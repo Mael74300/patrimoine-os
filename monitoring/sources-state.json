@@ -1,1 +1,68 @@
-{}
+{
+  "https://www.amf-france.org/fr/espace-epargnants": {
+    "hash": "ed943b926ba9712fa19e6f7b4ff5558fcc440a3847235b6adcaf7c328cb0daf6",
+    "status": "validée",
+    "checkedAt": "2026-10-10T12:35:15.066Z",
+    "httpStatus": 200
+  },
+  "https://www.amf-france.org/fr/espace-epargnants/proteger-son-epargne/listes-noires-et-mises-en-garde": {
+    "hash": "aa3101f7173c7a77bcd01126c119459ebf96a3f8da9c09a154a76993d8881648",
+    "status": "validée",
+    "checkedAt": "2026-10-10T12:35:15.066Z",
+    "httpStatus": 200
+  },
+  "https://www.impots.gouv.fr/particulier": {
+    "hash": "f518b36b8e42e037e59016217305ae6ad0ad615d267435a7899764029287fccc",
+    "status": "validée",
+    "checkedAt": "2026-10-10T12:35:15.066Z",
+    "httpStatus": 200
+  },
+  "https://www.service-public.fr/particuliers/vosdroits/F10864": {
+    "hash": "ef3d8edc7053fef1811332e0d235460e2e69e6627537162aaa201a1bf56e645b",
+    "status": "validée",
+    "checkedAt": "2026-10-10T12:35:15.066Z",
+    "httpStatus": 200
+  },
+  "https://www.service-public.fr/particuliers/vosdroits/F22414": {
+    "hash": "c7fef45f40962c2da5b93e27d8cace3c95f49bbd7a7c79deb943631645d4e0b9",
+    "status": "validée",
+    "checkedAt": "2026-10-10T12:35:15.066Z",
+    "httpStatus": 200
+  },
+  "https://www.service-public.fr/particuliers/vosdroits/F2365": {
+    "hash": "aaca83abd63b8165dc6d8573c8d771bb69e06bba1923d6e4e0a5648e6a1d8d15",
+    "status": "validée",
+    "checkedAt": "2026-10-10T12:35:15.066Z",
+    "httpStatus": 200
+  },
+  "https://www.service-public.fr/particuliers/vosdroits/F2367": {
+    "hash": "039807550bde047969f47a657dde6cbff2c9277dafd5752a52d1553f81a7f6f6",
+    "status": "validée",
+    "checkedAt": "2026-10-10T12:35:15.066Z",
+    "httpStatus": 200
+  },
+  "https://www.service-public.fr/particuliers/vosdroits/F2368": {
+    "hash": "012fad1db45334739b1722bd3a5bc0296c02a0a05074acc6496b346ffabd3d88",
+    "status": "validée",
+    "checkedAt": "2026-10-10T12:35:15.066Z",
+    "httpStatus": 200
+  },
+  "https://www.service-public.fr/particuliers/vosdroits/F2385": {
+    "hash": "8c21a1acc79b010219c8e2bd11f1b36606ab00f5b8f72e43c437ec362b6d4a96",
+    "status": "validée",
+    "checkedAt": "2026-10-10T12:35:15.066Z",
+    "httpStatus": 200
+  },
+  "https://www.service-public.fr/particuliers/vosdroits/F34982": {
+    "hash": "6c0539108b5624863fa6072705d94efa0e7d65962d220c8af90c15f8dd052dd2",
+    "status": "validée",
+    "checkedAt": "2026-10-10T12:35:15.066Z",
+    "httpStatus": 200
+  },
+  "https://www.service-public.fr/particuliers/vosdroits/N31160": {
+    "hash": "f2accd551a81978799daff72019234d0ebb8841adec6485fb82ce37d94738089",
+    "status": "validée",
+    "checkedAt": "2026-10-10T12:35:15.066Z",
+    "httpStatus": 200
+  }
+}
