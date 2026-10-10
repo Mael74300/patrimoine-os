@@ -39,6 +39,11 @@ export default function Entrepreneuriat() {
         ))}
       </div>
 
+      <p className="notice info" style={{ marginTop: 24 }}>
+        Testez vos hypothèses de chiffre d'affaires, de marge, de rémunération et de trésorerie dans le{' '}
+        <Link to="/simulateurs/entreprise">calculateur entrepreneurial</Link>, en trois scénarios.
+      </p>
+
       <h2>Séparer l'entreprise et le patrimoine</h2>
       <div className="prose">
         <p>

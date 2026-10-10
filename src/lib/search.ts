@@ -5,10 +5,13 @@ import { investments } from '../data/investments';
 export type SearchHit = { kind: 'Fiche' | 'Guide' | 'Simulateur'; title: string; to: string; excerpt: string; score: number };
 
 export const simulators = [
-  { slug: 'patrimoine', title: 'Simulateur de patrimoine à long terme', excerpt: 'Intérêts composés, versements mensuels, frais, inflation, objectif.', keywords: 'interets composes epargne mensuelle objectif retraite fire inflation frais' },
-  { slug: 'immobilier', title: 'Calculateur immobilier locatif', excerpt: 'Rendement brut et net, cash-flow, coût du crédit.', keywords: 'location loyer rendement cash flow lmnp nue achat appartement' },
-  { slug: 'credit', title: 'Calculateur de crédit', excerpt: "Mensualité, coût total, tableau d'amortissement, capacité d'emprunt.", keywords: 'pret emprunt mensualite amortissement taux capacite' },
-  { slug: 'portefeuille', title: 'Calculateur de portefeuille', excerpt: 'Allocation, frais pondérés, rendement attendu, rééquilibrage.', keywords: 'allocation etf diversification frais reequilibrage risque' },
+  { slug: 'patrimoine', title: 'Simulateur de patrimoine à long terme', excerpt: 'Épargne variable, retraits ponctuels, frais, inflation, fiscalité, jusqu’à trois scénarios.', keywords: 'interets composes epargne mensuelle objectif inflation frais scenarios retrait' },
+  { slug: 'immobilier', title: 'Calculateur immobilier locatif', excerpt: 'Rendements, flux de trésorerie, fiscalité paramétrable, patrimoine net et scénario défavorable.', keywords: 'location loyer rendement cash flow lmnp nue achat appartement micro foncier reel' },
+  { slug: 'etf-immobilier', title: 'Comparateur ETF et immobilier', excerpt: 'Deux stratégies, même capital et même effort d’épargne : patrimoine net estimé.', keywords: 'etf immobilier comparer bourse pierre locatif strategie' },
+  { slug: 'credit', title: 'Calculateur de crédit', excerpt: "Mensualité, intérêts, tableau d'amortissement, remboursement anticipé.", keywords: 'pret emprunt mensualite amortissement taux capacite anticipe' },
+  { slug: 'portefeuille', title: 'Calculateur de portefeuille', excerpt: 'Allocation, frais pondérés, rendement supposé, rééquilibrage.', keywords: 'allocation etf diversification frais reequilibrage risque' },
+  { slug: 'entreprise', title: 'Calculateur entrepreneurial', excerpt: "Chiffre d'affaires, marge, rémunération, trésorerie et valorisation en trois scénarios.", keywords: 'entreprise creation chiffre affaires marge tresorerie valorisation business plan' },
+  { slug: 'independance-financiere', title: "Simulateur d'indépendance financière", excerpt: 'Capital visé selon le taux de retrait, délai pour l’atteindre, durée du capital.', keywords: 'fire independance financiere rente taux de retrait retraite anticipee' },
 ];
 
 /** Minuscule, sans accents, pour une recherche tolérante. */

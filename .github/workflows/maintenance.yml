@@ -1,0 +1,59 @@
+name: Maintenance hebdomadaire
+# Chaque lundi : tests, construction, liens, pages sources officielles et fiches à réviser.
+# Tout problème ouvre (ou complète) un ticket « maintenance ». Rien n'est modifié automatiquement dans les fiches.
+on:
+  schedule:
+    - cron: '17 5 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Tests et construction
+        id: build
+        continue-on-error: true
+        run: npm test && npm run build
+
+      - name: Liens cités (sites tiers)
+        id: links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress --max-retries 2 --max-concurrency 4 --accept 200,403,429 'src/**/*.ts' 'src/**/*.tsx'
+          output: monitoring/links-report.md
+          fail: false
+
+      - name: Pages sources officielles
+        run: npm run sources:check
+
+      - name: Fiches à réviser
+        run: npm run review:check
+
+      - name: Ouvrir ou compléter le ticket de maintenance
+        run: |
+          set -e
+          body=monitoring/issue.md
+          : > "$body"
+          if [ "${{ steps.build.outcome }}" != "success" ]; then
+            echo "## Échec des tests ou de la construction" >> "$body"
+            echo "Voir l'exécution : ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> "$body"; echo >> "$body"
+          fi
+          if [ "${{ steps.links.outputs.exit_code }}" != "0" ] && [ -s monitoring/links-report.md ]; then cat monitoring/links-report.md >> "$body"; echo >> "$body"; fi
+          [ -s monitoring/sources-report.md ] && { cat monitoring/sources-report.md >> "$body"; echo >> "$body"; }
+          [ -s monitoring/reviews-report.md ] && { cat monitoring/reviews-report.md >> "$body"; echo >> "$body"; }
+          if [ ! -s "$body" ]; then echo "Rien à signaler."; exit 0; fi
+          gh label create maintenance --color BFD4F2 --description "Révision et maintenance" 2>/dev/null || true
+          title="Maintenance : éléments à vérifier"
+          number=$(gh issue list --label maintenance --state open --search "in:title \"$title\"" --json number --jq '.[0].number')
+          if [ -n "$number" ]; then gh issue comment "$number" --body-file "$body"; else gh issue create --title "$title" --label maintenance --body-file "$body"; fi

@@ -1,63 +1,90 @@
 # Patrimoine OS
 
-Plateforme française et gratuite consacrée à la construction du patrimoine : encyclopédie des investissements, comparateur, simulateurs et guides. Site 100 % statique, sans backend, sans compte, sans cookie ni traceur. Coût d'exploitation : 0 €.
+Plateforme française et gratuite consacrée à la construction du patrimoine : encyclopédie des investissements, comparateurs, sept simulateurs et guides pédagogiques. Site statique pré-rendu, sans backend, sans compte, sans cookie ni traceur. Coût d'exploitation : 0 €.
 
-## Ce qui est livré
+## Contenu
 
-| Rubrique | Contenu |
+| Rubrique | Détail |
 |---|---|
-| Accueil | Recherche, accès rapides, exemple de simulation (marqué fictif), 20 familles, sources officielles |
-| Encyclopédie | 26 fiches générées depuis `src/data/investments.ts`, filtres (famille, risque, liquidité, texte) |
-| Fiche | Définition, fonctionnement, comment investir, capital, horizon, liquidité, risque, frais, fiscalité datée, avantages/inconvénients, temps et compétences, exemple chiffré, sources, alternatives. Chaque information porte un statut « vérifié au … » ou « à vérifier ». |
-| Simulateurs | Patrimoine long terme (frais, inflation, fiscalité de sortie, objectif, scénarios ±2 pts), immobilier locatif (rendements, cash-flow, crédit), crédit (amortissement, capacité d'emprunt), portefeuille (pondérations, frais, rééquilibrage, projection) |
-| Comparateur | Jusqu'à 3 placements côte à côte + projection selon vos hypothèses |
-| Entrepreneuriat, guides, méthode | Contenus pédagogiques, formules documentées, confidentialité, effacement des données locales |
+| Encyclopédie | 26 fiches générées depuis `src/data/investments.ts`, filtres et recherche. Chaque fiche affiche ses sources, sa date de vérification, la date de validité fiscale, les données utilisées, les hypothèses et la prochaine révision. |
+| Simulateur de patrimoine | Capital initial, épargne variable par phases, retraits ponctuels, frais, inflation, fiscalité de sortie, objectif, jusqu'à 3 scénarios comparés |
+| Calculateur immobilier | Mensualité, coût du crédit, rendements, flux avant impôt, fiscalité paramétrable (micro-foncier, réel, micro-BIC, LMNP réel), capital restant dû, patrimoine net, scénario défavorable |
+| Comparateur ETF / immobilier | Même capital, même effort d'épargne annuel, patrimoine net après frais et impôts de sortie ; base de calcul expliquée sur la page |
+| Crédit | Mensualité, intérêts, amortissement, capacité d'emprunt, remboursement anticipé (durée ou mensualité, indemnités plafonnées) |
+| Entreprise | CA, marge, charges, rémunération, IS, besoin en fonds de roulement, trésorerie, valorisation, 3 scénarios |
+| Indépendance financière | Capital visé selon le taux de retrait, délai, durée du capital en phase de retrait, plusieurs scénarios |
+| Portefeuille, comparateur de fiches | Allocation, frais pondérés, rééquilibrage ; jusqu'à 3 fiches côte à côte |
+| Guides | 11 guides, dont 8 pages répondant à une intention de recherche précise (patrimoine net, rentabilité locative, PEA, frais…) |
+| Légal | Politique de confidentialité, mentions légales, effacement des données locales |
 
-Les simulations sont mémorisées dans le `localStorage` du navigateur uniquement (non synchronisées entre appareils).
+## Architecture
 
-## Choix techniques
+- **Vite + React + TypeScript**, CSS natif, graphiques SVG sans dépendance.
+- **Moteur de calcul** : un module par famille dans `src/lib/calc/` (`growth`, `loan`, `rental`, `compare`, `portfolio`, `business`, `fire`, `networth`, `format`), fonctions pures et déterministes. Conventions dans `common.ts` et sur la page « Méthode ». **113 tests** : formules, exemples connus, valeurs nulles, négatives et durées nulles, chaque exemple chiffré cité dans les fiches et guides, métadonnées SEO, scripts de surveillance.
+- **Pré-rendu statique** (`scripts/prerender.mjs`) : 54 pages HTML complètes avec URL lisibles (`/encyclopedie/pea/`), titre, description, URL canonique, Open Graph, données structurées (Article, BreadcrumbList, WebApplication), plus `404.html`, `sitemap.xml`, `robots.txt`. Le navigateur reprend ensuite la page (hydratation) pour l'interactivité.
+- **Sécurité** : politique de sécurité du contenu (CSP) dans chaque page, aucune ressource tierce, aucun formulaire envoyé, dépendances auditées à chaque construction et mises à jour par Dependabot.
+- **Données locales** : saisies et simulations enregistrées dans le `localStorage`, jamais transmises, non synchronisées entre appareils.
 
-- **Vite + React + TypeScript**, CSS natif (pas de Tailwind : il n'aurait rien simplifié ici).
-- **Graphiques en SVG maison** (`src/components/ui.tsx`) : zéro dépendance, accessibles au clavier (flèches gauche/droite).
-- **Moteur de calcul** dans `src/lib/finance.ts`, fonctions pures couvertes par 52 tests (`npm test`), dont la vérification de chaque exemple chiffré cité dans les fiches.
-- **Hébergement : GitHub Pages**, retenu face à Cloudflare Pages car le code et l'hébergement restent au même endroit (un seul service), gratuit pour un dépôt public, déploiement automatique par GitHub Actions. Le sous-domaine `<compte>.github.io/patrimoine-os` suffit au lancement.
-- **Routage par hash** (`/#/encyclopedie`) : fonctionne sur tout hébergement statique sans configuration. Contrepartie : référencement moins bon qu'avec des pages pré-rendues (voir feuille de route).
-- Dépendances de production : `react`, `react-dom`, `react-router-dom`. Poids : ~87 ko gzip.
+## Mise en ligne (une fois, environ 10 minutes)
 
-## Mise en ligne (une seule fois, environ 10 minutes)
-
-1. Créer un dépôt **public** `patrimoine-os` sur GitHub et y pousser ce dossier :
+1. Compléter les mentions légales dans `src/config.ts` (`legal.publisher`, `publicationDirector`, `contact`).
+2. Créer un dépôt **public** `patrimoine-os` sur GitHub et y pousser ce dossier :
    ```bash
-   git init && git add . && git commit -m "Patrimoine OS"
-   git branch -M main
    git remote add origin https://github.com/<compte>/patrimoine-os.git
    git push -u origin main
    ```
-2. Dans le dépôt : **Settings → Pages → Source : GitHub Actions**.
-3. Le workflow `deploy.yml` lance les tests, construit et publie à chaque `push` sur `main`. Si un test échoue, rien n'est publié.
+3. Dans le dépôt : **Settings → Pages → Source : GitHub Actions**.
 
-## Maintenance automatisée
+Le workflow `deploy.yml` teste, audite, construit et publie à chaque `push` sur `main`, à l'adresse `https://<compte>.github.io/patrimoine-os/`, sans configuration : l'adresse est déduite du dépôt. Pour un domaine personnalisé plus tard, définir les variables de dépôt `SITE_URL` et `BASE_PATH`.
 
-- `check-links.yml` vérifie chaque mois les liens des sources et ouvre une issue si l'un est cassé.
-- Calendrier de mise à jour manuelle (quelques minutes, dans `src/data/investments.ts`, puis modifier `AS_OF`) :
-  - **1er février et 1er août** : taux Livret A, LDDS, LEP.
-  - **Janvier** : loi de finances et loi de financement de la Sécurité sociale (PFU, prélèvements sociaux, plafonds).
+4. **Une fois, sur votre ordinateur** (accès internet nécessaire) : `npm ci && npm run sources:accept`, puis commit de `monitoring/sources-state.json`. Cela enregistre les empreintes de référence des pages officielles suivies.
 
-## Ajouter une fiche
+## Maintenance automatisée (GitHub Actions, gratuit)
 
-Ajouter un objet dans `src/data/investments.ts` (le type `Investment` guide la saisie). Les tests vérifient automatiquement catégorie, alternatives, sources en `https` et la mention « fictif » dans l'exemple. La fiche, la recherche, les filtres et le comparateur l'intègrent sans autre modification.
+`maintenance.yml`, chaque lundi :
 
-## Publicité et affiliation (désactivées)
+| Contrôle | Résultat |
+|---|---|
+| Tests et construction | échec signalé |
+| Liens cités | liens cassés signalés |
+| Pages sources officielles | page modifiée, disparue ou en erreur signalée, avec les fiches concernées. Respect de robots.txt, une requête toutes les 3 secondes, seule une empreinte du texte est conservée (aucune copie) |
+| Fiches à réviser | révision dépassée ou dans les 30 jours, éléments « à vérifier » |
 
-`src/config.ts` : `ads.enabled` active les emplacements `<AdSlot>` ; `affiliates` associe un lien partenaire à une fiche, affiché avec la mention de commission et `rel="sponsored"`.
+Tout est regroupé dans un ticket GitHub « maintenance ». **Aucune fiche n'est modifiée automatiquement** : après relecture, vous corrigez la fiche, mettez à jour `verifiedOn` et `nextReview`, puis lancez `npm run sources:accept`.
 
-## Feuille de route
+Calendrier indicatif : taux des livrets au 1er février et au 1er août ; loi de finances et de financement de la Sécurité sociale fin décembre. Les `nextReview` des fiches sont réglés en conséquence.
 
-1. Pré-rendu statique des fiches (par ex. `vite-react-ssg`) pour le référencement.
-2. Fiches des familles « en préparation » : collection, terres et forêts, énergie, crédit et levier, autres.
-3. Fiscalité détaillée par enveloppe dans le simulateur (abattements de l'assurance-vie, historique des taux du PEA).
-4. Export / import JSON des simulations pour passer d'un appareil à l'autre, sans serveur.
+## Commandes
+
+```bash
+npm run dev             # développement
+npm test                # tests
+npm run build           # construction pré-rendue dans dist/
+npm run sources:check   # surveillance des sources (réseau requis)
+npm run sources:accept  # valider les sources après relecture
+npm run review:check    # fiches à réviser
+```
+
+## Ajouter une fiche ou un guide
+
+Ajouter un objet dans `src/data/investments.ts` ou `src/data/guides.ts`. La page, la recherche, les filtres, le sitemap et les métadonnées sont générés automatiquement ; les tests vérifient la cohérence (catégorie, alternatives, sources, mention « fictif », unicité des titres).
+
+## Monétisation future (désactivée)
+
+`src/config.ts` : `ads.enabled`, `affiliates` (liens réels uniquement, affichés « Lien commercial » avec `rel="sponsored"`), `premium.enabled`. Rien n'est requis pour que le site fonctionne. Avant d'activer une publicité ou une mesure d'audience déposant des traceurs, ajouter un recueil du consentement et mettre à jour la politique de confidentialité.
+
+## État d'avancement (section 13 du cahier des charges)
+
+| Étape | État |
+|---|---|
+| 1. Base fonctionnelle | fait |
+| 2. Outils interactifs | fait |
+| 3. Qualité et contenu | fait ; familles « en préparation » à documenter |
+| 4. Automatisation | fait |
+| 5. Préparation à la monétisation | emplacements prêts, aucun service intégré |
+
+Pistes suivantes : fiches des familles restantes (collection, terres et forêts, énergie, levier, autres), chargement différé des simulateurs pour alléger la page d'accueil, export/import JSON des simulations entre appareils.
 
 ## Avertissement
 
-Informations générales à visée pédagogique, sans conseil en investissement personnalisé. Données réglementaires vérifiées au 10 octobre 2026 ; les éléments non confirmés sont signalés « à vérifier » sur le site.
+Informations générales à visée pédagogique, sans conseil en investissement personnalisé. Données réglementaires vérifiées au 10 octobre 2026 ; les éléments non confirmés sont signalés « à vérifier ».

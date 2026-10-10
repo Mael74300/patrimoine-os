@@ -1,0 +1,77 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { config } from '../config';
+import { clearAll } from '../lib/storage';
+import { PageHead } from '../components/ui';
+
+export function Confidentialite() {
+  const [cleared, setCleared] = useState(false);
+  return (
+    <div className="prose">
+      <PageHead eyebrow="RGPD" title="Politique de confidentialité">Version du 10 octobre 2026.</PageHead>
+
+      <h2>Ce que le site ne collecte pas</h2>
+      <p>
+        {config.siteName} ne demande ni compte, ni adresse électronique, ni coordonnées bancaires, ni mot de passe. Il n'utilise aucun cookie,
+        aucun outil de mesure d'audience et aucun traceur publicitaire. Aucun formulaire n'envoie de données à un serveur.
+      </p>
+
+      <h2>Les calculs restent sur votre appareil</h2>
+      <p>
+        Les simulateurs s'exécutent entièrement dans votre navigateur. Les montants que vous saisissez ne sont transmis à personne, y compris à l'éditeur.
+      </p>
+
+      <h2>Stockage local</h2>
+      <p>
+        Pour vous éviter de tout ressaisir, vos dernières saisies et les simulations que vous choisissez d'enregistrer sont conservées dans le
+        stockage local de votre navigateur (localStorage). Ce stockage sert uniquement une fonctionnalité que vous utilisez ; il ne sert ni à
+        vous suivre ni à mesurer l'audience. Ces données restent sur cet appareil, ne sont pas synchronisées entre vos appareils et ne sont jamais
+        envoyées. Vous pouvez les effacer à tout moment :
+      </p>
+      <button className="btn secondary" onClick={() => { clearAll(); setCleared(true); }}>Effacer mes données locales</button>
+      {cleared && <p role="status" className="small" style={{ marginTop: 8 }}>Données locales effacées.</p>}
+
+      <h2>Hébergement</h2>
+      <p>
+        Le site est hébergé par GitHub Pages. Comme tout hébergeur, GitHub peut enregistrer des données techniques de connexion, notamment
+        l'adresse IP, à des fins de sécurité et de fonctionnement, et peut les traiter aux États-Unis. Ce traitement relève de GitHub :
+        consultez sa <a href={config.legal.hostPrivacyUrl} target="_blank" rel="noopener noreferrer">déclaration de confidentialité</a>.
+      </p>
+
+      <h2>Liens externes</h2>
+      <p>Les liens vers des sites officiels ou des partenaires ouvrent des sites tiers, soumis à leurs propres politiques.</p>
+
+      <h2>Vos droits</h2>
+      <p>
+        L'éditeur ne détenant aucune donnée personnelle vous concernant, il n'en a aucune à vous communiquer ou à effacer. Pour toute question :
+        {' '}{config.legal.contact}. Vous pouvez aussi saisir la <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">CNIL</a>.
+      </p>
+      <p className="small muted">Si des services tiers (publicité, mesure d'audience) étaient ajoutés, cette page serait mise à jour et un consentement serait demandé lorsque la loi l'exige, avant tout dépôt de traceur.</p>
+    </div>
+  );
+}
+
+export function MentionsLegales() {
+  return (
+    <div className="prose">
+      <PageHead eyebrow="Informations légales" title="Mentions légales" />
+      <h2>Éditeur</h2>
+      <p>{config.legal.publisher}<br />Directeur ou directrice de la publication : {config.legal.publicationDirector}<br />Contact : {config.legal.contact}</p>
+      <h2>Hébergeur</h2>
+      <p>{config.legal.host}</p>
+      <h2>Nature du contenu</h2>
+      <p>
+        Les informations publiées sont générales et pédagogiques. Elles ne constituent ni un conseil en investissement, ni un conseil juridique ou
+        fiscal, et ne tiennent pas compte de votre situation personnelle. Les résultats des simulateurs dépendent de vos hypothèses et ne sont pas des
+        prévisions. Avant toute décision, consultez un professionnel habilité.
+      </p>
+      <h2>Liens commerciaux</h2>
+      <p>
+        Le site ne contient aujourd'hui aucun lien commercial ni publicité. S'il en contient un jour, chacun sera signalé comme tel ; la présence d'une
+        rémunération n'influencera pas le contenu des fiches. Voir <Link to="/methodologie">Méthode et sources</Link>.
+      </p>
+      <h2>Propriété intellectuelle</h2>
+      <p>Les textes, données et code sont originaux. Les sources citées restent la propriété de leurs auteurs ; aucun article n'est reproduit.</p>
+    </div>
+  );
+}

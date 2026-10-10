@@ -35,6 +35,16 @@ export type Investment = {
   sources: Source[];
   alternatives: string[]; // slugs
   tags: string[];
+  review: Review;
+};
+
+/** Suivi de vérification d'une fiche (section 9 du cahier des charges). */
+export type Review = {
+  verifiedOn: string; // date ISO de la dernière vérification humaine
+  taxValidAsOf: string; // date à laquelle la fiscalité décrite était considérée comme valable
+  nextReview: string; // date ISO à partir de laquelle la fiche est signalée « à réviser »
+  data: string[]; // données chiffrées utilisées dans la fiche
+  assumptions: string[]; // hypothèses retenues (exemples, échelles)
 };
 
 export type Guide = {
@@ -45,4 +55,9 @@ export type Guide = {
   sections: { heading: string; body: string[] }[];
   related: string[];
   sources: Source[];
+  updatedOn: string;
+  /** Outil intégré à la page. */
+  widget?: 'catalogue' | 'patrimoine-net';
+  /** Simulateur ou page à mettre en avant. */
+  cta?: { to: string; label: string };
 };

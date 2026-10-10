@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { categories } from '../data/categories';
 import { AS_OF, investments } from '../data/investments';
 import { fmtEur, projectGrowth } from '../lib/finance';
+import { guides } from '../data/guides';
+import { simulators } from '../lib/search';
 import { LineChart, PageHead } from '../components/ui';
 
 export default function Home() {
@@ -72,6 +74,25 @@ export default function Home() {
         <li><strong>Comparer</strong><br /><span className="muted">Mettez plusieurs placements côte à côte selon le risque, la liquidité, l'horizon et l'effort demandé.</span></li>
         <li><strong>Simuler</strong><br /><span className="muted">Les calculs s'exécutent dans votre navigateur. Aucune inscription, aucune donnée envoyée.</span></li>
       </ol>
+
+      <div className="split" style={{ marginTop: 8 }}>
+        <section>
+          <h2>Simulateurs</h2>
+          <ul className="inv-list">
+            {simulators.map((s) => (
+              <li key={s.slug}><Link className="inv-row" to={`/simulateurs/${s.slug}`}><div><h3>{s.title}</h3><p>{s.excerpt}</p></div></Link></li>
+            ))}
+          </ul>
+        </section>
+        <section>
+          <h2>Guides essentiels</h2>
+          <ul className="inv-list">
+            {guides.slice(0, 8).map((g) => (
+              <li key={g.slug}><Link className="inv-row" to={`/guides/${g.slug}`}><div><h3>{g.title}</h3><p>{g.summary}</p></div></Link></li>
+            ))}
+          </ul>
+        </section>
+      </div>
 
       <h2>Les familles d'investissement</h2>
       <div className="cat-grid">

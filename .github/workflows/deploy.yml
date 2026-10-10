@@ -1,31 +1,43 @@
-name: Déploiement GitHub Pages
+name: Tests et déploiement
+# À chaque push sur main : tests, audit des dépendances, construction pré-rendue, publication sur GitHub Pages.
+# Sur une pull request : mêmes contrôles, sans publication.
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 permissions:
   contents: read
   pages: write
   id-token: write
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Adresse publique dérivée du dépôt : https://<compte>.github.io/<dépôt>. Pour un domaine personnalisé,
+      # définir les variables de dépôt SITE_URL et BASE_PATH (Settings → Secrets and variables → Actions → Variables).
+      SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io/{1}', github.repository_owner, github.event.repository.name) }}
+      BASE_PATH: ${{ vars.BASE_PATH || format('/{0}/', github.event.repository.name) }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
       - run: npm ci
       - run: npm test
+      - name: Audit de sécurité des dépendances de production
+        run: npm audit --omit=dev --audit-level=high
       - run: npm run build
-      - uses: actions/upload-pages-artifact@v3
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     environment:

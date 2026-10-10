@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// base relative : fonctionne sur GitHub Pages (sous-chemin /<repo>/) comme en local.
+// BASE_PATH : chemin du site, par exemple /patrimoine-os/ sur GitHub Pages (renseigné par le workflow).
 export default defineConfig({
   plugins: [react()],
-  base: './',
-  test: { environment: 'node' },
+  base: process.env.BASE_PATH || '/',
+  test: { environment: 'node', include: ['src/**/*.test.ts', 'scripts/**/*.test.ts'] },
 } as any);

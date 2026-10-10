@@ -1,4 +1,4 @@
-import type { Investment, Source } from './types';
+import type { Investment, Review, Source } from './types';
 
 /** Date de référence des informations réglementaires et fiscales de ce fichier. */
 export const AS_OF = '10 octobre 2026';
@@ -26,7 +26,7 @@ const S = {
 
 const PFU = "Prélèvement forfaitaire unique de 31,4 % (12,8 % d'impôt sur le revenu + 18,6 % de prélèvements sociaux) sur les revenus 2026, ou option globale pour le barème progressif. Hausse issue de la loi de financement de la Sécurité sociale pour 2026.";
 
-export const investments: Investment[] = [
+const raw: Omit<Investment, 'review'>[] = [
   // ------------------------------------------------------------------ Épargne
   {
     slug: 'livret-a',
@@ -600,5 +600,48 @@ export const investments: Investment[] = [
     tags: ['transmission'],
   },
 ];
+
+/** Date ISO de vérification commune au lot de fiches publié le 10 octobre 2026. */
+export const VERIFIED_ON = '2026-10-10';
+
+/**
+ * Prochaine révision : les taux réglementés changent au 1er février et au 1er août ;
+ * la fiscalité change surtout avec la loi de finances (publiée fin décembre).
+ */
+function defaultNextReview(category: string): string {
+  return category === 'epargne' ? '2027-02-01' : '2027-01-31';
+}
+
+const REVIEW: Record<string, Partial<Review>> = {
+  'livret-a': { data: ['Taux 1,70 % du 1er août 2026 au 31 janvier 2027 (arrêté du 28 juillet 2026)', 'Plafonds 22 950 € (Livret A) et 12 000 € (LDDS)'] },
+  lep: { data: ['Taux 2,50 % du 1er août 2026 au 31 janvier 2027', 'Plafond 10 000 €'] },
+  'compte-a-terme': { data: ['PFU 31,4 % sur les revenus 2026', 'Garantie des dépôts 100 000 € par établissement et par déposant'], assumptions: ['Taux brut de 3 % choisi pour l’exemple'] },
+  'etf-monde': { assumptions: ['Rendement de 6 % par an net de frais, hypothèse d’illustration et non prévision', 'Versements en début de mois'] },
+  pea: { data: ['Plafond de versements 150 000 €', 'PFU 31,4 % en cas de retrait avant 5 ans'], assumptions: ['Taux des prélèvements sociaux sur les gains de PEA en 2026 à confirmer'] },
+  'compte-titres': { data: ['PFU 31,4 % (12,8 % + 18,6 %) sur les revenus 2026'] },
+  'assurance-vie': { data: ['Prélèvements sociaux 17,2 %', 'Abattement annuel 4 600 € / 9 200 € après 8 ans', 'Taux de 7,5 % jusqu’à 150 000 € de primes', 'Abattement décès 152 500 € par bénéficiaire (primes avant 70 ans)'] },
+  'fonds-euros': { assumptions: ['Rendement de 2,5 % net de frais, hypothèse d’illustration'] },
+  'location-nue': { data: ['Micro-foncier jusqu’à 15 000 € de revenus fonciers bruts, abattement 30 %', 'Plus-value : 19 % + 17,2 %, exonération après 22 et 30 ans'] },
+  lmnp: { assumptions: ['Taux des prélèvements sociaux applicable aux revenus de location meublée en 2026 à confirmer', 'Abattements du micro-BIC à confirmer'] },
+  scpi: { assumptions: ['Frais d’entrée de 10 % et distribution de 5 % pour l’exemple'] },
+  'credit-immobilier': { data: ['Mensualité calculée par la formule des prêts à échéances constantes'], assumptions: ['Taux de 3,6 % sur 20 ans choisi pour l’exemple, hors assurance'] },
+  cryptomonnaies: { data: ['PFU 31,4 % sur les plus-values de cession 2026', 'Exonération si cessions annuelles ≤ 305 €'] },
+  per: { data: ['Sortie en capital : versements au barème, gains au PFU'], assumptions: ['Tranche marginale de 30 % pour l’exemple'] },
+  or: { data: ['Taxe forfaitaire 11,5 % du prix de cession'] },
+  donation: { data: ['Abattement 100 000 € par parent et par enfant, renouvelable tous les 15 ans'] },
+  'capital-humain': { assumptions: ['Rendement de 5 % par an sur l’épargne supplémentaire, hypothèse d’illustration'] },
+};
+
+export const investments: Investment[] = raw.map((i) => ({
+  ...i,
+  review: {
+    verifiedOn: VERIFIED_ON,
+    taxValidAsOf: VERIFIED_ON,
+    nextReview: defaultNextReview(i.category),
+    data: REVIEW[i.slug]?.data ?? [],
+    assumptions: ['Échelles de risque, liquidité et effort attribuées par la rédaction', 'Exemple chiffré fictif', ...(REVIEW[i.slug]?.assumptions ?? [])],
+    ...(REVIEW[i.slug]?.nextReview ? { nextReview: REVIEW[i.slug]!.nextReview! } : {}),
+  },
+}));
 
 export const investmentBySlug = Object.fromEntries(investments.map((i) => [i.slug, i]));

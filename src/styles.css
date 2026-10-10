@@ -199,3 +199,16 @@ tr:last-child td { border-bottom: 0; }
   .site-header, .site-footer, .sim-form, .btn { display: none !important; }
   .sim { grid-template-columns: 1fr; }
 }
+
+/* ---------- Onglets, scénarios */
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 14px; }
+.tabs button { font: inherit; font-size: 0.88rem; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); cursor: pointer; }
+.tabs button.on { background: var(--primary); border-color: var(--primary); color: var(--primary-ink); font-weight: 600; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 700px) { .split { grid-template-columns: 1fr; } }
+.section-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); font-weight: 700; margin: 24px 0 8px; }
+.est { border-top: 3px dashed var(--warn); }
+.basis { border-left: 4px solid var(--primary); background: var(--surface); padding: 14px 18px; border-radius: 6px; }
+.basis ol, .basis ul { margin: 6px 0 0; padding-left: 1.2rem; }
+td.pos { color: var(--accent); }
+td.neg { color: var(--danger); }

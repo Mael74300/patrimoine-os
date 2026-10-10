@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { HashRouter, Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { config } from './config';
 import { AS_OF } from './data/investments';
 import Home from './pages/Home';
@@ -15,6 +15,10 @@ import Entrepreneuriat from './pages/Entrepreneuriat';
 import { GuideList, GuidePage } from './pages/Guides';
 import Methodologie from './pages/Methodologie';
 import SearchPage from './pages/SearchPage';
+import SimEtfImmobilier from './pages/SimEtfImmobilier';
+import SimEntreprise from './pages/SimEntreprise';
+import SimIndependance from './pages/SimIndependance';
+import { Confidentialite, MentionsLegales } from './pages/Legal';
 import NotFound from './pages/NotFound';
 
 const NAV = [
@@ -23,7 +27,7 @@ const NAV = [
   { to: '/comparateur', label: 'Comparateur' },
   { to: '/entrepreneuriat', label: 'Entrepreneuriat' },
   { to: '/guides', label: 'Guides' },
-  { to: '/methodologie', label: 'Méthode & sources' },
+  { to: '/methodologie', label: 'Méthode' },
 ];
 
 function ScrollTop() {
@@ -73,13 +77,15 @@ function Footer() {
           <p className="small" style={{ marginTop: 8 }}>
             Informations générales et outils pédagogiques. Aucun conseil en investissement personnalisé.
             Données réglementaires vérifiées au {AS_OF}. Aucun cookie, aucun traceur, aucune inscription :
-            vos simulations restent dans votre navigateur.
+            vos simulations restent dans votre navigateur. Aucun lien commercial.
           </p>
         </div>
         <div>
           <strong style={{ color: 'var(--ink)' }}>Explorer</strong>
           <ul style={{ marginTop: 8 }}>
             {NAV.map((n) => <li key={n.to}><Link to={n.to}>{n.label}</Link></li>)}
+            <li><Link to="/confidentialite">Confidentialité</Link></li>
+            <li><Link to="/mentions-legales">Mentions légales</Link></li>
           </ul>
         </div>
         <div>
@@ -96,9 +102,10 @@ function Footer() {
   );
 }
 
+/** Coquille de l'application, sans routeur : utilisée par le navigateur (BrowserRouter) et le pré-rendu (StaticRouter). */
 export default function App() {
   return (
-    <HashRouter>
+    <>
       <ScrollTop />
       <a href="#contenu" className="skip" onClick={(e) => { e.preventDefault(); document.getElementById('contenu')?.focus(); }}>
         Aller au contenu
@@ -117,6 +124,11 @@ export default function App() {
             <Route path="/simulateurs/immobilier" element={<SimImmobilier />} />
             <Route path="/simulateurs/credit" element={<SimCredit />} />
             <Route path="/simulateurs/portefeuille" element={<SimPortefeuille />} />
+            <Route path="/simulateurs/etf-immobilier" element={<SimEtfImmobilier />} />
+            <Route path="/simulateurs/entreprise" element={<SimEntreprise />} />
+            <Route path="/simulateurs/independance-financiere" element={<SimIndependance />} />
+            <Route path="/confidentialite" element={<Confidentialite />} />
+            <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/entrepreneuriat" element={<Entrepreneuriat />} />
             <Route path="/guides" element={<GuideList />} />
             <Route path="/guides/:slug" element={<GuidePage />} />
@@ -126,6 +138,6 @@ export default function App() {
         </div>
       </main>
       <Footer />
-    </HashRouter>
+    </>
   );
 }

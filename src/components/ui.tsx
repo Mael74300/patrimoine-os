@@ -65,11 +65,21 @@ function round(n: number, d: number) {
   return Math.round(n * f) / f;
 }
 
-/** État de formulaire mémorisé sur l'appareil (préférence locale). */
+/**
+ * État de formulaire mémorisé sur l'appareil (préférence locale).
+ * Le premier rendu utilise toujours les valeurs par défaut (identique au pré-rendu statique),
+ * puis les valeurs enregistrées sont chargées dans le navigateur.
+ */
 export function usePersistentState<T extends object>(key: string, initial: T) {
-  const [state, setState] = useState<T>(() => ({ ...initial, ...load<Partial<T>>('last:' + key, {}) }));
+  const [state, setState] = useState<T>(initial);
+  const loaded = useRef(false);
   useEffect(() => {
-    save('last:' + key, state);
+    const stored = load<Partial<T> | null>('last:' + key, null);
+    if (stored) setState((s) => ({ ...s, ...stored }));
+    loaded.current = true;
+  }, [key]);
+  useEffect(() => {
+    if (loaded.current) save('last:' + key, state);
   }, [key, state]);
   const update = <K extends keyof T>(k: K) => (v: T[K]) => setState((s) => ({ ...s, [k]: v }));
   return [state, setState, update] as const;
@@ -160,7 +170,7 @@ export function AdSlot({ id }: { id: string }) {
 
 // ------------------------------------------------------------ Graphique
 
-export type Series = { name: string; color: string; values: number[]; dashed?: boolean };
+export type Series = { name: string; color: string; values: (number | undefined)[]; dashed?: boolean };
 
 type ChartProps = {
   series: Series[];
@@ -180,7 +190,7 @@ export function LineChart({ series, xLabels, format, title, height = 300 }: Char
   const svgRef = useRef<SVGSVGElement>(null);
 
   const { max, min, ticks } = useMemo(() => {
-    const all = series.flatMap((s) => s.values).filter(Number.isFinite);
+    const all = series.flatMap((s) => s.values).filter((v): v is number => typeof v === 'number' && Number.isFinite(v));
     const lo = Math.min(0, ...all);
     const hi = Math.max(1, ...all);
     const step = niceStep((hi - lo) / 4);
@@ -233,10 +243,12 @@ export function LineChart({ series, xLabels, format, title, height = 300 }: Char
             <text key={i} x={x(i)} y={H - 10} textAnchor="middle">{l}</text>
           ) : null,
         )}
-        {series.map((s) => (
+        {series.map((s, idx) => (
           <path
-            key={s.name}
-            d={s.values.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join('')}
+            key={idx}
+            d={s.values
+              .map((v, i) => (typeof v === 'number' && Number.isFinite(v) ? `${i === 0 || !Number.isFinite(s.values[i - 1] as number) ? 'M' : 'L'}${x(i).toFixed(1)},${y(v).toFixed(1)}` : ''))
+              .join('')}
             fill="none"
             stroke={s.color}
             strokeWidth={2.2}
@@ -245,21 +257,25 @@ export function LineChart({ series, xLabels, format, title, height = 300 }: Char
           />
         ))}
         <line x1={x(active)} x2={x(active)} y1={pad.t} y2={H - pad.b} stroke="var(--ink-3)" strokeDasharray="2 3" />
-        {series.map((s) => (
-          <circle key={s.name} cx={x(active)} cy={y(s.values[active])} r={4} fill={s.color} stroke="#fff" strokeWidth={1.5} />
-        ))}
+        {series.map((s, idx) =>
+          typeof s.values[active] === 'number' ? (
+            <circle key={idx} cx={x(active)} cy={y(s.values[active] as number)} r={4} fill={s.color} stroke="var(--surface)" strokeWidth={1.5} />
+          ) : null,
+        )}
       </svg>
       <div className="chart-tip" aria-live="polite">
         <strong>{xLabels[active]}</strong>{' '}
-        {series.map((s) => (
-          <span key={s.name} style={{ marginLeft: 12 }}>
-            <span style={{ color: s.color }}>●</span> {s.name} : <span className="num">{format(s.values[active])}</span>
-          </span>
-        ))}
+        {series.map((s, idx) =>
+          typeof s.values[active] === 'number' ? (
+            <span key={idx} style={{ marginLeft: 12 }}>
+              <span style={{ color: s.color }}>●</span> {s.name} : <span className="num">{format(s.values[active] as number)}</span>
+            </span>
+          ) : null,
+        )}
       </div>
       <figcaption className="chart-legend">
-        {series.map((s) => (
-          <span key={s.name} style={{ ['--c' as string]: s.color }}>{s.name}</span>
+        {series.map((s, idx) => (
+          <span key={idx} style={{ ['--c' as string]: s.color }}>{s.name}</span>
         ))}
       </figcaption>
     </figure>
@@ -284,7 +300,8 @@ function compact(n: number) {
 
 export function SavedSims<T>({ simKey, current, onLoad }: { simKey: string; current: T; onLoad: (d: T) => void }) {
   const storeKey = 'saved:' + simKey;
-  const [list, setList] = useState<SavedSim<T>[]>(() => load(storeKey, []));
+  const [list, setList] = useState<SavedSim<T>[]>([]);
+  useEffect(() => setList(load(storeKey, [])), [storeKey]);
   const [name, setName] = useState('');
   const [msg, setMsg] = useState('');
   const persist = (l: SavedSim<T>[]) => {
@@ -341,5 +358,74 @@ export function Crumbs({ items }: { items: { to?: string; label: string }[] }) {
         </span>
       ))}
     </nav>
+  );
+}
+
+// ------------------------------------------------------------ Listes éditables (retraits, phases d'épargne)
+
+type Row = { a: number; b: number };
+
+export function RowsEditor({ title, rows, onChange, aLabel, bLabel, bUnit, addLabel, empty }: {
+  title: string;
+  rows: Row[];
+  onChange: (rows: Row[]) => void;
+  aLabel: string;
+  bLabel: string;
+  bUnit: string;
+  addLabel: string;
+  empty: string;
+}) {
+  const id = useId();
+  return (
+    <fieldset>
+      <legend>{title}</legend>
+      {rows.length === 0 && <p className="small muted" style={{ margin: '0 0 8px' }}>{empty}</p>}
+      {rows.map((r, i) => (
+        <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr auto', gap: 8, alignItems: 'end', marginBottom: 8 }}>
+          <div>
+            <label htmlFor={`${id}-a${i}`}>{aLabel}</label>
+            <input id={`${id}-a${i}`} type="number" min={1} max={60} value={r.a} onChange={(e) => onChange(rows.map((x, k) => (k === i ? { ...x, a: Math.max(1, Math.round(+e.target.value || 1)) } : x)))} />
+          </div>
+          <div>
+            <label htmlFor={`${id}-b${i}`}>{bLabel} ({bUnit})</label>
+            <input id={`${id}-b${i}`} type="number" min={0} value={r.b} onChange={(e) => onChange(rows.map((x, k) => (k === i ? { ...x, b: Math.max(0, +e.target.value || 0) } : x)))} />
+          </div>
+          <button type="button" className="btn small secondary" aria-label={`Supprimer la ligne ${i + 1}`} onClick={() => onChange(rows.filter((_, k) => k !== i))}>×</button>
+        </div>
+      ))}
+      <button type="button" className="btn small secondary" onClick={() => onChange([...rows, { a: (rows.at(-1)?.a ?? 4) + 1, b: rows.at(-1)?.b ?? 0 }])}>{addLabel}</button>
+    </fieldset>
+  );
+}
+
+export function SelectField<V extends string | number>({ label, value, options, onChange, hint }: {
+  label: string;
+  value: V;
+  options: { v: V; label: string }[];
+  onChange: (v: V) => void;
+  hint?: string;
+}) {
+  const id = useId();
+  return (
+    <div className="field">
+      <label htmlFor={id}>{label}</label>
+      <select id={id} value={String(value)} onChange={(e) => {
+        const o = options.find((x) => String(x.v) === e.target.value);
+        if (o) onChange(o.v);
+      }}>
+        {options.map((o) => <option key={String(o.v)} value={String(o.v)}>{o.label}</option>)}
+      </select>
+      {hint && <div className="hint">{hint}</div>}
+    </div>
+  );
+}
+
+export function Tabs({ items, active, onSelect, label }: { items: string[]; active: number; onSelect: (i: number) => void; label: string }) {
+  return (
+    <div className="tabs" role="tablist" aria-label={label}>
+      {items.map((t, i) => (
+        <button key={i} type="button" role="tab" aria-selected={i === active} className={i === active ? 'on' : ''} onClick={() => onSelect(i)}>{t}</button>
+      ))}
+    </div>
   );
 }
