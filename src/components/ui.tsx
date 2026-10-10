@@ -1,0 +1,345 @@
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
+import { Link } from 'react-router-dom';
+import { config } from '../config';
+import type { Checked, Level, Source } from '../data/types';
+import { load, save, type SavedSim } from '../lib/storage';
+
+// ------------------------------------------------------------ Champs
+
+type NumberFieldProps = {
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+  unit?: string;
+  step?: number;
+  min?: number;
+  max?: number;
+  hint?: string;
+  /** Si true, la valeur affichée est en % et stockée en décimal. */
+  percent?: boolean;
+};
+
+export function NumberField({ label, value, onChange, unit, step = 1, min, max, hint, percent }: NumberFieldProps) {
+  const id = useId();
+  const shown = percent ? round(value * 100, 4) : value;
+  const [text, setText] = useState(String(shown));
+  const last = useRef(shown);
+  useEffect(() => {
+    if (shown !== last.current) {
+      setText(String(shown));
+      last.current = shown;
+    }
+  }, [shown]);
+  return (
+    <div className="field">
+      <label htmlFor={id}>{label}</label>
+      <div className="input-unit">
+        <input
+          id={id}
+          type="number"
+          inputMode="decimal"
+          value={text}
+          step={step}
+          min={min}
+          max={max}
+          onChange={(e) => {
+            setText(e.target.value);
+            const n = parseFloat(e.target.value.replace(',', '.'));
+            if (Number.isFinite(n)) {
+              const clamped = Math.min(max ?? Infinity, Math.max(min ?? -Infinity, n));
+              last.current = clamped;
+              onChange(percent ? clamped / 100 : clamped);
+            }
+          }}
+          aria-describedby={hint ? id + '-h' : undefined}
+        />
+        {unit && <span aria-hidden="true">{unit}</span>}
+      </div>
+      {hint && <div className="hint" id={id + '-h'}>{hint}</div>}
+    </div>
+  );
+}
+
+function round(n: number, d: number) {
+  const f = Math.pow(10, d);
+  return Math.round(n * f) / f;
+}
+
+/** État de formulaire mémorisé sur l'appareil (préférence locale). */
+export function usePersistentState<T extends object>(key: string, initial: T) {
+  const [state, setState] = useState<T>(() => ({ ...initial, ...load<Partial<T>>('last:' + key, {}) }));
+  useEffect(() => {
+    save('last:' + key, state);
+  }, [key, state]);
+  const update = <K extends keyof T>(k: K) => (v: T[K]) => setState((s) => ({ ...s, [k]: v }));
+  return [state, setState, update] as const;
+}
+
+// ------------------------------------------------------------ Affichage
+
+export function Kpi({ label, value, sub, tone }: { label: string; value: string; sub?: string; tone?: 'pos' | 'neg' }) {
+  return (
+    <div className={'kpi ' + (tone ?? '')}>
+      <div className="k-label">{label}</div>
+      <div className="k-value">{value}</div>
+      {sub && <div className="k-sub">{sub}</div>}
+    </div>
+  );
+}
+
+export function Dots({ level, kind, label }: { level: Level; kind?: 'risk' | 'liq'; label: string }) {
+  return (
+    <div className="meter" aria-label={`${label} : ${level} sur 5`} role="img">
+      <span>{label}</span>
+      <div className={'dots ' + (kind ?? '')}>
+        {[1, 2, 3, 4, 5].map((i) => (
+          <i key={i} className={i <= level ? 'on' : ''} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function CheckedText({ c }: { c: Checked }) {
+  return (
+    <p>
+      {c.text}{' '}
+      {c.verified ? (
+        <span className="badge-verified">✓ vérifié{c.asOf ? ` au ${c.asOf}` : ''}</span>
+      ) : (
+        <span className="badge-unverified">à vérifier</span>
+      )}
+    </p>
+  );
+}
+
+export function Sources({ list }: { list: Source[] }) {
+  return (
+    <ul className="source-list">
+      {list.map((s) => (
+        <li key={s.url + s.label}>
+          <a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a>
+          {s.official && <span className="muted small"> · source institutionnelle</span>}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export function PageHead({ eyebrow, title, children }: { eyebrow?: string; title: string; children?: ReactNode }) {
+  useEffect(() => {
+    document.title = `${title} · ${config.siteName}`;
+  }, [title]);
+  return (
+    <header style={{ marginBottom: 24 }}>
+      {eyebrow && <div className="eyebrow">{eyebrow}</div>}
+      <h1>{title}</h1>
+      {children && <div className="lede">{children}</div>}
+    </header>
+  );
+}
+
+export function Disclaimer() {
+  return (
+    <p className="notice small" role="note">
+      Simulation pédagogique fondée sur vos hypothèses. Les rendements passés ou supposés ne préjugent pas des
+      rendements futurs. Ce site ne fournit pas de conseil en investissement personnalisé.
+    </p>
+  );
+}
+
+/** Emplacement publicitaire : n'affiche rien tant que config.ads.enabled est false. */
+export function AdSlot({ id }: { id: string }) {
+  if (!config.ads.enabled) return null;
+  return (
+    <aside className="panel small muted" data-ad-slot={id} aria-label="Publicité">
+      Publicité
+    </aside>
+  );
+}
+
+// ------------------------------------------------------------ Graphique
+
+export type Series = { name: string; color: string; values: number[]; dashed?: boolean };
+
+type ChartProps = {
+  series: Series[];
+  xLabels: (string | number)[];
+  format: (n: number) => string;
+  title: string;
+  height?: number;
+};
+
+/** Graphique en lignes SVG, sans dépendance, utilisable à la souris, au doigt et au clavier. */
+export function LineChart({ series, xLabels, format, title, height = 300 }: ChartProps) {
+  const W = 720;
+  const H = height;
+  const pad = { l: 64, r: 16, t: 16, b: 32 };
+  const n = xLabels.length;
+  const [hover, setHover] = useState<number | null>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  const { max, min, ticks } = useMemo(() => {
+    const all = series.flatMap((s) => s.values).filter(Number.isFinite);
+    const lo = Math.min(0, ...all);
+    const hi = Math.max(1, ...all);
+    const step = niceStep((hi - lo) / 4);
+    const top = Math.ceil(hi / step) * step;
+    const bottom = Math.floor(lo / step) * step;
+    const t: number[] = [];
+    for (let v = bottom; v <= top + step / 2; v += step) t.push(v);
+    return { max: top, min: bottom, ticks: t };
+  }, [series]);
+
+  const x = (i: number) => pad.l + (n <= 1 ? 0 : (i / (n - 1)) * (W - pad.l - pad.r));
+  const y = (v: number) => pad.t + (1 - (v - min) / (max - min || 1)) * (H - pad.t - pad.b);
+  const labelEvery = Math.max(1, Math.ceil(n / 10));
+
+  const onMove = (clientX: number) => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const rect = svg.getBoundingClientRect();
+    const px = ((clientX - rect.left) / rect.width) * W;
+    const i = Math.round(((px - pad.l) / (W - pad.l - pad.r)) * (n - 1));
+    setHover(Math.max(0, Math.min(n - 1, i)));
+  };
+
+  const active = hover ?? n - 1;
+
+  return (
+    <figure style={{ margin: 0 }}>
+      <svg
+        ref={svgRef}
+        className="chart"
+        viewBox={`0 0 ${W} ${H}`}
+        role="img"
+        aria-label={title}
+        tabIndex={0}
+        onPointerMove={(e) => onMove(e.clientX)}
+        onPointerLeave={() => setHover(null)}
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowRight') setHover(Math.min(n - 1, (hover ?? n - 1) + 1));
+          if (e.key === 'ArrowLeft') setHover(Math.max(0, (hover ?? n - 1) - 1));
+        }}
+      >
+        {ticks.map((t) => (
+          <g key={t}>
+            <line className="grid-line" x1={pad.l} x2={W - pad.r} y1={y(t)} y2={y(t)} />
+            <text x={pad.l - 8} y={y(t) + 4} textAnchor="end">{compact(t)}</text>
+          </g>
+        ))}
+        {xLabels.map((l, i) =>
+          (i % labelEvery === 0 && n - 1 - i >= labelEvery * 0.6) || i === n - 1 ? (
+            <text key={i} x={x(i)} y={H - 10} textAnchor="middle">{l}</text>
+          ) : null,
+        )}
+        {series.map((s) => (
+          <path
+            key={s.name}
+            d={s.values.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join('')}
+            fill="none"
+            stroke={s.color}
+            strokeWidth={2.2}
+            strokeDasharray={s.dashed ? '5 4' : undefined}
+            strokeLinejoin="round"
+          />
+        ))}
+        <line x1={x(active)} x2={x(active)} y1={pad.t} y2={H - pad.b} stroke="var(--ink-3)" strokeDasharray="2 3" />
+        {series.map((s) => (
+          <circle key={s.name} cx={x(active)} cy={y(s.values[active])} r={4} fill={s.color} stroke="#fff" strokeWidth={1.5} />
+        ))}
+      </svg>
+      <div className="chart-tip" aria-live="polite">
+        <strong>{xLabels[active]}</strong>{' '}
+        {series.map((s) => (
+          <span key={s.name} style={{ marginLeft: 12 }}>
+            <span style={{ color: s.color }}>●</span> {s.name} : <span className="num">{format(s.values[active])}</span>
+          </span>
+        ))}
+      </div>
+      <figcaption className="chart-legend">
+        {series.map((s) => (
+          <span key={s.name} style={{ ['--c' as string]: s.color }}>{s.name}</span>
+        ))}
+      </figcaption>
+    </figure>
+  );
+}
+
+function niceStep(raw: number) {
+  if (raw <= 0) return 1;
+  const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const f = raw / p;
+  return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * p;
+}
+
+function compact(n: number) {
+  const a = Math.abs(n);
+  if (a >= 1e6) return (n / 1e6).toLocaleString('fr-FR', { maximumFractionDigits: 1 }) + ' M€';
+  if (a >= 1e3) return (n / 1e3).toLocaleString('fr-FR', { maximumFractionDigits: 0 }) + ' k€';
+  return n.toLocaleString('fr-FR') + ' €';
+}
+
+// ------------------------------------------------------------ Simulations enregistrées
+
+export function SavedSims<T>({ simKey, current, onLoad }: { simKey: string; current: T; onLoad: (d: T) => void }) {
+  const storeKey = 'saved:' + simKey;
+  const [list, setList] = useState<SavedSim<T>[]>(() => load(storeKey, []));
+  const [name, setName] = useState('');
+  const [msg, setMsg] = useState('');
+  const persist = (l: SavedSim<T>[]) => {
+    setList(l);
+    if (!save(storeKey, l)) setMsg("Le stockage local est indisponible dans ce navigateur (navigation privée ?).");
+  };
+  return (
+    <details className="panel" style={{ marginTop: 16 }}>
+      <summary style={{ cursor: 'pointer', fontWeight: 600 }}>Mes simulations enregistrées ({list.length})</summary>
+      <p className="small muted" style={{ marginTop: 10 }}>
+        Enregistrées uniquement dans ce navigateur, sur cet appareil. Elles ne sont ni envoyées ni synchronisées entre vos appareils.
+      </p>
+      <div style={{ display: 'flex', gap: 8 }}>
+        <input type="text" placeholder="Nom de la simulation" value={name} onChange={(e) => setName(e.target.value)} aria-label="Nom de la simulation" />
+        <button
+          className="btn small"
+          onClick={() => {
+            const label = name.trim() || `Simulation du ${new Date().toLocaleDateString('fr-FR')}`;
+            persist([{ id: String(Date.now()), name: label, savedAt: new Date().toISOString(), data: current }, ...list].slice(0, 20));
+            setName('');
+            setMsg(`« ${label} » enregistrée.`);
+          }}
+        >
+          Enregistrer
+        </button>
+      </div>
+      {msg && <p className="small" role="status" style={{ marginTop: 8 }}>{msg}</p>}
+      {list.length > 0 && (
+        <ul style={{ listStyle: 'none', padding: 0, margin: '12px 0 0' }}>
+          {list.map((s) => (
+            <li key={s.id} style={{ display: 'flex', gap: 8, alignItems: 'center', padding: '6px 0', borderTop: '1px solid var(--line)' }}>
+              <span style={{ flex: 1 }}>
+                {s.name} <span className="muted small">· {new Date(s.savedAt).toLocaleDateString('fr-FR')}</span>
+              </span>
+              <button className="btn small secondary" onClick={() => onLoad(s.data)}>Charger</button>
+              <button className="btn small secondary" aria-label={`Supprimer ${s.name}`} onClick={() => persist(list.filter((x) => x.id !== s.id))}>
+                Supprimer
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </details>
+  );
+}
+
+export function Crumbs({ items }: { items: { to?: string; label: string }[] }) {
+  return (
+    <nav className="breadcrumb" aria-label="Fil d'Ariane">
+      {items.map((it, i) => (
+        <span key={i}>
+          {i > 0 && ' / '}
+          {it.to ? <Link to={it.to}>{it.label}</Link> : <span aria-current="page">{it.label}</span>}
+        </span>
+      ))}
+    </nav>
+  );
+}
