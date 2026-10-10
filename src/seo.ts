@@ -29,7 +29,7 @@ export function pagesMeta(siteUrl: string): PageMeta[] {
     { path: '/entrepreneuriat/', title: `Créer de la richesse par l’entreprise | ${SITE}`, description: 'Créer, développer ou racheter une entreprise : les voies possibles, leurs risques et les ressources publiques gratuites.' },
     { path: '/guides/', title: `Guides pédagogiques sur l’investissement | ${SITE}`, description: 'Guides pour comprendre le patrimoine net, la rentabilité locative, le PEA, les frais, le crédit et l’effet de levier.' },
     { path: '/methodologie/', title: `Méthode, formules et sources | ${SITE}`, description: 'Sources officielles, dates de vérification, formules de calcul et processus de mise à jour de Patrimoine OS.' },
-    { path: '/confidentialite/', title: `Politique de confidentialité | ${SITE}`, description: 'Aucun cookie, aucun traceur, aucun compte : vos calculs restent dans votre navigateur.' },
+    { path: '/confidentialite/', title: `Politique de confidentialité | ${SITE}`, description: 'Aucun cookie, aucun compte, mesure d’audience anonyme : vos calculs restent dans votre navigateur.' },
     { path: '/recherche/', title: `Recherche | ${SITE}`, description: 'Rechercher une fiche, un guide ou un simulateur.', noindex: true },
     { path: '/mentions-legales/', title: `Mentions légales | ${SITE}`, description: 'Éditeur, hébergeur et nature des informations publiées sur Patrimoine OS.' },
   ];

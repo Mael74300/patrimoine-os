@@ -89,7 +89,7 @@ export default function Methodologie() {
       </p>
 
       <h2>Confidentialité</h2>
-      <p>Aucun cookie ni traceur ; vos calculs restent dans votre navigateur. Détails dans la <Link to="/confidentialite">politique de confidentialité</Link>.</p>
+      <p>Aucun cookie ; une mesure d'audience anonyme compte les pages vues ; vos calculs restent dans votre navigateur. Détails dans la <Link to="/confidentialite">politique de confidentialité</Link>.</p>
     </div>
   );
 }

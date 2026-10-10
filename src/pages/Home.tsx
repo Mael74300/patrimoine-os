@@ -72,7 +72,7 @@ export default function Home() {
       <ol className="steps">
         <li><strong>Comprendre</strong><br /><span className="muted">Chaque fiche explique un investissement : fonctionnement, risques, frais, fiscalité datée et sources.</span></li>
         <li><strong>Comparer</strong><br /><span className="muted">Mettez plusieurs placements côte à côte selon le risque, la liquidité, l'horizon et l'effort demandé.</span></li>
-        <li><strong>Simuler</strong><br /><span className="muted">Les calculs s'exécutent dans votre navigateur. Aucune inscription, aucune donnée envoyée.</span></li>
+        <li><strong>Simuler</strong><br /><span className="muted">Les calculs s'exécutent dans votre navigateur. Aucune inscription ; vos saisies ne sont jamais envoyées.</span></li>
       </ol>
 
       <div className="split" style={{ marginTop: 8 }}>

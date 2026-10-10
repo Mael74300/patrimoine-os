@@ -8,12 +8,12 @@ export function Confidentialite() {
   const [cleared, setCleared] = useState(false);
   return (
     <div className="prose">
-      <PageHead eyebrow="RGPD" title="Politique de confidentialité">Version du 10 octobre 2026.</PageHead>
+      <PageHead eyebrow="RGPD" title="Politique de confidentialité">Version du 10 octobre 2026, mise à jour pour la mesure d'audience.</PageHead>
 
       <h2>Ce que le site ne collecte pas</h2>
       <p>
-        {config.siteName} ne demande ni compte, ni adresse électronique, ni coordonnées bancaires, ni mot de passe. Il n'utilise aucun cookie,
-        aucun outil de mesure d'audience et aucun traceur publicitaire. Aucun formulaire n'envoie de données à un serveur.
+        {config.siteName} ne demande ni compte, ni adresse électronique, ni coordonnées bancaires, ni mot de passe. Il n'utilise aucun cookie
+        et aucun traceur publicitaire. Aucun formulaire n'envoie de données à un serveur.
       </p>
 
       <h2>Les calculs restent sur votre appareil</h2>
@@ -31,6 +31,24 @@ export function Confidentialite() {
       <button className="btn secondary" onClick={() => { clearAll(); setCleared(true); }}>Effacer mes données locales</button>
       {cleared && <p role="status" className="small" style={{ marginTop: 8 }}>Données locales effacées.</p>}
 
+      {config.analytics.goatcounter && (
+        <>
+          <h2>Mesure d'audience</h2>
+          <p>
+            Pour savoir quelles pages sont utiles, le site compte les pages vues avec{' '}
+            <a href="https://www.goatcounter.com" target="_blank" rel="noopener noreferrer">GoatCounter</a>, un outil open source qui
+            n'utilise pas de cookie et n'enregistre rien dans votre navigateur. Pour chaque page vue, il reçoit l'adresse de la page, le site
+            d'où vous venez, le type de navigateur et d'appareil, la taille d'écran et un pays approximatif. Il n'est pas conçu pour vous identifier
+            et ne conserve pas de données personnelles de façon durable. Les statistiques ne servent qu'à améliorer le site ; elles ne sont ni
+            revendues ni utilisées pour de la publicité. Les montants saisis dans les simulateurs ne sont jamais transmis.
+          </p>
+          <p>
+            Vous pouvez empêcher ce comptage avec un bloqueur de contenu : le site fonctionne de la même façon. Détails dans la{' '}
+            <a href="https://www.goatcounter.com/help/privacy" target="_blank" rel="noopener noreferrer">politique de confidentialité de GoatCounter</a>.
+          </p>
+        </>
+      )}
+
       <h2>Hébergement</h2>
       <p>
         Le site est hébergé par GitHub Pages. Comme tout hébergeur, GitHub peut enregistrer des données techniques de connexion, notamment
@@ -46,7 +64,7 @@ export function Confidentialite() {
         L'éditeur ne détenant aucune donnée personnelle vous concernant, il n'en a aucune à vous communiquer ou à effacer. Pour toute question :
         {' '}{config.legal.contact}. Vous pouvez aussi saisir la <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">CNIL</a>.
       </p>
-      <p className="small muted">Si des services tiers (publicité, mesure d'audience) étaient ajoutés, cette page serait mise à jour et un consentement serait demandé lorsque la loi l'exige, avant tout dépôt de traceur.</p>
+      <p className="small muted">Si d'autres services tiers (publicité, par exemple) étaient ajoutés, cette page serait mise à jour et un consentement serait demandé lorsque la loi l'exige, avant tout dépôt de traceur.</p>
     </div>
   );
 }

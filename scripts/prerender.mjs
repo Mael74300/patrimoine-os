@@ -9,16 +9,21 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
-const siteUrl = (process.env.SITE_URL || 'https://exemple.github.io/patrimoine-os').replace(/\/$/, '');
+// new URL() met le nom d'hôte en minuscules (Mael74300.github.io → mael74300.github.io).
+const siteUrl = new URL(process.env.SITE_URL || 'https://exemple.github.io/patrimoine-os').href.replace(/\/$/, '');
 const base = process.env.BASE_PATH || '/';
 
+const { render, pagesMeta, lastModified, config } = await import(pathToFileURL(join(root, 'dist-ssr', 'entry-server.js')).href);
+
+const gc = config.analytics.goatcounter;
+const gcOrigin = gc ? `https://${gc}.goatcounter.com` : '';
 const CSP = [
   "default-src 'self'",
-  "script-src 'self'",
+  `script-src 'self'${gc ? ' https://gc.zgo.at' : ''}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data:",
+  `img-src 'self' data:${gc ? ' ' + gcOrigin : ''}`,
   "font-src 'self'",
-  "connect-src 'self'",
+  `connect-src 'self'${gc ? ' ' + gcOrigin : ''}`,
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -26,7 +31,6 @@ const CSP = [
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-const { render, pagesMeta, lastModified } = await import(pathToFileURL(join(root, 'dist-ssr', 'entry-server.js')).href);
 const template = await readFile(join(dist, 'index.html'), 'utf8');
 
 function page(meta, html, { noindex = false, path = '' } = {}) {
@@ -40,6 +44,12 @@ function page(meta, html, { noindex = false, path = '' } = {}) {
     '<meta property="og:site_name" content="Patrimoine OS" />',
     `<meta property="og:title" content="${esc(meta.title)}" />`,
     `<meta property="og:description" content="${esc(meta.description)}" />`,
+    `<meta property="og:image" content="${esc(siteUrl)}/og.png" />`,
+    '<meta property="og:image:width" content="1200" />',
+    '<meta property="og:image:height" content="630" />',
+    '<meta name="twitter:card" content="summary_large_image" />',
+    // Mesure d'audience sans cookie ; le comptage est déclenché par l'application à chaque page.
+    gc ? `<script data-goatcounter="${gcOrigin}/count" data-goatcounter-settings='{"no_onload": true}' async src="https://gc.zgo.at/count.js"></script>` : '',
     noindex ? '' : `<meta property="og:url" content="${esc(url)}" />`,
     ...(meta.jsonLd ?? []).map((j) => `<script type="application/ld+json">${JSON.stringify(j).replace(/</g, '\\u003c')}</script>`),
   ].filter(Boolean).join('\n    ');

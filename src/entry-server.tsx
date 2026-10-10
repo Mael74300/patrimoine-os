@@ -3,6 +3,7 @@ import { StaticRouter } from 'react-router-dom';
 import App from './App';
 
 export { pagesMeta, lastModified } from './seo';
+export { config } from './config';
 
 /** Rend une page en HTML statique. `url` est relatif au site (sans le chemin de base). */
 export function render(url: string, basename: string): string {

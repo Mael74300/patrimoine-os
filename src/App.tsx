@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { config } from './config';
+import { trackPageview } from './lib/analytics';
 import { AS_OF } from './data/investments';
 import Home from './pages/Home';
 import Encyclopedia from './pages/Encyclopedia';
@@ -49,6 +50,15 @@ export function Logo() {
   );
 }
 
+/** Compte une page vue à chaque changement d'adresse (le site ne recharge pas la page en naviguant). */
+function Analytics() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    trackPageview();
+  }, [pathname]);
+  return null;
+}
+
 function Header() {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
@@ -82,8 +92,8 @@ function Footer() {
           <strong style={{ color: 'var(--ink)' }}>{config.siteName}</strong>
           <p className="small" style={{ marginTop: 8 }}>
             Informations générales et outils pédagogiques. Aucun conseil en investissement personnalisé.
-            Données réglementaires vérifiées au {AS_OF}. Aucun cookie, aucun traceur, aucune inscription :
-            vos simulations restent dans votre navigateur. Aucun lien commercial.
+            Données réglementaires vérifiées au {AS_OF}. Aucun cookie, aucune inscription, mesure d'audience anonyme :
+            vos saisies et simulations restent dans votre navigateur. Aucun lien commercial.
           </p>
         </div>
         <div>
@@ -113,6 +123,7 @@ export default function App() {
   return (
     <>
       <ScrollTop />
+      <Analytics />
       <a href="#contenu" className="skip" onClick={(e) => { e.preventDefault(); document.getElementById('contenu')?.focus(); }}>
         Aller au contenu
       </a>

@@ -17,6 +17,12 @@ export const config = {
     hostPrivacyUrl: 'https://docs.github.com/fr/site-policy/privacy-policies/github-general-privacy-statement',
   },
 
+  /**
+   * Mesure d'audience GoatCounter : sans cookie, sans stockage dans le navigateur.
+   * Mettre `null` pour la désactiver entièrement (le site fonctionne sans).
+   */
+  analytics: { goatcounter: 'patrimoine-os' as string | null },
+
   /** Monétisation future : chaque intégration reste optionnelle. */
   ads: { enabled: false },
   /** Liens partenaires réels uniquement, par fiche : toujours affichés comme « Lien commercial ». */
