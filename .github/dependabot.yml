@@ -1,4 +1,6 @@
-# Mises à jour automatiques et gratuites des dépendances (propositions de pull requests, testées par le workflow).
+# Mises à jour automatiques et gratuites des dépendances (propositions testées par le workflow).
+# Seules les versions mineures et correctives sont proposées : les versions majeures, susceptibles
+# de casser le site, se font à la main après vérification dans un navigateur.
 version: 2
 updates:
   - package-ecosystem: npm
@@ -9,7 +11,13 @@ updates:
     groups:
       dependances:
         patterns: ['*']
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: monthly
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
