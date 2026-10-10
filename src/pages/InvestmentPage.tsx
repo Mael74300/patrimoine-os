@@ -14,7 +14,9 @@ export default function InvestmentPage() {
   const cat = categoryById[inv.category];
   const aff = config.affiliates[inv.slug];
   const [stale, setStale] = useState(false);
-  useEffect(() => setStale(new Date().toISOString().slice(0, 10) >= inv.review.nextReview), [inv.review.nextReview]);
+  useEffect(() => {
+    setStale(new Date().toISOString().slice(0, 10) >= inv.review.nextReview);
+  }, [inv.review.nextReview]);
 
   return (
     <>

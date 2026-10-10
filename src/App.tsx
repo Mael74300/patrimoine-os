@@ -32,7 +32,11 @@ const NAV = [
 
 function ScrollTop() {
   const { pathname } = useLocation();
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
+  // Accolades obligatoires : dans les navigateurs récents, scrollTo renvoie une promesse,
+  // que React prendrait pour une fonction de nettoyage et appellerait au changement de page.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
   return null;
 }
 
@@ -48,7 +52,9 @@ export function Logo() {
 function Header() {
   const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
-  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
   return (
     <header className="site-header">
       <div className="container">

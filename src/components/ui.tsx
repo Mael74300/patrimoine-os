@@ -301,7 +301,9 @@ function compact(n: number) {
 export function SavedSims<T>({ simKey, current, onLoad }: { simKey: string; current: T; onLoad: (d: T) => void }) {
   const storeKey = 'saved:' + simKey;
   const [list, setList] = useState<SavedSim<T>[]>([]);
-  useEffect(() => setList(load(storeKey, [])), [storeKey]);
+  useEffect(() => {
+    setList(load(storeKey, []));
+  }, [storeKey]);
   const [name, setName] = useState('');
   const [msg, setMsg] = useState('');
   const persist = (l: SavedSim<T>[]) => {
