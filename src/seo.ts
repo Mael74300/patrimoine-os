@@ -6,6 +6,11 @@ import { simulators } from './lib/search';
 export type PageMeta = { path: string; title: string; description: string; jsonLd?: object[]; noindex?: boolean };
 
 const SITE = 'Patrimoine OS';
+/** Premier titre qui tient en 70 caractères (au-delà, les moteurs le tronquent). */
+const fit = (...candidates: string[]) => candidates.find((c) => c.length <= 70) ?? candidates[candidates.length - 1];
+
+const fit170 = (...candidates: string[]) => candidates.find((c) => c.length <= 170) ?? candidates[candidates.length - 1];
+
 const ORG = { '@type': 'Organization', name: SITE };
 
 const crumbs = (siteUrl: string, items: [string, string][]) => ({
@@ -19,7 +24,7 @@ export function pagesMeta(siteUrl: string): PageMeta[] {
   const pages: PageMeta[] = [
     {
       path: '/',
-      title: `${SITE} — Encyclopédie, comparateurs et simulateurs patrimoniaux gratuits`,
+      title: `${SITE} — Encyclopédie et simulateurs patrimoniaux gratuits`,
       description: 'Toutes les stratégies pour construire votre patrimoine : encyclopédie des investissements, comparateurs et simulateurs gratuits, sans inscription.',
       jsonLd: [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SITE, url: siteUrl + '/', inLanguage: 'fr-FR' }],
     },
@@ -37,8 +42,8 @@ export function pagesMeta(siteUrl: string): PageMeta[] {
   for (const s of simulators) {
     pages.push({
       path: `/simulateurs/${s.slug}/`,
-      title: `${s.title} | ${SITE}`,
-      description: `${s.excerpt} Gratuit, sans inscription, calculé dans votre navigateur.`,
+      title: fit(`${s.title} | ${SITE}`, s.title),
+      description: fit170(`${s.excerpt} Gratuit, sans inscription, calculé dans votre navigateur.`, `${s.excerpt} Gratuit, sans inscription.`),
       jsonLd: [
         { '@context': 'https://schema.org', '@type': 'WebApplication', name: s.title, applicationCategory: 'FinanceApplication', operatingSystem: 'Navigateur web', isAccessibleForFree: true, inLanguage: 'fr-FR', url: `${siteUrl}/simulateurs/${s.slug}/` },
         crumbs(siteUrl, [['Accueil', '/'], ['Simulateurs', '/simulateurs/'], [s.title, `/simulateurs/${s.slug}/`]]),
@@ -49,7 +54,7 @@ export function pagesMeta(siteUrl: string): PageMeta[] {
     const cat = categories.find((c) => c.id === i.category)!;
     pages.push({
       path: `/encyclopedie/${i.slug}/`,
-      title: `${i.name} : fonctionnement, risques, frais et fiscalité | ${SITE}`,
+      title: fit(`${i.name} : fonctionnement, risques, frais et fiscalité | ${SITE}`, `${i.name} : risques, frais, fiscalité | ${SITE}`, `${i.name} : risques, frais, fiscalité`, `${i.name} | ${SITE}`, i.name),
       description: i.summary,
       jsonLd: [
         { '@context': 'https://schema.org', '@type': 'Article', headline: i.name, description: i.summary, inLanguage: 'fr-FR', dateModified: i.review.verifiedOn, author: ORG, publisher: ORG },
@@ -60,7 +65,7 @@ export function pagesMeta(siteUrl: string): PageMeta[] {
   for (const g of guides) {
     pages.push({
       path: `/guides/${g.slug}/`,
-      title: `${g.title} | ${SITE}`,
+      title: fit(`${g.title} | ${SITE}`, g.title),
       description: g.summary,
       jsonLd: [
         { '@context': 'https://schema.org', '@type': 'Article', headline: g.title, description: g.summary, inLanguage: 'fr-FR', dateModified: g.updatedOn, author: ORG, publisher: ORG },

@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
+    "build": "tsc --noEmit && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs && node scripts/seo-check.mjs",
     "build:apercu": "VITE_HASH=1 vite build --base ./ --outDir dist-apercu",
     "preview": "vite preview",
+    "seo:check": "node scripts/seo-check.mjs",
     "test": "vitest run",
     "sources:check": "tsx scripts/watch-sources.ts",
     "sources:accept": "tsx scripts/watch-sources.ts --accept",
