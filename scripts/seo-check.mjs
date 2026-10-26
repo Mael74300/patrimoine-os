@@ -59,7 +59,8 @@ export function checkSeo(pages, { siteUrl, base = '/' }) {
       let href = unesc(m[1]).split('#')[0].split('?')[0];
       if (!href || /^(https?:|mailto:|tel:)/.test(href)) continue;
       if (!href.startsWith('/')) continue;
-      if (base !== '/' && href.startsWith(base)) href = '/' + href.slice(base.length);
+      const prefix = base.replace(/\/$/, '');
+      if (prefix && (href === prefix || href.startsWith(prefix + '/'))) href = href.slice(prefix.length) || '/';
       const target = norm(href);
       if (/\.[a-z0-9]+$/i.test(target)) continue; // fichier (og.png, sitemap.xml…)
       if (!known.has(target)) errors.push(`${here} : lien interne cassé vers « ${m[1]} »`);
