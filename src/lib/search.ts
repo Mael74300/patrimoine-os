@@ -13,6 +13,7 @@ export const simulators = [
   { slug: 'entreprise', title: 'Calculateur entrepreneurial', excerpt: "Chiffre d'affaires, marge, rémunération, trésorerie et valorisation en trois scénarios.", keywords: 'entreprise creation chiffre affaires marge tresorerie valorisation business plan' },
   { slug: 'independance-financiere', title: "Simulateur d'indépendance financière", excerpt: 'Capital visé selon le taux de retrait, délai pour l’atteindre, durée du capital.', keywords: 'fire independance financiere rente taux de retrait retraite anticipee' },
   { slug: 'epargne-de-precaution', title: "Simulateur d'épargne de précaution", excerpt: 'Réserve à garder disponible, délai pour la constituer et répartition sur les livrets réglementés.', keywords: 'precaution urgence imprevu matelas securite livret a ldds lep mois de depenses reserve' },
+  { slug: 'budget', title: 'Budget mensuel et taux d’épargne', excerpt: 'Part du revenu consacrée aux besoins, envies et épargne, repère 50/30/20 et effort pour un taux visé.', keywords: 'budget depenses taux epargne 50 30 20 revenu besoins envies capacite epargne' },
 ];
 
 /** Minuscule, sans accents, pour une recherche tolérante. */
