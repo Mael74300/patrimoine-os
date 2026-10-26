@@ -11,3 +11,4 @@ export * from './format';
 export * from './precaution';
 export * from './budget';
 export * from './fees';
+export * from './prepayVsInvest';
