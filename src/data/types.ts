@@ -56,6 +56,8 @@ export type Guide = {
   related: string[];
   sources: Source[];
   updatedOn: string;
+  /** Questions-réponses affichées sur la page ; reprises en données structurées FAQPage. */
+  faq?: { q: string; a: string }[];
   /** Outil intégré à la page. */
   widget?: 'catalogue' | 'patrimoine-net';
   /** Simulateur ou page à mettre en avant. */

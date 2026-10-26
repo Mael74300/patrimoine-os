@@ -108,6 +108,12 @@ export function GuidePage() {
             {s.body.map((p) => <p key={p}>{p}</p>)}
           </section>
         ))}
+        {g.faq?.length ? (
+          <section>
+            <h2>Questions fréquentes</h2>
+            {g.faq.map((f) => <div key={f.q}><h3>{f.q}</h3><p>{f.a}</p></div>)}
+          </section>
+        ) : null}
       </div>
       {g.widget === 'catalogue' && <Catalogue />}
       {g.widget === 'patrimoine-net' && (<><h2>Calculer votre patrimoine net</h2><NetWorthCalculator /></>)}
