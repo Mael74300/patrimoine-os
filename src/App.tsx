@@ -22,6 +22,7 @@ import SimIndependance from './pages/SimIndependance';
 import SimPrecaution from './pages/SimPrecaution';
 import SimBudget from './pages/SimBudget';
 import SimFrais from './pages/SimFrais';
+import SimRembourser from './pages/SimRembourser';
 import Glossaire from './pages/Glossaire';
 import { Confidentialite, MentionsLegales } from './pages/Legal';
 import NotFound from './pages/NotFound';
@@ -152,6 +153,7 @@ export default function App() {
             <Route path="/simulateurs/epargne-de-precaution" element={<SimPrecaution />} />
             <Route path="/simulateurs/budget" element={<SimBudget />} />
             <Route path="/simulateurs/frais" element={<SimFrais />} />
+            <Route path="/simulateurs/rembourser-ou-investir" element={<SimRembourser />} />
             <Route path="/glossaire" element={<Glossaire />} />
             <Route path="/confidentialite" element={<Confidentialite />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />

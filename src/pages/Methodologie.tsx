@@ -45,6 +45,11 @@ const FORMULAS: [string, string[]][] = [
     'Rendement net = (1 + rendement brut) × (1 − frais) − 1, capitalisé chaque mois au taux actuariel équivalent, versements en début de mois (même moteur que le simulateur de patrimoine).',
     'Coût des frais = capital final sans frais − capital final avec frais, à versements et rendement brut identiques. Part des gains absorbée = coût / (capital sans frais − versements cumulés).',
   ]],
+  ['Rembourser ou investir', [
+    'Horizon commun : la durée restante du crédit. Crédit à échéances constantes, taux mensuel = taux nominal / 12 ; mensualité = capital × t / (1 − (1 + t)^−n).',
+    'Rembourser : la somme réduit le capital, la mensualité est conservée, le crédit s’éteint plus tôt et les mensualités libérées sont investies jusqu’à l’horizon. Investir : le crédit suit son échéancier, la somme est placée dès le départ.',
+    'Placement : rendement net de frais au taux actuariel mensuel ; patrimoine net = placement − impôt (taux unique sur les gains, jamais sur une perte) − capital restant dû. Rendement d’équilibre : recherche par dichotomie du rendement brut (0–30 %) qui égalise les deux options. Assurance et indemnités de remboursement anticipé ignorées.',
+  ]],
   ['Budget et taux d’épargne', [
     'Taux d’épargne = épargne mensuelle / revenu net mensuel. Revenu non affecté = revenu − besoins − envies − épargne.',
     'Repère 50 / 30 / 20 : besoins 50 %, envies 30 %, épargne 20 % du revenu net ; repère pédagogique, non une règle officielle. Effort pour un taux visé = revenu × taux − épargne actuelle, couvert d’abord par le revenu non affecté puis par les envies.',
