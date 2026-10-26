@@ -20,6 +20,7 @@ import SimEtfImmobilier from './pages/SimEtfImmobilier';
 import SimEntreprise from './pages/SimEntreprise';
 import SimIndependance from './pages/SimIndependance';
 import SimPrecaution from './pages/SimPrecaution';
+import SimBudget from './pages/SimBudget';
 import { Confidentialite, MentionsLegales } from './pages/Legal';
 import NotFound from './pages/NotFound';
 
@@ -146,6 +147,7 @@ export default function App() {
             <Route path="/simulateurs/entreprise" element={<SimEntreprise />} />
             <Route path="/simulateurs/independance-financiere" element={<SimIndependance />} />
             <Route path="/simulateurs/epargne-de-precaution" element={<SimPrecaution />} />
+            <Route path="/simulateurs/budget" element={<SimBudget />} />
             <Route path="/confidentialite" element={<Confidentialite />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/entrepreneuriat" element={<Entrepreneuriat />} />

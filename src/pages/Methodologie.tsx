@@ -41,6 +41,10 @@ const FORMULAS: [string, string[]][] = [
     'Constitution : intérêts au taux mensuel équivalent puis versement en fin de mois. Versement requis : (cible − épargne × (1 + t)^n) / [((1 + t)^n − 1) / t].',
     'Répartition : LEP (si éligible), puis Livret A, puis LDDS, dans la limite des plafonds de versement ; l’excédent est indiqué sans rémunération supposée.',
   ]],
+  ['Budget et taux d’épargne', [
+    'Taux d’épargne = épargne mensuelle / revenu net mensuel. Revenu non affecté = revenu − besoins − envies − épargne.',
+    'Repère 50 / 30 / 20 : besoins 50 %, envies 30 %, épargne 20 % du revenu net ; repère pédagogique, non une règle officielle. Effort pour un taux visé = revenu × taux − épargne actuelle, couvert d’abord par le revenu non affecté puis par les envies.',
+  ]],
 ];
 
 export default function Methodologie() {
