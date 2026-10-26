@@ -26,6 +26,11 @@ describe('contrôle SEO', () => {
     expect(errs.some((e) => e.includes('lien interne cassé'))).toBe(true);
     expect(errs.some((e) => e.includes('/b : page orpheline'))).toBe(true);
   });
+  it('retire le préfixe de déploiement, avec ou sans barre finale', () => {
+    const a = page('/', { links: ['/depot', '/depot/a'] });
+    const b = page('/a/', { title: 'Autre titre de page parfaitement valide', desc: 'Une autre description, différente de la première, et assez longue.', links: ['/depot/'] });
+    expect(checkSeo([a, b], { siteUrl: site, base: '/depot/' })).toEqual([]);
+  });
   it('signale un JSON-LD invalide', () => {
     const errs = run([page('/', { ld: '<script type="application/ld+json">{oups</script>' })]);
     expect(errs.some((e) => e.includes('JSON-LD invalide'))).toBe(true);
