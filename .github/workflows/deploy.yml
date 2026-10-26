@@ -46,3 +46,16 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+      # Prévient Bing et les moteurs IndexNow ; ne peut jamais bloquer ni faire échouer la publication.
+      - uses: actions/checkout@v4
+        continue-on-error: true
+      - uses: actions/setup-node@v4
+        continue-on-error: true
+        with:
+          node-version: 22
+      - name: Notification IndexNow
+        continue-on-error: true
+        timeout-minutes: 2
+        env:
+          SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io/{1}', github.repository_owner, github.event.repository.name) }}
+        run: node scripts/indexnow.mjs || true

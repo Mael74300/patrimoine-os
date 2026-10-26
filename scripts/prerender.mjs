@@ -1,11 +1,12 @@
 /**
  * Pré-rendu statique : une page HTML complète par adresse (titre, description, URL canonique,
- * Open Graph, données structurées), plus 404.html, sitemap.xml et robots.txt.
+ * Open Graph, données structurées), plus 404.html, sitemap.xml, feed.xml et robots.txt.
  * Variables : SITE_URL (ex. https://compte.github.io/patrimoine-os) et BASE_PATH (ex. /patrimoine-os/).
  */
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { buildAtom, feedEntries } from './lib/atom.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
@@ -50,6 +51,7 @@ function page(meta, html, { noindex = false, path = '' } = {}) {
     '<meta name="twitter:card" content="summary_large_image" />',
     // Mesure d'audience sans cookie ; le comptage est déclenché par l'application à chaque page.
     gc ? `<script data-goatcounter="${gcOrigin}/count" data-goatcounter-settings='{"no_onload": true}' async src="https://gc.zgo.at/count.js"></script>` : '',
+    `<link rel="alternate" type="application/atom+xml" title="Patrimoine OS — nouveautés" href="${esc(siteUrl)}/feed.xml" />`,
     noindex ? '' : `<meta property="og:url" content="${esc(url)}" />`,
     ...(meta.jsonLd ?? []).map((j) => `<script type="application/ld+json">${JSON.stringify(j).replace(/</g, '\\u003c')}</script>`),
   ].filter(Boolean).join('\n    ');
@@ -80,7 +82,8 @@ ${pages.filter((p) => !p.noindex).map((p) => `  <url><loc>${esc(siteUrl + p.path
 </urlset>
 `;
 await writeFile(join(dist, 'sitemap.xml'), sitemap);
+await writeFile(join(dist, 'feed.xml'), buildAtom(feedEntries(pages, siteUrl, lastModified), siteUrl));
 await writeFile(join(dist, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`);
 await rm(join(root, 'dist-ssr'), { recursive: true, force: true });
 
-console.log(`Pré-rendu : ${pages.length} pages, 404.html, sitemap.xml, robots.txt → ${siteUrl}`);
+console.log(`Pré-rendu : ${pages.length} pages, 404.html, sitemap.xml, feed.xml, robots.txt → ${siteUrl}`);
