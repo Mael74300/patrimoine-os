@@ -1,4 +1,5 @@
 import { clamp, num, safeDiv } from './common';
+import { projectGrowth } from './growth';
 
 /**
  * Budget mensuel et taux d'épargne. La répartition 50 / 30 / 20 (besoins, envies, épargne) est un repère
@@ -69,4 +70,17 @@ export function catchUp(i: BudgetInput, targetRate: number) {
 /** Mois de revenu net épargnés en un an (pour situer l'effort : 12 × taux d'épargne). */
 export function monthsOfIncomeSavedPerYear(savingRate: number): number {
   return 12 * Math.max(0, num(savingRate));
+}
+
+/**
+ * Capital constitué en épargnant chaque mois le montant du budget, au rendement net supposé (versements en début de mois).
+ * Hypothèse de calcul, pas une prévision : un rendement nul donne la simple somme des versements.
+ */
+export function projectBudgetSaving(monthlySaving: number, annualNetReturn: number, durationYears: number) {
+  const pts = projectGrowth({
+    initial: 0, monthly: Math.max(0, num(monthlySaving)), annualReturn: num(annualNetReturn), annualFees: 0,
+    years: durationYears, inflation: 0,
+  });
+  const last = pts[pts.length - 1];
+  return { contributed: last ? last.contributed : 0, finalValue: last ? last.value : 0, gains: last ? last.gains : 0 };
 }

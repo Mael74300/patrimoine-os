@@ -10,3 +10,4 @@ export * from './networth';
 export * from './format';
 export * from './precaution';
 export * from './budget';
+export * from './fees';

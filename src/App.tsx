@@ -21,6 +21,8 @@ import SimEntreprise from './pages/SimEntreprise';
 import SimIndependance from './pages/SimIndependance';
 import SimPrecaution from './pages/SimPrecaution';
 import SimBudget from './pages/SimBudget';
+import SimFrais from './pages/SimFrais';
+import Glossaire from './pages/Glossaire';
 import { Confidentialite, MentionsLegales } from './pages/Legal';
 import NotFound from './pages/NotFound';
 
@@ -102,6 +104,7 @@ function Footer() {
           <strong style={{ color: 'var(--ink)' }}>Explorer</strong>
           <ul style={{ marginTop: 8 }}>
             {NAV.map((n) => <li key={n.to}><Link to={n.to}>{n.label}</Link></li>)}
+            <li><Link to="/glossaire">Glossaire</Link></li>
             <li><Link to="/confidentialite">Confidentialité</Link></li>
             <li><Link to="/mentions-legales">Mentions légales</Link></li>
           </ul>
@@ -148,6 +151,8 @@ export default function App() {
             <Route path="/simulateurs/independance-financiere" element={<SimIndependance />} />
             <Route path="/simulateurs/epargne-de-precaution" element={<SimPrecaution />} />
             <Route path="/simulateurs/budget" element={<SimBudget />} />
+            <Route path="/simulateurs/frais" element={<SimFrais />} />
+            <Route path="/glossaire" element={<Glossaire />} />
             <Route path="/confidentialite" element={<Confidentialite />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/entrepreneuriat" element={<Entrepreneuriat />} />

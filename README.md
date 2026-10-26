@@ -1,6 +1,6 @@
 # Patrimoine OS
 
-Plateforme française et gratuite consacrée à la construction du patrimoine : encyclopédie des investissements, comparateurs, neuf simulateurs et guides pédagogiques. Site statique pré-rendu, sans backend, sans compte, sans cookie ni traceur. Coût d'exploitation : 0 €.
+Plateforme française et gratuite consacrée à la construction du patrimoine : encyclopédie des investissements, comparateurs, dix simulateurs et guides pédagogiques. Site statique pré-rendu, sans backend, sans compte, sans cookie ni traceur. Coût d'exploitation : 0 €.
 
 ## Contenu
 
@@ -15,15 +15,18 @@ Plateforme française et gratuite consacrée à la construction du patrimoine : 
 | Indépendance financière | Capital visé selon le taux de retrait, délai, durée du capital en phase de retrait, plusieurs scénarios |
 | Épargne de précaution | Montant visé selon la situation professionnelle (repères de 3, 6 ou 9 mois de dépenses), mois couverts, délai et versement nécessaire, répartition sur LEP, Livret A et LDDS dans la limite des plafonds |
 | Budget et taux d'épargne | Part du revenu en besoins, envies et épargne, comparaison au repère pédagogique 50 / 30 / 20, effort mensuel pour atteindre un taux d'épargne visé |
+| Impact des frais | Trois niveaux de frais annuels à rendement brut et versements identiques : capital final, coût des frais, part des gains absorbée |
 | Portefeuille, comparateur de fiches | Allocation, frais pondérés, rééquilibrage ; jusqu'à 3 fiches côte à côte |
 | Guides | 11 guides, dont 8 pages répondant à une intention de recherche précise (patrimoine net, rentabilité locative, PEA, frais…) |
+| Glossaire | 20 notions expliquées, avec liens vers simulateurs, fiches et guides (liens vérifiés par les tests) |
+| Simulations locales | Chaque simulateur permet d'enregistrer, d'exporter et d'importer ses simulations en fichier JSON (local, rien n'est envoyé) |
 | Légal | Politique de confidentialité, mentions légales, effacement des données locales |
 
 ## Architecture
 
 - **Vite + React + TypeScript**, CSS natif, graphiques SVG sans dépendance.
-- **Moteur de calcul** : un module par famille dans `src/lib/calc/` (`growth`, `loan`, `rental`, `compare`, `portfolio`, `business`, `fire`, `precaution`, `budget`, `networth`, `format`), fonctions pures et déterministes. Conventions dans `common.ts` et sur la page « Méthode ». **131 tests** : formules, exemples connus, valeurs nulles, négatives et durées nulles, chaque exemple chiffré cité dans les fiches et guides, métadonnées SEO, scripts de surveillance.
-- **Pré-rendu statique** (`scripts/prerender.mjs`) : 56 pages HTML complètes avec URL lisibles (`/encyclopedie/pea/`), titre, description, URL canonique, Open Graph, données structurées (Article, BreadcrumbList, WebApplication), plus `404.html`, `sitemap.xml`, `robots.txt`. Le navigateur reprend ensuite la page (hydratation) pour l'interactivité.
+- **Moteur de calcul** : un module par famille dans `src/lib/calc/` (`growth`, `loan`, `rental`, `compare`, `portfolio`, `business`, `fire`, `precaution`, `budget`, `fees`, `networth`, `format`), fonctions pures et déterministes. Conventions dans `common.ts` et sur la page « Méthode ». **144 tests** : formules, exemples connus, valeurs nulles, négatives et durées nulles, chaque exemple chiffré cité dans les fiches et guides, métadonnées SEO, scripts de surveillance.
+- **Pré-rendu statique** (`scripts/prerender.mjs`) : 58 pages HTML complètes avec URL lisibles (`/encyclopedie/pea/`), titre, description, URL canonique, Open Graph, données structurées (Article, BreadcrumbList, WebApplication), plus `404.html`, `sitemap.xml`, `robots.txt`. Le navigateur reprend ensuite la page (hydratation) pour l'interactivité.
 - **Sécurité** : politique de sécurité du contenu (CSP) dans chaque page, aucune ressource tierce, aucun formulaire envoyé, dépendances auditées à chaque construction et mises à jour par Dependabot.
 - **Données locales** : saisies et simulations enregistrées dans le `localStorage`, jamais transmises, non synchronisées entre appareils.
 

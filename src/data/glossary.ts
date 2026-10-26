@@ -1,0 +1,33 @@
+/**
+ * Glossaire pédagogique. Définitions générales, sans chiffre réglementaire (ceux-ci restent dans les fiches, datés et sourcés).
+ * Chaque lien interne doit pointer vers une page existante : vérifié par les tests.
+ */
+export type GlossaryLink = { label: string; to: string };
+export type GlossaryTerm = { term: string; definition: string; links: GlossaryLink[] };
+
+const sim = (slug: string, label: string): GlossaryLink => ({ label, to: `/simulateurs/${slug}` });
+const fiche = (slug: string, label: string): GlossaryLink => ({ label, to: `/encyclopedie/${slug}` });
+const guide = (slug: string, label: string): GlossaryLink => ({ label, to: `/guides/${slug}` });
+
+export const glossary: GlossaryTerm[] = [
+  { term: 'Allocation d’actifs', definition: 'Répartition d’un patrimoine entre grandes familles de placements (liquidités, obligations, actions, immobilier…). Elle explique l’essentiel du risque pris, davantage que le choix d’un produit précis.', links: [sim('portefeuille', 'Calculateur de portefeuille'), guide('types-investissements', 'Types d’investissements')] },
+  { term: 'Amortissement (crédit)', definition: 'Remboursement progressif du capital emprunté. Au début d’un crédit à mensualité constante, la part d’intérêts est élevée ; le capital remboursé augmente ensuite.', links: [sim('credit', 'Calculateur de crédit'), fiche('credit-immobilier', 'Crédit immobilier')] },
+  { term: 'Capacité d’emprunt', definition: 'Montant maximal qu’un ménage peut emprunter pour une mensualité, un taux et une durée donnés. Elle dépend aussi des critères de la banque.', links: [sim('credit', 'Calculateur de crédit')] },
+  { term: 'Cash-flow (flux de trésorerie)', definition: 'Différence entre les sommes encaissées et décaissées sur une période. En immobilier locatif : loyers moins charges, crédit et impôts.', links: [sim('immobilier', 'Calculateur immobilier'), guide('rentabilite-locative', 'Rentabilité locative')] },
+  { term: 'Diversification', definition: 'Répartition de l’argent sur plusieurs actifs peu corrélés, pour qu’un incident isolé ne compromette pas tout le patrimoine. Elle réduit certains risques sans les supprimer.', links: [sim('portefeuille', 'Calculateur de portefeuille'), fiche('etf-monde', 'ETF monde')] },
+  { term: 'Effet de levier', definition: 'Utilisation du crédit pour investir plus que son apport. Il amplifie les gains comme les pertes, et l’emprunt reste dû quoi qu’il arrive.', links: [guide('investir-a-credit', 'Investir à crédit'), sim('immobilier', 'Calculateur immobilier')] },
+  { term: 'Enveloppe', definition: 'Cadre juridique et fiscal dans lequel on loge des placements (PEA, assurance-vie, compte-titres…). Elle détermine la fiscalité, les plafonds et la disponibilité de l’argent, pas le rendement.', links: [guide('choisir-son-enveloppe', 'Choisir son enveloppe'), fiche('pea', 'PEA'), fiche('assurance-vie', 'Assurance-vie')] },
+  { term: 'Épargne de précaution', definition: 'Réserve disponible rapidement pour faire face à un imprévu (perte de revenu, réparation). Elle se garde sur des supports sans risque de perte en capital.', links: [sim('epargne-de-precaution', 'Simulateur d’épargne de précaution'), fiche('livret-a', 'Livret A et LDDS')] },
+  { term: 'ETF (fonds indiciel coté)', definition: 'Fonds coté en bourse qui réplique un indice. Il offre une diversification large pour des frais courants généralement faibles.', links: [fiche('etf-monde', 'ETF monde'), sim('portefeuille', 'Calculateur de portefeuille')] },
+  { term: 'Frais courants', definition: 'Pourcentage annuel du capital prélevé pour gérer un fonds ou un contrat. Faibles en apparence, ils s’accumulent d’année en année et pèsent lourd sur de longues durées.', links: [sim('frais', 'Impact des frais'), guide('comparer-les-frais', 'Comparer les frais')] },
+  { term: 'Indépendance financière', definition: 'Situation où le patrimoine et les revenus de placement couvrent durablement les dépenses, sans dépendre d’un salaire. Elle repose sur des hypothèses de rendement et d’inflation qui ne sont jamais garanties.', links: [sim('independance-financiere', 'Simulateur d’indépendance financière')] },
+  { term: 'Inflation', definition: 'Hausse générale des prix, qui réduit le pouvoir d’achat d’une somme au fil du temps. Un rendement « réel » est un rendement corrigé de l’inflation.', links: [sim('patrimoine', 'Simulateur de patrimoine'), guide('interets-composes', 'Intérêts composés')] },
+  { term: 'Intérêts composés', definition: 'Mécanisme par lequel les intérêts gagnés produisent à leur tour des intérêts. Son effet croît fortement avec la durée.', links: [guide('interets-composes', 'Intérêts composés'), sim('patrimoine', 'Simulateur de patrimoine')] },
+  { term: 'Liquidité', definition: 'Facilité à retrouver son argent rapidement et sans perte. Un livret est très liquide ; un bien immobilier l’est peu.', links: [guide('types-investissements', 'Types d’investissements'), fiche('livret-a', 'Livret A et LDDS')] },
+  { term: 'Patrimoine net', definition: 'Ce que l’on possède moins ce que l’on doit : actifs (épargne, placements, biens) moins dettes.', links: [guide('patrimoine-net', 'Patrimoine net')] },
+  { term: 'Rendement brut et net', definition: 'Le rendement brut est calculé avant frais et impôts ; le rendement net après. Seul le net reflète ce qui reste réellement à l’investisseur.', links: [guide('rentabilite-locative', 'Rentabilité locative'), sim('frais', 'Impact des frais')] },
+  { term: 'Risque de perte en capital', definition: 'Possibilité de récupérer moins que ce qui a été investi. Il est absent des livrets réglementés et présent sur la plupart des placements en actions, en immobilier ou en cryptoactifs.', links: [guide('types-investissements', 'Types d’investissements'), fiche('actions-individuelles', 'Actions individuelles')] },
+  { term: 'Taux d’épargne', definition: 'Part du revenu net mise de côté chaque mois. Le repère 50 / 30 / 20 (besoins, envies, épargne) est pédagogique et non réglementaire.', links: [sim('budget', 'Budget et taux d’épargne'), guide('par-ou-commencer', 'Par où commencer')] },
+  { term: 'Taux de retrait', definition: 'Part du capital retirée chaque année pour vivre. Plus il est élevé, plus le capital nécessaire est faible mais plus le risque d’épuisement augmente.', links: [sim('independance-financiere', 'Simulateur d’indépendance financière')] },
+  { term: 'Volatilité', definition: 'Ampleur des variations de prix d’un actif dans le temps. Une forte volatilité n’est pas une perte en soi, mais elle oblige à pouvoir attendre.', links: [fiche('etf-monde', 'ETF monde'), fiche('cryptomonnaies', 'Cryptoactifs')] },
+];

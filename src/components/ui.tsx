@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { config } from '../config';
 import type { Checked, Level, Source } from '../data/types';
 import { load, save, type SavedSim } from '../lib/storage';
+import { buildExport, mergeSims, parseExport } from '../lib/simExport';
 
 // ------------------------------------------------------------ Champs
 
@@ -329,6 +330,42 @@ export function SavedSims<T>({ simKey, current, onLoad }: { simKey: string; curr
         >
           Enregistrer
         </button>
+      </div>
+      <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
+        <button
+          className="btn small secondary"
+          disabled={list.length === 0}
+          onClick={() => {
+            const blob = new Blob([JSON.stringify(buildExport(simKey, list), null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `patrimoine-os-${simKey}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            setMsg('Export téléchargé : le fichier reste sur votre appareil.');
+          }}
+        >
+          Exporter (.json)
+        </button>
+        <label className="btn small secondary" style={{ cursor: 'pointer' }}>
+          Importer
+          <input
+            type="file"
+            accept="application/json,.json"
+            style={{ display: 'none' }}
+            onChange={async (e) => {
+              const file = e.target.files?.[0];
+              e.target.value = '';
+              if (!file) return;
+              const r = parseExport<T>(await file.text(), simKey);
+              if (!r.ok) return setMsg(r.error);
+              const merged = mergeSims(list, r.sims);
+              persist(merged);
+              setMsg(`${merged.length - list.length} simulation(s) importée(s).`);
+            }}
+          />
+        </label>
       </div>
       {msg && <p className="small" role="status" style={{ marginTop: 8 }}>{msg}</p>}
       {list.length > 0 && (
