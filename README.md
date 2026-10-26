@@ -1,6 +1,6 @@
 # Patrimoine OS
 
-Plateforme française et gratuite consacrée à la construction du patrimoine : encyclopédie des investissements, comparateurs, onze simulateurs et guides pédagogiques. Site statique pré-rendu, sans backend, sans compte, sans cookie ni traceur. Coût d'exploitation : 0 €.
+Plateforme française et gratuite consacrée à la construction du patrimoine : encyclopédie des investissements, comparateurs, douze simulateurs et guides pédagogiques. Site statique pré-rendu, sans backend, sans compte, sans cookie ni traceur. Coût d'exploitation : 0 €.
 
 ## Contenu
 
@@ -17,6 +17,7 @@ Plateforme française et gratuite consacrée à la construction du patrimoine : 
 | Budget et taux d'épargne | Part du revenu en besoins, envies et épargne, comparaison au repère pédagogique 50 / 30 / 20, effort mensuel pour atteindre un taux d'épargne visé |
 | Impact des frais | Trois niveaux de frais annuels à rendement brut et versements identiques : capital final, coût des frais, part des gains absorbée |
 | Rembourser ou investir | Remboursement anticipé d'un crédit (mensualité conservée) ou placement de la même somme : patrimoine net à la fin de la durée restante, intérêts économisés, rendement brut d'équilibre |
+| Inflation et pouvoir d'achat | Valeur d'une somme inchangée ou placée en euros d'aujourd'hui, montant pour garder le même pouvoir d'achat, rendement réel, durées de perte de moitié et de doublement |
 | Portefeuille, comparateur de fiches | Allocation, frais pondérés, rééquilibrage ; jusqu'à 3 fiches côte à côte |
 | Guides | 11 guides, dont 8 pages répondant à une intention de recherche précise (patrimoine net, rentabilité locative, PEA, frais…) |
 | Glossaire | 20 notions expliquées, avec liens vers simulateurs, fiches et guides (liens vérifiés par les tests) |
@@ -26,8 +27,8 @@ Plateforme française et gratuite consacrée à la construction du patrimoine : 
 ## Architecture
 
 - **Vite + React + TypeScript**, CSS natif, graphiques SVG sans dépendance.
-- **Moteur de calcul** : un module par famille dans `src/lib/calc/` (`growth`, `loan`, `rental`, `compare`, `portfolio`, `business`, `fire`, `precaution`, `budget`, `fees`, `prepayVsInvest`, `networth`, `format`), fonctions pures et déterministes. Conventions dans `common.ts` et sur la page « Méthode ». **160 tests** : formules, exemples connus, valeurs nulles, négatives et durées nulles, chaque exemple chiffré cité dans les fiches et guides, métadonnées SEO, contrôle SEO, scripts de surveillance.
-- **Pré-rendu statique** (`scripts/prerender.mjs`) : 59 pages HTML complètes avec URL lisibles (`/encyclopedie/pea/`), titre, description, URL canonique, Open Graph, données structurées (Article, BreadcrumbList, WebApplication, FAQPage sur les guides qui comportent des questions fréquentes), plus `404.html`, `sitemap.xml`, `feed.xml` (flux Atom des nouveautés, référencé dans le `<head>`) et `robots.txt`. Le navigateur reprend ensuite la page (hydratation) pour l'interactivité.
+- **Moteur de calcul** : un module par famille dans `src/lib/calc/` (`growth`, `loan`, `rental`, `compare`, `portfolio`, `business`, `fire`, `precaution`, `budget`, `fees`, `prepayVsInvest`, `purchasingPower`, `networth`, `format`), fonctions pures et déterministes. Conventions dans `common.ts` et sur la page « Méthode ». **168 tests** : formules, exemples connus, valeurs nulles, négatives et durées nulles, chaque exemple chiffré cité dans les fiches et guides, métadonnées SEO, contrôle SEO, scripts de surveillance.
+- **Pré-rendu statique** (`scripts/prerender.mjs`) : 60 pages HTML complètes avec URL lisibles (`/encyclopedie/pea/`), titre, description, URL canonique, Open Graph, données structurées (Article, BreadcrumbList, WebApplication, FAQPage sur les guides qui comportent des questions fréquentes), plus `404.html`, `sitemap.xml`, `feed.xml` (flux Atom des nouveautés, référencé dans le `<head>`) et `robots.txt`. Le navigateur reprend ensuite la page (hydratation) pour l'interactivité.
 - **Contrôle SEO** (`scripts/seo-check.mjs`, lancé par `npm run build`, échec en cas d’erreur) : titre et description présents, uniques et de longueur raisonnable, URL canonique, liens internes cassés, pages orphelines, JSON-LD valide.
 - **IndexNow** : la clé (non secrète) est publiée à la racine du site (`public/<clé>.txt`) ; après chaque publication, `scripts/indexnow.mjs` envoie les adresses du sitemap à `api.indexnow.org`. L’étape ne peut pas faire échouer le déploiement.
 - **Sécurité** : politique de sécurité du contenu (CSP) dans chaque page, aucune ressource tierce, aucun formulaire envoyé, dépendances auditées à chaque construction et mises à jour par Dependabot.

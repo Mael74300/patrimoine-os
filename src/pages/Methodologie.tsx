@@ -50,6 +50,10 @@ const FORMULAS: [string, string[]][] = [
     'Rembourser : la somme réduit le capital, la mensualité est conservée, le crédit s’éteint plus tôt et les mensualités libérées sont investies jusqu’à l’horizon. Investir : le crédit suit son échéancier, la somme est placée dès le départ.',
     'Placement : rendement net de frais au taux actuariel mensuel ; patrimoine net = placement − impôt (taux unique sur les gains, jamais sur une perte) − capital restant dû. Rendement d’équilibre : recherche par dichotomie du rendement brut (0–30 %) qui égalise les deux options. Assurance et indemnités de remboursement anticipé ignorées.',
   ]],
+  ['Inflation et pouvoir d’achat', [
+    'Valeur d’une somme S en euros d’aujourd’hui après T années : S / (1 + i)^T. Montant nécessaire pour garder le même pouvoir d’achat : S × (1 + i)^T. Perte de pouvoir d’achat = 1 − valeur réelle / S.',
+    'Rendement réel = (1 + r) / (1 + i) − 1. Durée pour perdre la moitié du pouvoir d’achat = ln 2 / ln(1 + i) ; durée pour doubler un capital placé = ln 2 / ln(1 + r) (valeur exacte de la « règle des 72 »). Sans versement, avant impôt.',
+  ]],
   ['Budget et taux d’épargne', [
     'Taux d’épargne = épargne mensuelle / revenu net mensuel. Revenu non affecté = revenu − besoins − envies − épargne.',
     'Repère 50 / 30 / 20 : besoins 50 %, envies 30 %, épargne 20 % du revenu net ; repère pédagogique, non une règle officielle. Effort pour un taux visé = revenu × taux − épargne actuelle, couvert d’abord par le revenu non affecté puis par les envies.',

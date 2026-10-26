@@ -16,6 +16,7 @@ export const simulators = [
   { slug: 'budget', title: 'Budget mensuel et taux d’épargne', excerpt: 'Part du revenu consacrée aux besoins, envies et épargne, repère 50/30/20 et effort pour un taux visé.', keywords: 'budget depenses taux epargne 50 30 20 revenu besoins envies capacite epargne' },
   { slug: 'frais', title: 'Impact des frais sur votre capital', excerpt: 'Trois niveaux de frais annuels comparés à rendement brut et versements identiques : capital final et coût des frais.', keywords: 'frais courants gestion cout etf assurance vie rendement net long terme comparaison' },
   { slug: 'rembourser-ou-investir', title: 'Rembourser son crédit ou investir', excerpt: 'Remboursement anticipé ou placement de la même somme : patrimoine net comparé et rendement d’équilibre.', keywords: 'remboursement anticipe pret immobilier investir arbitrage interets economises placer epargne credit' },
+  { slug: 'inflation', title: 'Inflation et pouvoir d’achat', excerpt: 'Ce que vaut une somme dans vingt ans, inchangée ou placée : pouvoir d’achat perdu et rendement réel.', keywords: 'inflation pouvoir achat prix hausse rendement reel epargne livret perte valeur euros constants' },
 ];
 
 /** Minuscule, sans accents, pour une recherche tolérante. */

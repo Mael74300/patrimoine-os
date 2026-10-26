@@ -12,3 +12,4 @@ export * from './precaution';
 export * from './budget';
 export * from './fees';
 export * from './prepayVsInvest';
+export * from './purchasingPower';
