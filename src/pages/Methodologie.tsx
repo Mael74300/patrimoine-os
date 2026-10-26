@@ -41,9 +41,14 @@ const FORMULAS: [string, string[]][] = [
     'Constitution : intérêts au taux mensuel équivalent puis versement en fin de mois. Versement requis : (cible − épargne × (1 + t)^n) / [((1 + t)^n − 1) / t].',
     'Répartition : LEP (si éligible), puis Livret A, puis LDDS, dans la limite des plafonds de versement ; l’excédent est indiqué sans rémunération supposée.',
   ]],
+  ['Impact des frais', [
+    'Rendement net = (1 + rendement brut) × (1 − frais) − 1, capitalisé chaque mois au taux actuariel équivalent, versements en début de mois (même moteur que le simulateur de patrimoine).',
+    'Coût des frais = capital final sans frais − capital final avec frais, à versements et rendement brut identiques. Part des gains absorbée = coût / (capital sans frais − versements cumulés).',
+  ]],
   ['Budget et taux d’épargne', [
     'Taux d’épargne = épargne mensuelle / revenu net mensuel. Revenu non affecté = revenu − besoins − envies − épargne.',
     'Repère 50 / 30 / 20 : besoins 50 %, envies 30 %, épargne 20 % du revenu net ; repère pédagogique, non une règle officielle. Effort pour un taux visé = revenu × taux − épargne actuelle, couvert d’abord par le revenu non affecté puis par les envies.',
+    'Projection de l’épargne : versements mensuels constants en début de mois, capitalisés au rendement net supposé (hypothèse de l’utilisateur, sans garantie).',
   ]],
 ];
 

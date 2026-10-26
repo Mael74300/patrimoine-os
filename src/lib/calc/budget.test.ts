@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { analyzeBudget, BUDGET_BENCHMARK, catchUp, monthsOfIncomeSavedPerYear, savingForRate } from './budget';
+import { analyzeBudget, BUDGET_BENCHMARK, catchUp, monthsOfIncomeSavedPerYear, projectBudgetSaving, savingForRate } from './budget';
 
 const B = { netIncome: 2500, needs: 1500, wants: 600, saving: 250 };
 
@@ -57,5 +57,19 @@ describe('budget et taux d’épargne', () => {
   it('mois de revenu épargnés par an', () => {
     expect(monthsOfIncomeSavedPerYear(0.2)).toBeCloseTo(2.4, 12);
     expect(monthsOfIncomeSavedPerYear(-1)).toBe(0);
+  });
+});
+
+describe('projection de l’épargne du budget', () => {
+  it('rendement nul : somme des versements', () => {
+    const p = projectBudgetSaving(250, 0, 10);
+    expect(p.contributed).toBe(30000);
+    expect(p.finalValue).toBeCloseTo(30000, 6);
+    expect(p.gains).toBeCloseTo(0, 6);
+  });
+  it('rendement positif : gains positifs ; durée nulle ou entrées invalides sans NaN', () => {
+    expect(projectBudgetSaving(250, 0.04, 10).gains).toBeGreaterThan(0);
+    const z = projectBudgetSaving(NaN, NaN, 0);
+    expect(z.finalValue).toBe(0);
   });
 });

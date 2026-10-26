@@ -1,14 +1,16 @@
-import { analyzeBudget, BUDGET_BENCHMARK, catchUp, fmtEur, fmtNum, fmtPct, monthsOfIncomeSavedPerYear } from '../lib/finance';
+import { Link } from 'react-router-dom';
+import { analyzeBudget, BUDGET_BENCHMARK, catchUp, fmtEur, fmtNum, fmtPct, monthsOfIncomeSavedPerYear, projectBudgetSaving } from '../lib/finance';
 import { Crumbs, Disclaimer, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
-type State = { netIncome: number; needs: number; wants: number; saving: number; targetRate: number };
+type State = { netIncome: number; needs: number; wants: number; saving: number; targetRate: number; projReturn: number; projYears: number };
 
-const DEFAULTS: State = { netIncome: 2500, needs: 1400, wants: 650, saving: 250, targetRate: 0.2 };
+const DEFAULTS: State = { netIncome: 2500, needs: 1400, wants: 650, saving: 250, targetRate: 0.2, projReturn: 0.03, projYears: 10 };
 
 export default function SimBudget() {
   const [s, setS, up] = usePersistentState<State>('budget', DEFAULTS);
   const b = analyzeBudget(s);
   const c = catchUp(s, s.targetRate);
+  const proj = projectBudgetSaving(b.saving, s.projReturn, s.projYears);
   const rows = [
     { label: 'Besoins (dépenses contraintes)', amount: b.needs, share: b.shares.needs, bench: BUDGET_BENCHMARK.needs, gap: b.gaps.needs },
     { label: 'Envies (confort, loisirs)', amount: b.wants, share: b.shares.wants, bench: BUDGET_BENCHMARK.wants, gap: b.gaps.wants },
@@ -35,6 +37,11 @@ export default function SimBudget() {
             <NumberField label="Envies" unit="€" value={s.wants} onChange={up('wants')} min={0} step={50} hint="Loisirs, restaurants, abonnements, voyages, achats de confort." />
             <NumberField label="Épargne mensuelle" unit="€" value={s.saving} onChange={up('saving')} min={0} step={50} />
             <NumberField label="Taux d'épargne visé" unit="%" percent value={s.targetRate} onChange={up('targetRate')} min={0} max={100} step={1} hint="20 % est le repère du 50 / 30 / 20." />
+          </fieldset>
+          <fieldset>
+            <legend>Projection de l'épargne</legend>
+            <NumberField label="Rendement net supposé" unit="%" percent value={s.projReturn} onChange={up('projReturn')} min={-10} max={20} step={0.5} hint="Hypothèse, jamais une garantie. 0 % = simple somme des versements." />
+            <NumberField label="Durée" unit="ans" value={s.projYears} onChange={up('projYears')} min={1} max={50} step={1} />
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
         </form>
@@ -79,6 +86,12 @@ export default function SimBudget() {
               {c.uncovered > 0 && <li>Reste non couvert : <strong>{fmtEur(c.uncovered)}</strong> — il faudrait agir sur les besoins ou sur le revenu, ou viser un taux plus réaliste.</li>}
             </ul>
           )}
+          <h2>Que devient cette épargne en {s.projYears} ans ?</h2>
+          <p>
+            En épargnant {fmtEur(b.saving)} par mois à {fmtPct(s.projReturn)} net par an : <strong>{fmtEur(proj.finalValue)}</strong>, dont {fmtEur(proj.contributed)} versés
+            et {fmtEur(proj.gains)} de gains supposés. Pour affiner (inflation, frais, paliers), utilisez le <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link> ;
+            pour la réserve disponible en priorité, voir l'<Link to="/simulateurs/epargne-de-precaution">épargne de précaution</Link> ; pour l'effet des frais, <Link to="/simulateurs/frais">l'impact des frais</Link>.
+          </p>
           <p className="muted small">Estimation purement arithmétique à partir de vos saisies ; elle ne tient compte ni des imprévus ni de l'évolution de vos revenus.</p>
           <SavedSims simKey="budget" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>

@@ -28,6 +28,7 @@ export function pagesMeta(siteUrl: string): PageMeta[] {
     { path: '/comparateur/', title: `Comparateur de placements | ${SITE}`, description: 'Comparez jusqu’à trois placements : risque, liquidité, horizon, frais, fiscalité, puis projection selon vos hypothèses.' },
     { path: '/entrepreneuriat/', title: `Créer de la richesse par l’entreprise | ${SITE}`, description: 'Créer, développer ou racheter une entreprise : les voies possibles, leurs risques et les ressources publiques gratuites.' },
     { path: '/guides/', title: `Guides pédagogiques sur l’investissement | ${SITE}`, description: 'Guides pour comprendre le patrimoine net, la rentabilité locative, le PEA, les frais, le crédit et l’effet de levier.' },
+    { path: '/glossaire/', title: `Glossaire de la finance personnelle | ${SITE}`, description: 'Les notions clés du patrimoine expliquées simplement : intérêts composés, frais courants, allocation, liquidité, taux d’épargne, avec des liens vers les simulateurs.' },
     { path: '/methodologie/', title: `Méthode, formules et sources | ${SITE}`, description: 'Sources officielles, dates de vérification, formules de calcul et processus de mise à jour de Patrimoine OS.' },
     { path: '/confidentialite/', title: `Politique de confidentialité | ${SITE}`, description: 'Aucun cookie, aucun compte, mesure d’audience anonyme : vos calculs restent dans votre navigateur.' },
     { path: '/recherche/', title: `Recherche | ${SITE}`, description: 'Rechercher une fiche, un guide ou un simulateur.', noindex: true },
