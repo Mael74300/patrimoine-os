@@ -119,7 +119,7 @@ const raw: Omit<Investment, 'review'>[] = [
     slug: 'actions-individuelles',
     name: 'Actions en direct',
     category: 'actions',
-    summary: "Acheter soi-même des titres d'entreprises cotées.",
+    summary: "Acheter soi-même des titres d'entreprises cotées en Bourse : fonctionnement, risques, frais et fiscalité.",
     definition: "Une action est un titre de propriété d'une fraction d'une entreprise, donnant droit aux dividendes éventuels et au vote.",
     howItWorks: "La valeur dépend des résultats de l'entreprise et des anticipations du marché. Une entreprise peut perdre l'essentiel de sa valeur.",
     howToInvest: ['Ouvrir un PEA ou un compte-titres.', 'Analyser les comptes et la valorisation des entreprises.', 'Diversifier sur de nombreux titres et secteurs.'],
