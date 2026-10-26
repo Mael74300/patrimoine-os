@@ -203,6 +203,12 @@ export const guides: Guide[] = [
     ],
     related: ['pea', 'etf-monde', 'compte-titres'],
     sources: [SP('PEA', 'F2385'), IMPOTS],
+    faq: [
+      { q: 'Quel est le plafond de versement du PEA ?', a: 'Les versements, uniquement en euros, sont plafonnés à 150 000 €. Le PEA-PME partage avec lui un plafond global de 225 000 €.' },
+      { q: 'Que se passe-t-il en cas de retrait avant 5 ans ?', a: 'En principe, le plan est clôturé et les gains sont imposés au prélèvement forfaitaire unique (31,4 % en 2026), sauf exceptions prévues par la loi.' },
+      { q: 'Peut-on retirer de l’argent après 5 ans sans clôturer le PEA ?', a: 'Oui : après 5 ans, les retraits sont possibles sans clôturer le plan et sans bloquer les versements futurs. Les gains sont exonérés d’impôt sur le revenu ; seuls les prélèvements sociaux restent dus.' },
+      { q: 'Combien de PEA peut-on détenir ?', a: 'Un seul par personne, à condition d’être fiscalement domicilié en France.' },
+    ],
     cta: { to: '/simulateurs/patrimoine', label: 'Simuler une épargne en PEA' },
   },
   {
@@ -269,6 +275,11 @@ export const guides: Guide[] = [
     ],
     related: ['lep', 'livret-a', 'etf-monde', 'capital-humain'],
     sources: [SP('LEP', 'F2367'), AMF],
+    faq: [
+      { q: 'Peut-on se constituer un patrimoine en épargnant 50 € par mois ?', a: 'Exemple fictif : 50 € par mois pendant 30 ans, avec un rendement supposé de 4 %, représentent environ 34 400 € pour 18 000 € versés. Ce n’est pas une prévision : les rendements réels varient.' },
+      { q: 'Faut-il d’abord placer ou constituer une épargne de précaution ?', a: 'Une épargne de précaution, même modeste, évite le recours au découvert ou au crédit renouvelable, dont le coût annule tout rendement. Le LEP, si vous y avez droit, est le meilleur taux sans risque, sans impôt.' },
+      { q: 'Comment épargner régulièrement sans y penser ?', a: 'Un virement automatique le jour de la paie rend l’épargne régulière sans effort de volonté. Certains PEA et contrats d’assurance-vie acceptent de petits versements programmés.' },
+    ],
     cta: { to: '/simulateurs/patrimoine', label: 'Simuler une épargne progressive' },
   },
   {

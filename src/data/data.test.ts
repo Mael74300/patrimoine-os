@@ -83,3 +83,17 @@ describe('référencement', () => {
     }
   });
 });
+
+describe('FAQ des guides', () => {
+  it('chaque question-réponse affichée est reprise dans les données structurées FAQPage', () => {
+    const avecFaq = guides.filter((g) => g.faq?.length);
+    expect(avecFaq.length).toBeGreaterThan(0);
+    for (const g of avecFaq) {
+      const page = pagesMeta('https://exemple.test').find((p) => p.path === `/guides/${g.slug}/`)!;
+      const faq = (page.jsonLd as { '@type': string; mainEntity: { name: string; acceptedAnswer: { text: string } }[] }[]).find((d) => d['@type'] === 'FAQPage')!;
+      expect(faq, g.slug).toBeDefined();
+      expect(faq.mainEntity.map((m) => m.name)).toEqual(g.faq!.map((f) => f.q));
+      for (const f of g.faq!) { expect(f.q.endsWith('?')).toBe(true); expect(f.a.length).toBeGreaterThan(40); }
+    }
+  });
+});

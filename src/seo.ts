@@ -70,6 +70,7 @@ export function pagesMeta(siteUrl: string): PageMeta[] {
       jsonLd: [
         { '@context': 'https://schema.org', '@type': 'Article', headline: g.title, description: g.summary, inLanguage: 'fr-FR', dateModified: g.updatedOn, author: ORG, publisher: ORG },
         crumbs(siteUrl, [['Accueil', '/'], ['Guides', '/guides/'], [g.title, `/guides/${g.slug}/`]]),
+        ...(g.faq?.length ? [{ '@context': 'https://schema.org', '@type': 'FAQPage', inLanguage: 'fr-FR', mainEntity: g.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }] : []),
       ],
     });
   }
