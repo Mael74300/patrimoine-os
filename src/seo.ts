@@ -24,7 +24,7 @@ export function pagesMeta(siteUrl: string): PageMeta[] {
       jsonLd: [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SITE, url: siteUrl + '/', inLanguage: 'fr-FR' }],
     },
     { path: '/encyclopedie/', title: `Encyclopédie des investissements | ${SITE}`, description: `${investments.length} fiches sur les placements accessibles aux particuliers : fonctionnement, risques, frais, fiscalité datée et sources officielles.` },
-    { path: '/simulateurs/', title: `Simulateurs financiers gratuits | ${SITE}`, description: 'Simulateurs de patrimoine, crédit, immobilier locatif, entreprise et indépendance financière, calculés dans votre navigateur.' },
+    { path: '/simulateurs/', title: `Simulateurs financiers gratuits | ${SITE}`, description: 'Simulateurs de patrimoine, crédit, immobilier locatif, entreprise, indépendance financière et épargne de précaution, calculés dans votre navigateur.' },
     { path: '/comparateur/', title: `Comparateur de placements | ${SITE}`, description: 'Comparez jusqu’à trois placements : risque, liquidité, horizon, frais, fiscalité, puis projection selon vos hypothèses.' },
     { path: '/entrepreneuriat/', title: `Créer de la richesse par l’entreprise | ${SITE}`, description: 'Créer, développer ou racheter une entreprise : les voies possibles, leurs risques et les ressources publiques gratuites.' },
     { path: '/guides/', title: `Guides pédagogiques sur l’investissement | ${SITE}`, description: 'Guides pour comprendre le patrimoine net, la rentabilité locative, le PEA, les frais, le crédit et l’effet de levier.' },

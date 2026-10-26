@@ -8,3 +8,4 @@ export * from './business';
 export * from './fire';
 export * from './networth';
 export * from './format';
+export * from './precaution';

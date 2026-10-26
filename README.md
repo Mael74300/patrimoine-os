@@ -1,6 +1,6 @@
 # Patrimoine OS
 
-Plateforme française et gratuite consacrée à la construction du patrimoine : encyclopédie des investissements, comparateurs, sept simulateurs et guides pédagogiques. Site statique pré-rendu, sans backend, sans compte, sans cookie ni traceur. Coût d'exploitation : 0 €.
+Plateforme française et gratuite consacrée à la construction du patrimoine : encyclopédie des investissements, comparateurs, huit simulateurs et guides pédagogiques. Site statique pré-rendu, sans backend, sans compte, sans cookie ni traceur. Coût d'exploitation : 0 €.
 
 ## Contenu
 
@@ -13,6 +13,7 @@ Plateforme française et gratuite consacrée à la construction du patrimoine : 
 | Crédit | Mensualité, intérêts, amortissement, capacité d'emprunt, remboursement anticipé (durée ou mensualité, indemnités plafonnées) |
 | Entreprise | CA, marge, charges, rémunération, IS, besoin en fonds de roulement, trésorerie, valorisation, 3 scénarios |
 | Indépendance financière | Capital visé selon le taux de retrait, délai, durée du capital en phase de retrait, plusieurs scénarios |
+| Épargne de précaution | Montant visé selon la situation professionnelle (repères de 3, 6 ou 9 mois de dépenses), mois couverts, délai et versement nécessaire, répartition sur LEP, Livret A et LDDS dans la limite des plafonds |
 | Portefeuille, comparateur de fiches | Allocation, frais pondérés, rééquilibrage ; jusqu'à 3 fiches côte à côte |
 | Guides | 11 guides, dont 8 pages répondant à une intention de recherche précise (patrimoine net, rentabilité locative, PEA, frais…) |
 | Légal | Politique de confidentialité, mentions légales, effacement des données locales |
@@ -20,8 +21,8 @@ Plateforme française et gratuite consacrée à la construction du patrimoine : 
 ## Architecture
 
 - **Vite + React + TypeScript**, CSS natif, graphiques SVG sans dépendance.
-- **Moteur de calcul** : un module par famille dans `src/lib/calc/` (`growth`, `loan`, `rental`, `compare`, `portfolio`, `business`, `fire`, `networth`, `format`), fonctions pures et déterministes. Conventions dans `common.ts` et sur la page « Méthode ». **113 tests** : formules, exemples connus, valeurs nulles, négatives et durées nulles, chaque exemple chiffré cité dans les fiches et guides, métadonnées SEO, scripts de surveillance.
-- **Pré-rendu statique** (`scripts/prerender.mjs`) : 54 pages HTML complètes avec URL lisibles (`/encyclopedie/pea/`), titre, description, URL canonique, Open Graph, données structurées (Article, BreadcrumbList, WebApplication), plus `404.html`, `sitemap.xml`, `robots.txt`. Le navigateur reprend ensuite la page (hydratation) pour l'interactivité.
+- **Moteur de calcul** : un module par famille dans `src/lib/calc/` (`growth`, `loan`, `rental`, `compare`, `portfolio`, `business`, `fire`, `precaution`, `networth`, `format`), fonctions pures et déterministes. Conventions dans `common.ts` et sur la page « Méthode ». **122 tests** : formules, exemples connus, valeurs nulles, négatives et durées nulles, chaque exemple chiffré cité dans les fiches et guides, métadonnées SEO, scripts de surveillance.
+- **Pré-rendu statique** (`scripts/prerender.mjs`) : 55 pages HTML complètes avec URL lisibles (`/encyclopedie/pea/`), titre, description, URL canonique, Open Graph, données structurées (Article, BreadcrumbList, WebApplication), plus `404.html`, `sitemap.xml`, `robots.txt`. Le navigateur reprend ensuite la page (hydratation) pour l'interactivité.
 - **Sécurité** : politique de sécurité du contenu (CSP) dans chaque page, aucune ressource tierce, aucun formulaire envoyé, dépendances auditées à chaque construction et mises à jour par Dependabot.
 - **Données locales** : saisies et simulations enregistrées dans le `localStorage`, jamais transmises, non synchronisées entre appareils.
 

@@ -36,6 +36,11 @@ const FORMULAS: [string, string[]][] = [
     'Capital visé = (dépenses − revenus récurrents) / taux de retrait. Délai : capital × (1 + rendement réel) + épargne, chaque année.',
     'Phase de retrait : retrait en début d’année, revalorisé de l’inflation, puis rendement nominal sur le capital restant.',
   ]],
+  ['Épargne de précaution', [
+    'Montant visé = dépenses mensuelles × nombre de mois + réserve pour dépenses prévisibles. Les durées proposées (3, 6, 9 mois) sont des repères, non une règle officielle.',
+    'Constitution : intérêts au taux mensuel équivalent puis versement en fin de mois. Versement requis : (cible − épargne × (1 + t)^n) / [((1 + t)^n − 1) / t].',
+    'Répartition : LEP (si éligible), puis Livret A, puis LDDS, dans la limite des plafonds de versement ; l’excédent est indiqué sans rémunération supposée.',
+  ]],
 ];
 
 export default function Methodologie() {
