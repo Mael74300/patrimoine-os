@@ -37,6 +37,8 @@ export const simsForGuide: Record<string, string[]> = {
   'par-ou-commencer': ['budget', 'epargne-de-precaution'],
   'interets-composes': ['patrimoine', 'inflation'],
   'choisir-son-enveloppe': ['frais', 'patrimoine'],
+  'combien-epargne-de-precaution': ['epargne-de-precaution', 'inflation', 'budget'],
+  'taux-endettement-capacite-emprunt': ['endettement', 'credit'],
 };
 
 const bySlug = Object.fromEntries(simulators.map((s) => [s.slug, s]));

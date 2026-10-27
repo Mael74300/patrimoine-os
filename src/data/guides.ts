@@ -328,6 +328,91 @@ export const guides: Guide[] = [
     related: ['pea', 'assurance-vie', 'per', 'compte-titres'],
     sources: [SP('PEA', 'F2385'), SP('Assurance-vie', 'F22414'), SP('PER', 'F34982')],
   },
+  {
+    slug: 'combien-epargne-de-precaution',
+    title: 'Combien mettre en épargne de précaution ?',
+    summary: 'Trois, six ou neuf mois de dépenses : comment choisir son repère, où placer cette réserve et dans quel ordre remplir les livrets.',
+    readingMinutes: 5,
+    updatedOn: '2026-10-27',
+    sections: [
+      {
+        heading: 'Aucune règle officielle, des repères',
+        body: [
+          'Aucun texte ne fixe le montant d’une épargne de précaution. Les repères courants se comptent en mois de dépenses : environ 3 mois avec des revenus stables (CDI, fonction publique, retraite), 6 mois avec des revenus variables (CDD, intérim) et jusqu’à 9 mois pour un indépendant ou un dirigeant.',
+          'Exemple fictif : avec 2 000 € de dépenses mensuelles, ces repères donnent respectivement 6 000 €, 12 000 € et 18 000 €. À ce montant, ajoutez les dépenses prévisibles (franchise d’assurance, réparation, appareil à remplacer).',
+        ],
+      },
+      {
+        heading: 'Ce qui fait varier le montant',
+        body: [
+          'La stabilité de vos revenus, le nombre de personnes à charge, un seul ou deux revenus dans le foyer, l’âge du logement et du véhicule, ainsi que votre couverture santé et prévoyance. Un foyer à deux revenus stables peut viser le bas de la fourchette ; un indépendant avec un crédit en cours, le haut.',
+        ],
+      },
+      {
+        heading: 'Où placer cette réserve',
+        body: [
+          'La réserve doit rester disponible immédiatement et ne pas fluctuer : les livrets réglementés sont les supports naturels. Plafonds de dépôt : LEP 10 000 € (sous conditions de revenus), Livret A 22 950 € et LDDS 12 000 €. Taux au 10 octobre 2026 : 2,5 % pour le LEP et 1,7 % pour le Livret A et le LDDS, fixés pour la période du 1er août 2026 au 31 janvier 2027.',
+          'On remplit en général d’abord le mieux rémunéré (LEP si vous y avez droit), puis le Livret A, puis le LDDS. Ces taux changent à chaque révision : vérifiez-les sur les fiches Livret A et LEP.',
+        ],
+      },
+      {
+        heading: 'Et au-delà de la réserve ?',
+        body: [
+          'Une fois la réserve constituée, l’argent supplémentaire laissé sur un livret perd du pouvoir d’achat si l’inflation dépasse le taux. Le simulateur d’inflation montre l’effet sur la durée ; les guides PEA et assurance-vie présentent les enveloppes pour un horizon plus long.',
+        ],
+      },
+    ],
+    related: ['livret-a', 'lep'],
+    sources: [SP('Livret A', 'F2365'), SP('LEP', 'F2367'), SP('LDDS', 'F2368'), BDF],
+    faq: [
+      { q: 'Combien de mois de dépenses faut-il garder en épargne de précaution ?', a: 'Aucune règle officielle ne le fixe. Les repères courants sont d’environ 3 mois de dépenses avec des revenus stables, 6 mois avec des revenus variables et jusqu’à 9 mois pour un indépendant. À adapter à votre situation.' },
+      { q: 'Sur quel placement garder son épargne de précaution ?', a: 'Sur des supports disponibles immédiatement et sans risque de perte en capital : les livrets réglementés (LEP si vous y avez droit, Livret A, LDDS), dans la limite de leurs plafonds.' },
+      { q: 'Faut-il constituer l’épargne de précaution avant d’investir ?', a: 'C’est l’ordre de priorité le plus courant : une réserve évite de devoir vendre un placement au mauvais moment ou de recourir au découvert. Le montant dépend de vos revenus et de vos charges.' },
+    ],
+    cta: { to: '/simulateurs/epargne-de-precaution', label: 'Calculer ma réserve' },
+  },
+  {
+    slug: 'taux-endettement-capacite-emprunt',
+    title: 'Taux d’endettement : quel repère pour emprunter ?',
+    summary: 'Comment se calcule le taux d’endettement, d’où vient le repère de 35 % et pourquoi le reste à vivre compte autant.',
+    readingMinutes: 5,
+    updatedOn: '2026-10-27',
+    sections: [
+      {
+        heading: 'Le calcul',
+        body: [
+          'Le taux d’endettement est la part de vos revenus consacrée au remboursement de vos crédits : mensualités divisées par revenus nets mensuels. Exemple fictif : 200 € de crédit en cours et 850 € de nouvelle mensualité pour 3 000 € de revenus donnent (200 + 850) / 3 000 = 35 %.',
+        ],
+      },
+      {
+        heading: 'Le repère de 35 %',
+        body: [
+          'Le Haut Conseil de stabilité financière (décision D-HCSF-2021-7, applicable depuis le 1er janvier 2022) recommande aux banques de limiter les charges d’emprunt à 35 % des revenus, assurance comprise, et la durée à 25 ans (27 ans avec différé pour un bien neuf ou des travaux). Les banques disposent d’une marge de dérogation, qui reste limitée : c’est un repère, pas un droit à emprunter.',
+          'Avec 3 000 € de revenus, la charge totale de crédit maximale est donc de 1 050 € par mois ; si 200 € sont déjà engagés, il reste 850 € pour le nouveau crédit.',
+        ],
+      },
+      {
+        heading: 'Le reste à vivre',
+        body: [
+          'Le taux ne dit pas ce qu’il vous reste. Deux foyers au même taux n’ont pas la même marge si leurs charges ou le nombre de personnes diffèrent. Le reste à vivre (revenus moins crédits et charges courantes, rapporté au nombre de personnes) complète le taux et aide à vérifier qu’une mensualité reste supportable.',
+        ],
+      },
+      {
+        heading: 'Que faire si le taux dépasse 35 %',
+        body: [
+          'Allonger la durée dans la limite du repère, augmenter l’apport, réduire le prix visé, solder un petit crédit ou emprunter à deux. Le simulateur calcule la mensualité maximale, le revenu minimal et le capital empruntable.',
+        ],
+      },
+    ],
+    related: ['credit-immobilier'],
+    sources: [{ label: 'Haut Conseil de stabilité financière', url: 'https://www.economie.gouv.fr/hcsf', official: true }, BDF, ANIL],
+    faq: [
+      { q: 'Comment calculer son taux d’endettement ?', a: 'On divise le total des mensualités de crédit par les revenus nets mensuels. Exemple fictif : 1 050 € de mensualités pour 3 000 € de revenus donnent un taux de 35 %.' },
+      { q: 'Le taux d’endettement maximal est-il de 35 % ?', a: 'C’est le repère recommandé par le HCSF, assurance comprise, appliqué par les banques avec une marge de dérogation limitée. Ce n’est pas une loi : chaque banque apprécie le dossier.' },
+      { q: 'Qu’est-ce que le reste à vivre ?', a: 'C’est ce qu’il vous reste chaque mois après les crédits et les charges courantes, souvent rapporté au nombre de personnes du foyer. Il complète le taux d’endettement pour juger si une mensualité est supportable.' },
+    ],
+    cta: { to: '/simulateurs/endettement', label: 'Calculer mon taux d’endettement' },
+  },
 ];
 
 export const guideBySlug = Object.fromEntries(guides.map((g) => [g.slug, g]));
