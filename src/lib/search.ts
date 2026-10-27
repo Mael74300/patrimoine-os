@@ -20,6 +20,7 @@ export const simulators = [
   { slug: 'endettement', title: 'Taux d’endettement et reste à vivre', excerpt: 'Part des revenus consacrée aux crédits, reste à vivre, mensualité maximale et capital empruntable au repère de 35 %.', keywords: 'taux endettement taux effort 35 hcsf reste a vivre capacite emprunt pret immobilier revenus mensualite' },
   { slug: 'objectif-epargne', title: 'Objectif d’épargne : combien verser par mois', excerpt: 'Versement mensuel pour atteindre un montant à une échéance (apport, voyage, travaux) et effet de la durée et du taux.', keywords: 'objectif epargne projet apport voyage travaux versement mensuel echeance economiser combien epargner par mois' },
   { slug: 'taeg', title: 'Calcul du TAEG d’un crédit', excerpt: 'TAEG estimé à partir du taux, de l’assurance et des frais de dossier ou de garantie, pour comparer deux offres de prêt.', keywords: 'taeg calcul taux annuel effectif global credit pret immobilier assurance frais dossier garantie comparer offres cout total' },
+  { slug: 'louer-ou-acheter', title: 'Louer ou acheter sa résidence principale', excerpt: 'Patrimoine du propriétaire et du locataire à l’horizon choisi, selon vos hypothèses de prix, de loyer, de frais et de rendement.', keywords: 'louer ou acheter residence principale loyer achat pret immobilier comparer proprietaire locataire horizon frais notaire apport' },
 ];
 
 /** Minuscule, sans accents, pour une recherche tolérante. */

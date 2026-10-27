@@ -58,6 +58,10 @@ const FORMULAS: [string, string[]][] = [
     'Versement mensuel = (objectif − épargne de départ × (1 + r)^n) × r / ((1 + r)^n − 1), avec r le taux mensuel équivalent au taux annuel saisi et n le nombre de mois ; versements en fin de mois. Taux nul : (objectif − épargne de départ) / n.',
     'Intérêts = objectif − épargne de départ − total des versements. Le taux est une hypothèse, avant impôt ; le taux du Livret A affiché en repère provient des données du site, daté et sourcé sur sa fiche.',
   ]],
+  ['Louer ou acheter', [
+    'Chaque mois : le propriétaire paie la mensualité (prêt à échéances constantes) et des charges égales à un pourcentage annuel de la valeur courante du bien ; le locataire paie le loyer. L’écart entre les deux budgets est placé, au rendement saisi, par celui des deux qui dépense le moins. Valeur du bien et loyer évoluent aux taux annuels saisis (taux mensuel équivalent).',
+    'Patrimoine du propriétaire = valeur du bien × (1 − frais de revente) − capital restant dû + épargne éventuelle ; patrimoine du locataire = (apport + frais d’acquisition) et écarts mensuels placés. Avantage = propriétaire − locataire. Avant impôt, assurance de prêt et travaux exceptionnels exclus ; toutes les valeurs sont des hypothèses de l’utilisateur.',
+  ]],
   ['TAEG d’un crédit', [
     'Le TAEG est le taux annuel i qui égalise le capital réellement reçu (capital − frais payés au départ) et la valeur actuelle des sorties mensuelles : capital − frais = (mensualité + assurance) × (1 − (1 + j)^−n) / j, avec j le taux mensuel et n le nombre de mois ; TAEG = (1 + j)^12 − 1. Résolution par dichotomie.',
     'Hypothèses : échéances constantes, assurance en pourcentage annuel du capital initial, frais payés à la signature, sans garantie à restituer ni indemnité de sortie. Estimation pédagogique : seul le TAEG de l’offre de prêt fait foi.',
