@@ -44,6 +44,9 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
 
 import { amortize, netOfFees, rentalAnalysis } from '../lib/finance';
 import { RENTAL } from '../lib/calc/fixtures';
+import { PROFILE_MONTHS, precautionTarget } from '../lib/calc/precaution';
+import { debtRatio, HCSF } from '../lib/calc/debtRatio';
+import { LIVRETS, LIVRETS_AS_OF } from './livrets';
 import { pagesMeta } from '../seo';
 
 describe('les exemples chiffrés des guides sont exacts', () => {
@@ -65,6 +68,25 @@ describe('les exemples chiffrés des guides sont exacts', () => {
     expect(r.grossYield).toBeCloseTo(0.06, 10);
     expect(r.netYield).toBeCloseTo(0.036, 3);
     expect(Math.abs(r.monthlyCashflow + 390)).toBeLessThan(5);
+  });
+  it('précaution : 2 000 € × 3, 6 et 9 mois → 6 000 €, 12 000 €, 18 000 €', () => {
+    for (const [m, t] of [[3, 6000], [6, 12000], [9, 18000]]) expect(precautionTarget({ monthlyExpenses: 2000, months: m, extraReserve: 0 })).toBe(t);
+    expect(PROFILE_MONTHS.stable.months).toBe(3);
+    expect(PROFILE_MONTHS.variable.months).toBe(6);
+    expect(PROFILE_MONTHS.independant.months).toBe(9);
+  });
+  it('plafonds et taux des livrets cités dans le guide précaution = LIVRETS', () => {
+    const t = guides.find((x) => x.slug === 'combien-epargne-de-precaution')!.sections.flatMap((s) => s.body).join(' ');
+    const by = Object.fromEntries(LIVRETS.map((l) => [l.id, l]));
+    expect(by.lep.cap).toBe(10000); expect(by.livretA.cap).toBe(22950); expect(by.ldds.cap).toBe(12000);
+    expect(by.lep.rate).toBe(0.025); expect(by.livretA.rate).toBe(0.017);
+    for (const s of ['10 000 €', '22 950 €', '12 000 €', '2,5 %', '1,7 %', LIVRETS_AS_OF, 'du 1er août 2026 au 31 janvier 2027']) expect(t, s).toContain(s);
+  });
+  it('endettement : (200 + 850) / 3 000 = 35 %, mensualité maximale 850 €, repère HCSF cité', () => {
+    const r = debtRatio({ income: 3000, existingPayments: 200, newPayment: 850, livingCosts: 0, householdSize: 1 });
+    expect(r.ratioAfter).toBeCloseTo(0.35, 10);
+    expect(r.maxNewPayment).toBeCloseTo(850, 6);
+    expect(HCSF.maxRatio).toBe(0.35); expect(HCSF.maxYears).toBe(25); expect(HCSF.maxYearsNew).toBe(27);
   });
   it('crédit : 180 000 € à 3,5 % → ≈ 6 200 € d’intérêts la première année', () => {
     expect(amortize({ principal: 180000, annualRate: 0.035, years: 20 }).schedule[0].interest).toBeCloseTo(6200, -2);
