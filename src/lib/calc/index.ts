@@ -20,3 +20,4 @@ export * from './rentVsBuy';
 export * from './debtPayoff';
 export * from './lumpVsGradual';
 export * from './withdrawal';
+export * from './performance';
