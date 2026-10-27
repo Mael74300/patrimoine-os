@@ -32,6 +32,10 @@ const FORMULAS: [string, string[]][] = [
     'Résultat avant impôt = marge brute − charges fixes − rémunération chargée. Impôt sur les sociétés après report des pertes.',
     'Flux de trésorerie = résultat net − variation du besoin en fonds de roulement (CA × délai clients / 365). Valeur = résultat net positif × multiple.',
   ]],
+  ['Rendement réel d’un placement', [
+    'Versement initial au début, puis versement mensuel en fin de chaque mois. Le taux mensuel m est celui pour lequel initial × (1 + m)^n + versement × ((1 + m)^n − 1) / m = valeur actuelle, trouvé par dichotomie (n = nombre de mois).',
+    'Rendement annuel équivalent = (1 + m)^12 − 1. Rendement cumulé = (valeur actuelle − total versé) / total versé. Montants saisis uniquement, rendement passé et nominal.',
+  ]],
   ['Retraits réguliers', [
     'Chaque mois : capital = capital × (1 + rendement mensuel équivalent), puis retrait en fin de mois. Le retrait est multiplié par (1 + indexation) au début de chaque année. Si le capital ne couvre plus le retrait, le mois est le mois d’épuisement et le dernier prélèvement est ce qui reste.',
     'Retrait tenable : plus grand premier retrait mensuel pour lequel le capital reste positif à la fin de l’horizon, trouvé par dichotomie. Rendement et indexation supposés constants, avant frais et impôts ; ce sont des hypothèses, pas des prévisions.',
