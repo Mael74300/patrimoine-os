@@ -32,6 +32,10 @@ const FORMULAS: [string, string[]][] = [
     'Résultat avant impôt = marge brute − charges fixes − rémunération chargée. Impôt sur les sociétés après report des pertes.',
     'Flux de trésorerie = résultat net − variation du besoin en fonds de roulement (CA × délai clients / 365). Valeur = résultat net positif × multiple.',
   ]],
+  ['Retraits réguliers', [
+    'Chaque mois : capital = capital × (1 + rendement mensuel équivalent), puis retrait en fin de mois. Le retrait est multiplié par (1 + indexation) au début de chaque année. Si le capital ne couvre plus le retrait, le mois est le mois d’épuisement et le dernier prélèvement est ce qui reste.',
+    'Retrait tenable : plus grand premier retrait mensuel pour lequel le capital reste positif à la fin de l’horizon, trouvé par dichotomie. Rendement et indexation supposés constants, avant frais et impôts ; ce sont des hypothèses, pas des prévisions.',
+  ]],
   ['Indépendance financière', [
     'Capital visé = (dépenses − revenus récurrents) / taux de retrait. Délai : capital × (1 + rendement réel) + épargne, chaque année.',
     'Phase de retrait : retrait en début d’année, revalorisé de l’inflation, puis rendement nominal sur le capital restant.',
