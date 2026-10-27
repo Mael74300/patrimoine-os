@@ -413,6 +413,90 @@ export const guides: Guide[] = [
     ],
     cta: { to: '/simulateurs/endettement', label: 'Calculer mon taux d’endettement' },
   },
+  {
+    slug: 'combien-epargner-par-mois-objectif',
+    title: 'Combien épargner par mois pour atteindre un objectif ?',
+    summary: 'Apport, voyage, travaux : comment calculer le versement mensuel selon le montant visé, la durée et le taux, et ce que changent les intérêts.',
+    readingMinutes: 4,
+    updatedOn: '2026-10-27',
+    sections: [
+      {
+        heading: 'Le calcul de base',
+        body: [
+          'Sans intérêts, le versement mensuel est simplement l’objectif divisé par le nombre de mois. Exemple fictif : 20 000 € en 5 ans, soit 60 mois, demandent 20 000 / 60 ≈ 333 € par mois.',
+          'Avec un taux de 1,7 % par an (celui du Livret A au 10 octobre 2026), le même objectif demande environ 320 € par mois : les intérêts, avant impôt, apportent environ 820 € sur 5 ans, soit à peine 4 % de l’objectif.',
+        ],
+      },
+      {
+        heading: 'La durée pèse plus que le taux',
+        body: [
+          'Sur des durées courtes et des placements sans risque, ce sont surtout vos versements qui construisent la somme. Pour le même objectif fictif de 20 000 € à 1,7 % : environ 542 € par mois sur 3 ans, 320 € sur 5 ans et 153 € sur 10 ans. Allonger l’échéance est le levier le plus efficace, s’il est compatible avec votre projet.',
+        ],
+      },
+      {
+        heading: 'Où placer l’argent selon l’échéance',
+        body: [
+          'Pour un objectif à moins de 3 à 5 ans, privilégiez des supports sans risque de perte en capital et disponibles : livrets réglementés dans la limite de leurs plafonds (voir la fiche Livret A). Un support investi en actions peut perdre de la valeur au moment où vous avez besoin de la somme. Au-delà d’une dizaine d’années, les autres enveloppes présentées dans les guides deviennent envisageables, avec un risque à accepter.',
+        ],
+      },
+      {
+        heading: 'Vérifier que le versement est réaliste',
+        body: [
+          'Comparez le versement à votre capacité d’épargne réelle : le simulateur de budget la calcule à partir de vos revenus et dépenses. Si le versement est trop élevé, réduisez l’objectif, repoussez l’échéance ou prévoyez un apport de départ.',
+        ],
+      },
+    ],
+    related: ['livret-a', 'lep'],
+    sources: [SP('Livret A', 'F2365'), BDF],
+    faq: [
+      { q: 'Comment calculer combien épargner par mois pour un objectif ?', a: 'Sans intérêts, divisez l’objectif par le nombre de mois. Exemple fictif : 20 000 € en 5 ans donnent environ 333 € par mois. Avec des intérêts, le versement est un peu plus bas ; le simulateur le calcule.' },
+      { q: 'Les intérêts changent-ils beaucoup le montant à épargner ?', a: 'Sur quelques années et avec un placement sans risque, peu : dans l’exemple fictif de 20 000 € en 5 ans à 1,7 %, les intérêts représentent environ 4 % de l’objectif, avant impôt.' },
+      { q: 'Où placer l’argent d’un projet à court terme ?', a: 'Sur des supports disponibles et sans risque de perte en capital, comme les livrets réglementés, dans la limite de leurs plafonds.' },
+    ],
+    cta: { to: '/simulateurs/objectif-epargne', label: 'Calculer mon versement mensuel' },
+  },
+  {
+    slug: 'rembourser-credit-par-anticipation-ou-investir',
+    title: 'Rembourser son crédit par anticipation ou investir ?',
+    summary: 'Comment comparer l’économie d’intérêts d’un remboursement anticipé au gain d’un placement, et ce qui fait pencher la balance.',
+    readingMinutes: 5,
+    updatedOn: '2026-10-27',
+    sections: [
+      {
+        heading: 'Deux options, la même somme',
+        body: [
+          'Rembourser par anticipation réduit le capital restant dû : la mensualité reste identique et le crédit s’éteint plus tôt. Investir garde le crédit tel quel et place la somme. La bonne comparaison se fait au même horizon, la durée restante du crédit, sur le patrimoine net obtenu.',
+        ],
+      },
+      {
+        heading: 'Un exemple fictif chiffré',
+        body: [
+          'Crédit de 150 000 € à 4 % sur 20 ans restants, 20 000 € disponibles, placement à 5 % par an, frais de 0,2 % par an, gains imposés à 30 %. Rembourser fait gagner 45 mois et économise environ 21 250 € d’intérêts ; le patrimoine net final est d’environ 43 900 €, contre 41 700 € en investissant. Dans cet exemple, rembourser l’emporte d’environ 2 200 €.',
+          'Le rendement d’équilibre est ici d’environ 5,3 % brut par an : au-dessus, investir gagne, en dessous, rembourser gagne. Ce rendement n’est pas garanti, alors que l’économie d’intérêts, elle, est certaine.',
+        ],
+      },
+      {
+        heading: 'Ce qui fait pencher la balance',
+        body: [
+          'Le taux du crédit (plus il est élevé, plus rembourser est intéressant), le rendement net et son incertitude, la fiscalité du placement, les indemnités de remboursement anticipé (plafonnées par la loi pour les crédits immobiliers : consultez votre contrat) et le besoin de liquidité. Les sommes versées sur un crédit ne sont plus disponibles, alors qu’un placement reste mobilisable.',
+        ],
+      },
+      {
+        heading: 'Avant de choisir',
+        body: [
+          'Constituez d’abord votre épargne de précaution : rembourser un crédit bloque l’argent. Le simulateur ne tient pas compte de l’assurance emprunteur ni des indemnités ; ajoutez-les à votre propre estimation.',
+        ],
+      },
+    ],
+    related: ['credit-immobilier'],
+    sources: [ANIL, BDF],
+    faq: [
+      { q: 'Vaut-il mieux rembourser son crédit ou investir ?', a: 'Cela dépend du taux du crédit et du rendement net espéré du placement. Dans l’exemple fictif de cette page (crédit à 4 %, placement à 5 %), rembourser l’emporte ; le rendement d’équilibre est d’environ 5,3 % brut par an.' },
+      { q: 'Que se passe-t-il quand on rembourse par anticipation ?', a: 'Le capital restant dû baisse. Selon l’option choisie avec la banque, la mensualité ou la durée est réduite ; le simulateur suppose que la mensualité est conservée et que le crédit s’éteint plus tôt.' },
+      { q: 'Y a-t-il des frais pour un remboursement anticipé ?', a: 'Des indemnités peuvent s’appliquer, plafonnées par la loi pour les crédits immobiliers. Vérifiez votre contrat : le simulateur les ignore.' },
+    ],
+    cta: { to: '/simulateurs/rembourser-ou-investir', label: 'Comparer rembourser et investir' },
+  },
 ];
 
 export const guideBySlug = Object.fromEntries(guides.map((g) => [g.slug, g]));

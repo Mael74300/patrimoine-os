@@ -45,6 +45,8 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
 import { amortize, netOfFees, rentalAnalysis } from '../lib/finance';
 import { RENTAL } from '../lib/calc/fixtures';
 import { PROFILE_MONTHS, precautionTarget } from '../lib/calc/precaution';
+import { savingsGoal, monthlyByDuration } from '../lib/calc/savingsGoal';
+import { prepayVsInvest } from '../lib/calc/prepayVsInvest';
 import { debtRatio, HCSF } from '../lib/calc/debtRatio';
 import { LIVRETS, LIVRETS_AS_OF } from './livrets';
 import { pagesMeta } from '../seo';
@@ -87,6 +89,24 @@ describe('les exemples chiffrés des guides sont exacts', () => {
     expect(r.ratioAfter).toBeCloseTo(0.35, 10);
     expect(r.maxNewPayment).toBeCloseTo(850, 6);
     expect(HCSF.maxRatio).toBe(0.35); expect(HCSF.maxYears).toBe(25); expect(HCSF.maxYearsNew).toBe(27);
+  });
+  it('objectif d’épargne : 20 000 € en 5 ans → 333 € sans intérêts, 320 € à 1,7 % (≈ 820 € d’intérêts) ; 542 / 320 / 153 € sur 3 / 5 / 10 ans', () => {
+    expect(savingsGoal({ target: 20000, current: 0, years: 5, annualRate: 0 }).monthly).toBeCloseTo(333.33, 2);
+    const r = savingsGoal({ target: 20000, current: 0, years: 5, annualRate: 0.017 });
+    expect(Math.round(r.monthly)).toBe(320);
+    expect(Math.round(r.interest / 10) * 10).toBe(820);
+    expect(r.interestShare).toBeCloseTo(0.04, 2);
+    expect(monthlyByDuration({ target: 20000, current: 0, annualRate: 0.017 }, [3, 5, 10]).map((x) => Math.round(x.monthly))).toEqual([542, 320, 153]);
+    expect(LIVRETS.find((l) => l.id === 'livretA')!.rate).toBe(0.017);
+  });
+  it('rembourser ou investir : 150 000 € à 4 %, 20 ans, 20 000 € → 45 mois gagnés, ≈ 21 250 € d’intérêts, 43 900 € vs 41 700 €, équilibre ≈ 5,3 %', () => {
+    const r = prepayVsInvest({ balance: 150000, annualRate: 0.04, remainingYears: 20, lump: 20000, annualReturn: 0.05, annualFees: 0.002, taxRate: 0.3 });
+    expect(r.monthsSaved).toBe(45);
+    expect(Math.round(r.interestSaved / 50) * 50).toBe(21250);
+    expect(Math.round(r.wealthPrepay / 100) * 100).toBe(43900);
+    expect(Math.round(r.wealthInvest / 100) * 100).toBe(41700);
+    expect(Math.round(r.advantageInvest / 100) * 100).toBe(-2200);
+    expect(r.breakEvenReturn!).toBeCloseTo(0.053, 3);
   });
   it('crédit : 180 000 € à 3,5 % → ≈ 6 200 € d’intérêts la première année', () => {
     expect(amortize({ principal: 180000, annualRate: 0.035, years: 20 }).schedule[0].interest).toBeCloseTo(6200, -2);
