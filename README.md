@@ -20,6 +20,7 @@ Plateforme française et gratuite consacrée à la construction du patrimoine : 
 | Inflation et pouvoir d'achat | Valeur d'une somme inchangée ou placée en euros d'aujourd'hui, montant pour garder le même pouvoir d'achat, rendement réel, durées de perte de moitié et de doublement |
 | Portefeuille, comparateur de fiches | Allocation, frais pondérés, rééquilibrage ; jusqu'à 3 fiches côte à côte |
 | Guides | 11 guides, dont 8 pages répondant à une intention de recherche précise (patrimoine net, rentabilité locative, PEA, frais…) |
+| Liens internes | Chaque fiche et chaque guide renvoie vers ses simulateurs liés (table `src/lib/relatedSims.ts`, cohérence testée : cibles existantes, aucun simulateur sans lien entrant) |
 | Glossaire | 20 notions expliquées, avec liens vers simulateurs, fiches et guides (liens vérifiés par les tests) |
 | Simulations locales | Chaque simulateur permet d'enregistrer, d'exporter et d'importer ses simulations en fichier JSON (local, rien n'est envoyé) |
 | Légal | Politique de confidentialité, mentions légales, effacement des données locales |
@@ -27,7 +28,7 @@ Plateforme française et gratuite consacrée à la construction du patrimoine : 
 ## Architecture
 
 - **Vite + React + TypeScript**, CSS natif, graphiques SVG sans dépendance.
-- **Moteur de calcul** : un module par famille dans `src/lib/calc/` (`growth`, `loan`, `rental`, `compare`, `portfolio`, `business`, `fire`, `precaution`, `budget`, `fees`, `prepayVsInvest`, `purchasingPower`, `networth`, `format`), fonctions pures et déterministes. Conventions dans `common.ts` et sur la page « Méthode ». **168 tests** : formules, exemples connus, valeurs nulles, négatives et durées nulles, chaque exemple chiffré cité dans les fiches et guides, métadonnées SEO, contrôle SEO, scripts de surveillance.
+- **Moteur de calcul** : un module par famille dans `src/lib/calc/` (`growth`, `loan`, `rental`, `compare`, `portfolio`, `business`, `fire`, `precaution`, `budget`, `fees`, `prepayVsInvest`, `purchasingPower`, `networth`, `format`), fonctions pures et déterministes. Conventions dans `common.ts` et sur la page « Méthode ». **171 tests** : formules, exemples connus, valeurs nulles, négatives et durées nulles, chaque exemple chiffré cité dans les fiches et guides, métadonnées SEO, contrôle SEO, scripts de surveillance.
 - **Pré-rendu statique** (`scripts/prerender.mjs`) : 60 pages HTML complètes avec URL lisibles (`/encyclopedie/pea/`), titre, description, URL canonique, Open Graph, données structurées (Article, BreadcrumbList, WebApplication, FAQPage sur les guides qui comportent des questions fréquentes), plus `404.html`, `sitemap.xml`, `feed.xml` (flux Atom des nouveautés, référencé dans le `<head>`) et `robots.txt`. Le navigateur reprend ensuite la page (hydratation) pour l'interactivité.
 - **Contrôle SEO** (`scripts/seo-check.mjs`, lancé par `npm run build`, échec en cas d’erreur) : titre et description présents, uniques et de longueur raisonnable, URL canonique, liens internes cassés, pages orphelines, JSON-LD valide.
 - **IndexNow** : la clé (non secrète) est publiée à la racine du site (`public/<clé>.txt`) ; après chaque publication, `scripts/indexnow.mjs` envoie les adresses du sitemap à `api.indexnow.org`. L’étape ne peut pas faire échouer le déploiement.

@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { config } from '../config';
 import { categoryById } from '../data/categories';
 import { investmentBySlug } from '../data/investments';
+import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Dots, PageHead, Sources } from '../components/ui';
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
@@ -69,6 +70,15 @@ export default function InvestmentPage() {
               <a href={aff.url} rel="sponsored noopener noreferrer" target="_blank">{aff.label}</a>
             </p>
           )}
+
+          {relatedSimulators(simsForInvestment[inv.slug]).length > 0 && (<>
+            <h2>Simulateurs liés</h2>
+            <ul>
+              {relatedSimulators(simsForInvestment[inv.slug]).map((sim) => (
+                <li key={sim.slug}><Link to={`/simulateurs/${sim.slug}`}>{sim.title}</Link> — {sim.excerpt}</li>
+              ))}
+            </ul>
+          </>)}
 
           <h2>Alternatives comparables</h2>
           <ul>
