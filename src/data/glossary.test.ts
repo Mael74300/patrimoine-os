@@ -22,3 +22,13 @@ describe('glossaire', () => {
     for (const t of glossary) for (const l of t.links) expect(routes.has(l.to), `${t.term} → ${l.to}`).toBe(true);
   });
 });
+
+describe('données structurées du glossaire', () => {
+  it('DefinedTermSet reprend exactement les termes affichés', async () => {
+    const { pagesMeta } = await import('../seo');
+    const page = pagesMeta('https://exemple.github.io/patrimoine-os').find((p) => p.path === '/glossaire/')!;
+    const set = (page.jsonLd as { '@type': string; hasDefinedTerm?: { name: string; description: string }[] }[]).find((d) => d['@type'] === 'DefinedTermSet')!;
+    expect(set.hasDefinedTerm!.map((t) => t.name).sort()).toEqual(glossary.map((t) => t.term).sort());
+    for (const t of set.hasDefinedTerm!) expect(glossary.find((g) => g.term === t.name)!.definition).toBe(t.description);
+  });
+});
