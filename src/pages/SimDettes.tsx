@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { comparePayoff, fmtEur, type Debt } from '../lib/finance';
-import { Crumbs, Disclaimer, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = {
   b1: number; r1: number; m1: number;
@@ -113,6 +113,7 @@ export default function SimDettes() {
           </p>
           <SavedSims simKey="dettes" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <SimFaq slug="dettes" />
         </section>
       </div>
     </>

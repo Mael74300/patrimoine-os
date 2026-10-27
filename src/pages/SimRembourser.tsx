@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { fmtEur, fmtPct, prepayVsInvest } from '../lib/finance';
-import { Crumbs, Disclaimer, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = { balance: number; annualRate: number; remainingYears: number; lump: number; annualReturn: number; annualFees: number; taxRate: number };
 
@@ -68,6 +68,7 @@ export default function SimRembourser() {
           </p>
           <SavedSims simKey="rembourser" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <SimFaq slug="rembourser-ou-investir" />
         </section>
       </div>
     </>

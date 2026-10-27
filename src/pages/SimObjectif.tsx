@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { fmtEur, fmtPct, monthlyByDuration, monthlyByRate, savingsGoal } from '../lib/finance';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
-import { Crumbs, Disclaimer, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = { target: number; current: number; years: number; annualRate: number };
 
@@ -80,6 +80,7 @@ export default function SimObjectif() {
           </p>
           <SavedSims simKey="objectif-epargne" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <SimFaq slug="objectif-epargne" />
         </section>
       </div>
     </>

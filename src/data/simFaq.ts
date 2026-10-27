@@ -23,6 +23,24 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Pourquoi le résultat dépend-il autant de la hausse des prix et de la durée ?', a: 'Les frais d’acquisition et de revente pèsent d’autant plus que la durée de détention est courte, alors que la hausse du bien et le remboursement du capital jouent sur la durée. Le simulateur montre l’effet de ces deux hypothèses.' },
     { q: 'Le résultat est-il une prévision ?', a: 'Non. Il ne repose que sur les hypothèses que vous saisissez (prix, loyer, rendement, charges), dont l’évolution réelle est inconnue. Les montants par défaut sont fictifs.' },
   ],
+  dettes: [
+    { q: 'Quelle différence entre la méthode avalanche et la boule de neige ?', a: 'Avec l’avalanche, tout le budget disponible au-delà des mensualités minimales va d’abord à la dette au taux le plus élevé. Avec la boule de neige, il va à celle dont le solde est le plus petit. Dans les deux cas, une dette soldée libère sa mensualité pour la suivante.' },
+    { q: 'Quelle méthode coûte le moins d’intérêts ?', a: 'À budget identique, l’avalanche minimise les intérêts versés puisqu’elle réduit en premier la dette la plus chère. La boule de neige peut coûter un peu plus mais solde plus vite la première dette, ce qui peut aider à tenir la durée. Le simulateur chiffre l’écart avec vos saisies.' },
+    { q: 'Comment le budget mensuel est-il défini ?', a: 'Le budget total est constant : somme des mensualités minimales de vos dettes plus le versement supplémentaire que vous saisissez. Quand une dette est soldée, sa mensualité est reportée sur la suivante.' },
+    { q: 'Les résultats sont-ils une prévision ?', a: 'Non, ils découlent uniquement des soldes, taux et mensualités que vous saisissez, supposés constants. Les valeurs par défaut sont fictives.' },
+  ],
+  'objectif-epargne': [
+    { q: 'Comment est calculé le versement mensuel nécessaire ?', a: 'Le simulateur cherche le versement mensuel constant qui, placé au rendement annuel net que vous saisissez, versé en fin de mois, atteint le montant visé à l’échéance, après prise en compte de l’épargne déjà constituée. La formule est détaillée sur la page Méthode.' },
+    { q: 'Quel taux faut-il saisir ?', a: 'Aucun taux n’est imposé : c’est une hypothèse de votre choix, que le simulateur considère comme un rendement net. Saisir 0 % donne le versement sans aucun intérêt, simple division du montant restant par le nombre de mois.' },
+    { q: 'Pourquoi allonger la durée réduit-il autant le versement ?', a: 'Le montant à constituer est réparti sur davantage de mois, et les intérêts éventuels jouent plus longtemps. Sur de courtes durées, ce sont surtout les versements qui construisent la somme.' },
+    { q: 'Le résultat est-il une prévision ?', a: 'Non, il ne repose que sur vos hypothèses (montant, durée, taux), supposées constantes. Les valeurs par défaut sont fictives.' },
+  ],
+  'rembourser-ou-investir': [
+    { q: 'Comment le simulateur compare-t-il rembourser et investir ?', a: 'Il compare, à l’horizon choisi, le patrimoine net obtenu en remboursant une somme par anticipation (intérêts économisés) et celui obtenu en la plaçant au rendement saisi tout en poursuivant le crédit, après frais et imposition saisis.' },
+    { q: 'Qu’est-ce que le rendement d’équilibre ?', a: 'C’est le rendement annuel brut du placement pour lequel les deux options donnent le même patrimoine net avec vos hypothèses. Au-dessus, investir l’emporte ; en dessous, rembourser l’emporte.' },
+    { q: 'Quels frais et quelle imposition sont pris en compte ?', a: 'Uniquement ceux que vous saisissez : les frais annuels du placement et un taux unique d’imposition appliqué aux gains à l’horizon. Les éventuelles indemnités de remboursement anticipé de votre prêt ne sont pas calculées : vérifiez les conditions de votre contrat.' },
+    { q: 'Le résultat est-il une prévision ?', a: 'Non, le rendement futur est inconnu et un placement peut perdre de la valeur. Le résultat découle uniquement de vos hypothèses, et les valeurs par défaut sont fictives.' },
+  ],
   frais: [
     { q: 'Pourquoi une petite différence de frais pèse-t-elle autant à long terme ?', a: 'Les frais annuels sont prélevés chaque année sur le capital, qui ne produit plus de gains sur la part prélevée. Cet effet se cumule avec la durée, d’où un écart de capital final bien supérieur à la différence de frais.' },
     { q: 'Que signifie la part des gains absorbée par les frais ?', a: 'C’est le rapport entre le coût des frais (capital final sans frais moins capital final avec frais) et les gains obtenus sans frais, à rendement brut et versements identiques.' },
