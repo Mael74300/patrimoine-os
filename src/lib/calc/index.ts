@@ -18,3 +18,4 @@ export * from './savingsGoal';
 export * from './taeg';
 export * from './rentVsBuy';
 export * from './debtPayoff';
+export * from './lumpVsGradual';

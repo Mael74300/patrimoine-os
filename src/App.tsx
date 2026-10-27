@@ -29,6 +29,7 @@ import SimObjectif from './pages/SimObjectif';
 import SimTaeg from './pages/SimTaeg';
 import SimLouerAcheter from './pages/SimLouerAcheter';
 import SimDettes from './pages/SimDettes';
+import SimEtalement from './pages/SimEtalement';
 import Glossaire from './pages/Glossaire';
 import { Confidentialite, MentionsLegales } from './pages/Legal';
 import NotFound from './pages/NotFound';
@@ -166,6 +167,7 @@ export default function App() {
             <Route path="/simulateurs/taeg" element={<SimTaeg />} />
             <Route path="/simulateurs/louer-ou-acheter" element={<SimLouerAcheter />} />
             <Route path="/simulateurs/dettes" element={<SimDettes />} />
+            <Route path="/simulateurs/investir-d-un-coup-ou-progressivement" element={<SimEtalement />} />
             <Route path="/glossaire" element={<Glossaire />} />
             <Route path="/confidentialite" element={<Confidentialite />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
