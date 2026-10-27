@@ -54,6 +54,10 @@ const FORMULAS: [string, string[]][] = [
     'Valeur d’une somme S en euros d’aujourd’hui après T années : S / (1 + i)^T. Montant nécessaire pour garder le même pouvoir d’achat : S × (1 + i)^T. Perte de pouvoir d’achat = 1 − valeur réelle / S.',
     'Rendement réel = (1 + r) / (1 + i) − 1. Durée pour perdre la moitié du pouvoir d’achat = ln 2 / ln(1 + i) ; durée pour doubler un capital placé = ln 2 / ln(1 + r) (valeur exacte de la « règle des 72 »). Sans versement, avant impôt.',
   ]],
+  ['Taux d’endettement et reste à vivre', [
+    'Taux d’endettement = (mensualités en cours + nouvelle mensualité, assurance comprise) / revenus nets mensuels. Repère : 35 % au plus (recommandation du HCSF, décision D-HCSF-2021-7), sur 25 ans au plus. Mensualité maximale = 35 % × revenus − mensualités en cours ; revenu minimal = charges d’emprunt / 35 %.',
+    'Reste à vivre = revenus − crédits − autres charges ; par personne = reste à vivre / nombre de personnes. Capital empruntable = mensualité maximale / (facteur de mensualité par euro emprunté + assurance mensuelle par euro emprunté). Aucun seuil de reste à vivre officiel n’est appliqué.',
+  ]],
   ['Budget et taux d’épargne', [
     'Taux d’épargne = épargne mensuelle / revenu net mensuel. Revenu non affecté = revenu − besoins − envies − épargne.',
     'Repère 50 / 30 / 20 : besoins 50 %, envies 30 %, épargne 20 % du revenu net ; repère pédagogique, non une règle officielle. Effort pour un taux visé = revenu × taux − épargne actuelle, couvert d’abord par le revenu non affecté puis par les envies.',
