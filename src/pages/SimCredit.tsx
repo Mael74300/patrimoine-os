@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { amortize, borrowingCapacity, fmtEur, fmtEur2, prepayment } from '../lib/finance';
-import { Crumbs, Disclaimer, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
 
 type State = {
   principal: number; annualRate: number; years: number; insuranceRate: number;
@@ -113,6 +113,7 @@ export default function SimCredit() {
           </div>
           <SavedSims simKey="credit" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <SimFaq slug="credit" />
         </section>
       </div>
     </>

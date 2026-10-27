@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { drawdown, fireTarget, fmtEur, fmtPct, fmtYears, realRate, yearsToTarget, type FireInput } from '../lib/finance';
-import { Crumbs, Disclaimer, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 const DEFAULTS: FireInput = {
   annualExpenses: 30000, currentWealth: 80000, recurringIncome: 0, annualSavings: 15000,
@@ -93,6 +93,7 @@ export default function SimIndependance() {
           </div>
           <SavedSims simKey="independance" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <SimFaq slug="independance-financiere" />
         </section>
       </div>
     </>
