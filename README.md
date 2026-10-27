@@ -30,7 +30,7 @@ Plateforme française et gratuite consacrée à la construction du patrimoine : 
 ## Architecture
 
 - **Vite + React + TypeScript**, CSS natif, graphiques SVG sans dépendance.
-- **Moteur de calcul** : un module par famille dans `src/lib/calc/` (`growth`, `loan`, `rental`, `compare`, `portfolio`, `business`, `fire`, `precaution`, `budget`, `fees`, `prepayVsInvest`, `purchasingPower`, `debtRatio`, `savingsGoal`, `networth`, `format`), fonctions pures et déterministes. Conventions dans `common.ts` et sur la page « Méthode ». **188 tests** : formules, exemples connus, valeurs nulles, négatives et durées nulles, chaque exemple chiffré cité dans les fiches et guides, métadonnées SEO, contrôle SEO, scripts de surveillance.
+- **Moteur de calcul** : un module par famille dans `src/lib/calc/` (`growth`, `loan`, `rental`, `compare`, `portfolio`, `business`, `fire`, `precaution`, `budget`, `fees`, `prepayVsInvest`, `purchasingPower`, `debtRatio`, `savingsGoal`, `networth`, `format`), fonctions pures et déterministes. Conventions dans `common.ts` et sur la page « Méthode ». **196 tests** : formules, exemples connus, valeurs nulles, négatives et durées nulles, chaque exemple chiffré cité dans les fiches et guides, métadonnées SEO, contrôle SEO, scripts de surveillance.
 - **Pré-rendu statique** (`scripts/prerender.mjs`) : 66 pages HTML complètes avec URL lisibles (`/encyclopedie/pea/`), titre, description, URL canonique, Open Graph, données structurées (Article, BreadcrumbList, WebApplication, FAQPage sur les guides qui comportent des questions fréquentes), plus `404.html`, `sitemap.xml`, `feed.xml` (flux Atom des nouveautés, référencé dans le `<head>`) et `robots.txt`. Le navigateur reprend ensuite la page (hydratation) pour l'interactivité.
 - **Contrôle SEO** (`scripts/seo-check.mjs`, lancé par `npm run build`, échec en cas d’erreur) : titre et description présents, uniques et de longueur raisonnable, URL canonique, liens internes cassés, pages orphelines, JSON-LD valide.
 - **IndexNow** : la clé (non secrète) est publiée à la racine du site (`public/<clé>.txt`) ; après chaque publication, `scripts/indexnow.mjs` envoie les adresses du sitemap à `api.indexnow.org`. L’étape ne peut pas faire échouer le déploiement.
@@ -62,9 +62,24 @@ Le workflow `deploy.yml` teste, audite, construit et publie à chaque `push` sur
 | Pages sources officielles | page modifiée, disparue ou en erreur signalée, avec les fiches concernées. Respect de robots.txt, une requête toutes les 3 secondes, seule une empreinte du texte est conservée (aucune copie) |
 | Fiches à réviser | révision dépassée ou dans les 30 jours, éléments « à vérifier » |
 
-Tout est regroupé dans un ticket GitHub « maintenance ». **Aucune fiche n'est modifiée automatiquement** : après relecture, vous corrigez la fiche, mettez à jour `verifiedOn` et `nextReview`, puis lancez `npm run sources:accept`.
+Tout est regroupé dans un ticket GitHub « maintenance ». **La surveillance ne modifie aucune fiche** : après relecture, vous corrigez la fiche, mettez à jour `verifiedOn` et `nextReview`, puis lancez `npm run sources:accept`.
 
 Calendrier indicatif : taux des livrets au 1er février et au 1er août ; loi de finances et de financement de la Sécurité sociale fin décembre. Les `nextReview` des fiches sont réglés en conséquence.
+
+## Fusion automatique et exactitude des informations
+
+`auto-merge.yml` fusionne seules les pull requests des tâches automatiques (branches `feature/*` ouvertes par le propriétaire depuis ce dépôt), puis lance la publication. Les autres pull requests ne sont jamais fusionnées automatiquement. Avant toute fusion :
+
+1. **Vérification des informations** (`scripts/check-pr-facts.mjs`) : la description contient une section `## Vérification des informations` qui liste chaque information factuelle ajoutée ou modifiée (taux, plafond, seuil, règle fiscale, date d'effet…), une ligne par information, avec le lien https de la source officielle consultée et la date de consultation. Sinon, elle indique « Aucune information factuelle ajoutée ni modifiée ». Une description incomplète bloque la fusion.
+2. Tests, audit des dépendances, construction pré-rendue et contrôle SEO, sur la version fusionnée avec `main`.
+
+Règles d'exactitude pour toute modification, manuelle ou automatique :
+
+- chaque chiffre réglementaire est confirmé sur une source officielle (Service-Public.fr, impots.gouv.fr, Legifrance, Banque de France, AMF, URSSAF…) consultée au moment de la modification, puis daté (`asOf`, `verifiedOn`) ;
+- une information qui ne peut pas être confirmée n'est pas publiée comme vérifiée : elle est retirée ou marquée « à vérifier » ;
+- un chiffre déjà présent n'est jamais modifié sans source qui confirme la nouvelle valeur ;
+- un même chiffre cité à plusieurs endroits reste identique partout (tests de cohérence) ;
+- les exemples chiffrés sont marqués « fictif » et recalculés par les tests.
 
 ## Commandes
 

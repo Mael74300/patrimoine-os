@@ -1,0 +1,63 @@
+name: Fusion automatique
+# Fusionne seules les pull requests des tâches automatiques (branches feature/* ouvertes par le propriétaire
+# depuis ce dépôt), une fois les contrôles passés, puis lance la publication.
+# Contrôles : description avec « Vérification des informations » complète (source et date pour chaque
+# information factuelle), tests, audit des dépendances, construction pré-rendue et contrôle SEO.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+    branches: [main]
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+concurrency:
+  group: auto-merge-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  fusion:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      startsWith(github.event.pull_request.head.ref, 'feature/') &&
+      github.event.pull_request.user.login == github.repository_owner &&
+      !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    env:
+      SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io/{1}', github.repository_owner, github.event.repository.name) }}
+      BASE_PATH: ${{ vars.BASE_PATH || format('/{0}/', github.event.repository.name) }}
+    steps:
+      # Contrôle la version fusionnée avec main (référence par défaut d'une pull request).
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Vérification des informations (description de la pull request)
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: node scripts/check-pr-facts.mjs
+      - run: npm ci
+      - run: npm test
+      - name: Audit de sécurité des dépendances de production
+        run: npm audit --omit=dev --audit-level=high
+      - run: npm run build
+      # --match-head-commit : ne fusionne que le commit contrôlé, jamais un commit poussé entre-temps.
+      - name: Fusion
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          gh pr merge ${{ github.event.pull_request.number }} --repo ${{ github.repository }}
+          --squash --match-head-commit ${{ github.event.pull_request.head.sha }}
+      - name: Suppression de la branche fusionnée
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/git/refs/heads/$HEAD_REF"
+      # Une fusion faite avec le jeton d'Actions ne déclenche pas le push sur main : publication lancée explicitement.
+      - name: Publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --repo ${{ github.repository }} --ref main
