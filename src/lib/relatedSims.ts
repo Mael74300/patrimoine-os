@@ -2,7 +2,7 @@ import { simulators } from './search';
 
 /** Simulateurs liés à chaque fiche (clé : slug de fiche) et à chaque guide (clé : slug de guide). Cohérence vérifiée par les tests. */
 export const simsForInvestment: Record<string, string[]> = {
-  'livret-a': ['epargne-de-precaution', 'inflation'],
+  'livret-a': ['epargne-de-precaution', 'objectif-epargne', 'inflation'],
   lep: ['epargne-de-precaution', 'inflation'],
   'compte-a-terme': ['inflation', 'patrimoine'],
   'etf-monde': ['frais', 'portefeuille', 'patrimoine'],
@@ -34,7 +34,7 @@ export const simsForGuide: Record<string, string[]> = {
   'fonctionnement-pea': ['frais', 'patrimoine'],
   'comparer-les-frais': ['frais'],
   'epargne-limitee': ['epargne-de-precaution', 'inflation'],
-  'par-ou-commencer': ['budget', 'epargne-de-precaution'],
+  'par-ou-commencer': ['budget', 'epargne-de-precaution', 'objectif-epargne'],
   'interets-composes': ['patrimoine', 'inflation'],
   'choisir-son-enveloppe': ['frais', 'patrimoine'],
   'combien-epargne-de-precaution': ['epargne-de-precaution', 'inflation', 'budget'],

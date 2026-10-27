@@ -18,6 +18,7 @@ export const simulators = [
   { slug: 'rembourser-ou-investir', title: 'Rembourser son crédit ou investir', excerpt: 'Remboursement anticipé ou placement de la même somme : patrimoine net comparé et rendement d’équilibre.', keywords: 'remboursement anticipe pret immobilier investir arbitrage interets economises placer epargne credit' },
   { slug: 'inflation', title: 'Inflation et pouvoir d’achat', excerpt: 'Ce que vaut une somme dans vingt ans, inchangée ou placée : pouvoir d’achat perdu et rendement réel.', keywords: 'inflation pouvoir achat prix hausse rendement reel epargne livret perte valeur euros constants' },
   { slug: 'endettement', title: 'Taux d’endettement et reste à vivre', excerpt: 'Part des revenus consacrée aux crédits, reste à vivre, mensualité maximale et capital empruntable au repère de 35 %.', keywords: 'taux endettement taux effort 35 hcsf reste a vivre capacite emprunt pret immobilier revenus mensualite' },
+  { slug: 'objectif-epargne', title: 'Objectif d’épargne : combien verser par mois', excerpt: 'Versement mensuel pour atteindre un montant à une échéance (apport, voyage, travaux) et effet de la durée et du taux.', keywords: 'objectif epargne projet apport voyage travaux versement mensuel echeance economiser combien epargner par mois' },
 ];
 
 /** Minuscule, sans accents, pour une recherche tolérante. */

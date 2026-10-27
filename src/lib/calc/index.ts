@@ -14,3 +14,4 @@ export * from './fees';
 export * from './prepayVsInvest';
 export * from './purchasingPower';
 export * from './debtRatio';
+export * from './savingsGoal';
