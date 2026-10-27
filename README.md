@@ -1,6 +1,6 @@
 # Patrimoine OS
 
-Plateforme française et gratuite consacrée à la construction du patrimoine : encyclopédie des investissements, comparateurs, quatorze simulateurs et guides pédagogiques. Site statique pré-rendu, sans backend, sans compte, sans cookie ni traceur. Coût d'exploitation : 0 €.
+Plateforme française et gratuite consacrée à la construction du patrimoine : encyclopédie des investissements, comparateurs, quinze simulateurs et guides pédagogiques. Site statique pré-rendu, sans backend, sans compte, sans cookie ni traceur. Coût d'exploitation : 0 €.
 
 ## Contenu
 
@@ -20,6 +20,7 @@ Plateforme française et gratuite consacrée à la construction du patrimoine : 
 | Inflation et pouvoir d'achat | Valeur d'une somme inchangée ou placée en euros d'aujourd'hui, montant pour garder le même pouvoir d'achat, rendement réel, durées de perte de moitié et de doublement |
 | Taux d'endettement | Taux d'endettement avant/après un projet, repère de 35 % du HCSF (assurance comprise, source et date de vérification), mensualité maximale, revenu minimal, capital empruntable, reste à vivre par personne |
 | Objectif d'épargne | Versement mensuel pour atteindre un montant à une échéance (apport, voyage, travaux), total versé, intérêts, effet de la durée et du taux (repère : taux du Livret A issu des données du site) |
+| TAEG d’un crédit | TAEG estimé à partir du taux, de l’assurance et des frais payés au départ, écart avec le taux nominal, effet des frais et de l’assurance, coût total (estimation : seul le TAEG de l’offre fait foi) |
 | Portefeuille, comparateur de fiches | Allocation, frais pondérés, rééquilibrage ; jusqu'à 3 fiches côte à côte |
 | Guides | 15 guides, dont 12 pages répondant à une intention de recherche précise (patrimoine net, rentabilité locative, PEA, frais…) |
 | Liens internes | Chaque fiche et chaque guide renvoie vers ses simulateurs liés (table `src/lib/relatedSims.ts`, cohérence testée : cibles existantes, aucun simulateur sans lien entrant) |
@@ -30,8 +31,8 @@ Plateforme française et gratuite consacrée à la construction du patrimoine : 
 ## Architecture
 
 - **Vite + React + TypeScript**, CSS natif, graphiques SVG sans dépendance.
-- **Moteur de calcul** : un module par famille dans `src/lib/calc/` (`growth`, `loan`, `rental`, `compare`, `portfolio`, `business`, `fire`, `precaution`, `budget`, `fees`, `prepayVsInvest`, `purchasingPower`, `debtRatio`, `savingsGoal`, `networth`, `format`), fonctions pures et déterministes. Conventions dans `common.ts` et sur la page « Méthode ». **188 tests** : formules, exemples connus, valeurs nulles, négatives et durées nulles, chaque exemple chiffré cité dans les fiches et guides, métadonnées SEO, contrôle SEO, scripts de surveillance.
-- **Pré-rendu statique** (`scripts/prerender.mjs`) : 66 pages HTML complètes avec URL lisibles (`/encyclopedie/pea/`), titre, description, URL canonique, Open Graph, données structurées (Article, BreadcrumbList, WebApplication, FAQPage sur les guides qui comportent des questions fréquentes), plus `404.html`, `sitemap.xml`, `feed.xml` (flux Atom des nouveautés, référencé dans le `<head>`) et `robots.txt`. Le navigateur reprend ensuite la page (hydratation) pour l'interactivité.
+- **Moteur de calcul** : un module par famille dans `src/lib/calc/` (`growth`, `loan`, `rental`, `compare`, `portfolio`, `business`, `fire`, `precaution`, `budget`, `fees`, `prepayVsInvest`, `purchasingPower`, `debtRatio`, `savingsGoal`, `taeg`, `networth`, `format`), fonctions pures et déterministes. Conventions dans `common.ts` et sur la page « Méthode ». **195 tests** : formules, exemples connus, valeurs nulles, négatives et durées nulles, chaque exemple chiffré cité dans les fiches et guides, métadonnées SEO, contrôle SEO, scripts de surveillance.
+- **Pré-rendu statique** (`scripts/prerender.mjs`) : 67 pages HTML complètes avec URL lisibles (`/encyclopedie/pea/`), titre, description, URL canonique, Open Graph, données structurées (Article, BreadcrumbList, WebApplication, FAQPage sur les guides qui comportent des questions fréquentes), plus `404.html`, `sitemap.xml`, `feed.xml` (flux Atom des nouveautés, référencé dans le `<head>`) et `robots.txt`. Le navigateur reprend ensuite la page (hydratation) pour l'interactivité.
 - **Contrôle SEO** (`scripts/seo-check.mjs`, lancé par `npm run build`, échec en cas d’erreur) : titre et description présents, uniques et de longueur raisonnable, URL canonique, liens internes cassés, pages orphelines, JSON-LD valide.
 - **IndexNow** : la clé (non secrète) est publiée à la racine du site (`public/<clé>.txt`) ; après chaque publication, `scripts/indexnow.mjs` envoie les adresses du sitemap à `api.indexnow.org`. L’étape ne peut pas faire échouer le déploiement.
 - **Sécurité** : politique de sécurité du contenu (CSP) dans chaque page, aucune ressource tierce, aucun formulaire envoyé, dépendances auditées à chaque construction et mises à jour par Dependabot.
