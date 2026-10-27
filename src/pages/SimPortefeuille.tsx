@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { fmtEur, fmtPct, projectGrowth, rebalance, summarizePortfolio, type PortfolioLine } from '../lib/finance';
-import { Crumbs, Disclaimer, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type Line = PortfolioLine & { target: number };
 type State = { lines: Line[]; monthly: number; years: number };
@@ -126,6 +126,7 @@ export default function SimPortefeuille() {
       </div>
       <SavedSims simKey="portefeuille" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
       <div style={{ marginTop: 16 }}><Disclaimer /></div>
+      <SimFaq slug="portefeuille" />
     </>
   );
 }
