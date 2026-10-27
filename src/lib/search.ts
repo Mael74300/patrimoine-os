@@ -22,6 +22,7 @@ export const simulators = [
   { slug: 'taeg', title: 'Calcul du TAEG d’un crédit', excerpt: 'TAEG estimé à partir du taux, de l’assurance et des frais de dossier ou de garantie, pour comparer deux offres de prêt.', keywords: 'taeg calcul taux annuel effectif global credit pret immobilier assurance frais dossier garantie comparer offres cout total' },
   { slug: 'louer-ou-acheter', title: 'Louer ou acheter sa résidence principale', excerpt: 'Patrimoine du propriétaire et du locataire à l’horizon choisi, selon vos hypothèses de prix, de loyer, de frais et de rendement.', keywords: 'louer ou acheter residence principale loyer achat pret immobilier comparer proprietaire locataire horizon frais notaire apport' },
   { slug: 'dettes', title: 'Rembourser plusieurs dettes : avalanche ou boule de neige', excerpt: 'Ordre de remboursement de plusieurs dettes : intérêts et durée selon la méthode avalanche, boule de neige ou mensualités minimales.', keywords: 'rembourser plusieurs dettes avalanche boule de neige snowball credit consommation carte revolving surendettement ordre remboursement interets' },
+  { slug: 'investir-d-un-coup-ou-progressivement', title: 'Investir d’un coup ou progressivement', excerpt: 'Un capital placé en une fois ou en tranches égales sur plusieurs mois : valeur finale selon le parcours de prix que vous supposez.', keywords: 'investir d un coup ou progressivement versements programmes dca lump sum etalement capital placement bourse etf moment entrer marche' },
 ];
 
 /** Minuscule, sans accents, pour une recherche tolérante. */

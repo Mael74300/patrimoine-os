@@ -66,6 +66,10 @@ const FORMULAS: [string, string[]][] = [
     'Chaque mois, chaque dette produit des intérêts égaux à son solde × taux annuel / 12 (convention des crédits), puis les mensualités minimales sont payées. Le reste du budget (budget total constant = somme des minimums + versement supplémentaire) va à la dette prioritaire : taux le plus élevé (avalanche) ou plus petit solde (boule de neige). Une dette soldée libère sa mensualité pour la suivante.',
     'Hypothèses : taux fixes, aucun frais ni indemnité de remboursement anticipé, durée limitée à 50 ans (au-delà, la dette est déclarée non soldée). Toutes les valeurs sont saisies par l’utilisateur.',
   ]],
+  ['Investir d’un coup ou progressivement', [
+    'Le prix suit un parcours supposé : régulier (rendement annuel saisi, converti en taux mensuel équivalent), ou avec une baisse ou une hausse linéaire de l’ampleur saisie pendant la durée d’étalement, puis le rendement saisi. Investir en une fois : parts = capital / prix(0), valeur finale = parts × prix(horizon).',
+    'Étalement : chaque mois, en début de mois, on investit la part restante divisée par le nombre de tranches restantes ; la part non investie rapporte le rendement de trésorerie saisi. Valeur finale = parts × prix(horizon) + trésorerie résiduelle. Avant frais et impôts ; le parcours est une hypothèse, pas une prévision.',
+  ]],
   ['TAEG d’un crédit', [
     'Le TAEG est le taux annuel i qui égalise le capital réellement reçu (capital − frais payés au départ) et la valeur actuelle des sorties mensuelles : capital − frais = (mensualité + assurance) × (1 − (1 + j)^−n) / j, avec j le taux mensuel et n le nombre de mois ; TAEG = (1 + j)^12 − 1. Résolution par dichotomie.',
     'Hypothèses : échéances constantes, assurance en pourcentage annuel du capital initial, frais payés à la signature, sans garantie à restituer ni indemnité de sortie. Estimation pédagogique : seul le TAEG de l’offre de prêt fait foi.',
