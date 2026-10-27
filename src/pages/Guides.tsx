@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom';
 import { categories } from '../data/categories';
 import { guideBySlug, guides } from '../data/guides';
 import { investmentBySlug, investments } from '../data/investments';
+import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
 import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
 import { Crumbs, PageHead, Sources, usePersistentState } from '../components/ui';
 import NotFound from './NotFound';
@@ -125,6 +126,14 @@ export function GuidePage() {
             <li key={r}><Link to={`/encyclopedie/${r}`}>{investmentBySlug[r].name}</Link> — {investmentBySlug[r].summary}</li>
           ))}
         </ul>
+        {relatedSimulators(simsForGuide[g.slug]).length > 0 && (<>
+          <h2>Simulateurs liés</h2>
+          <ul>
+            {relatedSimulators(simsForGuide[g.slug]).map((sim) => (
+              <li key={sim.slug}><Link to={`/simulateurs/${sim.slug}`}>{sim.title}</Link> — {sim.excerpt}</li>
+            ))}
+          </ul>
+        </>)}
         <h2>Sources</h2>
         <Sources list={g.sources} />
         <h2>Autres guides</h2>
