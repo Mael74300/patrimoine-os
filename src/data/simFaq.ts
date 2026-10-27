@@ -6,6 +6,30 @@
 export type FaqItem = { q: string; a: string };
 
 export const simFaq: Record<string, FaqItem[]> = {
+  patrimoine: [
+    { q: 'Comment le simulateur calcule-t-il le capital final ?', a: 'Le capital de départ puis chaque versement mensuel sont capitalisés au rendement annuel que vous saisissez, converti en taux mensuel équivalent, après déduction des frais annuels. Les versements sont placés en début de mois et les retraits ponctuels prélevés en fin d’année, dans la limite du capital disponible.' },
+    { q: 'Que représentent les gains affichés ?', a: 'Ils valent le capital final, plus les retraits effectués, moins le total des versements. C’est la part du capital final qui provient du rendement et non de votre épargne. La fiscalité de sortie, si vous en saisissez une, est un taux unique appliqué aux gains restants : c’est une simplification.' },
+    { q: 'À quoi servent les trois scénarios comparés ?', a: 'À tester l’effet d’un seul paramètre à la fois : versement, durée, rendement ou frais. Les scénarios partagent le même moteur de calcul, ce qui permet de lire l’écart sans autre différence que celle que vous avez saisie.' },
+    { q: 'Le résultat est-il une prévision ?', a: 'Non. Il découle uniquement du rendement, des frais et de l’inflation que vous saisissez, supposés constants chaque année, alors que les marchés varient. Les montants par défaut sont fictifs.' },
+  ],
+  portefeuille: [
+    { q: 'Comment le rendement du portefeuille est-il calculé ?', a: 'C’est la moyenne des rendements attendus de chaque ligne, pondérée par son poids dans le portefeuille (montant de la ligne divisé par le total). Les frais et le niveau de risque sont pondérés de la même façon. Le rendement net de chaque ligne est (1 + rendement) × (1 − frais) − 1.' },
+    { q: 'Que fait le rééquilibrage ?', a: 'Pour chaque ligne, il compare le montant actuel au montant correspondant à l’allocation cible appliquée au total du portefeuille. Un résultat positif est un montant à acheter, un résultat négatif un montant à vendre. Les frais et impôts éventuels liés aux ventes ne sont pas pris en compte.' },
+    { q: 'Que signifie le niveau de risque moyen ?', a: 'C’est la moyenne pondérée des niveaux de risque de 1 à 7 que vous attribuez vous-même à chaque ligne. Il n’est pas calculé à partir de données de marché et ne mesure ni la volatilité ni le risque de perte réel.' },
+    { q: 'La projection est-elle une prévision ?', a: 'Non. Elle applique chaque année le rendement net pondéré saisi, sans volatilité, avec une allocation maintenue constante. Les montants par défaut sont fictifs.' },
+  ],
+  'etf-immobilier': [
+    { q: 'Sur quelle base l’ETF et l’immobilier sont-ils comparés ?', a: 'Sur le même capital de départ (l’apport immobilier est investi en ETF dans l’autre scénario) et sur le même effort d’épargne annuel : le flux négatif après impôt du bien est versé sur les ETF dans l’autre scénario, et un excédent éventuel est placé au taux de trésorerie choisi.' },
+    { q: 'Que représente le patrimoine net affiché ?', a: 'Pour l’ETF, la valeur du placement après imposition des gains saisie. Pour l’immobilier, la valeur du bien après frais de revente et impôt sur la plus-value estimé, moins le capital restant dû du crédit. Les deux sont estimés à l’horizon choisi.' },
+    { q: 'Pourquoi le résultat change-t-il autant avec la hausse des prix et le rendement de l’ETF ?', a: 'L’immobilier est financé à crédit : une petite variation de la valeur du bien agit sur un capital plus grand que l’apport. À l’inverse, le rendement de l’ETF s’applique à tous les versements. Faites varier ces deux hypothèses pour voir à partir de quand l’un dépasse l’autre.' },
+    { q: 'Ce résultat est-il une prévision ?', a: 'Non. Il ne repose que sur les hypothèses saisies (prix, loyers, charges, rendement, frais), supposées constantes, dont l’évolution réelle est inconnue. Les montants par défaut sont fictifs.' },
+  ],
+  entreprise: [
+    { q: 'Quelle différence entre chiffre d’affaires, résultat et trésorerie ?', a: 'Le chiffre d’affaires est le total des ventes. Le résultat est ce qui reste après charges, rémunération et impôt sur les sociétés. La trésorerie suit les encaissements réels : elle tient compte du délai de paiement des clients et de l’investissement initial, donc elle peut baisser même quand le résultat est positif.' },
+    { q: 'Comment le besoin en fonds de roulement est-il estimé ?', a: 'Il vaut le chiffre d’affaires multiplié par le délai de paiement des clients et divisé par 365. Plus vos clients paient tard, plus l’activité consomme de trésorerie à mesure qu’elle grandit.' },
+    { q: 'Comment la valeur de l’entreprise est-elle estimée ?', a: 'Par un multiple du résultat net positif, que vous choisissez. C’est une estimation pédagogique : elle n’est ni de la trésorerie ni un revenu, et une valorisation réelle dépend de nombreux autres facteurs.' },
+    { q: 'Que changent les scénarios pessimiste et optimiste ?', a: 'Ils modifient le chiffre d’affaires de départ, sa croissance et la marge brute par rapport au scénario central, les autres hypothèses restant identiques. Le taux d’impôt sur les sociétés et les charges sociales sont des valeurs que vous saisissez : vérifiez-les pour votre situation. Les montants par défaut sont fictifs.' },
+  ],
   taeg: [
     { q: 'Pourquoi le TAEG est-il supérieur au taux nominal ?', a: 'Le taux nominal ne porte que sur les intérêts. Le TAEG ajoute l’assurance et les frais payés au départ : vous recevez moins que le capital emprunté tout en remboursant les mêmes échéances, ce qui relève le taux annuel réellement supporté. Avec ni assurance ni frais, les deux taux sont égaux.' },
     { q: 'Comment ce simulateur calcule-t-il le TAEG ?', a: 'Il cherche le taux annuel pour lequel la valeur actuelle des mensualités (assurance comprise) égale le capital emprunté diminué des frais payés au départ, par dichotomie. La formule est détaillée sur la page Méthode. C’est une estimation à partir de vos saisies.' },
