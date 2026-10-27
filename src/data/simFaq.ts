@@ -52,4 +52,22 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Que signifie la part des gains absorbée par les frais ?', a: 'C’est le rapport entre le coût des frais (capital final sans frais moins capital final avec frais) et les gains obtenus sans frais, à rendement brut et versements identiques.' },
     { q: 'Quels frais faut-il saisir ?', a: 'Le total des frais annuels courants de votre placement, en pourcentage de l’encours. Le simulateur compare trois niveaux, à rendement brut et versements identiques ; les valeurs par défaut sont fictives.' },
   ],
+  credit: [
+    { q: 'Comment la mensualité d’un crédit est-elle calculée ?', a: 'Pour un prêt à échéances constantes, la mensualité vaut capital × t / (1 − (1 + t)^−n), où t est le taux mensuel (taux nominal annuel divisé par 12) et n le nombre de mensualités. Chaque échéance rembourse des intérêts sur le capital restant dû, le reste amortit le capital.' },
+    { q: 'Pourquoi les intérêts diminuent-ils au fil du prêt ?', a: 'Les intérêts de chaque mois se calculent sur le capital restant dû. Celui-ci baisse à chaque échéance, donc la part d’intérêts décroît et la part de capital augmente, alors que la mensualité reste identique. Le tableau d’amortissement le montre mois par mois.' },
+    { q: 'Qu’est-ce que le coût total du crédit affiché ?', a: 'C’est la somme des intérêts, et de l’assurance si vous en saisissez une, payés sur toute la durée. Le TAEG, qui intègre aussi les frais payés au départ, se calcule dans le simulateur de TAEG.' },
+    { q: 'Le résultat remplace-t-il une offre de prêt ?', a: 'Non, c’est une estimation à partir de vos saisies. Seule l’offre remise par l’établissement prêteur engage celui-ci et précise les montants exacts.' },
+  ],
+  budget: [
+    { q: 'Comment le taux d’épargne est-il calculé ?', a: 'Il s’obtient en divisant l’épargne mensuelle par le revenu net mensuel. Le revenu non affecté est ce qu’il reste du revenu après les besoins, les envies et l’épargne que vous saisissez.' },
+    { q: 'La répartition 50 / 30 / 20 est-elle une règle ?', a: 'Non, c’est un repère pédagogique : 50 % du revenu net pour les besoins, 30 % pour les envies, 20 % pour l’épargne. Votre situation (loyer, famille, projets) peut justifier une répartition très différente.' },
+    { q: 'Comment lire l’effort pour atteindre un taux d’épargne visé ?', a: 'Le simulateur calcule la somme mensuelle à épargner en plus pour atteindre le taux visé, couverte d’abord par le revenu non affecté puis par une réduction des envies. Les besoins ne sont pas modifiés.' },
+    { q: 'La projection de l’épargne est-elle une prévision ?', a: 'Non. Elle suppose des versements constants et le rendement net que vous saisissez, sans garantie. Elle ne tient compte ni des imprévus ni de l’évolution de vos revenus.' },
+  ],
+  'independance-financiere': [
+    { q: 'Comment le capital visé est-il calculé ?', a: 'Il vaut (dépenses annuelles − revenus récurrents) / taux de retrait. Plus le taux de retrait choisi est bas, plus le capital nécessaire est élevé : un taux de 4 % correspond à 25 fois les dépenses à financer.' },
+    { q: 'Quel taux de retrait faut-il choisir ?', a: 'Aucun taux n’est imposé : c’est une hypothèse de votre choix, à faire varier. Un taux faible est plus prudent, un taux élevé réduit le capital visé mais épuise plus vite le capital si les rendements sont faibles. Le simulateur indique pendant combien d’années le capital dure.' },
+    { q: 'Pourquoi le rendement et l’inflation sont-ils séparés ?', a: 'Les dépenses augmentent avec l’inflation alors que le capital rapporte un rendement. Le délai d’atteinte utilise le rendement réel, corrigé de l’inflation, et la phase de retrait revalorise les retraits de l’inflation.' },
+    { q: 'Le délai affiché est-il une prévision ?', a: 'Non. Il découle uniquement de vos hypothèses (épargne, rendement, inflation, dépenses), dont l’évolution réelle est inconnue. Les montants par défaut sont fictifs.' },
+  ],
 };
