@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { categoryById } from './categories';
 import { guides } from './guides';
+import { simFaq } from './simFaq';
 import { investmentBySlug, investments } from './investments';
 import { loanPayment, projectGrowth } from '../lib/finance';
 
@@ -50,6 +51,7 @@ import { prepayVsInvest } from '../lib/calc/prepayVsInvest';
 import { debtRatio, HCSF } from '../lib/calc/debtRatio';
 import { LIVRETS, LIVRETS_AS_OF } from './livrets';
 import { pagesMeta } from '../seo';
+import { simulators } from '../lib/search';
 
 describe('les exemples chiffrés des guides sont exacts', () => {
   const g = (monthly: number, r: number, y: number, changes = [] as { fromYear: number; monthly: number }[]) =>
@@ -136,6 +138,20 @@ describe('FAQ des guides', () => {
       expect(faq, g.slug).toBeDefined();
       expect(faq.mainEntity.map((m) => m.name)).toEqual(g.faq!.map((f) => f.q));
       for (const f of g.faq!) { expect(f.q.endsWith('?')).toBe(true); expect(f.a.length).toBeGreaterThan(40); }
+    }
+  });
+});
+
+describe('FAQ des simulateurs', () => {
+  it('chaque question-réponse affichée est reprise en FAQPage, sans chiffre réglementaire', () => {
+    const slugs = Object.keys(simFaq);
+    expect(slugs.length).toBeGreaterThan(0);
+    for (const slug of slugs) {
+      expect(simulators.some((s) => s.slug === slug), slug).toBe(true);
+      const page = pagesMeta('https://exemple.test').find((p) => p.path === `/simulateurs/${slug}/`)!;
+      const faq = (page.jsonLd as { '@type': string; mainEntity: { name: string; acceptedAnswer: { text: string } }[] }[]).find((d) => d['@type'] === 'FAQPage')!;
+      expect(faq.mainEntity.map((m) => m.name)).toEqual(simFaq[slug].map((f) => f.q));
+      for (const f of simFaq[slug]) { expect(f.q.endsWith('?')).toBe(true); expect(f.a.length).toBeGreaterThan(40); }
     }
   });
 });

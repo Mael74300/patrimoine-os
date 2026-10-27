@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { fmtEur, fmtPct, taeg, taegByFees, taegByInsurance } from '../lib/finance';
-import { Crumbs, Disclaimer, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = { principal: number; annualRate: number; years: number; insuranceRate: number; fees: number };
 
@@ -69,6 +69,7 @@ export default function SimTaeg() {
           </p>
           <SavedSims simKey="taeg" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <SimFaq slug="taeg" />
         </section>
       </div>
     </>

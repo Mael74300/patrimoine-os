@@ -1,4 +1,5 @@
 import { categories } from './data/categories';
+import { simFaq } from './data/simFaq';
 import { glossary } from './data/glossary';
 import { guides } from './data/guides';
 import { investments, VERIFIED_ON } from './data/investments';
@@ -63,6 +64,7 @@ export function pagesMeta(siteUrl: string): PageMeta[] {
       jsonLd: [
         { '@context': 'https://schema.org', '@type': 'WebApplication', name: s.title, applicationCategory: 'FinanceApplication', operatingSystem: 'Navigateur web', isAccessibleForFree: true, inLanguage: 'fr-FR', url: `${siteUrl}/simulateurs/${s.slug}/` },
         crumbs(siteUrl, [['Accueil', '/'], ['Simulateurs', '/simulateurs/'], [s.title, `/simulateurs/${s.slug}/`]]),
+        ...(simFaq[s.slug]?.length ? [{ '@context': 'https://schema.org', '@type': 'FAQPage', inLanguage: 'fr-FR', mainEntity: simFaq[s.slug].map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }] : []),
       ],
     });
   }
