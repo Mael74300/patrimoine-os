@@ -16,3 +16,4 @@ export * from './purchasingPower';
 export * from './debtRatio';
 export * from './savingsGoal';
 export * from './taeg';
+export * from './rentVsBuy';
