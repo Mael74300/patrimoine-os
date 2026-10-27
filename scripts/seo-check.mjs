@@ -4,7 +4,7 @@
  * incohérente, liens internes cassés, pages orphelines (sans lien entrant), JSON-LD invalide.
  * Utilisé par le build (échec en cas d'erreur) et par les tests.
  */
-import { readFile } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -84,7 +84,20 @@ export async function checkDist(dist, siteUrl, base) {
   const pages = [];
   for (const path of paths) pages.push({ path, html: await readFile(join(dist, path, 'index.html'), 'utf8') });
   pages.push({ path: '/404/', html: await readFile(join(dist, '404.html'), 'utf8') });
-  return { pages, errors: checkSeo(pages.filter((p) => p.path !== '/404/'), { siteUrl, base }) };
+  const errors = checkSeo(pages.filter((p) => p.path !== '/404/'), { siteUrl, base });
+  // Chaque image Open Graph du site doit exister dans dist/.
+  for (const p of pages) {
+    const m = p.html.match(/<meta property="og:image" content="([^"]+)"/);
+    if (!m) continue;
+    const src = unesc(m[1]);
+    if (!src.startsWith(siteUrl + '/')) continue;
+    try {
+      await access(join(dist, src.slice(siteUrl.length)));
+    } catch {
+      errors.push(`${p.path} : image Open Graph introuvable (${src})`);
+    }
+  }
+  return { pages, errors };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
