@@ -10,7 +10,7 @@ export const simsForInvestment: Record<string, string[]> = {
   obligations: ['portefeuille', 'inflation'],
   pea: ['frais', 'patrimoine'],
   'compte-titres': ['frais', 'patrimoine'],
-  'assurance-vie': ['frais', 'patrimoine'],
+  'assurance-vie': ['frais', 'patrimoine', 'retraits-reguliers-duree-du-capital'],
   'fonds-euros': ['inflation', 'frais'],
   'unites-de-compte': ['frais', 'portefeuille'],
   'location-nue': ['immobilier', 'etf-immobilier'],
@@ -21,7 +21,7 @@ export const simsForInvestment: Record<string, string[]> = {
   'creation-entreprise': ['entreprise'],
   'reprise-entreprise': ['entreprise', 'credit'],
   'activite-numerique': ['entreprise', 'budget'],
-  per: ['patrimoine', 'independance-financiere'],
+  per: ['patrimoine', 'independance-financiere', 'retraits-reguliers-duree-du-capital'],
   'capital-humain': ['budget', 'independance-financiere'],
 };
 
