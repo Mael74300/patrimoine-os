@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { fmtEur, fmtPct, purchasingPower } from '../lib/finance';
-import { Crumbs, Disclaimer, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = { amount: number; years: number; inflation: number; annualReturn: number };
 
@@ -67,6 +67,7 @@ export default function SimInflation() {
           </p>
           <SavedSims simKey="inflation" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <SimFaq slug="inflation" />
         </section>
       </div>
     </>

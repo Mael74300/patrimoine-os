@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { advantageByHorizon, advantageByPriceGrowth, fmtEur, fmtPct, rentVsBuy } from '../lib/finance';
-import { Crumbs, Disclaimer, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = {
   price: number; downPayment: number; acquisitionRate: number; loanRate: number; loanYears: number; ownerCostRate: number;
@@ -88,6 +88,7 @@ export default function SimLouerAcheter() {
           </p>
           <SavedSims simKey="louer-acheter" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <SimFaq slug="louer-ou-acheter" />
         </section>
       </div>
     </>

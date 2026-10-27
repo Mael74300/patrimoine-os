@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { feeImpact, fmtEur, fmtPct } from '../lib/finance';
-import { Crumbs, Disclaimer, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = { initial: number; monthly: number; annualReturn: number; years: number; inflation: number; feesA: number; feesB: number; feesC: number };
 
@@ -76,6 +76,7 @@ export default function SimFrais() {
           </p>
           <SavedSims simKey="frais" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <SimFaq slug="frais" />
         </section>
       </div>
     </>
