@@ -21,6 +21,7 @@ export const simulators = [
   { slug: 'objectif-epargne', title: 'Objectif d’épargne : combien verser par mois', excerpt: 'Versement mensuel pour atteindre un montant à une échéance (apport, voyage, travaux) et effet de la durée et du taux.', keywords: 'objectif epargne projet apport voyage travaux versement mensuel echeance economiser combien epargner par mois' },
   { slug: 'taeg', title: 'Calcul du TAEG d’un crédit', excerpt: 'TAEG estimé à partir du taux, de l’assurance et des frais de dossier ou de garantie, pour comparer deux offres de prêt.', keywords: 'taeg calcul taux annuel effectif global credit pret immobilier assurance frais dossier garantie comparer offres cout total' },
   { slug: 'louer-ou-acheter', title: 'Louer ou acheter sa résidence principale', excerpt: 'Patrimoine du propriétaire et du locataire à l’horizon choisi, selon vos hypothèses de prix, de loyer, de frais et de rendement.', keywords: 'louer ou acheter residence principale loyer achat pret immobilier comparer proprietaire locataire horizon frais notaire apport' },
+  { slug: 'dettes', title: 'Rembourser plusieurs dettes : avalanche ou boule de neige', excerpt: 'Ordre de remboursement de plusieurs dettes : intérêts et durée selon la méthode avalanche, boule de neige ou mensualités minimales.', keywords: 'rembourser plusieurs dettes avalanche boule de neige snowball credit consommation carte revolving surendettement ordre remboursement interets' },
 ];
 
 /** Minuscule, sans accents, pour une recherche tolérante. */
