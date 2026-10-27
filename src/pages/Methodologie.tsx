@@ -54,6 +54,10 @@ const FORMULAS: [string, string[]][] = [
     'Valeur d’une somme S en euros d’aujourd’hui après T années : S / (1 + i)^T. Montant nécessaire pour garder le même pouvoir d’achat : S × (1 + i)^T. Perte de pouvoir d’achat = 1 − valeur réelle / S.',
     'Rendement réel = (1 + r) / (1 + i) − 1. Durée pour perdre la moitié du pouvoir d’achat = ln 2 / ln(1 + i) ; durée pour doubler un capital placé = ln 2 / ln(1 + r) (valeur exacte de la « règle des 72 »). Sans versement, avant impôt.',
   ]],
+  ['Objectif d’épargne', [
+    'Versement mensuel = (objectif − épargne de départ × (1 + r)^n) × r / ((1 + r)^n − 1), avec r le taux mensuel équivalent au taux annuel saisi et n le nombre de mois ; versements en fin de mois. Taux nul : (objectif − épargne de départ) / n.',
+    'Intérêts = objectif − épargne de départ − total des versements. Le taux est une hypothèse, avant impôt ; le taux du Livret A affiché en repère provient des données du site, daté et sourcé sur sa fiche.',
+  ]],
   ['Taux d’endettement et reste à vivre', [
     'Taux d’endettement = (mensualités en cours + nouvelle mensualité, assurance comprise) / revenus nets mensuels. Repère : 35 % au plus (recommandation du HCSF, décision D-HCSF-2021-7), sur 25 ans au plus. Mensualité maximale = 35 % × revenus − mensualités en cours ; revenu minimal = charges d’emprunt / 35 %.',
     'Reste à vivre = revenus − crédits − autres charges ; par personne = reste à vivre / nombre de personnes. Capital empruntable = mensualité maximale / (facteur de mensualité par euro emprunté + assurance mensuelle par euro emprunté). Aucun seuil de reste à vivre officiel n’est appliqué.',

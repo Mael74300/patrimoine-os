@@ -25,6 +25,7 @@ import SimFrais from './pages/SimFrais';
 import SimRembourser from './pages/SimRembourser';
 import SimInflation from './pages/SimInflation';
 import SimEndettement from './pages/SimEndettement';
+import SimObjectif from './pages/SimObjectif';
 import Glossaire from './pages/Glossaire';
 import { Confidentialite, MentionsLegales } from './pages/Legal';
 import NotFound from './pages/NotFound';
@@ -158,6 +159,7 @@ export default function App() {
             <Route path="/simulateurs/rembourser-ou-investir" element={<SimRembourser />} />
             <Route path="/simulateurs/inflation" element={<SimInflation />} />
             <Route path="/simulateurs/endettement" element={<SimEndettement />} />
+            <Route path="/simulateurs/objectif-epargne" element={<SimObjectif />} />
             <Route path="/glossaire" element={<Glossaire />} />
             <Route path="/confidentialite" element={<Confidentialite />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
