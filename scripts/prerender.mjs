@@ -7,6 +7,7 @@ import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { buildAtom, feedEntries } from './lib/atom.mjs';
+import { ogFileName, ogLabel, renderOgImage } from './lib/ogimage.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
@@ -45,7 +46,7 @@ function page(meta, html, { noindex = false, path = '' } = {}) {
     '<meta property="og:site_name" content="Patrimoine OS" />',
     `<meta property="og:title" content="${esc(meta.title)}" />`,
     `<meta property="og:description" content="${esc(meta.description)}" />`,
-    `<meta property="og:image" content="${esc(siteUrl)}/og.png" />`,
+    `<meta property="og:image" content="${esc(siteUrl)}/${!noindex && ogFileName(meta.path) ? 'og/' + ogFileName(meta.path) : 'og.png'}" />`,
     '<meta property="og:image:width" content="1200" />',
     '<meta property="og:image:height" content="630" />',
     '<meta name="twitter:card" content="summary_large_image" />',
@@ -68,6 +69,12 @@ for (const meta of pages) {
   const file = join(dist, meta.path, 'index.html');
   await mkdir(dirname(file), { recursive: true });
   await writeFile(file, page(meta, html, { noindex: !!meta.noindex, path: meta.path }));
+  // Image de partage propre à la page (titre sans le suffixe de site), générée sans service externe.
+  const og = meta.noindex ? null : ogFileName(meta.path);
+  if (og) {
+    await mkdir(join(dist, 'og'), { recursive: true });
+    await writeFile(join(dist, 'og', og), renderOgImage({ title: meta.title.replace(/\s*\|\s*Patrimoine OS$/, ''), label: ogLabel(meta.path) }));
+  }
 }
 
 // Page 404 servie par GitHub Pages pour toute adresse inconnue.
