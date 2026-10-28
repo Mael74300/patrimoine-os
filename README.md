@@ -127,7 +127,7 @@ Ajouter un objet dans `src/data/investments.ts` ou `src/data/guides.ts`. La page
 | 4. Automatisation | fait |
 | 5. Préparation à la monétisation | emplacements prêts, aucun service intégré |
 
-Pistes suivantes : fiches des familles restantes (collection, terres et forêts, énergie, levier, autres), chargement différé des simulateurs pour alléger la page d'accueil, export/import JSON des simulations entre appareils.
+Chantiers suivants : voir [ROADMAP.md](ROADMAP.md), qui fixe l'ordre de travail de la tâche automatique.
 
 ## Avertissement
 
