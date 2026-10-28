@@ -34,3 +34,9 @@ ${entries.map((e) => `  <entry>
 </feed>
 `;
 }
+
+/** Date de dernière modification d'une page : celle de son Article (fiche, guide) si elle existe, sinon la date de repli. */
+export function pageLastmod(page, fallbackDate) {
+  const article = (page.jsonLd ?? []).find((j) => j['@type'] === 'Article');
+  return article?.dateModified ?? fallbackDate;
+}
