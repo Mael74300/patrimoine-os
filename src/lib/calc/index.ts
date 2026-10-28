@@ -28,3 +28,4 @@ export * from './stepUp';
 export * from './simpleVsCompound';
 export * from './timeToTarget';
 export * from './rateConversion';
+export * from './loanDuration';

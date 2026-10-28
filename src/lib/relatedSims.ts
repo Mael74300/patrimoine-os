@@ -17,7 +17,7 @@ export const simsForInvestment: Record<string, string[]> = {
   lmnp: ['immobilier', 'etf-immobilier'],
   scpi: ['immobilier', 'frais'],
   'foncieres-cotees': ['etf-immobilier', 'portefeuille'],
-  'credit-immobilier': ['credit', 'renegocier-son-credit-gain-et-point-mort', 'taeg', 'louer-ou-acheter', 'endettement', 'rembourser-ou-investir', 'immobilier'],
+  'credit-immobilier': ['credit', 'duree-du-credit-mensualite-et-cout-total', 'renegocier-son-credit-gain-et-point-mort', 'taeg', 'louer-ou-acheter', 'endettement', 'rembourser-ou-investir', 'immobilier'],
   'creation-entreprise': ['entreprise'],
   'reprise-entreprise': ['entreprise', 'credit'],
   'activite-numerique': ['entreprise', 'budget'],

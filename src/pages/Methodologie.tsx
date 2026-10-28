@@ -47,6 +47,9 @@ const FORMULAS: [string, string[]][] = [
   ['Durée pour atteindre un capital', [
     'Chaque mois : capital = capital × (1 + rendement mensuel équivalent) + versement (fin de mois), jusqu’à atteindre le capital visé (100 ans au plus). Intérêts = capital à l’arrivée − total versé. Durée sans rendement = ⌈(objectif − capital de départ) ÷ versement⌉. Rendement supposé constant, avant frais, impôts et inflation ; ce sont des hypothèses, pas des prévisions.',
   ]],
+  ['Durée du crédit', [
+    'Pour chaque durée : mensualité = capital × (taux / 12) ÷ (1 − (1 + taux / 12)^(−mois)) (capital ÷ mois si taux nul) ; assurance mensuelle = capital × taux d’assurance ÷ 12 ; intérêts = mensualité × mois − capital ; coût total = intérêts + assurance. Taux fixe identique pour toutes les durées ; ce sont des hypothèses, pas une offre de prêt.',
+  ]],
   ['Convertir un taux annuel', [
     'Taux équivalent par période = (1 + taux annuel)^(1/n) − 1 ; taux proportionnel = taux annuel / n ; taux annuel nominal équivalent = n × taux équivalent ; taux annuel du taux proportionnel = (1 + taux / n)^n − 1. Taux saisi uniquement, sans chiffre réglementaire.',
   ]],

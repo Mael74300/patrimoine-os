@@ -39,6 +39,7 @@ import SimSimpleComposes from './pages/SimSimpleComposes';
 import SimRenegociation from './pages/SimRenegociation';
 import SimDuree from './pages/SimDuree';
 import SimTaux from './pages/SimTaux';
+import SimDureeCredit from './pages/SimDureeCredit';
 import Glossaire from './pages/Glossaire';
 import { Confidentialite, MentionsLegales } from './pages/Legal';
 import NotFound from './pages/NotFound';
@@ -186,6 +187,7 @@ export default function App() {
             <Route path="/simulateurs/renegocier-son-credit-gain-et-point-mort" element={<SimRenegociation />} />
             <Route path="/simulateurs/duree-pour-atteindre-un-capital" element={<SimDuree />} />
             <Route path="/simulateurs/convertir-un-taux-annuel-en-taux-mensuel" element={<SimTaux />} />
+            <Route path="/simulateurs/duree-du-credit-mensualite-et-cout-total" element={<SimDureeCredit />} />
             <Route path="/glossaire" element={<Glossaire />} />
             <Route path="/confidentialite" element={<Confidentialite />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
