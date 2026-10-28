@@ -36,6 +36,10 @@ const FORMULAS: [string, string[]][] = [
     'Versement initial au début, puis versement mensuel en fin de chaque mois. Le taux mensuel m est celui pour lequel initial × (1 + m)^n + versement × ((1 + m)^n − 1) / m = valeur actuelle, trouvé par dichotomie (n = nombre de mois).',
     'Rendement annuel équivalent = (1 + m)^12 − 1. Rendement cumulé = (valeur actuelle − total versé) / total versé. Montants saisis uniquement, rendement passé et nominal.',
   ]],
+  ['Coût d’attendre pour épargner', [
+    'Capital à l’arrivée = versement × ((1 + m)^n − 1) / m, avec m le taux mensuel équivalent au rendement annuel supposé et n le nombre de mois de versement (n × versement si le rendement est nul). Versements en fin de mois.',
+    'Coût de l’attente = capital en commençant tout de suite (n = horizon) − capital en commençant après le délai (n = horizon − délai). Versement pour rattraper = versement × capital immédiat / capital après délai, par linéarité. Rendement supposé constant, avant frais, impôts et inflation.',
+  ]],
   ['Retraits réguliers', [
     'Chaque mois : capital = capital × (1 + rendement mensuel équivalent), puis retrait en fin de mois. Le retrait est multiplié par (1 + indexation) au début de chaque année. Si le capital ne couvre plus le retrait, le mois est le mois d’épuisement et le dernier prélèvement est ce qui reste.',
     'Retrait tenable : plus grand premier retrait mensuel pour lequel le capital reste positif à la fin de l’horizon, trouvé par dichotomie. Rendement et indexation supposés constants, avant frais et impôts ; ce sont des hypothèses, pas des prévisions.',
