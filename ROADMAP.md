@@ -8,6 +8,14 @@ Liste de travail vivante de la tâche automatique et des contributions manuelles
 
 ## Principes
 
+- **Tout est améliorable (propriétaire, 28 octobre 2026).** Le but est que le site soit meilleur partout, pas seulement plus fourni. Toutes les dimensions comptent et doivent tourner d'une exécution à l'autre :
+  - **esthétique** : mise en page, typographie, couleurs, espacements, hiérarchie visuelle, cohérence entre pages, graphiques, cartes, boutons, états de survol et de focus, rendu mobile, impression soignée d'un site de confiance ;
+  - **vulgarisation** : phrases courtes, mots simples, jargon expliqué au premier usage (ou lien vers le glossaire), exemples concrets du quotidien, résultats de simulateur traduits en une phrase claire (« concrètement, cela veut dire… ») ; viser un lecteur qui n'y connaît rien, sans jamais sacrifier l'exactitude ;
+  - **ergonomie et navigation** : trouver vite, comprendre où l'on est, savoir quoi faire ensuite ;
+  - **contenu** : justesse, clarté, cohérence, utilité réelle ;
+  - **technique** : vitesse, accessibilité, robustesse, absence de bogue.
+  Aucun service externe pour l'esthétique : pas de police, d'image ni de script tiers (la politique de sécurité du contenu l'interdit) ; uniquement du CSS, du SVG et des polices système.
+
 - **Améliorer l'existant avant d'ajouter.** Le site compte 31 simulateurs, 26 fiches et 19 guides (28 octobre 2026). Plusieurs simulateurs se recoupent. La priorité est la cohérence, la qualité et la navigation, pas le nombre de pages.
 - **Pas de nouveau simulateur ni de nouveau guide** sans chantier qui le justifie par un besoin utilisateur constaté (question fréquente sans réponse sur le site, parcours bloqué) et l'absence de doublon avec l'existant.
 - **Lisibilité d'abord.** Le propriétaire trouve le site encombré (28 octobre 2026). Une modification ne doit pas allonger l'accueil, les listes ni les pages existantes sans en retirer autant ailleurs. Préférer : regrouper, raccourcir, replier, hiérarchiser. Mesurer la hauteur des pages touchées avant et après (Playwright, 1280 px et 375 px) et l'indiquer dans la pull request.
@@ -35,7 +43,9 @@ Pour chacun, noter ce qui gêne vraiment :
 - une impasse sans lien vers la suite ;
 - des contenus qui se contredisent ou se répètent ;
 - un bogue, un affichage cassé sur mobile ;
-- de la lenteur.
+- de la lenteur ;
+- une page laide, terne, déséquilibrée ou incohérente avec le reste du site ;
+- un texte difficile à comprendre pour quelqu'un qui n'y connaît rien.
 
 Pour chaque constat : le visiteur concerné, la page, et ce qui le gêne.
 
@@ -46,6 +56,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les plus importants, datés.
 
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent.
+- 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public.
 
 ## À faire
 
@@ -58,7 +69,9 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 7. [ ] **Accessibilité.** Audit des pages principales : contrastes, ordre de tabulation, focus visible, libellés des champs, alternative textuelle ou tableau pour chaque graphique, annonces des résultats aux lecteurs d'écran. Corriger, puis ajouter un test automatisé qui empêche les régressions.
 8. [ ] **Relecture éditoriale d'ensemble.** Repérer les doublons et contradictions entre guides, fiches et simulateurs (par exemple le guide et le simulateur sur la règle de 72), harmoniser le vocabulaire et les liens, raccourcir ce qui se répète.
 9. [ ] **Accueil et parcours.** Une entrée « Par où commencer ? » selon la situation (je débute, j'ai une épargne, je veux acheter, je prépare ma retraite), qui oriente vers trois ou quatre pages existantes au plus, sans allonger l'accueil.
-10. [ ] **Test de fumée dans l'intégration continue.** Chaque page pré-rendue se charge sans erreur JavaScript, à 1280 px et 375 px, sans débordement horizontal.
+10. [ ] **Identité visuelle (propriétaire).** Revoir l'esthétique d'ensemble : palette, typographie (polices système), échelle d'espacements, cartes, boutons, en-tête, pied de page, graphiques. Une refonte cohérente par petites étapes, page par page, en gardant les contrastes accessibles. Captures avant et après dans chaque pull request.
+11. [ ] **Vulgarisation (propriétaire).** Réécrire en langage simple, page par page en commençant par les plus visitées (accueil, simulateurs principaux, guides d'entrée) : phrases courtes, jargon expliqué, exemple concret, phrase de synthèse sous chaque résultat de simulateur. Sans changer aucun chiffre ni règle.
+12. [ ] **Test de fumée dans l'intégration continue.** Chaque page pré-rendue se charge sans erreur JavaScript, à 1280 px et 375 px, sans débordement horizontal.
 
 ## Fait
 
