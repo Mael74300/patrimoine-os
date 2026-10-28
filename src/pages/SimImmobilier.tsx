@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ADVERSE, adverseScenario, amortize, fmtEur, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, type TaxRegime } from '../lib/finance';
-import { Crumbs, Disclaimer, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
 
 export const RENTAL_DEFAULTS: RentalInput = {
   price: 150000, notaryRate: 0.08, works: 10000, furniture: 0,
@@ -179,6 +179,7 @@ export default function SimImmobilier() {
             <Link to="/encyclopedie/location-nue">location nue</Link> et <Link to="/encyclopedie/lmnp">LMNP</Link>.
           </p>
           <SavedSims simKey="immobilier" current={s} onLoad={(d) => setS({ ...RENTAL_DEFAULTS, ...d })} />
+          <SimFaq slug="immobilier" />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
         </section>
       </div>
