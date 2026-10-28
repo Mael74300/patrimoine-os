@@ -40,6 +40,10 @@ const FORMULAS: [string, string[]][] = [
     'Capital à l’arrivée = versement × ((1 + m)^n − 1) / m, avec m le taux mensuel équivalent au rendement annuel supposé et n le nombre de mois de versement (n × versement si le rendement est nul). Versements en fin de mois.',
     'Coût de l’attente = capital en commençant tout de suite (n = horizon) − capital en commençant après le délai (n = horizon − délai). Versement pour rattraper = versement × capital immédiat / capital après délai, par linéarité. Rendement supposé constant, avant frais, impôts et inflation.',
   ]],
+  ['Doubler son capital', [
+    'Durée exacte pour multiplier un capital par k, sans versement : ln(k) / ln(1 + rendement annuel). Règle de 72 généralisée : 72 × (ln k / ln 2) / rendement en %, soit 72 / rendement en % pour doubler.',
+    'Rendement réel = (1 + rendement) / (1 + inflation) − 1 ; la durée en pouvoir d’achat applique la même formule à ce rendement réel. Rendement et inflation supposés constants, avant frais et impôts ; durée non définie si le rendement n’est pas positif.',
+  ]],
   ['Retraits réguliers', [
     'Chaque mois : capital = capital × (1 + rendement mensuel équivalent), puis retrait en fin de mois. Le retrait est multiplié par (1 + indexation) au début de chaque année. Si le capital ne couvre plus le retrait, le mois est le mois d’épuisement et le dernier prélèvement est ce qui reste.',
     'Retrait tenable : plus grand premier retrait mensuel pour lequel le capital reste positif à la fin de l’horizon, trouvé par dichotomie. Rendement et indexation supposés constants, avant frais et impôts ; ce sont des hypothèses, pas des prévisions.',
