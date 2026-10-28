@@ -86,6 +86,12 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Pourquoi l’écart est-il nul avec un taux nul ?', a: 'Sans intérêts, il n’y a rien à réinvestir : les deux méthodes laissent le capital inchangé. L’écart grandit avec le taux et avec la durée.' },
     { q: 'Le résultat est-il une prévision ?', a: 'Non. Le taux est supposé constant, sans versement, avant frais, impôts et inflation. Les produits réels ont leurs propres règles de calcul et de versement des intérêts ; les montants par défaut sont fictifs.' },
   ],
+  'duree-pour-atteindre-un-capital': [
+    { q: 'Comment la durée est-elle calculée ?', a: 'Le simulateur ajoute chaque mois le rendement mensuel équivalent puis le versement, jusqu’à ce que le capital atteigne le montant visé. La durée est le nombre de mois nécessaires, avec un maximum de 100 ans.' },
+    { q: 'Que signifie le gain de temps grâce au rendement ?', a: 'C’est la différence entre la durée sans aucun rendement (capital de départ plus versements seuls) et la durée avec le rendement que vous supposez.' },
+    { q: 'Pourquoi l’objectif peut-il ne jamais être atteint ?', a: 'Sans versement et avec un rendement nul ou négatif, le capital ne progresse pas : il faut augmenter le versement, le rendement supposé ou baisser l’objectif.' },
+    { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement est supposé constant, avant frais, impôts et inflation, et les versements sont supposés réguliers. Les montants par défaut sont fictifs.' },
+  ],
   'augmenter-son-epargne-chaque-annee': [
     { q: 'Quel effet a une hausse annuelle du versement mensuel ?', a: 'Chaque hausse s’ajoute aux versements suivants, qui fructifient ensuite à leur tour. Le simulateur compare le capital obtenu avec un versement constant et avec un versement qui augmente d’un pourcentage chaque année, au même rendement supposé.' },
     { q: 'Que signifie le versement constant équivalent ?', a: 'C’est la mensualité fixe qui donnerait, sur la même durée et au même rendement supposé, le même capital final que le versement qui augmente. Il permet de comparer les deux façons d’épargner.' },
