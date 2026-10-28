@@ -98,6 +98,13 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Quel taux utiliser pour un calcul d’épargne ou de crédit ?', a: 'Cela dépend de la convention du produit, indiquée dans son contrat. Ce simulateur se contente de convertir un taux saisi selon les deux méthodes ; il ne dit pas laquelle s’applique à un produit donné.' },
     { q: 'Le résultat est-il une prévision ?', a: 'Non. C’est un calcul mathématique à partir du seul taux saisi. Les valeurs par défaut sont fictives.' },
   ],
+  'duree-du-credit-mensualite-et-cout-total': [
+    { q: 'Pourquoi allonger la durée réduit-elle la mensualité mais augmente-t-elle le coût ?', a: 'Le capital est remboursé plus lentement : chaque mensualité est plus faible, mais le capital restant dû reste élevé plus longtemps et génère des intérêts plus longtemps. Le coût total (intérêts et assurance) augmente donc avec la durée, à taux identique.' },
+    { q: 'Comment la mensualité est-elle calculée ?', a: 'Avec la formule des crédits à mensualités constantes : capital × (taux annuel / 12) ÷ (1 − (1 + taux annuel / 12)^(−nombre de mois)). Sans taux, la mensualité vaut simplement le capital divisé par le nombre de mois. L’assurance, calculée ici sur le capital initial, s’y ajoute.' },
+    { q: 'Que comprend le coût total affiché ?', a: 'La somme des intérêts et de l’assurance sur toute la durée, sans le capital emprunté. Les frais de dossier, de garantie ou de notaire ne sont pas inclus.' },
+    { q: 'Le taux est-il le même pour toutes les durées ?', a: 'Dans ce simulateur oui, par simplification. En pratique, les banques proposent souvent des taux différents selon la durée : saisissez le taux de chaque offre dans le calculateur de crédit pour les comparer.' },
+    { q: 'Le résultat est-il une offre de prêt ?', a: 'Non. C’est un calcul pédagogique à partir de vos saisies, avec un taux fixe. Les montants par défaut sont fictifs.' },
+  ],
   'augmenter-son-epargne-chaque-annee': [
     { q: 'Quel effet a une hausse annuelle du versement mensuel ?', a: 'Chaque hausse s’ajoute aux versements suivants, qui fructifient ensuite à leur tour. Le simulateur compare le capital obtenu avec un versement constant et avec un versement qui augmente d’un pourcentage chaque année, au même rendement supposé.' },
     { q: 'Que signifie le versement constant équivalent ?', a: 'C’est la mensualité fixe qui donnerait, sur la même durée et au même rendement supposé, le même capital final que le versement qui augmente. Il permet de comparer les deux façons d’épargner.' },
