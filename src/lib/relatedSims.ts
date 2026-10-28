@@ -35,7 +35,7 @@ export const simsForGuide: Record<string, string[]> = {
   'comparer-les-frais': ['frais'],
   'epargne-limitee': ['epargne-de-precaution', 'inflation'],
   'par-ou-commencer': ['budget', 'epargne-de-precaution', 'objectif-epargne', 'cout-d-attendre-pour-epargner'],
-  'interets-composes': ['patrimoine', 'inflation', 'investir-d-un-coup-ou-progressivement', 'rendement-reel-de-mon-placement', 'cout-d-attendre-pour-epargner', 'doubler-son-capital-regle-de-72', 'augmenter-son-epargne-chaque-annee', 'interets-simples-ou-composes'],
+  'interets-composes': ['patrimoine', 'inflation', 'investir-d-un-coup-ou-progressivement', 'rendement-reel-de-mon-placement', 'cout-d-attendre-pour-epargner', 'doubler-son-capital-regle-de-72', 'augmenter-son-epargne-chaque-annee', 'interets-simples-ou-composes', 'duree-pour-atteindre-un-capital'],
   'choisir-son-enveloppe': ['frais', 'patrimoine'],
   'combien-epargne-de-precaution': ['epargne-de-precaution', 'inflation', 'budget'],
   'taux-endettement-capacite-emprunt': ['endettement', 'credit', 'dettes'],

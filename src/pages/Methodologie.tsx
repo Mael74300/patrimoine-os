@@ -44,6 +44,9 @@ const FORMULAS: [string, string[]][] = [
     'Mensualité = capital × m / (1 − (1 + m)^−n), avec m le taux nominal annuel / 12 et n le nombre de mois ; intérêts = mensualité × n − capital restant dû, pour le prêt actuel (durée restante) et le nouveau prêt.',
     'Gain net = intérêts restants du prêt actuel − intérêts du nouveau prêt − frais saisis. Point mort = frais / (mensualité actuelle − nouvelle mensualité). Assurance exclue, échéances constantes, taux et frais saisis uniquement.',
   ]],
+  ['Durée pour atteindre un capital', [
+    'Chaque mois : capital = capital × (1 + rendement mensuel équivalent) + versement (fin de mois), jusqu’à atteindre le capital visé (100 ans au plus). Intérêts = capital à l’arrivée − total versé. Durée sans rendement = ⌈(objectif − capital de départ) ÷ versement⌉. Rendement supposé constant, avant frais, impôts et inflation ; ce sont des hypothèses, pas des prévisions.',
+  ]],
   ['Intérêts simples ou composés', [
     'Intérêts simples : capital × (1 + taux × années). Intérêts composés : capital × (1 + taux)^années. Écart = composés − simples ; rapport = capital composé ÷ capital simple. Taux constant, sans versement, avant frais, impôts et inflation ; ce sont des hypothèses, pas des prévisions.',
   ]],
