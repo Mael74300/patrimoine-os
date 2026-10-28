@@ -59,6 +59,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent.
 - 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public.
 - 2026-10-28 (propriétaire) : ajouter des images créées par la tâche elle-même.
+- 2026-10-28 : aucune illustration sur le site ; les guides sont du texte seul, notamment « Comprendre les intérêts composés » (débutant : notion abstraite sans schéma). Schéma ajouté (voir « Fait »).
+- 2026-10-28 : les 31 simulateurs et les pages de simulateur restent longs et se recoupent (chantiers 1 à 3).
 
 ## À faire
 
@@ -83,5 +85,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [~] **Illustrations maison, étape 1** (2026-10-28) : premier schéma SVG, « intérêts simples ou composés », dans le guide « Comprendre les intérêts composés » (`src/components/Illustrations.tsx`, chiffres calculés et testés). Reste à illustrer : amortissement d'un crédit, effet de levier, diversification, inflation ; icônes des thèmes ; en-têtes.
 
 - [x] **Catalogue des simulateurs par thème et accueil allégé** (2026-10-28, #55) : simulateurs classés en six thèmes avec filtre ; accueil limité à six simulateurs et six guides, familles sans fiche masquées. Hauteur de l'accueil : 5 755 → 2 990 px à 1280 px, 10 988 → 6 821 px à 375 px.
