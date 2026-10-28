@@ -27,3 +27,4 @@ export * from './renegotiation';
 export * from './stepUp';
 export * from './simpleVsCompound';
 export * from './timeToTarget';
+export * from './rateConversion';
