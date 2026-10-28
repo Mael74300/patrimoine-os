@@ -182,3 +182,15 @@ describe('guide règle de 72 : exemples fictifs recalculés', () => {
     expect([0.02, 0.04, 0.06, 0.08, 0.12].map((r) => exact(r).toFixed(2))).toEqual(['35.00', '17.67', '11.90', '9.01', '6.12']);
   });
 });
+
+describe('guide Livret A quinzaines : exemple fictif et taux cohérents', () => {
+  it('une quinzaine sur 1 000 € à 1,70 % ≈ 0,71 €, taux et plafond = LIVRETS', () => {
+    const a = LIVRETS.find((l) => l.id === 'livretA')!;
+    expect(((1000 * a.rate) / 24).toFixed(2)).toBe('0.71');
+    const t = JSON.stringify(guides.find((x) => x.slug === 'livret-a-calcul-interets-quinzaines')!);
+    expect(t).toContain('1,70 %');
+    expect(t).toContain('22 950 €');
+    expect(a.rate).toBe(0.017);
+    expect(a.cap).toBe(22950);
+  });
+});
