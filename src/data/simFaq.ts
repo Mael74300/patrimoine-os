@@ -80,6 +80,12 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Que signifie le versement pour rattraper ?', a: 'C’est le versement mensuel constant, à partir de la fin du délai, qui donne à l’arrivée le même capital que si vous aviez commencé tout de suite avec votre versement actuel. C’est un calcul sur vos hypothèses, pas une recommandation.' },
     { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement réel est inconnu et varie ; il est supposé constant et avant frais, impôts et inflation. Les montants par défaut sont fictifs.' },
   ],
+  'augmenter-son-epargne-chaque-annee': [
+    { q: 'Quel effet a une hausse annuelle du versement mensuel ?', a: 'Chaque hausse s’ajoute aux versements suivants, qui fructifient ensuite à leur tour. Le simulateur compare le capital obtenu avec un versement constant et avec un versement qui augmente d’un pourcentage chaque année, au même rendement supposé.' },
+    { q: 'Que signifie le versement constant équivalent ?', a: 'C’est la mensualité fixe qui donnerait, sur la même durée et au même rendement supposé, le même capital final que le versement qui augmente. Il permet de comparer les deux façons d’épargner.' },
+    { q: 'La hausse du versement est-elle comparable à celle de mon salaire ?', a: 'Vous choisissez librement le pourcentage : le simulateur ne connaît ni votre salaire ni son évolution. Indexer son épargne sur une hausse de revenu est une hypothèse de votre part, pas une prévision.' },
+    { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement réel est inconnu et varie ; il est supposé constant et avant frais, impôts et inflation. Les montants par défaut sont fictifs.' },
+  ],
   'doubler-son-capital-regle-de-72': [
     { q: 'En combien de temps un capital double-t-il ?', a: 'Sans nouveau versement et à rendement annuel constant, la durée exacte vaut ln(2) divisé par ln(1 + rendement). Elle ne dépend pas du capital de départ, seulement du rendement supposé : plus il est élevé, plus le doublement est rapide.' },
     { q: 'Qu’est-ce que la règle de 72 ?', a: 'C’est une approximation de tête : on divise 72 par le rendement annuel exprimé en pourcentage pour obtenir le nombre d’années nécessaires pour doubler. Le simulateur la compare au calcul exact pour montrer l’écart, faible pour des rendements de quelques pour cent.' },
