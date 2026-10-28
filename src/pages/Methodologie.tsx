@@ -53,6 +53,9 @@ const FORMULAS: [string, string[]][] = [
   ['Crédit in fine ou amortissable', [
     'In fine : intérêts mensuels = capital × taux / 12 ; assurance mensuelle = capital × taux d’assurance / 12 ; épargne mensuelle (fin de mois) = capital × r ÷ ((1 + r)^mois − 1) avec r = (1 + rendement net)^(1/12) − 1 (capital ÷ mois si r = 0). Coût net = (intérêts + assurance) × mois − (capital − épargne mensuelle × mois). Amortissable : mensualité constante, coût = intérêts + assurance. Rendement constant, sans fiscalité ni frais ; ce sont des hypothèses, pas une offre de prêt.',
   ]],
+  ['Capital à placer aujourd’hui', [
+    'Valeur actualisée : avec r = (1 + R)^(1/12) − 1 et n le nombre de mois, capital à placer = (capital visé − versement × ((1 + r)^n − 1) / r) / (1 + r)^n, borné à 0 € ; si r = 0, capital visé − versement × n. Les versements sont en fin de mois, le rendement est constant et supposé.',
+  ]],
   ['Rendement nécessaire pour atteindre un objectif', [
     'Recherche par dichotomie (80 itérations, rendement entre 0 % et 100 % par an) du rendement annuel R tel que, avec r = (1 + R)^(1/12) − 1 et pour chacun des mois de la durée : capital = capital × (1 + r) + versement (fin de mois), le capital final égale le capital visé. Si les versements seuls suffisent, le résultat est 0 % ; si même 100 % par an ne suffit pas, aucun rendement n’est affiché.',
   ]],

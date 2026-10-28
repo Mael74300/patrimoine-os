@@ -183,6 +183,13 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Pourquoi le rendement et l’inflation sont-ils séparés ?', a: 'Les dépenses augmentent avec l’inflation alors que le capital rapporte un rendement. Le délai d’atteinte utilise le rendement réel, corrigé de l’inflation, et la phase de retrait revalorise les retraits de l’inflation.' },
     { q: 'Le délai affiché est-il une prévision ?', a: 'Non. Il découle uniquement de vos hypothèses (épargne, rendement, inflation, dépenses), dont l’évolution réelle est inconnue. Les montants par défaut sont fictifs.' },
   ],
+  'capital-a-placer-aujourd-hui': [
+    { q: 'Comment calcule-t-on la somme à placer aujourd’hui ?', a: 'On « actualise » le capital visé : on le divise par le facteur de croissance (1 + taux mensuel)^(nombre de mois), après avoir retranché ce que vos versements mensuels apporteront. Le calcul est direct, sans itération, et utilise le même modèle que le simulateur de durée.' },
+    { q: 'Pourquoi un rendement plus élevé réduit-il la somme à placer ?', a: 'Parce que les intérêts font une plus grande part du chemin. Mais le rendement saisi est une hypothèse, jamais une garantie : il vaut mieux tester plusieurs valeurs prudentes.' },
+    { q: 'Que se passe-t-il si mes versements mensuels suffisent déjà ?', a: 'Le capital à placer affiché est alors de 0 € : vos versements et leurs intérêts supposés atteignent l’objectif sans somme de départ.' },
+    { q: 'Le résultat tient-il compte des frais, impôts et de l’inflation ?', a: 'Non. Le rendement est supposé constant, avant frais, impôts et inflation. Pour mesurer l’effet de l’inflation, utilisez le simulateur dédié.' },
+    { q: 'Le résultat est-il une prévision ?', a: 'Non. C’est un calcul pédagogique à partir de vos hypothèses, sans conseil en investissement. Les montants par défaut sont fictifs.' },
+  ],
   'rendement-necessaire-pour-atteindre-un-objectif': [
     { q: 'Comment le rendement nécessaire est-il calculé ?', a: 'Le simulateur cherche, par approximations successives, le rendement annuel qui, appliqué chaque mois à votre capital (converti en taux mensuel équivalent) avec votre versement en fin de mois, atteint exactement le capital visé à l’échéance choisie. C’est le même modèle que celui du simulateur de durée.' },
     { q: 'Un rendement nécessaire élevé est-il réaliste ?', a: 'Le simulateur ne le dit pas : il indique seulement ce que votre objectif exige. Plus le rendement nécessaire est élevé, plus l’objectif repose sur une performance incertaine ; il vaut alors mieux augmenter le versement, allonger la durée ou revoir le capital visé.' },
