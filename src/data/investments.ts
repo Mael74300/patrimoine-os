@@ -613,8 +613,8 @@ function defaultNextReview(category: string): string {
 }
 
 const REVIEW: Record<string, Partial<Review>> = {
-  'livret-a': { data: ['Taux 1,70 % du 1er août 2026 au 31 janvier 2027 (arrêté du 28 juillet 2026)', 'Plafonds 22 950 € (Livret A) et 12 000 € (LDDS)'] },
-  lep: { data: ['Taux 2,50 % du 1er août 2026 au 31 janvier 2027', 'Plafond 10 000 €'] },
+  'livret-a': { verifiedOn: '2026-10-28', taxValidAsOf: '2026-10-28', data: ['Taux 1,70 % du 1er août 2026 au 31 janvier 2027 (arrêté du 28 juillet 2026)', 'Plafonds 22 950 € (Livret A) et 12 000 € (LDDS)'] },
+  lep: { verifiedOn: '2026-10-28', taxValidAsOf: '2026-10-28', data: ['Taux 2,50 % du 1er août 2026 au 31 janvier 2027', 'Plafond 10 000 €'] },
   'compte-a-terme': { data: ['PFU 31,4 % sur les revenus 2026', 'Garantie des dépôts 100 000 € par établissement et par déposant'], assumptions: ['Taux brut de 3 % choisi pour l’exemple'] },
   'etf-monde': { assumptions: ['Rendement de 6 % par an net de frais, hypothèse d’illustration et non prévision', 'Versements en début de mois'] },
   pea: { data: ['Plafond de versements 150 000 €', 'PFU 31,4 % en cas de retrait avant 5 ans'], assumptions: ['Taux des prélèvements sociaux sur les gains de PEA en 2026 à confirmer'] },
@@ -635,8 +635,8 @@ const REVIEW: Record<string, Partial<Review>> = {
 export const investments: Investment[] = raw.map((i) => ({
   ...i,
   review: {
-    verifiedOn: VERIFIED_ON,
-    taxValidAsOf: VERIFIED_ON,
+    verifiedOn: REVIEW[i.slug]?.verifiedOn ?? VERIFIED_ON,
+    taxValidAsOf: REVIEW[i.slug]?.taxValidAsOf ?? VERIFIED_ON,
     nextReview: defaultNextReview(i.category),
     data: REVIEW[i.slug]?.data ?? [],
     assumptions: ['Échelles de risque, liquidité et effort attribuées par la rédaction', 'Exemple chiffré fictif', ...(REVIEW[i.slug]?.assumptions ?? [])],
