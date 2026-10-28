@@ -42,6 +42,7 @@ import SimTaux from './pages/SimTaux';
 import SimDureeCredit from './pages/SimDureeCredit';
 import SimInFine from './pages/SimInFine';
 import SimRendementRequis from './pages/SimRendementRequis';
+import SimCapitalAPlacer from './pages/SimCapitalAPlacer';
 import Glossaire from './pages/Glossaire';
 import PlanDuSite from './pages/PlanDuSite';
 import { Confidentialite, MentionsLegales } from './pages/Legal';
@@ -194,6 +195,7 @@ export default function App() {
             <Route path="/simulateurs/duree-du-credit-mensualite-et-cout-total" element={<SimDureeCredit />} />
             <Route path="/simulateurs/credit-in-fine-ou-amortissable" element={<SimInFine />} />
             <Route path="/simulateurs/rendement-necessaire-pour-atteindre-un-objectif" element={<SimRendementRequis />} />
+            <Route path="/simulateurs/capital-a-placer-aujourd-hui" element={<SimCapitalAPlacer />} />
             <Route path="/glossaire" element={<Glossaire />} />
             <Route path="/plan-du-site" element={<PlanDuSite />} />
             <Route path="/confidentialite" element={<Confidentialite />} />

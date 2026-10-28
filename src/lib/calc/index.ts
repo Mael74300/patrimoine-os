@@ -31,3 +31,4 @@ export * from './rateConversion';
 export * from './loanDuration';
 export * from './inFine';
 export * from './requiredReturn';
+export * from './presentValue';
