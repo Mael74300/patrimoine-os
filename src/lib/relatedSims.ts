@@ -41,6 +41,7 @@ export const simsForGuide: Record<string, string[]> = {
   'taux-endettement-capacite-emprunt': ['endettement', 'credit', 'dettes'],
   'combien-epargner-par-mois-objectif': ['objectif-epargne', 'budget', 'inflation'],
   'rembourser-credit-par-anticipation-ou-investir': ['rembourser-ou-investir', 'credit', 'renegocier-son-credit-gain-et-point-mort', 'dettes', 'epargne-de-precaution'],
+  'diversification-placements': ['patrimoine', 'frais', 'epargne-de-precaution'],
 };
 
 const bySlug = Object.fromEntries(simulators.map((s) => [s.slug, s]));
