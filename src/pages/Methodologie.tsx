@@ -47,6 +47,9 @@ const FORMULAS: [string, string[]][] = [
   ['Durée pour atteindre un capital', [
     'Chaque mois : capital = capital × (1 + rendement mensuel équivalent) + versement (fin de mois), jusqu’à atteindre le capital visé (100 ans au plus). Intérêts = capital à l’arrivée − total versé. Durée sans rendement = ⌈(objectif − capital de départ) ÷ versement⌉. Rendement supposé constant, avant frais, impôts et inflation ; ce sont des hypothèses, pas des prévisions.',
   ]],
+  ['Convertir un taux annuel', [
+    'Taux équivalent par période = (1 + taux annuel)^(1/n) − 1 ; taux proportionnel = taux annuel / n ; taux annuel nominal équivalent = n × taux équivalent ; taux annuel du taux proportionnel = (1 + taux / n)^n − 1. Taux saisi uniquement, sans chiffre réglementaire.',
+  ]],
   ['Intérêts simples ou composés', [
     'Intérêts simples : capital × (1 + taux × années). Intérêts composés : capital × (1 + taux)^années. Écart = composés − simples ; rapport = capital composé ÷ capital simple. Taux constant, sans versement, avant frais, impôts et inflation ; ce sont des hypothèses, pas des prévisions.',
   ]],
