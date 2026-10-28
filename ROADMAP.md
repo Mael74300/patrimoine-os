@@ -14,6 +14,7 @@ Liste de travail vivante de la tâche automatique et des contributions manuelles
   - **ergonomie et navigation** : trouver vite, comprendre où l'on est, savoir quoi faire ensuite ;
   - **contenu** : justesse, clarté, cohérence, utilité réelle ;
   - **technique** : vitesse, accessibilité, robustesse, absence de bogue.
+  - **illustrations maison** : images dessinées par la tâche elle-même en SVG (voir le chantier « Illustrations maison ») ;
   Aucun service externe pour l'esthétique : pas de police, d'image ni de script tiers (la politique de sécurité du contenu l'interdit) ; uniquement du CSS, du SVG et des polices système.
 
 - **Améliorer l'existant avant d'ajouter.** Le site compte 31 simulateurs, 26 fiches et 19 guides (28 octobre 2026). Plusieurs simulateurs se recoupent. La priorité est la cohérence, la qualité et la navigation, pas le nombre de pages.
@@ -57,6 +58,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent.
 - 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public.
+- 2026-10-28 (propriétaire) : ajouter des images créées par la tâche elle-même.
 
 ## À faire
 
@@ -71,7 +73,12 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 9. [ ] **Accueil et parcours.** Une entrée « Par où commencer ? » selon la situation (je débute, j'ai une épargne, je veux acheter, je prépare ma retraite), qui oriente vers trois ou quatre pages existantes au plus, sans allonger l'accueil.
 10. [ ] **Identité visuelle (propriétaire).** Revoir l'esthétique d'ensemble : palette, typographie (polices système), échelle d'espacements, cartes, boutons, en-tête, pied de page, graphiques. Une refonte cohérente par petites étapes, page par page, en gardant les contrastes accessibles. Captures avant et après dans chaque pull request.
 11. [ ] **Vulgarisation (propriétaire).** Réécrire en langage simple, page par page en commençant par les plus visitées (accueil, simulateurs principaux, guides d'entrée) : phrases courtes, jargon expliqué, exemple concret, phrase de synthèse sous chaque résultat de simulateur. Sans changer aucun chiffre ni règle.
-12. [ ] **Test de fumée dans l'intégration continue.** Chaque page pré-rendue se charge sans erreur JavaScript, à 1280 px et 375 px, sans débordement horizontal.
+12. [ ] **Illustrations maison (propriétaire).** Des images créées par la tâche elle-même, en SVG écrit à la main, pour rendre le site plus agréable et plus facile à comprendre :
+   - **schémas explicatifs** qui vulgarisent une notion (intérêts composés, amortissement d'un crédit, effet de levier, diversification, inflation) : priorité, car ils aident à comprendre ;
+   - **icônes** cohérentes pour les thèmes de simulateurs et les familles d'investissement ;
+   - **illustrations d'en-tête** sobres pour l'accueil, les guides et les rubriques.
+   Règles : un seul style pour tout le site (traits, arrondis, palette tirée des variables CSS pour suivre le thème) ; fichiers légers (moins de 15 ko chacun) dans `src/assets/illustrations/` ou en composants ; texte alternatif utile pour les schémas, `aria-hidden` pour les images décoratives ; lisibles à 375 px. Un schéma qui montre des chiffres doit être exact, ou marqué « illustration » s'il est seulement indicatif ; aucune donnée inventée présentée comme réelle. Pas d'image tirée d'une banque d'images ni d'un service externe. Quelques images utiles par exécution, jamais une image sur chaque page par principe ; ne pas allonger les pages sans raison.
+13. [ ] **Test de fumée dans l'intégration continue.** Chaque page pré-rendue se charge sans erreur JavaScript, à 1280 px et 375 px, sans débordement horizontal.
 
 ## Fait
 
