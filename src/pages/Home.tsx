@@ -5,6 +5,7 @@ import { AS_OF, investments } from '../data/investments';
 import { fmtEur, projectGrowth } from '../lib/finance';
 import { guides } from '../data/guides';
 import { simulators } from '../lib/search';
+import { featuredSims, simBySlug } from '../lib/simThemes';
 import { LineChart, PageHead } from '../components/ui';
 
 export default function Home() {
@@ -77,30 +78,32 @@ export default function Home() {
 
       <div className="split" style={{ marginTop: 8 }}>
         <section>
-          <h2>Simulateurs</h2>
+          <h2>Simulateurs les plus utiles</h2>
           <ul className="inv-list">
-            {simulators.map((s) => (
+            {featuredSims.map(simBySlug).map((s) => (
               <li key={s.slug}><Link className="inv-row" to={`/simulateurs/${s.slug}`}><div><h3>{s.title}</h3><p>{s.excerpt}</p></div></Link></li>
             ))}
           </ul>
+          <p><Link to="/simulateurs">Voir les {simulators.length} simulateurs, classés par thème</Link></p>
         </section>
         <section>
           <h2>Guides essentiels</h2>
           <ul className="inv-list">
-            {guides.slice(0, 8).map((g) => (
+            {guides.slice(0, 6).map((g) => (
               <li key={g.slug}><Link className="inv-row" to={`/guides/${g.slug}`}><div><h3>{g.title}</h3><p>{g.summary}</p></div></Link></li>
             ))}
           </ul>
+          <p><Link to="/guides">Voir les {guides.length} guides</Link></p>
         </section>
       </div>
 
       <h2>Les familles d'investissement</h2>
       <div className="cat-grid">
-        {categories.map((c) => (
+        {categories.filter((c) => counts[c.id]).map((c) => (
           <Link key={c.id} to={`/encyclopedie?cat=${c.id}`}>
             <strong>{c.name}</strong>
             <span>{c.short}</span>
-            <em>{counts[c.id] ? `${counts[c.id]} fiche${counts[c.id] > 1 ? 's' : ''}` : 'Fiches en préparation'}</em>
+            <em>{`${counts[c.id]} fiche${counts[c.id] > 1 ? 's' : ''}`}</em>
           </Link>
         ))}
       </div>
