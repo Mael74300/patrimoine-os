@@ -175,3 +175,10 @@ describe('FAQ des simulateurs', () => {
     }
   });
 });
+
+describe('guide règle de 72 : exemples fictifs recalculés', () => {
+  it('durée exacte de doublement ≈ valeurs citées', () => {
+    const exact = (r: number) => Math.log(2) / Math.log(1 + r);
+    expect([0.02, 0.04, 0.06, 0.08, 0.12].map((r) => exact(r).toFixed(2))).toEqual(['35.00', '17.67', '11.90', '9.01', '6.12']);
+  });
+});
