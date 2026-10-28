@@ -183,4 +183,11 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Pourquoi le rendement et l’inflation sont-ils séparés ?', a: 'Les dépenses augmentent avec l’inflation alors que le capital rapporte un rendement. Le délai d’atteinte utilise le rendement réel, corrigé de l’inflation, et la phase de retrait revalorise les retraits de l’inflation.' },
     { q: 'Le délai affiché est-il une prévision ?', a: 'Non. Il découle uniquement de vos hypothèses (épargne, rendement, inflation, dépenses), dont l’évolution réelle est inconnue. Les montants par défaut sont fictifs.' },
   ],
+  'rendement-necessaire-pour-atteindre-un-objectif': [
+    { q: 'Comment le rendement nécessaire est-il calculé ?', a: 'Le simulateur cherche, par approximations successives, le rendement annuel qui, appliqué chaque mois à votre capital (converti en taux mensuel équivalent) avec votre versement en fin de mois, atteint exactement le capital visé à l’échéance choisie. C’est le même modèle que celui du simulateur de durée.' },
+    { q: 'Un rendement nécessaire élevé est-il réaliste ?', a: 'Le simulateur ne le dit pas : il indique seulement ce que votre objectif exige. Plus le rendement nécessaire est élevé, plus l’objectif repose sur une performance incertaine ; il vaut alors mieux augmenter le versement, allonger la durée ou revoir le capital visé.' },
+    { q: 'Que signifie un rendement nécessaire de 0 % ?', a: 'Vos versements et votre capital de départ suffisent à atteindre l’objectif sans aucun rendement. Le simulateur n’affiche pas de rendement négatif.' },
+    { q: 'Ce rendement tient-il compte des frais, impôts et de l’inflation ?', a: 'Non. C’est un rendement annuel constant avant frais, impôts et inflation. Pour comparer à un placement réel, il faut retrancher les frais et l’impôt de ce placement, et vous pouvez corriger de l’inflation avec le simulateur dédié.' },
+    { q: 'Le résultat est-il une prévision ?', a: 'Non. C’est un calcul pédagogique à partir de vos hypothèses, sans conseil en investissement. Les montants par défaut sont fictifs.' },
+  ],
 };
