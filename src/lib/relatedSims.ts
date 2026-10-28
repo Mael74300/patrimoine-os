@@ -17,7 +17,7 @@ export const simsForInvestment: Record<string, string[]> = {
   lmnp: ['immobilier', 'etf-immobilier'],
   scpi: ['immobilier', 'frais'],
   'foncieres-cotees': ['etf-immobilier', 'portefeuille'],
-  'credit-immobilier': ['credit', 'taeg', 'louer-ou-acheter', 'endettement', 'rembourser-ou-investir', 'immobilier'],
+  'credit-immobilier': ['credit', 'renegocier-son-credit-gain-et-point-mort', 'taeg', 'louer-ou-acheter', 'endettement', 'rembourser-ou-investir', 'immobilier'],
   'creation-entreprise': ['entreprise'],
   'reprise-entreprise': ['entreprise', 'credit'],
   'activite-numerique': ['entreprise', 'budget'],
@@ -40,7 +40,7 @@ export const simsForGuide: Record<string, string[]> = {
   'combien-epargne-de-precaution': ['epargne-de-precaution', 'inflation', 'budget'],
   'taux-endettement-capacite-emprunt': ['endettement', 'credit', 'dettes'],
   'combien-epargner-par-mois-objectif': ['objectif-epargne', 'budget', 'inflation'],
-  'rembourser-credit-par-anticipation-ou-investir': ['rembourser-ou-investir', 'credit', 'dettes', 'epargne-de-precaution'],
+  'rembourser-credit-par-anticipation-ou-investir': ['rembourser-ou-investir', 'credit', 'renegocier-son-credit-gain-et-point-mort', 'dettes', 'epargne-de-precaution'],
 };
 
 const bySlug = Object.fromEntries(simulators.map((s) => [s.slug, s]));
