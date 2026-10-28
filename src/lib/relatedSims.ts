@@ -43,6 +43,7 @@ export const simsForGuide: Record<string, string[]> = {
   'rembourser-credit-par-anticipation-ou-investir': ['rembourser-ou-investir', 'credit', 'renegocier-son-credit-gain-et-point-mort', 'dettes', 'epargne-de-precaution'],
   'diversification-placements': ['patrimoine', 'frais', 'epargne-de-precaution'],
   'inflation-pouvoir-d-achat-epargne': ['inflation', 'rendement-reel-de-mon-placement', 'epargne-de-precaution'],
+  'regle-de-72-doubler-son-capital': ['doubler-son-capital-regle-de-72', 'inflation', 'interets-simples-ou-composes'],
 };
 
 const bySlug = Object.fromEntries(simulators.map((s) => [s.slug, s]));

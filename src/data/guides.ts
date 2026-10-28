@@ -587,6 +587,50 @@ export const guides: Guide[] = [
     ],
     cta: { to: '/simulateurs/inflation', label: 'Simuler l’effet de l’inflation' },
   },
+  {
+    slug: 'regle-de-72-doubler-son-capital',
+    title: 'La règle de 72 : en combien de temps un capital double-t-il ?',
+    summary: 'Comment estimer de tête la durée pour doubler un capital, pourquoi la règle fonctionne, ses limites et le calcul exact.',
+    readingMinutes: 4,
+    updatedOn: '2026-10-28',
+    sections: [
+      {
+        heading: 'Le principe de la règle de 72',
+        body: [
+          'La règle de 72 est un raccourci de calcul mental : pour estimer le nombre d’années nécessaires pour doubler un capital placé à intérêts composés, on divise 72 par le taux de rendement annuel exprimé en pourcentage. À 6 % par an, 72 ÷ 6 = 12 ans.',
+          'Il s’agit d’une approximation, pas d’une règle légale ni d’une promesse de rendement : le taux est une hypothèse que vous choisissez.',
+        ],
+      },
+      {
+        heading: 'Le calcul exact',
+        body: [
+          'Un capital placé au taux r double lorsque (1 + r)^n = 2, soit n = ln 2 ÷ ln (1 + r), où ln désigne le logarithme népérien. C’est la formule des intérêts composés appliquée à un objectif de multiplication par deux.',
+          'Exemple fictif : à 6 % par an, n = ln 2 ÷ ln 1,06 ≈ 11,90 ans, contre 12 ans par la règle de 72.',
+        ],
+      },
+      {
+        heading: 'Jusqu’où l’approximation est-elle bonne ?',
+        body: [
+          'Exemples fictifs, calculés avec la formule exacte : à 2 %, 35,00 ans contre 36 par la règle ; à 4 %, 17,67 ans contre 18 ; à 8 %, 9,01 ans contre 9 ; à 12 %, 6,12 ans contre 6.',
+          'La règle est donc surtout utile pour des taux modérés. Elle ne tient compte ni des frais, ni de la fiscalité, ni de l’inflation, ni de versements réguliers : ces éléments allongent la durée réelle.',
+        ],
+      },
+      {
+        heading: 'Doubler en euros ou en pouvoir d’achat',
+        body: [
+          'Doubler le montant affiché ne double pas le pouvoir d’achat si les prix montent. Pour raisonner en euros d’aujourd’hui, remplacez le taux par le rendement réel, (1 + rendement) ÷ (1 + inflation) − 1. Le simulateur « Doubler son capital » calcule les deux durées à partir de vos hypothèses.',
+        ],
+      },
+    ],
+    related: ['etf-monde', 'fonds-euros'],
+    sources: [IFP],
+    faq: [
+      { q: 'Comment appliquer la règle de 72 ?', a: 'Divisez 72 par le taux de rendement annuel en pourcentage : le résultat est une estimation du nombre d’années pour doubler. Exemple fictif : 72 ÷ 8 = 9 ans.' },
+      { q: 'La règle de 72 est-elle exacte ?', a: 'Non, c’est une approximation. Le calcul exact est ln 2 ÷ ln (1 + taux) ; l’écart reste faible pour des taux modérés.' },
+      { q: 'La règle de 72 tient-elle compte des frais et de l’inflation ?', a: 'Non. Utilisez un rendement net de frais et, pour le pouvoir d’achat, un rendement réel corrigé de l’inflation.' },
+    ],
+    cta: { to: '/simulateurs/doubler-son-capital-regle-de-72', label: 'Simuler le doublement d’un capital' },
+  },
 ];
 
 export const guideBySlug = Object.fromEntries(guides.map((g) => [g.slug, g]));
