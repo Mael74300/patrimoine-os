@@ -6,7 +6,7 @@
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { buildAtom, feedEntries } from './lib/atom.mjs';
+import { buildAtom, feedEntries, pageLastmod } from './lib/atom.mjs';
 import { ogFileName, ogLabel, renderOgImage } from './lib/ogimage.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -85,7 +85,7 @@ await writeFile(
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${pages.filter((p) => !p.noindex).map((p) => `  <url><loc>${esc(siteUrl + p.path)}</loc><lastmod>${lastModified}</lastmod></url>`).join('\n')}
+${pages.filter((p) => !p.noindex).map((p) => `  <url><loc>${esc(siteUrl + p.path)}</loc><lastmod>${pageLastmod(p, lastModified)}</lastmod></url>`).join('\n')}
 </urlset>
 `;
 await writeFile(join(dist, 'sitemap.xml'), sitemap);

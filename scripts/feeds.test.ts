@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error module JavaScript du build, sans déclaration de types
-import { buildAtom, feedEntries } from './lib/atom.mjs';
+import { buildAtom, feedEntries, pageLastmod } from './lib/atom.mjs';
 // @ts-expect-error module JavaScript du build, sans déclaration de types
 import { buildPayload, urlsFromSitemap } from './indexnow.mjs';
 import { pagesMeta } from '../src/seo';
@@ -38,5 +38,16 @@ describe('IndexNow', () => {
     const files = readdirSync('public').filter((f) => /^[0-9a-f]{32}\.txt$/.test(f));
     expect(files).toHaveLength(1);
     expect(readFileSync(`public/${files[0]}`, 'utf8')).toBe(files[0].replace('.txt', ''));
+  });
+});
+
+describe('dates lastmod du sitemap', () => {
+  it('reprend la date de l’Article d’une fiche ou d’un guide, sinon la date de repli', () => {
+    const pages = pagesMeta(site);
+    for (const p of pages) {
+      const article = (p.jsonLd ?? []).find((j: { '@type'?: string }) => j['@type'] === 'Article') as { dateModified: string } | undefined;
+      expect(pageLastmod(p, '2000-01-01')).toBe(article ? article.dateModified : '2000-01-01');
+      expect(pageLastmod(p, '2000-01-01')).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
   });
 });
