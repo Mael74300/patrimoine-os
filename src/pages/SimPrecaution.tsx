@@ -5,7 +5,7 @@ import {
   PROFILE_MONTHS, type PrecautionInput, type PrecautionProfile,
 } from '../lib/finance';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
-import { Crumbs, Disclaimer, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, Sources, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, Sources, usePersistentState } from '../components/ui';
 
 type State = PrecautionInput & { profile: PrecautionProfile; lep: 'oui' | 'non'; deadline: number };
 
@@ -152,6 +152,7 @@ export default function SimPrecaution() {
           <h2>Sources</h2>
           <Sources list={LIVRETS.map((l) => ({ ...l.source, official: true }))} />
           <SavedSims simKey="precaution" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
+          <SimFaq slug="epargne-de-precaution" />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
         </section>
       </div>

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { capacityAtHcsf, debtRatio, fmtEur, fmtPct, HCSF } from '../lib/finance';
-import { Crumbs, Disclaimer, Kpi, NumberField, PageHead, SavedSims, Sources, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, Sources, usePersistentState } from '../components/ui';
 
 type State = { income: number; existingPayments: number; newPayment: number; livingCosts: number; householdSize: number; rate: number; years: number; insuranceRate: number };
 
@@ -65,6 +65,7 @@ export default function SimEndettement() {
           <h2>Source</h2>
           <Sources list={[{ ...HCSF.source, official: true }]} />
           <SavedSims simKey="endettement" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
+          <SimFaq slug="endettement" />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
         </section>
       </div>
