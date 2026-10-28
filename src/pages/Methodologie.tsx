@@ -44,6 +44,9 @@ const FORMULAS: [string, string[]][] = [
     'Mensualité = capital × m / (1 − (1 + m)^−n), avec m le taux nominal annuel / 12 et n le nombre de mois ; intérêts = mensualité × n − capital restant dû, pour le prêt actuel (durée restante) et le nouveau prêt.',
     'Gain net = intérêts restants du prêt actuel − intérêts du nouveau prêt − frais saisis. Point mort = frais / (mensualité actuelle − nouvelle mensualité). Assurance exclue, échéances constantes, taux et frais saisis uniquement.',
   ]],
+  ['Intérêts simples ou composés', [
+    'Intérêts simples : capital × (1 + taux × années). Intérêts composés : capital × (1 + taux)^années. Écart = composés − simples ; rapport = capital composé ÷ capital simple. Taux constant, sans versement, avant frais, impôts et inflation ; ce sont des hypothèses, pas des prévisions.',
+  ]],
   ['Augmenter son épargne chaque année', [
     'Chaque mois : capital = capital × (1 + rendement mensuel équivalent) + versement du mois (fin de mois). Le versement est multiplié par (1 + hausse) au début de chaque année à partir de la deuxième ; la comparaison porte sur le même versement de départ maintenu constant.',
     'Versement constant équivalent = capital final avec hausse ÷ (capital final avec versement constant ÷ versement de départ), par linéarité. Rendement et hausse supposés constants, avant frais, impôts et inflation ; ce sont des hypothèses, pas des prévisions.',

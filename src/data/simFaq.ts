@@ -80,6 +80,12 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Que signifie le versement pour rattraper ?', a: 'C’est le versement mensuel constant, à partir de la fin du délai, qui donne à l’arrivée le même capital que si vous aviez commencé tout de suite avec votre versement actuel. C’est un calcul sur vos hypothèses, pas une recommandation.' },
     { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement réel est inconnu et varie ; il est supposé constant et avant frais, impôts et inflation. Les montants par défaut sont fictifs.' },
   ],
+  'interets-simples-ou-composes': [
+    { q: 'Quelle différence entre intérêts simples et intérêts composés ?', a: 'Avec des intérêts simples, chaque année rapporte le même montant, calculé sur le capital de départ. Avec des intérêts composés, les intérêts de chaque année sont ajoutés au capital et produisent à leur tour des intérêts les années suivantes.' },
+    { q: 'Quelles formules le simulateur utilise-t-il ?', a: 'Intérêts simples : capital × (1 + taux × années). Intérêts composés : capital × (1 + taux)^années. Les deux donnent le même résultat après la première année ; l’écart se creuse ensuite, d’autant plus vite que le taux et la durée sont élevés.' },
+    { q: 'Pourquoi l’écart est-il nul avec un taux nul ?', a: 'Sans intérêts, il n’y a rien à réinvestir : les deux méthodes laissent le capital inchangé. L’écart grandit avec le taux et avec la durée.' },
+    { q: 'Le résultat est-il une prévision ?', a: 'Non. Le taux est supposé constant, sans versement, avant frais, impôts et inflation. Les produits réels ont leurs propres règles de calcul et de versement des intérêts ; les montants par défaut sont fictifs.' },
+  ],
   'augmenter-son-epargne-chaque-annee': [
     { q: 'Quel effet a une hausse annuelle du versement mensuel ?', a: 'Chaque hausse s’ajoute aux versements suivants, qui fructifient ensuite à leur tour. Le simulateur compare le capital obtenu avec un versement constant et avec un versement qui augmente d’un pourcentage chaque année, au même rendement supposé.' },
     { q: 'Que signifie le versement constant équivalent ?', a: 'C’est la mensualité fixe qui donnerait, sur la même durée et au même rendement supposé, le même capital final que le versement qui augmente. Il permet de comparer les deux façons d’épargner.' },

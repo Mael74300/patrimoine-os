@@ -35,6 +35,7 @@ import SimRendement from './pages/SimRendement';
 import SimAttendre from './pages/SimAttendre';
 import SimDoubler from './pages/SimDoubler';
 import SimProgressif from './pages/SimProgressif';
+import SimSimpleComposes from './pages/SimSimpleComposes';
 import SimRenegociation from './pages/SimRenegociation';
 import Glossaire from './pages/Glossaire';
 import { Confidentialite, MentionsLegales } from './pages/Legal';
@@ -179,6 +180,7 @@ export default function App() {
             <Route path="/simulateurs/cout-d-attendre-pour-epargner" element={<SimAttendre />} />
             <Route path="/simulateurs/doubler-son-capital-regle-de-72" element={<SimDoubler />} />
             <Route path="/simulateurs/augmenter-son-epargne-chaque-annee" element={<SimProgressif />} />
+            <Route path="/simulateurs/interets-simples-ou-composes" element={<SimSimpleComposes />} />
             <Route path="/simulateurs/renegocier-son-credit-gain-et-point-mort" element={<SimRenegociation />} />
             <Route path="/glossaire" element={<Glossaire />} />
             <Route path="/confidentialite" element={<Confidentialite />} />
