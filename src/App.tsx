@@ -43,6 +43,7 @@ import SimDureeCredit from './pages/SimDureeCredit';
 import SimInFine from './pages/SimInFine';
 import SimRendementRequis from './pages/SimRendementRequis';
 import Glossaire from './pages/Glossaire';
+import PlanDuSite from './pages/PlanDuSite';
 import { Confidentialite, MentionsLegales } from './pages/Legal';
 import NotFound from './pages/NotFound';
 
@@ -125,6 +126,7 @@ function Footer() {
           <ul style={{ marginTop: 8 }}>
             {NAV.map((n) => <li key={n.to}><Link to={n.to}>{n.label}</Link></li>)}
             <li><Link to="/glossaire">Glossaire</Link></li>
+            <li><Link to="/plan-du-site">Plan du site</Link></li>
             <li><Link to="/confidentialite">Confidentialité</Link></li>
             <li><Link to="/mentions-legales">Mentions légales</Link></li>
           </ul>
@@ -193,6 +195,7 @@ export default function App() {
             <Route path="/simulateurs/credit-in-fine-ou-amortissable" element={<SimInFine />} />
             <Route path="/simulateurs/rendement-necessaire-pour-atteindre-un-objectif" element={<SimRendementRequis />} />
             <Route path="/glossaire" element={<Glossaire />} />
+            <Route path="/plan-du-site" element={<PlanDuSite />} />
             <Route path="/confidentialite" element={<Confidentialite />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/entrepreneuriat" element={<Entrepreneuriat />} />

@@ -52,6 +52,7 @@ export function pagesMeta(siteUrl: string): PageMeta[] {
       ],
     },
     { path: '/methodologie/', title: `Méthode, formules et sources | ${SITE}`, description: 'Sources officielles, dates de vérification, formules de calcul et processus de mise à jour de Patrimoine OS.' },
+    { path: '/plan-du-site/', title: `Plan du site | ${SITE}`, description: 'Toutes les pages de Patrimoine OS en un coup d’œil : fiches de l’encyclopédie, guides, simulateurs, glossaire et pages d’information.' },
     { path: '/confidentialite/', title: `Politique de confidentialité | ${SITE}`, description: 'Aucun cookie, aucun compte, mesure d’audience anonyme : vos calculs restent dans votre navigateur.' },
     { path: '/recherche/', title: `Recherche | ${SITE}`, description: 'Rechercher une fiche, un guide ou un simulateur.', noindex: true },
     { path: '/mentions-legales/', title: `Mentions légales | ${SITE}`, description: 'Éditeur, hébergeur et nature des informations publiées sur Patrimoine OS.' },
