@@ -40,6 +40,10 @@ const FORMULAS: [string, string[]][] = [
     'Capital à l’arrivée = versement × ((1 + m)^n − 1) / m, avec m le taux mensuel équivalent au rendement annuel supposé et n le nombre de mois de versement (n × versement si le rendement est nul). Versements en fin de mois.',
     'Coût de l’attente = capital en commençant tout de suite (n = horizon) − capital en commençant après le délai (n = horizon − délai). Versement pour rattraper = versement × capital immédiat / capital après délai, par linéarité. Rendement supposé constant, avant frais, impôts et inflation.',
   ]],
+  ['Renégocier son crédit', [
+    'Mensualité = capital × m / (1 − (1 + m)^−n), avec m le taux nominal annuel / 12 et n le nombre de mois ; intérêts = mensualité × n − capital restant dû, pour le prêt actuel (durée restante) et le nouveau prêt.',
+    'Gain net = intérêts restants du prêt actuel − intérêts du nouveau prêt − frais saisis. Point mort = frais / (mensualité actuelle − nouvelle mensualité). Assurance exclue, échéances constantes, taux et frais saisis uniquement.',
+  ]],
   ['Doubler son capital', [
     'Durée exacte pour multiplier un capital par k, sans versement : ln(k) / ln(1 + rendement annuel). Règle de 72 généralisée : 72 × (ln k / ln 2) / rendement en %, soit 72 / rendement en % pour doubler.',
     'Rendement réel = (1 + rendement) / (1 + inflation) − 1 ; la durée en pouvoir d’achat applique la même formule à ce rendement réel. Rendement et inflation supposés constants, avant frais et impôts ; durée non définie si le rendement n’est pas positif.',
