@@ -631,6 +631,56 @@ export const guides: Guide[] = [
     ],
     cta: { to: '/simulateurs/doubler-son-capital-regle-de-72', label: 'Simuler le doublement d’un capital' },
   },
+  {
+    slug: 'livret-a-calcul-interets-quinzaines',
+    title: 'Livret A : comment sont calculés les intérêts (quinzaines)',
+    summary: 'À quelle date un dépôt ou un retrait est pris en compte, comment fonctionnent les quinzaines et quand les intérêts sont ajoutés au capital.',
+    readingMinutes: 4,
+    updatedOn: '2026-10-28',
+    sections: [
+      {
+        heading: 'Des intérêts calculés par quinzaines',
+        body: [
+          'Sur le Livret A, les intérêts sont calculés le 1er et le 16 de chaque mois. Une somme ne produit des intérêts que si elle reste placée pendant une quinzaine entière : l’argent déposé ou retiré en cours de quinzaine ne compte qu’à la date de valeur indiquée ci-dessous.',
+          'Selon Service-Public.fr (page vérifiée le 1er août 2026, consultée le 28 octobre 2026), les intérêts sont exonérés d’impôt sur le revenu et de prélèvements sociaux.',
+        ],
+      },
+      {
+        heading: 'À partir de quand un dépôt rapporte-t-il ?',
+        body: [
+          'Un dépôt effectué entre le 1er et le 15 du mois est pris en compte à partir du 16 du même mois. Un dépôt effectué à partir du 16 est pris en compte à partir du 1er du mois suivant.',
+          'Exemple : un dépôt le 10 mai commence à rapporter le 16 mai ; un dépôt le 20 mai commence à rapporter le 1er juin.',
+        ],
+      },
+      {
+        heading: 'Et un retrait ?',
+        body: [
+          'Un retrait effectué jusqu’au 15 du mois est calculé sur le solde arrêté au dernier jour du mois précédent. Un retrait effectué à partir du 16 est calculé sur le solde arrêté au 15 du mois. Retirer juste après le début d’une quinzaine fait donc perdre les intérêts de cette quinzaine sur la somme retirée.',
+        ],
+      },
+      {
+        heading: 'Combien représente une quinzaine ?',
+        body: [
+          'Exemple fictif au taux de 1,70 % par an (taux en vigueur du 1er août 2026 au 31 janvier 2027) : sur 1 000 €, une quinzaine rapporte environ 1 000 × 1,70 % ÷ 24 ≈ 0,71 €. Déposer le 10 mai plutôt que le 20 mai fait donc gagner une quinzaine, soit environ 0,71 €.',
+          'L’écart est faible pour une somme modeste : l’enjeu est surtout de ne pas retirer ou déposer au mauvais moment sur de gros montants. Le taux est susceptible de changer au 1er février 2027.',
+        ],
+      },
+      {
+        heading: 'Quand les intérêts sont-ils ajoutés au capital ?',
+        body: [
+          'Au 31 décembre de chaque année, les intérêts cumulés sur l’année s’ajoutent au capital et produisent eux-mêmes des intérêts l’année suivante, même si le plafond de 22 950 € est déjà dépassé. En cas de clôture en cours d’année, les intérêts du 1er janvier à la date de clôture sont crédités le jour de la clôture.',
+        ],
+      },
+    ],
+    related: ['livret-a'],
+    sources: [SP('Livret A', 'F2365')],
+    faq: [
+      { q: 'À quelle date un dépôt sur le Livret A commence-t-il à rapporter ?', a: 'Un dépôt effectué du 1er au 15 du mois compte à partir du 16 ; un dépôt effectué à partir du 16 compte à partir du 1er du mois suivant.' },
+      { q: 'Quand les intérêts du Livret A sont-ils versés ?', a: 'Les intérêts de l’année s’ajoutent au capital au 31 décembre, ou le jour de la clôture si le livret est fermé en cours d’année.' },
+      { q: 'Les intérêts du Livret A sont-ils imposés ?', a: 'Non : ils sont exonérés d’impôt sur le revenu et de prélèvements sociaux, selon Service-Public.fr.' },
+    ],
+    cta: { to: '/simulateurs/epargne-de-precaution', label: 'Simuler son épargne de précaution' },
+  },
 ];
 
 export const guideBySlug = Object.fromEntries(guides.map((g) => [g.slug, g]));
