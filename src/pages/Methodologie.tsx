@@ -50,6 +50,9 @@ const FORMULAS: [string, string[]][] = [
   ['Durée du crédit', [
     'Pour chaque durée : mensualité = capital × (taux / 12) ÷ (1 − (1 + taux / 12)^(−mois)) (capital ÷ mois si taux nul) ; assurance mensuelle = capital × taux d’assurance ÷ 12 ; intérêts = mensualité × mois − capital ; coût total = intérêts + assurance. Taux fixe identique pour toutes les durées ; ce sont des hypothèses, pas une offre de prêt.',
   ]],
+  ['Crédit in fine ou amortissable', [
+    'In fine : intérêts mensuels = capital × taux / 12 ; assurance mensuelle = capital × taux d’assurance / 12 ; épargne mensuelle (fin de mois) = capital × r ÷ ((1 + r)^mois − 1) avec r = (1 + rendement net)^(1/12) − 1 (capital ÷ mois si r = 0). Coût net = (intérêts + assurance) × mois − (capital − épargne mensuelle × mois). Amortissable : mensualité constante, coût = intérêts + assurance. Rendement constant, sans fiscalité ni frais ; ce sont des hypothèses, pas une offre de prêt.',
+  ]],
   ['Convertir un taux annuel', [
     'Taux équivalent par période = (1 + taux annuel)^(1/n) − 1 ; taux proportionnel = taux annuel / n ; taux annuel nominal équivalent = n × taux équivalent ; taux annuel du taux proportionnel = (1 + taux / n)^n − 1. Taux saisi uniquement, sans chiffre réglementaire.',
   ]],

@@ -105,6 +105,13 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Le taux est-il le même pour toutes les durées ?', a: 'Dans ce simulateur oui, par simplification. En pratique, les banques proposent souvent des taux différents selon la durée : saisissez le taux de chaque offre dans le calculateur de crédit pour les comparer.' },
     { q: 'Le résultat est-il une offre de prêt ?', a: 'Non. C’est un calcul pédagogique à partir de vos saisies, avec un taux fixe. Les montants par défaut sont fictifs.' },
   ],
+  'credit-in-fine-ou-amortissable': [
+    { q: 'Quelle différence entre un crédit in fine et un crédit amortissable ?', a: 'Dans un crédit amortissable, chaque mensualité rembourse une part de capital et des intérêts. Dans un crédit in fine, on ne paie que les intérêts pendant la durée et le capital est remboursé en une seule fois à l’échéance, souvent à l’aide d’une épargne constituée en parallèle.' },
+    { q: 'Comment le simulateur calcule-t-il l’épargne à constituer ?', a: 'Il cherche le versement mensuel qui, placé chaque fin de mois au rendement net supposé, reconstitue exactement le capital emprunté à l’échéance : capital × r ÷ ((1 + r)^mois − 1), avec r le taux mensuel équivalent. Sans rendement, c’est le capital divisé par le nombre de mois.' },
+    { q: 'Quand l’in fine coûte-t-il plus cher ?', a: 'Quand l’épargne rapporte moins que le taux du crédit : les intérêts, calculés sur tout le capital pendant toute la durée, dépassent alors les gains de l’épargne. Dans ce simulateur, le coût net est égal aux intérêts et à l’assurance, diminués des gains de l’épargne.' },
+    { q: 'Le rendement de l’épargne est-il garanti ?', a: 'Non. Le rendement saisi est une hypothèse constante : un placement réel peut rapporter moins, voire perdre de la valeur, et le capital pourrait alors manquer à l’échéance. Fiscalité, frais de l’enveloppe et conditions de la banque ne sont pas pris en compte.' },
+    { q: 'Le résultat est-il une offre de prêt ?', a: 'Non. C’est un calcul pédagogique à partir de vos saisies, avec un taux fixe. Les montants par défaut sont fictifs.' },
+  ],
   'augmenter-son-epargne-chaque-annee': [
     { q: 'Quel effet a une hausse annuelle du versement mensuel ?', a: 'Chaque hausse s’ajoute aux versements suivants, qui fructifient ensuite à leur tour. Le simulateur compare le capital obtenu avec un versement constant et avec un versement qui augmente d’un pourcentage chaque année, au même rendement supposé.' },
     { q: 'Que signifie le versement constant équivalent ?', a: 'C’est la mensualité fixe qui donnerait, sur la même durée et au même rendement supposé, le même capital final que le versement qui augmente. Il permet de comparer les deux façons d’épargner.' },

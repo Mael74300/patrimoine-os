@@ -29,3 +29,4 @@ export * from './simpleVsCompound';
 export * from './timeToTarget';
 export * from './rateConversion';
 export * from './loanDuration';
+export * from './inFine';
