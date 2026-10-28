@@ -42,6 +42,7 @@ export const simsForGuide: Record<string, string[]> = {
   'combien-epargner-par-mois-objectif': ['objectif-epargne', 'budget', 'inflation'],
   'rembourser-credit-par-anticipation-ou-investir': ['rembourser-ou-investir', 'credit', 'renegocier-son-credit-gain-et-point-mort', 'dettes', 'epargne-de-precaution'],
   'diversification-placements': ['patrimoine', 'frais', 'epargne-de-precaution'],
+  'inflation-pouvoir-d-achat-epargne': ['inflation', 'rendement-reel-de-mon-placement', 'epargne-de-precaution'],
 };
 
 const bySlug = Object.fromEntries(simulators.map((s) => [s.slug, s]));
