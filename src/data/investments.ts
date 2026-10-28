@@ -619,7 +619,7 @@ const REVIEW: Record<string, Partial<Review>> = {
   'etf-monde': { assumptions: ['Rendement de 6 % par an net de frais, hypothèse d’illustration et non prévision', 'Versements en début de mois'] },
   pea: { data: ['Plafond de versements 150 000 €', 'PFU 31,4 % en cas de retrait avant 5 ans'], assumptions: ['Taux des prélèvements sociaux sur les gains de PEA en 2026 à confirmer'] },
   'compte-titres': { data: ['PFU 31,4 % (12,8 % + 18,6 %) sur les revenus 2026'] },
-  'assurance-vie': { data: ['Prélèvements sociaux 17,2 %', 'Abattement annuel 4 600 € / 9 200 € après 8 ans', 'Taux de 7,5 % jusqu’à 150 000 € de primes', 'Abattement décès 152 500 € par bénéficiaire (primes avant 70 ans)'] },
+  'assurance-vie': { verifiedOn: '2026-10-28', taxValidAsOf: '2026-10-28', data: ['Prélèvements sociaux 17,2 %', 'Abattement annuel 4 600 € / 9 200 € après 8 ans', 'Taux de 7,5 % jusqu’à 150 000 € de primes', 'Abattement décès 152 500 € par bénéficiaire (primes avant 70 ans)'] },
   'fonds-euros': { assumptions: ['Rendement de 2,5 % net de frais, hypothèse d’illustration'] },
   'location-nue': { data: ['Micro-foncier jusqu’à 15 000 € de revenus fonciers bruts, abattement 30 %', 'Plus-value : 19 % + 17,2 %, exonération après 22 et 30 ans'] },
   lmnp: { assumptions: ['Taux des prélèvements sociaux applicable aux revenus de location meublée en 2026 à confirmer', 'Abattements du micro-BIC à confirmer'] },
