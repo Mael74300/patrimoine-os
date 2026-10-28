@@ -115,6 +115,15 @@ describe('les exemples chiffrés des guides sont exacts', () => {
   });
 });
 
+describe('guide diversification', () => {
+  it('exemple fictif : 70 % à −20 % et 30 % à +2 % → −13,4 %', () => {
+    expect(0.7 * -20 + 0.3 * 2).toBeCloseTo(-13.4, 10);
+    const g = guides.find((x) => x.slug === 'diversification-placements')!;
+    expect(JSON.stringify(g)).toContain('−13,4 %');
+    expect(JSON.stringify(g)).toContain('fictif');
+  });
+});
+
 describe('référencement', () => {
   const pages = pagesMeta('https://exemple.test');
   it('chemins, titres et descriptions uniques et renseignés', () => {
