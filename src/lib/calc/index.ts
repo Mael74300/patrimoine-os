@@ -24,3 +24,4 @@ export * from './performance';
 export * from './delay';
 export * from './doubling';
 export * from './renegotiation';
+export * from './stepUp';
