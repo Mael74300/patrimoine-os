@@ -124,6 +124,17 @@ describe('guide diversification', () => {
   });
 });
 
+describe('guide inflation', () => {
+  it('exemple fictif : 10 000 € à 2 % d’inflation sur 10 ans → ≈ 8 203 € ; à 3 % → ≈ 13 439 € soit ≈ 11 025 € réels (≈ 0,98 %)', () => {
+    expect(10000 / 1.02 ** 10).toBeCloseTo(8203, 0);
+    expect(10000 * 1.03 ** 10).toBeCloseTo(13439, 0);
+    expect(10000 * 1.03 ** 10 / 1.02 ** 10).toBeCloseTo(11025, 0);
+    expect(1.03 / 1.02 - 1).toBeCloseTo(0.0098, 4);
+    const t = JSON.stringify(guides.find((x) => x.slug === 'inflation-pouvoir-d-achat-epargne')!);
+    for (const v of ['8 203', '13 439', '11 025', '0,98 %', 'fictif']) expect(t).toContain(v);
+  });
+});
+
 describe('référencement', () => {
   const pages = pagesMeta('https://exemple.test');
   it('chemins, titres et descriptions uniques et renseignés', () => {

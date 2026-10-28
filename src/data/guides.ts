@@ -542,6 +542,51 @@ export const guides: Guide[] = [
     ],
     cta: { to: '/simulateurs/frais', label: 'Comparer l’effet des frais' },
   },
+  {
+    slug: 'inflation-pouvoir-d-achat-epargne',
+    title: 'Inflation : que devient le pouvoir d’achat de votre épargne ?',
+    summary: 'Ce que l’inflation fait à une somme placée, la différence entre rendement nominal et rendement réel, et comment la calculer.',
+    readingMinutes: 5,
+    updatedOn: '2026-10-28',
+    sections: [
+      {
+        heading: 'Ce que mesure l’inflation',
+        body: [
+          'Selon La finance pour tous, l’inflation est une hausse généralisée et durable des prix des biens et des services. Elle correspond à une baisse du pouvoir d’achat de la monnaie : avec la même somme, on peut acheter moins de choses qu’auparavant.',
+          'Une épargne dont la valeur affichée ne bouge pas perd donc de sa valeur réelle tant que les prix montent : c’est l’érosion monétaire.',
+        ],
+      },
+      {
+        heading: 'Rendement nominal et rendement réel',
+        body: [
+          'Le rendement nominal est celui que vous voyez affiché. Le rendement réel le corrige de l’inflation : on le calcule par (1 + rendement nominal) ÷ (1 + inflation) − 1. La finance pour tous résume l’idée en parlant d’un taux d’intérêt diminué de l’inflation ; la formule exacte divise au lieu de soustraire, l’écart étant faible quand les taux sont bas.',
+          'Si le rendement réel est positif, votre pouvoir d’achat augmente ; s’il est négatif, il baisse, même si le montant affiché grossit.',
+        ],
+      },
+      {
+        heading: 'Un exemple fictif chiffré',
+        body: [
+          'Supposons une inflation de 2 % par an, constante pendant 10 ans. Une somme de 10 000 € laissée telle quelle ne permet plus d’acheter que l’équivalent de 10 000 ÷ 1,02^10 ≈ 8 203 € d’aujourd’hui.',
+          'Placée à 3 % par an, la même somme atteint 10 000 × 1,03^10 ≈ 13 439 €, soit en euros d’aujourd’hui ≈ 11 025 € : le rendement réel est (1,03 ÷ 1,02) − 1 ≈ 0,98 % par an. Exemple fictif, à but pédagogique : ces taux ne sont ni observés ni prévus.',
+        ],
+      },
+      {
+        heading: 'Ce qu’il faut en retenir',
+        body: [
+          'L’inflation varie d’une année à l’autre : une hypothèse constante est une simplification. Comparez toujours un rendement à l’inflation de la même période, et gardez en tête que la sécurité d’un placement et sa disponibilité ont aussi une valeur, notamment pour l’épargne de précaution.',
+          'Les simulateurs « Inflation et pouvoir d’achat » et « Rendement réel de mon placement » calculent ces effets à partir de vos propres hypothèses.',
+        ],
+      },
+    ],
+    related: ['livret-a', 'etf-monde', 'fonds-euros'],
+    sources: [{ label: 'La finance pour tous — L’inflation', url: 'https://www.lafinancepourtous.com/decryptages/politiques-economiques/economie-mondiale/inflation/', official: true }],
+    faq: [
+      { q: 'Comment l’inflation réduit-elle le pouvoir d’achat de l’épargne ?', a: 'Les prix montent de façon générale et durable : avec la même somme, on achète moins de choses qu’avant. Une épargne qui ne progresse pas, ou moins vite que les prix, perd donc de la valeur réelle.' },
+      { q: 'Comment calculer un rendement réel ?', a: 'Avec la formule (1 + rendement nominal) ÷ (1 + inflation) − 1. Exemple fictif : 3 % de rendement et 2 % d’inflation donnent environ 0,98 % de rendement réel.' },
+      { q: 'Un rendement nominal positif garantit-il de ne pas perdre de pouvoir d’achat ?', a: 'Non. Si le rendement nominal est inférieur à l’inflation, le rendement réel est négatif : le montant affiché augmente mais permet d’acheter moins.' },
+    ],
+    cta: { to: '/simulateurs/inflation', label: 'Simuler l’effet de l’inflation' },
+  },
 ];
 
 export const guideBySlug = Object.fromEntries(guides.map((g) => [g.slug, g]));
