@@ -33,6 +33,7 @@ import SimEtalement from './pages/SimEtalement';
 import SimRetraits from './pages/SimRetraits';
 import SimRendement from './pages/SimRendement';
 import SimAttendre from './pages/SimAttendre';
+import SimDoubler from './pages/SimDoubler';
 import Glossaire from './pages/Glossaire';
 import { Confidentialite, MentionsLegales } from './pages/Legal';
 import NotFound from './pages/NotFound';
@@ -174,6 +175,7 @@ export default function App() {
             <Route path="/simulateurs/retraits-reguliers-duree-du-capital" element={<SimRetraits />} />
             <Route path="/simulateurs/rendement-reel-de-mon-placement" element={<SimRendement />} />
             <Route path="/simulateurs/cout-d-attendre-pour-epargner" element={<SimAttendre />} />
+            <Route path="/simulateurs/doubler-son-capital-regle-de-72" element={<SimDoubler />} />
             <Route path="/glossaire" element={<Glossaire />} />
             <Route path="/confidentialite" element={<Confidentialite />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />

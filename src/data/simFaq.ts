@@ -73,6 +73,12 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Que signifie le versement pour rattraper ?', a: 'C’est le versement mensuel constant, à partir de la fin du délai, qui donne à l’arrivée le même capital que si vous aviez commencé tout de suite avec votre versement actuel. C’est un calcul sur vos hypothèses, pas une recommandation.' },
     { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement réel est inconnu et varie ; il est supposé constant et avant frais, impôts et inflation. Les montants par défaut sont fictifs.' },
   ],
+  'doubler-son-capital-regle-de-72': [
+    { q: 'En combien de temps un capital double-t-il ?', a: 'Sans nouveau versement et à rendement annuel constant, la durée exacte vaut ln(2) divisé par ln(1 + rendement). Elle ne dépend pas du capital de départ, seulement du rendement supposé : plus il est élevé, plus le doublement est rapide.' },
+    { q: 'Qu’est-ce que la règle de 72 ?', a: 'C’est une approximation de tête : on divise 72 par le rendement annuel exprimé en pourcentage pour obtenir le nombre d’années nécessaires pour doubler. Le simulateur la compare au calcul exact pour montrer l’écart, faible pour des rendements de quelques pour cent.' },
+    { q: 'Pourquoi tenir compte de l’inflation ?', a: 'Un capital qui double en valeur nominale ne double pas en pouvoir d’achat si les prix augmentent aussi. Le simulateur calcule le rendement réel, (1 + rendement) / (1 + inflation) − 1, et la durée pour multiplier la valeur réelle du capital.' },
+    { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement et l’inflation réels sont inconnus et varient ; ils sont supposés constants, avant frais et impôts. Les montants par défaut sont fictifs.' },
+  ],
   'rendement-reel-de-mon-placement': [
     { q: 'Comment calculer le rendement réel de mon placement si j’ai fait plusieurs versements ?', a: 'Diviser le gain par le total versé ne tient pas compte de la date des versements. Le taux de rendement interne est le taux annuel qui, appliqué à chaque versement pendant la durée où il est resté placé, redonne la valeur actuelle. Le simulateur le calcule à partir du versement initial, du versement mensuel, de la durée et de la valeur actuelle.' },
     { q: 'Quelle différence entre rendement cumulé et rendement annuel équivalent ?', a: 'Le rendement cumulé est le gain rapporté au total versé, sans tenir compte de la durée. Le rendement annuel équivalent le ramène à un taux par an, ce qui permet de comparer des placements détenus pendant des durées différentes.' },
