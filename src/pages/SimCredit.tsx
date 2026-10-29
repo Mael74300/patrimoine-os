@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { amortize, borrowingCapacity, fmtEur, fmtEur2, prepayment } from '../lib/finance';
-import { Crumbs, Disclaimer, Fold, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
+import { creditTakeaway } from '../lib/takeaways';
+import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
 
 type State = {
   principal: number; annualRate: number; years: number; insuranceRate: number;
@@ -68,6 +69,8 @@ export default function SimCredit() {
             <Kpi label="Coût total du crédit" value={fmtEur(res.totalCost)} sub="intérêts + assurance" />
             <Kpi label="Capacité d'emprunt indicative" value={fmtEur(capacity)} sub={`mensualité max. ${fmtEur(maxMonthly)} assurance comprise`} />
           </div>
+
+          <Takeaway>{creditTakeaway({ principal: s.principal, years: s.years, monthlyTotal: res.monthlyPayment + res.monthlyInsurance, totalCost: res.totalCost })}</Takeaway>
 
           <h2>Remboursement anticipé</h2>
           <div className="kpis">

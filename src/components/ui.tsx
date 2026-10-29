@@ -489,6 +489,17 @@ export function SimFaq({ slug }: { slug: string }) {
   );
 }
 
+/** Phrase « Concrètement » sous les résultats : traduit les chiffres en langage courant. Rien n'est affiché si le texte est vide. */
+export function Takeaway({ children }: { children: ReactNode }) {
+  if (!children) return null;
+  return (
+    <p className="takeaway">
+      <strong>Concrètement. </strong>
+      {children}
+    </p>
+  );
+}
+
 /** Bloc repliable (tableau détaillé, précisions) : la page reste courte, le contenu reste dans le HTML. */
 export function Fold({ title, children }: { title: string; children: ReactNode }) {
   return (

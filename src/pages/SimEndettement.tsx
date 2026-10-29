@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { capacityAtHcsf, debtRatio, fmtEur, fmtPct, HCSF } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, Sources, usePersistentState } from '../components/ui';
+import { debtRatioTakeaway } from '../lib/takeaways';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, Sources, usePersistentState } from '../components/ui';
 
 type State = { income: number; existingPayments: number; newPayment: number; livingCosts: number; householdSize: number; rate: number; years: number; insuranceRate: number };
 
@@ -47,6 +48,7 @@ export default function SimEndettement() {
             <Kpi label="Reste à vivre par mois" value={fmtEur(r.remainingAfter)} sub={`soit ${fmtEur(r.remainingPerPerson)} par personne`} tone={r.remainingAfter < 0 ? 'neg' : undefined} />
             <Kpi label={`Mensualité maximale à ${pct}`} value={fmtEur(r.maxNewPayment)} sub={`taux actuel hors projet : ${fmtPct(r.ratioBefore)}`} />
           </div>
+          <Takeaway>{debtRatioTakeaway({ income: s.income, ratioAfter: r.ratioAfter, remainingAfter: r.remainingAfter, withinRef: r.withinHcsf, refLabel: pct })}</Takeaway>
           <h2>Repères</h2>
           <div className="table-wrap">
             <table>

@@ -64,6 +64,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-29 : l'accueil n'orientait pas selon la situation du visiteur (débutant, épargnant, futur acheteur, retraite) ; bloc « Par où commencer ? » ajouté (voir « Fait »). Les familles sans icône ni illustration restent à traiter (chantier Illustrations).
 - 2026-10-29 : les 31 simulateurs se recoupent encore (chantiers 1 et 2).
 - 2026-10-29 : le guide « investir à crédit » parle d'intérêts et de capital remboursé sans le montrer (futur acheteur : notion abstraite) ; schéma « que contient une mensualité » ajouté (voir « Fait »). Restent sans schéma : diversification, inflation, effet de levier.
+- 2026-10-29 : les résultats des simulateurs ne sont que des chiffres bruts (débutant : « 92 854 € d'intérêts », et alors ?) ; phrase « Concrètement » ajoutée sous les résultats du crédit, du taux d'endettement et du rendement réel (voir « Fait »). Restent les autres simulateurs.
 - 2026-10-29 : le script unique de 576 ko (166 ko compressé) pénalisait chaque première visite, surtout sur mobile ; chargement différé par page ajouté (voir « Fait »).
 
 ## À faire
@@ -76,7 +77,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 6. [ ] **Accessibilité.** Audit des pages principales : contrastes, ordre de tabulation, focus visible, libellés des champs, alternative textuelle ou tableau pour chaque graphique, annonces des résultats aux lecteurs d'écran. Corriger, puis ajouter un test automatisé qui empêche les régressions.
 7. [ ] **Relecture éditoriale d'ensemble.** Repérer les doublons et contradictions entre guides, fiches et simulateurs (par exemple le guide et le simulateur sur la règle de 72), harmoniser le vocabulaire et les liens, raccourcir ce qui se répète.
 8. [ ] **Identité visuelle (propriétaire).** Revoir l'esthétique d'ensemble : palette, typographie (polices système), échelle d'espacements, cartes, boutons, en-tête, pied de page, graphiques. Une refonte cohérente par petites étapes, page par page, en gardant les contrastes accessibles. Captures avant et après dans chaque pull request.
-9. [ ] **Vulgarisation (propriétaire).** Réécrire en langage simple, page par page en commençant par les plus visitées (accueil, simulateurs principaux, guides d'entrée) : phrases courtes, jargon expliqué, exemple concret, phrase de synthèse sous chaque résultat de simulateur. Sans changer aucun chiffre ni règle.
+9. [~] **Vulgarisation (propriétaire).** (étape 1 faite le 2026-10-29) Réécrire en langage simple, page par page en commençant par les plus visitées (accueil, simulateurs principaux, guides d'entrée) : phrases courtes, jargon expliqué, exemple concret, phrase de synthèse sous chaque résultat de simulateur. Sans changer aucun chiffre ni règle.
 10. [ ] **Illustrations maison (propriétaire).** Des images créées par la tâche elle-même, en SVG écrit à la main, pour rendre le site plus agréable et plus facile à comprendre :
    - **schémas explicatifs** qui vulgarisent une notion (intérêts composés, amortissement d'un crédit, effet de levier, diversification, inflation) : priorité, car ils aident à comprendre ;
    - **icônes** cohérentes pour les thèmes de simulateurs et les familles d'investissement ;
@@ -88,6 +89,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [~] **Vulgarisation, étape 1** (2026-10-29) : composant `Takeaway` et phrases « Concrètement » (`src/lib/takeaways.ts`, testées) sous les résultats des simulateurs crédit, taux d'endettement et rendement réel : elles reformulent les chiffres calculés, sans aucun chiffre nouveau. Hauteur du crédit à 1280 px : 2 478 px ; à 375 px : 4 603 px (+ environ 170 px). Reste : les autres simulateurs (immobilier, indépendance, précaution, patrimoine…), puis les guides.
 
 - [~] **Illustrations maison, étape 2** (2026-10-29) : schéma « que contient une mensualité » (`SchemaMensualite`) dans le guide « investir à crédit » : à total annuel constant, part d'intérêts et part de capital aux années 1, 10 et 20 de l'exemple fictif du guide (180 000 € à 3,5 % sur 20 ans), chiffres calculés par `amortize` et testés. Hauteur du guide : 375 px 3 640 → 4 094 px ; 1280 px 2 391 → 2 855 px. Reste : diversification, inflation, effet de levier ; icônes des thèmes ; en-têtes.
 
