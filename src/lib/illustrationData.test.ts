@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loanSlices, snowballGroups } from './illustrationData';
+import { inflationBars, loanSlices, snowballGroups } from './illustrationData';
 
 describe('schéma intérêts simples ou composés', () => {
   it('retrouve les chiffres du guide (10 000 € à 5 %)', () => {
@@ -26,5 +26,15 @@ describe('schéma « que contient une mensualité »', () => {
     for (const s of slices) expect(s.total).toBeCloseTo(monthly * 12, 6);
     expect(slices[0].interest).toBeGreaterThan(slices[1].interest);
     expect(slices[1].interest).toBeGreaterThan(slices[2].interest);
+  });
+});
+
+describe('schéma inflation', () => {
+  it('retrouve les chiffres du guide (10 000 €, 2 % d’inflation, 3 % de rendement, 10 ans)', () => {
+    const [idle, placed] = inflationBars();
+    expect(Math.round(idle.shown)).toBe(10000);
+    expect(Math.round(idle.real)).toBe(8203);
+    expect(Math.round(placed.shown)).toBe(13439);
+    expect(Math.round(placed.real)).toBe(11025);
   });
 });
