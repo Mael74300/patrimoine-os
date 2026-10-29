@@ -21,7 +21,7 @@ export default function SimSimpleComposes() {
       </PageHead>
       <p className="notice" role="note">
         Calcul fondé uniquement sur les hypothèses que vous saisissez, sans chiffre réglementaire ni prévision. Le taux est supposé constant, avant frais et impôts.
-        Voir aussi le simulateur de <Link to="/simulateurs/patrimoine">patrimoine à long terme</Link> et la règle de <Link to="/simulateurs/doubler-son-capital-regle-de-72">doublement du capital</Link>.
+        Voir aussi le simulateur de <Link to="/simulateurs/patrimoine">patrimoine à long terme</Link> et la règle de <Link to="/simulateurs/interets-composes#doubler">doublement du capital</Link>.
       </p>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>

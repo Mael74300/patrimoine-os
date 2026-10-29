@@ -629,7 +629,7 @@ export const guides: Guide[] = [
       { q: 'La règle de 72 est-elle exacte ?', a: 'Non, c’est une approximation. Le calcul exact est ln 2 ÷ ln (1 + taux) ; l’écart reste faible pour des taux modérés.' },
       { q: 'La règle de 72 tient-elle compte des frais et de l’inflation ?', a: 'Non. Utilisez un rendement net de frais et, pour le pouvoir d’achat, un rendement réel corrigé de l’inflation.' },
     ],
-    cta: { to: '/simulateurs/doubler-son-capital-regle-de-72', label: 'Simuler le doublement d’un capital' },
+    cta: { to: '/simulateurs/interets-composes#doubler', label: 'Simuler le doublement d’un capital' },
   },
   {
     slug: 'livret-a-calcul-interets-quinzaines',

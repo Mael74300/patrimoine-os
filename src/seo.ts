@@ -4,8 +4,9 @@ import { glossary } from './data/glossary';
 import { guides } from './data/guides';
 import { investments, VERIFIED_ON } from './data/investments';
 import { simulators } from './lib/search';
+import { movedSims } from './lib/movedSims';
 
-export type PageMeta = { path: string; title: string; description: string; jsonLd?: object[]; noindex?: boolean };
+export type PageMeta = { path: string; title: string; description: string; jsonLd?: object[]; noindex?: boolean; canonicalPath?: string };
 
 const SITE = 'Patrimoine OS';
 /** Premier titre qui tient en 70 caractères (au-delà, les moteurs le tronquent). */
@@ -67,6 +68,16 @@ export function pagesMeta(siteUrl: string): PageMeta[] {
         crumbs(siteUrl, [['Accueil', '/'], ['Simulateurs', '/simulateurs/'], [s.title, `/simulateurs/${s.slug}/`]]),
         ...(simFaq[s.slug]?.length ? [{ '@context': 'https://schema.org', '@type': 'FAQPage', inLanguage: 'fr-FR', mainEntity: simFaq[s.slug].map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }] : []),
       ],
+    });
+  }
+  // Anciennes adresses : page de renvoi hors index, canonique vers la page qui regroupe le calcul.
+  for (const m of movedSims) {
+    pages.push({
+      path: `/simulateurs/${m.slug}/`,
+      title: `${m.title} : simulateur déplacé | ${SITE}`,
+      description: `Ce calcul fait maintenant partie du simulateur « Intérêts composés » de ${SITE}.`,
+      noindex: true,
+      canonicalPath: `${m.to}/`,
     });
   }
   for (const i of investments) {

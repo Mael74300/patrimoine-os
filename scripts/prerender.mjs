@@ -40,7 +40,8 @@ function page(meta, html, { noindex = false, path = '' } = {}) {
   const head = [
     `<title>${esc(meta.title)}</title>`,
     `<meta name="description" content="${esc(meta.description)}" />`,
-    noindex ? '<meta name="robots" content="noindex" />' : `<link rel="canonical" href="${esc(url)}" />`,
+    noindex ? '<meta name="robots" content="noindex" />' : '',
+    !noindex || meta.canonicalPath ? `<link rel="canonical" href="${esc(meta.canonicalPath ? siteUrl + meta.canonicalPath : url)}" />` : '',
     '<meta property="og:type" content="website" />',
     '<meta property="og:locale" content="fr_FR" />',
     '<meta property="og:site_name" content="Patrimoine OS" />',
