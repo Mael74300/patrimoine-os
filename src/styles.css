@@ -230,6 +230,9 @@ td.neg { color: var(--danger); }
 .faq summary:focus-visible, details.fold > summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 .faq details > p { margin: 0; padding: 0 14px 14px; }
 details.fold > .table-wrap { margin: 0 8px 8px; }
+.fold-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); column-gap: 16px; align-items: start; }
+details.fold > .fold-form { padding: 4px 14px 6px; }
+.panel.fold-form { margin-bottom: 20px; }
 
 .situations { list-style: none; padding: 0; margin: 8px 0 8px; display: grid; gap: 12px; grid-template-columns: repeat(4, 1fr); }
 .situations a { display: block; height: 100%; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); text-decoration: none; color: inherit; }
