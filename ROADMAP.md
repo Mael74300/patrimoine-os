@@ -58,7 +58,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (31, chantiers 1 et 2).
 - 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public ; ajouter des images créées par la tâche elle-même.
-- 2026-10-29 : les résultats des simulateurs ne sont que des chiffres bruts (débutant : « 92 854 € d'intérêts », et alors ?). Phrase « Concrètement » ajoutée sous les résultats de 9 simulateurs : crédit, endettement, rendement, objectif d'épargne, louer ou acheter, indépendance financière, retraits, précaution, rembourser ou investir (voir « Fait »). Restent les autres simulateurs (immobilier, patrimoine, entreprise…).
+- 2026-10-29 : les résultats des simulateurs ne sont que des chiffres bruts (débutant : « 92 854 € d'intérêts », et alors ?). Phrase « Concrètement » ajoutée sous les résultats de 9 simulateurs : crédit, endettement, rendement, objectif d'épargne, louer ou acheter, indépendance financière, retraits, précaution, rembourser ou investir (voir « Fait »). Immobilier locatif ajouté ensuite (voir « Fait ») ; restent patrimoine, entreprise et les simulateurs à onglets.
 - 2026-10-29 : schémas SVG ajoutés aux guides intérêts composés, investir à crédit, inflation et diversification (voir « Fait ») ; effet de levier ajouté ensuite. Familles d'investissement de l'accueil dotées d'icônes (voir « Fait ») ; restent les thèmes de simulateurs et les en-têtes. Schéma « effet de levier » ajouté au guide « investir à crédit » (voir « Fait ») : les quatre schémas prévus existent.
 - 2026-10-29 : pages de simulateur longues sur mobile (FAQ et tableaux annuels) ; repliés pour le crédit et l'immobilier ; la mensualité du crédit remontée. Restent les simulateurs à formulaire long (entreprise, indépendance, patrimoine).
 - 2026-10-29 : sur mobile, graphiques et résumé « En bref » des fiches illisibles ou trop bas ; corrigés (voir « Fait »). Catalogue de l'encyclopédie regroupé par famille (6 160 → 5 813 px à 375 px).
@@ -77,7 +77,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 6. [~] **Accessibilité** (étape 1 faite le 2026-10-29 : contrastes, tableaux, en-têtes, test automatisé). Étape 2 faite le 2026-10-29 (graphiques). Étape suivante : annonces des résultats aux lecteurs d'écran, libellés des champs, ordre de tabulation.
 7. [ ] **Relecture éditoriale d'ensemble.** Repérer les doublons et contradictions entre guides, fiches et simulateurs (par exemple le guide et le simulateur sur la règle de 72), harmoniser le vocabulaire et les liens, raccourcir ce qui se répète.
 8. [ ] **Identité visuelle (propriétaire).** Revoir l'esthétique d'ensemble : palette, typographie (polices système), échelle d'espacements, cartes, boutons, en-tête, pied de page, graphiques. Une refonte cohérente par petites étapes, page par page, en gardant les contrastes accessibles. Captures avant et après dans chaque pull request.
-9. [~] **Vulgarisation (propriétaire).** (étapes 1 à 3 faites le 2026-10-29 : 9 simulateurs) Réécrire en langage simple, page par page en commençant par les plus visitées (accueil, simulateurs principaux, guides d'entrée) : phrases courtes, jargon expliqué, exemple concret, phrase de synthèse sous chaque résultat de simulateur. Sans changer aucun chiffre ni règle.
+9. [~] **Vulgarisation (propriétaire).** (étapes 1 à 4 faites le 2026-10-29 : 10 simulateurs) Réécrire en langage simple, page par page en commençant par les plus visitées (accueil, simulateurs principaux, guides d'entrée) : phrases courtes, jargon expliqué, exemple concret, phrase de synthèse sous chaque résultat de simulateur. Sans changer aucun chiffre ni règle.
 10. [ ] **Illustrations maison (propriétaire).** Des images créées par la tâche elle-même, en SVG écrit à la main, pour rendre le site plus agréable et plus facile à comprendre :
    - **schémas explicatifs** qui vulgarisent une notion (intérêts composés, amortissement d'un crédit, effet de levier, diversification, inflation) : priorité, car ils aident à comprendre ;
    - **icônes** cohérentes pour les thèmes de simulateurs et les familles d'investissement ;
@@ -88,6 +88,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [~] **Vulgarisation, étape 4** (2026-10-29) : phrase « Concrètement » (`rentalTakeaway`, testée contre `rentalAnalysis` et `rentalProjection`) sous les résultats du calculateur immobilier locatif : rendement net, flux mensuel avant et après impôt (« il faut sortir X € de votre poche »), patrimoine à l'horizon avec mise en garde sur les hypothèses ; aucun chiffre réglementaire ni nouveau. Hauteur à 375 px : 6 819 → 7 224 px ; à 1280 px : 3 053 → 3 246 px. Reste : patrimoine, entreprise, simulateurs à onglets, puis les guides.
 
 - [~] **Alléger les pages de simulateur, étape 3** (2026-10-29) : tableaux annuels des simulateurs patrimoine et entreprise repliés (`Fold`), notes de conventions incluses ; aucun chiffre ni texte réglementaire modifié. Hauteur à 375 px : patrimoine 5 656 → 4 291 px, entreprise 5 573 → 5 185 px ; à 1280 px : 3 459 → 2 164 px et 2 809 → 2 466 px.
 

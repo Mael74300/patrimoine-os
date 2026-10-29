@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ADVERSE, adverseScenario, amortize, fmtEur, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, type TaxRegime } from '../lib/finance';
-import { Crumbs, Disclaimer, Fold, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
+import { rentalTakeaway } from '../lib/takeaways';
+import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
 
 export const RENTAL_DEFAULTS: RentalInput = {
   price: 150000, notaryRate: 0.08, works: 10000, furniture: 0,
@@ -109,6 +110,7 @@ export default function SimImmobilier() {
             <Kpi label={`Capital restant dû à ${s.horizon} ans`} value={fmtEur(end?.remaining ?? 0)} />
             <Kpi label={`Patrimoine net immobilier estimé à ${s.horizon} ans`} value={fmtEur(end?.netEquity ?? 0)} sub="valeur estimée − capital restant dû" />
           </div>
+          <Takeaway>{rentalTakeaway({ totalCost: r.totalCost, netYield: r.netYield, monthlyCashflow: r.monthlyCashflow, monthlyCashflowAfterTax: s.regime === 'aucune' || !y1 ? null : y1.cashflowAfterTax / 12, horizon: s.horizon, netEquity: end?.netEquity ?? 0 })}</Takeaway>
           {s.regime === 'micro-foncier' && r.annualRentCollected > 15000 && (
             <p className="notice small">Avec plus de 15 000 € de revenus fonciers bruts par an, le micro-foncier n'est pas applicable : choisissez le régime réel.</p>
           )}
