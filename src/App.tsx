@@ -1,52 +1,9 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { config } from './config';
 import { trackPageview } from './lib/analytics';
 import { AS_OF } from './data/investments';
-import Home from './pages/Home';
-import Encyclopedia from './pages/Encyclopedia';
-import InvestmentPage from './pages/InvestmentPage';
-import Compare from './pages/Compare';
-import Simulators from './pages/Simulators';
-import SimPatrimoine from './pages/SimPatrimoine';
-import SimImmobilier from './pages/SimImmobilier';
-import SimCredit from './pages/SimCredit';
-import SimPortefeuille from './pages/SimPortefeuille';
-import Entrepreneuriat from './pages/Entrepreneuriat';
-import { GuideList, GuidePage } from './pages/Guides';
-import Methodologie from './pages/Methodologie';
-import SearchPage from './pages/SearchPage';
-import SimEtfImmobilier from './pages/SimEtfImmobilier';
-import SimEntreprise from './pages/SimEntreprise';
-import SimIndependance from './pages/SimIndependance';
-import SimPrecaution from './pages/SimPrecaution';
-import SimBudget from './pages/SimBudget';
-import SimFrais from './pages/SimFrais';
-import SimRembourser from './pages/SimRembourser';
-import SimInflation from './pages/SimInflation';
-import SimEndettement from './pages/SimEndettement';
-import SimObjectif from './pages/SimObjectif';
-import SimTaeg from './pages/SimTaeg';
-import SimLouerAcheter from './pages/SimLouerAcheter';
-import SimDettes from './pages/SimDettes';
-import SimEtalement from './pages/SimEtalement';
-import SimRetraits from './pages/SimRetraits';
-import SimRendement from './pages/SimRendement';
-import SimAttendre from './pages/SimAttendre';
-import SimDoubler from './pages/SimDoubler';
-import SimProgressif from './pages/SimProgressif';
-import SimSimpleComposes from './pages/SimSimpleComposes';
-import SimRenegociation from './pages/SimRenegociation';
-import SimDuree from './pages/SimDuree';
-import SimTaux from './pages/SimTaux';
-import SimDureeCredit from './pages/SimDureeCredit';
-import SimInFine from './pages/SimInFine';
-import SimRendementRequis from './pages/SimRendementRequis';
-import SimCapitalAPlacer from './pages/SimCapitalAPlacer';
-import Glossaire from './pages/Glossaire';
-import PlanDuSite from './pages/PlanDuSite';
-import { Confidentialite, MentionsLegales } from './pages/Legal';
-import NotFound from './pages/NotFound';
+import { ROUTES } from './routes';
 
 const NAV = [
   { to: '/encyclopedie', label: 'Encyclopédie' },
@@ -158,54 +115,11 @@ export default function App() {
       <Header />
       <main id="contenu" tabIndex={-1}>
         <div className="container">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/recherche" element={<SearchPage />} />
-            <Route path="/encyclopedie" element={<Encyclopedia />} />
-            <Route path="/encyclopedie/:slug" element={<InvestmentPage />} />
-            <Route path="/comparateur" element={<Compare />} />
-            <Route path="/simulateurs" element={<Simulators />} />
-            <Route path="/simulateurs/patrimoine" element={<SimPatrimoine />} />
-            <Route path="/simulateurs/immobilier" element={<SimImmobilier />} />
-            <Route path="/simulateurs/credit" element={<SimCredit />} />
-            <Route path="/simulateurs/portefeuille" element={<SimPortefeuille />} />
-            <Route path="/simulateurs/etf-immobilier" element={<SimEtfImmobilier />} />
-            <Route path="/simulateurs/entreprise" element={<SimEntreprise />} />
-            <Route path="/simulateurs/independance-financiere" element={<SimIndependance />} />
-            <Route path="/simulateurs/epargne-de-precaution" element={<SimPrecaution />} />
-            <Route path="/simulateurs/budget" element={<SimBudget />} />
-            <Route path="/simulateurs/frais" element={<SimFrais />} />
-            <Route path="/simulateurs/rembourser-ou-investir" element={<SimRembourser />} />
-            <Route path="/simulateurs/inflation" element={<SimInflation />} />
-            <Route path="/simulateurs/endettement" element={<SimEndettement />} />
-            <Route path="/simulateurs/objectif-epargne" element={<SimObjectif />} />
-            <Route path="/simulateurs/taeg" element={<SimTaeg />} />
-            <Route path="/simulateurs/louer-ou-acheter" element={<SimLouerAcheter />} />
-            <Route path="/simulateurs/dettes" element={<SimDettes />} />
-            <Route path="/simulateurs/investir-d-un-coup-ou-progressivement" element={<SimEtalement />} />
-            <Route path="/simulateurs/retraits-reguliers-duree-du-capital" element={<SimRetraits />} />
-            <Route path="/simulateurs/rendement-reel-de-mon-placement" element={<SimRendement />} />
-            <Route path="/simulateurs/cout-d-attendre-pour-epargner" element={<SimAttendre />} />
-            <Route path="/simulateurs/doubler-son-capital-regle-de-72" element={<SimDoubler />} />
-            <Route path="/simulateurs/augmenter-son-epargne-chaque-annee" element={<SimProgressif />} />
-            <Route path="/simulateurs/interets-simples-ou-composes" element={<SimSimpleComposes />} />
-            <Route path="/simulateurs/renegocier-son-credit-gain-et-point-mort" element={<SimRenegociation />} />
-            <Route path="/simulateurs/duree-pour-atteindre-un-capital" element={<SimDuree />} />
-            <Route path="/simulateurs/convertir-un-taux-annuel-en-taux-mensuel" element={<SimTaux />} />
-            <Route path="/simulateurs/duree-du-credit-mensualite-et-cout-total" element={<SimDureeCredit />} />
-            <Route path="/simulateurs/credit-in-fine-ou-amortissable" element={<SimInFine />} />
-            <Route path="/simulateurs/rendement-necessaire-pour-atteindre-un-objectif" element={<SimRendementRequis />} />
-            <Route path="/simulateurs/capital-a-placer-aujourd-hui" element={<SimCapitalAPlacer />} />
-            <Route path="/glossaire" element={<Glossaire />} />
-            <Route path="/plan-du-site" element={<PlanDuSite />} />
-            <Route path="/confidentialite" element={<Confidentialite />} />
-            <Route path="/mentions-legales" element={<MentionsLegales />} />
-            <Route path="/entrepreneuriat" element={<Entrepreneuriat />} />
-            <Route path="/guides" element={<GuideList />} />
-            <Route path="/guides/:slug" element={<GuidePage />} />
-            <Route path="/methodologie" element={<Methodologie />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <Suspense fallback={<p className="small" role="status">Chargement…</p>}>
+            <Routes>
+              {ROUTES.map(({ path, Component }) => <Route key={path} path={path} element={<Component />} />)}
+            </Routes>
+          </Suspense>
         </div>
       </main>
       <Footer />
