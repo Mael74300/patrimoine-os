@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { snowballGroups } from './illustrationData';
+import { loanSlices, snowballGroups } from './illustrationData';
 
 describe('schéma intérêts simples ou composés', () => {
   it('retrouve les chiffres du guide (10 000 € à 5 %)', () => {
@@ -9,5 +9,22 @@ describe('schéma intérêts simples ou composés', () => {
     expect(Math.round(d10.simple.total)).toBe(15000);
     expect(Math.round(d20.simple.total)).toBe(20000);
     expect(Math.round(d20.compound.interest)).toBe(16533);
+  });
+});
+
+describe('schéma « que contient une mensualité »', () => {
+  it('retrouve les chiffres du guide (180 000 € à 3,5 % sur 20 ans)', () => {
+    const { monthly, slices } = loanSlices();
+    expect(Math.round(monthly)).toBe(1044);
+    expect(Math.round(slices[0].interest)).toBe(6199); // « environ 6 200 € » dans le guide
+    expect(Math.round(slices[0].principal)).toBe(6328);
+    expect(Math.round(slices[1].interest)).toBe(3860);
+    expect(Math.round(slices[2].interest)).toBe(234);
+  });
+  it('garde un total annuel constant : seule la répartition change', () => {
+    const { monthly, slices } = loanSlices();
+    for (const s of slices) expect(s.total).toBeCloseTo(monthly * 12, 6);
+    expect(slices[0].interest).toBeGreaterThan(slices[1].interest);
+    expect(slices[1].interest).toBeGreaterThan(slices[2].interest);
   });
 });

@@ -1,5 +1,5 @@
 import { fmtEur } from '../lib/finance';
-import { SNOWBALL_EXAMPLE, snowballGroups, type SnowballBar } from '../lib/illustrationData';
+import { LOAN_EXAMPLE, SNOWBALL_EXAMPLE, loanSlices, snowballGroups, type SnowballBar } from '../lib/illustrationData';
 
 const W = 420;
 const BASE = 262;
@@ -57,6 +57,55 @@ export function SchemaInterets() {
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : {fmtEur(initial)} placés à {annualRate * 100} % par an, sans nouveau versement, avant frais et impôts.
         Avec des intérêts simples, on touche chaque année la même somme. Avec des intérêts composés, les intérêts déjà gagnés rapportent à leur tour : l’écart s’agrandit avec la durée.
+      </figcaption>
+    </figure>
+  );
+}
+
+/** Schéma « que contient une mensualité » : à total constant, la part d'intérêts diminue et la part de capital augmente. */
+export function SchemaMensualite() {
+  const { monthly, slices } = loanSlices();
+  const { principal, annualRate, years } = LOAN_EXAMPLE;
+  const ratePct = String(Math.round(annualRate * 1000) / 10).replace('.', ',');
+  const BASE_Y = 250;
+  const TOP_Y = 52;
+  const BW = 78;
+  const scale = (BASE_Y - TOP_Y) / (monthly * 12);
+  const alt = slices
+    .map((s) => `Année ${s.year} : ${fmtEur(s.interest)} d’intérêts et ${fmtEur(s.principal)} de capital remboursé.`)
+    .join(' ');
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 320" role="img" aria-labelledby="ill-loan-t ill-loan-d" className="ill-svg">
+        <title id="ill-loan-t">Dans une mensualité fixe, la part d’intérêts diminue et la part de capital augmente</title>
+        <desc id="ill-loan-d">{`Crédit de ${fmtEur(principal)} à ${ratePct} % sur ${years} ans, mensualité de ${fmtEur(monthly)} hors assurance, soit ${fmtEur(monthly * 12)} par an. ${alt}`}</desc>
+        <line x1={20} x2={400} y1={BASE_Y} y2={BASE_Y} stroke="var(--line)" strokeWidth={2} />
+        {slices.map((s, i) => {
+          const cx = 80 + i * 130;
+          const x = cx - BW / 2;
+          const hi = s.interest * scale;
+          const hp = s.principal * scale;
+          return (
+            <g key={s.year}>
+              <rect x={x} y={BASE_Y - hp} width={BW} height={hp} rx={4} fill="var(--primary)" />
+              <rect x={x} y={BASE_Y - hp - hi} width={BW} height={hi} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+              <text x={cx} y={TOP_Y - 10} textAnchor="middle" className="ill-total">{fmtEur(s.total)}</text>
+              <text x={cx} y={BASE_Y - hp - hi / 2 + 4} textAnchor="middle" className="ill-in" style={hi < 18 ? { display: 'none' } : undefined}>{fmtEur(s.interest)}</text>
+              <text x={cx} y={BASE_Y - hp / 2 + 4} textAnchor="middle" className="ill-in ill-on-dark">{fmtEur(s.principal)}</text>
+              <text x={cx} y={BASE_Y + 20} textAnchor="middle" className="ill-year">{`Année ${s.year}`}</text>
+            </g>
+          );
+        })}
+        <g transform="translate(24 288)">
+          <rect width={14} height={14} rx={3} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+          <text x={22} y={12} className="ill-sub" textAnchor="start">Intérêts (le prix du crédit)</text>
+          <rect x={200} width={14} height={14} rx={3} fill="var(--primary)" />
+          <text x={222} y={12} className="ill-sub" textAnchor="start">Capital remboursé</text>
+        </g>
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : {fmtEur(principal)} empruntés à {ratePct} % sur {years} ans, hors assurance, soit {fmtEur(monthly)} par mois.
+        Chaque année, on rembourse la même somme ({fmtEur(monthly * 12)}), mais au début elle sert surtout à payer les intérêts. Le capital emprunté diminue peu au départ, puis de plus en plus vite.
       </figcaption>
     </figure>
   );

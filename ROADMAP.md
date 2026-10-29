@@ -63,6 +63,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-29 : pages de simulateur très longues sur mobile (crédit 5 922 px, immobilier 8 537 px) à cause de la FAQ et des tableaux annuels toujours dépliés ; FAQ et tableaux de crédit et d'immobilier repliés (voir « Fait »). Restent les autres tableaux (entreprise…).
 - 2026-10-29 : l'accueil n'orientait pas selon la situation du visiteur (débutant, épargnant, futur acheteur, retraite) ; bloc « Par où commencer ? » ajouté (voir « Fait »). Les familles sans icône ni illustration restent à traiter (chantier Illustrations).
 - 2026-10-29 : les 31 simulateurs se recoupent encore (chantiers 1 et 2).
+- 2026-10-29 : le guide « investir à crédit » parle d'intérêts et de capital remboursé sans le montrer (futur acheteur : notion abstraite) ; schéma « que contient une mensualité » ajouté (voir « Fait »). Restent sans schéma : diversification, inflation, effet de levier.
 - 2026-10-29 : le script unique de 576 ko (166 ko compressé) pénalisait chaque première visite, surtout sur mobile ; chargement différé par page ajouté (voir « Fait »).
 
 ## À faire
@@ -87,6 +88,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [~] **Illustrations maison, étape 2** (2026-10-29) : schéma « que contient une mensualité » (`SchemaMensualite`) dans le guide « investir à crédit » : à total annuel constant, part d'intérêts et part de capital aux années 1, 10 et 20 de l'exemple fictif du guide (180 000 € à 3,5 % sur 20 ans), chiffres calculés par `amortize` et testés. Hauteur du guide : 375 px 3 640 → 4 094 px ; 1280 px 2 391 → 2 855 px. Reste : diversification, inflation, effet de levier ; icônes des thèmes ; en-têtes.
 
 - [x] **Chargement différé des pages** (2026-10-29) : une page = un fichier JavaScript (`src/routes.tsx`) ; le pré-rendu embarque toutes les pages, le navigateur charge celle de l'adresse avant l'hydratation. JavaScript chargé sur la page crédit : 576 → 295 ko (166 → 96 ko compressé) ; accueil : 576 → 357 ko (166 → 116 ko compressé). Hauteurs de page inchangées.
 
