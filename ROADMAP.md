@@ -68,6 +68,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-29 : sur mobile, les graphiques étaient réduits à un tiers de leur taille : légendes d'axes d'environ 5 px, illisibles (tous visiteurs, 13 pages) ; dessin désormais à la largeur réelle (voir « Fait »).
 - 2026-10-29 : le guide « inflation » expliquait en texte seul pourquoi un montant qui grossit peut acheter moins (épargnant : notion abstraite) ; schéma ajouté (voir « Fait »).
 - 2026-10-29 : sur mobile, le résumé « En bref » d'une fiche (risque, liquidité, horizon, capital) n'apparaissait qu'après 4 000 px de texte (épargnant : impossible de juger vite) ; résumé remonté sous le titre, données et hypothèses repliées (voir « Fait »).
+- 2026-10-29 : audit automatisé de 87 pages à 375 px (libellés, noms de liens, titres, débordement) : aucune anomalie. Sur mobile, le catalogue des simulateurs faisait 6 023 px et ses liens de thèmes, de simples liens dans une phrase, étaient trop petits à toucher ; thèmes en boutons de 44 px avec compteur, descriptions limitées à deux lignes (voir « Fait »). Le catalogue de l'encyclopédie (6 160 px) reste à alléger.
 - 2026-10-29 : sur mobile, la mensualité du simulateur de crédit n'apparaissait qu'après environ 1 565 px de formulaire ; réglages avancés déplacés près des résultats (voir « Fait »). Les autres simulateurs à formulaire long restent à examiner.
 
 ## À faire
@@ -91,6 +92,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [~] **Catalogue des simulateurs sur mobile** (2026-10-29) : thèmes en boutons d'au moins 44 px de haut avec nombre de simulateurs, descriptions limitées à deux lignes et rangées resserrées sous 600 px. Hauteur de `/simulateurs/` : 375 px 6 023 → 5 170 px ; 1280 px 3 882 → 3 955 px. Reste : catalogue de l'encyclopédie.
 
 - [x] **Fiches : résumé en haut sur mobile** (2026-10-29) : le bloc « En bref » est affiché sous le titre sous 900 px (colonne latérale masquée), avec les boutons Comparer et Simuler ; « Données utilisées » et « Hypothèses » repliées (`Fold`). Hauteur de la fiche PEA : 375 px 4 575 → 4 123 px ; 1280 px 2 936 → 2 757 px.
 
