@@ -65,7 +65,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-29 : audit d'accessibilité automatisé (87 pages) : contrastes, tableaux au clavier, en-têtes corrigés ; alternative textuelle des graphiques ajoutée (voir « Fait ») ; restent les annonces des résultats aux lecteurs d'écran.
 - 2026-10-29 : 4 simulateurs d'intérêts composés réunis en une page à onglets, puis 4 simulateurs de crédit (durée, TAEG, in fine, renégociation) en une page « Comparer des crédits » (31 → 25 simulateurs) ; restent 5 simulateurs de la famille des intérêts composés (chantier 1).
 - 2026-10-29 : débutant sur la page Guides : 19 guides en liste plate, sans ordre de lecture ; regroupés en quatre parcours, et « Autres guides » ne propose plus toujours les trois mêmes (voir « Fait »).
-- 2026-10-29 : audit automatisé à 375 px : aucun débordement horizontal, aucune erreur de console. Simulateurs patrimoine (5 656 px) et entreprise (5 573 px) : tableau annuel de 25 lignes ouvert, résultats loin sous un formulaire long ; tableaux repliés (voir « Fait »), formulaires restent à raccourcir.
+- 2026-10-29 : audit automatisé des 81 pages du plan du site, à 375 et 1280 px : aucune erreur de console ; un seul débordement horizontal (simulateur de portefeuille à 375 px, 1 000 px de large), corrigé (voir « Fait »). Simulateurs patrimoine (5 656 px) et entreprise (5 573 px) : tableau annuel de 25 lignes ouvert, résultats loin sous un formulaire long ; tableaux repliés (voir « Fait »), formulaires restent à raccourcir.
 
 ## À faire
 
@@ -88,6 +88,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [x] **Bogue : débordement horizontal du simulateur de portefeuille sur mobile** (2026-10-29) : le texte réservé aux lecteurs d'écran (`.sr-only`, position absolue) ajouté dans les en-têtes vides du tableau défilant échappait à son cadre et élargissait la page à 1 000 px à 375 px ; `.table-wrap` devient `position: relative`, avec un test. Audit des 81 pages à 375 et 1280 px : plus aucun débordement ni erreur de console. Hauteurs inchangées (portefeuille 3 543 px à 375 px).
 
 - [~] **Vulgarisation, étape 4** (2026-10-29) : phrase « Concrètement » (`rentalTakeaway`, testée contre `rentalAnalysis` et `rentalProjection`) sous les résultats du calculateur immobilier locatif : rendement net, flux mensuel avant et après impôt (« il faut sortir X € de votre poche »), patrimoine à l'horizon avec mise en garde sur les hypothèses ; aucun chiffre réglementaire ni nouveau. Hauteur à 375 px : 6 819 → 7 224 px ; à 1280 px : 3 053 → 3 246 px. Reste : patrimoine, entreprise, simulateurs à onglets, puis les guides.
 
