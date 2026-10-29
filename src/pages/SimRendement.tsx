@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { performance, fmtEur, fmtPct } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { performanceTakeaway } from '../lib/takeaways';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = { initial: number; monthly: number; years: number; finalValue: number };
 
@@ -41,6 +42,7 @@ export default function SimRendement() {
             <Kpi label="Total versé" value={fmtEur(r.invested)} sub="versement initial + versements mensuels" />
             <Kpi label="Gain ou perte" value={fmtEur(r.gain)} sub={r.cumulative === null ? '' : `${fmtPct(r.cumulative)} du total versé, non annualisé`} />
           </div>
+          <Takeaway>{performanceTakeaway({ invested: r.invested, gain: r.gain, annualized: r.annualized })}</Takeaway>
           <p className="muted small">
             Le versement initial est placé au début, chaque versement mensuel en fin de mois. Le rendement cumulé (gain divisé par le total versé) ne tient pas compte du temps : le rendement annuel équivalent est le taux qui, appliqué à chaque versement pendant la durée qu’il est resté placé, redonne la valeur actuelle.
             Si rien n’a été versé ou si la durée est nulle, le rendement annuel n’est pas défini. Les exemples ci-dessus sont fictifs.
