@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { diversificationRows, inflationBars, loanSlices, snowballGroups } from './illustrationData';
+import { diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups } from './illustrationData';
 
 describe('schéma intérêts simples ou composés', () => {
   it('retrouve les chiffres du guide (10 000 € à 5 %)', () => {
@@ -47,5 +47,18 @@ describe('schéma diversification', () => {
     expect(mix.stocks).toBeCloseTo(0.7, 10);
     expect(mix.safe).toBeCloseTo(0.3, 10);
     expect(mix.result).toBeCloseTo(-0.134, 10);
+  });
+});
+
+describe('schéma « effet de levier »', () => {
+  it('retrouve les chiffres du guide (200 000 € dont 20 000 € d’apport, loyers nets de 5 % ou 3 %)', () => {
+    const { interest, down, bars } = leverageBars();
+    expect(Math.round(interest)).toBe(6199); // « environ 6 200 € »
+    expect(bars[0].income).toBe(10000);
+    expect(Math.round(bars[0].left)).toBe(3801); // « environ 3 800 € »
+    expect(Math.round((bars[0].left / down) * 100)).toBe(19); // « près de 19 % de l’apport »
+    expect(bars[1].income).toBe(6000);
+    expect(Math.round(bars[1].shortfall)).toBe(199); // « environ 200 € »
+    expect(bars[1].left).toBe(0);
   });
 });

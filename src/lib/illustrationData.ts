@@ -64,3 +64,22 @@ export function diversificationRows(): DiversificationRow[] {
   const { stocksReturn, safeReturn, stocksShares } = DIVERSIFICATION_EXAMPLE;
   return stocksShares.map((s) => ({ stocks: s, safe: 1 - s, result: s * stocksReturn + (1 - s) * safeReturn }));
 }
+
+/** Exemple fictif du guide « investir à crédit » : bien de 200 000 €, 20 000 € d'apport, 180 000 € empruntés à 3,5 % sur 20 ans, loyers nets de charges de 5 % ou 3 % du prix. */
+export const LEVERAGE_EXAMPLE = { price: 200000, down: 20000, netYields: [0.05, 0.03] as const };
+
+export type LeverageBar = { yieldPct: number; income: number; interestPaid: number; left: number; shortfall: number };
+
+/** Première année : ce que rapporte le bien (net de charges), ce qui part en intérêts, ce qu'il reste (ou ce qui manque) avant impôt. */
+export function leverageBars(): { interest: number; down: number; bars: LeverageBar[] } {
+  const { price, down, netYields } = LEVERAGE_EXAMPLE;
+  const interest = loanSlices().slices[0].interest;
+  return {
+    interest,
+    down,
+    bars: netYields.map((y) => {
+      const income = price * y;
+      return { yieldPct: y * 100, income, interestPaid: Math.min(income, interest), left: Math.max(0, income - interest), shortfall: Math.max(0, interest - income) };
+    }),
+  };
+}
