@@ -27,15 +27,15 @@ export default function Simulators() {
         <input id="sim-filter" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="crédit, inflation, retraite…" />
       </div>
       {q && <p className="small muted" role="status">{shown} simulateur{shown > 1 ? 's' : ''} sur {simulators.length}</p>}
-      <nav aria-label="Thèmes" className="small" style={{ margin: '8px 0 16px' }}>
-        {groups.map((t, i) => (
-          <span key={t.id}>{i > 0 && ' · '}<a href={`#${t.id}`}>{t.title}</a></span>
+      <nav aria-label="Thèmes" className="theme-nav">
+        {groups.map((t) => (
+          <a key={t.id} href={`#${t.id}`}>{t.title} <span aria-hidden="true">{t.slugs.length}</span></a>
         ))}
       </nav>
       {groups.map((t) => (
         <section key={t.id} aria-labelledby={`h-${t.id}`}>
           <h2 id={`h-${t.id}`}><span id={t.id} style={{ scrollMarginTop: 80 }}>{t.title}</span></h2>
-          <ul className="inv-list">
+          <ul className="inv-list inv-list--compact">
             {t.slugs.map((slug) => {
               const s = simBySlug(slug);
               return <li key={slug}><Link className="inv-row" to={`/simulateurs/${slug}`}><div><h3>{s.title}</h3><p>{s.excerpt}</p></div></Link></li>;
