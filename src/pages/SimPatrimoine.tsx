@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { afterTax, fmtEur, fmtPct, netOfFees, projectGrowth, requiredMonthly, type SavingsChange, type Withdrawal } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, RowsEditor, SavedSims, SelectField, Tabs, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Kpi, LineChart, NumberField, PageHead, RowsEditor, SavedSims, SelectField, Tabs, usePersistentState } from '../components/ui';
 
 type Scenario = {
   name: string;
@@ -160,7 +160,7 @@ export default function SimPatrimoine() {
             demanderait une épargne mensuelle constante d'environ <strong>{fmtEur(need)}</strong> (hors retraits).
           </p>
 
-          <h2>Évolution annuelle — {s.name}</h2>
+          <Fold title={`Tableau d'évolution année par année — ${s.name}`}>
           <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th>Année</th><th className="r">Versé (cumul)</th><th className="r">Retiré (cumul)</th><th className="r">Capital nominal</th><th className="r">Gains</th><th className="r">Corrigé inflation</th></tr></thead>
@@ -182,6 +182,7 @@ export default function SimPatrimoine() {
             Conventions : versements en début de mois, capitalisation mensuelle au taux équivalent au taux annuel net de frais,
             retraits en fin d'année. Rendement nominal ; la colonne « corrigé inflation » divise par (1 + inflation)^année.
           </p>
+          </Fold>
           <SavedSims simKey="patrimoine-v2" current={st} onLoad={(d) => setSt({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
           <SimFaq slug="patrimoine" />
