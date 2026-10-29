@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { config } from '../config';
 import type { Checked, Level, Source } from '../data/types';
 import { load, save, type SavedSim } from '../lib/storage';
+import { summarizeSeries } from '../lib/chartSummary';
 import { buildExport, mergeSims, parseExport } from '../lib/simExport';
 
 // ------------------------------------------------------------ Champs
@@ -230,6 +231,8 @@ export function LineChart({ series, xLabels, format, title, height = 300 }: Char
   };
 
   const active = hover ?? n - 1;
+  const descId = useId();
+  const summary = useMemo(() => summarizeSeries(series, xLabels, format), [series, xLabels, format]);
 
   return (
     <figure style={{ margin: 0 }}>
@@ -239,6 +242,7 @@ export function LineChart({ series, xLabels, format, title, height = 300 }: Char
         viewBox={`0 0 ${W} ${H}`}
         role="img"
         aria-label={title}
+        aria-describedby={descId}
         tabIndex={0}
         onPointerMove={(e) => onMove(e.clientX)}
         onPointerLeave={() => setHover(null)}
@@ -278,6 +282,30 @@ export function LineChart({ series, xLabels, format, title, height = 300 }: Char
           ) : null,
         )}
       </svg>
+      <div id={descId} className="sr-only">
+        {title}. {summary.join(' ')} Flèches gauche et droite : lire les valeurs une à une.
+      </div>
+      <div className="sr-only">
+        <table>
+          <caption>{title}</caption>
+          <thead>
+            <tr>
+              <th scope="col">Période</th>
+              {series.map((s, idx) => <th key={idx} scope="col">{s.name}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {xLabels.map((l, i) => (
+              <tr key={i}>
+                <th scope="row">{l}</th>
+                {series.map((s, idx) => (
+                  <td key={idx}>{typeof s.values[i] === 'number' && Number.isFinite(s.values[i] as number) ? format(s.values[i] as number) : '—'}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <div className="chart-tip" aria-live="polite">
         <strong>{xLabels[active]}</strong>{' '}
         {series.map((s, idx) =>
