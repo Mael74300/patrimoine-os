@@ -178,7 +178,7 @@ tr:last-child td { border-bottom: 0; }
 
 /* ---------- Chart */
 .chart { width: 100%; height: auto; display: block; }
-.chart text { font-family: var(--font); fill: var(--ink-3); font-size: 11px; }
+.chart text { font-family: var(--font); fill: var(--ink-3); font-size: 12px; }
 .chart .grid-line { stroke: var(--line); stroke-width: 1; }
 .chart-legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--ink-2); margin-top: 8px; }
 .chart-legend span::before { content: ''; display: inline-block; width: 12px; height: 3px; margin-right: 6px; vertical-align: middle; background: var(--c); }
