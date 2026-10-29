@@ -4,7 +4,7 @@ import { config } from '../config';
 import { categoryById } from '../data/categories';
 import { investmentBySlug } from '../data/investments';
 import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
-import { AdSlot, CheckedText, Crumbs, Dots, PageHead, Sources } from '../components/ui';
+import { AdSlot, CheckedText, Crumbs, Dots, Fold, PageHead, Sources } from '../components/ui';
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
 
@@ -25,6 +25,23 @@ export default function InvestmentPage() {
       <div className="fiche">
         <article className="prose">
           <PageHead eyebrow={cat.name} title={inv.name}>{inv.summary}</PageHead>
+
+          <div className="panel fiche-brief">
+            <div className="meters">
+              <Dots level={inv.risk} kind="risk" label="Risque" />
+              <Dots level={inv.liquidity} kind="liq" label="Liquidité" />
+              <Dots level={inv.effort} label="Effort" />
+            </div>
+            <p className="small" style={{ margin: '10px 0 0' }}>
+              <strong>Horizon :</strong> {inv.horizon}. <strong>Capital :</strong> {inv.minCapital.text}{' '}
+              {!inv.minCapital.verified && <span className="badge-unverified">à vérifier</span>}
+            </p>
+            <div className="btn-row" style={{ marginTop: 12 }}>
+              <Link className="btn small" to={`/comparateur?ids=${[inv.slug, ...inv.alternatives.slice(0, 2)].join(',')}`}>Comparer</Link>
+              <Link className="btn small secondary" to="/simulateurs">Simuler</Link>
+            </div>
+            <p className="small muted" style={{ margin: '8px 0 0' }}>Échelles de 1 à 5 attribuées par la rédaction à titre indicatif.</p>
+          </div>
 
           <h2>Définition</h2>
           <p>{inv.definition}</p>
@@ -61,9 +78,11 @@ export default function InvestmentPage() {
             <dt>Fiscalité considérée valable au</dt><dd>{fmtDate(inv.review.taxValidAsOf)}</dd>
             <dt>Prochaine révision prévue</dt><dd>{fmtDate(inv.review.nextReview)}</dd>
           </dl>
-          {inv.review.data.length > 0 && (<><h3>Données utilisées</h3><ul>{inv.review.data.map((d) => <li key={d}>{d}</li>)}</ul></>)}
-          <h3>Hypothèses</h3>
-          <ul>{inv.review.assumptions.map((d) => <li key={d}>{d}</li>)}</ul>
+          <Fold title="Données et hypothèses utilisées">
+            {inv.review.data.length > 0 && (<><h3>Données utilisées</h3><ul>{inv.review.data.map((d) => <li key={d}>{d}</li>)}</ul></>)}
+            <h3>Hypothèses</h3>
+            <ul>{inv.review.assumptions.map((d) => <li key={d}>{d}</li>)}</ul>
+          </Fold>
           {aff && (
             <p className="small">
               <span className="tag">Lien commercial</span> Le site peut percevoir une commission si vous utilisez ce lien, sans effet sur le contenu de la fiche :{' '}
