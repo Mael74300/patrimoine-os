@@ -5,7 +5,32 @@
  */
 export type FaqItem = { q: string; a: string };
 
+/**
+ * Simulateur « Intérêts composés » (quatre onglets) : les questions des quatre anciens simulateurs, sans doublon de question.
+ */
+const interetsComposes: FaqItem[] = [
+  { q: 'Comment calcule-t-on la somme à placer aujourd’hui ?', a: 'On « actualise » le capital visé : on le divise par le facteur de croissance (1 + taux mensuel)^(nombre de mois), après avoir retranché ce que vos versements mensuels apporteront. Le calcul est direct, sans itération, et utilise le même modèle que le simulateur de durée.' },
+  { q: 'Pourquoi un rendement plus élevé réduit-il la somme à placer ?', a: 'Parce que les intérêts font une plus grande part du chemin. Mais le rendement saisi est une hypothèse, jamais une garantie : il vaut mieux tester plusieurs valeurs prudentes.' },
+  { q: 'Que se passe-t-il si mes versements mensuels suffisent déjà ?', a: 'Le capital à placer affiché est alors de 0 € : vos versements et leurs intérêts supposés atteignent l’objectif sans somme de départ.' },
+  { q: 'Le résultat tient-il compte des frais, impôts et de l’inflation ?', a: 'Non. Le rendement est supposé constant, avant frais, impôts et inflation. Pour mesurer l’effet de l’inflation, utilisez le simulateur dédié.' },
+  { q: 'Le résultat est-il une prévision ?', a: 'Non. C’est un calcul pédagogique à partir de vos hypothèses, sans conseil en investissement. Les montants par défaut sont fictifs.' },
+  { q: 'Comment la durée est-elle calculée ?', a: 'Le simulateur ajoute chaque mois le rendement mensuel équivalent puis le versement, jusqu’à ce que le capital atteigne le montant visé. La durée est le nombre de mois nécessaires, avec un maximum de 100 ans.' },
+  { q: 'Que signifie le gain de temps grâce au rendement ?', a: 'C’est la différence entre la durée sans aucun rendement (capital de départ plus versements seuls) et la durée avec le rendement que vous supposez.' },
+  { q: 'Pourquoi l’objectif peut-il ne jamais être atteint ?', a: 'Sans versement et avec un rendement nul ou négatif, le capital ne progresse pas : il faut augmenter le versement, le rendement supposé ou baisser l’objectif.' },
+  { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement est supposé constant, avant frais, impôts et inflation, et les versements sont supposés réguliers. Les montants par défaut sont fictifs.' },
+  { q: 'Comment le rendement nécessaire est-il calculé ?', a: 'Le simulateur cherche, par approximations successives, le rendement annuel qui, appliqué chaque mois à votre capital (converti en taux mensuel équivalent) avec votre versement en fin de mois, atteint exactement le capital visé à l’échéance choisie. C’est le même modèle que celui du simulateur de durée.' },
+  { q: 'Un rendement nécessaire élevé est-il réaliste ?', a: 'Le simulateur ne le dit pas : il indique seulement ce que votre objectif exige. Plus le rendement nécessaire est élevé, plus l’objectif repose sur une performance incertaine ; il vaut alors mieux augmenter le versement, allonger la durée ou revoir le capital visé.' },
+  { q: 'Que signifie un rendement nécessaire de 0 % ?', a: 'Vos versements et votre capital de départ suffisent à atteindre l’objectif sans aucun rendement. Le simulateur n’affiche pas de rendement négatif.' },
+  { q: 'Ce rendement tient-il compte des frais, impôts et de l’inflation ?', a: 'Non. C’est un rendement annuel constant avant frais, impôts et inflation. Pour comparer à un placement réel, il faut retrancher les frais et l’impôt de ce placement, et vous pouvez corriger de l’inflation avec le simulateur dédié.' },
+  { q: 'Le résultat est-il une prévision ?', a: 'Non. C’est un calcul pédagogique à partir de vos hypothèses, sans conseil en investissement. Les montants par défaut sont fictifs.' },
+  { q: 'En combien de temps un capital double-t-il ?', a: 'Sans nouveau versement et à rendement annuel constant, la durée exacte vaut ln(2) divisé par ln(1 + rendement). Elle ne dépend pas du capital de départ, seulement du rendement supposé : plus il est élevé, plus le doublement est rapide.' },
+  { q: 'Qu’est-ce que la règle de 72 ?', a: 'C’est une approximation de tête : on divise 72 par le rendement annuel exprimé en pourcentage pour obtenir le nombre d’années nécessaires pour doubler. Le simulateur la compare au calcul exact pour montrer l’écart, faible pour des rendements de quelques pour cent.' },
+  { q: 'Pourquoi tenir compte de l’inflation ?', a: 'Un capital qui double en valeur nominale ne double pas en pouvoir d’achat si les prix augmentent aussi. Le simulateur calcule le rendement réel, (1 + rendement) / (1 + inflation) − 1, et la durée pour multiplier la valeur réelle du capital.' },
+  { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement et l’inflation réels sont inconnus et varient ; ils sont supposés constants, avant frais et impôts. Les montants par défaut sont fictifs.' },
+].filter((f, i, all) => all.findIndex((g) => g.q === f.q) === i);
+
 export const simFaq: Record<string, FaqItem[]> = {
+  'interets-composes': interetsComposes,
   immobilier: [
     { q: 'Quelle différence entre rendement brut et rendement net de charges ?', a: 'Le rendement brut rapporte les loyers annuels au prix du bien seul. Le rendement net de charges retire des loyers encaissés (vacance déduite) les charges, la taxe foncière, l’entretien et la gestion, puis divise par le coût total de l’opération (prix, frais d’acquisition, travaux, mobilier). Il est donc plus bas, et plus proche de la réalité.' },
     { q: 'Comment le flux de trésorerie mensuel est-il calculé ?', a: 'Il vaut les loyers encaissés moins les charges, divisés par douze, moins la mensualité du crédit assurance comprise, la première année et avant impôt. Un flux négatif signifie que vous complétez chaque mois la différence avec votre épargne.' },
@@ -86,12 +111,6 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Pourquoi l’écart est-il nul avec un taux nul ?', a: 'Sans intérêts, il n’y a rien à réinvestir : les deux méthodes laissent le capital inchangé. L’écart grandit avec le taux et avec la durée.' },
     { q: 'Le résultat est-il une prévision ?', a: 'Non. Le taux est supposé constant, sans versement, avant frais, impôts et inflation. Les produits réels ont leurs propres règles de calcul et de versement des intérêts ; les montants par défaut sont fictifs.' },
   ],
-  'duree-pour-atteindre-un-capital': [
-    { q: 'Comment la durée est-elle calculée ?', a: 'Le simulateur ajoute chaque mois le rendement mensuel équivalent puis le versement, jusqu’à ce que le capital atteigne le montant visé. La durée est le nombre de mois nécessaires, avec un maximum de 100 ans.' },
-    { q: 'Que signifie le gain de temps grâce au rendement ?', a: 'C’est la différence entre la durée sans aucun rendement (capital de départ plus versements seuls) et la durée avec le rendement que vous supposez.' },
-    { q: 'Pourquoi l’objectif peut-il ne jamais être atteint ?', a: 'Sans versement et avec un rendement nul ou négatif, le capital ne progresse pas : il faut augmenter le versement, le rendement supposé ou baisser l’objectif.' },
-    { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement est supposé constant, avant frais, impôts et inflation, et les versements sont supposés réguliers. Les montants par défaut sont fictifs.' },
-  ],
   'convertir-un-taux-annuel-en-taux-mensuel': [
     { q: 'Comment passer d’un taux annuel à un taux mensuel ?', a: 'Le taux mensuel équivalent vaut (1 + taux annuel)^(1/12) − 1. Capitalisé douze fois, il redonne exactement le taux annuel. Par exemple, un taux annuel fictif de 5 % correspond à un taux mensuel équivalent d’environ 0,4074 %.' },
     { q: 'Quelle différence entre taux équivalent et taux proportionnel ?', a: 'Le taux proportionnel s’obtient en divisant simplement le taux annuel par le nombre de périodes (5 % / 12 ≈ 0,4167 %). Capitalisé douze fois, il donne un taux annuel un peu supérieur à 5 % : les deux ne sont pas interchangeables dès qu’il y a capitalisation.' },
@@ -117,12 +136,6 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Que signifie le versement constant équivalent ?', a: 'C’est la mensualité fixe qui donnerait, sur la même durée et au même rendement supposé, le même capital final que le versement qui augmente. Il permet de comparer les deux façons d’épargner.' },
     { q: 'La hausse du versement est-elle comparable à celle de mon salaire ?', a: 'Vous choisissez librement le pourcentage : le simulateur ne connaît ni votre salaire ni son évolution. Indexer son épargne sur une hausse de revenu est une hypothèse de votre part, pas une prévision.' },
     { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement réel est inconnu et varie ; il est supposé constant et avant frais, impôts et inflation. Les montants par défaut sont fictifs.' },
-  ],
-  'doubler-son-capital-regle-de-72': [
-    { q: 'En combien de temps un capital double-t-il ?', a: 'Sans nouveau versement et à rendement annuel constant, la durée exacte vaut ln(2) divisé par ln(1 + rendement). Elle ne dépend pas du capital de départ, seulement du rendement supposé : plus il est élevé, plus le doublement est rapide.' },
-    { q: 'Qu’est-ce que la règle de 72 ?', a: 'C’est une approximation de tête : on divise 72 par le rendement annuel exprimé en pourcentage pour obtenir le nombre d’années nécessaires pour doubler. Le simulateur la compare au calcul exact pour montrer l’écart, faible pour des rendements de quelques pour cent.' },
-    { q: 'Pourquoi tenir compte de l’inflation ?', a: 'Un capital qui double en valeur nominale ne double pas en pouvoir d’achat si les prix augmentent aussi. Le simulateur calcule le rendement réel, (1 + rendement) / (1 + inflation) − 1, et la durée pour multiplier la valeur réelle du capital.' },
-    { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement et l’inflation réels sont inconnus et varient ; ils sont supposés constants, avant frais et impôts. Les montants par défaut sont fictifs.' },
   ],
   'rendement-reel-de-mon-placement': [
     { q: 'Comment calculer le rendement réel de mon placement si j’ai fait plusieurs versements ?', a: 'Diviser le gain par le total versé ne tient pas compte de la date des versements. Le taux de rendement interne est le taux annuel qui, appliqué à chaque versement pendant la durée où il est resté placé, redonne la valeur actuelle. Le simulateur le calcule à partir du versement initial, du versement mensuel, de la durée et de la valeur actuelle.' },
@@ -182,19 +195,5 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Quel taux de retrait faut-il choisir ?', a: 'Aucun taux n’est imposé : c’est une hypothèse de votre choix, à faire varier. Un taux faible est plus prudent, un taux élevé réduit le capital visé mais épuise plus vite le capital si les rendements sont faibles. Le simulateur indique pendant combien d’années le capital dure.' },
     { q: 'Pourquoi le rendement et l’inflation sont-ils séparés ?', a: 'Les dépenses augmentent avec l’inflation alors que le capital rapporte un rendement. Le délai d’atteinte utilise le rendement réel, corrigé de l’inflation, et la phase de retrait revalorise les retraits de l’inflation.' },
     { q: 'Le délai affiché est-il une prévision ?', a: 'Non. Il découle uniquement de vos hypothèses (épargne, rendement, inflation, dépenses), dont l’évolution réelle est inconnue. Les montants par défaut sont fictifs.' },
-  ],
-  'capital-a-placer-aujourd-hui': [
-    { q: 'Comment calcule-t-on la somme à placer aujourd’hui ?', a: 'On « actualise » le capital visé : on le divise par le facteur de croissance (1 + taux mensuel)^(nombre de mois), après avoir retranché ce que vos versements mensuels apporteront. Le calcul est direct, sans itération, et utilise le même modèle que le simulateur de durée.' },
-    { q: 'Pourquoi un rendement plus élevé réduit-il la somme à placer ?', a: 'Parce que les intérêts font une plus grande part du chemin. Mais le rendement saisi est une hypothèse, jamais une garantie : il vaut mieux tester plusieurs valeurs prudentes.' },
-    { q: 'Que se passe-t-il si mes versements mensuels suffisent déjà ?', a: 'Le capital à placer affiché est alors de 0 € : vos versements et leurs intérêts supposés atteignent l’objectif sans somme de départ.' },
-    { q: 'Le résultat tient-il compte des frais, impôts et de l’inflation ?', a: 'Non. Le rendement est supposé constant, avant frais, impôts et inflation. Pour mesurer l’effet de l’inflation, utilisez le simulateur dédié.' },
-    { q: 'Le résultat est-il une prévision ?', a: 'Non. C’est un calcul pédagogique à partir de vos hypothèses, sans conseil en investissement. Les montants par défaut sont fictifs.' },
-  ],
-  'rendement-necessaire-pour-atteindre-un-objectif': [
-    { q: 'Comment le rendement nécessaire est-il calculé ?', a: 'Le simulateur cherche, par approximations successives, le rendement annuel qui, appliqué chaque mois à votre capital (converti en taux mensuel équivalent) avec votre versement en fin de mois, atteint exactement le capital visé à l’échéance choisie. C’est le même modèle que celui du simulateur de durée.' },
-    { q: 'Un rendement nécessaire élevé est-il réaliste ?', a: 'Le simulateur ne le dit pas : il indique seulement ce que votre objectif exige. Plus le rendement nécessaire est élevé, plus l’objectif repose sur une performance incertaine ; il vaut alors mieux augmenter le versement, allonger la durée ou revoir le capital visé.' },
-    { q: 'Que signifie un rendement nécessaire de 0 % ?', a: 'Vos versements et votre capital de départ suffisent à atteindre l’objectif sans aucun rendement. Le simulateur n’affiche pas de rendement négatif.' },
-    { q: 'Ce rendement tient-il compte des frais, impôts et de l’inflation ?', a: 'Non. C’est un rendement annuel constant avant frais, impôts et inflation. Pour comparer à un placement réel, il faut retrancher les frais et l’impôt de ce placement, et vous pouvez corriger de l’inflation avec le simulateur dédié.' },
-    { q: 'Le résultat est-il une prévision ?', a: 'Non. C’est un calcul pédagogique à partir de vos hypothèses, sans conseil en investissement. Les montants par défaut sont fictifs.' },
   ],
 };

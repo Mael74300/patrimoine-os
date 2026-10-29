@@ -220,6 +220,7 @@ details.fold > h3, details.fold > ul { margin-left: 14px; margin-right: 14px; }
 /* ---------- Onglets, scénarios */
 .tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 14px; }
 .tabs button { font: inherit; font-size: 0.88rem; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); cursor: pointer; }
+.tabs [role="tab"] { min-height: 44px; padding: 8px 14px; }
 .tabs button.on { background: var(--primary); border-color: var(--primary); color: var(--primary-ink); font-weight: 600; }
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 700px) { .split { grid-template-columns: 1fr; } }

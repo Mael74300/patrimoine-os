@@ -35,16 +35,16 @@ export const simsForGuide: Record<string, string[]> = {
   'comparer-les-frais': ['frais'],
   'epargne-limitee': ['epargne-de-precaution', 'inflation'],
   'par-ou-commencer': ['budget', 'epargne-de-precaution', 'objectif-epargne', 'cout-d-attendre-pour-epargner'],
-  'interets-composes': ['capital-a-placer-aujourd-hui', 'rendement-necessaire-pour-atteindre-un-objectif', 'patrimoine', 'inflation', 'investir-d-un-coup-ou-progressivement', 'rendement-reel-de-mon-placement', 'cout-d-attendre-pour-epargner', 'doubler-son-capital-regle-de-72', 'augmenter-son-epargne-chaque-annee', 'interets-simples-ou-composes', 'duree-pour-atteindre-un-capital', 'convertir-un-taux-annuel-en-taux-mensuel'],
+  'interets-composes': ['interets-composes', 'patrimoine', 'inflation', 'investir-d-un-coup-ou-progressivement', 'rendement-reel-de-mon-placement', 'cout-d-attendre-pour-epargner', 'augmenter-son-epargne-chaque-annee', 'interets-simples-ou-composes', 'convertir-un-taux-annuel-en-taux-mensuel'],
   'choisir-son-enveloppe': ['frais', 'patrimoine'],
   'combien-epargne-de-precaution': ['epargne-de-precaution', 'inflation', 'budget'],
   'taux-endettement-capacite-emprunt': ['endettement', 'credit', 'dettes'],
-  'combien-epargner-par-mois-objectif': ['capital-a-placer-aujourd-hui', 'rendement-necessaire-pour-atteindre-un-objectif', 'objectif-epargne', 'budget', 'inflation'],
+  'combien-epargner-par-mois-objectif': ['interets-composes', 'objectif-epargne', 'budget', 'inflation'],
   'rembourser-credit-par-anticipation-ou-investir': ['rembourser-ou-investir', 'credit', 'renegocier-son-credit-gain-et-point-mort', 'dettes', 'epargne-de-precaution'],
   'diversification-placements': ['patrimoine', 'frais', 'epargne-de-precaution'],
   'inflation-pouvoir-d-achat-epargne': ['inflation', 'rendement-reel-de-mon-placement', 'epargne-de-precaution'],
   'livret-a-calcul-interets-quinzaines': ['epargne-de-precaution', 'inflation'],
-  'regle-de-72-doubler-son-capital': ['doubler-son-capital-regle-de-72', 'inflation', 'interets-simples-ou-composes'],
+  'regle-de-72-doubler-son-capital': ['interets-composes', 'inflation', 'interets-simples-ou-composes'],
 };
 
 const bySlug = Object.fromEntries(simulators.map((s) => [s.slug, s]));
