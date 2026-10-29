@@ -477,7 +477,24 @@ export function SimFaq({ slug }: { slug: string }) {
   return (
     <section aria-label="Questions fréquentes" style={{ marginTop: 32 }}>
       <h2>Questions fréquentes</h2>
-      {items.map((f) => <div key={f.q}><h3>{f.q}</h3><p>{f.a}</p></div>)}
+      <div className="faq">
+        {items.map((f) => (
+          <details key={f.q}>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
     </section>
+  );
+}
+
+/** Bloc repliable (tableau détaillé, précisions) : la page reste courte, le contenu reste dans le HTML. */
+export function Fold({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <details className="fold">
+      <summary>{title}</summary>
+      {children}
+    </details>
   );
 }

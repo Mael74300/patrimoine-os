@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ADVERSE, adverseScenario, amortize, fmtEur, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, type TaxRegime } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
 
 export const RENTAL_DEFAULTS: RentalInput = {
   price: 150000, notaryRate: 0.08, works: 10000, furniture: 0,
@@ -145,7 +145,7 @@ export default function SimImmobilier() {
             </table>
           </div>
 
-          <h2>Détail annuel</h2>
+          <Fold title="Détail annuel">
           <div className="table-wrap">
             <table>
               <thead>
@@ -172,6 +172,7 @@ export default function SimImmobilier() {
               </tbody>
             </table>
           </div>
+          </Fold>
           <p className="notice info small" style={{ marginTop: 16 }}>
             Estimation fiscale simplifiée : impôt = base imposable × (tranche marginale + prélèvements sociaux). Au réel, un déficit est reporté sur les
             revenus locatifs suivants ; son imputation sur le revenu global n'est pas modélisée. Le patrimoine net ne déduit ni frais de revente ni impôt

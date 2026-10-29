@@ -222,3 +222,13 @@ td.neg { color: var(--danger); }
 .ill-in { font-size: 12px; font-weight: 600; }
 .ill-sub { font-size: 13px; fill: var(--ink-2) !important; }
 .ill-year { font-size: 14px; font-weight: 700; }
+
+/* Blocs repliables : FAQ des simulateurs et tableaux détaillés */
+.faq details, details.fold { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); margin: 8px 0; }
+.faq summary, details.fold > summary { cursor: pointer; font-weight: 600; padding: 12px 14px; list-style: none; display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+.faq summary::-webkit-details-marker, details.fold > summary::-webkit-details-marker { display: none; }
+.faq summary::after, details.fold > summary::after { content: '+'; font-size: 1.25rem; line-height: 1; color: var(--primary); flex: none; }
+.faq details[open] > summary::after, details.fold[open] > summary::after { content: '−'; }
+.faq summary:focus-visible, details.fold > summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.faq details > p { margin: 0; padding: 0 14px 14px; }
+details.fold > .table-wrap { margin: 0 8px 8px; }

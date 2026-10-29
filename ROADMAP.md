@@ -60,13 +60,14 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public.
 - 2026-10-28 (propriétaire) : ajouter des images créées par la tâche elle-même.
 - 2026-10-28 : aucune illustration sur le site ; les guides sont du texte seul, notamment « Comprendre les intérêts composés » (débutant : notion abstraite sans schéma). Schéma ajouté (voir « Fait »).
-- 2026-10-28 : les 31 simulateurs et les pages de simulateur restent longs et se recoupent (chantiers 1 à 3).
+- 2026-10-29 : pages de simulateur très longues sur mobile (crédit 5 922 px, immobilier 8 537 px) à cause de la FAQ et des tableaux annuels toujours dépliés ; FAQ et tableaux de crédit et d'immobilier repliés (voir « Fait »). Restent les autres tableaux (entreprise…).
+- 2026-10-29 : les 31 simulateurs se recoupent encore (chantiers 1 et 2).
 
 ## À faire
 
 1. [ ] **Regrouper les simulateurs d'intérêts composés.** `doubler-son-capital-regle-de-72`, `duree-pour-atteindre-un-capital`, `capital-a-placer-aujourd-hui`, `rendement-necessaire-pour-atteindre-un-objectif`, `interets-simples-ou-composes`, `convertir-un-taux-annuel-en-taux-mensuel`, `augmenter-son-epargne-chaque-annee`, `cout-d-attendre-pour-epargner` et `objectif-epargne` répondent à des variantes d'une même question. Les réunir en un simulateur « Intérêts composés » à onglets (quelle valeur chercher : capital final, durée, versement, capital de départ, rendement), en gardant les calculs et tests existants. Les anciennes adresses restent valides : page courte pré-rendue qui renvoie vers le bon onglet (lien visible, `<link rel="canonical">` vers la nouvelle page, `noindex`), retirée du plan du site et du flux. Un regroupement par exécution si nécessaire.
 2. [ ] **Regrouper les simulateurs de crédit.** `credit`, `duree-du-credit-mensualite-et-cout-total`, `credit-in-fine-ou-amortissable`, `renegocier-son-credit-gain-et-point-mort`, `taeg` : une page crédit à onglets, même méthode que le chantier 1.
-3. [ ] **Alléger les pages de simulateur.** Sur chaque page : formulaire et résultats principaux en premier ; FAQ, sources, hypothèses détaillées et simulations enregistrées dans des blocs repliables ; supprimer les textes répétés d'une page à l'autre. Mesurer la hauteur avant et après.
+3. [~] **Alléger les pages de simulateur** (étape 1 faite le 2026-10-29 : FAQ et tableaux de crédit et d'immobilier repliés). Sur chaque page : formulaire et résultats principaux en premier ; FAQ, sources, hypothèses détaillées et simulations enregistrées dans des blocs repliables ; supprimer les textes répétés d'une page à l'autre. Mesurer la hauteur avant et après.
 4. [ ] **Chargement différé des pages.** Le script principal fait 573 kB (168 kB compressé) car tous les simulateurs sont dans un seul fichier. Passer les pages en `React.lazy` par route, sans casser le pré-rendu ni l'hydratation ; mesurer avant et après dans la pull request.
 5. [ ] **Fiches des familles vides.** Aucune fiche pour : Actifs de collection, Terres agricoles et forêts, Énergies renouvelables et actifs réels, Crédit et effet de levier, Autres formes documentées. Une fiche par exécution, sourcée sur des sites officiels (AMF, impots.gouv.fr, service-public.gouv.fr…), avec les mêmes rubriques que les fiches existantes.
 6. [ ] **Exporter et importer ses données locales.** Fichier JSON téléchargé et rechargé par l'utilisateur, pour passer d'un appareil à l'autre, sans aucun envoi à un serveur ; validation du fichier importé ; tests.
@@ -85,6 +86,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [~] **Alléger les pages de simulateur, étape 1** (2026-10-29) : FAQ des 31 simulateurs en questions repliables, tableaux annuels des simulateurs crédit et immobilier repliés (composant `Fold`). Hauteur à 375 px : crédit 5 922 → 4 413 px, immobilier 8 537 → 6 705 px, budget 4 777 → 4 344 px ; à 1280 px : crédit 3 555 → 2 361 px, immobilier 4 405 → 3 053 px.
 
 - [~] **Illustrations maison, étape 1** (2026-10-28) : premier schéma SVG, « intérêts simples ou composés », dans le guide « Comprendre les intérêts composés » (`src/components/Illustrations.tsx`, chiffres calculés et testés). Reste à illustrer : amortissement d'un crédit, effet de levier, diversification, inflation ; icônes des thèmes ; en-têtes.
 

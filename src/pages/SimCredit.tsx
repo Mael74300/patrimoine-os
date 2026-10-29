@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { amortize, borrowingCapacity, fmtEur, fmtEur2, prepayment } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
 
 type State = {
   principal: number; annualRate: number; years: number; insuranceRate: number;
@@ -94,7 +94,7 @@ export default function SimCredit() {
             Avant de rembourser par anticipation, comparez le taux du crédit au rendement net que l'épargne obtiendrait ailleurs, et gardez une épargne de précaution.
           </p>
 
-          <h2>Tableau d'amortissement annuel</h2>
+          <Fold title="Tableau d'amortissement annuel">
           <div className="table-wrap">
             <table>
               <thead><tr><th>Année</th><th className="r">Intérêts</th><th className="r">Capital remboursé</th><th className="r">Assurance</th><th className="r">Restant dû</th></tr></thead>
@@ -111,6 +111,7 @@ export default function SimCredit() {
               </tbody>
             </table>
           </div>
+          </Fold>
           <SavedSims simKey="credit" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
           <SimFaq slug="credit" />
