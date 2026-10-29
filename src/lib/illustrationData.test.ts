@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { inflationBars, loanSlices, snowballGroups } from './illustrationData';
+import { diversificationRows, inflationBars, loanSlices, snowballGroups } from './illustrationData';
 
 describe('schéma intérêts simples ou composés', () => {
   it('retrouve les chiffres du guide (10 000 € à 5 %)', () => {
@@ -36,5 +36,16 @@ describe('schéma inflation', () => {
     expect(Math.round(idle.real)).toBe(8203);
     expect(Math.round(placed.shown)).toBe(13439);
     expect(Math.round(placed.real)).toBe(11025);
+  });
+});
+
+describe('schéma diversification', () => {
+  it('retrouve les chiffres du guide : −20 % en 100 % actions, −13,4 % avec 70 % d’actions et 30 % de placement prudent', () => {
+    const [all, mix] = diversificationRows();
+    expect(all.result).toBeCloseTo(-0.2, 10);
+    expect(all.safe).toBe(0);
+    expect(mix.stocks).toBeCloseTo(0.7, 10);
+    expect(mix.safe).toBeCloseTo(0.3, 10);
+    expect(mix.result).toBeCloseTo(-0.134, 10);
   });
 });
