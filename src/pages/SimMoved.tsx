@@ -16,10 +16,10 @@ export default function SimMoved() {
     <>
       <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: moved.title }]} />
       <PageHead eyebrow="Simulateur déplacé" title={moved.title}>
-        Ce calcul fait maintenant partie du simulateur « Intérêts composés », sous forme d’onglet.
+        Ce calcul fait maintenant partie du simulateur « {moved.dest} », sous forme d’onglet.
       </PageHead>
       <p>
-        <Link className="btn" to={{ pathname: moved.to, hash: moved.tab }}>Ouvrir le simulateur « Intérêts composés »</Link>
+        <Link className="btn" to={{ pathname: moved.to, hash: moved.tab }}>Ouvrir le simulateur « {moved.dest} »</Link>
       </p>
     </>
   );

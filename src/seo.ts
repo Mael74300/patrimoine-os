@@ -75,7 +75,7 @@ export function pagesMeta(siteUrl: string): PageMeta[] {
     pages.push({
       path: `/simulateurs/${m.slug}/`,
       title: `${m.title} : simulateur déplacé | ${SITE}`,
-      description: `Ce calcul fait maintenant partie du simulateur « Intérêts composés » de ${SITE}.`,
+      description: `Ce calcul fait maintenant partie du simulateur « ${m.dest} » de ${SITE}.`,
       noindex: true,
       canonicalPath: `${m.to}/`,
     });

@@ -1,5 +1,5 @@
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
-import { simFaq } from '../data/simFaq';
+import { simFaq, type FaqItem } from '../data/simFaq';
 import { Link } from 'react-router-dom';
 import { config } from '../config';
 import type { Checked, Level, Source } from '../data/types';
@@ -512,8 +512,7 @@ export function Tabs({ items, active, onSelect, label }: { items: string[]; acti
 }
 
 /** Questions fréquentes d'un simulateur (mêmes questions que les données structurées FAQPage). */
-export function SimFaq({ slug }: { slug: string }) {
-  const items = simFaq[slug];
+export function SimFaq({ slug, items = simFaq[slug] }: { slug: string; items?: FaqItem[] }) {
   if (!items?.length) return null;
   return (
     <section aria-label="Questions fréquentes" style={{ marginTop: 32 }}>

@@ -14,7 +14,7 @@ export const simThemes: { id: string; title: string; slugs: string[] }[] = [
   {
     id: 'credit',
     title: 'Crédit',
-    slugs: ['credit', 'taeg', 'duree-du-credit-mensualite-et-cout-total', 'credit-in-fine-ou-amortissable', 'renegocier-son-credit-gain-et-point-mort', 'rembourser-ou-investir'],
+    slugs: ['credit', 'comparer-des-credits', 'rembourser-ou-investir'],
   },
   { id: 'budget', title: 'Budget et dettes', slugs: ['budget', 'endettement', 'dettes'] },
   { id: 'immobilier', title: 'Immobilier', slugs: ['immobilier', 'etf-immobilier', 'louer-ou-acheter'] },
