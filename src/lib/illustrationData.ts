@@ -37,3 +37,19 @@ export function loanSlices(): { monthly: number; slices: LoanSlice[] } {
     }),
   };
 }
+
+/** Exemple fictif du guide « Inflation » : 10 000 € pendant 10 ans, inflation constante de 2 %, placement à 3 %. */
+export const INFLATION_EXAMPLE = { initial: 10000, inflation: 0.02, rate: 0.03, years: 10 };
+
+export type InflationBar = { label: string; shown: number; real: number };
+
+/** Montant affiché et pouvoir d'achat (en euros d'aujourd'hui) au bout de la période, calculés avec les formules du guide. */
+export function inflationBars(): InflationBar[] {
+  const { initial, inflation, rate, years } = INFLATION_EXAMPLE;
+  const deflator = Math.pow(1 + inflation, years);
+  const placed = initial * Math.pow(1 + rate, years);
+  return [
+    { label: 'Laissée telle quelle', shown: initial, real: initial / deflator },
+    { label: 'Placée à 3 % par an', shown: placed, real: placed / deflator },
+  ];
+}

@@ -1,5 +1,5 @@
 import { fmtEur } from '../lib/finance';
-import { LOAN_EXAMPLE, SNOWBALL_EXAMPLE, loanSlices, snowballGroups, type SnowballBar } from '../lib/illustrationData';
+import { INFLATION_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, inflationBars, loanSlices, snowballGroups, type SnowballBar } from '../lib/illustrationData';
 
 const W = 420;
 const BASE = 262;
@@ -106,6 +106,56 @@ export function SchemaMensualite() {
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : {fmtEur(principal)} empruntés à {ratePct} % sur {years} ans, hors assurance, soit {fmtEur(monthly)} par mois.
         Chaque année, on rembourse la même somme ({fmtEur(monthly * 12)}), mais au début elle sert surtout à payer les intérêts. Le capital emprunté diminue peu au départ, puis de plus en plus vite.
+      </figcaption>
+    </figure>
+  );
+}
+
+/** Schéma « inflation » : montant affiché et pouvoir d'achat réel au bout de 10 ans, avec ou sans placement. */
+export function SchemaInflation() {
+  const bars = inflationBars();
+  const { initial, inflation, rate, years } = INFLATION_EXAMPLE;
+  const BASE_Y = 250;
+  const TOP_Y = 56;
+  const BW = 74;
+  const max = Math.max(...bars.map((b) => b.shown));
+  const h = (v: number) => (v / max) * (BASE_Y - TOP_Y);
+  const alt = bars
+    .map((b) => `${b.label} : ${fmtEur(b.shown)} affichés, soit ${fmtEur(b.real)} en euros d’aujourd’hui.`)
+    .join(' ');
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 340" role="img" aria-labelledby="ill-infl-t ill-infl-d" className="ill-svg">
+        <title id="ill-infl-t">L’inflation réduit la valeur réelle d’une somme : le montant affiché ne dit pas ce qu’on peut acheter</title>
+        <desc id="ill-infl-d">{`${fmtEur(initial)} sur ${years} ans, avec une inflation de ${inflation * 100} % par an. ${alt}`}</desc>
+        <line x1={20} x2={400} y1={BASE_Y} y2={BASE_Y} stroke="var(--line)" strokeWidth={2} />
+        {bars.map((b, i) => {
+          const cx = 105 + i * 215;
+          const xs = cx - BW - 6;
+          const xr = cx + 6;
+          return (
+            <g key={b.label}>
+              <rect x={xs} y={BASE_Y - h(b.shown)} width={BW} height={h(b.shown)} rx={4} fill="var(--surface-2)" stroke="var(--ink-2)" strokeWidth={2} strokeDasharray="6 4" />
+              <rect x={xr} y={BASE_Y - h(b.real)} width={BW} height={h(b.real)} rx={4} fill="var(--primary)" />
+              <text x={xs + BW / 2} y={BASE_Y - h(b.shown) - 8} textAnchor="middle" className="ill-total">{fmtEur(b.shown)}</text>
+              <text x={xr + BW / 2} y={BASE_Y - h(b.real) - 8} textAnchor="middle" className="ill-total">{fmtEur(b.real)}</text>
+              <text x={cx} y={BASE_Y + 20} textAnchor="middle" className="ill-year">{b.label}</text>
+            </g>
+          );
+        })}
+        <line x1={20} x2={400} y1={BASE_Y - h(initial)} y2={BASE_Y - h(initial)} stroke="var(--accent)" strokeWidth={2} strokeDasharray="2 5" />
+        <g transform="translate(24 288)">
+          <rect width={14} height={14} rx={3} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeDasharray="4 3" />
+          <text x={22} y={12} className="ill-sub" textAnchor="start">Montant affiché</text>
+          <rect x={170} width={14} height={14} rx={3} fill="var(--primary)" />
+          <text x={192} y={12} className="ill-sub" textAnchor="start">Valeur en euros d’aujourd’hui</text>
+          <line x1={0} x2={14} y1={34} y2={34} stroke="var(--accent)" strokeWidth={2} strokeDasharray="2 3" />
+          <text x={22} y={39} className="ill-sub" textAnchor="start">{`Niveau de départ : ${fmtEur(initial)}`}</text>
+        </g>
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : {fmtEur(initial)} sur {years} ans, avec une inflation constante de {inflation * 100} % par an et un placement à {rate * 100} % par an, avant frais et impôts.
+        Le montant affiché peut grossir sans que la somme permette d’acheter plus : ce qui compte, c’est l’écart avec l’inflation. Ces taux ne sont ni observés ni prévus.
       </figcaption>
     </figure>
   );
