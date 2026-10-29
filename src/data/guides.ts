@@ -684,3 +684,18 @@ export const guides: Guide[] = [
 ];
 
 export const guideBySlug = Object.fromEntries(guides.map((g) => [g.slug, g]));
+
+/** Parcours de lecture de la page « Guides » : chaque guide figure dans un seul groupe (vérifié par un test). */
+export const guideGroups: { title: string; intro: string; slugs: string[] }[] = [
+  { title: 'Pour démarrer', intro: 'Les bases, dans l’ordre : priorités, réserve, effort d’épargne.', slugs: ['par-ou-commencer', 'combien-epargne-de-precaution', 'epargne-limitee', 'combien-epargner-par-mois-objectif', 'patrimoine-net'] },
+  { title: 'Comprendre les mécanismes', intro: 'Le temps, l’inflation, les frais, la diversification : ce qui joue sur vos résultats.', slugs: ['interets-composes', 'regle-de-72-doubler-son-capital', 'inflation-pouvoir-d-achat-epargne', 'diversification-placements', 'comparer-les-frais', 'livret-a-calcul-interets-quinzaines'] },
+  { title: 'Choisir ses placements', intro: 'Les familles de placements et les enveloppes qui les contiennent.', slugs: ['types-investissements', 'choisir-son-enveloppe', 'fonctionnement-pea', 'immobilier-ou-etf'] },
+  { title: 'Immobilier et crédit', intro: 'Emprunter, louer, rembourser : les repères avant de s’engager.', slugs: ['taux-endettement-capacite-emprunt', 'investir-a-credit', 'rentabilite-locative', 'rembourser-credit-par-anticipation-ou-investir'] },
+];
+
+/** Autres guides proposés en bas d’un guide : ceux du même groupe d’abord, puis le reste. */
+export function otherGuides(slug: string, n = 3) {
+  const group = guideGroups.find((g) => g.slugs.includes(slug))?.slugs ?? [];
+  const order = [...group, ...guides.map((g) => g.slug)];
+  return [...new Set(order)].filter((s) => s !== slug).slice(0, n).map((s) => guideBySlug[s]);
+}
