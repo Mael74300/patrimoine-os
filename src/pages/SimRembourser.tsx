@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { fmtEur, fmtPct, prepayVsInvest } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { prepayTakeaway } from '../lib/takeaways';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = { balance: number; annualRate: number; remainingYears: number; lump: number; annualReturn: number; annualFees: number; taxRate: number };
 
@@ -51,6 +52,7 @@ export default function SimRembourser() {
             <Kpi label="Intérêts économisés en remboursant" value={fmtEur(r.interestSaved)} sub={`crédit raccourci de ${fmtMonths(r.monthsSaved)}`} />
             <Kpi label="Rendement brut d'équilibre" value={r.breakEvenReturn === null ? 'Hors plage' : fmtPct(r.breakEvenReturn)} sub="en dessous, rembourser l'emporte" />
           </div>
+          <Takeaway>{prepayTakeaway({ lump: r.lump, advantageInvest: r.advantageInvest, interestSaved: r.interestSaved, breakEvenReturn: r.breakEvenReturn })}</Takeaway>
           <h2>Comparaison à la fin de la durée restante</h2>
           <div className="table-wrap" tabIndex={0}>
             <table>

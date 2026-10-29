@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { amortize, debtRatio, fireTarget, performance, rentVsBuy, savingsGoal, yearsToTarget } from './finance';
-import { creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway } from './takeaways';
+import { amortize, debtRatio, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
+import { creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -77,5 +77,47 @@ describe('phrases « Concrètement »', () => {
     expect(fireTakeaway({ gap: 30000, withdrawalRate: 0.035, target, currentWealth: 0, annualSavings: 0, years: null })).toContain('100 ans');
     expect(fireTakeaway({ gap: 0, withdrawalRate: 0.035, target: 0, currentWealth: 0, annualSavings: 0, years: 0 })).toContain('aucun capital');
     expect(fireTakeaway({ gap: 30000, withdrawalRate: 0, target: Infinity, currentWealth: 0, annualSavings: 0, years: null })).toBe('');
+  });
+  it('retraits : durée, capital restant et retrait tenable issus du calcul', () => {
+    const base = { capital: 200000, monthly: 1000, annualReturn: 0.03, indexation: 0.02, years: 25 };
+    const ok = withdrawal(base);
+    const t = digits(withdrawalTakeaway({ capital: 200000, monthly: 1000, years: 25, ...ok }));
+    expect(t).toContain(eur(ok.remaining));
+    expect(t).toContain(eur(ok.totalWithdrawn));
+    expect(t).toContain(eur(ok.sustainable));
+    const out = withdrawal({ ...base, monthly: 2500 });
+    expect(out.monthsUntilEmpty).not.toBeNull();
+    const m = out.monthsUntilEmpty as number;
+    const t2 = withdrawalTakeaway({ capital: 200000, monthly: 2500, years: 25, ...out });
+    expect(t2).toContain(`${Math.floor(m / 12)} an`);
+    expect(digits(t2)).toContain(eur(out.sustainable));
+    expect(withdrawalTakeaway({ capital: 0, monthly: 100, years: 5, ...ok })).toBe('');
+  });
+  it('épargne de précaution : manque et délai issus du calcul, cas atteint et non atteint', () => {
+    const input = { profile: 'stable' as const, monthlyExpenses: 2000, months: 3, extraReserve: 1000, currentSavings: 2500, monthlySaving: 250, annualRate: 0.017, deadline: 24 };
+    const path = precautionPath(input);
+    const t = digits(precautionTakeaway({ target: path.target, savings: 2500, monthlySaving: 250, reachedAt: path.reachedAt }));
+    expect(t).toContain(eur(path.target));
+    expect(t).toContain(eur(path.target - 2500));
+    expect(path.reachedAt).not.toBeNull();
+    expect(precautionTakeaway({ target: 7000, savings: 8000, monthlySaving: 0, reachedAt: 0 })).toContain('couvre déjà');
+    expect(precautionTakeaway({ target: 7000, savings: 0, monthlySaving: 0, reachedAt: null })).toContain('ne se comble pas');
+    expect(precautionTakeaway({ target: 7000, savings: 0, monthlySaving: 1, reachedAt: null })).toContain('50 ans');
+    expect(precautionTakeaway({ target: 0, savings: 0, monthlySaving: 0, reachedAt: 0 })).toBe('');
+  });
+  it('rembourser ou investir : sens de l’écart, intérêts économisés et seuil', () => {
+    const base = { balance: 150000, annualRate: 0.035, remainingYears: 15, lump: 20000, annualReturn: 0.05, annualFees: 0.005, taxRate: 0.314 };
+    const inv = prepayVsInvest({ ...base, annualReturn: 0.1 });
+    expect(inv.advantageInvest).toBeGreaterThan(0);
+    const ti = prepayTakeaway(inv);
+    expect(digits(ti)).toContain(eur(inv.advantageInvest));
+    expect(digits(ti)).toContain(eur(inv.interestSaved));
+    expect(ti).toContain('placer');
+    const rep = prepayVsInvest({ ...base, annualReturn: 0.0 });
+    expect(rep.advantageInvest).toBeLessThan(0);
+    const tr = prepayTakeaway(rep);
+    expect(digits(tr)).toContain(eur(-rep.advantageInvest));
+    expect(tr).toContain('pour rembourser');
+    expect(prepayTakeaway({ ...rep, lump: 0 })).toBe('');
   });
 });

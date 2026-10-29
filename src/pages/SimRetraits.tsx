@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { withdrawal, fmtEur } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { withdrawalTakeaway } from '../lib/takeaways';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = { capital: number; monthly: number; ret: number; idx: number; years: number };
 
@@ -44,6 +45,7 @@ export default function SimRetraits() {
             <Kpi label="Capital restant à l’horizon" value={fmtEur(r.remaining)} sub={`après ${s.years} ans`} />
             <Kpi label="Retrait mensuel tenable" value={fmtEur(r.sustainable)} sub="premier retrait maximal jusqu’à l’horizon" />
           </div>
+          <Takeaway>{withdrawalTakeaway({ capital: s.capital, monthly: s.monthly, years: s.years, monthsUntilEmpty: r.monthsUntilEmpty, remaining: r.remaining, totalWithdrawn: r.totalWithdrawn, sustainable: r.sustainable })}</Takeaway>
           <p className="muted small">
             Le rendement est appliqué chaque mois, puis le retrait est prélevé en fin de mois ; le retrait est revalorisé chaque année du taux saisi.
             Total retiré sur la période : {fmtEur(r.totalWithdrawn)}. Les exemples ci-dessus sont fictifs.

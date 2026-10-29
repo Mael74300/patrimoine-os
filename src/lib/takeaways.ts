@@ -65,3 +65,41 @@ export function fireTakeaway(p: { gap: number; withdrawalRate: number; target: n
   if (p.years === null) return `${base} Avec ces hypothèses, vous ne l’atteignez pas en 100 ans.`;
   return `${base} Avec ${fmtEur(p.currentWealth)} déjà réunis et ${fmtEur(p.annualSavings)} mis de côté chaque année, vous y arrivez dans environ ${p.years} an${p.years > 1 ? 's' : ''}, en euros constants.`;
 }
+
+const dureeEnMois = (m: number): string => {
+  const y = Math.floor(m / 12);
+  const r = m % 12;
+  return [y ? `${y} an${y > 1 ? 's' : ''}` : '', r ? `${r} mois` : ''].filter(Boolean).join(' et ');
+};
+
+/** Retraits réguliers : combien de temps le capital tient, et le retrait qui tiendrait tout l'horizon. */
+export function withdrawalTakeaway(p: { capital: number; monthly: number; years: number; monthsUntilEmpty: number | null; remaining: number; totalWithdrawn: number; sustainable: number }): string {
+  if (!(p.capital > 0) || !(p.monthly > 0) || !(p.years >= 1)) return '';
+  const ans = `${p.years} an${p.years > 1 ? 's' : ''}`;
+  if (p.monthsUntilEmpty !== null) {
+    return `En retirant ${fmtEur(p.monthly)} le premier mois sur un capital de ${fmtEur(p.capital)}, il n'y a plus rien au bout de ${dureeEnMois(p.monthsUntilEmpty)}, après ${fmtEur(p.totalWithdrawn)} retirés en tout. Pour tenir ${ans}, le premier retrait devrait rester sous ${fmtEur(p.sustainable)} par mois.`;
+  }
+  return `En retirant ${fmtEur(p.monthly)} le premier mois sur un capital de ${fmtEur(p.capital)}, vous avez encore ${fmtEur(p.remaining)} au bout de ${ans}, après ${fmtEur(p.totalWithdrawn)} retirés en tout. Le premier retrait pourrait aller jusqu'à ${fmtEur(p.sustainable)} par mois sans épuiser le capital avant ${ans}. Tout repose sur le rendement supposé : s'il est plus faible, le capital dure moins longtemps.`;
+}
+
+/** Épargne de précaution : montant à réunir, ce qui manque et en combien de temps avec le versement saisi. */
+export function precautionTakeaway(p: { target: number; savings: number; monthlySaving: number; reachedAt: number | null }): string {
+  if (!(p.target > 0)) return '';
+  const gap = Math.max(0, p.target - p.savings);
+  if (gap === 0) return `Votre épargne de ${fmtEur(p.savings)} couvre déjà le montant visé de ${fmtEur(p.target)} : en cas d'imprévu, vous avez de quoi tenir sans toucher à vos autres placements.`;
+  const base = `Pour être à l'abri d'un imprévu, il faut mettre ${fmtEur(p.target)} de côté, disponibles à tout moment. Vous en avez ${fmtEur(p.savings)} : il manque ${fmtEur(gap)}.`;
+  if (!(p.monthlySaving > 0)) return `${base} Sans versement mensuel, ce manque ne se comble pas.`;
+  if (p.reachedAt === null) return `${base} Avec ${fmtEur(p.monthlySaving)} par mois, ce montant n'est pas atteint en 50 ans : il faut verser davantage.`;
+  return `${base} Avec ${fmtEur(p.monthlySaving)} par mois, vous y arrivez en ${dureeEnMois(p.reachedAt)}.`;
+}
+
+/** Rembourser ou investir : l'option qui laisse le plus à l'horizon, avec le compromis certain / incertain. */
+export function prepayTakeaway(p: { lump: number; advantageInvest: number; interestSaved: number; breakEvenReturn: number | null }): string {
+  if (!(p.lump > 0)) return '';
+  const certain = `Rembourser vous fait économiser ${fmtEur(p.interestSaved)} d'intérêts : ce gain est certain, alors que le rendement d'un placement n'est qu'une hypothèse.`;
+  const seuil = p.breakEvenReturn === null ? '' : ` Les deux options s'équivalent avec un rendement brut d'environ ${fmtPct(p.breakEvenReturn)} par an ; en dessous, rembourser l'emporte.`;
+  if (Math.round(p.advantageInvest) === 0) return `Avec ces hypothèses, investir ${fmtEur(p.lump)} ou les utiliser pour rembourser votre crédit vous laisse à peu près le même patrimoine à la fin. ${certain}`;
+  return p.advantageInvest > 0
+    ? `Avec ces hypothèses, placer ${fmtEur(p.lump)} vous laisse ${fmtEur(p.advantageInvest)} de plus à la fin du crédit que les utiliser pour rembourser. ${certain}${seuil}`
+    : `Avec ces hypothèses, utiliser ${fmtEur(p.lump)} pour rembourser votre crédit vous laisse ${fmtEur(-p.advantageInvest)} de plus à la fin que les placer. ${certain}${seuil}`;
+}
