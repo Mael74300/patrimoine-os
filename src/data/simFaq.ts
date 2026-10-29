@@ -29,8 +29,47 @@ const interetsComposes: FaqItem[] = [
   { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement et l’inflation réels sont inconnus et varient ; ils sont supposés constants, avant frais et impôts. Les montants par défaut sont fictifs.' },
 ].filter((f, i, all) => all.findIndex((g) => g.q === f.q) === i);
 
+/** Questions de l’onglet « Quelle durée ? ». */
+const creditsDuree: FaqItem[] = [
+    { q: 'Pourquoi allonger la durée réduit-elle la mensualité mais augmente-t-elle le coût ?', a: 'Le capital est remboursé plus lentement : chaque mensualité est plus faible, mais le capital restant dû reste élevé plus longtemps et génère des intérêts plus longtemps. Le coût total (intérêts et assurance) augmente donc avec la durée, à taux identique.' },
+    { q: 'Comment la mensualité est-elle calculée ?', a: 'Avec la formule des crédits à mensualités constantes : capital × (taux annuel / 12) ÷ (1 − (1 + taux annuel / 12)^(−nombre de mois)). Sans taux, la mensualité vaut simplement le capital divisé par le nombre de mois. L’assurance, calculée ici sur le capital initial, s’y ajoute.' },
+    { q: 'Que comprend le coût total affiché ?', a: 'La somme des intérêts et de l’assurance sur toute la durée, sans le capital emprunté. Les frais de dossier, de garantie ou de notaire ne sont pas inclus.' },
+    { q: 'Le taux est-il le même pour toutes les durées ?', a: 'Dans ce simulateur oui, par simplification. En pratique, les banques proposent souvent des taux différents selon la durée : saisissez le taux de chaque offre dans le calculateur de crédit pour les comparer.' },
+    { q: 'Le résultat est-il une offre de prêt ?', a: 'Non. C’est un calcul pédagogique à partir de vos saisies, avec un taux fixe. Les montants par défaut sont fictifs.' },
+];
+
+/** Questions de l’onglet « Quel TAEG ? ». */
+const creditsTaeg: FaqItem[] = [
+    { q: 'Pourquoi le TAEG est-il supérieur au taux nominal ?', a: 'Le taux nominal ne porte que sur les intérêts. Le TAEG ajoute l’assurance et les frais payés au départ : vous recevez moins que le capital emprunté tout en remboursant les mêmes échéances, ce qui relève le taux annuel réellement supporté. Avec ni assurance ni frais, les deux taux sont égaux.' },
+    { q: 'Comment ce simulateur calcule-t-il le TAEG ?', a: 'Il cherche le taux annuel pour lequel la valeur actuelle des mensualités (assurance comprise) égale le capital emprunté diminué des frais payés au départ, par dichotomie. La formule est détaillée sur la page Méthode. C’est une estimation à partir de vos saisies.' },
+    { q: 'Le TAEG calculé ici peut-il différer de celui de mon offre de prêt ?', a: 'Oui, c’est une estimation pédagogique : elle suppose des échéances constantes, une assurance calculée sur le capital initial et des frais payés à la signature. Seul le TAEG indiqué sur l’offre de la banque fait foi.' },
+    { q: 'Pour comparer deux offres, que faut-il saisir ?', a: 'Saisissez pour chaque offre le même capital et la même durée, avec son taux nominal, le taux annuel de son assurance et le total de ses frais payés au départ, puis comparez le TAEG et le coût total obtenus.' },
+];
+
+/** Questions de l’onglet « In fine ou amortissable ». */
+const creditsInFine: FaqItem[] = [
+    { q: 'Quelle différence entre un crédit in fine et un crédit amortissable ?', a: 'Dans un crédit amortissable, chaque mensualité rembourse une part de capital et des intérêts. Dans un crédit in fine, on ne paie que les intérêts pendant la durée et le capital est remboursé en une seule fois à l’échéance, souvent à l’aide d’une épargne constituée en parallèle.' },
+    { q: 'Comment le simulateur calcule-t-il l’épargne à constituer ?', a: 'Il cherche le versement mensuel qui, placé chaque fin de mois au rendement net supposé, reconstitue exactement le capital emprunté à l’échéance : capital × r ÷ ((1 + r)^mois − 1), avec r le taux mensuel équivalent. Sans rendement, c’est le capital divisé par le nombre de mois.' },
+    { q: 'Quand l’in fine coûte-t-il plus cher ?', a: 'Quand l’épargne rapporte moins que le taux du crédit : les intérêts, calculés sur tout le capital pendant toute la durée, dépassent alors les gains de l’épargne. Dans ce simulateur, le coût net est égal aux intérêts et à l’assurance, diminués des gains de l’épargne.' },
+    { q: 'Le rendement de l’épargne est-il garanti ?', a: 'Non. Le rendement saisi est une hypothèse constante : un placement réel peut rapporter moins, voire perdre de la valeur, et le capital pourrait alors manquer à l’échéance. Fiscalité, frais de l’enveloppe et conditions de la banque ne sont pas pris en compte.' },
+    { q: 'Le résultat est-il une offre de prêt ?', a: 'Non. C’est un calcul pédagogique à partir de vos saisies, avec un taux fixe. Les montants par défaut sont fictifs.' },
+];
+
+/** Questions de l’onglet « Renégocier mon prêt ». */
+const creditsRenegocier: FaqItem[] = [
+    { q: 'Comment savoir si renégocier ou racheter mon crédit est rentable ?', a: 'Comparez les intérêts qu’il vous reste à payer sur le prêt actuel avec ceux du nouveau prêt, puis retirez les frais de l’opération : c’est le gain net affiché. Il doit être positif, et le point mort (frais divisés par l’économie mensuelle) doit être inférieur au temps pendant lequel vous comptez garder le prêt.' },
+    { q: 'Quels frais faut-il saisir ?', a: 'Tous les frais ponctuels de l’opération : frais de dossier, garantie du nouveau prêt, indemnités éventuelles de remboursement anticipé du prêt actuel. Ils dépendent de vos contrats et de l’offre reçue : relevez-les sur vos documents, le simulateur n’en suppose aucun.' },
+    { q: 'Pourquoi la mensualité baisse-t-elle mais le gain net est-il négatif ?', a: 'Si la nouvelle durée est plus longue que la durée restante, la mensualité diminue mais les intérêts s’accumulent sur plus de mois. Le gain net, qui compare les intérêts totaux et inclut les frais, est le bon indicateur du coût.' },
+    { q: 'L’assurance emprunteur est-elle prise en compte ?', a: 'Non, les mensualités sont hors assurance. Si le nouveau contrat d’assurance change son coût, ajoutez l’écart sur la durée au gain net à la main.' },
+    { q: 'Le résultat est-il une promesse de gain ?', a: 'Non. Il découle uniquement des taux, durées et frais saisis, avec des échéances constantes. Les montants par défaut sont fictifs et l’offre réelle d’une banque peut différer.' },
+];
+
+/** Simulateur « Comparer des crédits » : questions de chaque onglet, affichées sous l'onglet actif ; les données structurées reprennent celles de l'onglet ouvert par défaut. */
+export const comparerCreditsFaq = { duree: creditsDuree, taeg: creditsTaeg, infine: creditsInFine, renegocier: creditsRenegocier };
+
 export const simFaq: Record<string, FaqItem[]> = {
   'interets-composes': interetsComposes,
+  'comparer-des-credits': comparerCreditsFaq.duree,
   immobilier: [
     { q: 'Quelle différence entre rendement brut et rendement net de charges ?', a: 'Le rendement brut rapporte les loyers annuels au prix du bien seul. Le rendement net de charges retire des loyers encaissés (vacance déduite) les charges, la taxe foncière, l’entretien et la gestion, puis divise par le coût total de l’opération (prix, frais d’acquisition, travaux, mobilier). Il est donc plus bas, et plus proche de la réalité.' },
     { q: 'Comment le flux de trésorerie mensuel est-il calculé ?', a: 'Il vaut les loyers encaissés moins les charges, divisés par douze, moins la mensualité du crédit assurance comprise, la première année et avant impôt. Un flux négatif signifie que vous complétez chaque mois la différence avec votre épargne.' },
@@ -75,12 +114,6 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Comment la valeur de l’entreprise est-elle estimée ?', a: 'Par un multiple du résultat net positif, que vous choisissez. C’est une estimation pédagogique : elle n’est ni de la trésorerie ni un revenu, et une valorisation réelle dépend de nombreux autres facteurs.' },
     { q: 'Que changent les scénarios pessimiste et optimiste ?', a: 'Ils modifient le chiffre d’affaires de départ, sa croissance et la marge brute par rapport au scénario central, les autres hypothèses restant identiques. Le taux d’impôt sur les sociétés et les charges sociales sont des valeurs que vous saisissez : vérifiez-les pour votre situation. Les montants par défaut sont fictifs.' },
   ],
-  taeg: [
-    { q: 'Pourquoi le TAEG est-il supérieur au taux nominal ?', a: 'Le taux nominal ne porte que sur les intérêts. Le TAEG ajoute l’assurance et les frais payés au départ : vous recevez moins que le capital emprunté tout en remboursant les mêmes échéances, ce qui relève le taux annuel réellement supporté. Avec ni assurance ni frais, les deux taux sont égaux.' },
-    { q: 'Comment ce simulateur calcule-t-il le TAEG ?', a: 'Il cherche le taux annuel pour lequel la valeur actuelle des mensualités (assurance comprise) égale le capital emprunté diminué des frais payés au départ, par dichotomie. La formule est détaillée sur la page Méthode. C’est une estimation à partir de vos saisies.' },
-    { q: 'Le TAEG calculé ici peut-il différer de celui de mon offre de prêt ?', a: 'Oui, c’est une estimation pédagogique : elle suppose des échéances constantes, une assurance calculée sur le capital initial et des frais payés à la signature. Seul le TAEG indiqué sur l’offre de la banque fait foi.' },
-    { q: 'Pour comparer deux offres, que faut-il saisir ?', a: 'Saisissez pour chaque offre le même capital et la même durée, avec son taux nominal, le taux annuel de son assurance et le total de ses frais payés au départ, puis comparez le TAEG et le coût total obtenus.' },
-  ],
   inflation: [
     { q: 'Que mesure la perte de pouvoir d’achat affichée ?', a: 'Elle compare ce que l’on pourra acheter avec la somme dans l’avenir à ce qu’elle permet d’acheter aujourd’hui, si les prix progressent au taux d’inflation que vous saisissez. La somme n’a pas diminué en euros : ce sont les prix qui ont augmenté.' },
     { q: 'Qu’est-ce que le rendement réel ?', a: 'C’est le rendement net corrigé de l’inflation, calculé par (1 + rendement) / (1 + inflation) − 1. Il est positif si le placement progresse plus vite que les prix, négatif sinon.' },
@@ -91,13 +124,6 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Qu’est-ce que le point d’équilibre ?', a: 'C’est le premier mois à partir duquel acheter l’emporte durablement sur louer jusqu’à l’horizon, avec vos hypothèses. S’il n’apparaît pas, acheter ne l’emporte pas sur la durée étudiée.' },
     { q: 'Pourquoi le résultat dépend-il autant de la hausse des prix et de la durée ?', a: 'Les frais d’acquisition et de revente pèsent d’autant plus que la durée de détention est courte, alors que la hausse du bien et le remboursement du capital jouent sur la durée. Le simulateur montre l’effet de ces deux hypothèses.' },
     { q: 'Le résultat est-il une prévision ?', a: 'Non. Il ne repose que sur les hypothèses que vous saisissez (prix, loyer, rendement, charges), dont l’évolution réelle est inconnue. Les montants par défaut sont fictifs.' },
-  ],
-  'renegocier-son-credit-gain-et-point-mort': [
-    { q: 'Comment savoir si renégocier ou racheter mon crédit est rentable ?', a: 'Comparez les intérêts qu’il vous reste à payer sur le prêt actuel avec ceux du nouveau prêt, puis retirez les frais de l’opération : c’est le gain net affiché. Il doit être positif, et le point mort (frais divisés par l’économie mensuelle) doit être inférieur au temps pendant lequel vous comptez garder le prêt.' },
-    { q: 'Quels frais faut-il saisir ?', a: 'Tous les frais ponctuels de l’opération : frais de dossier, garantie du nouveau prêt, indemnités éventuelles de remboursement anticipé du prêt actuel. Ils dépendent de vos contrats et de l’offre reçue : relevez-les sur vos documents, le simulateur n’en suppose aucun.' },
-    { q: 'Pourquoi la mensualité baisse-t-elle mais le gain net est-il négatif ?', a: 'Si la nouvelle durée est plus longue que la durée restante, la mensualité diminue mais les intérêts s’accumulent sur plus de mois. Le gain net, qui compare les intérêts totaux et inclut les frais, est le bon indicateur du coût.' },
-    { q: 'L’assurance emprunteur est-elle prise en compte ?', a: 'Non, les mensualités sont hors assurance. Si le nouveau contrat d’assurance change son coût, ajoutez l’écart sur la durée au gain net à la main.' },
-    { q: 'Le résultat est-il une promesse de gain ?', a: 'Non. Il découle uniquement des taux, durées et frais saisis, avec des échéances constantes. Les montants par défaut sont fictifs et l’offre réelle d’une banque peut différer.' },
   ],
   'cout-d-attendre-pour-epargner': [
     { q: 'Combien coûte de commencer à épargner plus tard ?', a: 'Cela dépend du versement, du rendement que vous supposez, de la date d’arrivée et du délai. Le simulateur compare le capital obtenu en commençant tout de suite et en commençant après le délai, à versement mensuel et date d’arrivée identiques.' },
@@ -116,20 +142,6 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Quelle différence entre taux équivalent et taux proportionnel ?', a: 'Le taux proportionnel s’obtient en divisant simplement le taux annuel par le nombre de périodes (5 % / 12 ≈ 0,4167 %). Capitalisé douze fois, il donne un taux annuel un peu supérieur à 5 % : les deux ne sont pas interchangeables dès qu’il y a capitalisation.' },
     { q: 'Quel taux utiliser pour un calcul d’épargne ou de crédit ?', a: 'Cela dépend de la convention du produit, indiquée dans son contrat. Ce simulateur se contente de convertir un taux saisi selon les deux méthodes ; il ne dit pas laquelle s’applique à un produit donné.' },
     { q: 'Le résultat est-il une prévision ?', a: 'Non. C’est un calcul mathématique à partir du seul taux saisi. Les valeurs par défaut sont fictives.' },
-  ],
-  'duree-du-credit-mensualite-et-cout-total': [
-    { q: 'Pourquoi allonger la durée réduit-elle la mensualité mais augmente-t-elle le coût ?', a: 'Le capital est remboursé plus lentement : chaque mensualité est plus faible, mais le capital restant dû reste élevé plus longtemps et génère des intérêts plus longtemps. Le coût total (intérêts et assurance) augmente donc avec la durée, à taux identique.' },
-    { q: 'Comment la mensualité est-elle calculée ?', a: 'Avec la formule des crédits à mensualités constantes : capital × (taux annuel / 12) ÷ (1 − (1 + taux annuel / 12)^(−nombre de mois)). Sans taux, la mensualité vaut simplement le capital divisé par le nombre de mois. L’assurance, calculée ici sur le capital initial, s’y ajoute.' },
-    { q: 'Que comprend le coût total affiché ?', a: 'La somme des intérêts et de l’assurance sur toute la durée, sans le capital emprunté. Les frais de dossier, de garantie ou de notaire ne sont pas inclus.' },
-    { q: 'Le taux est-il le même pour toutes les durées ?', a: 'Dans ce simulateur oui, par simplification. En pratique, les banques proposent souvent des taux différents selon la durée : saisissez le taux de chaque offre dans le calculateur de crédit pour les comparer.' },
-    { q: 'Le résultat est-il une offre de prêt ?', a: 'Non. C’est un calcul pédagogique à partir de vos saisies, avec un taux fixe. Les montants par défaut sont fictifs.' },
-  ],
-  'credit-in-fine-ou-amortissable': [
-    { q: 'Quelle différence entre un crédit in fine et un crédit amortissable ?', a: 'Dans un crédit amortissable, chaque mensualité rembourse une part de capital et des intérêts. Dans un crédit in fine, on ne paie que les intérêts pendant la durée et le capital est remboursé en une seule fois à l’échéance, souvent à l’aide d’une épargne constituée en parallèle.' },
-    { q: 'Comment le simulateur calcule-t-il l’épargne à constituer ?', a: 'Il cherche le versement mensuel qui, placé chaque fin de mois au rendement net supposé, reconstitue exactement le capital emprunté à l’échéance : capital × r ÷ ((1 + r)^mois − 1), avec r le taux mensuel équivalent. Sans rendement, c’est le capital divisé par le nombre de mois.' },
-    { q: 'Quand l’in fine coûte-t-il plus cher ?', a: 'Quand l’épargne rapporte moins que le taux du crédit : les intérêts, calculés sur tout le capital pendant toute la durée, dépassent alors les gains de l’épargne. Dans ce simulateur, le coût net est égal aux intérêts et à l’assurance, diminués des gains de l’épargne.' },
-    { q: 'Le rendement de l’épargne est-il garanti ?', a: 'Non. Le rendement saisi est une hypothèse constante : un placement réel peut rapporter moins, voire perdre de la valeur, et le capital pourrait alors manquer à l’échéance. Fiscalité, frais de l’enveloppe et conditions de la banque ne sont pas pris en compte.' },
-    { q: 'Le résultat est-il une offre de prêt ?', a: 'Non. C’est un calcul pédagogique à partir de vos saisies, avec un taux fixe. Les montants par défaut sont fictifs.' },
   ],
   'augmenter-son-epargne-chaque-annee': [
     { q: 'Quel effet a une hausse annuelle du versement mensuel ?', a: 'Chaque hausse s’ajoute aux versements suivants, qui fructifient ensuite à leur tour. Le simulateur compare le capital obtenu avec un versement constant et avec un versement qui augmente d’un pourcentage chaque année, au même rendement supposé.' },

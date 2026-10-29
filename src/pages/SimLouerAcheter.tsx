@@ -29,7 +29,7 @@ export default function SimLouerAcheter() {
       </PageHead>
       <p className="notice" role="note">
         Résultat entièrement fondé sur vos hypothèses (prix, loyer, hausses, rendement, frais) : modifiez-les, l’issue peut s’inverser. Le plus souvent, ce sont la durée de détention
-        et l’évolution du prix qui décident. Pour le détail du prêt, voir le <Link to="/simulateurs/credit">calculateur de crédit</Link> et le <Link to="/simulateurs/taeg">TAEG</Link>
+        et l’évolution du prix qui décident. Pour le détail du prêt, voir le <Link to="/simulateurs/credit">calculateur de crédit</Link> et le <Link to="/simulateurs/comparer-des-credits#taeg">TAEG</Link>
         {' '}; pour la mensualité supportable, le <Link to="/simulateurs/endettement">taux d’endettement</Link>.
       </p>
       <div className="sim" style={{ marginTop: 24 }}>
