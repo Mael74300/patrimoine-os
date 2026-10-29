@@ -153,9 +153,9 @@ export default function SimEtfImmobilier() {
           </div>
 
           <h2>Comparaison détaillée</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
-              <thead><tr><th style={{ width: 170 }} /><th>ETF</th><th>Immobilier locatif</th></tr></thead>
+              <thead><tr><th style={{ width: 170 }}><span className="sr-only">Critère</span></th><th>ETF</th><th>Immobilier locatif</th></tr></thead>
               <tbody>
                 {rows.map(([k, a, b]) => <tr key={k}><th scope="row">{k}</th><td>{a}</td><td>{b}</td></tr>)}
                 <tr><th scope="row">Frais et impôts de sortie</th><td>{fmtEur(res.etf.exitCosts)}</td><td>{fmtEur(res.immo.exitCosts)}</td></tr>

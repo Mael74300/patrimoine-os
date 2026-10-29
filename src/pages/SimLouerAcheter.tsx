@@ -61,7 +61,7 @@ export default function SimLouerAcheter() {
           </div>
           <p className="muted small">Mensualité du prêt hors assurance : {fmtEur(r.monthlyPayment)} sur un capital emprunté de {fmtEur(r.loanAmount)}.</p>
           <h2>Si le prix du bien évolue autrement</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th scope="col">Hausse annuelle du prix</th><th scope="col" className="r">Acheter − louer</th></tr></thead>
               <tbody>
@@ -72,7 +72,7 @@ export default function SimLouerAcheter() {
             </table>
           </div>
           <h2>Si l’on revend plus tôt ou plus tard</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th scope="col">Horizon</th><th scope="col" className="r">Acheter − louer</th></tr></thead>
               <tbody>

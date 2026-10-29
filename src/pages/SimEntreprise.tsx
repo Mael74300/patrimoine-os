@@ -67,7 +67,7 @@ export default function SimEntreprise() {
 
         <section aria-label="Résultats">
           <h2 style={{ marginTop: 0 }}>Trois scénarios à {s.years} ans</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th>Scénario</th><th className="r">CA final</th><th className="r">Résultat net final</th><th className="r">Trésorerie finale</th><th className="r">Trésorerie la plus basse</th><th className="r">Valeur estimée</th></tr></thead>
               <tbody>
@@ -110,7 +110,7 @@ export default function SimEntreprise() {
               <Kpi label="Impôt sur les sociétés" value={fmtEur(last.corporateTax)} />
             </div>
           )}
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead>
                 <tr><th>Année</th><th className="r">CA</th><th className="r">Marge brute</th><th className="r">Charges fixes</th><th className="r">Rémunération chargée</th><th className="r">Résultat avant IS</th><th className="r">IS</th><th className="r">Résultat net</th><th className="r">Besoin en fonds de roulement</th><th className="r">Flux de trésorerie</th><th className="r">Trésorerie</th><th className="r">Valeur estimée</th></tr>

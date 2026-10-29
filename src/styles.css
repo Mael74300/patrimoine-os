@@ -4,7 +4,7 @@
   --surface-2: #efede6;
   --ink: #22262b;
   --ink-2: #4b525a;
-  --ink-3: #6b727a;
+  --ink-3: #5f666e;
   --line: #dedbd2;
   --primary: #123a4a;
   --primary-ink: #ffffff;
@@ -132,6 +132,8 @@ legend { font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; }
 .kpi.neg .k-value { color: var(--danger); }
 
 /* ---------- Tables */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.table-wrap:focus-visible { outline-offset: -3px; }
 .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
 table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
 th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }

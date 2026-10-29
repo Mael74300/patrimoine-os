@@ -68,6 +68,7 @@ export default function Encyclopedia() {
       {currentCat && list.length === 0 && !q && (
         <p className="notice info">Les fiches de cette famille sont en préparation. Elles seront publiées une fois leurs informations vérifiées.</p>
       )}
+      <h2 className="sr-only">Liste des placements</h2>
       <ul className="inv-list">
         {list.map((i) => (
           <li key={i.slug}>

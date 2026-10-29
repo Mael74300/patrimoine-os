@@ -45,7 +45,7 @@ export default function SimInFine() {
             <Kpi label="Coût net, in fine" value={fmtEur(r.inFineNetCost)} sub={r.netCostGap >= 0 ? `${fmtEur(r.netCostGap)} de plus` : `${fmtEur(-r.netCostGap)} de moins`} />
           </div>
           <h2>Comparaison sur {r.months / 12} ans</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th>Poste</th><th className="r">Amortissable</th><th className="r">In fine</th></tr></thead>
               <tbody>

@@ -58,7 +58,7 @@ export default function SimBudget() {
           </div>
 
           <h2>Votre budget face au repère 50 / 30 / 20</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th>Poste</th><th className="r">Montant</th><th className="r">Part du revenu</th><th className="r">Repère</th><th className="r">Écart au repère</th></tr></thead>
               <tbody>

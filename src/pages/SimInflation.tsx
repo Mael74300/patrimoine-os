@@ -52,7 +52,7 @@ export default function SimInflation() {
             ]}
           />
           <h2>Repères de durée</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <tbody>
                 <tr><th scope="row">Durée pour perdre la moitié du pouvoir d’achat (somme inchangée)</th><td className="r">{fmtYears(r.yearsToHalve)}</td></tr>

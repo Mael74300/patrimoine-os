@@ -42,7 +42,7 @@ export default function SimTaeg() {
             <Kpi label="Coût total du crédit" value={fmtEur(r.totalCost)} sub={`intérêts ${fmtEur(r.totalInterest)} + assurance ${fmtEur(r.totalInsurance)} + frais ${fmtEur(Math.min(s.fees, s.principal))}`} />
           </div>
           <h2>Effet des frais payés au départ</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th scope="col">Frais au départ</th><th scope="col" className="r">TAEG</th></tr></thead>
               <tbody>
@@ -53,7 +53,7 @@ export default function SimTaeg() {
             </table>
           </div>
           <h2>Effet de l’assurance</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th scope="col">Assurance (taux annuel)</th><th scope="col" className="r">TAEG</th></tr></thead>
               <tbody>

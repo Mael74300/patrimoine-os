@@ -50,7 +50,7 @@ export default function SimEndettement() {
           </div>
           <Takeaway>{debtRatioTakeaway({ income: s.income, ratioAfter: r.ratioAfter, remainingAfter: r.remainingAfter, withinRef: r.withinHcsf, refLabel: pct })}</Takeaway>
           <h2>Repères</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <tbody>
                 <tr><th scope="row">Revenu net minimal pour la mensualité saisie</th><td className="r">{fmtEur(r.minIncome)}</td></tr>

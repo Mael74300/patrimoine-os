@@ -81,7 +81,7 @@ export default function SimDettes() {
             />
           </div>
           <h2>Comparaison des trois approches</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th scope="col">Approche</th><th scope="col" className="r">Durée</th><th scope="col" className="r">Intérêts</th><th scope="col" className="r">Total payé</th></tr></thead>
               <tbody>
@@ -92,7 +92,7 @@ export default function SimDettes() {
             </table>
           </div>
           <h2>Mois de solde de chaque dette</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th scope="col">Dette</th><th scope="col" className="r">Avalanche</th><th scope="col" className="r">Boule de neige</th></tr></thead>
               <tbody>

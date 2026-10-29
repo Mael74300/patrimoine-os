@@ -52,7 +52,7 @@ export default function SimRembourser() {
             <Kpi label="Rendement brut d'équilibre" value={r.breakEvenReturn === null ? 'Hors plage' : fmtPct(r.breakEvenReturn)} sub="en dessous, rembourser l'emporte" />
           </div>
           <h2>Comparaison à la fin de la durée restante</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th>Option</th><th className="r">Patrimoine net</th><th className="r">Crédit soldé en</th></tr></thead>
               <tbody>

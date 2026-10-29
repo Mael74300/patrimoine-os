@@ -132,9 +132,9 @@ export default function SimImmobilier() {
             Appliqué à votre saisie : {ADVERSE.extraVacancyMonths} mois de vacance en plus par an, loyer réduit de {Math.round((1 - ADVERSE.rentFactor) * 100)} %,
             taxe foncière et charges majorées de {Math.round((ADVERSE.chargesFactor - 1) * 100)} %, évolution du prix du bien diminuée de {Math.abs(ADVERSE.appreciationDelta * 100)} points par an.
           </p>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
-              <thead><tr><th /><th className="r">Central</th><th className="r">Défavorable</th></tr></thead>
+              <thead><tr><th><span className="sr-only">Indicateur</span></th><th className="r">Central</th><th className="r">Défavorable</th></tr></thead>
               <tbody>
                 <tr><td>Rendement net de charges</td><td className="r">{fmtPct(r.netYield)}</td><td className="r">{fmtPct(badSnap.netYield)}</td></tr>
                 <tr><td>Flux mensuel avant impôt</td><td className="r">{fmtEur(r.monthlyCashflow)}</td><td className="r">{fmtEur(badSnap.monthlyCashflow)}</td></tr>
@@ -146,7 +146,7 @@ export default function SimImmobilier() {
           </div>
 
           <Fold title="Détail annuel">
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead>
                 <tr>

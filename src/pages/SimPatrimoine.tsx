@@ -127,7 +127,7 @@ export default function SimPatrimoine() {
           {st.scenarios.length > 1 && (
             <>
               <h2>Comparaison des scénarios</h2>
-              <div className="table-wrap">
+              <div className="table-wrap" tabIndex={0}>
                 <table>
                   <thead><tr><th>Scénario</th><th className="r">Durée</th><th className="r">Versements</th><th className="r">Gains</th><th className="r">Capital nominal</th><th className="r">Corrigé inflation</th><th className="r">Après fiscalité</th></tr></thead>
                   <tbody>
@@ -161,7 +161,7 @@ export default function SimPatrimoine() {
           </p>
 
           <h2>Évolution annuelle — {s.name}</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th>Année</th><th className="r">Versé (cumul)</th><th className="r">Retiré (cumul)</th><th className="r">Capital nominal</th><th className="r">Gains</th><th className="r">Corrigé inflation</th></tr></thead>
               <tbody>

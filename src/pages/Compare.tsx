@@ -63,10 +63,10 @@ export default function Compare() {
       </div>
 
       {items.length > 0 && (
-        <div className="table-wrap">
+        <div className="table-wrap" tabIndex={0}>
           <table>
             <thead>
-              <tr><th style={{ width: 150 }} />{items.map((i) => <th key={i.slug}><Link to={`/encyclopedie/${i.slug}`}>{i.name}</Link></th>)}</tr>
+              <tr><th style={{ width: 150 }}><span className="sr-only">Critère</span></th>{items.map((i) => <th key={i.slug}><Link to={`/encyclopedie/${i.slug}`}>{i.name}</Link></th>)}</tr>
             </thead>
             <tbody>
               {rows.map(([label, render]) => (
@@ -87,7 +87,7 @@ export default function Compare() {
       <div className="grid cols-3">
         {items.map((i, k) => (
           <div className="panel" key={i.slug}>
-            <strong style={{ color: COLORS[k] }}>● {i.name}</strong>
+            <strong><span style={{ color: COLORS[k] }} aria-hidden="true">●</span> {i.name}</strong>
             <div style={{ marginTop: 10 }}>
               <NumberField label="Rendement brut supposé" unit="%" percent value={getH(i.slug).r} step={0.25} min={-10} max={20}
                 onChange={(v) => setHyp((h) => ({ ...h, [i.slug]: { ...getH(i.slug), r: v } }))} />

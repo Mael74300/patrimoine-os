@@ -99,7 +99,7 @@ export default function SimCredit() {
           </p>
 
           <Fold title="Tableau d'amortissement annuel">
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th>Année</th><th className="r">Intérêts</th><th className="r">Capital remboursé</th><th className="r">Assurance</th><th className="r">Restant dû</th></tr></thead>
               <tbody>

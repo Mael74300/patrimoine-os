@@ -57,7 +57,7 @@ export default function SimFrais() {
             series={res.map((r, i) => ({ name: `Frais ${fmtPct(r.fees)}`, color: COLORS[i], values: r.series }))}
           />
           <h2>Comparaison</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th>Frais annuels</th><th className="r">Capital final</th><th className="r">En euros d'aujourd'hui</th><th className="r">Coût des frais</th><th className="r">Part des gains absorbée</th></tr></thead>
               <tbody>
