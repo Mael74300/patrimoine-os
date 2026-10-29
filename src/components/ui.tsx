@@ -184,12 +184,25 @@ type ChartProps = {
 
 /** Graphique en lignes SVG, sans dépendance, utilisable à la souris, au doigt et au clavier. */
 export function LineChart({ series, xLabels, format, title, height = 300 }: ChartProps) {
-  const W = 720;
-  const H = height;
-  const pad = { l: 64, r: 16, t: 16, b: 32 };
+  // Largeur du dessin = largeur affichée : les textes gardent leur taille réelle (lisibles sur mobile).
+  const [W, setW] = useState(720);
+  const narrow = W < 480;
+  const H = narrow ? Math.min(height, 240) : height;
+  const pad = { l: narrow ? 48 : 64, r: 16, t: 16, b: 32 };
   const n = xLabels.length;
   const [hover, setHover] = useState<number | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+
+  useEffect(() => {
+    const el = svgRef.current?.parentElement;
+    if (!el) return;
+    const measure = () => setW(Math.max(260, Math.round(el.getBoundingClientRect().width)));
+    measure();
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const { max, min, ticks } = useMemo(() => {
     const all = series.flatMap((s) => s.values).filter((v): v is number => typeof v === 'number' && Number.isFinite(v));
@@ -205,7 +218,7 @@ export function LineChart({ series, xLabels, format, title, height = 300 }: Char
 
   const x = (i: number) => pad.l + (n <= 1 ? 0 : (i / (n - 1)) * (W - pad.l - pad.r));
   const y = (v: number) => pad.t + (1 - (v - min) / (max - min || 1)) * (H - pad.t - pad.b);
-  const labelEvery = Math.max(1, Math.ceil(n / 10));
+  const labelEvery = Math.max(1, Math.ceil(n / Math.max(3, Math.floor((W - pad.l - pad.r) / 56))));
 
   const onMove = (clientX: number) => {
     const svg = svgRef.current;
