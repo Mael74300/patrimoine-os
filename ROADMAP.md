@@ -67,6 +67,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-29 : les résultats des simulateurs ne sont que des chiffres bruts (débutant : « 92 854 € d'intérêts », et alors ?) ; phrase « Concrètement » ajoutée sous les résultats du crédit, du taux d'endettement et du rendement réel (voir « Fait »). Restent les autres simulateurs.
 - 2026-10-29 : sur mobile, les graphiques étaient réduits à un tiers de leur taille : légendes d'axes d'environ 5 px, illisibles (tous visiteurs, 13 pages) ; dessin désormais à la largeur réelle (voir « Fait »).
 - 2026-10-29 : le guide « inflation » expliquait en texte seul pourquoi un montant qui grossit peut acheter moins (épargnant : notion abstraite) ; schéma ajouté (voir « Fait »).
+- 2026-10-29 : sur mobile, le résumé « En bref » d'une fiche (risque, liquidité, horizon, capital) n'apparaissait qu'après 4 000 px de texte (épargnant : impossible de juger vite) ; résumé remonté sous le titre, données et hypothèses repliées (voir « Fait »).
 - 2026-10-29 : sur mobile, la mensualité du simulateur de crédit n'apparaissait qu'après environ 1 565 px de formulaire ; réglages avancés déplacés près des résultats (voir « Fait »). Les autres simulateurs à formulaire long restent à examiner.
 
 ## À faire
@@ -90,6 +91,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [x] **Fiches : résumé en haut sur mobile** (2026-10-29) : le bloc « En bref » est affiché sous le titre sous 900 px (colonne latérale masquée), avec les boutons Comparer et Simuler ; « Données utilisées » et « Hypothèses » repliées (`Fold`). Hauteur de la fiche PEA : 375 px 4 575 → 4 123 px ; 1280 px 2 936 → 2 757 px.
 
 - [~] **Illustrations maison, étape 4** (2026-10-29) : schéma « diversification » (`SchemaDiversification`) dans le guide « Diversifier ses placements » : part de chaque placement et perte de l’année pour l’exemple fictif déjà présent (actions −20 %, placement prudent +2 % ; 100 % actions : −20 % ; 70/30 : −13,4 %), chiffres calculés et testés. Hauteur du guide : 375 px 4 679 → 5 110 px ; 1280 px 3 050 → 3 472 px. Reste : effet de levier ; icônes des thèmes ; en-têtes.
 
