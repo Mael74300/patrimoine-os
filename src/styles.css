@@ -217,6 +217,7 @@ td.neg { color: var(--danger); }
 .ill-total { font-size: 14px; font-weight: 700; }
 .ill-in { font-size: 12px; font-weight: 600; }
 .ill-sub { font-size: 13px; fill: var(--ink-2) !important; }
+.ill-svg text.ill-on-dark { fill: var(--primary-ink); }
 .ill-year { font-size: 14px; font-weight: 700; }
 
 /* Blocs repliables : FAQ des simulateurs et tableaux détaillés */
