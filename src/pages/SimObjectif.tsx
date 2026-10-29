@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { fmtEur, fmtPct, monthlyByDuration, monthlyByRate, savingsGoal } from '../lib/finance';
+import { savingsGoalTakeaway } from '../lib/takeaways';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
-import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = { target: number; current: number; years: number; annualRate: number };
 
@@ -44,6 +45,7 @@ export default function SimObjectif() {
             <Kpi label="Total des versements" value={fmtEur(r.deposits)} sub={`en plus des ${fmtEur(s.current)} déjà épargnés`} />
             <Kpi label="Intérêts attendus" value={fmtEur(r.interest)} sub={`soit ${fmtPct(r.interestShare)} de l'objectif`} />
           </div>
+          <Takeaway>{savingsGoalTakeaway({ target: s.target, current: s.current, years: n, monthly: r.monthly, deposits: r.deposits, interest: r.interest })}</Takeaway>
           <h2>Progression vers l’objectif</h2>
           <LineChart
             title="Solde de l'épargne à la fin de chaque année"

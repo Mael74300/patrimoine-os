@@ -56,21 +56,14 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les plus importants, datés.
 
-- 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent.
-- 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public.
-- 2026-10-28 (propriétaire) : ajouter des images créées par la tâche elle-même.
-- 2026-10-28 : aucune illustration sur le site ; les guides sont du texte seul, notamment « Comprendre les intérêts composés » (débutant : notion abstraite sans schéma). Schéma ajouté (voir « Fait »).
-- 2026-10-29 : pages de simulateur très longues sur mobile (crédit 5 922 px, immobilier 8 537 px) à cause de la FAQ et des tableaux annuels toujours dépliés ; FAQ et tableaux de crédit et d'immobilier repliés (voir « Fait »). Restent les autres tableaux (entreprise…).
-- 2026-10-29 : l'accueil n'orientait pas selon la situation du visiteur (débutant, épargnant, futur acheteur, retraite) ; bloc « Par où commencer ? » ajouté (voir « Fait »). Les familles sans icône ni illustration restent à traiter (chantier Illustrations).
-- 2026-10-29 : les 31 simulateurs se recoupent encore (chantiers 1 et 2).
-- 2026-10-29 : le guide « investir à crédit » parle d'intérêts et de capital remboursé sans le montrer (futur acheteur : notion abstraite) ; schéma « que contient une mensualité » ajouté (voir « Fait »). Schéma « inflation » ajouté ensuite (voir « Fait »). Schéma « diversification » ajouté ensuite (voir « Fait »). Reste sans schéma : effet de levier.
-- 2026-10-29 : les résultats des simulateurs ne sont que des chiffres bruts (débutant : « 92 854 € d'intérêts », et alors ?) ; phrase « Concrètement » ajoutée sous les résultats du crédit, du taux d'endettement et du rendement réel (voir « Fait »). Restent les autres simulateurs.
-- 2026-10-29 : sur mobile, les graphiques étaient réduits à un tiers de leur taille : légendes d'axes d'environ 5 px, illisibles (tous visiteurs, 13 pages) ; dessin désormais à la largeur réelle (voir « Fait »).
-- 2026-10-29 : le guide « inflation » expliquait en texte seul pourquoi un montant qui grossit peut acheter moins (épargnant : notion abstraite) ; schéma ajouté (voir « Fait »).
-- 2026-10-29 : sur mobile, le résumé « En bref » d'une fiche (risque, liquidité, horizon, capital) n'apparaissait qu'après 4 000 px de texte (épargnant : impossible de juger vite) ; résumé remonté sous le titre, données et hypothèses repliées (voir « Fait »).
-- 2026-10-29 : audit automatisé de 87 pages à 375 px (libellés, noms de liens, titres, débordement) : aucune anomalie. Sur mobile, le catalogue des simulateurs faisait 6 023 px et ses liens de thèmes, de simples liens dans une phrase, étaient trop petits à toucher ; thèmes en boutons de 44 px avec compteur, descriptions limitées à deux lignes (voir « Fait »). Le catalogue de l'encyclopédie (6 160 px) reste à alléger.
-- 2026-10-29 : audit d'accessibilité automatisé (axe-core, 87 pages, 375 et 1280 px) : texte secondaire à 4,46 pour 1 de contraste (seuil 4,5) sur 85 pages, tableaux défilants inaccessibles au clavier (8 pages), en-têtes de colonnes vides, saut de niveau de titre dans l'encyclopédie ; corrigés (voir « Fait »). Restent : annonces des résultats aux lecteurs d'écran, alternative textuelle des graphiques.
-- 2026-10-29 : sur mobile, la mensualité du simulateur de crédit n'apparaissait qu'après environ 1 565 px de formulaire ; réglages avancés déplacés près des résultats (voir « Fait »). Les autres simulateurs à formulaire long restent à examiner.
+- 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (31, chantiers 1 et 2).
+- 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public ; ajouter des images créées par la tâche elle-même.
+- 2026-10-29 : les résultats des simulateurs ne sont que des chiffres bruts (débutant : « 92 854 € d'intérêts », et alors ?). Phrase « Concrètement » ajoutée sous les résultats de 6 simulateurs : crédit, endettement, rendement, objectif d'épargne, louer ou acheter, indépendance financière (voir « Fait »). Restent les autres simulateurs (immobilier, précaution, patrimoine, retraits…).
+- 2026-10-29 : schémas SVG ajoutés aux guides intérêts composés, investir à crédit, inflation et diversification (voir « Fait ») ; reste sans schéma : effet de levier. Les familles et thèmes sans icône ni illustration restent à traiter.
+- 2026-10-29 : pages de simulateur longues sur mobile (FAQ et tableaux annuels) ; repliés pour le crédit et l'immobilier ; la mensualité du crédit remontée. Restent les simulateurs à formulaire long (entreprise, indépendance, patrimoine).
+- 2026-10-29 : sur mobile, graphiques et résumé « En bref » des fiches illisibles ou trop bas ; corrigés (voir « Fait »). Le catalogue de l'encyclopédie (6 160 px à 375 px) reste à alléger.
+- 2026-10-29 : audit d'accessibilité automatisé (87 pages) : contrastes, tableaux au clavier, en-têtes corrigés ; restent les annonces des résultats aux lecteurs d'écran et l'alternative textuelle des graphiques.
+- 2026-10-29 : audit automatisé de 87 pages à 375 px : aucun débordement horizontal, aucune erreur de console.
 
 ## À faire
 
@@ -82,7 +75,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 6. [~] **Accessibilité** (étape 1 faite le 2026-10-29 : contrastes, tableaux, en-têtes, test automatisé). Étape suivante : alternative textuelle ou tableau pour chaque graphique, annonces des résultats aux lecteurs d'écran, libellés des champs, ordre de tabulation.
 7. [ ] **Relecture éditoriale d'ensemble.** Repérer les doublons et contradictions entre guides, fiches et simulateurs (par exemple le guide et le simulateur sur la règle de 72), harmoniser le vocabulaire et les liens, raccourcir ce qui se répète.
 8. [ ] **Identité visuelle (propriétaire).** Revoir l'esthétique d'ensemble : palette, typographie (polices système), échelle d'espacements, cartes, boutons, en-tête, pied de page, graphiques. Une refonte cohérente par petites étapes, page par page, en gardant les contrastes accessibles. Captures avant et après dans chaque pull request.
-9. [~] **Vulgarisation (propriétaire).** (étape 1 faite le 2026-10-29) Réécrire en langage simple, page par page en commençant par les plus visitées (accueil, simulateurs principaux, guides d'entrée) : phrases courtes, jargon expliqué, exemple concret, phrase de synthèse sous chaque résultat de simulateur. Sans changer aucun chiffre ni règle.
+9. [~] **Vulgarisation (propriétaire).** (étapes 1 et 2 faites le 2026-10-29 : 6 simulateurs) Réécrire en langage simple, page par page en commençant par les plus visitées (accueil, simulateurs principaux, guides d'entrée) : phrases courtes, jargon expliqué, exemple concret, phrase de synthèse sous chaque résultat de simulateur. Sans changer aucun chiffre ni règle.
 10. [ ] **Illustrations maison (propriétaire).** Des images créées par la tâche elle-même, en SVG écrit à la main, pour rendre le site plus agréable et plus facile à comprendre :
    - **schémas explicatifs** qui vulgarisent une notion (intérêts composés, amortissement d'un crédit, effet de levier, diversification, inflation) : priorité, car ils aident à comprendre ;
    - **icônes** cohérentes pour les thèmes de simulateurs et les familles d'investissement ;
@@ -93,6 +86,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [~] **Vulgarisation, étape 2** (2026-10-29) : phrases « Concrètement » (`src/lib/takeaways.ts`, testées contre les fonctions de calcul) sous les résultats de l'objectif d'épargne, de louer ou acheter et de l'indépendance financière ; elles reformulent les chiffres affichés, sans aucun chiffre réglementaire ni nouveau. Hauteur à 375 px : objectif 4 238 → 4 452 px, louer ou acheter 4 731 → 4 966 px, indépendance 4 338 → environ 4 560 px ; à 1280 px : 2 716 → 2 833, 2 362 → 2 500, 2 378 → environ 2 520 px. Reste : immobilier, précaution, patrimoine, retraits, puis les guides.
 
 - [~] **Accessibilité, étape 1** (2026-10-29) : `--ink-3` (texte secondaire) assombri de #6b727a à #5f666e (contraste 4,46 → 5,33 sur le fond de page) ; tableaux défilants atteignables au clavier (`tabIndex`) ; en-têtes de colonnes vides remplacés par un texte réservé aux lecteurs d'écran (`.sr-only`) ; titre masqué « Liste des placements » dans l'encyclopédie ; noms de placements du comparateur non colorés (le point seul l'est). Test `src/accessibility.test.ts` (contrastes de la palette, tableaux, en-têtes). Audit axe-core (WCAG 2.1 AA et bonnes pratiques, 87 pages, 375 et 1280 px) : 1 176 éléments en défaut de contraste sur 85 pages avant, aucune violation après. Hauteurs de page inchangées.
 
