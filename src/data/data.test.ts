@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { categoryById } from './categories';
-import { guides } from './guides';
+import { guideGroups, guides, otherGuides } from './guides';
 import { simFaq } from './simFaq';
 import { investmentBySlug, investments } from './investments';
 import { loanPayment, projectGrowth } from '../lib/finance';
@@ -18,6 +18,16 @@ describe('intégrité des données éditoriales', () => {
     expect(i.example.toLowerCase()).toContain('fictif');
   });
 
+  it('chaque guide figure dans un seul groupe de la page Guides', () => {
+    const all = guideGroups.flatMap((g) => g.slugs);
+    expect([...all].sort()).toEqual(guides.map((g) => g.slug).sort());
+  });
+  it('« Autres guides » : trois guides différents, du même groupe d’abord', () => {
+    const o = otherGuides('interets-composes');
+    expect(o).toHaveLength(3);
+    expect(o.map((g) => g.slug)).not.toContain('interets-composes');
+    expect(o[0].slug).toBe('regle-de-72-doubler-son-capital');
+  });
   it('les guides pointent vers des fiches existantes', () => {
     for (const g of guides) for (const r of g.related) expect(investmentBySlug[r], r).toBeDefined();
   });

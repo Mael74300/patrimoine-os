@@ -266,3 +266,4 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 @media (max-width: 960px) { .situations { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px) { .situations { grid-template-columns: 1fr; } .situations a { display: grid; grid-template-columns: 48px 1fr; column-gap: 12px; align-items: start; padding: 12px 14px; } .situations .situation-icon { grid-row: 1 / span 3; margin: 0; } }
 @media (max-width: 600px) { .grid.src-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .src-grid .panel { padding: 12px; } }
+@media (min-width: 900px) { .guide-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; align-items: start; } }

@@ -64,6 +64,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-29 : sur mobile, graphiques et résumé « En bref » des fiches illisibles ou trop bas ; corrigés (voir « Fait »). Catalogue de l'encyclopédie regroupé par famille (6 160 → 5 813 px à 375 px).
 - 2026-10-29 : audit d'accessibilité automatisé (87 pages) : contrastes, tableaux au clavier, en-têtes corrigés ; restent les annonces des résultats aux lecteurs d'écran et l'alternative textuelle des graphiques.
 - 2026-10-29 : 4 simulateurs d'intérêts composés réunis en une page à onglets (31 → 28 simulateurs) ; restent 5 simulateurs de la même famille et les 5 simulateurs de crédit (chantiers 1 et 2).
+- 2026-10-29 : débutant sur la page Guides : 19 guides en liste plate, sans ordre de lecture ; regroupés en quatre parcours, et « Autres guides » ne propose plus toujours les trois mêmes (voir « Fait »).
 - 2026-10-29 : audit automatisé de 87 pages à 375 px : aucun débordement horizontal, aucune erreur de console.
 
 ## À faire
@@ -87,6 +88,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [x] **Guides par parcours** (2026-10-29) : la page « Guides » regroupe les 19 guides en quatre parcours (Pour démarrer, Comprendre les mécanismes, Choisir ses placements, Immobilier et crédit ; `guideGroups`, testé : chaque guide dans un seul groupe), deux colonnes sur écran large, résumés limités à deux lignes sur mobile ; « Autres guides » en bas de chaque guide propose d'abord le même groupe (`otherGuides`). Hauteur de `/guides/` : 375 px 4 411 → 4 260 px ; 1280 px 2 254 → 2 094 px.
 
 - [~] **Regroupement des simulateurs d'intérêts composés, étape 1** (2026-10-29) : page `/simulateurs/interets-composes/` à quatre onglets (combien placer, en combien de temps, quel rendement, doubler son capital), calculs et tests inchangés, enregistrements locaux conservés, FAQ regroupée (18 questions sans doublon). Les 4 anciennes adresses restent valides : page de renvoi pré-rendue (`noindex`, canonique vers la nouvelle page, hors plan du site et flux) puis redirection vers le bon onglet. Hauteur : 4 pages de 1 672 à 1 707 px à 1280 px et de 3 103 à 3 210 px à 375 px → 1 page de 2 522 px et 4 185 px. Reste : les cinq autres simulateurs de la famille.
 

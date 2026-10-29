@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { categories } from '../data/categories';
-import { guideBySlug, guides } from '../data/guides';
+import { guideBySlug, guideGroups, guides, otherGuides } from '../data/guides';
 import { investmentBySlug, investments } from '../data/investments';
 import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
 import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
@@ -15,16 +15,24 @@ export function GuideList() {
   return (
     <>
       <PageHead eyebrow="Guides" title="Guides pédagogiques">Des explications courtes pour comprendre les mécanismes avant de choisir.</PageHead>
-      <ul className="inv-list">
-        {guides.map((g) => (
-          <li key={g.slug}>
-            <Link className="inv-row" to={`/guides/${g.slug}`}>
-              <div><h2 style={{ margin: '0 0 4px', fontSize: '1.05rem', color: 'var(--primary)' }}>{g.title}</h2><p>{g.summary}</p></div>
-              <span className="small muted">{g.readingMinutes} min</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <div className="guide-groups">
+      {guideGroups.map((grp) => (
+        <section key={grp.title} aria-labelledby={`grp-${grp.slugs[0]}`} style={{ marginTop: 28 }}>
+          <h2 id={`grp-${grp.slugs[0]}`} style={{ margin: 0 }}>{grp.title}</h2>
+          <p className="small muted" style={{ margin: '4px 0 8px' }}>{grp.intro}</p>
+          <ul className="inv-list inv-list--compact">
+            {grp.slugs.map((slug) => guideBySlug[slug]).map((g) => (
+              <li key={g.slug}>
+                <Link className="inv-row" to={`/guides/${g.slug}`}>
+                  <div><h3 style={{ margin: '0 0 4px', fontSize: '1.05rem', color: 'var(--primary)' }}>{g.title}</h3><p>{g.summary}</p></div>
+                  <span className="small muted">{g.readingMinutes} min</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+      </div>
     </>
   );
 }
@@ -97,7 +105,7 @@ export function GuidePage() {
   const { slug = '' } = useParams();
   const g = guideBySlug[slug];
   if (!g) return <NotFound />;
-  const others = guides.filter((x) => x.slug !== g.slug).slice(0, 3);
+  const others = otherGuides(g.slug);
   return (
     <article>
       <Crumbs items={[{ to: '/', label: 'Accueil' }, { to: '/guides', label: 'Guides' }, { label: g.title }]} />
