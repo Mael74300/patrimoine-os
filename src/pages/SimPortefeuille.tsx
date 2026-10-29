@@ -44,12 +44,12 @@ export default function SimPortefeuille() {
       </div>
 
       <h2>Lignes du portefeuille</h2>
-      <div className="table-wrap">
+      <div className="table-wrap" tabIndex={0}>
         <table>
           <thead>
             <tr>
               <th>Support</th><th className="r">Montant (€)</th><th className="r">Rendement supposé (%)</th><th className="r">Frais (%)</th>
-              <th className="r">Risque (1-7)</th><th className="r">Cible (%)</th><th className="r">Poids actuel</th><th className="r">Rééquilibrage</th><th />
+              <th className="r">Risque (1-7)</th><th className="r">Cible (%)</th><th className="r">Poids actuel</th><th className="r">Rééquilibrage</th><th><span className="sr-only">Actions</span></th>
             </tr>
           </thead>
           <tbody>

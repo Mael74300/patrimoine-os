@@ -55,7 +55,7 @@ export default function SimIndependance() {
           </div>
 
           <h2>Selon le taux de retrait</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th>Taux de retrait</th><th className="r">Capital visé</th><th className="r">Délai estimé</th><th className="r">Capital épuisé après (rendement central)</th></tr></thead>
               <tbody>

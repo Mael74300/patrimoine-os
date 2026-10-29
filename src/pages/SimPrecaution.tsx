@@ -113,7 +113,7 @@ export default function SimPrecaution() {
             Remplissage du livret le mieux rémunéré vers le moins rémunéré, dans la limite des plafonds de versement (un livret de chaque type par personne).
             Taux {LIVRETS_PERIOD}, vérifiés au {LIVRETS_AS_OF}.
           </p>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th>Support</th><th className="r">Taux</th><th className="r">Plafond</th><th className="r">Montant</th><th className="r">Intérêts sur un an</th></tr></thead>
               <tbody>

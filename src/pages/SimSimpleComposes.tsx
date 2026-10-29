@@ -40,7 +40,7 @@ export default function SimSimpleComposes() {
             <Kpi label="Écart en faveur des composés" value={fmtEur(r.gap)} sub="intérêts composés − intérêts simples" />
             <Kpi label="Rapport composé / simple" value={`× ${fmtNum(r.ratio)}`} sub="sur le capital final" />
           </div>
-          <div className="table-wrap" style={{ marginTop: 16 }}><table>
+          <div className="table-wrap" tabIndex={0} style={{ marginTop: 16 }}><table>
             <thead><tr><th>Année</th><th className="r">Intérêts simples</th><th className="r">Intérêts composés</th><th className="r">Écart</th></tr></thead>
             <tbody>
               {shown.map((row) => (

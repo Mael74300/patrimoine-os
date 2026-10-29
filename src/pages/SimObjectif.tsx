@@ -53,7 +53,7 @@ export default function SimObjectif() {
           />
           <p className="muted small">Échéance : {n} an{n > 1 ? 's' : ''}.</p>
           <h2>Effet de la durée</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th scope="col">Échéance</th><th scope="col" className="r">Versement mensuel</th></tr></thead>
               <tbody>
@@ -64,7 +64,7 @@ export default function SimObjectif() {
             </table>
           </div>
           <h2>Effet du taux</h2>
-          <div className="table-wrap">
+          <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th scope="col">Rendement annuel</th><th scope="col" className="r">Versement mensuel</th></tr></thead>
               <tbody>
