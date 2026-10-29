@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { categories } from '../data/categories';
 import { guideBySlug, guideGroups, guides, otherGuides } from '../data/guides';
@@ -5,7 +6,7 @@ import { investmentBySlug, investments } from '../data/investments';
 import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
 import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
 import { Crumbs, PageHead, Sources, usePersistentState } from '../components/ui';
-import { SchemaDiversification, SchemaInflation, SchemaInterets, SchemaMensualite } from '../components/Illustrations';
+import { SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite } from '../components/Illustrations';
 import NotFound from './NotFound';
 
 const fmtDate = (iso: string) => new Date(iso + 'T12:00:00Z').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -115,11 +116,15 @@ export function GuidePage() {
         {g.sections.map((s, i) => (
           <section key={s.heading}>
             <h2>{s.heading}</h2>
-            {s.body.map((p) => <p key={p}>{p}</p>)}
+            {s.body.map((p, k) => (
+              <Fragment key={p}>
+                <p>{p}</p>
+                {g.slug === 'investir-a-credit' && s.heading === 'Un exemple fictif' && (k === 0 ? <SchemaMensualite /> : <SchemaLevier />)}
+              </Fragment>
+            ))}
             {g.slug === 'interets-composes' && i === 0 && <SchemaInterets />}
             {g.slug === 'inflation-pouvoir-d-achat-epargne' && s.heading === 'Un exemple fictif chiffré' && <SchemaInflation />}
             {g.slug === 'diversification-placements' && s.heading === 'Un exemple fictif chiffré' && <SchemaDiversification />}
-            {g.slug === 'investir-a-credit' && s.heading === 'Un exemple fictif' && <SchemaMensualite />}
           </section>
         ))}
         {g.faq?.length ? (
