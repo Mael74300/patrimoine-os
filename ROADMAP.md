@@ -61,6 +61,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-28 (propriétaire) : ajouter des images créées par la tâche elle-même.
 - 2026-10-28 : aucune illustration sur le site ; les guides sont du texte seul, notamment « Comprendre les intérêts composés » (débutant : notion abstraite sans schéma). Schéma ajouté (voir « Fait »).
 - 2026-10-29 : pages de simulateur très longues sur mobile (crédit 5 922 px, immobilier 8 537 px) à cause de la FAQ et des tableaux annuels toujours dépliés ; FAQ et tableaux de crédit et d'immobilier repliés (voir « Fait »). Restent les autres tableaux (entreprise…).
+- 2026-10-29 : l'accueil n'orientait pas selon la situation du visiteur (débutant, épargnant, futur acheteur, retraite) ; bloc « Par où commencer ? » ajouté (voir « Fait »). Les familles sans icône ni illustration restent à traiter (chantier Illustrations).
 - 2026-10-29 : les 31 simulateurs se recoupent encore (chantiers 1 et 2).
 
 ## À faire
@@ -73,19 +74,21 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 6. [ ] **Exporter et importer ses données locales.** Fichier JSON téléchargé et rechargé par l'utilisateur, pour passer d'un appareil à l'autre, sans aucun envoi à un serveur ; validation du fichier importé ; tests.
 7. [ ] **Accessibilité.** Audit des pages principales : contrastes, ordre de tabulation, focus visible, libellés des champs, alternative textuelle ou tableau pour chaque graphique, annonces des résultats aux lecteurs d'écran. Corriger, puis ajouter un test automatisé qui empêche les régressions.
 8. [ ] **Relecture éditoriale d'ensemble.** Repérer les doublons et contradictions entre guides, fiches et simulateurs (par exemple le guide et le simulateur sur la règle de 72), harmoniser le vocabulaire et les liens, raccourcir ce qui se répète.
-9. [ ] **Accueil et parcours.** Une entrée « Par où commencer ? » selon la situation (je débute, j'ai une épargne, je veux acheter, je prépare ma retraite), qui oriente vers trois ou quatre pages existantes au plus, sans allonger l'accueil.
-10. [ ] **Identité visuelle (propriétaire).** Revoir l'esthétique d'ensemble : palette, typographie (polices système), échelle d'espacements, cartes, boutons, en-tête, pied de page, graphiques. Une refonte cohérente par petites étapes, page par page, en gardant les contrastes accessibles. Captures avant et après dans chaque pull request.
-11. [ ] **Vulgarisation (propriétaire).** Réécrire en langage simple, page par page en commençant par les plus visitées (accueil, simulateurs principaux, guides d'entrée) : phrases courtes, jargon expliqué, exemple concret, phrase de synthèse sous chaque résultat de simulateur. Sans changer aucun chiffre ni règle.
-12. [ ] **Illustrations maison (propriétaire).** Des images créées par la tâche elle-même, en SVG écrit à la main, pour rendre le site plus agréable et plus facile à comprendre :
+9. [ ] **Identité visuelle (propriétaire).** Revoir l'esthétique d'ensemble : palette, typographie (polices système), échelle d'espacements, cartes, boutons, en-tête, pied de page, graphiques. Une refonte cohérente par petites étapes, page par page, en gardant les contrastes accessibles. Captures avant et après dans chaque pull request.
+10. [ ] **Vulgarisation (propriétaire).** Réécrire en langage simple, page par page en commençant par les plus visitées (accueil, simulateurs principaux, guides d'entrée) : phrases courtes, jargon expliqué, exemple concret, phrase de synthèse sous chaque résultat de simulateur. Sans changer aucun chiffre ni règle.
+11. [ ] **Illustrations maison (propriétaire).** Des images créées par la tâche elle-même, en SVG écrit à la main, pour rendre le site plus agréable et plus facile à comprendre :
    - **schémas explicatifs** qui vulgarisent une notion (intérêts composés, amortissement d'un crédit, effet de levier, diversification, inflation) : priorité, car ils aident à comprendre ;
    - **icônes** cohérentes pour les thèmes de simulateurs et les familles d'investissement ;
    - **illustrations d'en-tête** sobres pour l'accueil, les guides et les rubriques.
    Règles : un seul style pour tout le site (traits, arrondis, palette tirée des variables CSS pour suivre le thème) ; fichiers légers (moins de 15 ko chacun) dans `src/assets/illustrations/` ou en composants ; texte alternatif utile pour les schémas, `aria-hidden` pour les images décoratives ; lisibles à 375 px. Un schéma qui montre des chiffres doit être exact, ou marqué « illustration » s'il est seulement indicatif ; aucune donnée inventée présentée comme réelle. Pas d'image tirée d'une banque d'images ni d'un service externe. Quelques images utiles par exécution, jamais une image sur chaque page par principe ; ne pas allonger les pages sans raison.
-13. [ ] **Test de fumée dans l'intégration continue.** Chaque page pré-rendue se charge sans erreur JavaScript, à 1280 px et 375 px, sans débordement horizontal.
+12. [ ] **Test de fumée dans l'intégration continue.** Chaque page pré-rendue se charge sans erreur JavaScript, à 1280 px et 375 px, sans débordement horizontal.
 
 ## Fait
 
+
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [x] **Accueil et parcours** (2026-10-29) : le bloc « Comment fonctionne le site » est remplacé par « Par où commencer ? », quatre cartes (Je débute, J'ai déjà de l'épargne, Je veux acheter, Je prépare ma retraite) avec icônes SVG maison (`SituationIcon`), chacune vers une seule page existante ; sources de l'accueil sur deux colonnes à 375 px. Hauteur de l'accueil : 375 px 6 821 → 6 705 px ; 1280 px 2 990 → 3 028 px.
 
 - [~] **Alléger les pages de simulateur, étape 1** (2026-10-29) : FAQ des 31 simulateurs en questions repliables, tableaux annuels des simulateurs crédit et immobilier repliés (composant `Fold`). Hauteur à 375 px : crédit 5 922 → 4 413 px, immobilier 8 537 → 6 705 px, budget 4 777 → 4 344 px ; à 1280 px : crédit 3 555 → 2 361 px, immobilier 4 405 → 3 053 px.
 

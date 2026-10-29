@@ -174,10 +174,6 @@ tr:last-child td { border-bottom: 0; }
 .cat-grid span { font-size: 0.86rem; color: var(--ink-2); }
 .cat-grid em { font-style: normal; font-size: 0.75rem; color: var(--ink-3); display: block; margin-top: 6px; }
 
-.steps { counter-reset: step; list-style: none; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(3, 1fr); }
-.steps li { counter-increment: step; padding-top: 8px; border-top: 2px solid var(--primary); }
-.steps li::before { content: counter(step, decimal-leading-zero); font-family: var(--font-num); color: var(--accent); font-weight: 700; display: block; margin-bottom: 4px; }
-@media (max-width: 760px) { .steps { grid-template-columns: 1fr; } }
 
 /* ---------- Chart */
 .chart { width: 100%; height: auto; display: block; }
@@ -232,3 +228,15 @@ td.neg { color: var(--danger); }
 .faq summary:focus-visible, details.fold > summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 .faq details > p { margin: 0; padding: 0 14px 14px; }
 details.fold > .table-wrap { margin: 0 8px 8px; }
+
+.situations { list-style: none; padding: 0; margin: 8px 0 8px; display: grid; gap: 12px; grid-template-columns: repeat(4, 1fr); }
+.situations a { display: block; height: 100%; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); text-decoration: none; color: inherit; }
+.situations a:hover, .situations a:focus-visible { background: var(--accent-soft); border-color: var(--accent); }
+.situations .situation-icon { display: block; margin-bottom: 8px; }
+.situations strong { display: block; color: var(--primary); font-size: 1.05rem; margin-bottom: 4px; }
+.situations span { display: block; font-size: 0.9rem; color: var(--ink-2); }
+.situations em { display: block; font-style: normal; font-weight: 600; font-size: 0.875rem; color: var(--accent); margin-top: 6px; }
+.situations em::after { content: ' →'; }
+@media (max-width: 960px) { .situations { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .situations { grid-template-columns: 1fr; } .situations a { display: grid; grid-template-columns: 48px 1fr; column-gap: 12px; align-items: start; padding: 12px 14px; } .situations .situation-icon { grid-row: 1 / span 3; margin: 0; } }
+@media (max-width: 600px) { .grid.src-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .src-grid .panel { padding: 12px; } }
