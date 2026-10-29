@@ -5,7 +5,8 @@ import {
   PROFILE_MONTHS, type PrecautionInput, type PrecautionProfile,
 } from '../lib/finance';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
-import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, Sources, usePersistentState } from '../components/ui';
+import { precautionTakeaway } from '../lib/takeaways';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, Sources, usePersistentState } from '../components/ui';
 
 type State = PrecautionInput & { profile: PrecautionProfile; lep: 'oui' | 'non'; deadline: number };
 
@@ -90,6 +91,7 @@ export default function SimPrecaution() {
             <Kpi label="Délai avec votre versement" value={fmtMonths(path.reachedAt)} sub={`${fmtEur(s.monthlySaving)} par mois`} />
             <Kpi label={`Versement pour y arriver en ${fmtNum(s.deadline)} mois`} value={fmtEur(Math.ceil(need))} sub="par mois, intérêts compris" />
           </div>
+          <Takeaway>{precautionTakeaway({ target, savings: s.currentSavings, monthlySaving: s.monthlySaving, reachedAt: path.reachedAt })}</Takeaway>
 
           <h2>Constitution de la réserve</h2>
           <p className="muted small">
