@@ -7,7 +7,7 @@ import { guides } from '../data/guides';
 import { simulators } from '../lib/search';
 import { featuredSims, simBySlug } from '../lib/simThemes';
 import { LineChart, PageHead } from '../components/ui';
-import { SituationIcon, type SituationIconName } from '../components/Illustrations';
+import { FamilyIcon, SituationIcon, type SituationIconName } from '../components/Illustrations';
 
 const situations: { icon: SituationIconName; title: string; text: string; cta: string; to: string }[] = [
   { icon: 'pousse', title: 'Je débute', text: 'Un premier salaire, par où commencer ?', cta: 'Le guide pour démarrer', to: '/guides/par-ou-commencer' },
@@ -116,6 +116,7 @@ export default function Home() {
       <div className="cat-grid">
         {categories.filter((c) => counts[c.id]).map((c) => (
           <Link key={c.id} to={`/encyclopedie?cat=${c.id}`}>
+            <FamilyIcon id={c.id} />
             <strong>{c.name}</strong>
             <span>{c.short}</span>
             <em>{`${counts[c.id]} fiche${counts[c.id] > 1 ? 's' : ''}`}</em>

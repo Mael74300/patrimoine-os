@@ -59,7 +59,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (31, chantiers 1 et 2).
 - 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public ; ajouter des images créées par la tâche elle-même.
 - 2026-10-29 : les résultats des simulateurs ne sont que des chiffres bruts (débutant : « 92 854 € d'intérêts », et alors ?). Phrase « Concrètement » ajoutée sous les résultats de 6 simulateurs : crédit, endettement, rendement, objectif d'épargne, louer ou acheter, indépendance financière (voir « Fait »). Restent les autres simulateurs (immobilier, précaution, patrimoine, retraits…).
-- 2026-10-29 : schémas SVG ajoutés aux guides intérêts composés, investir à crédit, inflation et diversification (voir « Fait ») ; reste sans schéma : effet de levier. Les familles et thèmes sans icône ni illustration restent à traiter.
+- 2026-10-29 : schémas SVG ajoutés aux guides intérêts composés, investir à crédit, inflation et diversification (voir « Fait ») ; reste sans schéma : effet de levier. Familles d'investissement de l'accueil dotées d'icônes (voir « Fait ») ; restent les thèmes de simulateurs et les en-têtes.
 - 2026-10-29 : pages de simulateur longues sur mobile (FAQ et tableaux annuels) ; repliés pour le crédit et l'immobilier ; la mensualité du crédit remontée. Restent les simulateurs à formulaire long (entreprise, indépendance, patrimoine).
 - 2026-10-29 : sur mobile, graphiques et résumé « En bref » des fiches illisibles ou trop bas ; corrigés (voir « Fait »). Catalogue de l'encyclopédie regroupé par famille (6 160 → 5 813 px à 375 px).
 - 2026-10-29 : audit d'accessibilité automatisé (87 pages) : contrastes, tableaux au clavier, en-têtes corrigés ; restent les annonces des résultats aux lecteurs d'écran et l'alternative textuelle des graphiques.
@@ -88,6 +88,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [~] **Illustrations maison, étape 5** (2026-10-29) : icônes SVG `FamilyIcon` pour les 20 familles d'investissement (même grille 48 × 48 et même trait que `SituationIcon`), affichées sur les cartes de l'accueil ; la case grise vide de la grille est supprimée (cartes séparées), l'effectif « N fiches » est masqué sur mobile. Hauteur de l'accueil : 375 px 6 833 → 6 605 px ; 1280 px 3 121 → 3 189 px. Reste : icônes des thèmes de simulateurs ; en-têtes ; schéma effet de levier.
 
 - [x] **Guides par parcours** (2026-10-29) : la page « Guides » regroupe les 19 guides en quatre parcours (Pour démarrer, Comprendre les mécanismes, Choisir ses placements, Immobilier et crédit ; `guideGroups`, testé : chaque guide dans un seul groupe), deux colonnes sur écran large, résumés limités à deux lignes sur mobile ; « Autres guides » en bas de chaque guide propose d'abord le même groupe (`otherGuides`). Hauteur de `/guides/` : 375 px 4 411 → 4 260 px ; 1280 px 2 254 → 2 094 px.
 
