@@ -61,3 +61,46 @@ export function SchemaInterets() {
     </figure>
   );
 }
+
+export type SituationIconName = 'pousse' | 'pieces' | 'maison' | 'soleil';
+
+/** Icônes décoratives des parcours d'accueil : même trait (2,5), même grille 48 × 48, couleurs du thème. */
+export function SituationIcon({ name }: { name: SituationIconName }) {
+  const line = { fill: 'none', stroke: 'var(--primary)', strokeWidth: 2.5, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const soft = { fill: 'var(--accent-soft)', stroke: 'var(--accent)', strokeWidth: 2.5, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  return (
+    <svg viewBox="0 0 48 48" width={48} height={48} aria-hidden="true" focusable="false" className="situation-icon">
+      {name === 'pousse' && (
+        <>
+          <path d="M24 42V24" {...line} />
+          <path d="M24 28c-9 0-13-5-13-12 8 0 13 4 13 12z" {...soft} />
+          <path d="M24 24c0-7 4-11 12-11 0 7-4 11-12 11z" {...soft} />
+          <path d="M16 42h16" {...line} />
+        </>
+      )}
+      {name === 'pieces' && (
+        <>
+          <ellipse cx="24" cy="35" rx="14" ry="5.5" {...soft} />
+          <path d="M10 27v8M38 27v8" {...line} />
+          <ellipse cx="24" cy="27" rx="14" ry="5.5" {...soft} />
+          <path d="M10 19v8M38 19v8" {...line} />
+          <ellipse cx="24" cy="19" rx="14" ry="5.5" {...soft} />
+        </>
+      )}
+      {name === 'maison' && (
+        <>
+          <path d="M6 23 24 8l18 15" {...line} />
+          <path d="M11 20v22h26V20" {...soft} />
+          <path d="M20 42V30h8v12" {...line} />
+        </>
+      )}
+      {name === 'soleil' && (
+        <>
+          <path d="M6 36h36" {...line} />
+          <path d="M14 36a10 10 0 0 1 20 0z" {...soft} />
+          <path d="M24 12v6M10 20l4 4M38 20l-4 4" {...line} />
+        </>
+      )}
+    </svg>
+  );
+}

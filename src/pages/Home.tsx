@@ -7,6 +7,14 @@ import { guides } from '../data/guides';
 import { simulators } from '../lib/search';
 import { featuredSims, simBySlug } from '../lib/simThemes';
 import { LineChart, PageHead } from '../components/ui';
+import { SituationIcon, type SituationIconName } from '../components/Illustrations';
+
+const situations: { icon: SituationIconName; title: string; text: string; cta: string; to: string }[] = [
+  { icon: 'pousse', title: 'Je débute', text: 'Un premier salaire, par où commencer ?', cta: 'Le guide pour démarrer', to: '/guides/par-ou-commencer' },
+  { icon: 'pieces', title: "J'ai déjà de l'épargne", text: 'Livrets, PEA, assurance-vie, PER : que choisir ?', cta: 'Comparer les enveloppes', to: '/guides/choisir-son-enveloppe' },
+  { icon: 'maison', title: 'Je veux acheter', text: 'Ce que la banque regarde avant de prêter.', cta: 'Le taux d’endettement', to: '/guides/taux-endettement-capacite-emprunt' },
+  { icon: 'soleil', title: 'Je prépare ma retraite', text: 'Combien de temps mon capital peut-il durer ?', cta: 'Tester mon capital', to: '/simulateurs/retraits-reguliers-duree-du-capital' },
+];
 
 export default function Home() {
   const [q, setQ] = useState('');
@@ -69,12 +77,19 @@ export default function Home() {
         </div>
       </section>
 
-      <h2>Comment fonctionne le site</h2>
-      <ol className="steps">
-        <li><strong>Comprendre</strong><br /><span className="muted">Chaque fiche explique un investissement : fonctionnement, risques, frais, fiscalité datée et sources.</span></li>
-        <li><strong>Comparer</strong><br /><span className="muted">Mettez plusieurs placements côte à côte selon le risque, la liquidité, l'horizon et l'effort demandé.</span></li>
-        <li><strong>Simuler</strong><br /><span className="muted">Les calculs s'exécutent dans votre navigateur. Aucune inscription ; vos saisies ne sont jamais envoyées.</span></li>
-      </ol>
+      <h2>Par où commencer ?</h2>
+      <ul className="situations">
+        {situations.map((s) => (
+          <li key={s.to}>
+            <Link to={s.to}>
+              <SituationIcon name={s.icon} />
+              <strong>{s.title}</strong>
+              <span>{s.text}</span>
+              <em>{s.cta}</em>
+            </Link>
+          </li>
+        ))}
+      </ul>
 
       <div className="split" style={{ marginTop: 8 }}>
         <section>
@@ -109,11 +124,8 @@ export default function Home() {
       </div>
 
       <h2>Sources officielles</h2>
-      <p className="muted">
-        Les informations réglementaires de ce site sont datées (dernière vérification : {AS_OF}) et renvoient aux sources institutionnelles.
-        Les points non confirmés sont signalés « à vérifier ».
-      </p>
-      <div className="grid cols-4">
+      <p className="muted">Informations datées (dernière vérification : {AS_OF}), avec renvoi aux sources institutionnelles ; les points non confirmés sont signalés « à vérifier ».</p>
+      <div className="grid cols-4 src-grid">
         {[
           ['Service-Public.fr', 'https://www.service-public.fr', 'Droits et démarches des particuliers'],
           ['impots.gouv.fr', 'https://www.impots.gouv.fr/particulier', 'Fiscalité des revenus et du patrimoine'],
