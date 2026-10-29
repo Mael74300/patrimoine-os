@@ -53,3 +53,14 @@ export function inflationBars(): InflationBar[] {
     { label: 'Placée à 3 % par an', shown: placed, real: placed / deflator },
   ];
 }
+
+/** Exemple fictif du guide « Diversifier » : une année où les actions perdent 20 % et un placement prudent gagne 2 %. */
+export const DIVERSIFICATION_EXAMPLE = { stocksReturn: -0.2, safeReturn: 0.02, stocksShares: [1, 0.7] };
+
+export type DiversificationRow = { stocks: number; safe: number; result: number };
+
+/** Rendement de l'année pour chaque répartition : moyenne des rendements pondérée par la part de chaque placement. */
+export function diversificationRows(): DiversificationRow[] {
+  const { stocksReturn, safeReturn, stocksShares } = DIVERSIFICATION_EXAMPLE;
+  return stocksShares.map((s) => ({ stocks: s, safe: 1 - s, result: s * stocksReturn + (1 - s) * safeReturn }));
+}

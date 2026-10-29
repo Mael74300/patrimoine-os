@@ -1,5 +1,5 @@
 import { fmtEur } from '../lib/finance';
-import { INFLATION_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, inflationBars, loanSlices, snowballGroups, type SnowballBar } from '../lib/illustrationData';
+import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, loanSlices, snowballGroups, type SnowballBar } from '../lib/illustrationData';
 
 const W = 420;
 const BASE = 262;
@@ -156,6 +156,53 @@ export function SchemaInflation() {
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : {fmtEur(initial)} sur {years} ans, avec une inflation constante de {inflation * 100} % par an et un placement à {rate * 100} % par an, avant frais et impôts.
         Le montant affiché peut grossir sans que la somme permette d’acheter plus : ce qui compte, c’est l’écart avec l’inflation. Ces taux ne sont ni observés ni prévus.
+      </figcaption>
+    </figure>
+  );
+}
+
+const pct = (v: number) => `${v < 0 ? '−' : ''}${(Math.abs(v) * 100).toLocaleString('fr-FR', { maximumFractionDigits: 1 })} %`;
+
+/** Schéma « diversification » : même année, 100 % actions ou 70 % actions et 30 % placement prudent. Les longueurs des barres de perte sont proportionnelles. */
+export function SchemaDiversification() {
+  const rows = diversificationRows();
+  const { stocksReturn, safeReturn } = DIVERSIFICATION_EXAMPLE;
+  const X0 = 20;
+  const FULL = 380;
+  const len = (v: number) => (Math.abs(v) / Math.abs(stocksReturn)) * 280;
+  const titles = ['Tout en actions', 'Actions et placement prudent'];
+  const alt = rows
+    .map((r, i) => `${titles[i]} (${pct(r.stocks)} d’actions${r.safe > 0 ? `, ${pct(r.safe)} de placement prudent` : ''}) : ${pct(r.result)} sur l’année.`)
+    .join(' ');
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 258" role="img" aria-labelledby="ill-div-t ill-div-d" className="ill-svg">
+        <title id="ill-div-t">Répartir son épargne entre plusieurs placements réduit la perte d’une année où les actions baissent</title>
+        <desc id="ill-div-d">{`Une année fictive où les actions perdent ${pct(-stocksReturn)} et un placement prudent gagne ${pct(safeReturn)}. ${alt}`}</desc>
+        {rows.map((r, i) => {
+          const y = 8 + i * 124;
+          const ws = r.stocks * FULL;
+          return (
+            <g key={titles[i]}>
+              <text x={X0} y={y + 14} className="ill-year" textAnchor="start">{titles[i]}</text>
+              <rect x={X0} y={y + 24} width={ws} height={30} rx={4} fill="var(--primary)" />
+              <text x={X0 + 10} y={y + 44} className="ill-on-dark ill-in" textAnchor="start">{`Actions ${pct(r.stocks)}`}</text>
+              {r.safe > 0 && (
+                <>
+                  <rect x={X0 + ws} y={y + 24} width={FULL - ws} height={30} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+                  <text x={X0 + ws + 10} y={y + 44} className="ill-in" textAnchor="start">{`Prudent ${pct(r.safe)}`}</text>
+                </>
+              )}
+              <text x={X0} y={y + 78} className="ill-sub" textAnchor="start">Résultat de l’année</text>
+              <rect x={X0} y={y + 86} width={len(r.result)} height={22} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+              <text x={X0 + len(r.result) + 10} y={y + 102} className="ill-total" textAnchor="start">{pct(r.result)}</text>
+            </g>
+          );
+        })}
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : une année où les actions perdent {pct(-stocksReturn)} et où un placement prudent gagne {pct(safeReturn)}.
+        La barre foncée montre la part de chaque placement ; la barre ocre est la perte de l’année. La répartition amortit la baisse, sans l’empêcher ni garantir un gain. Ces rendements ne sont ni observés ni prévus.
       </figcaption>
     </figure>
   );

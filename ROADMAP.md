@@ -63,7 +63,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-29 : pages de simulateur très longues sur mobile (crédit 5 922 px, immobilier 8 537 px) à cause de la FAQ et des tableaux annuels toujours dépliés ; FAQ et tableaux de crédit et d'immobilier repliés (voir « Fait »). Restent les autres tableaux (entreprise…).
 - 2026-10-29 : l'accueil n'orientait pas selon la situation du visiteur (débutant, épargnant, futur acheteur, retraite) ; bloc « Par où commencer ? » ajouté (voir « Fait »). Les familles sans icône ni illustration restent à traiter (chantier Illustrations).
 - 2026-10-29 : les 31 simulateurs se recoupent encore (chantiers 1 et 2).
-- 2026-10-29 : le guide « investir à crédit » parle d'intérêts et de capital remboursé sans le montrer (futur acheteur : notion abstraite) ; schéma « que contient une mensualité » ajouté (voir « Fait »). Schéma « inflation » ajouté ensuite (voir « Fait »). Restent sans schéma : diversification, effet de levier.
+- 2026-10-29 : le guide « investir à crédit » parle d'intérêts et de capital remboursé sans le montrer (futur acheteur : notion abstraite) ; schéma « que contient une mensualité » ajouté (voir « Fait »). Schéma « inflation » ajouté ensuite (voir « Fait »). Schéma « diversification » ajouté ensuite (voir « Fait »). Reste sans schéma : effet de levier.
 - 2026-10-29 : les résultats des simulateurs ne sont que des chiffres bruts (débutant : « 92 854 € d'intérêts », et alors ?) ; phrase « Concrètement » ajoutée sous les résultats du crédit, du taux d'endettement et du rendement réel (voir « Fait »). Restent les autres simulateurs.
 - 2026-10-29 : sur mobile, les graphiques étaient réduits à un tiers de leur taille : légendes d'axes d'environ 5 px, illisibles (tous visiteurs, 13 pages) ; dessin désormais à la largeur réelle (voir « Fait »).
 - 2026-10-29 : le guide « inflation » expliquait en texte seul pourquoi un montant qui grossit peut acheter moins (épargnant : notion abstraite) ; schéma ajouté (voir « Fait »).
@@ -89,8 +89,9 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 
 ## Fait
 
-
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [~] **Illustrations maison, étape 4** (2026-10-29) : schéma « diversification » (`SchemaDiversification`) dans le guide « Diversifier ses placements » : part de chaque placement et perte de l’année pour l’exemple fictif déjà présent (actions −20 %, placement prudent +2 % ; 100 % actions : −20 % ; 70/30 : −13,4 %), chiffres calculés et testés. Hauteur du guide : 375 px 4 679 → 5 110 px ; 1280 px 3 050 → 3 472 px. Reste : effet de levier ; icônes des thèmes ; en-têtes.
 
 - [~] **Illustrations maison, étape 3** (2026-10-29) : schéma « inflation » (`SchemaInflation`) dans le guide « Inflation : que devient le pouvoir d’achat de votre épargne ? » : montant affiché et valeur en euros d’aujourd’hui après 10 ans, avec ou sans placement, sur l’exemple fictif déjà présent dans le guide (10 000 €, 2 %, 3 %), chiffres calculés et testés. Hauteur du guide : 375 px 4 543 → 4 992 px ; 1280 px 3 044 → 3 532 px. Reste : diversification, effet de levier ; icônes des thèmes ; en-têtes.
 
