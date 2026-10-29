@@ -62,3 +62,10 @@ describe('tableaux', () => {
     }
   });
 });
+
+describe('texte réservé aux lecteurs d’écran', () => {
+  it('reste contenu dans le tableau défilant (sinon la page déborde à droite sur mobile)', () => {
+    const rule = css.match(/\.table-wrap \{[^}]*\}/)?.[0] ?? '';
+    expect(rule).toMatch(/position:\s*relative/);
+  });
+});
