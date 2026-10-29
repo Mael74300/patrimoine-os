@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { BUSINESS_SCENARIOS, fmtEur, fmtPct, lowestCash, projectBusiness, type BusinessInput } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, Tabs, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, Tabs, usePersistentState } from '../components/ui';
 
 const DEFAULTS: BusinessInput = {
   revenueY1: 120000, revenueGrowth: 0.1, grossMarginRate: 0.6, fixedCosts: 30000, fixedCostsGrowth: 0.02,
@@ -110,6 +110,7 @@ export default function SimEntreprise() {
               <Kpi label="Impôt sur les sociétés" value={fmtEur(last.corporateTax)} />
             </div>
           )}
+          <Fold title="Tableau détaillé année par année">
           <div className="table-wrap" tabIndex={0}>
             <table>
               <thead>
@@ -139,6 +140,7 @@ export default function SimEntreprise() {
             Simplifications : pas d'amortissements comptables ni d'emprunt ; les pertes sont reportées sur les bénéfices suivants ; le besoin en fonds de
             roulement ne tient compte que des délais clients. La valeur estimée n'est pas une offre de rachat.
           </p>
+          </Fold>
           <SavedSims simKey="entreprise" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
           <SimFaq slug="entreprise" />

@@ -179,6 +179,7 @@ tr:last-child td { border-bottom: 0; }
 .fiche aside .panel { position: sticky; top: 84px; }
 .fiche-brief { display: none; margin-bottom: 8px; }
 details.fold > h3, details.fold > ul { margin-left: 14px; margin-right: 14px; }
+details.fold > p { margin-left: 14px; margin-right: 14px; }
 @media (max-width: 900px) { .fiche-brief { display: block; } .fiche aside { display: none; } }
 .facts dt { font-size: 0.8rem; color: var(--ink-3); margin-top: 12px; }
 .facts dd { margin: 2px 0 0; font-weight: 600; }
