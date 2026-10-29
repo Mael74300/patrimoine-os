@@ -45,21 +45,6 @@ export default function SimCredit() {
             <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={0} max={30} />
             <NumberField label="Assurance emprunteur" unit="%" percent value={s.insuranceRate} onChange={up('insuranceRate')} step={0.05} min={0} max={2} />
           </fieldset>
-          <fieldset>
-            <legend>Remboursement anticipé</legend>
-            <NumberField label="À la fin de l'année" unit="an" value={s.prepayYear} onChange={up('prepayYear')} min={0} max={30} />
-            <NumberField label="Montant remboursé" unit="€" value={s.prepayAmount} onChange={up('prepayAmount')} min={0} step={1000} />
-            <SelectField label="Effet" value={s.prepayMode} onChange={up('prepayMode')}
-              options={[{ v: 'duree', label: 'Réduire la durée (mensualité inchangée)' }, { v: 'mensualite', label: 'Réduire la mensualité (durée inchangée)' }]} />
-            <SelectField label="Indemnités de remboursement anticipé" value={s.withPenalty ? 1 : 0} onChange={(v) => up('withPenalty')(v === 1)}
-              options={[{ v: 1, label: 'Appliquer le plafond légal' }, { v: 0, label: 'Aucune (contrat sans indemnités)' }]}
-              hint="Crédit immobilier : au plus 6 mois d'intérêts sur la somme remboursée, dans la limite de 3 % du capital restant dû." />
-          </fieldset>
-          <fieldset>
-            <legend>Capacité d'emprunt</legend>
-            <NumberField label="Revenus nets mensuels" unit="€" value={s.income} onChange={up('income')} min={0} step={100} />
-            <NumberField label="Taux d'effort maximal" unit="%" percent value={s.debtRatio} onChange={up('debtRatio')} step={1} min={0} max={60} hint="Recommandation du HCSF : 35 % des revenus, assurance comprise." />
-          </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
         </form>
         <section aria-label="Résultats">
@@ -72,7 +57,23 @@ export default function SimCredit() {
 
           <Takeaway>{creditTakeaway({ principal: s.principal, years: s.years, monthlyTotal: res.monthlyPayment + res.monthlyInsurance, totalCost: res.totalCost })}</Takeaway>
 
+          <Fold title="Régler la capacité d'emprunt (revenus, taux d'effort)">
+            <div className="fold-form">
+              <NumberField label="Revenus nets mensuels" unit="€" value={s.income} onChange={up('income')} min={0} step={100} />
+              <NumberField label="Taux d'effort maximal" unit="%" percent value={s.debtRatio} onChange={up('debtRatio')} step={1} min={0} max={60} hint="Recommandation du HCSF : 35 % des revenus, assurance comprise." />
+            </div>
+          </Fold>
+
           <h2>Remboursement anticipé</h2>
+          <div className="panel fold-form">
+            <NumberField label="À la fin de l'année" unit="an" value={s.prepayYear} onChange={up('prepayYear')} min={0} max={30} />
+            <NumberField label="Montant remboursé" unit="€" value={s.prepayAmount} onChange={up('prepayAmount')} min={0} step={1000} />
+            <SelectField label="Effet" value={s.prepayMode} onChange={up('prepayMode')}
+              options={[{ v: 'duree', label: 'Réduire la durée (mensualité inchangée)' }, { v: 'mensualite', label: 'Réduire la mensualité (durée inchangée)' }]} />
+            <SelectField label="Indemnités de remboursement anticipé" value={s.withPenalty ? 1 : 0} onChange={(v) => up('withPenalty')(v === 1)}
+              options={[{ v: 1, label: 'Appliquer le plafond légal' }, { v: 0, label: 'Aucune (contrat sans indemnités)' }]}
+              hint="Crédit immobilier : au plus 6 mois d'intérêts sur la somme remboursée, dans la limite de 3 % du capital restant dû." />
+          </div>
           <div className="kpis">
             <Kpi label="Somme remboursée" value={fmtEur(pre.prepaid)} sub={`sur ${fmtEur(pre.remainingBefore)} restant dû`} />
             <Kpi label="Intérêts économisés" value={fmtEur(pre.interestSaved)} tone="pos" />
