@@ -61,7 +61,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-29 : les résultats des simulateurs ne sont que des chiffres bruts (débutant : « 92 854 € d'intérêts », et alors ?). Phrase « Concrètement » ajoutée sous les résultats de 6 simulateurs : crédit, endettement, rendement, objectif d'épargne, louer ou acheter, indépendance financière (voir « Fait »). Restent les autres simulateurs (immobilier, précaution, patrimoine, retraits…).
 - 2026-10-29 : schémas SVG ajoutés aux guides intérêts composés, investir à crédit, inflation et diversification (voir « Fait ») ; reste sans schéma : effet de levier. Les familles et thèmes sans icône ni illustration restent à traiter.
 - 2026-10-29 : pages de simulateur longues sur mobile (FAQ et tableaux annuels) ; repliés pour le crédit et l'immobilier ; la mensualité du crédit remontée. Restent les simulateurs à formulaire long (entreprise, indépendance, patrimoine).
-- 2026-10-29 : sur mobile, graphiques et résumé « En bref » des fiches illisibles ou trop bas ; corrigés (voir « Fait »). Le catalogue de l'encyclopédie (6 160 px à 375 px) reste à alléger.
+- 2026-10-29 : sur mobile, graphiques et résumé « En bref » des fiches illisibles ou trop bas ; corrigés (voir « Fait »). Catalogue de l'encyclopédie regroupé par famille (6 160 → 5 813 px à 375 px).
 - 2026-10-29 : audit d'accessibilité automatisé (87 pages) : contrastes, tableaux au clavier, en-têtes corrigés ; restent les annonces des résultats aux lecteurs d'écran et l'alternative textuelle des graphiques.
 - 2026-10-29 : audit automatisé de 87 pages à 375 px : aucun débordement horizontal, aucune erreur de console.
 
@@ -86,6 +86,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [x] **Catalogue de l'encyclopédie par famille** (2026-10-29) : placements regroupés sous un titre par famille avec leur nombre (le libellé répété sur chaque ligne disparaît), lignes resserrées, filtres risque et liquidité repliés (ouverts s'ils sont actifs). Hauteur de `/encyclopedie/` : 375 px 6 160 → 5 813 px ; 1280 px 3 539 → 3 528 px.
 
 - [~] **Vulgarisation, étape 2** (2026-10-29) : phrases « Concrètement » (`src/lib/takeaways.ts`, testées contre les fonctions de calcul) sous les résultats de l'objectif d'épargne, de louer ou acheter et de l'indépendance financière ; elles reformulent les chiffres affichés, sans aucun chiffre réglementaire ni nouveau. Hauteur à 375 px : objectif 4 238 → 4 452 px, louer ou acheter 4 731 → 4 966 px, indépendance 4 338 → environ 4 560 px ; à 1280 px : 2 716 → 2 833, 2 362 → 2 500, 2 378 → environ 2 520 px. Reste : immobilier, précaution, patrimoine, retraits, puis les guides.
 

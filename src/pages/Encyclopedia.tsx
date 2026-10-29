@@ -30,6 +30,17 @@ export default function Encyclopedia() {
       .sort((a, b) => categoryById[a.category].order - categoryById[b.category].order || a.name.localeCompare(b.name));
   }, [q, cat, maxRisk, minLiq]);
 
+  // La liste est déjà triée par famille : on la découpe en groupes consécutifs.
+  const groups = useMemo(() => {
+    const out: { cat: (typeof categories)[number]; items: typeof list }[] = [];
+    for (const i of list) {
+      const last = out[out.length - 1];
+      if (last && last.cat.id === i.category) last.items.push(i);
+      else out.push({ cat: categoryById[i.category], items: [i] });
+    }
+    return out;
+  }, [list]);
+
   const currentCat = cat ? categoryById[cat] : null;
 
   return (
@@ -50,6 +61,11 @@ export default function Encyclopedia() {
             {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
         </div>
+      </div>
+
+      <details className="filters-more" open={maxRisk !== 5 || minLiq !== 1 || undefined}>
+        <summary>Filtrer par risque et liquidité</summary>
+        <div className="filters">
         <div>
           <label htmlFor="f-r">Risque maximal</label>
           <select id="f-r" value={maxRisk} onChange={(e) => set('risque', e.target.value === '5' ? '' : e.target.value)}>
@@ -62,31 +78,37 @@ export default function Encyclopedia() {
             {[1, 2, 3, 4, 5].map((n) => <option key={n} value={n}>{n === 1 ? 'Toutes' : `${n} sur 5 ou plus`}</option>)}
           </select>
         </div>
-      </div>
+        </div>
+      </details>
 
       <p className="small muted" aria-live="polite">{list.length} résultat{list.length > 1 ? 's' : ''}</p>
       {currentCat && list.length === 0 && !q && (
         <p className="notice info">Les fiches de cette famille sont en préparation. Elles seront publiées une fois leurs informations vérifiées.</p>
       )}
-      <h2 className="sr-only">Liste des placements</h2>
-      <ul className="inv-list">
-        {list.map((i) => (
-          <li key={i.slug}>
-            <Link className="inv-row" to={`/encyclopedie/${i.slug}`}>
-              <div>
-                <div className="small muted">{categoryById[i.category].name}</div>
-                <h3>{i.name}</h3>
-                <p>{i.summary}</p>
-              </div>
-              <div className="meters">
-                <Dots level={i.risk} kind="risk" label="Risque" />
-                <Dots level={i.liquidity} kind="liq" label="Liquidité" />
-                <Dots level={i.effort} label="Effort" />
-              </div>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {groups.map((g) => (
+        <section key={g.cat.id} className="inv-group" aria-labelledby={`fam-${g.cat.id}`}>
+          <h2 id={`fam-${g.cat.id}`} className="inv-group-title">
+            {g.cat.name} <span>{g.items.length}</span>
+          </h2>
+          <ul className="inv-list inv-list--compact">
+            {g.items.map((i) => (
+              <li key={i.slug}>
+                <Link className="inv-row" to={`/encyclopedie/${i.slug}`}>
+                  <div>
+                    <h3>{i.name}</h3>
+                    <p>{i.summary}</p>
+                  </div>
+                  <div className="meters">
+                    <Dots level={i.risk} kind="risk" label="Risque" />
+                    <Dots level={i.liquidity} kind="liq" label="Liquidité" />
+                    <Dots level={i.effort} label="Effort" />
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
     </>
   );
 }
