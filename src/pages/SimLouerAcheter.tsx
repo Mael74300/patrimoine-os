@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { advantageByHorizon, advantageByPriceGrowth, fmtEur, fmtPct, rentVsBuy } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { rentVsBuyTakeaway } from '../lib/takeaways';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = {
   price: number; downPayment: number; acquisitionRate: number; loanRate: number; loanYears: number; ownerCostRate: number;
@@ -59,6 +60,7 @@ export default function SimLouerAcheter() {
             <Kpi label="Patrimoine du locataire" value={fmtEur(r.renterWealth)} sub="apport, frais et écarts mensuels placés" />
             <Kpi label={buyWins ? 'Avantage à l’achat' : 'Avantage à la location'} value={fmtEur(Math.abs(r.advantage))} sub={r.breakEvenMonth !== null ? `l’achat l’emporte durablement dès le mois ${r.breakEvenMonth}` : 'l’achat ne l’emporte pas à cet horizon'} />
           </div>
+          <Takeaway>{rentVsBuyTakeaway({ horizonYears: Math.floor(s.horizonYears), advantage: r.advantage, breakEvenMonth: r.breakEvenMonth })}</Takeaway>
           <p className="muted small">Mensualité du prêt hors assurance : {fmtEur(r.monthlyPayment)} sur un capital emprunté de {fmtEur(r.loanAmount)}.</p>
           <h2>Si le prix du bien évolue autrement</h2>
           <div className="table-wrap" tabIndex={0}>
