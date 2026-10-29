@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { amortize, debtRatio, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
-import { creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { amortize, debtRatio, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
+import { creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -119,5 +119,43 @@ describe('phrases « Concrètement »', () => {
     expect(digits(tr)).toContain(eur(-rep.advantageInvest));
     expect(tr).toContain('pour rembourser');
     expect(prepayTakeaway({ ...rep, lump: 0 })).toBe('');
+  });
+});
+
+describe('phrase « Concrètement » : immobilier locatif', () => {
+  const digits = (t: string) => t.replace(/\s/g, '');
+  const eur = (n: number) => digits(Math.round(n).toLocaleString('fr-FR'));
+  const base: RentalInput = {
+    price: 150000, notaryRate: 0.08, works: 10000, furniture: 0,
+    monthlyRent: 750, vacancyMonths: 1, propertyTax: 900, coOwnership: 600, insurancePno: 150,
+    managementRate: 0, maintenanceRate: 0.05,
+    downPayment: 22000, loanRate: 0.035, loanYears: 20, loanInsuranceRate: 0.003,
+    regime: 'micro-foncier', marginalRate: 0.3, socialRate: 0.172, microAllowance: 0.3, annualDepreciation: 4000,
+    appreciation: 0.01, indexation: 0.015, horizon: 20,
+  };
+  const args = (i: RentalInput) => {
+    const r = rentalAnalysis(i);
+    const proj = rentalProjection(i);
+    return { totalCost: r.totalCost, netYield: r.netYield, monthlyCashflow: r.monthlyCashflow, monthlyCashflowAfterTax: proj[0].cashflowAfterTax / 12, horizon: i.horizon, netEquity: proj[proj.length - 1].netEquity };
+  };
+  it('reprend rendement net, flux mensuels et patrimoine calculés', () => {
+    const a = args(base);
+    expect(a.monthlyCashflow).toBeLessThan(0);
+    const t = digits(rentalTakeaway(a));
+    expect(t).toContain(digits(fmtPct(a.netYield)));
+    expect(t).toContain(eur(-a.monthlyCashflow));
+    expect(t).toContain('devotrepoche');
+    expect(t).toContain(eur(a.netEquity));
+  });
+  it('flux positif : le loyer couvre mensualité et charges', () => {
+    const a = args({ ...base, monthlyRent: 1500 });
+    expect(a.monthlyCashflow).toBeGreaterThan(0);
+    const t = digits(rentalTakeaway(a));
+    expect(t).toContain('leloyercouvre');
+    expect(t).toContain(eur(a.monthlyCashflow));
+  });
+  it('sans estimation d’impôt, aucune phrase sur l’impôt ; entrées vides : texte vide', () => {
+    expect(rentalTakeaway({ ...args(base), monthlyCashflowAfterTax: null })).not.toContain('impôt estimé');
+    expect(rentalTakeaway({ ...args(base), totalCost: 0 })).toBe('');
   });
 });
