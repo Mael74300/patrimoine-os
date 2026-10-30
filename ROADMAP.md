@@ -60,6 +60,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-10-30 : simulateurs entreprise et portefeuille : seuls à ne pas avoir de phrase « Concrètement » (chantier Vulgarisation, deux dernières étapes) ; le tableau de scénarios de l'entreprise donne cinq colonnes de chiffres sans lecture guidée.
 - 2026-10-30 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable ce jour (service-public.gouv.fr et economie.gouv.fr renvoient une page de vérification, legifrance 403) ; fiches non écrites faute de confirmation.
 - 2026-10-30 : illustrations : les neuf schémas prévus (intérêts, mensualité, inflation, levier, diversification, escalier, enveloppe…) sont en place ; reste les en-têtes de rubrique.
+- 2026-10-30 : visiteur curieux d'entreprendre, page Entrepreneuriat : texte seul, 3 709 px à 375 px, aucun visuel pour l'idée centrale (séparer l'entreprise et le patrimoine) ; schéma ajouté (voir « Fait »). Glossaire : liste de 20 notions sans repère visuel, à surveiller.
 
 ## À faire
 
@@ -82,6 +83,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+- [~] **Illustrations maison, étape 11** (2026-10-30, PR à venir) : schéma `SchemaSeparer` (entreprise → une partie des bénéfices → épargne personnelle : livrets, PEA, assurance-vie) sur la page Entrepreneuriat ; aucun chiffre, il reprend le texte de la page (testé). Hauteur à 375 px : 3 709 → 3 991 px ; 1280 px : 2 017 → 2 393 px. Reste : en-têtes de rubrique.
 - [x] **Accessibilité : pied de page tactile sur mobile** (2026-10-30, PR à venir) : sous 720 px, les liens du pied de page ont une cible de 44 px de haut (17 px avant) et les listes « Explorer » et « Sources officielles » passent sur deux colonnes (CSS seul, aucun texte ni chiffre modifié). Hauteur de l'accueil à 375 px : 5 014 → 4 899 px ; 1280 px inchangée (3 189 px).
 - [~] **Vulgarisation, étape 10 : simulateur de patrimoine à long terme** (2026-10-30, PR à venir) : phrase « Concrètement » (`wealthTakeaway`, testée contre `projectGrowth` et `afterTax`) sous les résultats : versements, capital simulé et gains, valeur après impôt sur les gains, puis en euros d'aujourd'hui. Aucune donnée réglementaire nouvelle. Hauteur à 375 px : environ 4 300 → 4 550 px ; 1280 px : environ 2 170 → 2 302 px.
 - [~] **Vulgarisation, étape 9 : simulateur d'impact des frais** (2026-10-30, PR à venir) : phrase « Concrètement » (`feesTakeaway`, testée contre `feeImpact`) sous les résultats : capital au niveau de frais le plus bas et le plus haut, écart, coût total et part des gains absorbée. Aucune donnée réglementaire. Hauteur à 375 px : 4 187 → 4 381 px ; 1280 px : 2 263 → 2 360 px.

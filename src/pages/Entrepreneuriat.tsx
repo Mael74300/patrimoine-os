@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { investments } from '../data/investments';
 import { Dots, PageHead } from '../components/ui';
+import { SchemaSeparer } from '../components/Illustrations';
 
 const PATHS = [
   {
@@ -45,6 +46,7 @@ export default function Entrepreneuriat() {
       </p>
 
       <h2>Séparer l'entreprise et le patrimoine</h2>
+      <SchemaSeparer />
       <div className="prose">
         <p>
           Un entrepreneur concentre souvent l'essentiel de son patrimoine dans sa société. Constituer en parallèle une épargne personnelle diversifiée
