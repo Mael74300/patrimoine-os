@@ -212,3 +212,15 @@ export function budgetTakeaway(p: { income: number; shares: { needs: number; wan
     : ` Vous atteignez déjà le taux d'épargne visé (${fmtPct(p.targetRate)}).`;
   return repartition + reste + cible;
 }
+
+/** Inflation : ce que la somme permet d'acheter à l'horizon, laissée telle quelle ou placée. */
+export function inflationTakeaway(p: { amount: number; years: number; inflation: number; annualReturn: number; idleRealValue: number; nominalToKeepPower: number; investedRealValue: number }): string {
+  if (!(p.amount > 0) || !(p.years > 0)) return '';
+  const duree = `${p.years} an${p.years > 1 ? 's' : ''}`;
+  const rien = p.inflation > 0
+    ? `Avec ${fmtPct(p.inflation)} d'inflation par an, ${fmtEur(p.amount)} laissés tels quels pendant ${duree} ne permettront d'acheter que ce que ${fmtEur(p.idleRealValue)} achètent aujourd'hui. Pour garder le même pouvoir d'achat, il faudrait alors détenir ${fmtEur(p.nominalToKeepPower)}.`
+    : `Avec ${fmtPct(p.inflation)} d'inflation par an, ${fmtEur(p.amount)} laissés tels quels pendant ${duree} permettent d'acheter, en euros d'aujourd'hui, ${fmtEur(p.idleRealValue)}.`;
+  const diff = Math.round(p.investedRealValue) - Math.round(p.amount);
+  const place = ` Placée à ${fmtPct(p.annualReturn)} par an, la même somme vaut ${fmtEur(p.investedRealValue)} en euros d'aujourd'hui : ${diff > 0 ? `elle gagne ${fmtEur(diff)} de pouvoir d'achat` : diff < 0 ? `elle perd encore ${fmtEur(-diff)} de pouvoir d'achat` : 'son pouvoir d\'achat est conservé'}.`;
+  return rien + place;
+}
