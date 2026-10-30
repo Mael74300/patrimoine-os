@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { fmtEur, fmtPct, purchasingPower } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { inflationTakeaway } from '../lib/takeaways';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = { amount: number; years: number; inflation: number; annualReturn: number };
 
@@ -41,6 +42,7 @@ export default function SimInflation() {
             <Kpi label="Montant pour garder le même pouvoir d'achat" value={fmtEur(r.nominalToKeepPower)} sub={`dans ${n} an${n > 1 ? 's' : ''}, en euros courants`} />
             <Kpi label="Somme placée, en euros d'aujourd'hui" value={fmtEur(r.investedRealValue)} sub={`${fmtEur(r.investedValue)} en euros courants · rendement réel ${fmtPct(r.realReturn)}`} tone={r.realReturn < 0 ? 'neg' : undefined} />
           </div>
+          <Takeaway>{inflationTakeaway({ amount: s.amount, years: n, inflation: s.inflation, annualReturn: s.annualReturn, idleRealValue: r.idleRealValue, nominalToKeepPower: r.nominalToKeepPower, investedRealValue: r.investedRealValue })}</Takeaway>
           <h2>Valeur de la somme dans le temps (euros d’aujourd’hui)</h2>
           <LineChart
             title="Pouvoir d'achat de la somme, inchangée ou placée"

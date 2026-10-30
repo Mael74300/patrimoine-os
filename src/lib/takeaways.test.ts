@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
-import { budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
+import { inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -245,5 +245,17 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     const ok = analyzeBudget({ ...inp, saving: 600, wants: 500 });
     expect(budgetTakeaway({ income: ok.income, shares: ok.shares, unallocated: ok.unallocated, targetRate: 0.2, missing: 0 })).toContain('déjà');
     expect(budgetTakeaway({ income: 0, shares: { needs: 0, wants: 0, saving: 0 }, unallocated: 0, targetRate: 0.2, missing: 0 })).toBe('');
+  });
+  it('inflation : valeurs issues de purchasingPower, gain ou perte de pouvoir d\'achat', () => {
+    const inp = { amount: 10000, years: 20, inflation: 0.02, annualReturn: 0.03 };
+    const r = purchasingPower(inp);
+    const mk = (x: typeof r, i: typeof inp) => digits(inflationTakeaway({ ...i, idleRealValue: x.idleRealValue, nominalToKeepPower: x.nominalToKeepPower, investedRealValue: x.investedRealValue }));
+    const t = mk(r, inp);
+    expect(t).toContain(eur(r.idleRealValue) + '€achètent');
+    expect(t).toContain(eur(r.nominalToKeepPower));
+    expect(t).toContain('ellegagne' + eur(r.investedRealValue - 10000) + '€de');
+    const low = { ...inp, annualReturn: 0.01 };
+    expect(mk(purchasingPower(low), low)).toContain('elleperdencore');
+    expect(inflationTakeaway({ ...inp, amount: 0, idleRealValue: 0, nominalToKeepPower: 0, investedRealValue: 0 })).toBe('');
   });
 });
