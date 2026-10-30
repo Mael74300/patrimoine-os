@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { categories } from '../data/categories';
 import { AS_OF, investments } from '../data/investments';
@@ -16,6 +16,20 @@ const situations: { icon: SituationIconName; title: string; text: string; cta: s
   { icon: 'soleil', title: 'Je prépare ma retraite', text: 'Combien de temps mon capital peut-il durer ?', cta: 'Tester mon capital', to: '/simulateurs/retraits-reguliers-duree-du-capital' },
 ];
 
+/** Bloc replié sur mobile (liste longue), toujours ouvert en écran large et dans le HTML pré-rendu. */
+export function MobileFold({ label, children }: { label: string; children?: ReactNode }) {
+  const ref = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    if (window.matchMedia('(max-width: 700px)').matches && ref.current) ref.current.open = false;
+  }, []);
+  return (
+    <details ref={ref} open className="cmp-fold mob-fold">
+      <summary>{label}</summary>
+      {children}
+    </details>
+  );
+}
+
 export default function Home() {
   const [q, setQ] = useState('');
   const nav = useNavigate();
@@ -28,6 +42,7 @@ export default function Home() {
     investments.forEach((i) => (c[i.category] = (c[i.category] ?? 0) + 1));
     return c;
   }, []);
+  const familyCount = categories.filter((c) => counts[c.id]).length;
   const last = example[example.length - 1];
 
   return (
@@ -113,16 +128,18 @@ export default function Home() {
       </div>
 
       <h2>Les familles d'investissement</h2>
-      <div className="cat-grid">
-        {categories.filter((c) => counts[c.id]).map((c) => (
-          <Link key={c.id} to={`/encyclopedie?cat=${c.id}`}>
-            <FamilyIcon id={c.id} />
-            <strong>{c.name}</strong>
-            <span>{c.short}</span>
-            <em>{`${counts[c.id]} fiche${counts[c.id] > 1 ? 's' : ''}`}</em>
-          </Link>
-        ))}
-      </div>
+      <MobileFold label={`Voir les ${familyCount} familles`}>
+        <div className="cat-grid">
+          {categories.filter((c) => counts[c.id]).map((c) => (
+            <Link key={c.id} to={`/encyclopedie?cat=${c.id}`}>
+              <FamilyIcon id={c.id} />
+              <strong>{c.name}</strong>
+              <span>{c.short}</span>
+              <em>{`${counts[c.id]} fiche${counts[c.id] > 1 ? 's' : ''}`}</em>
+            </Link>
+          ))}
+        </div>
+      </MobileFold>
 
       <h2>Sources officielles</h2>
       <p className="muted">Informations datées (dernière vérification : {AS_OF}), avec renvoi aux sources institutionnelles ; les points non confirmés sont signalés « à vérifier ».</p>

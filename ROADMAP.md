@@ -58,7 +58,6 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (31, chantiers 1 et 2).
 - 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public ; ajouter des images créées par la tâche elle-même.
-- 2026-10-30 : débutant sur « Par où commencer » (le guide d'entrée) : cinq étapes ordonnées présentées comme cinq blocs de texte identiques, sans repère visuel de progression ; schéma « escalier » numéroté ajouté (voir « Fait »). Audit des guides, fiche assurance-vie, glossaire à 375 et 1280 px : aucune erreur de console, pas de débordement. Reste pour les illustrations : en-têtes de rubriques.
 - 2026-10-30 : visiteur arrivé par Google sur « Méthodologie » (la page la plus longue du site : 14 302 px à 375 px, dont 12 000 px de formules toutes ouvertes) ; formules repliées une par une (voir « Fait »). Audit technique des 77 pages à 375 et 1280 px : aucune erreur de console, aucun débordement, un seul h1 partout.
 - 2026-10-30 : épargnant de 45 ans sur le comparateur (page d'entrée des comparaisons) : à 375 px, le tableau défilait latéralement et la 3e colonne était coupée (« Assurance-vie » tronqué, ETF invisible sans glisser) ; critères empilés avec le nom du placement devant chaque valeur (voir « Fait »). Audit de l'entrepreneuriat, du glossaire et du plan du site à 375 et 1280 px : aucune erreur de console, pas de débordement.
 - 2026-10-30 : débutant sur le simulateur de budget (son premier outil) : résultats en tableau de pourcentages sans phrase de synthèse ; phrase « Concrètement » ajoutée (voir « Fait »). Audit à 375 et 1280 px : aucune erreur de console, pas de débordement.
@@ -66,6 +65,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-30 : débutant sur la recherche : page vide (« Saisissez un mot-clé. ») sans suite, et « livrets » ne trouvait pas « livret » ; points de départ proposés et pluriels tolérés (voir « Fait »). Audit de l'inflation, du Livret A, du plan du site à 375 px : aucune erreur de console.
 - 2026-10-30 : épargnant de 45 ans sur le comparateur à 375 px : 6 406 px de haut, dont les listes d'avantages et d'inconvénients de trois placements toutes ouvertes ; repliées sur mobile (voir « Fait »). Audit de l'accueil, de l'encyclopédie et de la fiche PEA à 375 et 1280 px : aucune erreur de console.
 - 2026-10-30 : débutant sur le simulateur d'inflation (page clé pour comprendre la perte de pouvoir d'achat) : trois chiffres bruts sans phrase de synthèse ; phrase « Concrètement » ajoutée (voir « Fait »). Audit à 375 et 1280 px : aucune erreur de console, pas de débordement.
+- 2026-10-30 : débutant sur l'accueil à 375 px : 6 605 px de haut, dont la grille de 17 familles qui occupait un quart de la page ; repliée sur mobile (voir « Fait »). Audit des étiquettes de champs, boutons et liens sur les 77 pages indexables : aucun libellé manquant, aucune erreur de console.
 
 ## À faire
 
@@ -88,6 +88,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+- [x] **Accueil : familles d'investissement repliées sur mobile** (2026-10-30, PR à venir) : sous 700 px, la grille des 17 familles est repliée derrière « Voir les 17 familles » (`MobileFold`, contenu dans le HTML), toujours ouverte en écran large ; aucun texte ni chiffre modifié. Hauteur de l'accueil à 375 px : 6 605 → 5 014 px ; à 1280 px : 3 189 px, inchangée.
 - [x] **Vulgarisation : phrase « Concrètement » du simulateur d'inflation** (2026-10-30) : `inflationTakeaway` (testé, valeurs issues de `purchasingPower`) sous les résultats ; aucun chiffre réglementaire ni texte existant modifié. Hauteur de `/simulateurs/inflation/` : 375 px ≈ 3 804 → 4 079 px ; 1280 px : 2 336 px.
 - [x] **Comparateur : avantages et inconvénients repliés sur mobile** (2026-10-30) : sous 700 px, les listes sont repliées (`CmpFold`, une par placement, contenu dans le HTML), toujours ouvertes en écran large ; aucun texte ni chiffre modifié. Hauteur de `/comparateur/` : 375 px 6 406 → 6 198 px ; 1280 px 2 838 px inchangé.
 - [x] **Recherche : plus d'impasse** (2026-10-30) : page vide ou sans résultat → huit points de départ (pages existantes, testées) ; pluriels tolérés (`stem`, testé). Aucun chiffre modifié. Hauteur de `/recherche/` à 375 px : 1 411 → 1 495 px (état vide) ; 1280 px : 1 012 px.
