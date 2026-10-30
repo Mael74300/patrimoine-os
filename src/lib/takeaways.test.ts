@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
+import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
-import { feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -283,5 +283,25 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(t).toContain(eur(c.cost) + '€');
     expect(b.finalValue).toBeGreaterThan(c.finalValue);
     expect(feesTakeaway({ years: 25, lowest: a, highest: a, noFees: base.finalValue })).toBe('');
+  });
+
+  it('patrimoine : versements, capital, impôt et valeur réelle viennent de projectGrowth', () => {
+    const inp = { initial: 5000, monthly: 200, annualReturn: 0.05, annualFees: 0.005, inflation: 0.02, years: 25, contributionGrowth: 0, savingsChanges: [], withdrawals: [{ year: 10, amount: 3000 }] };
+    const pts = projectGrowth(inp);
+    const l = pts[pts.length - 1];
+    const net = afterTax(l.value, l.contributed - l.withdrawn, 0.314);
+    const netReal = net / Math.pow(1.02, 25);
+    const t = digits(wealthTakeaway({ years: 25, contributed: l.contributed, withdrawn: l.withdrawn, value: l.value, gains: l.gains, netValue: net, netRealValue: netReal, taxRate: 0.314, inflation: 0.02 }));
+    expect(t).toContain(eur(l.contributed) + '€');
+    expect(t).toContain('retirez3000€');
+    expect(t).toContain(eur(l.value) + '€');
+    expect(t).toContain(eur(l.gains) + '€');
+    expect(t).toContain(eur(net) + '€');
+    expect(t).toContain(eur(netReal) + '€');
+    expect(netOfFees(0.05, 0.005)).toBeLessThan(0.05);
+    const sansImpot = wealthTakeaway({ years: 25, contributed: l.contributed, withdrawn: 0, value: l.value, gains: l.gains, netValue: l.value, netRealValue: netReal, taxRate: 0, inflation: 0 });
+    expect(sansImpot).not.toContain('impôt');
+    expect(sansImpot).not.toContain('inflation');
+    expect(wealthTakeaway({ years: 0, contributed: 1, withdrawn: 0, value: 1, gains: 0, netValue: 1, netRealValue: 1, taxRate: 0, inflation: 0 })).toBe('');
   });
 });
