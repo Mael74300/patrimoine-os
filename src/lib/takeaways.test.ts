@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
-import { delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
+import { budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -229,5 +229,21 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(t).toContain((r.equivalentRate * 100).toFixed(4).replace('.', ','));
     expect(t).toContain((r.proportionalRate * 100).toFixed(4).replace('.', ','));
     expect(rateConversionTakeaway({ annualRate: 0.05, periods: 7, equivalentRate: r.equivalentRate, proportionalRate: r.proportionalRate, gap: r.gap })).toBe('');
+  });
+  it('budget : parts du revenu, dépassement et effort issus du calcul', () => {
+    const inp = { netIncome: 2500, needs: 1400, wants: 650, saving: 250 };
+    const b = analyzeBudget(inp);
+    const c = catchUp(inp, 0.2);
+    const t = digits(budgetTakeaway({ income: b.income, shares: b.shares, unallocated: b.unallocated, targetRate: 0.2, missing: c.missing }));
+    expect(t).toContain('56€vontauxbesoins');
+    expect(t).toContain('26€auxenvies');
+    expect(t).toContain('10€àl\'épargne');
+    expect(t).toContain(eur(200));
+    expect(t).toContain(eur(c.missing));
+    const over = analyzeBudget({ ...inp, wants: 1200 });
+    expect(budgetTakeaway({ income: over.income, shares: over.shares, unallocated: over.unallocated, targetRate: 0.2, missing: 500 })).toContain('dépassent le revenu de');
+    const ok = analyzeBudget({ ...inp, saving: 600, wants: 500 });
+    expect(budgetTakeaway({ income: ok.income, shares: ok.shares, unallocated: ok.unallocated, targetRate: 0.2, missing: 0 })).toContain('déjà');
+    expect(budgetTakeaway({ income: 0, shares: { needs: 0, wants: 0, saving: 0 }, unallocated: 0, targetRate: 0.2, missing: 0 })).toBe('');
   });
 });

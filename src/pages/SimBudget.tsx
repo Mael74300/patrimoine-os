@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { analyzeBudget, BUDGET_BENCHMARK, catchUp, fmtEur, fmtNum, fmtPct, monthsOfIncomeSavedPerYear, projectBudgetSaving } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { budgetTakeaway } from '../lib/takeaways';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = { netIncome: number; needs: number; wants: number; saving: number; targetRate: number; projReturn: number; projYears: number };
 
@@ -56,6 +57,7 @@ export default function SimBudget() {
             />
             <Kpi label={`Effort pour ${fmtPct(s.targetRate)}`} value={fmtEur(c.missing)} sub="à trouver chaque mois" tone={c.missing === 0 ? 'pos' : undefined} />
           </div>
+          <Takeaway>{budgetTakeaway({ income: b.income, shares: b.shares, unallocated: b.unallocated, targetRate: s.targetRate, missing: c.missing })}</Takeaway>
 
           <h2>Votre budget face au repère 50 / 30 / 20</h2>
           <div className="table-wrap" tabIndex={0}>

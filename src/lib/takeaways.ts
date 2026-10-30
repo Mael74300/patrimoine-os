@@ -196,3 +196,19 @@ export function rateConversionTakeaway(p: { annualRate: number; periods: number;
   const pct = (x: number) => `${(x * 100).toFixed(4).replace('.', ',')} %`;
   return `Pour obtenir ${fmtPct(p.annualRate)} sur l'année, appliquez un taux ${nom} de ${pct(p.equivalentRate)} à chaque période, pas ${pct(p.proportionalRate)} (le taux annuel divisé par ${p.periods}), qui donnerait un peu trop.`;
 }
+
+/** Budget : la répartition de 100 € de revenu et l'effort pour atteindre le taux visé. */
+export function budgetTakeaway(p: { income: number; shares: { needs: number; wants: number; saving: number }; unallocated: number; targetRate: number; missing: number }): string {
+  if (!(p.income > 0)) return '';
+  const cent = (x: number) => Math.round(x * 100);
+  const repartition = `Sur 100 € de revenu, ${cent(p.shares.needs)} € vont aux besoins, ${cent(p.shares.wants)} € aux envies et ${cent(p.shares.saving)} € à l'épargne.`;
+  const reste = p.unallocated < 0
+    ? ` Vos postes dépassent le revenu de ${fmtEur(-p.unallocated)} par mois : le budget n'est pas équilibré.`
+    : Math.round(p.unallocated) > 0
+      ? ` Il reste ${fmtEur(p.unallocated)} par mois que vous n'avez affectés à rien.`
+      : '';
+  const cible = p.missing > 0
+    ? ` Pour épargner ${fmtPct(p.targetRate)} de votre revenu, il faudrait mettre de côté ${fmtEur(p.missing)} de plus chaque mois.`
+    : ` Vous atteignez déjà le taux d'épargne visé (${fmtPct(p.targetRate)}).`;
+  return repartition + reste + cible;
+}
