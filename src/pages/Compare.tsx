@@ -1,9 +1,23 @@
-import { useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { categoryById } from '../data/categories';
 import { investmentBySlug, investments } from '../data/investments';
 import { fmtEur, projectGrowth } from '../lib/finance';
 import { Disclaimer, Dots, LineChart, NumberField, PageHead } from '../components/ui';
+
+/** Liste repliée sur mobile (le tableau y est empilé), toujours ouverte en écran large. */
+export function CmpFold({ label, items }: { label: string; items: string[] }) {
+  const ref = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    if (window.matchMedia('(max-width: 700px)').matches && ref.current) ref.current.open = false;
+  }, []);
+  return (
+    <details ref={ref} open className="cmp-fold">
+      <summary>{label}</summary>
+      <ul style={{ margin: 0, paddingLeft: 16 }}>{items.map((p) => <li key={p}>{p}</li>)}</ul>
+    </details>
+  );
+}
 
 const COLORS = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)'];
 const DEFAULT_IDS = ['livret-a', 'assurance-vie', 'etf-monde'];
@@ -36,8 +50,8 @@ export default function Compare() {
     ['Capital nécessaire', (i) => i.minCapital.text],
     ['Frais', (i) => i.fees.text],
     ['Fiscalité', (i) => i.tax.text],
-    ['Avantages', (i) => <ul style={{ margin: 0, paddingLeft: 16 }}>{i.pros.map((p) => <li key={p}>{p}</li>)}</ul>],
-    ['Inconvénients', (i) => <ul style={{ margin: 0, paddingLeft: 16 }}>{i.cons.map((p) => <li key={p}>{p}</li>)}</ul>],
+    ['Avantages', (i) => <CmpFold label="Voir les avantages" items={i.pros} />],
+    ['Inconvénients', (i) => <CmpFold label="Voir les inconvénients" items={i.cons} />],
   ];
 
   return (
