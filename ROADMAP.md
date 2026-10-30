@@ -65,6 +65,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-30 : débutant sur la page Guides : plusieurs titres rejetaient le « ? » seul sur la ligne suivante (« …double-t-il / ? ») ; titres équilibrés en CSS (voir « Fait »). Audit des pages d'accueil, guides, encyclopédie, simulateurs à 375 et 1280 px : aucune erreur de console.
 - 2026-10-30 : débutant sur « Intérêts composés » (8 onglets, la page de départ des épargnants) : résultats en chiffres bruts, et le titre rejetait le « : » seul en début de ligne à 375 px ; phrases « Concrètement » ajoutées aux 8 onglets, espace insécable avant le « : » (voir « Fait »). Audit des 8 onglets à 375 et 1280 px : aucune erreur de console, pas de débordement.
 - 2026-10-30 : débutant sur « Par où commencer » (le guide d'entrée) : cinq étapes ordonnées présentées comme cinq blocs de texte identiques, sans repère visuel de progression ; schéma « escalier » numéroté ajouté (voir « Fait »). Audit des guides, fiche assurance-vie, glossaire à 375 et 1280 px : aucune erreur de console, pas de débordement. Reste pour les illustrations : en-têtes de rubriques.
+- 2026-10-30 : visiteur arrivé par Google sur « Méthodologie » (la page la plus longue du site : 14 302 px à 375 px, dont 12 000 px de formules toutes ouvertes) ; formules repliées une par une (voir « Fait »). Audit technique des 77 pages à 375 et 1280 px : aucune erreur de console, aucun débordement, un seul h1 partout.
 
 ## À faire
 
@@ -87,6 +88,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [x] **Méthodologie : formules repliées** (2026-10-30) : tous les blocs de formules de `/methodologie/` sont repliables (`Fold`), le contenu reste dans le HTML ; aucun texte ni chiffre modifié. Hauteur : 375 px 14 302 → 5 006 px ; 1280 px → 3 774 px.
 
 - [~] **Illustrations maison, étape 8** (2026-10-30) : schéma « escalier » (`SchemaEscalier`) en tête du guide « Par où commencer » : les cinq étapes numérotées, reprises des titres du guide (testé, aucun chiffre ajouté), titres de section numérotés. Hauteur du guide : 375 px 4 004 → 4 252 px ; 1280 px 2 568 → 2 898 px. Reste : en-têtes de rubriques.
 
