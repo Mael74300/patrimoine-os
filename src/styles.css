@@ -284,7 +284,7 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 @media (min-width: 900px) {
   .inv-list--grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 32px; }
 }
-@media (max-width: 600px) { .theme-title .sim-theme-icon { display: none; } }
+@media (max-width: 600px) { .theme-title .sim-theme-icon { display: none; } .guide-groups .theme-title .sim-theme-icon { display: block; } }
 @media (max-width: 600px) { .theme-nav a { gap: 6px; padding: 0 12px; } .theme-nav a .sim-theme-icon { width: 20px; height: 20px; margin-left: -2px; } }
 .ill-num { font-size: 15px; font-weight: 700; }
 .ill-step { font-size: 14.5px; font-weight: 600; }

@@ -403,6 +403,27 @@ export function SimThemeIcon({ id, size = 36 }: { id: string; size?: number }) {
   return <svg viewBox="0 0 48 48" width={size} height={size} aria-hidden="true" focusable="false" className="sim-theme-icon">{shape}</svg>;
 }
 
+/** Icônes décoratives des quatre parcours de la page Guides : même trait et même grille 48 × 48 que `SimThemeIcon`. */
+export function GuideGroupIcon({ index, size = 36 }: { index: number; size?: number }) {
+  const line = { fill: 'none', stroke: 'var(--primary)', strokeWidth: 2.5, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const soft = { fill: 'var(--accent-soft)', stroke: 'var(--accent)', strokeWidth: 2.5, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  let shape: JSX.Element;
+  switch (index) {
+    case 0: // drapeau de départ
+      shape = <><path d="M12 42V7" {...line} /><path d="M12 9h26l-6 8 6 8H12z" {...soft} /></>;
+      break;
+    case 1: // engrenage : les mécanismes
+      shape = <><circle cx="24" cy="24" r="11" {...soft} /><circle cx="24" cy="24" r="4.5" {...line} /><path d="M24 5v6M24 37v6M5 24h6M37 24h6M10.6 10.6l4.2 4.2M33.2 33.2l4.2 4.2M10.6 37.4l4.2-4.2M33.2 14.8l4.2-4.2" {...line} /></>;
+      break;
+    case 2: // balance : choisir
+      shape = <><path d="M24 8v32M15 40h18" {...line} /><path d="M9 14h30" {...line} /><path d="M9 14l-5 12h10zM39 14l-5 12h10z" {...soft} /><path d="M4 26a5 4 0 0 0 10 0M34 26a5 4 0 0 0 10 0" {...line} /></>;
+      break;
+    default: // maison et clé : immobilier et crédit
+      shape = <><path d="M5 22 22 8l17 14" {...line} /><path d="M10 19v21h24V19" {...soft} /><path d="M18 40V29h8v11" {...line} /><circle cx="39" cy="38" r="3.5" {...soft} /><path d="M39 34.5V28M39 31h4" {...line} /></>;
+  }
+  return <svg viewBox="0 0 48 48" width={size} height={size} aria-hidden="true" focusable="false" className="sim-theme-icon">{shape}</svg>;
+}
+
 /** Schéma « escalier » : les étapes d’un guide, dans l’ordre, chacune un cran plus haut. Les libellés viennent des titres du guide. */
 export function SchemaEscalier({ steps, title }: { steps: string[]; title: string }) {
   const ROW = 46;
