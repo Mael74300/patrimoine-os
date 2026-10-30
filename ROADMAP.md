@@ -65,6 +65,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-29 : audit d'accessibilité automatisé (87 pages) : contrastes, tableaux au clavier, en-têtes corrigés ; alternative textuelle des graphiques ajoutée (voir « Fait ») ; restent les annonces des résultats aux lecteurs d'écran.
 - 2026-10-29 : 4 simulateurs d'intérêts composés réunis en une page à onglets, puis 4 simulateurs de crédit (durée, TAEG, in fine, renégociation) en une page « Comparer des crédits » (31 → 25 simulateurs) ; restent 5 simulateurs de la famille des intérêts composés (chantier 1).
 - 2026-10-29 : débutant sur la page Guides : 19 guides en liste plate, sans ordre de lecture ; regroupés en quatre parcours, et « Autres guides » ne propose plus toujours les trois mêmes (voir « Fait »).
+- 2026-10-30 : épargnant sur plusieurs appareils : ses simulations enregistrées restaient bloquées dans un navigateur ; export et import ajoutés (voir « Fait »). Audit de l'accueil : aucune erreur de console, pas de débordement (375 px : 6 605 px de haut).
 - 2026-10-29 : audit automatisé des 81 pages du plan du site, à 375 et 1280 px : aucune erreur de console ; un seul débordement horizontal (simulateur de portefeuille à 375 px, 1 000 px de large), corrigé (voir « Fait »). Simulateurs patrimoine (5 656 px) et entreprise (5 573 px) : tableau annuel de 25 lignes ouvert, résultats loin sous un formulaire long ; tableaux repliés (voir « Fait »), formulaires restent à raccourcir.
 
 ## À faire
@@ -73,7 +74,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 2. [x] **Regrouper les simulateurs de crédit** : fait le 2026-10-29, voir « Fait ».
 3. [~] **Alléger les pages de simulateur** (étape 1 faite le 2026-10-29 : FAQ et tableaux de crédit et d'immobilier repliés). Étape 2 faite le 2026-10-29 pour le crédit. Étape 3 faite le 2026-10-29 : tableaux annuels de patrimoine et d'entreprise repliés. Étape suivante : formulaires longs (patrimoine, entreprise : résultats à 1 100 px et plus à 375 px). Sur chaque page : formulaire et résultats principaux en premier ; FAQ, sources, hypothèses détaillées et simulations enregistrées dans des blocs repliables ; supprimer les textes répétés d'une page à l'autre. Mesurer la hauteur avant et après.
 4. [ ] **Fiches des familles vides.** Aucune fiche pour : Actifs de collection, Terres agricoles et forêts, Énergies renouvelables et actifs réels, Crédit et effet de levier, Autres formes documentées. Une fiche par exécution, sourcée sur des sites officiels (AMF, impots.gouv.fr, service-public.gouv.fr…), avec les mêmes rubriques que les fiches existantes.
-5. [ ] **Exporter et importer ses données locales.** Fichier JSON téléchargé et rechargé par l'utilisateur, pour passer d'un appareil à l'autre, sans aucun envoi à un serveur ; validation du fichier importé ; tests.
+5. [x] **Exporter et importer ses données locales** : fait le 2026-10-30, voir « Fait ».
 6. [~] **Accessibilité** (étape 1 faite le 2026-10-29 : contrastes, tableaux, en-têtes, test automatisé). Étape 2 faite le 2026-10-29 (graphiques). Étape suivante : annonces des résultats aux lecteurs d'écran, libellés des champs, ordre de tabulation.
 7. [ ] **Relecture éditoriale d'ensemble.** Repérer les doublons et contradictions entre guides, fiches et simulateurs (par exemple le guide et le simulateur sur la règle de 72), harmoniser le vocabulaire et les liens, raccourcir ce qui se répète.
 8. [ ] **Identité visuelle (propriétaire).** Revoir l'esthétique d'ensemble : palette, typographie (polices système), échelle d'espacements, cartes, boutons, en-tête, pied de page, graphiques. Une refonte cohérente par petites étapes, page par page, en gardant les contrastes accessibles. Captures avant et après dans chaque pull request.
@@ -88,6 +89,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [x] **Exporter et importer ses données locales** (2026-10-30) : sur la page Confidentialité, boutons « Exporter mes données » (fichier JSON téléchargé), « Importer un fichier » et « Effacer » ; le fichier est validé avant import (format, version, noms de données, 2 Mo maximum) par `parseImport` (`src/lib/storage.ts`, testé) ; rien n'est envoyé à un serveur. Parcours vérifié avec Playwright (export, effacement, import, refus d'un fichier étranger). Hauteur de `/confidentialite/` hors messages : 375 px 3 331 → environ 3 600 px ; 1280 px 2 119 → environ 2 250 px.
 
 - [x] **Bogue : débordement horizontal du simulateur de portefeuille sur mobile** (2026-10-29) : le texte réservé aux lecteurs d'écran (`.sr-only`, position absolue) ajouté dans les en-têtes vides du tableau défilant échappait à son cadre et élargissait la page à 1 000 px à 375 px ; `.table-wrap` devient `position: relative`, avec un test. Audit des 81 pages à 375 et 1280 px : plus aucun débordement ni erreur de console. Hauteurs inchangées (portefeuille 3 543 px à 375 px).
 
