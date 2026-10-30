@@ -289,6 +289,9 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 .ill-num { font-size: 15px; font-weight: 700; }
 .ill-step { font-size: 14.5px; font-weight: 600; }
 
+/* Comparateur : avantages et inconvénients, repliés sous 700 px seulement */
+.cmp-fold > summary { display: none; list-style: none; }
+.cmp-fold > summary::-webkit-details-marker { display: none; }
 /* Comparateur : sous 700 px, chaque critère devient un bloc et chaque placement une ligne étiquetée */
 @media (max-width: 700px) {
   .cmp-wrap { overflow-x: visible; }
@@ -299,6 +302,10 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
   .cmp-table tbody th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 0; padding: 12px 12px 2px; background: var(--surface); }
   .cmp-table tbody tr:not(:last-child) td:last-child { border-bottom: 1px solid var(--line); }
   .cmp-table tbody td { padding: 4px 12px; border-bottom: 0; }
+  .cmp-fold > summary { display: flex; justify-content: space-between; align-items: center; min-height: 36px; cursor: pointer; color: var(--primary); font-size: 0.9rem; }
+  .cmp-fold > summary::after { content: '+'; font-size: 1.25rem; line-height: 1; }
+  .cmp-fold[open] > summary::after { content: '−'; }
+  .cmp-fold > summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
   .cmp-table tbody td::before { content: attr(data-label); display: block; font-weight: 600; font-size: 0.85rem; color: var(--ink-2); }
 }
 
