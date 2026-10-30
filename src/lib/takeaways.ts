@@ -1,4 +1,4 @@
-import { fmtEur, fmtPct } from './finance';
+import { fmtEur, fmtNum, fmtPct } from './finance';
 
 /**
  * Phrases « Concrètement » affichées sous les résultats des simulateurs.
@@ -121,4 +121,78 @@ export function rentalTakeaway(p: { totalCost: number; netYield: number; monthly
   }
   const fin = ` À ${p.horizon} an${p.horizon > 1 ? 's' : ''}, une fois le crédit déduit, le bien représenterait environ ${fmtEur(p.netEquity)} de patrimoine : c'est une estimation qui suppose que le prix et les loyers évoluent comme saisi.`;
   return rendement + tresorerie + apres + fin;
+}
+
+const ansTxt = (n: number) => `${n} an${n > 1 ? 's' : ''}`;
+
+/** Intérêts composés, « combien placer » : somme à mettre de côté aujourd'hui et part des intérêts. */
+export function presentValueTakeaway(p: { target: number; years: number; monthly: number; initial: number; contributed: number; gain: number; noInitialNeeded: boolean }): string {
+  if (!(p.target > 0) || !(p.years >= 1)) return '';
+  if (p.noInitialNeeded) return `Avec ${fmtEur(p.monthly)} versés chaque mois pendant ${ansTxt(p.years)}, vous atteignez ${fmtEur(p.target)} sans placer de somme de départ.`;
+  const gain = p.gain > 0
+    ? ` Sur ces ${fmtEur(p.target)}, ${fmtEur(p.gain)} viennent des intérêts : vous n'avez à sortir de votre poche que ${fmtEur(p.contributed)}.`
+    : ` Avec ce rendement, les intérêts n'apportent rien : tout vient de ce que vous versez (${fmtEur(p.contributed)}).`;
+  return `Pour disposer de ${fmtEur(p.target)} dans ${ansTxt(p.years)}, il faut placer ${fmtEur(p.initial)} dès aujourd'hui, en plus de ${fmtEur(p.monthly)} par mois.${gain}`;
+}
+
+/** Intérêts composés, « en combien de temps » : durée, intérêts et temps gagné grâce au rendement. */
+export function timeToTargetTakeaway(p: { target: number; months: number | null; interest: number; contributed: number; monthsWithoutReturn: number | null }): string {
+  if (!(p.target > 0) || p.months === null) return '';
+  const sans = p.monthsWithoutReturn !== null && p.monthsWithoutReturn > p.months
+    ? ` Sans rendement, il faudrait ${dureeEnMois(p.monthsWithoutReturn)} : le rendement fait gagner ${dureeEnMois(p.monthsWithoutReturn - p.months)}.`
+    : '';
+  const interets = p.interest > 0 ? `, dont ${fmtEur(p.interest)} d'intérêts et ${fmtEur(p.contributed)} venant de vous` : '';
+  return `Avec ces hypothèses, vous atteignez ${fmtEur(p.target)} en ${dureeEnMois(p.months)}${interets}.${sans}`;
+}
+
+/** Intérêts composés, « quel rendement » : rendement à viser et part qu'il doit fournir. */
+export function requiredReturnTakeaway(p: { target: number; years: number; annualRate: number | null; contributed: number; withoutReturn: number; alreadyReached: boolean }): string {
+  if (!(p.target > 0) || !(p.years >= 1) || p.annualRate === null) return '';
+  if (p.alreadyReached) return `Vos versements suffisent à atteindre ${fmtEur(p.target)} en ${ansTxt(p.years)} : aucun rendement n'est nécessaire.`;
+  const part = Math.max(0, p.target - p.withoutReturn);
+  return `Pour passer de ${fmtEur(p.contributed)} versés à ${fmtEur(p.target)} en ${ansTxt(p.years)}, il faut que l'argent rapporte environ ${fmtPct(p.annualRate)} par an en moyenne, sans interruption. Le rendement doit fournir ${fmtEur(part)} : plus ce taux est élevé, plus il suppose de prendre des risques, et aucun taux n'est garanti.`;
+}
+
+/** Intérêts composés, « doubler son capital » : durée exacte, règle de 72 et durée en pouvoir d'achat. */
+export function doublingTakeaway(p: { multiple: number; exactYears: number | null; realYears: number | null; realReturn: number }): string {
+  if (!(p.multiple > 1)) return '';
+  const quoi = p.multiple === 2 ? 'doubler' : `multiplier par ${fmtNum(p.multiple)}`;
+  if (p.exactYears === null) return `Avec ce rendement, le capital ne peut pas être multiplié par ${fmtNum(p.multiple)} : il ne progresse pas.`;
+  const exact = `Avec ces hypothèses, il faut environ ${fmtNum(p.exactYears)} ans pour ${quoi} le nombre d'euros du compte.`;
+  const reel = p.realYears === null
+    ? ` Mais une fois l'inflation retirée, le pouvoir d'achat n'augmente pas : vous avez plus d'euros, pas plus de choses à acheter.`
+    : ` En tenant compte de l'inflation, il faut environ ${fmtNum(p.realYears)} ans pour ${quoi} ce que l'on peut réellement acheter.`;
+  return exact + reel;
+}
+
+/** Intérêts simples ou composés : écart au bout de la durée. */
+export function simpleVsCompoundTakeaway(p: { initial: number; years: number; simpleFinal: number; compoundFinal: number; gap: number }): string {
+  if (!(p.initial > 0) || !(p.years >= 1)) return '';
+  if (Math.round(p.gap) === 0) return `Avec ces hypothèses, les deux méthodes donnent le même résultat : ${fmtEur(p.compoundFinal)} après ${ansTxt(p.years)}.`;
+  const sens = p.gap > 0 ? `${fmtEur(p.gap)} de plus avec les intérêts composés` : `${fmtEur(-p.gap)} de moins avec les intérêts composés`;
+  return `Avec ${fmtEur(p.initial)} placés pendant ${ansTxt(p.years)}, vous obtenez ${fmtEur(p.simpleFinal)} si seuls les ${fmtEur(p.initial)} de départ rapportent, et ${fmtEur(p.compoundFinal)} si les intérêts rapportent aussi : ${sens}.`;
+}
+
+/** Coût d'attendre : capital perdu et effort de rattrapage. */
+export function delayCostTakeaway(p: { monthly: number; years: number; delayYears: number; startNow: number; startLater: number; cost: number; catchUpMonthly: number | null }): string {
+  if (!(p.monthly > 0) || !(p.years >= 1) || !(p.delayYears > 0) || p.delayYears >= p.years) return '';
+  const attente = `${fmtNum(p.delayYears)} an${p.delayYears > 1 ? 's' : ''}`;
+  const rattrape = p.catchUpMonthly === null ? '' : ` Pour arriver au même capital en commençant plus tard, il faudrait verser ${fmtEur(p.catchUpMonthly)} par mois au lieu de ${fmtEur(p.monthly)}.`;
+  if (Math.round(p.cost) <= 0) return `Avec ces hypothèses, attendre ${attente} ne change pas le capital final (${fmtEur(p.startNow)}).`;
+  return `Commencer maintenant donne ${fmtEur(p.startNow)} dans ${ansTxt(p.years)}, contre ${fmtEur(p.startLater)} en attendant ${attente} : l'attente coûte ${fmtEur(p.cost)}.${rattrape}`;
+}
+
+/** Épargne qui augmente : capital supplémentaire obtenu en relevant le versement chaque année. */
+export function stepUpTakeaway(p: { monthly: number; years: number; flatCapital: number; steppedCapital: number; extraCapital: number; lastMonthly: number }): string {
+  if (!(p.monthly > 0) || !(p.years >= 1)) return '';
+  if (Math.round(p.extraCapital) === 0) return `Avec ces hypothèses, relever le versement chaque année ne change pas le capital final (${fmtEur(p.flatCapital)}).`;
+  return `En partant de ${fmtEur(p.monthly)} par mois et en relevant le versement chaque année, vous arrivez à ${fmtEur(p.steppedCapital)} après ${ansTxt(p.years)}, contre ${fmtEur(p.flatCapital)} avec un versement constant : ${fmtEur(p.extraCapital)} d'écart. La dernière année, le versement atteint ${fmtEur(p.lastMonthly)} par mois.`;
+}
+
+/** Conversion de taux : pourquoi ne pas simplement diviser le taux annuel. */
+export function rateConversionTakeaway(p: { annualRate: number; periods: number; equivalentRate: number; proportionalRate: number; gap: number }): string {
+  if (![2, 4, 12].includes(p.periods) || !Number.isFinite(p.equivalentRate)) return '';
+  const nom = p.periods === 12 ? 'mensuel' : p.periods === 4 ? 'trimestriel' : 'semestriel';
+  const pct = (x: number) => `${(x * 100).toFixed(4).replace('.', ',')} %`;
+  return `Pour obtenir ${fmtPct(p.annualRate)} sur l'année, appliquez un taux ${nom} de ${pct(p.equivalentRate)} à chaque période, pas ${pct(p.proportionalRate)} (le taux annuel divisé par ${p.periods}), qui donnerait un peu trop.`;
 }

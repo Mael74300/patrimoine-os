@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { amortize, debtRatio, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
-import { creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
+import { delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -157,5 +157,77 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
   it('sans estimation d’impôt, aucune phrase sur l’impôt ; entrées vides : texte vide', () => {
     expect(rentalTakeaway({ ...args(base), monthlyCashflowAfterTax: null })).not.toContain('impôt estimé');
     expect(rentalTakeaway({ ...args(base), totalCost: 0 })).toBe('');
+  });
+  it('intérêts composés : combien placer, chiffres issus du calcul', () => {
+    const i = { target: 30000, years: 10, annualRate: 0.04, monthly: 100 };
+    const r = presentValue(i);
+    const t = digits(presentValueTakeaway({ target: 30000, years: 10, monthly: 100, ...r }));
+    expect(t).toContain(eur(r.initial));
+    expect(t).toContain(eur(r.gain));
+    expect(t).toContain(eur(r.contributed));
+    const z = presentValue({ target: 1000, years: 10, annualRate: 0.04, monthly: 500 });
+    expect(presentValueTakeaway({ target: 1000, years: 10, monthly: 500, ...z })).toContain('sans placer');
+    expect(presentValueTakeaway({ target: 0, years: 10, monthly: 0, ...z })).toBe('');
+  });
+  it('intérêts composés : durée, intérêts et temps gagné', () => {
+    const r = timeToTarget({ initial: 2000, monthly: 300, annualRate: 0.04, target: 30000 });
+    const t = digits(timeToTargetTakeaway({ target: 30000, months: r.months, interest: r.interest, contributed: r.contributed, monthsWithoutReturn: r.monthsWithoutReturn }));
+    expect(t).toContain(eur(r.interest));
+    expect(t).toContain(eur(r.contributed));
+    expect(t).toContain('gagne');
+    expect(timeToTargetTakeaway({ target: 30000, months: null, interest: 0, contributed: 0, monthsWithoutReturn: null })).toBe('');
+  });
+  it('intérêts composés : rendement nécessaire', () => {
+    const r = requiredReturn({ initial: 5000, monthly: 200, years: 15, target: 60000 });
+    const t = digits(requiredReturnTakeaway({ target: 60000, years: 15, ...r }));
+    expect(t).toContain(eur(r.contributed));
+    expect(t).toContain(eur(60000 - r.withoutReturn));
+    expect(t).toContain(digits(fmtPct(r.annualRate as number)));
+    const easy = requiredReturn({ initial: 5000, monthly: 500, years: 15, target: 20000 });
+    expect(requiredReturnTakeaway({ target: 20000, years: 15, ...easy })).toContain('aucun rendement');
+    expect(requiredReturnTakeaway({ target: 1, years: 15, annualRate: null, contributed: 0, withoutReturn: 0, alreadyReached: false })).toBe('');
+  });
+  it('intérêts composés : doubler son capital, en euros puis en pouvoir d’achat', () => {
+    const r = doubling({ initial: 10000, annualReturn: 0.06, inflation: 0.02, multiple: 2 });
+    const t = doublingTakeaway({ multiple: 2, exactYears: r.exactYears, realYears: r.realYears, realReturn: r.realReturn });
+    expect(t).toContain(`${(Math.round((r.exactYears as number) * 10) / 10).toString().replace('.', ',')} ans`);
+    expect(t).toContain('inflation');
+    const flat = doubling({ initial: 10000, annualReturn: 0.02, inflation: 0.03, multiple: 2 });
+    expect(doublingTakeaway({ multiple: 2, exactYears: flat.exactYears, realYears: flat.realYears, realReturn: flat.realReturn })).toContain('pouvoir d\'achat n\'augmente pas');
+    expect(doublingTakeaway({ multiple: 1, exactYears: null, realYears: null, realReturn: 0 })).toBe('');
+  });
+  it('intérêts composés : simples ou composés', () => {
+    const r = simpleVsCompound({ initial: 10000, annualRate: 0.05, years: 20 });
+    const t = digits(simpleVsCompoundTakeaway({ initial: 10000, years: 20, ...r }));
+    expect(t).toContain(eur(r.simpleFinal));
+    expect(t).toContain(eur(r.compoundFinal));
+    expect(t).toContain(eur(r.gap));
+    expect(simpleVsCompoundTakeaway({ initial: 0, years: 20, simpleFinal: 0, compoundFinal: 0, gap: 0 })).toBe('');
+  });
+  it('intérêts composés : coût d’attendre et rattrapage', () => {
+    const r = delayCost({ monthly: 200, annualReturn: 0.05, years: 25, delayYears: 5 });
+    const t = digits(delayCostTakeaway({ monthly: 200, years: 25, delayYears: 5, ...r }));
+    expect(t).toContain(eur(r.startNow));
+    expect(t).toContain(eur(r.startLater));
+    expect(t).toContain(eur(r.cost));
+    expect(t).toContain(eur(r.catchUpMonthly as number));
+    expect(delayCostTakeaway({ monthly: 200, years: 5, delayYears: 5, startNow: 0, startLater: 0, cost: 0, catchUpMonthly: null })).toBe('');
+  });
+  it('intérêts composés : épargne qui augmente', () => {
+    const r = stepUp({ monthly: 200, annualIncrease: 0.03, annualReturn: 0.05, years: 25 });
+    const t = digits(stepUpTakeaway({ monthly: 200, years: 25, ...r }));
+    expect(t).toContain(eur(r.steppedCapital));
+    expect(t).toContain(eur(r.flatCapital));
+    expect(t).toContain(eur(r.extraCapital));
+    expect(t).toContain(eur(r.lastMonthly));
+    expect(stepUpTakeaway({ monthly: 0, years: 25, ...r })).toBe('');
+  });
+  it('intérêts composés : conversion de taux', () => {
+    const r = rateConversion({ annualRate: 0.05, periods: 12 });
+    const t = rateConversionTakeaway({ annualRate: 0.05, periods: 12, equivalentRate: r.equivalentRate, proportionalRate: r.proportionalRate, gap: r.gap });
+    expect(t).toContain('mensuel');
+    expect(t).toContain((r.equivalentRate * 100).toFixed(4).replace('.', ','));
+    expect(t).toContain((r.proportionalRate * 100).toFixed(4).replace('.', ','));
+    expect(rateConversionTakeaway({ annualRate: 0.05, periods: 7, equivalentRate: r.equivalentRate, proportionalRate: r.proportionalRate, gap: r.gap })).toBe('');
   });
 });

@@ -58,7 +58,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (31, chantiers 1 et 2).
 - 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public ; ajouter des images créées par la tâche elle-même.
-- 2026-10-29 : les résultats des simulateurs ne sont que des chiffres bruts (débutant : « 92 854 € d'intérêts », et alors ?). Phrase « Concrètement » ajoutée sous les résultats de 9 simulateurs : crédit, endettement, rendement, objectif d'épargne, louer ou acheter, indépendance financière, retraits, précaution, rembourser ou investir (voir « Fait »). Immobilier locatif ajouté ensuite (voir « Fait ») ; restent patrimoine, entreprise et les simulateurs à onglets.
+- 2026-10-29 : les résultats des simulateurs ne sont que des chiffres bruts (débutant : « 92 854 € d'intérêts », et alors ?). Phrase « Concrètement » ajoutée sous les résultats de 9 simulateurs : crédit, endettement, rendement, objectif d'épargne, louer ou acheter, indépendance financière, retraits, précaution, rembourser ou investir (voir « Fait »). Immobilier locatif ajouté ensuite (voir « Fait ») ; restent patrimoine, entreprise et les autres simulateurs à onglets. Intérêts composés ajouté ensuite (voir « Fait »).
 - 2026-10-29 : schémas SVG ajoutés aux guides intérêts composés, investir à crédit, inflation et diversification (voir « Fait ») ; effet de levier ajouté ensuite. Familles d'investissement de l'accueil dotées d'icônes (voir « Fait ») ; restent les thèmes de simulateurs et les en-têtes. Schéma « effet de levier » ajouté au guide « investir à crédit » (voir « Fait ») : les quatre schémas prévus existent.
 - 2026-10-29 : audit d'accessibilité automatisé (87 pages) : contrastes, tableaux au clavier, en-têtes corrigés ; alternative textuelle des graphiques ajoutée (voir « Fait ») ; restent les annonces des résultats aux lecteurs d'écran.
 - 2026-10-30 : épargnant sur le catalogue des simulateurs : « Épargne et placements » alignait 13 simulateurs, dont huit variantes d'intérêts composés ; réunies en une page à 8 onglets (31 → 21 simulateurs, voir « Fait »). Catalogue : 375 px 4 589 → 4 202 px. Reste dans cette rubrique : 8 simulateurs distincts (patrimoine, précaution, objectif, portefeuille, frais, inflation, rendement réel, investir d'un coup).
@@ -66,6 +66,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-30 : visiteur sur le catalogue des simulateurs : liste de texte sans repère visuel, une seule colonne à 1280 px ; icônes de thème et deux colonnes ajoutées (voir « Fait »).
 - 2026-10-30 : épargnant sur plusieurs appareils : ses simulations enregistrées restaient bloquées dans un navigateur ; export et import ajoutés (voir « Fait »). Audit de l'accueil : aucune erreur de console, pas de débordement (375 px : 6 605 px de haut).
 - 2026-10-30 : débutant sur la page Guides : plusieurs titres rejetaient le « ? » seul sur la ligne suivante (« …double-t-il / ? ») ; titres équilibrés en CSS (voir « Fait »). Audit des pages d'accueil, guides, encyclopédie, simulateurs à 375 et 1280 px : aucune erreur de console.
+
+- 2026-10-30 : débutant sur « Intérêts composés » (8 onglets, la page de départ des épargnants) : résultats en chiffres bruts, et le titre rejetait le « : » seul en début de ligne à 375 px ; phrases « Concrètement » ajoutées aux 8 onglets, espace insécable avant le « : » (voir « Fait »). Audit des 8 onglets à 375 et 1280 px : aucune erreur de console, pas de débordement.
 
 ## À faire
 
@@ -77,7 +79,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 6. [~] **Accessibilité** (étape 1 faite le 2026-10-29 : contrastes, tableaux, en-têtes, test automatisé). Étape 2 faite le 2026-10-29 (graphiques). Étape suivante : annonces des résultats aux lecteurs d'écran, libellés des champs, ordre de tabulation.
 7. [ ] **Relecture éditoriale d'ensemble.** Repérer les doublons et contradictions entre guides, fiches et simulateurs (par exemple le guide et le simulateur sur la règle de 72), harmoniser le vocabulaire et les liens, raccourcir ce qui se répète.
 8. [ ] **Identité visuelle (propriétaire).** Revoir l'esthétique d'ensemble : palette, typographie (polices système), échelle d'espacements, cartes, boutons, en-tête, pied de page, graphiques. Une refonte cohérente par petites étapes, page par page, en gardant les contrastes accessibles. Captures avant et après dans chaque pull request.
-9. [~] **Vulgarisation (propriétaire).** (étapes 1 à 4 faites le 2026-10-29 : 10 simulateurs) Réécrire en langage simple, page par page en commençant par les plus visitées (accueil, simulateurs principaux, guides d'entrée) : phrases courtes, jargon expliqué, exemple concret, phrase de synthèse sous chaque résultat de simulateur. Sans changer aucun chiffre ni règle.
+9. [~] **Vulgarisation (propriétaire).** (étapes 1 à 4 faites le 2026-10-29 : 10 simulateurs ; étape 5 le 2026-10-30 : intérêts composés, 8 onglets ; restent patrimoine, entreprise, budget, dettes, frais, inflation, portefeuille) Réécrire en langage simple, page par page en commençant par les plus visitées (accueil, simulateurs principaux, guides d'entrée) : phrases courtes, jargon expliqué, exemple concret, phrase de synthèse sous chaque résultat de simulateur. Sans changer aucun chiffre ni règle.
 10. [ ] **Illustrations maison (propriétaire).** Des images créées par la tâche elle-même, en SVG écrit à la main, pour rendre le site plus agréable et plus facile à comprendre :
    - **schémas explicatifs** qui vulgarisent une notion (intérêts composés, amortissement d'un crédit, effet de levier, diversification, inflation) : priorité, car ils aident à comprendre ;
    - **icônes** cohérentes pour les thèmes de simulateurs et les familles d'investissement ;
@@ -88,6 +90,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [~] **Vulgarisation, étape 5** (2026-10-30) : phrases « Concrètement » (`src/lib/takeaways.ts`, testées contre les fonctions de calcul) sous les résultats des 8 onglets de `/simulateurs/interets-composes/` ; elles reformulent les chiffres affichés (sans aucun chiffre réglementaire ni nouveau) ; espace insécable avant le « : » du titre. Hauteur à 375 px : +162 à +235 px selon l'onglet (3 524 → 3 735 px pour « Combien placer », 3 914 → 4 116 px pour « Simples ou composés ») ; à 1280 px : 0 à +130 px (le formulaire est plus haut que les résultats sur la plupart des onglets). Reste : patrimoine, entreprise, budget, dettes, frais, inflation, portefeuille, puis les guides.
 
 - [x] **Typographie : plus de « ? » orphelin** (2026-10-30) : `text-wrap: balance` sur les titres et `text-wrap: pretty` sur les paragraphes et listes (`src/styles.css`) ; aucun texte ni chiffre modifié. Hauteurs inchangées : `/guides/` 375 px 4 260 px, 1280 px 2 094 px ; accueil 6 605 / 3 189 px ; `/simulateurs/` 4 254 / 2 988 px ; `/encyclopedie/` 5 813 / 3 528 px.
 
