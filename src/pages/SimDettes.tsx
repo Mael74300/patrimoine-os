@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { comparePayoff, fmtEur, type Debt } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { debtsTakeaway } from '../lib/takeaways';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = {
   b1: number; r1: number; m1: number;
@@ -80,6 +81,7 @@ export default function SimDettes() {
               sub="par rapport à la boule de neige, même budget"
             />
           </div>
+          <Takeaway>{debtsTakeaway({ extra: s.extra, minimum: c.minimum, avalanche: c.avalanche, snowball: c.snowball, interestSavedByAvalanche: c.interestSavedByAvalanche })}</Takeaway>
           <h2>Comparaison des trois approches</h2>
           <div className="table-wrap" tabIndex={0}>
             <table>

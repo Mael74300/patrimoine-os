@@ -224,3 +224,27 @@ export function inflationTakeaway(p: { amount: number; years: number; inflation:
   const place = ` Placée à ${fmtPct(p.annualReturn)} par an, la même somme vaut ${fmtEur(p.investedRealValue)} en euros d'aujourd'hui : ${diff > 0 ? `elle gagne ${fmtEur(diff)} de pouvoir d'achat` : diff < 0 ? `elle perd encore ${fmtEur(-diff)} de pouvoir d'achat` : 'son pouvoir d\'achat est conservé'}.`;
   return rien + place;
 }
+
+const durationFr = (months: number): string => {
+  const y = Math.floor(months / 12);
+  const m = months % 12;
+  return [y ? `${y} an${y > 1 ? 's' : ''}` : '', m || !y ? `${m} mois` : ''].filter(Boolean).join(' ');
+};
+
+/** Plusieurs dettes : durée et intérêts avec l'avalanche, comparés aux seules mensualités minimales. */
+export function debtsTakeaway(p: { extra: number; minimum: { months: number | null; totalInterest: number }; avalanche: { months: number | null; totalInterest: number }; snowball: { months: number | null; totalInterest: number }; interestSavedByAvalanche: number | null }): string {
+  const { minimum: min, avalanche: av, snowball: sn } = p;
+  if (av.months === null) return 'Avec ce budget, les dettes ne sont pas soldées en 50 ans : les mensualités ne couvrent pas les intérêts. Augmentez les mensualités ou le versement supplémentaire.';
+  if (av.months === 0) return '';
+  const ajout = p.extra > 0 ? `En ajoutant ${fmtEur(p.extra)} par mois à vos mensualités minimales, ` : 'Avec vos mensualités minimales, ';
+  const duree = `vous êtes libéré de toutes vos dettes en ${durationFr(av.months)} avec l'avalanche (${fmtEur(av.totalInterest)} d'intérêts)`;
+  const vs = p.extra > 0 && min.months !== null
+    ? `, contre ${durationFr(min.months)} et ${fmtEur(min.totalInterest)} d'intérêts sans versement supplémentaire`
+    : '';
+  const boule = sn.months !== null && p.interestSavedByAvalanche !== null
+    ? p.interestSavedByAvalanche > 0.5
+      ? ` La boule de neige coûterait ${fmtEur(p.interestSavedByAvalanche)} d'intérêts de plus pour une durée de ${durationFr(sn.months)}.`
+      : ' La boule de neige donne ici le même résultat.'
+    : '';
+  return `${ajout}${duree}${vs}.${boule}`;
+}

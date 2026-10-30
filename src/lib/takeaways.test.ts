@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
-import { inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { comparePayoff } from './calc/debtPayoff';
+import { debtsTakeaway, inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -257,5 +258,17 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     const low = { ...inp, annualReturn: 0.01 };
     expect(mk(purchasingPower(low), low)).toContain('elleperdencore');
     expect(inflationTakeaway({ ...inp, amount: 0, idleRealValue: 0, nominalToKeepPower: 0, investedRealValue: 0 })).toBe('');
+  });
+  it('dettes : valeurs issues de comparePayoff', () => {
+    const D = [{ name: 'a', balance: 2000, rate: 0.2, minPayment: 60 }, { name: 'b', balance: 6000, rate: 0.05, minPayment: 150 }, { name: 'c', balance: 1000, rate: 0.03, minPayment: 50 }];
+    const c = comparePayoff(D, 100);
+    const t = digits(debtsTakeaway({ extra: 100, ...c }));
+    expect(t).toContain(eur(c.avalanche.totalInterest) + '€d\'intérêts');
+    expect(t).toContain(eur(c.minimum.totalInterest) + '€d\'intérêts');
+    expect(t).toContain(eur(c.interestSavedByAvalanche!) + '€d\'intérêtsdeplus');
+    const stuck = comparePayoff([{ name: 'a', balance: 1000, rate: 0.5, minPayment: 1 }], 0);
+    expect(debtsTakeaway({ extra: 0, ...stuck })).toContain('ne sont pas soldées');
+    const none = comparePayoff([{ name: 'a', balance: 0, rate: 0.1, minPayment: 10 }], 0);
+    expect(debtsTakeaway({ extra: 0, ...none })).toBe('');
   });
 });
