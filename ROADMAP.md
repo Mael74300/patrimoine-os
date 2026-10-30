@@ -58,7 +58,6 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (31, chantiers 1 et 2).
 - 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public ; ajouter des images créées par la tâche elle-même.
-- 2026-10-30 : épargnant sur plusieurs appareils : ses simulations enregistrées restaient bloquées dans un navigateur ; export et import ajoutés (voir « Fait »). Audit de l'accueil : aucune erreur de console, pas de débordement (375 px : 6 605 px de haut).
 - 2026-10-30 : débutant sur la page Guides : plusieurs titres rejetaient le « ? » seul sur la ligne suivante (« …double-t-il / ? ») ; titres équilibrés en CSS (voir « Fait »). Audit des pages d'accueil, guides, encyclopédie, simulateurs à 375 et 1280 px : aucune erreur de console.
 - 2026-10-30 : débutant sur « Intérêts composés » (8 onglets, la page de départ des épargnants) : résultats en chiffres bruts, et le titre rejetait le « : » seul en début de ligne à 375 px ; phrases « Concrètement » ajoutées aux 8 onglets, espace insécable avant le « : » (voir « Fait »). Audit des 8 onglets à 375 et 1280 px : aucune erreur de console, pas de débordement.
 - 2026-10-30 : débutant sur « Par où commencer » (le guide d'entrée) : cinq étapes ordonnées présentées comme cinq blocs de texte identiques, sans repère visuel de progression ; schéma « escalier » numéroté ajouté (voir « Fait »). Audit des guides, fiche assurance-vie, glossaire à 375 et 1280 px : aucune erreur de console, pas de débordement. Reste pour les illustrations : en-têtes de rubriques.
@@ -66,6 +65,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-30 : épargnant de 45 ans sur le comparateur (page d'entrée des comparaisons) : à 375 px, le tableau défilait latéralement et la 3e colonne était coupée (« Assurance-vie » tronqué, ETF invisible sans glisser) ; critères empilés avec le nom du placement devant chaque valeur (voir « Fait »). Audit de l'entrepreneuriat, du glossaire et du plan du site à 375 et 1280 px : aucune erreur de console, pas de débordement.
 - 2026-10-30 : débutant sur le simulateur de budget (son premier outil) : résultats en tableau de pourcentages sans phrase de synthèse ; phrase « Concrètement » ajoutée (voir « Fait »). Audit à 375 et 1280 px : aucune erreur de console, pas de débordement.
 - 2026-10-30 : débutant sur la page Guides (19 guides en quatre parcours) : quatre titres de parcours identiques en texte seul, sans repère visuel, contrairement au catalogue des simulateurs ; icônes de parcours ajoutées (voir « Fait »). Audit de l'accueil, guides, simulateurs, encyclopédie à 375 et 1280 px : aucune erreur de console, pas de débordement.
+- 2026-10-30 : débutant sur la recherche : page vide (« Saisissez un mot-clé. ») sans suite, et « livrets » ne trouvait pas « livret » ; points de départ proposés et pluriels tolérés (voir « Fait »). Audit de l'inflation, du Livret A, du plan du site à 375 px : aucune erreur de console.
 
 ## À faire
 
@@ -88,6 +88,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+- [x] **Recherche : plus d'impasse** (2026-10-30) : page vide ou sans résultat → huit points de départ (pages existantes, testées) ; pluriels tolérés (`stem`, testé). Aucun chiffre modifié. Hauteur de `/recherche/` à 375 px : 1 411 → 1 495 px (état vide) ; 1280 px : 1 012 px.
 - [~] **Illustrations maison, étape 9** (2026-10-30) : icônes SVG `GuideGroupIcon` (drapeau, engrenage, balance, maison et clé) devant les quatre parcours de `/guides/`, même trait et même grille que `SimThemeIcon` ; décoratives, testées (une icône distincte par parcours). Aucun chiffre ni texte modifié. Hauteur de `/guides/` : 375 px 4 260 → 4 331 px ; 1280 px 2 094 → 2 122 px. Reste : en-têtes de rubriques.
 
 

@@ -31,8 +31,23 @@ export const simulators = [
 /** Minuscule, sans accents, pour une recherche tolérante. */
 export const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 
+/** « livrets » trouve « livret » : on retire le pluriel d'un mot de plus de trois lettres. */
+export const stem = (t: string) => (t.length > 3 ? t.replace(/[sx]$/, '') : t);
+
+/** Points d'entrée proposés quand la recherche est vide ou sans résultat (pages existantes). */
+export const searchSuggestions: { label: string; to: string }[] = [
+  { label: 'Par où commencer ?', to: '/guides/par-ou-commencer' },
+  { label: 'Combien épargner par mois ?', to: '/simulateurs/objectif-epargne' },
+  { label: 'Combien puis-je emprunter ?', to: '/simulateurs/endettement' },
+  { label: 'Louer ou acheter ?', to: '/simulateurs/louer-ou-acheter' },
+  { label: 'Livret A et LDDS', to: '/encyclopedie/livret-a' },
+  { label: 'PEA', to: '/encyclopedie/pea' },
+  { label: 'Assurance-vie', to: '/encyclopedie/assurance-vie' },
+  { label: 'PER', to: '/encyclopedie/per' },
+];
+
 export function search(query: string): SearchHit[] {
-  const terms = norm(query).split(/\s+/).filter((t) => t.length > 1);
+  const terms = norm(query).split(/\s+/).filter((t) => t.length > 1).map(stem);
   if (!terms.length) return [];
   const hits: SearchHit[] = [];
   const score = (title: string, body: string) => {
