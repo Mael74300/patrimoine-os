@@ -402,3 +402,33 @@ export function SimThemeIcon({ id, size = 36 }: { id: string; size?: number }) {
   }
   return <svg viewBox="0 0 48 48" width={size} height={size} aria-hidden="true" focusable="false" className="sim-theme-icon">{shape}</svg>;
 }
+
+/** Schéma « escalier » : les étapes d’un guide, dans l’ordre, chacune un cran plus haut. Les libellés viennent des titres du guide. */
+export function SchemaEscalier({ steps, title }: { steps: string[]; title: string }) {
+  const ROW = 46;
+  const STEP = 22;
+  const H = steps.length * ROW + 34;
+  const alt = steps.map((s, i) => `Étape ${i + 1} : ${s}.`).join(' ');
+  return (
+    <figure className="illustration">
+      <svg viewBox={`0 0 420 ${H}`} role="img" aria-labelledby="ill-esc-t ill-esc-d" className="ill-svg ill-stairs">
+        <title id="ill-esc-t">{title}</title>
+        <desc id="ill-esc-d">{alt}</desc>
+        {steps.map((s, i) => {
+          const x = i * STEP;
+          const y = i * ROW;
+          return (
+            <g key={s}>
+              <rect x={x} y={y + 2} width={420 - x} height={ROW - 6} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
+              <circle cx={x + 24} cy={y + ROW / 2 - 1} r={14} fill="var(--primary)" />
+              <text x={x + 24} y={y + ROW / 2 + 4} textAnchor="middle" className="ill-on-dark ill-num">{i + 1}</text>
+              <text x={x + 48} y={y + ROW / 2 + 4.5} textAnchor="start" className="ill-step">{s}</text>
+            </g>
+          );
+        })}
+        <text x={0} y={H - 8} textAnchor="start" className="ill-sub">Du plus urgent au plus long terme</text>
+        <path d={`M 262 ${H - 12} H 400 m -8 -5 l 8 5 l -8 5`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </figure>
+  );
+}

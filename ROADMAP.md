@@ -59,15 +59,12 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (31, chantiers 1 et 2).
 - 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public ; ajouter des images créées par la tâche elle-même.
 - 2026-10-29 : les résultats des simulateurs ne sont que des chiffres bruts (débutant : « 92 854 € d'intérêts », et alors ?). Phrase « Concrètement » ajoutée sous les résultats de 9 simulateurs : crédit, endettement, rendement, objectif d'épargne, louer ou acheter, indépendance financière, retraits, précaution, rembourser ou investir (voir « Fait »). Immobilier locatif ajouté ensuite (voir « Fait ») ; restent patrimoine, entreprise et les autres simulateurs à onglets. Intérêts composés ajouté ensuite (voir « Fait »).
-- 2026-10-29 : schémas SVG ajoutés aux guides intérêts composés, investir à crédit, inflation et diversification (voir « Fait ») ; effet de levier ajouté ensuite. Familles d'investissement de l'accueil dotées d'icônes (voir « Fait ») ; restent les thèmes de simulateurs et les en-têtes. Schéma « effet de levier » ajouté au guide « investir à crédit » (voir « Fait ») : les quatre schémas prévus existent.
 - 2026-10-29 : audit d'accessibilité automatisé (87 pages) : contrastes, tableaux au clavier, en-têtes corrigés ; alternative textuelle des graphiques ajoutée (voir « Fait ») ; restent les annonces des résultats aux lecteurs d'écran.
 - 2026-10-30 : épargnant sur le catalogue des simulateurs : « Épargne et placements » alignait 13 simulateurs, dont huit variantes d'intérêts composés ; réunies en une page à 8 onglets (31 → 21 simulateurs, voir « Fait »). Catalogue : 375 px 4 589 → 4 202 px. Reste dans cette rubrique : 8 simulateurs distincts (patrimoine, précaution, objectif, portefeuille, frais, inflation, rendement réel, investir d'un coup).
-- 2026-10-29 : débutant sur la page Guides : 19 guides en liste plate, sans ordre de lecture ; regroupés en quatre parcours, et « Autres guides » ne propose plus toujours les trois mêmes (voir « Fait »).
-- 2026-10-30 : visiteur sur le catalogue des simulateurs : liste de texte sans repère visuel, une seule colonne à 1280 px ; icônes de thème et deux colonnes ajoutées (voir « Fait »).
 - 2026-10-30 : épargnant sur plusieurs appareils : ses simulations enregistrées restaient bloquées dans un navigateur ; export et import ajoutés (voir « Fait »). Audit de l'accueil : aucune erreur de console, pas de débordement (375 px : 6 605 px de haut).
 - 2026-10-30 : débutant sur la page Guides : plusieurs titres rejetaient le « ? » seul sur la ligne suivante (« …double-t-il / ? ») ; titres équilibrés en CSS (voir « Fait »). Audit des pages d'accueil, guides, encyclopédie, simulateurs à 375 et 1280 px : aucune erreur de console.
-
 - 2026-10-30 : débutant sur « Intérêts composés » (8 onglets, la page de départ des épargnants) : résultats en chiffres bruts, et le titre rejetait le « : » seul en début de ligne à 375 px ; phrases « Concrètement » ajoutées aux 8 onglets, espace insécable avant le « : » (voir « Fait »). Audit des 8 onglets à 375 et 1280 px : aucune erreur de console, pas de débordement.
+- 2026-10-30 : débutant sur « Par où commencer » (le guide d'entrée) : cinq étapes ordonnées présentées comme cinq blocs de texte identiques, sans repère visuel de progression ; schéma « escalier » numéroté ajouté (voir « Fait »). Audit des guides, fiche assurance-vie, glossaire à 375 et 1280 px : aucune erreur de console, pas de débordement. Reste pour les illustrations : en-têtes de rubriques.
 
 ## À faire
 
@@ -90,6 +87,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [~] **Illustrations maison, étape 8** (2026-10-30) : schéma « escalier » (`SchemaEscalier`) en tête du guide « Par où commencer » : les cinq étapes numérotées, reprises des titres du guide (testé, aucun chiffre ajouté), titres de section numérotés. Hauteur du guide : 375 px 4 004 → 4 252 px ; 1280 px 2 568 → 2 898 px. Reste : en-têtes de rubriques.
 
 - [~] **Vulgarisation, étape 5** (2026-10-30) : phrases « Concrètement » (`src/lib/takeaways.ts`, testées contre les fonctions de calcul) sous les résultats des 8 onglets de `/simulateurs/interets-composes/` ; elles reformulent les chiffres affichés (sans aucun chiffre réglementaire ni nouveau) ; espace insécable avant le « : » du titre. Hauteur à 375 px : +162 à +235 px selon l'onglet (3 524 → 3 735 px pour « Combien placer », 3 914 → 4 116 px pour « Simples ou composés ») ; à 1280 px : 0 à +130 px (le formulaire est plus haut que les résultats sur la plupart des onglets). Reste : patrimoine, entreprise, budget, dettes, frais, inflation, portefeuille, puis les guides.
 

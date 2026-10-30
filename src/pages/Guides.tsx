@@ -6,7 +6,7 @@ import { investmentBySlug, investments } from '../data/investments';
 import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
 import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
 import { Crumbs, PageHead, Sources, usePersistentState } from '../components/ui';
-import { SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite } from '../components/Illustrations';
+import { SchemaEscalier, SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite } from '../components/Illustrations';
 import NotFound from './NotFound';
 
 const fmtDate = (iso: string) => new Date(iso + 'T12:00:00Z').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -113,9 +113,10 @@ export function GuidePage() {
       <div className="prose">
         <PageHead eyebrow={`Guide · ${g.readingMinutes} min de lecture`} title={g.title}>{g.summary}</PageHead>
         <p className="small muted">Mis à jour le {fmtDate(g.updatedOn)}</p>
+        {g.slug === 'par-ou-commencer' && <SchemaEscalier steps={g.sections.map((s) => s.heading)} title="Les cinq étapes pour construire son patrimoine, dans l’ordre" />}
         {g.sections.map((s, i) => (
           <section key={s.heading}>
-            <h2>{s.heading}</h2>
+            <h2>{g.slug === 'par-ou-commencer' ? `${i + 1}. ${s.heading}` : s.heading}</h2>
             {s.body.map((p, k) => (
               <Fragment key={p}>
                 <p>{p}</p>
