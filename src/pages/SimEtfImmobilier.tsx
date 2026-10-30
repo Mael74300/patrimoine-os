@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { compareEtfImmo, fmtEur, fmtPct, netOfFees, rentalAnalysis, type RentalInput } from '../lib/finance';
 import { load } from '../lib/storage';
-import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, MobileFold, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
 import { PS_OPTIONS, REGIMES, RENTAL_DEFAULTS, TMI_OPTIONS } from './SimImmobilier';
 
 type State = {
@@ -111,15 +111,19 @@ export default function SimEtfImmobilier() {
           <fieldset>
             <legend>Immobilier</legend>
             <NumberField label="Prix du bien" unit="€" value={R.price} onChange={setR('price')} min={0} step={5000} />
-            <NumberField label="Frais d'acquisition" unit="%" percent value={R.notaryRate} onChange={setR('notaryRate')} step={0.5} min={0} max={20} />
-            <NumberField label="Travaux" unit="€" value={R.works} onChange={setR('works')} min={0} step={1000} />
             <NumberField label="Apport (capital initial)" unit="€" value={R.downPayment} onChange={setR('downPayment')} min={0} step={1000} />
             <NumberField label="Loyer mensuel" unit="€" value={R.monthlyRent} onChange={setR('monthlyRent')} min={0} step={25} />
+            <NumberField label="Taux du crédit" unit="%" percent value={R.loanRate} onChange={setR('loanRate')} step={0.05} min={0} max={15} />
+            <NumberField label="Durée du crédit" unit="ans" value={R.loanYears} onChange={setR('loanYears')} min={0} max={30} />
+          </fieldset>
+          <MobileFold label="Immobilier : charges, fiscalité et hypothèses (réglages avancés)">
+          <fieldset>
+            <legend>Immobilier : détails</legend>
+            <NumberField label="Frais d'acquisition" unit="%" percent value={R.notaryRate} onChange={setR('notaryRate')} step={0.5} min={0} max={20} />
+            <NumberField label="Travaux" unit="€" value={R.works} onChange={setR('works')} min={0} step={1000} />
             <NumberField label="Vacance" unit="mois/an" value={R.vacancyMonths} onChange={setR('vacancyMonths')} min={0} max={12} step={0.5} />
             <NumberField label="Taxe foncière" unit="€/an" value={R.propertyTax} onChange={setR('propertyTax')} min={0} step={50} />
             <NumberField label="Autres charges" unit="€/an" value={R.coOwnership} onChange={setR('coOwnership')} min={0} step={50} />
-            <NumberField label="Taux du crédit" unit="%" percent value={R.loanRate} onChange={setR('loanRate')} step={0.05} min={0} max={15} />
-            <NumberField label="Durée du crédit" unit="ans" value={R.loanYears} onChange={setR('loanYears')} min={0} max={30} />
             <SelectField label="Régime fiscal" value={R.regime} options={REGIMES} onChange={(v) => setSt((x) => ({ ...x, rental: { ...x.rental, regime: v, microAllowance: REGIMES.find((g) => g.v === v)?.allowance ?? x.rental.microAllowance } }))} />
             <SelectField label="Tranche marginale" value={R.marginalRate} options={TMI_OPTIONS} onChange={setR('marginalRate')} />
             <SelectField label="Prélèvements sociaux" value={R.socialRate} options={PS_OPTIONS} onChange={setR('socialRate')} />
@@ -128,6 +132,7 @@ export default function SimEtfImmobilier() {
             <NumberField label="Frais de revente" unit="%" percent value={st.saleCostRate} onChange={set('saleCostRate')} step={0.5} min={0} max={15} />
             <NumberField label="Placement des excédents" unit="%/an" percent value={st.cashRate} onChange={set('cashRate')} step={0.1} min={0} max={10} />
           </fieldset>
+          </MobileFold>
           <button type="button" className="btn small secondary" onClick={() => setSt(DEFAULTS)}>Réinitialiser</button>
         </form>
 
@@ -153,6 +158,7 @@ export default function SimEtfImmobilier() {
           </div>
 
           <h2>Comparaison détaillée</h2>
+          <MobileFold label="Afficher le tableau critère par critère">
           <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th style={{ width: 170 }}><span className="sr-only">Critère</span></th><th>ETF</th><th>Immobilier locatif</th></tr></thead>
@@ -162,6 +168,7 @@ export default function SimEtfImmobilier() {
               </tbody>
             </table>
           </div>
+          </MobileFold>
           <p className="small muted" style={{ marginTop: 12 }}>
             Hypothèses simplificatrices : rendements constants chaque année, sans volatilité ; fiscalité locative estimée ; plus-value immobilière sans surtaxe.
             Un résultat différent avec d'autres hypothèses est normal : modifiez rendement et évolution des prix pour mesurer la sensibilité.
