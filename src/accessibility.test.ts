@@ -69,3 +69,12 @@ describe('texte réservé aux lecteurs d’écran', () => {
     expect(rule).toMatch(/position:\s*relative/);
   });
 });
+
+describe('annonce des résultats aux lecteurs d’écran', () => {
+  it('la phrase « Concrètement » est une zone de statut lue en entier à chaque changement', () => {
+    const ui: string = readFileSync('src/components/ui.tsx', 'utf8');
+    const m = ui.match(/<p className="takeaway"[^>]*>/);
+    expect(m?.[0]).toContain('role="status"');
+    expect(m?.[0]).toContain('aria-atomic="true"');
+  });
+});

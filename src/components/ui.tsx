@@ -533,7 +533,7 @@ export function SimFaq({ slug, items = simFaq[slug] }: { slug: string; items?: F
 export function Takeaway({ children }: { children: ReactNode }) {
   if (!children) return null;
   return (
-    <p className="takeaway">
+    <p className="takeaway" role="status" aria-atomic="true">
       <strong>Concrètement. </strong>
       {children}
     </p>
