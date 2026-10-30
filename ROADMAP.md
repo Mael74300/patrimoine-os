@@ -55,10 +55,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 ## Constats
 
 Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les plus importants, datés.
-
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (31, chantiers 1 et 2).
 - 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public ; ajouter des images créées par la tâche elle-même.
-- 2026-10-30 : épargnant de 45 ans sur le comparateur (page d'entrée des comparaisons) : à 375 px, le tableau défilait latéralement et la 3e colonne était coupée (« Assurance-vie » tronqué, ETF invisible sans glisser) ; critères empilés avec le nom du placement devant chaque valeur (voir « Fait »). Audit de l'entrepreneuriat, du glossaire et du plan du site à 375 et 1280 px : aucune erreur de console, pas de débordement.
 - 2026-10-30 : débutant sur le simulateur de budget (son premier outil) : résultats en tableau de pourcentages sans phrase de synthèse ; phrase « Concrètement » ajoutée (voir « Fait »). Audit à 375 et 1280 px : aucune erreur de console, pas de débordement.
 - 2026-10-30 : débutant sur la page Guides (19 guides en quatre parcours) : quatre titres de parcours identiques en texte seul, sans repère visuel, contrairement au catalogue des simulateurs ; icônes de parcours ajoutées (voir « Fait »). Audit de l'accueil, guides, simulateurs, encyclopédie à 375 et 1280 px : aucune erreur de console, pas de débordement.
 - 2026-10-30 : débutant sur la recherche : page vide (« Saisissez un mot-clé. ») sans suite, et « livrets » ne trouvait pas « livret » ; points de départ proposés et pluriels tolérés (voir « Fait »). Audit de l'inflation, du Livret A, du plan du site à 375 px : aucune erreur de console.
@@ -66,6 +64,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-30 : débutant sur le simulateur d'inflation (page clé pour comprendre la perte de pouvoir d'achat) : trois chiffres bruts sans phrase de synthèse ; phrase « Concrètement » ajoutée (voir « Fait »). Audit à 375 et 1280 px : aucune erreur de console, pas de débordement.
 - 2026-10-30 : débutant sur l'accueil à 375 px : 6 605 px de haut, dont la grille de 17 familles qui occupait un quart de la page ; repliée sur mobile (voir « Fait »). Audit des étiquettes de champs, boutons et liens sur les 77 pages indexables : aucun libellé manquant, aucune erreur de console.
 - 2026-10-30 : débutant sur le simulateur de dettes (avalanche ou boule de neige) : durées et intérêts en tableaux, sans phrase disant quelle méthode choisir ni ce que l'on gagne ; phrase « Concrètement » ajoutée (voir « Fait »). Audit de 6 simulateurs (retraits, patrimoine, dettes, frais, portefeuille, indépendance) à 375 et 1280 px : aucune erreur de console, pas de débordement.
+- 2026-10-30 : futur acheteur sur le simulateur immobilier locatif à 375 px : 7 224 px de haut, formulaire de 20 champs avant le moindre résultat ; fiscalité et projection repliées sur mobile (voir « Fait »). Parcours des 90 pages pré-rendues à 375 et 1280 px : aucune erreur de console, aucun débordement.
 
 ## À faire
 
@@ -88,6 +87,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+- [x] **Simulateur immobilier : réglages avancés repliés sur mobile** (2026-10-30, PR à venir) : sous 700 px, les blocs « Fiscalité » et « Projection » sont repliés (`MobileFold`, contenu dans le HTML), toujours ouverts en écran large ; aucun texte ni chiffre modifié. Hauteur de `/simulateurs/immobilier/` à 375 px : 7 224 → 6 572 px ; 1280 px inchangée.
 - [x] **Vulgarisation, étape 8 : simulateur de dettes** (2026-10-30, PR à venir) : phrase « Concrètement » sous les résultats (durée et intérêts avec l'avalanche, comparés aux seules mensualités minimales, écart avec la boule de neige), calculée par `debtsTakeaway` et testée contre `comparePayoff`. Aucune donnée réglementaire. Hauteur à 375 px : 4 636 → 4 898 px.
 - [x] **Illustrations maison, étape 10 et guide des types d'investissements allégé** (2026-10-30) : schéma `SchemaEnveloppe` (un même ETF logé dans PEA, compte-titres, assurance-vie ou PER ; aucun chiffre, testé contre le texte du guide) dans la section « Placement et enveloppe » ; catalogue des familles replié sur mobile (`MobileFold`, déplacé dans `components/ui`, contenu dans le HTML). Hauteur de `/guides/types-investissements/` : 375 px 6 462 → 3 556 px ; 1280 px 3 790 → 4 126 px (schéma).
 - [x] **Accueil : familles d'investissement repliées sur mobile** (2026-10-30, PR à venir) : sous 700 px, la grille des 17 familles est repliée derrière « Voir les 17 familles » (`MobileFold`, contenu dans le HTML), toujours ouverte en écran large ; aucun texte ni chiffre modifié. Hauteur de l'accueil à 375 px : 6 605 → 5 014 px ; à 1280 px : 3 189 px, inchangée.

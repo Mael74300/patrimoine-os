@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ADVERSE, adverseScenario, amortize, fmtEur, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, type TaxRegime } from '../lib/finance';
 import { rentalTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
 
 export const RENTAL_DEFAULTS: RentalInput = {
   price: 150000, notaryRate: 0.08, works: 10000, furniture: 0,
@@ -73,6 +73,7 @@ export default function SimImmobilier() {
             <NumberField label="Entretien" unit="% loyers" percent value={s.maintenanceRate} onChange={up('maintenanceRate')} step={0.5} min={0} max={20} />
             <NumberField label="Frais de gestion" unit="% loyers" percent value={s.managementRate} onChange={up('managementRate')} step={0.5} min={0} max={15} />
           </fieldset>
+          <MobileFold label="Fiscalité et projection (réglages avancés)">
           <fieldset>
             <legend>Fiscalité (estimation)</legend>
             <SelectField label="Régime" value={s.regime} options={REGIMES} onChange={(v) => setS((x) => ({ ...x, regime: v, microAllowance: REGIMES.find((g) => g.v === v)?.allowance ?? x.microAllowance }))} />
@@ -90,6 +91,7 @@ export default function SimImmobilier() {
             <NumberField label="Indexation des loyers et charges" unit="%" percent value={s.indexation} onChange={up('indexation')} step={0.25} min={-5} max={10} />
             <NumberField label="Horizon" unit="ans" value={s.horizon} onChange={up('horizon')} min={1} max={40} />
           </fieldset>
+          </MobileFold>
           <button type="button" className="btn small secondary" onClick={() => setS(RENTAL_DEFAULTS)}>Réinitialiser</button>
         </form>
 
