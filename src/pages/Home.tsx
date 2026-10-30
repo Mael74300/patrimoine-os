@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { categories } from '../data/categories';
 import { AS_OF, investments } from '../data/investments';
@@ -6,7 +6,7 @@ import { fmtEur, projectGrowth } from '../lib/finance';
 import { guides } from '../data/guides';
 import { simulators } from '../lib/search';
 import { featuredSims, simBySlug } from '../lib/simThemes';
-import { LineChart, PageHead } from '../components/ui';
+import { LineChart, MobileFold, PageHead } from '../components/ui';
 import { FamilyIcon, SituationIcon, type SituationIconName } from '../components/Illustrations';
 
 const situations: { icon: SituationIconName; title: string; text: string; cta: string; to: string }[] = [
@@ -15,20 +15,6 @@ const situations: { icon: SituationIconName; title: string; text: string; cta: s
   { icon: 'maison', title: 'Je veux acheter', text: 'Ce que la banque regarde avant de prêter.', cta: 'Le taux d’endettement', to: '/guides/taux-endettement-capacite-emprunt' },
   { icon: 'soleil', title: 'Je prépare ma retraite', text: 'Combien de temps mon capital peut-il durer ?', cta: 'Tester mon capital', to: '/simulateurs/retraits-reguliers-duree-du-capital' },
 ];
-
-/** Bloc replié sur mobile (liste longue), toujours ouvert en écran large et dans le HTML pré-rendu. */
-export function MobileFold({ label, children }: { label: string; children?: ReactNode }) {
-  const ref = useRef<HTMLDetailsElement>(null);
-  useEffect(() => {
-    if (window.matchMedia('(max-width: 700px)').matches && ref.current) ref.current.open = false;
-  }, []);
-  return (
-    <details ref={ref} open className="cmp-fold mob-fold">
-      <summary>{label}</summary>
-      {children}
-    </details>
-  );
-}
 
 export default function Home() {
   const [q, setQ] = useState('');
