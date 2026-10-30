@@ -257,3 +257,18 @@ export function feesTakeaway(p: { years: number; lowest: { fees: number; finalVa
   const part = hi.shareOfGains > 0 ? ` soit ${fmtPct(hi.shareOfGains)} des gains que vous auriez eus sans frais` : '';
   return `Sur ${p.years} an${p.years > 1 ? 's' : ''}, avec ${fmtPct(lo.fees)} de frais par an, votre capital atteint ${fmtEur(lo.finalValue)} ; avec ${fmtPct(hi.fees)}, il n'atteint que ${fmtEur(hi.finalValue)}. Cet écart de ${fmtEur(ecart)} vient uniquement des frais : à ${fmtPct(hi.fees)}, ils vous coûtent ${fmtEur(hi.cost)} au total,${part}.`;
 }
+
+/** Patrimoine à long terme : versements, capital simulé, puis valeur après impôt en euros d'aujourd'hui. */
+export function wealthTakeaway(p: { years: number; contributed: number; withdrawn: number; value: number; gains: number; netValue: number; netRealValue: number; taxRate: number; inflation: number }): string {
+  if (!(p.years > 0) || !(p.contributed > 0) || !(p.value > 0)) return '';
+  const duree = `${p.years} an${p.years > 1 ? 's' : ''}`;
+  const retraits = p.withdrawn > 0.5 ? ` et en retirez ${fmtEur(p.withdrawn)} en chemin` : '';
+  const gain = p.gains >= 0 ? `, dont ${fmtEur(p.gains)} de gains simulés` : `, avec une perte simulée de ${fmtEur(-p.gains)}`;
+  const impot = p.value - p.netValue > 0.5
+    ? ` Après un impôt de ${fmtPct(p.taxRate)} sur les gains, il vous resterait ${fmtEur(p.netValue)}.`
+    : '';
+  const reel = p.inflation > 0
+    ? ` Avec ${fmtPct(p.inflation)} d'inflation par an, cette somme ne vaudra que ${fmtEur(p.netRealValue)} en euros d'aujourd'hui : c'est le chiffre le plus proche de votre pouvoir d'achat réel.`
+    : '';
+  return `En ${duree}, vous versez ${fmtEur(p.contributed)}${retraits}, et le capital simulé atteint ${fmtEur(p.value)}${gain}.${impot}${reel}`;
+}

@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
+import { wealthTakeaway } from '../lib/takeaways';
 import { afterTax, fmtEur, fmtPct, netOfFees, projectGrowth, requiredMonthly, type SavingsChange, type Withdrawal } from '../lib/finance';
-import { Crumbs, Disclaimer, Fold, SimFaq, Kpi, LineChart, NumberField, PageHead, RowsEditor, SavedSims, SelectField, Tabs, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, RowsEditor, SavedSims, SelectField, Tabs, usePersistentState } from '../components/ui';
 
 type Scenario = {
   name: string;
@@ -120,6 +121,7 @@ export default function SimPatrimoine() {
             <Kpi label={`Capital final nominal (${s.years} ans)`} value={fmtEur(last.value)} sub={`${fmtEur(net)} après fiscalité`} />
             <Kpi label="Corrigé de l'inflation" value={fmtEur(last.realValue)} sub={`${fmtEur(netReal)} après fiscalité`} />
           </div>
+          <Takeaway>{wealthTakeaway({ years: s.years, contributed: last.contributed, withdrawn: last.withdrawn, value: last.value, gains: last.gains, netValue: net, netRealValue: netReal, taxRate: s.taxRate, inflation: s.inflation })}</Takeaway>
           <div className="panel">
             <LineChart title="Évolution du capital" xLabels={Array.from({ length: (st.scenarios.length === 1 ? points.length - 1 : maxYears) + 1 }, (_, y) => `An ${y}`)} format={fmtEur} series={series} />
           </div>
