@@ -301,3 +301,7 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
   .cmp-table tbody td { padding: 4px 12px; border-bottom: 0; }
   .cmp-table tbody td::before { content: attr(data-label); display: block; font-weight: 600; font-size: 0.85rem; color: var(--ink-2); }
 }
+
+.search-ideas { list-style: none; padding: 0; margin: 12px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.search-ideas .tag { margin: 0; padding: 10px 14px; min-height: 44px; display: inline-flex; align-items: center; font-size: 0.95rem; text-decoration: none; border: 1px solid var(--line); background: var(--surface); color: var(--primary); }
+.search-ideas .tag:hover { background: var(--surface-2); }
