@@ -248,3 +248,12 @@ export function debtsTakeaway(p: { extra: number; minimum: { months: number | nu
     : '';
   return `${ajout}${duree}${vs}.${boule}`;
 }
+
+/** Impact des frais : écart de capital entre le niveau de frais le plus bas et le plus élevé saisis. */
+export function feesTakeaway(p: { years: number; lowest: { fees: number; finalValue: number }; highest: { fees: number; finalValue: number; cost: number; shareOfGains: number }; noFees: number }): string {
+  const { lowest: lo, highest: hi } = p;
+  const ecart = lo.finalValue - hi.finalValue;
+  if (!(p.years > 0) || !(ecart > 0.5) || !(p.noFees > 0)) return '';
+  const part = hi.shareOfGains > 0 ? ` soit ${fmtPct(hi.shareOfGains)} des gains que vous auriez eus sans frais` : '';
+  return `Sur ${p.years} an${p.years > 1 ? 's' : ''}, avec ${fmtPct(lo.fees)} de frais par an, votre capital atteint ${fmtEur(lo.finalValue)} ; avec ${fmtPct(hi.fees)}, il n'atteint que ${fmtEur(hi.finalValue)}. Cet écart de ${fmtEur(ecart)} vient uniquement des frais : à ${fmtPct(hi.fees)}, ils vous coûtent ${fmtEur(hi.cost)} au total,${part}.`;
+}
