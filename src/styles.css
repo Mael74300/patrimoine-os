@@ -288,3 +288,16 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 @media (max-width: 600px) { .theme-nav a { gap: 6px; padding: 0 12px; } .theme-nav a .sim-theme-icon { width: 20px; height: 20px; margin-left: -2px; } }
 .ill-num { font-size: 15px; font-weight: 700; }
 .ill-step { font-size: 14.5px; font-weight: 600; }
+
+/* Comparateur : sous 700 px, chaque critère devient un bloc et chaque placement une ligne étiquetée */
+@media (max-width: 700px) {
+  .cmp-wrap { overflow-x: visible; }
+  .cmp-table, .cmp-table tbody, .cmp-table tr, .cmp-table td, .cmp-table th { display: block; }
+  .cmp-table thead tr { display: flex; flex-wrap: wrap; gap: 4px 16px; padding: 10px 12px; background: var(--surface-2); border-bottom: 1px solid var(--line); }
+  .cmp-table thead th { padding: 0; border: 0; background: none; }
+  .cmp-table thead th:first-child { display: none; }
+  .cmp-table tbody th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 0; padding: 12px 12px 2px; background: var(--surface); }
+  .cmp-table tbody tr:not(:last-child) td:last-child { border-bottom: 1px solid var(--line); }
+  .cmp-table tbody td { padding: 4px 12px; border-bottom: 0; }
+  .cmp-table tbody td::before { content: attr(data-label); display: block; font-weight: 600; font-size: 0.85rem; color: var(--ink-2); }
+}
