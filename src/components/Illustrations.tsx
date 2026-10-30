@@ -453,3 +453,34 @@ export function SchemaEscalier({ steps, title }: { steps: string[]; title: strin
     </figure>
   );
 }
+
+/** Schéma « placement et enveloppe » : un même ETF logé dans quatre enveloppes. Aucun chiffre ; reprend la phrase du guide. */
+export function SchemaEnveloppe() {
+  const envs = ['PEA', 'Compte-titres', 'Assurance-vie', 'PER'];
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 270" role="img" aria-labelledby="ill-env-t ill-env-d" className="ill-svg">
+        <title id="ill-env-t">Un même placement peut être logé dans plusieurs enveloppes</title>
+        <desc id="ill-env-d">Un même ETF (le placement) peut être logé dans un PEA, un compte-titres, une assurance-vie ou un PER (les enveloppes). Le placement détermine le risque ; l’enveloppe détermine la fiscalité, la disponibilité et la transmission.</desc>
+        <rect x={110} y={2} width={200} height={40} rx={20} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
+        <text x={210} y={27} textAnchor="middle" className="ill-step">Le placement : un ETF</text>
+        <path d="M 210 42 V 189" fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
+        {envs.map((e, i) => {
+          const x = (i % 2) * 220;
+          const y = 66 + Math.floor(i / 2) * 86;
+          return (
+            <g key={e}>
+              <path d={`M 210 ${y + 37} H ${i % 2 ? 220 : 200}`} fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
+              <rect x={x} y={y} width={200} height={74} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+              <text x={x + 100} y={y + 25} textAnchor="middle" className="ill-step">{e}</text>
+              <rect x={x + 50} y={y + 36} width={100} height={26} rx={13} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
+              <text x={x + 100} y={y + 54} textAnchor="middle" className="ill-in">le même ETF</text>
+            </g>
+          );
+        })}
+        <text x={210} y={246} textAnchor="middle" className="ill-sub">L’enveloppe fixe la fiscalité,</text>
+        <text x={210} y={264} textAnchor="middle" className="ill-sub">la disponibilité et la transmission</text>
+      </svg>
+    </figure>
+  );
+}

@@ -1,7 +1,7 @@
 import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { MobileFold } from './pages/Home';
+import { MobileFold } from './components/ui';
 
 describe('MobileFold', () => {
   it('reste ouvert dans le HTML pré-rendu et garde tout le contenu', () => {

@@ -5,8 +5,8 @@ import { guideBySlug, guideGroups, guides, otherGuides } from '../data/guides';
 import { investmentBySlug, investments } from '../data/investments';
 import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
 import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
-import { Crumbs, PageHead, Sources, usePersistentState } from '../components/ui';
-import { GuideGroupIcon, SchemaEscalier, SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite } from '../components/Illustrations';
+import { Crumbs, MobileFold, PageHead, Sources, usePersistentState } from '../components/ui';
+import { GuideGroupIcon, SchemaEnveloppe, SchemaEscalier, SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite } from '../components/Illustrations';
 import NotFound from './NotFound';
 
 const fmtDate = (iso: string) => new Date(iso + 'T12:00:00Z').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -123,6 +123,7 @@ export function GuidePage() {
                 {g.slug === 'investir-a-credit' && s.heading === 'Un exemple fictif' && (k === 0 ? <SchemaMensualite /> : <SchemaLevier />)}
               </Fragment>
             ))}
+            {g.slug === 'types-investissements' && s.heading.startsWith('Placement et enveloppe') && <SchemaEnveloppe />}
             {g.slug === 'interets-composes' && i === 0 && <SchemaInterets />}
             {g.slug === 'inflation-pouvoir-d-achat-epargne' && s.heading === 'Un exemple fictif chiffré' && <SchemaInflation />}
             {g.slug === 'diversification-placements' && s.heading === 'Un exemple fictif chiffré' && <SchemaDiversification />}
@@ -135,7 +136,7 @@ export function GuidePage() {
           </section>
         ) : null}
       </div>
-      {g.widget === 'catalogue' && <Catalogue />}
+      {g.widget === 'catalogue' && <MobileFold label={`Voir les ${categories.length} familles et leurs fiches`}><Catalogue /></MobileFold>}
       {g.widget === 'patrimoine-net' && (<><h2>Calculer votre patrimoine net</h2><NetWorthCalculator /></>)}
       <div className="prose">
         {g.cta && <p style={{ marginTop: 24 }}><Link className="btn" to={g.cta.to}>{g.cta.label}</Link></p>}
