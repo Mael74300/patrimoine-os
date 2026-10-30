@@ -1,8 +1,54 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { config } from '../config';
-import { clearAll } from '../lib/storage';
+import { buildExport, clearAll, parseImport, readAll, writeAll } from '../lib/storage';
 import { PageHead } from '../components/ui';
+
+function LocalDataTools({ onClear }: { onClear: () => void }) {
+  const [message, setMessage] = useState('');
+  function download() {
+    const entries = readAll();
+    if (Object.keys(entries).length === 0) {
+      setMessage("Aucune donnée locale à exporter : enregistrez d'abord une simulation.");
+      return;
+    }
+    const blob = new Blob([JSON.stringify(buildExport(entries), null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `patrimoine-os-donnees-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setMessage(`${Object.keys(entries).length} élément(s) exporté(s) dans un fichier de votre appareil.`);
+  }
+  async function upload(file: File | undefined) {
+    if (!file) return;
+    const result = parseImport(await file.text());
+    if (!result.ok) {
+      setMessage(`Import refusé : ${result.error}`);
+      return;
+    }
+    const n = writeAll(result.data);
+    setMessage(`${n} élément(s) importé(s). Rechargez la page d'un simulateur pour les retrouver.`);
+  }
+  return (
+    <>
+      <p>
+        Pour retrouver vos simulations sur un autre appareil, exportez-les dans un fichier, puis importez ce fichier sur l'autre appareil.
+        Le fichier reste chez vous : rien n'est envoyé. L'import complète ou remplace vos données locales actuelles.
+      </p>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <button className="btn secondary" onClick={download}>Exporter mes données</button>
+        <label className="btn secondary" style={{ cursor: 'pointer' }}>
+          Importer un fichier
+          <input type="file" accept="application/json,.json" className="sr-only" onChange={(e) => { upload(e.target.files?.[0]); e.target.value = ''; }} />
+        </label>
+        <button className="btn secondary" onClick={onClear}>Effacer mes données locales</button>
+      </div>
+      {message && <p role="status" className="small" style={{ marginTop: 8 }}>{message}</p>}
+    </>
+  );
+}
 
 export function Confidentialite() {
   const [cleared, setCleared] = useState(false);
@@ -26,9 +72,9 @@ export function Confidentialite() {
         Pour vous éviter de tout ressaisir, vos dernières saisies et les simulations que vous choisissez d'enregistrer sont conservées dans le
         stockage local de votre navigateur (localStorage). Ce stockage sert uniquement une fonctionnalité que vous utilisez ; il ne sert ni à
         vous suivre ni à mesurer l'audience. Ces données restent sur cet appareil, ne sont pas synchronisées entre vos appareils et ne sont jamais
-        envoyées. Vous pouvez les effacer à tout moment :
+        envoyées. Vous pouvez les exporter, les importer ou les effacer à tout moment :
       </p>
-      <button className="btn secondary" onClick={() => { clearAll(); setCleared(true); }}>Effacer mes données locales</button>
+      <LocalDataTools onClear={() => { clearAll(); setCleared(true); }} />
       {cleared && <p role="status" className="small" style={{ marginTop: 8 }}>Données locales effacées.</p>}
 
       {config.analytics.goatcounter && (
