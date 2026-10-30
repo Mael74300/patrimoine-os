@@ -63,14 +63,14 @@ export default function Compare() {
       </div>
 
       {items.length > 0 && (
-        <div className="table-wrap" tabIndex={0}>
-          <table>
+        <div className="table-wrap cmp-wrap" tabIndex={0}>
+          <table className="cmp-table">
             <thead>
               <tr><th style={{ width: 150 }}><span className="sr-only">Critère</span></th>{items.map((i) => <th key={i.slug}><Link to={`/encyclopedie/${i.slug}`}>{i.name}</Link></th>)}</tr>
             </thead>
             <tbody>
               {rows.map(([label, render]) => (
-                <tr key={label}><th scope="row">{label}</th>{items.map((i) => <td key={i.slug}>{render(i)}</td>)}</tr>
+                <tr key={label}><th scope="row">{label}</th>{items.map((i) => <td key={i.slug} data-label={i.name}>{render(i)}</td>)}</tr>
               ))}
             </tbody>
           </table>
