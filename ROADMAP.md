@@ -60,14 +60,12 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public ; ajouter des images créées par la tâche elle-même.
 - 2026-10-29 : les résultats des simulateurs ne sont que des chiffres bruts (débutant : « 92 854 € d'intérêts », et alors ?). Phrase « Concrètement » ajoutée sous les résultats de 9 simulateurs : crédit, endettement, rendement, objectif d'épargne, louer ou acheter, indépendance financière, retraits, précaution, rembourser ou investir (voir « Fait »). Immobilier locatif ajouté ensuite (voir « Fait ») ; restent patrimoine, entreprise et les simulateurs à onglets.
 - 2026-10-29 : schémas SVG ajoutés aux guides intérêts composés, investir à crédit, inflation et diversification (voir « Fait ») ; effet de levier ajouté ensuite. Familles d'investissement de l'accueil dotées d'icônes (voir « Fait ») ; restent les thèmes de simulateurs et les en-têtes. Schéma « effet de levier » ajouté au guide « investir à crédit » (voir « Fait ») : les quatre schémas prévus existent.
-- 2026-10-29 : pages de simulateur longues sur mobile (FAQ et tableaux annuels) ; repliés pour le crédit et l'immobilier ; la mensualité du crédit remontée. Restent les simulateurs à formulaire long (entreprise, indépendance, patrimoine).
-- 2026-10-29 : sur mobile, graphiques et résumé « En bref » des fiches illisibles ou trop bas ; corrigés (voir « Fait »). Catalogue de l'encyclopédie regroupé par famille (6 160 → 5 813 px à 375 px).
 - 2026-10-29 : audit d'accessibilité automatisé (87 pages) : contrastes, tableaux au clavier, en-têtes corrigés ; alternative textuelle des graphiques ajoutée (voir « Fait ») ; restent les annonces des résultats aux lecteurs d'écran.
 - 2026-10-30 : épargnant sur le catalogue des simulateurs : « Épargne et placements » alignait 13 simulateurs, dont huit variantes d'intérêts composés ; réunies en une page à 8 onglets (31 → 21 simulateurs, voir « Fait »). Catalogue : 375 px 4 589 → 4 202 px. Reste dans cette rubrique : 8 simulateurs distincts (patrimoine, précaution, objectif, portefeuille, frais, inflation, rendement réel, investir d'un coup).
 - 2026-10-29 : débutant sur la page Guides : 19 guides en liste plate, sans ordre de lecture ; regroupés en quatre parcours, et « Autres guides » ne propose plus toujours les trois mêmes (voir « Fait »).
 - 2026-10-30 : visiteur sur le catalogue des simulateurs : liste de texte sans repère visuel, une seule colonne à 1280 px ; icônes de thème et deux colonnes ajoutées (voir « Fait »).
 - 2026-10-30 : épargnant sur plusieurs appareils : ses simulations enregistrées restaient bloquées dans un navigateur ; export et import ajoutés (voir « Fait »). Audit de l'accueil : aucune erreur de console, pas de débordement (375 px : 6 605 px de haut).
-- 2026-10-29 : audit automatisé des 81 pages du plan du site, à 375 et 1280 px : aucune erreur de console ; un seul débordement horizontal (simulateur de portefeuille à 375 px, 1 000 px de large), corrigé (voir « Fait »). Simulateurs patrimoine (5 656 px) et entreprise (5 573 px) : tableau annuel de 25 lignes ouvert, résultats loin sous un formulaire long ; tableaux repliés (voir « Fait »), formulaires restent à raccourcir.
+- 2026-10-30 : débutant sur la page Guides : plusieurs titres rejetaient le « ? » seul sur la ligne suivante (« …double-t-il / ? ») ; titres équilibrés en CSS (voir « Fait »). Audit des pages d'accueil, guides, encyclopédie, simulateurs à 375 et 1280 px : aucune erreur de console.
 
 ## À faire
 
@@ -90,6 +88,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [x] **Typographie : plus de « ? » orphelin** (2026-10-30) : `text-wrap: balance` sur les titres et `text-wrap: pretty` sur les paragraphes et listes (`src/styles.css`) ; aucun texte ni chiffre modifié. Hauteurs inchangées : `/guides/` 375 px 4 260 px, 1280 px 2 094 px ; accueil 6 605 / 3 189 px ; `/simulateurs/` 4 254 / 2 988 px ; `/encyclopedie/` 5 813 / 3 528 px.
 
 - [~] **Illustrations maison, étape 7** (2026-10-30) : icônes SVG `SimThemeIcon` pour les six thèmes de simulateurs (même trait et même grille que `FamilyIcon`), dans les boutons de thème et les titres de rubrique (titres : écran large seulement) ; rangées de simulateurs sur deux colonnes dès 900 px. Aucun chiffre ni texte modifié. Hauteur de `/simulateurs/` : 1280 px 3 146 → 2 988 px ; 375 px 4 202 → 4 254 px. Reste : en-têtes.
 

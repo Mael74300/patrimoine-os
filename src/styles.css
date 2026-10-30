@@ -42,6 +42,9 @@ h1 { font-size: clamp(1.9rem, 4vw, 2.8rem); margin: 0 0 0.6rem; }
 h2 { font-size: 1.45rem; margin: 2.4rem 0 0.8rem; }
 h3 { font-size: 1.1rem; margin: 1.4rem 0 0.4rem; }
 p { margin: 0 0 1rem; }
+/* Titres équilibrés et paragraphes sans mot ni signe (« ? ») seul sur la dernière ligne */
+h1, h2, h3, h4 { text-wrap: balance; }
+p, li { text-wrap: pretty; }
 .num { font-variant-numeric: tabular-nums; }
 
 .skip { position: absolute; left: -999px; top: 0; background: var(--primary); color: #fff; padding: 8px 12px; z-index: 10; }
