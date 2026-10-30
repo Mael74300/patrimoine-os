@@ -29,6 +29,44 @@ const interetsComposes: FaqItem[] = [
   { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement et l’inflation réels sont inconnus et varient ; ils sont supposés constants, avant frais et impôts. Les montants par défaut sont fictifs.' },
 ].filter((f, i, all) => all.findIndex((g) => g.q === f.q) === i);
 
+const interetsSimples: FaqItem[] = [
+  { q: 'Quelle différence entre intérêts simples et intérêts composés ?', a: 'Avec des intérêts simples, chaque année rapporte le même montant, calculé sur le capital de départ. Avec des intérêts composés, les intérêts de chaque année sont ajoutés au capital et produisent à leur tour des intérêts les années suivantes.' },
+  { q: 'Quelles formules le simulateur utilise-t-il ?', a: 'Intérêts simples : capital × (1 + taux × années). Intérêts composés : capital × (1 + taux)^années. Les deux donnent le même résultat après la première année ; l’écart se creuse ensuite, d’autant plus vite que le taux et la durée sont élevés.' },
+  { q: 'Pourquoi l’écart est-il nul avec un taux nul ?', a: 'Sans intérêts, il n’y a rien à réinvestir : les deux méthodes laissent le capital inchangé. L’écart grandit avec le taux et avec la durée.' },
+  { q: 'Le résultat est-il une prévision ?', a: 'Non. Le taux est supposé constant, sans versement, avant frais, impôts et inflation. Les produits réels ont leurs propres règles de calcul et de versement des intérêts ; les montants par défaut sont fictifs.' },
+];
+const attendreFaq: FaqItem[] = [
+  { q: 'Combien coûte de commencer à épargner plus tard ?', a: 'Cela dépend du versement, du rendement que vous supposez, de la date d’arrivée et du délai. Le simulateur compare le capital obtenu en commençant tout de suite et en commençant après le délai, à versement mensuel et date d’arrivée identiques.' },
+  { q: 'Pourquoi l’attente coûte-t-elle plus que les versements manqués ?', a: 'Chaque versement manqué aurait aussi produit des intérêts jusqu’à la date d’arrivée, et ces intérêts auraient eux-mêmes produit des intérêts. Avec un rendement nul, le coût se limite aux versements non effectués.' },
+  { q: 'Que signifie le versement pour rattraper ?', a: 'C’est le versement mensuel constant, à partir de la fin du délai, qui donne à l’arrivée le même capital que si vous aviez commencé tout de suite avec votre versement actuel. C’est un calcul sur vos hypothèses, pas une recommandation.' },
+  { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement réel est inconnu et varie ; il est supposé constant et avant frais, impôts et inflation. Les montants par défaut sont fictifs.' },
+];
+const progressifFaq: FaqItem[] = [
+  { q: 'Quel effet a une hausse annuelle du versement mensuel ?', a: 'Chaque hausse s’ajoute aux versements suivants, qui fructifient ensuite à leur tour. Le simulateur compare le capital obtenu avec un versement constant et avec un versement qui augmente d’un pourcentage chaque année, au même rendement supposé.' },
+  { q: 'Que signifie le versement constant équivalent ?', a: 'C’est la mensualité fixe qui donnerait, sur la même durée et au même rendement supposé, le même capital final que le versement qui augmente. Il permet de comparer les deux façons d’épargner.' },
+  { q: 'La hausse du versement est-elle comparable à celle de mon salaire ?', a: 'Vous choisissez librement le pourcentage : le simulateur ne connaît ni votre salaire ni son évolution. Indexer son épargne sur une hausse de revenu est une hypothèse de votre part, pas une prévision.' },
+  { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement réel est inconnu et varie ; il est supposé constant et avant frais, impôts et inflation. Les montants par défaut sont fictifs.' },
+];
+const tauxFaq: FaqItem[] = [
+  { q: 'Comment passer d’un taux annuel à un taux mensuel ?', a: 'Le taux mensuel équivalent vaut (1 + taux annuel)^(1/12) − 1. Capitalisé douze fois, il redonne exactement le taux annuel. Par exemple, un taux annuel fictif de 5 % correspond à un taux mensuel équivalent d’environ 0,4074 %.' },
+  { q: 'Quelle différence entre taux équivalent et taux proportionnel ?', a: 'Le taux proportionnel s’obtient en divisant simplement le taux annuel par le nombre de périodes (5 % / 12 ≈ 0,4167 %). Capitalisé douze fois, il donne un taux annuel un peu supérieur à 5 % : les deux ne sont pas interchangeables dès qu’il y a capitalisation.' },
+  { q: 'Quel taux utiliser pour un calcul d’épargne ou de crédit ?', a: 'Cela dépend de la convention du produit, indiquée dans son contrat. Ce simulateur se contente de convertir un taux saisi selon les deux méthodes ; il ne dit pas laquelle s’applique à un produit donné.' },
+  { q: 'Le résultat est-il une prévision ?', a: 'Non. C’est un calcul mathématique à partir du seul taux saisi. Les valeurs par défaut sont fictives.' },
+];
+
+/** Simulateur « Intérêts composés » : questions de chaque onglet, affichées sous l'onglet actif ; les données structurées reprennent celles du premier onglet. */
+const prevision = interetsComposes.find((f) => f.q === 'Le résultat est-il une prévision ?')!;
+export const interetsComposesFaq = {
+  placer: interetsComposes.slice(0, 5),
+  duree: [...interetsComposes.slice(5, 8), prevision],
+  rendement: [...interetsComposes.slice(8, 12), prevision],
+  doubler: [...interetsComposes.slice(12), prevision],
+  simple: interetsSimples,
+  attendre: attendreFaq,
+  progressif: progressifFaq,
+  taux: tauxFaq,
+};
+
 /** Questions de l’onglet « Quelle durée ? ». */
 const creditsDuree: FaqItem[] = [
     { q: 'Pourquoi allonger la durée réduit-elle la mensualité mais augmente-t-elle le coût ?', a: 'Le capital est remboursé plus lentement : chaque mensualité est plus faible, mais le capital restant dû reste élevé plus longtemps et génère des intérêts plus longtemps. Le coût total (intérêts et assurance) augmente donc avec la durée, à taux identique.' },
@@ -68,7 +106,7 @@ const creditsRenegocier: FaqItem[] = [
 export const comparerCreditsFaq = { duree: creditsDuree, taeg: creditsTaeg, infine: creditsInFine, renegocier: creditsRenegocier };
 
 export const simFaq: Record<string, FaqItem[]> = {
-  'interets-composes': interetsComposes,
+  'interets-composes': interetsComposesFaq.placer,
   'comparer-des-credits': comparerCreditsFaq.duree,
   immobilier: [
     { q: 'Quelle différence entre rendement brut et rendement net de charges ?', a: 'Le rendement brut rapporte les loyers annuels au prix du bien seul. Le rendement net de charges retire des loyers encaissés (vacance déduite) les charges, la taxe foncière, l’entretien et la gestion, puis divise par le coût total de l’opération (prix, frais d’acquisition, travaux, mobilier). Il est donc plus bas, et plus proche de la réalité.' },
@@ -124,30 +162,6 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Qu’est-ce que le point d’équilibre ?', a: 'C’est le premier mois à partir duquel acheter l’emporte durablement sur louer jusqu’à l’horizon, avec vos hypothèses. S’il n’apparaît pas, acheter ne l’emporte pas sur la durée étudiée.' },
     { q: 'Pourquoi le résultat dépend-il autant de la hausse des prix et de la durée ?', a: 'Les frais d’acquisition et de revente pèsent d’autant plus que la durée de détention est courte, alors que la hausse du bien et le remboursement du capital jouent sur la durée. Le simulateur montre l’effet de ces deux hypothèses.' },
     { q: 'Le résultat est-il une prévision ?', a: 'Non. Il ne repose que sur les hypothèses que vous saisissez (prix, loyer, rendement, charges), dont l’évolution réelle est inconnue. Les montants par défaut sont fictifs.' },
-  ],
-  'cout-d-attendre-pour-epargner': [
-    { q: 'Combien coûte de commencer à épargner plus tard ?', a: 'Cela dépend du versement, du rendement que vous supposez, de la date d’arrivée et du délai. Le simulateur compare le capital obtenu en commençant tout de suite et en commençant après le délai, à versement mensuel et date d’arrivée identiques.' },
-    { q: 'Pourquoi l’attente coûte-t-elle plus que les versements manqués ?', a: 'Chaque versement manqué aurait aussi produit des intérêts jusqu’à la date d’arrivée, et ces intérêts auraient eux-mêmes produit des intérêts. Avec un rendement nul, le coût se limite aux versements non effectués.' },
-    { q: 'Que signifie le versement pour rattraper ?', a: 'C’est le versement mensuel constant, à partir de la fin du délai, qui donne à l’arrivée le même capital que si vous aviez commencé tout de suite avec votre versement actuel. C’est un calcul sur vos hypothèses, pas une recommandation.' },
-    { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement réel est inconnu et varie ; il est supposé constant et avant frais, impôts et inflation. Les montants par défaut sont fictifs.' },
-  ],
-  'interets-simples-ou-composes': [
-    { q: 'Quelle différence entre intérêts simples et intérêts composés ?', a: 'Avec des intérêts simples, chaque année rapporte le même montant, calculé sur le capital de départ. Avec des intérêts composés, les intérêts de chaque année sont ajoutés au capital et produisent à leur tour des intérêts les années suivantes.' },
-    { q: 'Quelles formules le simulateur utilise-t-il ?', a: 'Intérêts simples : capital × (1 + taux × années). Intérêts composés : capital × (1 + taux)^années. Les deux donnent le même résultat après la première année ; l’écart se creuse ensuite, d’autant plus vite que le taux et la durée sont élevés.' },
-    { q: 'Pourquoi l’écart est-il nul avec un taux nul ?', a: 'Sans intérêts, il n’y a rien à réinvestir : les deux méthodes laissent le capital inchangé. L’écart grandit avec le taux et avec la durée.' },
-    { q: 'Le résultat est-il une prévision ?', a: 'Non. Le taux est supposé constant, sans versement, avant frais, impôts et inflation. Les produits réels ont leurs propres règles de calcul et de versement des intérêts ; les montants par défaut sont fictifs.' },
-  ],
-  'convertir-un-taux-annuel-en-taux-mensuel': [
-    { q: 'Comment passer d’un taux annuel à un taux mensuel ?', a: 'Le taux mensuel équivalent vaut (1 + taux annuel)^(1/12) − 1. Capitalisé douze fois, il redonne exactement le taux annuel. Par exemple, un taux annuel fictif de 5 % correspond à un taux mensuel équivalent d’environ 0,4074 %.' },
-    { q: 'Quelle différence entre taux équivalent et taux proportionnel ?', a: 'Le taux proportionnel s’obtient en divisant simplement le taux annuel par le nombre de périodes (5 % / 12 ≈ 0,4167 %). Capitalisé douze fois, il donne un taux annuel un peu supérieur à 5 % : les deux ne sont pas interchangeables dès qu’il y a capitalisation.' },
-    { q: 'Quel taux utiliser pour un calcul d’épargne ou de crédit ?', a: 'Cela dépend de la convention du produit, indiquée dans son contrat. Ce simulateur se contente de convertir un taux saisi selon les deux méthodes ; il ne dit pas laquelle s’applique à un produit donné.' },
-    { q: 'Le résultat est-il une prévision ?', a: 'Non. C’est un calcul mathématique à partir du seul taux saisi. Les valeurs par défaut sont fictives.' },
-  ],
-  'augmenter-son-epargne-chaque-annee': [
-    { q: 'Quel effet a une hausse annuelle du versement mensuel ?', a: 'Chaque hausse s’ajoute aux versements suivants, qui fructifient ensuite à leur tour. Le simulateur compare le capital obtenu avec un versement constant et avec un versement qui augmente d’un pourcentage chaque année, au même rendement supposé.' },
-    { q: 'Que signifie le versement constant équivalent ?', a: 'C’est la mensualité fixe qui donnerait, sur la même durée et au même rendement supposé, le même capital final que le versement qui augmente. Il permet de comparer les deux façons d’épargner.' },
-    { q: 'La hausse du versement est-elle comparable à celle de mon salaire ?', a: 'Vous choisissez librement le pourcentage : le simulateur ne connaît ni votre salaire ni son évolution. Indexer son épargne sur une hausse de revenu est une hypothèse de votre part, pas une prévision.' },
-    { q: 'Le résultat est-il une prévision ?', a: 'Non. Le rendement réel est inconnu et varie ; il est supposé constant et avant frais, impôts et inflation. Les montants par défaut sont fictifs.' },
   ],
   'rendement-reel-de-mon-placement': [
     { q: 'Comment calculer le rendement réel de mon placement si j’ai fait plusieurs versements ?', a: 'Diviser le gain par le total versé ne tient pas compte de la date des versements. Le taux de rendement interne est le taux annuel qui, appliqué à chaque versement pendant la durée où il est resté placé, redonne la valeur actuelle. Le simulateur le calcule à partir du versement initial, du versement mensuel, de la durée et de la valeur actuelle.' },
