@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { feeImpact, fmtEur, fmtPct } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { feesTakeaway } from '../lib/takeaways';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = { initial: number; monthly: number; annualReturn: number; years: number; inflation: number; feesA: number; feesB: number; feesC: number };
 
@@ -13,6 +14,9 @@ export default function SimFrais() {
   const res = feeImpact(s, levels);
   const base = feeImpact(s, [0])[0];
   const worst = res[2];
+  const byFees = [...res].sort((a, b) => a.fees - b.fees);
+  const lowest = byFees[0];
+  const highest = byFees[byFees.length - 1];
 
   return (
     <>
@@ -49,6 +53,7 @@ export default function SimFrais() {
             <Kpi label={`Coût des frais à ${fmtPct(worst.fees)}`} value={fmtEur(worst.cost)} sub={`${fmtPct(worst.shareOfGains)} des gains absorbés`} tone={worst.cost > 0 ? 'neg' : undefined} />
             <Kpi label={`Capital avec ${fmtPct(res[0].fees)} de frais`} value={fmtEur(res[0].finalValue)} sub={`soit ${fmtEur(res[0].realValue)} d'aujourd'hui`} />
           </div>
+          <Takeaway>{feesTakeaway({ years: s.years, lowest: lowest, highest: highest, noFees: base.finalValue })}</Takeaway>
           <h2>Évolution du capital selon les frais</h2>
           <LineChart
             title="Capital selon le niveau de frais annuels"

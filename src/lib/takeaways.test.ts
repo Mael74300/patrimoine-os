@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
+import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
-import { debtsTakeaway, inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -270,5 +271,17 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(debtsTakeaway({ extra: 0, ...stuck })).toContain('ne sont pas soldées');
     const none = comparePayoff([{ name: 'a', balance: 0, rate: 0.1, minPayment: 10 }], 0);
     expect(debtsTakeaway({ extra: 0, ...none })).toBe('');
+  });
+  it('frais : valeurs issues de feeImpact, niveaux triés', () => {
+    const inp = { initial: 10000, monthly: 300, annualReturn: 0.06, years: 25, inflation: 0.02 };
+    const [a, b, c] = feeImpact(inp, [0.002, 0.01, 0.02]);
+    const base = feeImpact(inp, [0])[0];
+    const t = digits(feesTakeaway({ years: 25, lowest: a, highest: c, noFees: base.finalValue }));
+    expect(t).toContain(eur(a.finalValue) + '€');
+    expect(t).toContain(eur(c.finalValue) + '€');
+    expect(t).toContain(eur(a.finalValue - c.finalValue) + '€');
+    expect(t).toContain(eur(c.cost) + '€');
+    expect(b.finalValue).toBeGreaterThan(c.finalValue);
+    expect(feesTakeaway({ years: 25, lowest: a, highest: a, noFees: base.finalValue })).toBe('');
   });
 });
