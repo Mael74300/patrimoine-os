@@ -36,6 +36,23 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+  # Test de fumée : chaque page pré-rendue se charge sans erreur ni débordement, à 375 px et 1280 px.
+  # Tâche séparée : elle signale un problème sur la pull request mais ne conditionne pas la publication.
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+        env:
+          SITE_URL: http://localhost
+          BASE_PATH: /
+      - run: npm run smoke
   deploy:
     if: github.event_name != 'pull_request'
     needs: build
