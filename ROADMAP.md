@@ -65,6 +65,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-29 : audit d'accessibilité automatisé (87 pages) : contrastes, tableaux au clavier, en-têtes corrigés ; alternative textuelle des graphiques ajoutée (voir « Fait ») ; restent les annonces des résultats aux lecteurs d'écran.
 - 2026-10-30 : épargnant sur le catalogue des simulateurs : « Épargne et placements » alignait 13 simulateurs, dont huit variantes d'intérêts composés ; réunies en une page à 8 onglets (31 → 21 simulateurs, voir « Fait »). Catalogue : 375 px 4 589 → 4 202 px. Reste dans cette rubrique : 8 simulateurs distincts (patrimoine, précaution, objectif, portefeuille, frais, inflation, rendement réel, investir d'un coup).
 - 2026-10-29 : débutant sur la page Guides : 19 guides en liste plate, sans ordre de lecture ; regroupés en quatre parcours, et « Autres guides » ne propose plus toujours les trois mêmes (voir « Fait »).
+- 2026-10-30 : visiteur sur le catalogue des simulateurs : liste de texte sans repère visuel, une seule colonne à 1280 px ; icônes de thème et deux colonnes ajoutées (voir « Fait »).
 - 2026-10-30 : épargnant sur plusieurs appareils : ses simulations enregistrées restaient bloquées dans un navigateur ; export et import ajoutés (voir « Fait »). Audit de l'accueil : aucune erreur de console, pas de débordement (375 px : 6 605 px de haut).
 - 2026-10-29 : audit automatisé des 81 pages du plan du site, à 375 et 1280 px : aucune erreur de console ; un seul débordement horizontal (simulateur de portefeuille à 375 px, 1 000 px de large), corrigé (voir « Fait »). Simulateurs patrimoine (5 656 px) et entreprise (5 573 px) : tableau annuel de 25 lignes ouvert, résultats loin sous un formulaire long ; tableaux repliés (voir « Fait »), formulaires restent à raccourcir.
 
@@ -89,6 +90,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+
+- [~] **Illustrations maison, étape 7** (2026-10-30) : icônes SVG `SimThemeIcon` pour les six thèmes de simulateurs (même trait et même grille que `FamilyIcon`), dans les boutons de thème et les titres de rubrique (titres : écran large seulement) ; rangées de simulateurs sur deux colonnes dès 900 px. Aucun chiffre ni texte modifié. Hauteur de `/simulateurs/` : 1280 px 3 146 → 2 988 px ; 375 px 4 202 → 4 254 px. Reste : en-têtes.
 
 - [x] **Regroupement des simulateurs d'intérêts composés, étape 2** (2026-10-30) : quatre onglets ajoutés à `/simulateurs/interets-composes/` (simples ou composés, coût d'attendre, épargne qui augmente, taux annuel → mensuel), soit 8 onglets ; calculs, tests et clés d'enregistrement locaux inchangés ; FAQ affichée par onglet (`interetsComposesFaq`). Les 4 anciennes adresses restent valides (page de renvoi pré-rendue `noindex`, canonique vers la nouvelle page, redirection vers le bon onglet, hors plan du site et flux). Hauteur des onglets : 1 797 à 2 312 px (1280 px) et 3 381 à 4 032 px (375 px) ; catalogue `/simulateurs/` : 375 px 4 589 → 4 202 px ; 1280 px 3 469 → 3 146 px.
 

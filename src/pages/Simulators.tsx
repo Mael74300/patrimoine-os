@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { norm, simulators } from '../lib/search';
 import { simBySlug, simThemes, unthemedSims } from '../lib/simThemes';
 import { PageHead } from '../components/ui';
+import { SimThemeIcon } from '../components/Illustrations';
 
 export default function Simulators() {
   const [q, setQ] = useState('');
@@ -29,13 +30,13 @@ export default function Simulators() {
       {q && <p className="small muted" role="status">{shown} simulateur{shown > 1 ? 's' : ''} sur {simulators.length}</p>}
       <nav aria-label="Thèmes" className="theme-nav">
         {groups.map((t) => (
-          <a key={t.id} href={`#${t.id}`}>{t.title} <span aria-hidden="true">{t.slugs.length}</span></a>
+          <a key={t.id} href={`#${t.id}`}><SimThemeIcon id={t.id} size={24} />{t.title} <span aria-hidden="true">{t.slugs.length}</span></a>
         ))}
       </nav>
       {groups.map((t) => (
         <section key={t.id} aria-labelledby={`h-${t.id}`}>
-          <h2 id={`h-${t.id}`}><span id={t.id} style={{ scrollMarginTop: 80 }}>{t.title}</span></h2>
-          <ul className="inv-list inv-list--compact">
+          <h2 id={`h-${t.id}`} className="theme-title"><SimThemeIcon id={t.id} /><span id={t.id} style={{ scrollMarginTop: 80 }}>{t.title}</span></h2>
+          <ul className="inv-list inv-list--compact inv-list--grid">
             {t.slugs.map((slug) => {
               const s = simBySlug(slug);
               return <li key={slug}><Link className="inv-row" to={`/simulateurs/${slug}`}><div><h3>{s.title}</h3><p>{s.excerpt}</p></div></Link></li>;

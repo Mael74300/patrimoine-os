@@ -273,3 +273,13 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 @media (min-width: 900px) { .guide-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; align-items: start; } }
 
 @media (max-width: 520px) { .cat-grid { grid-template-columns: 1fr; gap: 8px; } .cat-grid a { padding: 12px 14px; } .cat-grid em { display: none; } }
+
+/* Catalogue des simulateurs : icône de thème, rangées sur deux colonnes en écran large */
+.theme-title { display: flex; align-items: center; gap: 12px; }
+.theme-title .sim-theme-icon { flex: none; padding: 6px; box-sizing: content-box; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.theme-nav a .sim-theme-icon { flex: none; margin-left: -4px; }
+@media (min-width: 900px) {
+  .inv-list--grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 32px; }
+}
+@media (max-width: 600px) { .theme-title .sim-theme-icon { display: none; } }
+@media (max-width: 600px) { .theme-nav a { gap: 6px; padding: 0 12px; } .theme-nav a .sim-theme-icon { width: 20px; height: 20px; margin-left: -2px; } }
