@@ -1,8 +1,9 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, fmtEur, fmtNum, fmtPct } from '../lib/finance';
+import { delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway } from '../lib/takeaways';
 import { interetsComposesFaq } from '../data/simFaq';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, SelectField, Takeaway, usePersistentState } from '../components/ui';
 
 // Exemples fictifs : toutes les valeurs par défaut sont des hypothèses à remplacer par les vôtres.
 
@@ -64,6 +65,7 @@ function Placer() {
         <Kpi label="Total versé" value={fmtEur(r.contributed)} sub="capital à placer et versements mensuels" />
         <Kpi label="Gain dans cette hypothèse" value={fmtEur(r.gain)} sub="objectif moins total versé" />
       </div>
+      <Takeaway>{presentValueTakeaway({ target: s.target, years: s.years, monthly: s.monthly, ...r })}</Takeaway>
       <p className="muted small">
         Avec r = (1 + R)^(1/12) − 1 et n le nombre de mois : capital à placer = (capital visé − versement × ((1 + r)^n − 1) / r) / (1 + r)^n, et jamais moins de 0 €.
         Les montants par défaut sont fictifs.
@@ -104,6 +106,7 @@ function Duree() {
       ) : (
         <p className="notice" role="status">Avec ces hypothèses, le capital visé n’est pas atteint en 100 ans : augmentez le versement mensuel, le rendement supposé ou baissez l’objectif.</p>
       )}
+      <Takeaway>{timeToTargetTakeaway({ target: s.target, months: r.months, interest: r.interest, contributed: r.contributed, monthsWithoutReturn: r.monthsWithoutReturn })}</Takeaway>
       <p className="muted small">
         Chaque mois : capital = capital × (1 + rendement mensuel équivalent) + versement (en fin de mois), jusqu’à atteindre le capital visé (100 ans au plus).
         Les montants par défaut sont fictifs.
@@ -142,6 +145,7 @@ function Rendement() {
           <Kpi label="Part à obtenir par le rendement" value={fmtEur(Math.max(0, s.target - r.withoutReturn))} sub="écart entre l’objectif et les versements seuls" />
         </div>
       )}
+      <Takeaway>{requiredReturnTakeaway({ target: s.target, years: s.years, annualRate: r.annualRate, contributed: r.contributed, withoutReturn: r.withoutReturn, alreadyReached: r.alreadyReached })}</Takeaway>
       <p className="muted small">
         On cherche le rendement annuel R tel que, chaque mois : capital = capital × (1 + r) + versement (fin de mois), avec r = (1 + R)^(1/12) − 1, jusqu’à égaler le capital visé.
         Les montants par défaut sont fictifs.
@@ -182,6 +186,7 @@ function Doubler() {
         <Kpi label="Rendement réel" value={fmtPct(r.realReturn)} sub="par an, après inflation supposée" />
         <Kpi label="Durée en pouvoir d’achat" value={years(r.realYears)} sub="pour multiplier la valeur réelle du capital" />
       </div>
+      <Takeaway>{doublingTakeaway({ multiple: s.multiple, exactYears: r.exactYears, realYears: r.realYears, realReturn: r.realReturn })}</Takeaway>
       <p className="muted small">
         Durée exacte = ln(multiple) / ln(1 + rendement). La règle de 72 divise 72 par le rendement en % : c’est une approximation de tête, proche du résultat pour des rendements de quelques pour cent, moins précise aux taux très faibles ou très élevés.
         Si le rendement n’est pas positif, le capital n’atteint jamais le multiple. Les exemples ci-dessus sont fictifs.
@@ -237,6 +242,7 @@ function Simple() {
           ))}
         </tbody>
       </table></div>
+      <Takeaway>{simpleVsCompoundTakeaway({ initial: s.initial, years: s.years, simpleFinal: r.simpleFinal, compoundFinal: r.compoundFinal, gap: r.gap })}</Takeaway>
       <p className="muted small">
         Intérêts simples : capital × (1 + taux × années). Intérêts composés : capital × (1 + taux)^années. Les deux coïncident la première année ; l’écart croît ensuite de plus en plus vite.
         Les exemples ci-dessus sont fictifs.
@@ -277,6 +283,7 @@ function Attendre() {
         <Kpi label="Coût de l’attente" value={fmtEur(r.cost)} sub="capital en moins à l’arrivée" />
         <Kpi label="Versement pour rattraper" value={r.catchUpMonthly === null ? '—' : fmtEur(r.catchUpMonthly)} sub="par mois après le délai, pour le même capital" />
       </div>
+      <Takeaway>{delayCostTakeaway({ monthly: s.monthly, years: s.years, delayYears: s.delayYears, startNow: r.startNow, startLater: r.startLater, cost: r.cost, catchUpMonthly: r.catchUpMonthly })}</Takeaway>
       <p className="muted small">
         Les versements ont lieu en fin de mois. Attendre fait perdre les versements des mois d’attente et les intérêts qu’ils auraient produits jusqu’à l’arrivée : plus le délai est long par rapport à l’horizon, plus l’écart est grand.
         Si le délai atteint l’horizon, aucun versement n’est possible et le rattrapage n’est pas défini. Les exemples ci-dessus sont fictifs.
@@ -317,6 +324,7 @@ function Progressif() {
         <Kpi label="Capital en plus" value={fmtEur(r.extraCapital)} sub="par rapport au versement constant" />
         <Kpi label="Dernier versement mensuel" value={fmtEur(r.lastMonthly)} sub={`équivalent à ${fmtEur(r.equivalentFlatMonthly)} constants par mois`} />
       </div>
+      <Takeaway>{stepUpTakeaway({ monthly: s.monthly, years: s.years, flatCapital: r.flatCapital, steppedCapital: r.steppedCapital, extraCapital: r.extraCapital, lastMonthly: r.lastMonthly })}</Takeaway>
       <p className="muted small">
         Le versement est multiplié par (1 + hausse) au début de chaque année à partir de la deuxième ; les versements ont lieu en fin de mois. Le « versement constant équivalent » est la mensualité fixe qui donnerait le même capital final.
         Les exemples ci-dessus sont fictifs.
@@ -353,6 +361,7 @@ function Taux() {
         <Kpi label="Taux annuel nominal équivalent" value={fmtRate(r.nominalRate)} sub="taux équivalent × nombre de périodes" />
         <Kpi label="Taux annuel réel du taux proportionnel" value={fmtRate(r.effectiveFromProportional)} sub={`écart de ${fmtRate(r.gap)} avec le taux saisi`} />
       </div>
+      <Takeaway>{rateConversionTakeaway({ annualRate: s.annualRate / 100, periods: s.periods, equivalentRate: r.equivalentRate, proportionalRate: r.proportionalRate, gap: r.gap })}</Takeaway>
       <p className="muted small">
         Taux équivalent = (1 + taux annuel)^(1 / n) − 1 ; taux proportionnel = taux annuel / n ; taux annuel du taux proportionnel = (1 + taux / n)^n − 1.
         Les montants par défaut sont fictifs.
@@ -382,7 +391,7 @@ export default function SimInteretsComposes() {
   return (
     <>
       <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: 'Intérêts composés' }]} />
-      <PageHead eyebrow="Simulateur" title="Intérêts composés : combien placer, en quel temps, à quel rendement ?">
+      <PageHead eyebrow="Simulateur" title="Intérêts composés : combien placer, en quel temps, à quel rendement ?">
         Huit calculs autour d’une même idée : l’argent placé rapporte des intérêts, qui rapportent eux-mêmes des intérêts. Choisissez votre question dans les onglets.
       </PageHead>
       <p className="notice" role="note">
