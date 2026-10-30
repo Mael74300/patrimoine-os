@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { AS_OF, investments } from '../data/investments';
-import { PageHead } from '../components/ui';
+import { Fold, PageHead } from '../components/ui';
 
 const FORMULAS: [string, string[]][] = [
   ['Conventions générales', [
@@ -166,11 +166,11 @@ export default function Methodologie() {
       </p>
 
       <h2>Formules de calcul</h2>
+      <p>Les formules utilisées par les simulateurs, à déplier si vous voulez vérifier un calcul.</p>
       {FORMULAS.map(([t, list]) => (
-        <section key={t}>
-          <h3>{t}</h3>
+        <Fold key={t} title={t}>
           <ul>{list.map((l) => <li key={l}>{l}</li>)}</ul>
-        </section>
+        </Fold>
       ))}
       <p>Chaque module de calcul est indépendant et couvert par des tests automatisés, y compris sur des exemples connus et des valeurs limites.</p>
 
