@@ -372,3 +372,33 @@ export function FamilyIcon({ id }: { id: string }) {
   }
   return <svg viewBox="0 0 48 48" width={40} height={40} aria-hidden="true" focusable="false" className="family-icon">{shape}</svg>;
 }
+
+/** Icônes décoratives des thèmes de simulateurs : même trait et mêmes couleurs que `FamilyIcon`, grille 48 × 48. */
+export function SimThemeIcon({ id, size = 36 }: { id: string; size?: number }) {
+  const line = { fill: 'none', stroke: 'var(--primary)', strokeWidth: 2.5, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const soft = { fill: 'var(--accent-soft)', stroke: 'var(--accent)', strokeWidth: 2.5, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  let shape: JSX.Element;
+  switch (id) {
+    case 'epargne': // plante qui pousse sur une pile de pièces
+      shape = <><ellipse cx="24" cy="39" rx="14" ry="5" {...soft} /><path d="M10 31v8M38 31v8" {...line} /><ellipse cx="24" cy="31" rx="14" ry="5" {...soft} /><path d="M24 26V14M24 19c-5 0-8-3-8-8 5 0 8 3 8 8zM24 16c0-4 3-6 8-6 0 4-3 6-8 6z" {...line} /></>;
+      break;
+    case 'credit': // calculette
+      shape = <><rect x="10" y="6" width="28" height="36" rx="4" {...soft} /><path d="M16 14h16" {...line} /><path d="M17 23h2M24 23h2M31 23h2M17 31h2M24 31h2M31 31h2M17 38h2M24 38h9" {...line} /></>;
+      break;
+    case 'budget': // camembert
+      shape = <><circle cx="24" cy="24" r="16" {...soft} /><path d="M24 24V8M24 24l13.9 8" {...line} /><circle cx="24" cy="24" r="16" {...line} /></>;
+      break;
+    case 'immobilier': // maison
+      shape = <><path d="M6 23 24 8l18 15" {...line} /><path d="M11 20v22h26V20" {...soft} /><path d="M20 42V30h8v12" {...line} /></>;
+      break;
+    case 'retraite': // soleil couchant
+      shape = <><path d="M6 36h36" {...line} /><path d="M14 36a10 10 0 0 1 20 0z" {...soft} /><path d="M24 12v6M10 20l4 4M38 20l-4 4" {...line} /></>;
+      break;
+    case 'entreprise': // mallette
+      shape = <><rect x="7" y="16" width="34" height="23" rx="3" {...soft} /><path d="M18 16v-4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4M7 27h34" {...line} /><path d="M22 27v3h4v-3" {...line} /></>;
+      break;
+    default: // autres : courbe en hausse
+      shape = <><path d="M8 8v32h34" {...line} /><path d="M14 33l9-10 7 6 11-14" {...line} /></>;
+  }
+  return <svg viewBox="0 0 48 48" width={size} height={size} aria-hidden="true" focusable="false" className="sim-theme-icon">{shape}</svg>;
+}
