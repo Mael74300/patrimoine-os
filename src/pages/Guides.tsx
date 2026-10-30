@@ -6,7 +6,7 @@ import { investmentBySlug, investments } from '../data/investments';
 import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
 import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
 import { Crumbs, PageHead, Sources, usePersistentState } from '../components/ui';
-import { SchemaEscalier, SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite } from '../components/Illustrations';
+import { GuideGroupIcon, SchemaEscalier, SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite } from '../components/Illustrations';
 import NotFound from './NotFound';
 
 const fmtDate = (iso: string) => new Date(iso + 'T12:00:00Z').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -17,9 +17,9 @@ export function GuideList() {
     <>
       <PageHead eyebrow="Guides" title="Guides pédagogiques">Des explications courtes pour comprendre les mécanismes avant de choisir.</PageHead>
       <div className="guide-groups">
-      {guideGroups.map((grp) => (
+      {guideGroups.map((grp, gi) => (
         <section key={grp.title} aria-labelledby={`grp-${grp.slugs[0]}`} style={{ marginTop: 28 }}>
-          <h2 id={`grp-${grp.slugs[0]}`} style={{ margin: 0 }}>{grp.title}</h2>
+          <h2 id={`grp-${grp.slugs[0]}`} className="theme-title" style={{ margin: 0 }}><GuideGroupIcon index={gi} size={28} />{grp.title}</h2>
           <p className="small muted" style={{ margin: '4px 0 8px' }}>{grp.intro}</p>
           <ul className="inv-list inv-list--compact">
             {grp.slugs.map((slug) => guideBySlug[slug]).map((g) => (

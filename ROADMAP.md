@@ -58,7 +58,6 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (31, chantiers 1 et 2).
 - 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public ; ajouter des images créées par la tâche elle-même.
-- 2026-10-30 : épargnant sur le catalogue des simulateurs : « Épargne et placements » alignait 13 simulateurs, dont huit variantes d'intérêts composés ; réunies en une page à 8 onglets (31 → 21 simulateurs, voir « Fait »). Catalogue : 375 px 4 589 → 4 202 px. Reste dans cette rubrique : 8 simulateurs distincts (patrimoine, précaution, objectif, portefeuille, frais, inflation, rendement réel, investir d'un coup).
 - 2026-10-30 : épargnant sur plusieurs appareils : ses simulations enregistrées restaient bloquées dans un navigateur ; export et import ajoutés (voir « Fait »). Audit de l'accueil : aucune erreur de console, pas de débordement (375 px : 6 605 px de haut).
 - 2026-10-30 : débutant sur la page Guides : plusieurs titres rejetaient le « ? » seul sur la ligne suivante (« …double-t-il / ? ») ; titres équilibrés en CSS (voir « Fait »). Audit des pages d'accueil, guides, encyclopédie, simulateurs à 375 et 1280 px : aucune erreur de console.
 - 2026-10-30 : débutant sur « Intérêts composés » (8 onglets, la page de départ des épargnants) : résultats en chiffres bruts, et le titre rejetait le « : » seul en début de ligne à 375 px ; phrases « Concrètement » ajoutées aux 8 onglets, espace insécable avant le « : » (voir « Fait »). Audit des 8 onglets à 375 et 1280 px : aucune erreur de console, pas de débordement.
@@ -66,6 +65,7 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 - 2026-10-30 : visiteur arrivé par Google sur « Méthodologie » (la page la plus longue du site : 14 302 px à 375 px, dont 12 000 px de formules toutes ouvertes) ; formules repliées une par une (voir « Fait »). Audit technique des 77 pages à 375 et 1280 px : aucune erreur de console, aucun débordement, un seul h1 partout.
 - 2026-10-30 : épargnant de 45 ans sur le comparateur (page d'entrée des comparaisons) : à 375 px, le tableau défilait latéralement et la 3e colonne était coupée (« Assurance-vie » tronqué, ETF invisible sans glisser) ; critères empilés avec le nom du placement devant chaque valeur (voir « Fait »). Audit de l'entrepreneuriat, du glossaire et du plan du site à 375 et 1280 px : aucune erreur de console, pas de débordement.
 - 2026-10-30 : débutant sur le simulateur de budget (son premier outil) : résultats en tableau de pourcentages sans phrase de synthèse ; phrase « Concrètement » ajoutée (voir « Fait »). Audit à 375 et 1280 px : aucune erreur de console, pas de débordement.
+- 2026-10-30 : débutant sur la page Guides (19 guides en quatre parcours) : quatre titres de parcours identiques en texte seul, sans repère visuel, contrairement au catalogue des simulateurs ; icônes de parcours ajoutées (voir « Fait »). Audit de l'accueil, guides, simulateurs, encyclopédie à 375 et 1280 px : aucune erreur de console, pas de débordement.
 
 ## À faire
 
@@ -88,6 +88,8 @@ Section réécrite à chaque audit, sans s'allonger : au plus 10 constats, les p
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+- [~] **Illustrations maison, étape 9** (2026-10-30) : icônes SVG `GuideGroupIcon` (drapeau, engrenage, balance, maison et clé) devant les quatre parcours de `/guides/`, même trait et même grille que `SimThemeIcon` ; décoratives, testées (une icône distincte par parcours). Aucun chiffre ni texte modifié. Hauteur de `/guides/` : 375 px 4 260 → 4 331 px ; 1280 px 2 094 → 2 122 px. Reste : en-têtes de rubriques.
+
 
 - [~] **Vulgarisation, étape 6** (2026-10-30) : phrase « Concrètement » (`budgetTakeaway`, testée contre `analyzeBudget` et `catchUp`) sous les résultats du simulateur de budget, premier outil du débutant : sur 100 € de revenu, part des besoins, des envies et de l'épargne ; revenu non affecté ou dépassement ; effort mensuel pour le taux visé. Aucun chiffre réglementaire ni nouveau (le repère 50 / 30 / 20 existait déjà). Hauteur de `/simulateurs/budget/` : 375 px 4 344 → 4 558 px ; 1280 px 2 153 → 2 270 px. Reste : patrimoine, entreprise, dettes, frais, inflation, portefeuille, puis les guides.
 
