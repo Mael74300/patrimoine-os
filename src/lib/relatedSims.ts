@@ -34,8 +34,8 @@ export const simsForGuide: Record<string, string[]> = {
   'fonctionnement-pea': ['frais', 'patrimoine'],
   'comparer-les-frais': ['frais'],
   'epargne-limitee': ['epargne-de-precaution', 'inflation'],
-  'par-ou-commencer': ['budget', 'epargne-de-precaution', 'objectif-epargne', 'cout-d-attendre-pour-epargner'],
-  'interets-composes': ['interets-composes', 'patrimoine', 'inflation', 'investir-d-un-coup-ou-progressivement', 'rendement-reel-de-mon-placement', 'cout-d-attendre-pour-epargner', 'augmenter-son-epargne-chaque-annee', 'interets-simples-ou-composes', 'convertir-un-taux-annuel-en-taux-mensuel'],
+  'par-ou-commencer': ['budget', 'epargne-de-precaution', 'objectif-epargne', 'interets-composes'],
+  'interets-composes': ['interets-composes', 'patrimoine', 'inflation', 'investir-d-un-coup-ou-progressivement', 'rendement-reel-de-mon-placement'],
   'choisir-son-enveloppe': ['frais', 'patrimoine'],
   'combien-epargne-de-precaution': ['epargne-de-precaution', 'inflation', 'budget'],
   'taux-endettement-capacite-emprunt': ['endettement', 'credit', 'dettes'],
@@ -44,7 +44,7 @@ export const simsForGuide: Record<string, string[]> = {
   'diversification-placements': ['patrimoine', 'frais', 'epargne-de-precaution'],
   'inflation-pouvoir-d-achat-epargne': ['inflation', 'rendement-reel-de-mon-placement', 'epargne-de-precaution'],
   'livret-a-calcul-interets-quinzaines': ['epargne-de-precaution', 'inflation'],
-  'regle-de-72-doubler-son-capital': ['interets-composes', 'inflation', 'interets-simples-ou-composes'],
+  'regle-de-72-doubler-son-capital': ['interets-composes', 'inflation'],
 };
 
 const bySlug = Object.fromEntries(simulators.map((s) => [s.slug, s]));

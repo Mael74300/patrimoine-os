@@ -7,8 +7,7 @@ export const simThemes: { id: string; title: string; slugs: string[] }[] = [
     title: 'Épargne et placements',
     slugs: [
       'patrimoine', 'epargne-de-precaution', 'objectif-epargne', 'portefeuille', 'frais', 'inflation', 'rendement-reel-de-mon-placement',
-      'investir-d-un-coup-ou-progressivement', 'interets-simples-ou-composes', 'interets-composes', 'augmenter-son-epargne-chaque-annee',
-      'cout-d-attendre-pour-epargner', 'convertir-un-taux-annuel-en-taux-mensuel',
+      'investir-d-un-coup-ou-progressivement', 'interets-composes',
     ],
   },
   {
