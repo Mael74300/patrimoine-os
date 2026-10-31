@@ -5,7 +5,7 @@ import { guideBySlug, guideGroups, guides, otherGuides } from '../data/guides';
 import { investmentBySlug, investments } from '../data/investments';
 import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
 import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
-import { Crumbs, MobileFold, PageHead, Sources, usePersistentState } from '../components/ui';
+import { Crumbs, MobileFold, PageHead, SimFaq, Sources, usePersistentState } from '../components/ui';
 import { GuideGroupIcon, SchemaEnveloppe, SchemaPea, SchemaEscalier, SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite } from '../components/Illustrations';
 import NotFound from './NotFound';
 
@@ -130,12 +130,7 @@ export function GuidePage() {
             {g.slug === 'diversification-placements' && s.heading === 'Un exemple fictif chiffré' && <SchemaDiversification />}
           </section>
         ))}
-        {g.faq?.length ? (
-          <section>
-            <h2>Questions fréquentes</h2>
-            {g.faq.map((f) => <div key={f.q}><h3>{f.q}</h3><p>{f.a}</p></div>)}
-          </section>
-        ) : null}
+        <SimFaq slug={g.slug} items={g.faq} />
       </div>
       {g.widget === 'catalogue' && <MobileFold label={`Voir les ${categories.length} familles et leurs fiches`}><Catalogue /></MobileFold>}
       {g.widget === 'patrimoine-net' && (<><h2>Calculer votre patrimoine net</h2><NetWorthCalculator /></>)}
