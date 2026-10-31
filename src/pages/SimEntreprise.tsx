@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { businessTakeaway } from '../lib/takeaways';
 import { BUSINESS_SCENARIOS, fmtEur, fmtPct, lowestCash, projectBusiness, type BusinessInput } from '../lib/finance';
-import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, Tabs, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, Tabs, usePersistentState } from '../components/ui';
 
 const DEFAULTS: BusinessInput = {
   revenueY1: 120000, revenueGrowth: 0.1, grossMarginRate: 0.6, fixedCosts: 30000, fixedCostsGrowth: 0.02,
@@ -28,7 +28,9 @@ export default function SimEntreprise() {
         Chiffre d'affaires, marge, charges, rémunération, trésorerie et valorisation sur plusieurs années, en trois scénarios.
       </PageHead>
 
-      <div className="grid cols-4" role="note" style={{ marginBottom: 24 }}>
+      <div style={{ marginBottom: 24 }}>
+      <MobileFold label="Quatre mots à connaître">
+      <div className="grid cols-4" role="note">
         {[
           ["Chiffre d'affaires", 'Le total des ventes. Ce n’est pas ce que vous gagnez.'],
           ['Résultat', 'Ce qui reste après charges, rémunération et impôt sur les sociétés.'],
@@ -38,31 +40,39 @@ export default function SimEntreprise() {
           <div key={t} className="panel small"><strong>{t}</strong><div className="muted">{d}</div></div>
         ))}
       </div>
+      </MobileFold>
+      </div>
 
       <div className="sim">
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
-            <legend>Activité</legend>
-            <NumberField label="Chiffre d'affaires, année 1" unit="€" value={s.revenueY1} onChange={up('revenueY1')} min={0} step={5000} />
-            <NumberField label="Croissance annuelle du CA" unit="%" percent value={s.revenueGrowth} onChange={up('revenueGrowth')} step={1} min={-50} max={300} />
-            <NumberField label="Marge brute" unit="% du CA" percent value={s.grossMarginRate} onChange={up('grossMarginRate')} step={1} min={0} max={100} hint="CA moins achats et coûts directs." />
+            <legend>Votre activité</legend>
+            <NumberField label="Chiffre d'affaires, année 1" unit="€" value={s.revenueY1} onChange={up('revenueY1')} min={0} step={5000} sliderMax={1000000} hint="Le total des ventes prévues la première année." />
+            <NumberField label="Croissance annuelle du CA" unit="%" percent value={s.revenueGrowth} onChange={up('revenueGrowth')} step={1} min={-50} max={300} sliderMax={50} hint="De combien les ventes augmentent chaque année." />
+            <NumberField label="Marge brute" unit="% du CA" percent value={s.grossMarginRate} onChange={up('grossMarginRate')} step={1} min={0} max={100} sliderMax={100} hint="CA moins achats et coûts directs." />
+            <NumberField label="Charges fixes annuelles" unit="€" value={s.fixedCosts} onChange={up('fixedCosts')} min={0} step={1000} sliderMax={300000} hint="Loyer, abonnements, assurances… ce que vous payez même sans vente." />
+            <NumberField label="Rémunération nette du dirigeant" unit="€/an" value={s.founderPay} onChange={up('founderPay')} min={0} step={1000} sliderMax={120000} />
+            <NumberField label="Trésorerie de départ" unit="€" value={s.initialCash} onChange={up('initialCash')} step={1000} sliderMax={200000} hint="L'argent disponible au lancement." />
           </fieldset>
-          <fieldset>
-            <legend>Charges et rémunération</legend>
-            <NumberField label="Charges fixes annuelles" unit="€" value={s.fixedCosts} onChange={up('fixedCosts')} min={0} step={1000} />
-            <NumberField label="Évolution des charges fixes" unit="%/an" percent value={s.fixedCostsGrowth} onChange={up('fixedCostsGrowth')} step={0.5} min={-20} max={50} />
-            <NumberField label="Rémunération nette du dirigeant" unit="€/an" value={s.founderPay} onChange={up('founderPay')} min={0} step={1000} />
-            <NumberField label="Charges sociales" unit="% du net" percent value={s.socialRate} onChange={up('socialRate')} step={1} min={0} max={150} hint="Varie fortement selon le statut : à vérifier avec l'URSSAF." />
-            <NumberField label="Impôt sur les sociétés" unit="%" percent value={s.corporateTaxRate} onChange={up('corporateTaxRate')} step={1} min={0} max={50} hint="Taux normal 25 % ; un taux réduit existe sous conditions pour les PME (à vérifier)." />
-          </fieldset>
-          <fieldset>
-            <legend>Trésorerie et valorisation</legend>
-            <NumberField label="Trésorerie de départ" unit="€" value={s.initialCash} onChange={up('initialCash')} step={1000} />
-            <NumberField label="Investissement initial" unit="€" value={s.initialInvestment} onChange={up('initialInvestment')} min={0} step={1000} />
-            <NumberField label="Délai de paiement clients" unit="jours" value={s.receivableDays} onChange={up('receivableDays')} min={0} max={180} />
-            <NumberField label="Multiple de valorisation" unit="× résultat" value={s.valuationMultiple} onChange={up('valuationMultiple')} min={0} max={30} step={0.5} hint="Hypothèse : les multiples varient beaucoup selon le secteur et la taille." />
-            <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={1} max={15} />
-          </fieldset>
+          <details className="fold advanced">
+            <summary>Réglages avancés (facultatif)</summary>
+            <div className="advanced-body">
+              <p className="small muted">Déjà remplis avec des valeurs d'exemple. Si vous ne savez pas, laissez-les telles quelles.</p>
+              <fieldset>
+                <legend>Charges et impôt</legend>
+                <NumberField label="Évolution des charges fixes" unit="%/an" percent value={s.fixedCostsGrowth} onChange={up('fixedCostsGrowth')} step={0.5} min={-20} max={50} />
+                <NumberField label="Charges sociales" unit="% du net" percent value={s.socialRate} onChange={up('socialRate')} step={1} min={0} max={150} hint="Varie fortement selon le statut : à vérifier avec l'URSSAF." />
+                <NumberField label="Impôt sur les sociétés" unit="%" percent value={s.corporateTaxRate} onChange={up('corporateTaxRate')} step={1} min={0} max={50} hint="Taux normal 25 % ; un taux réduit existe sous conditions pour les PME (à vérifier)." />
+              </fieldset>
+              <fieldset>
+                <legend>Trésorerie et valorisation</legend>
+                <NumberField label="Investissement initial" unit="€" value={s.initialInvestment} onChange={up('initialInvestment')} min={0} step={1000} hint="Matériel, aménagement… dépensé au départ." />
+                <NumberField label="Délai de paiement clients" unit="jours" value={s.receivableDays} onChange={up('receivableDays')} min={0} max={180} hint="Plus vos clients paient tard, moins vous avez de trésorerie." />
+                <NumberField label="Multiple de valorisation" unit="× résultat" value={s.valuationMultiple} onChange={up('valuationMultiple')} min={0} max={30} step={0.5} hint="Hypothèse : les multiples varient beaucoup selon le secteur et la taille." />
+                <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={1} max={15} />
+              </fieldset>
+            </div>
+          </details>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
         </form>
 
