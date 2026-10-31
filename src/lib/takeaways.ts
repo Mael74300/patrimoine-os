@@ -272,3 +272,32 @@ export function wealthTakeaway(p: { years: number; contributed: number; withdraw
     : '';
   return `En ${duree}, vous versez ${fmtEur(p.contributed)}${retraits}, et le capital simulé atteint ${fmtEur(p.value)}${gain}.${impot}${reel}`;
 }
+
+/** Entreprise : le chiffre d'affaires n'est pas un gain ; ce qui reste, la trésorerie et le besoin de financement du scénario pessimiste. */
+export function businessTakeaway(p: { years: number; revenueFirst: number; revenueLast: number; netResultLast: number; cashLast: number; pessimisticLowestCash: number }): string {
+  if (!(p.years > 0) || !(p.revenueLast > 0)) return '';
+  const duree = `${p.years} an${p.years > 1 ? 's' : ''}`;
+  const reste = p.netResultLast >= 0
+    ? `il vous reste ${fmtEur(p.netResultLast)} de résultat net la dernière année`
+    : `l'entreprise perd ${fmtEur(-p.netResultLast)} la dernière année`;
+  const treso = p.cashLast >= 0 ? `la trésorerie finale est de ${fmtEur(p.cashLast)}` : `la trésorerie finale est négative (${fmtEur(p.cashLast)})`;
+  const risque = p.pessimisticLowestCash < 0
+    ? ` Dans le scénario pessimiste, la trésorerie tombe jusqu'à ${fmtEur(p.pessimisticLowestCash)} : il faudrait trouver ce financement (apport, prêt, délais de paiement négociés).`
+    : '';
+  return `Dans le scénario central, le chiffre d'affaires passe de ${fmtEur(p.revenueFirst)} à ${fmtEur(p.revenueLast)} en ${duree}, mais ce n'est pas ce que vous gagnez : après charges, rémunération et impôt, ${reste}, et ${treso}.${risque}`;
+}
+
+/** Portefeuille : gain annuel supposé, frais, support dominant et projection. */
+export function portfolioTakeaway(p: { total: number; netReturn: number; annualFeesEuro: number; topLabel: string; topWeight: number; years: number; monthly: number; contributed: number; value: number }): string {
+  if (!(p.total > 0)) return '';
+  const gain = p.total * p.netReturn;
+  const annuel = gain >= 0
+    ? `rapporte en moyenne ${fmtPct(p.netReturn)} par an une fois les frais déduits, soit environ ${fmtEur(gain)} par an (hypothèse saisie, pas une garantie)`
+    : `perd en moyenne ${fmtPct(-p.netReturn)} par an une fois les frais déduits, soit environ ${fmtEur(-gain)} par an`;
+  const frais = p.annualFeesEuro > 0.5 ? ` Les frais vous coûtent ${fmtEur(p.annualFeesEuro)} par an.` : '';
+  const poids = p.topWeight >= 0.5 ? ` « ${p.topLabel} » pèse ${fmtPct(p.topWeight)} du total : si ce support chute, tout le portefeuille en souffre.` : '';
+  const proj = p.years > 0 && p.value > 0
+    ? ` En ${p.years} an${p.years > 1 ? 's' : ''}, avec ${fmtEur(p.monthly)} versés en plus chaque mois, il atteindrait environ ${fmtEur(p.value)} (dont ${fmtEur(p.contributed)} de versements, capital de départ compris), sans tenir compte des hausses et baisses des marchés.`
+    : '';
+  return `Votre portefeuille de ${fmtEur(p.total)} ${annuel}.${frais}${poids}${proj}`;
+}
