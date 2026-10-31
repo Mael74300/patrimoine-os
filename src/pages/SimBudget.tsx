@@ -33,17 +33,19 @@ export default function SimBudget() {
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
             <legend>Budget mensuel du foyer</legend>
-            <NumberField label="Revenu net mensuel" unit="€" value={s.netIncome} onChange={up('netIncome')} min={0} step={100} hint="Après impôt sur le revenu prélevé à la source, toutes sources comprises." />
-            <NumberField label="Besoins" unit="€" value={s.needs} onChange={up('needs')} min={0} step={50} hint="Logement, énergie, alimentation, transport, assurances, remboursements de crédit." />
-            <NumberField label="Envies" unit="€" value={s.wants} onChange={up('wants')} min={0} step={50} hint="Loisirs, restaurants, abonnements, voyages, achats de confort." />
-            <NumberField label="Épargne mensuelle" unit="€" value={s.saving} onChange={up('saving')} min={0} step={50} />
-            <NumberField label="Taux d'épargne visé" unit="%" percent value={s.targetRate} onChange={up('targetRate')} min={0} max={100} step={1} hint="20 % est le repère du 50 / 30 / 20." />
+            <NumberField label="Revenu net mensuel" unit="€" value={s.netIncome} onChange={up('netIncome')} min={0} step={100} sliderMax={8000} hint="Après impôt sur le revenu prélevé à la source, toutes sources comprises." />
+            <NumberField label="Besoins" unit="€" value={s.needs} onChange={up('needs')} min={0} step={50} sliderMax={5000} hint="Logement, énergie, alimentation, transport, assurances, remboursements de crédit." />
+            <NumberField label="Envies" unit="€" value={s.wants} onChange={up('wants')} min={0} step={50} sliderMax={3000} hint="Loisirs, restaurants, abonnements, voyages, achats de confort." />
+            <NumberField label="Épargne mensuelle" unit="€" value={s.saving} onChange={up('saving')} min={0} step={50} sliderMax={2000} />
           </fieldset>
-          <fieldset>
-            <legend>Projection de l'épargne</legend>
-            <NumberField label="Rendement net supposé" unit="%" percent value={s.projReturn} onChange={up('projReturn')} min={-10} max={20} step={0.5} hint="Hypothèse, jamais une garantie. 0 % = simple somme des versements." />
-            <NumberField label="Durée" unit="ans" value={s.projYears} onChange={up('projYears')} min={1} max={50} step={1} />
-          </fieldset>
+          <details className="fold advanced">
+            <summary>Réglages avancés (facultatif)</summary>
+            <div className="advanced-body">
+              <NumberField label="Taux d'épargne visé" unit="%" percent value={s.targetRate} onChange={up('targetRate')} min={0} max={100} step={1} hint="20 % est le repère du 50 / 30 / 20." />
+              <NumberField label="Rendement net supposé de l'épargne" unit="%" percent value={s.projReturn} onChange={up('projReturn')} min={-10} max={20} step={0.5} hint="Hypothèse, jamais une garantie. 0 % = simple somme des versements." />
+              <NumberField label="Durée de la projection" unit="ans" value={s.projYears} onChange={up('projYears')} min={1} max={50} step={1} />
+            </div>
+          </details>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
         </form>
         <section aria-label="Résultats">
@@ -62,7 +64,7 @@ export default function SimBudget() {
           <h2>Votre budget face au repère 50 / 30 / 20</h2>
           <div className="table-wrap" tabIndex={0}>
             <table>
-              <thead><tr><th>Poste</th><th className="r">Montant</th><th className="r">Part du revenu</th><th className="r">Repère</th><th className="r">Écart au repère</th></tr></thead>
+              <thead><tr><th>Poste</th><th className="r">Montant</th><th className="r">Part<span className="sr-only"> du revenu</span></th><th className="r">Repère</th><th className="r">Écart<span className="sr-only"> au repère</span></th></tr></thead>
               <tbody>
                 {rows.map((r) => (
                   <tr key={r.label}>
@@ -76,6 +78,7 @@ export default function SimBudget() {
               </tbody>
             </table>
           </div>
+          <p className="small muted">Part : part de votre revenu net. Écart : différence avec le repère, en euros par mois (+ : au-dessus du repère).</p>
 
           <h2>Atteindre {fmtPct(s.targetRate)} d'épargne</h2>
           {c.missing === 0 ? (
