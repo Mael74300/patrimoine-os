@@ -330,6 +330,11 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 /* Blocs repliés sous 700 px seulement (comparateur, familles de l'accueil) */
 .mob-fold > summary { font-weight: 600; border: 1px solid var(--line); border-radius: 8px; padding: 0 12px; background: var(--surface); }
 @media (max-width: 700px) { .mob-fold { margin-bottom: 12px; } }
+.mob-fold .fold-hint { display: none; }
+@media (max-width: 700px) {
+  .mob-fold:not([open]) > summary { display: block; line-height: 1.35; padding-top: 8px; padding-bottom: 8px; }
+  .mob-fold:not([open]) .fold-hint { display: block; font-weight: 400; font-size: .85rem; color: var(--ink-3); margin-top: 2px; }
+}
 .cmp-list { margin: 0; padding-left: 16px; }
 /* Comparateur : sous 700 px, chaque critère devient un bloc et chaque placement une ligne étiquetée */
 @media (max-width: 700px) {

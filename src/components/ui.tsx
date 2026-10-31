@@ -582,14 +582,14 @@ export function Fold({ title, children }: { title: string; children: ReactNode }
   );
 }
 /** Bloc replié sur mobile (liste longue), toujours ouvert en écran large et dans le HTML pré-rendu. */
-export function MobileFold({ label, children }: { label: string; children?: ReactNode }) {
+export function MobileFold({ label, hint, children }: { label: string; hint?: string; children?: ReactNode }) {
   const ref = useRef<HTMLDetailsElement>(null);
   useEffect(() => {
     if (window.matchMedia('(max-width: 700px)').matches && ref.current) ref.current.open = false;
   }, []);
   return (
     <details ref={ref} open className="cmp-fold mob-fold">
-      <summary>{label}</summary>
+      <summary>{label}{hint && <span className="fold-hint">{hint}</span>}</summary>
       {children}
     </details>
   );

@@ -113,7 +113,7 @@ export default function Encyclopedia() {
           <h2 id={`fam-${g.cat.id}`} className="inv-group-title">
             {g.cat.name} <span>{g.items.length}</span>
           </h2>
-          {unfiltered && g.items.length > 1 ? <MobileFold label={`Voir les ${g.items.length} fiches`}>{rows(g.items)}</MobileFold> : rows(g.items)}
+          {unfiltered && g.items.length > 1 ? <MobileFold label={`Voir les ${g.items.length} fiches`} hint={g.items.map((i) => i.name).join(' · ')}>{rows(g.items)}</MobileFold> : rows(g.items)}
         </section>
       ))}
     </>

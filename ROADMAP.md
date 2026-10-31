@@ -62,6 +62,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-10-31 : visiteur débutant (375 px) : sur l'accueil, l'exemple chiffré passait avant « Par où commencer ? » (quatre cartes à environ 1 000 px de défilement) ; corrigé (voir « Fait »).
 - 2026-10-31 : pistes vues : liens dans les cellules de tableau (Livret A, LDDS) encore à 18 px ; champ de recherche de l'accueil à 375 px tronquait son texte d'exemple (corrigé le 2026-10-31, texte raccourci). Contrôle fait le même jour : tous les liens isolés des 90 pages mesurent au moins 24 px à 375 px ; les liens en ligne dans les cellules sont exemptés (WCAG 2.5.8). Aucune erreur de console (hors GoatCounter, bloqué par le bac à sable).
 
+- 2026-10-31 : visiteur débutant (375 px) sur l'encyclopédie : familles repliées sans aucun nom de fiche visible, il fallait ouvrir chaque bloc pour savoir ce qu'il contenait ; corrigé (noms affichés sous « Voir les N fiches », +299 px assumés). Ordre de tabulation et en-têtes de rubrique restent à traiter.
+
 ## À faire
 
 1. [x] **Regrouper les simulateurs d'intérêts composés** : terminé le 2026-10-30 (étape 2 : simples ou composés, coût d'attendre, épargne qui augmente, conversion de taux, voir « Fait »). Historique : (étape 1 faite le 2026-10-29 : `capital-a-placer-aujourd-hui`, `duree-pour-atteindre-un-capital`, `rendement-necessaire-pour-atteindre-un-objectif` et `doubler-son-capital-regle-de-72` réunis dans `/simulateurs/interets-composes/`). Reste à intégrer : `doubler-son-capital-regle-de-72`, `duree-pour-atteindre-un-capital`, `capital-a-placer-aujourd-hui`, `rendement-necessaire-pour-atteindre-un-objectif`, `interets-simples-ou-composes`, `convertir-un-taux-annuel-en-taux-mensuel`, `augmenter-son-epargne-chaque-annee`, `cout-d-attendre-pour-epargner` et `objectif-epargne` répondent à des variantes d'une même question. Les réunir en un simulateur « Intérêts composés » à onglets (quelle valeur chercher : capital final, durée, versement, capital de départ, rendement), en gardant les calculs et tests existants. Les anciennes adresses restent valides : page courte pré-rendue qui renvoie vers le bon onglet (lien visible, `<link rel="canonical">` vers la nouvelle page, `noindex`), retirée du plan du site et du flux. Un regroupement par exécution si nécessaire.
@@ -82,6 +84,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-10-31 : encyclopédie sur mobile : les noms des fiches restent visibles sous chaque famille repliée (ergonomie).
 - 2026-10-31 : accueil mobile : texte d'exemple du champ de recherche raccourci (« PEA, SCPI, crédit… ») pour qu'il ne soit plus coupé à 375 px.
 
 - 2026-10-31 : **Illustrations maison, étape 14 : schéma « du rendement brut au net » dans le guide de rentabilité locative** : quatre barres (6,0 % → 5,2 % → 4,8 % → 3,6 %) qui montrent l’effet des frais d’achat, de la vacance et des charges sur l’exemple fictif du guide ; chiffres recalculés par un test (`src/rendement.test.ts`). Page à 375 px : 3 111 → 3 485 px (1 280 px : 2 439 px) (une image ajoutée, texte inchargé). PR à venir.
