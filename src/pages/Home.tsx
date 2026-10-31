@@ -115,7 +115,7 @@ export default function Home() {
 
       <h2>Les familles d'investissement</h2>
       <MobileFold label={`Voir les ${familyCount} familles`}>
-        <div className="cat-grid">
+        <div className="cat-grid cat-grid-home">
           {categories.filter((c) => counts[c.id]).map((c) => (
             <Link key={c.id} to={`/encyclopedie?cat=${c.id}`}>
               <FamilyIcon id={c.id} />

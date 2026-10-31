@@ -81,7 +81,7 @@ function Footer() {
         </div>
         <div>
           <strong style={{ color: 'var(--ink)' }}>Explorer</strong>
-          <ul style={{ marginTop: 8 }}>
+          <ul className="footer-links" style={{ marginTop: 8 }}>
             {NAV.map((n) => <li key={n.to}><Link to={n.to}>{n.label}</Link></li>)}
             <li><Link to="/glossaire">Glossaire</Link></li>
             <li><Link to="/plan-du-site">Plan du site</Link></li>

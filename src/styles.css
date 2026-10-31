@@ -68,9 +68,10 @@ p, li { text-wrap: pretty; }
 }
 main { padding: 32px 0 64px; min-height: 70vh; }
 .site-footer { border-top: 1px solid var(--line); background: var(--surface); color: var(--ink-2); font-size: 0.9rem; padding: 32px 0; }
-.footer-grid { display: grid; gap: 24px; grid-template-columns: 2fr 1fr 1fr; }
+.footer-grid { display: grid; gap: 24px; grid-template-columns: 2fr 1.6fr 1fr; }
 .footer-grid ul { list-style: none; padding: 0; margin: 0; }
 .footer-grid li { margin-bottom: 6px; }
+.footer-grid ul.footer-links { display: grid; grid-auto-flow: column; grid-template-rows: repeat(5, auto); column-gap: 20px; }
 @media (max-width: 720px) {
   .footer-grid { grid-template-columns: 1fr; gap: 16px; }
   /* Liens du pied de page : cibles tactiles de 44 px, listes sur deux colonnes pour ne pas allonger la page. */
@@ -208,6 +209,8 @@ details.fold > p { margin-left: 14px; margin-right: 14px; }
 /* ---------- Catégories */
 .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
 .cat-grid a { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; text-decoration: none; color: inherit; display: grid; grid-template-columns: 40px 1fr; column-gap: 12px; align-content: start; }
+.cat-grid-home { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 900px) { .cat-grid-home { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .cat-grid .family-icon { grid-row: 1 / span 3; }
 .cat-grid a:hover { background: var(--accent-soft); }
 .cat-grid strong { display: block; color: var(--primary); margin-bottom: 4px; }
@@ -287,7 +290,7 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 @media (max-width: 600px) { .grid.src-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .src-grid .panel { padding: 12px; } }
 @media (min-width: 900px) { .guide-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 40px; align-items: start; } }
 
-@media (max-width: 520px) { .cat-grid { grid-template-columns: 1fr; gap: 8px; } .cat-grid a { padding: 12px 14px; } .cat-grid em { display: none; } }
+@media (max-width: 520px) { .cat-grid, .cat-grid-home { grid-template-columns: 1fr; gap: 8px; } .cat-grid a { padding: 12px 14px; } .cat-grid em { display: none; } }
 
 /* Catalogue des simulateurs : icône de thème, rangées sur deux colonnes en écran large */
 .theme-title { display: flex; align-items: center; gap: 12px; }
