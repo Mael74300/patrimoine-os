@@ -306,6 +306,7 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 
 /* Blocs repliés sous 700 px seulement (comparateur, familles de l'accueil) */
 .mob-fold > summary { font-weight: 600; border: 1px solid var(--line); border-radius: 8px; padding: 0 12px; background: var(--surface); }
+@media (max-width: 700px) { .mob-fold { margin-bottom: 12px; } }
 .cmp-fold > summary { display: none; list-style: none; }
 .cmp-fold > summary::-webkit-details-marker { display: none; }
 /* Comparateur : sous 700 px, chaque critère devient un bloc et chaque placement une ligne étiquetée */
