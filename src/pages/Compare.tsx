@@ -5,18 +5,19 @@ import { investmentBySlug, investments } from '../data/investments';
 import { fmtEur, projectGrowth } from '../lib/finance';
 import { Disclaimer, Dots, LineChart, NumberField, PageHead } from '../components/ui';
 
-/** Liste repliée sur mobile (le tableau y est empilé), toujours ouverte en écran large. */
-export function CmpFold({ label, items }: { label: string; items: string[] }) {
-  const ref = useRef<HTMLDetailsElement>(null);
+/** Critères longs : repliés par ligne sur mobile (le tableau y est empilé), toujours ouverts sans JavaScript et en écran large. */
+export const CMP_FOLDED_ON_MOBILE = ['Capital nécessaire', 'Frais', 'Fiscalité', 'Avantages', 'Inconvénients'];
+
+export function useIsMobile(): boolean {
+  const [mobile, setMobile] = useState(false);
   useEffect(() => {
-    if (window.matchMedia('(max-width: 700px)').matches && ref.current) ref.current.open = false;
+    const mq = window.matchMedia('(max-width: 700px)');
+    const update = () => setMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
   }, []);
-  return (
-    <details ref={ref} open className="cmp-fold">
-      <summary>{label}</summary>
-      <ul style={{ margin: 0, paddingLeft: 16 }}>{items.map((p) => <li key={p}>{p}</li>)}</ul>
-    </details>
-  );
+  return mobile;
 }
 
 const COLORS = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)'];
@@ -41,6 +42,11 @@ export default function Compare() {
     [ids.join(), hyp, amount, monthly, years],
   );
 
+  const mobile = useIsMobile();
+  const [closed, setClosed] = useState<string[]>([]);
+  useEffect(() => { setClosed(mobile ? CMP_FOLDED_ON_MOBILE : []); }, [mobile]);
+  const toggle = (label: string) => setClosed((c) => (c.includes(label) ? c.filter((x) => x !== label) : [...c, label]));
+
   const rows: [string, (i: (typeof items)[number]) => ReactNode][] = [
     ['Famille', (i) => categoryById[i.category].name],
     ['Risque', (i) => <Dots level={i.risk} kind="risk" label="Risque" />],
@@ -50,8 +56,8 @@ export default function Compare() {
     ['Capital nécessaire', (i) => i.minCapital.text],
     ['Frais', (i) => i.fees.text],
     ['Fiscalité', (i) => i.tax.text],
-    ['Avantages', (i) => <CmpFold label="Voir les avantages" items={i.pros} />],
-    ['Inconvénients', (i) => <CmpFold label="Voir les inconvénients" items={i.cons} />],
+    ['Avantages', (i) => <ul className="cmp-list">{i.pros.map((x) => <li key={x}>{x}</li>)}</ul>],
+    ['Inconvénients', (i) => <ul className="cmp-list">{i.cons.map((x) => <li key={x}>{x}</li>)}</ul>],
   ];
 
   return (
@@ -84,7 +90,14 @@ export default function Compare() {
             </thead>
             <tbody>
               {rows.map(([label, render]) => (
-                <tr key={label}><th scope="row">{label}</th>{items.map((i) => <td key={i.slug} data-label={i.name}>{render(i)}</td>)}</tr>
+                <tr key={label} className={closed.includes(label) ? 'cmp-closed' : undefined}>
+                  <th scope="row">
+                    {mobile ? (
+                      <button type="button" className="cmp-toggle" aria-expanded={!closed.includes(label)} onClick={() => toggle(label)}>{label}</button>
+                    ) : label}
+                  </th>
+                  {items.map((i) => <td key={i.slug} data-label={i.name}>{render(i)}</td>)}
+                </tr>
               ))}
             </tbody>
           </table>
