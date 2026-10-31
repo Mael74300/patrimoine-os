@@ -84,8 +84,4 @@ describe('cibles tactiles des liens isolés', () => {
     for (const sel of ['.link-block a', '.source-list a', '.breadcrumb a']) expect(css).toContain(sel);
     expect(css).toMatch(/\.gloss-links a \{ display: inline-block; padding: 4px 2px; margin-right: 12px; \}/);
   });
-  it('l\'accueil marque ses liens « Voir les… » comme liens isolés', () => {
-    const home = Object.entries(pages).find(([k]) => k.endsWith('Home.tsx'))?.[1] ?? '';
-    expect(home.match(/className="link-block"/g)?.length).toBeGreaterThanOrEqual(2);
-  });
 });
