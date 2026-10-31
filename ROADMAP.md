@@ -62,7 +62,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-10-30 : illustrations : les neuf schémas prévus (intérêts, mensualité, inflation, levier, diversification, escalier, enveloppe…) sont en place ; reste les en-têtes de rubrique.
 - 2026-10-30 : visiteur curieux d'entreprendre, page Entrepreneuriat : texte seul, 3 709 px à 375 px, aucun visuel pour l'idée centrale (séparer l'entreprise et le patrimoine) ; schéma ajouté (voir « Fait »). 
 - 2026-10-31 : visiteur qui cherche un mot, page Glossaire : liste de 20 notions en texte continu, sans repère ni accès par lettre, liens « Voir aussi » en petit texte ; refait (voir « Fait »). Audit à 375 et 1280 px de l'accueil, du glossaire et des guides : aucune erreur de console.
-- 2026-10-31 : visiteur de l'encyclopédie (375 et 1280 px) : points Risque, Liquidité, Effort affichés partout sans légende ; légende repliable ajoutée (voir « Fait »). Autres pistes vues : grille des familles de l'accueil terminée par une ligne incomplète (3 cartes sur 4), pied de page à 10 liens en une seule colonne sur grand écran, encyclopédie encore longue à 375 px (5 625 px).
+- 2026-10-31 : visiteur de l'encyclopédie (375 et 1280 px) : points Risque, Liquidité, Effort affichés partout sans légende ; légende repliable ajoutée (voir « Fait »). Pistes vues : grille des familles de l'accueil et pied de page sur grand écran corrigés le 2026-10-31 (voir « Fait ») ; encyclopédie encore longue à 375 px (5 625 px).
 
 ## À faire
 
@@ -83,6 +83,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 11. [x] **Test de fumée dans l'intégration continue** : fait le 2026-10-30, voir « Fait ».
 
 ## Fait
+
+- 2026-10-31 : **Accueil et pied de page sur grand écran** : familles d'investissement en 3 colonnes (15 cartes = 5 lignes pleines au lieu d'une dernière ligne incomplète), liens « Explorer » du pied de page sur deux colonnes ; accueil à 1280 px : 3 189 → 3 063 px, mobile inchangé (4 899 px). Aucune information factuelle modifiée.
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
 - **Encyclopédie et fiches : légende des repères** (2026-10-31, PR à venir) : bloc repliable « Comment lire ces repères ? » (Risque, Liquidité, Effort : notes de 1 à 5 de Patrimoine OS, indicatives) sur l'encyclopédie et chaque fiche ; phrase vague retirée de l'introduction, lignes de liste resserrées. Hauteur de l'encyclopédie à 375 px : 5 698 → 5 625 px (fermé) ; à 1 280 px : 3 528 → 3 559 px.
