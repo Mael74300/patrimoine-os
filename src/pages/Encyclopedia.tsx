@@ -67,7 +67,7 @@ export default function Encyclopedia() {
 
   return (
     <>
-      <PageHead eyebrow="Encyclopédie" title={currentCat ? currentCat.name : 'Encyclopédie des investissements'}>
+      <PageHead art={currentCat ? undefined : 'encyclopedie'} eyebrow="Encyclopédie" title={currentCat ? currentCat.name : 'Encyclopédie des investissements'}>
         {currentCat ? currentCat.short : `${investments.length} fiches structurées, avec fiscalité datée et sources.`}
       </PageHead>
 
