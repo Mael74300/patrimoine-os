@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ADVERSE, adverseScenario, amortize, fmtEur, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, type TaxRegime } from '../lib/finance';
 import { rentalTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, Fold, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
 
 export const RENTAL_DEFAULTS: RentalInput = {
   price: 150000, notaryRate: 0.08, works: 10000, furniture: 0,
@@ -50,48 +50,52 @@ export default function SimImmobilier() {
       <div className="sim">
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
-            <legend>Acquisition</legend>
-            <NumberField label="Prix du bien" unit="€" value={s.price} onChange={up('price')} min={0} step={5000} />
-            <NumberField label="Frais d'acquisition" unit="%" percent value={s.notaryRate} onChange={up('notaryRate')} step={0.5} min={0} max={20} hint="Ordre de grandeur dans l'ancien : 7 à 8 % (à vérifier)." />
-            <NumberField label="Travaux" unit="€" value={s.works} onChange={up('works')} min={0} step={1000} />
-            <NumberField label="Mobilier" unit="€" value={s.furniture} onChange={up('furniture')} min={0} step={500} />
-            <NumberField label="Apport" unit="€" value={s.downPayment} onChange={up('downPayment')} min={0} step={1000} />
+            <legend>Votre projet</legend>
+            <NumberField label="Prix du bien" unit="€" value={s.price} onChange={up('price')} min={0} step={5000} sliderMax={1000000} />
+            <NumberField label="Apport" unit="€" value={s.downPayment} onChange={up('downPayment')} min={0} step={1000} sliderMax={300000} hint="La somme que vous payez de votre poche ; le reste est emprunté." />
+            <NumberField label="Taux d'intérêt nominal" unit="%" percent value={s.loanRate} onChange={up('loanRate')} step={0.05} min={0} max={15} sliderMax={8} hint="Le taux figure dans l'offre de votre banque ; la valeur proposée n'est qu'un exemple." />
+            <NumberField label="Durée du crédit" unit="ans" value={s.loanYears} onChange={up('loanYears')} min={0} max={30} sliderMax={30} />
+            <NumberField label="Loyer mensuel hors charges" unit="€" value={s.monthlyRent} onChange={up('monthlyRent')} min={0} step={25} sliderMax={3000} />
           </fieldset>
-          <fieldset>
-            <legend>Crédit</legend>
-            <NumberField label="Taux d'intérêt nominal" unit="%" percent value={s.loanRate} onChange={up('loanRate')} step={0.05} min={0} max={15} />
-            <NumberField label="Durée du crédit" unit="ans" value={s.loanYears} onChange={up('loanYears')} min={0} max={30} />
-            <NumberField label="Assurance emprunteur" unit="%" percent value={s.loanInsuranceRate} onChange={up('loanInsuranceRate')} step={0.05} min={0} max={2} hint="Taux annuel sur le capital emprunté." />
-          </fieldset>
-          <fieldset>
-            <legend>Location et charges</legend>
-            <NumberField label="Loyer mensuel hors charges" unit="€" value={s.monthlyRent} onChange={up('monthlyRent')} min={0} step={25} />
-            <NumberField label="Vacance locative" unit="mois/an" value={s.vacancyMonths} onChange={up('vacancyMonths')} min={0} max={12} step={0.5} />
-            <NumberField label="Charges non récupérables" unit="€/an" value={s.coOwnership} onChange={up('coOwnership')} min={0} step={50} />
-            <NumberField label="Assurance propriétaire non occupant" unit="€/an" value={s.insurancePno} onChange={up('insurancePno')} min={0} step={10} />
-            <NumberField label="Taxe foncière" unit="€/an" value={s.propertyTax} onChange={up('propertyTax')} min={0} step={50} />
-            <NumberField label="Entretien" unit="% loyers" percent value={s.maintenanceRate} onChange={up('maintenanceRate')} step={0.5} min={0} max={20} />
-            <NumberField label="Frais de gestion" unit="% loyers" percent value={s.managementRate} onChange={up('managementRate')} step={0.5} min={0} max={15} />
-          </fieldset>
-          <MobileFold label="Fiscalité et projection (réglages avancés)">
-          <fieldset>
-            <legend>Fiscalité (estimation)</legend>
-            <SelectField label="Régime" value={s.regime} options={REGIMES} onChange={(v) => setS((x) => ({ ...x, regime: v, microAllowance: REGIMES.find((g) => g.v === v)?.allowance ?? x.microAllowance }))} />
-            <SelectField label="Tranche marginale d'imposition" value={s.marginalRate} options={TMI_OPTIONS} onChange={up('marginalRate')} />
-            <SelectField label="Prélèvements sociaux" value={s.socialRate} options={PS_OPTIONS} onChange={up('socialRate')} />
-            {isMicro && <NumberField label="Abattement forfaitaire" unit="%" percent value={s.microAllowance} onChange={up('microAllowance')} step={1} min={0} max={100} />}
-            {s.regime === 'reel-bic' && (
-              <NumberField label="Amortissement annuel estimé" unit="€" value={s.annualDepreciation} onChange={up('annualDepreciation')} min={0} step={250}
-                hint="À établir avec un expert-comptable (bâti, mobilier, travaux)." />
-            )}
-          </fieldset>
-          <fieldset>
-            <legend>Projection</legend>
-            <NumberField label="Évolution annuelle du prix du bien" unit="%" percent value={s.appreciation} onChange={up('appreciation')} step={0.25} min={-10} max={10} hint="Hypothèse, non une prévision." />
-            <NumberField label="Indexation des loyers et charges" unit="%" percent value={s.indexation} onChange={up('indexation')} step={0.25} min={-5} max={10} />
-            <NumberField label="Horizon" unit="ans" value={s.horizon} onChange={up('horizon')} min={1} max={40} />
-          </fieldset>
-          </MobileFold>
+          <details className="fold advanced">
+            <summary>Réglages avancés (facultatif)</summary>
+            <div className="advanced-body">
+              <p className="small muted">Déjà remplis avec des valeurs d'exemple. Si vous ne savez pas, laissez-les telles quelles.</p>
+              <fieldset>
+                <legend>Acquisition</legend>
+                <NumberField label="Frais d'acquisition" unit="%" percent value={s.notaryRate} onChange={up('notaryRate')} step={0.5} min={0} max={20} hint="Ordre de grandeur dans l'ancien : 7 à 8 % (à vérifier)." />
+                <NumberField label="Travaux" unit="€" value={s.works} onChange={up('works')} min={0} step={1000} />
+                <NumberField label="Mobilier" unit="€" value={s.furniture} onChange={up('furniture')} min={0} step={500} />
+                <NumberField label="Assurance emprunteur" unit="%" percent value={s.loanInsuranceRate} onChange={up('loanInsuranceRate')} step={0.05} min={0} max={2} hint="Taux annuel sur le capital emprunté." />
+              </fieldset>
+              <fieldset>
+                <legend>Location et charges</legend>
+                <NumberField label="Vacance locative" unit="mois/an" value={s.vacancyMonths} onChange={up('vacancyMonths')} min={0} max={12} step={0.5} hint="Mois par an sans locataire." />
+                <NumberField label="Charges non récupérables" unit="€/an" value={s.coOwnership} onChange={up('coOwnership')} min={0} step={50} />
+                <NumberField label="Assurance propriétaire non occupant" unit="€/an" value={s.insurancePno} onChange={up('insurancePno')} min={0} step={10} />
+                <NumberField label="Taxe foncière" unit="€/an" value={s.propertyTax} onChange={up('propertyTax')} min={0} step={50} />
+                <NumberField label="Entretien" unit="% loyers" percent value={s.maintenanceRate} onChange={up('maintenanceRate')} step={0.5} min={0} max={20} />
+                <NumberField label="Frais de gestion" unit="% loyers" percent value={s.managementRate} onChange={up('managementRate')} step={0.5} min={0} max={15} />
+              </fieldset>
+              <fieldset>
+                <legend>Fiscalité (estimation)</legend>
+                <SelectField label="Régime" value={s.regime} options={REGIMES} onChange={(v) => setS((x) => ({ ...x, regime: v, microAllowance: REGIMES.find((g) => g.v === v)?.allowance ?? x.microAllowance }))} />
+                <SelectField label="Tranche marginale d'imposition" value={s.marginalRate} options={TMI_OPTIONS} onChange={up('marginalRate')} />
+                <SelectField label="Prélèvements sociaux" value={s.socialRate} options={PS_OPTIONS} onChange={up('socialRate')} />
+                {isMicro && <NumberField label="Abattement forfaitaire" unit="%" percent value={s.microAllowance} onChange={up('microAllowance')} step={1} min={0} max={100} />}
+                {s.regime === 'reel-bic' && (
+                  <NumberField label="Amortissement annuel estimé" unit="€" value={s.annualDepreciation} onChange={up('annualDepreciation')} min={0} step={250}
+                    hint="À établir avec un expert-comptable (bâti, mobilier, travaux)." />
+                )}
+              </fieldset>
+              <fieldset>
+                <legend>Projection</legend>
+                <NumberField label="Évolution annuelle du prix du bien" unit="%" percent value={s.appreciation} onChange={up('appreciation')} step={0.25} min={-10} max={10} hint="Hypothèse, non une prévision." />
+                <NumberField label="Indexation des loyers et charges" unit="%" percent value={s.indexation} onChange={up('indexation')} step={0.25} min={-5} max={10} />
+                <NumberField label="Horizon" unit="ans" value={s.horizon} onChange={up('horizon')} min={1} max={40} />
+              </fieldset>
+            </div>
+          </details>
           <button type="button" className="btn small secondary" onClick={() => setS(RENTAL_DEFAULTS)}>Réinitialiser</button>
         </form>
 
