@@ -544,3 +544,10 @@ details.advanced { margin: 4px 0 14px; }
   .line-table .lt-del { position: absolute; top: 10px; right: 10px; }
   .line-table .lt-del::before { display: none; }
 }
+
+/* Illustrations décoratives des bandeaux de rubrique (masquées sur mobile pour ne pas allonger la page) */
+.page-head .header-art { display: none; }
+@media (min-width: 761px) {
+  .page-head.has-art { padding-right: 300px; min-height: 170px; }
+  .page-head.has-art .header-art { display: block; position: absolute; right: 24px; top: 50%; transform: translateY(-50%); width: 240px; height: 150px; z-index: 1; }
+}

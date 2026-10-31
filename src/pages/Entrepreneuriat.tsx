@@ -25,7 +25,7 @@ export default function Entrepreneuriat() {
   const related = investments.filter((i) => ['entreprise', 'numerique', 'capital-humain'].includes(i.category));
   return (
     <>
-      <PageHead eyebrow="Entrepreneuriat" title="Créer de la richesse par l'entreprise">
+      <PageHead art="entrepreneuriat" eyebrow="Entrepreneuriat" title="Créer de la richesse par l'entreprise">
         L'entreprise est à la fois une source de revenus à épargner et un actif qui peut se revendre. C'est aussi la voie la plus risquée et la plus exigeante.
       </PageHead>
 

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { config } from '../config';
 import type { Checked, Level, Source } from '../data/types';
 import { load, save, type SavedSim } from '../lib/storage';
+import { HeaderArt, type HeaderArtName } from './Illustrations';
 import { summarizeSeries } from '../lib/chartSummary';
 import { buildExport, mergeSims, parseExport } from '../lib/simExport';
 
@@ -187,12 +188,13 @@ export function Sources({ list }: { list: Source[] }) {
   );
 }
 
-export function PageHead({ eyebrow, title, children }: { eyebrow?: string; title: string; children?: ReactNode }) {
+export function PageHead({ eyebrow, title, children, art }: { eyebrow?: string; title: string; children?: ReactNode; art?: HeaderArtName }) {
   useEffect(() => {
     document.title = `${title} · ${config.siteName}`;
   }, [title]);
   return (
-    <header className="page-head">
+    <header className={art ? 'page-head has-art' : 'page-head'}>
+      {art && <HeaderArt name={art} />}
       {eyebrow && <div className="eyebrow">{eyebrow}</div>}
       <h1>{title}</h1>
       {children && <div className="lede">{children}</div>}

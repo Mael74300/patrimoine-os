@@ -15,7 +15,7 @@ export { fmtDate };
 export function GuideList() {
   return (
     <>
-      <PageHead eyebrow="Guides" title="Guides pédagogiques">Des explications courtes pour comprendre les mécanismes avant de choisir.</PageHead>
+      <PageHead eyebrow="Guides" title="Guides pédagogiques" art="guides">Des explications courtes pour comprendre les mécanismes avant de choisir.</PageHead>
       <div className="guide-groups">
       {guideGroups.map((grp, gi) => (
         <section key={grp.title} aria-labelledby={`grp-${grp.slugs[0]}`} style={{ marginTop: 28 }}>

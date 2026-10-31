@@ -62,7 +62,7 @@ export default function Compare() {
 
   return (
     <>
-      <PageHead eyebrow="Comparateur" title="Comparer des placements et des stratégies">
+      <PageHead art="comparateur" eyebrow="Comparateur" title="Comparer des placements et des stratégies">
         Choisissez jusqu'à trois placements, comparez leurs caractéristiques, puis projetez-les avec vos propres hypothèses.
       </PageHead>
 

@@ -20,7 +20,7 @@ export default function Simulators() {
 
   return (
     <>
-      <PageHead eyebrow="Simulateurs" title="Simulateurs financiers gratuits">
+      <PageHead art="simulateurs" eyebrow="Simulateurs" title="Simulateurs financiers gratuits">
         {simulators.length} simulateurs classés par thème, calculés dans votre navigateur. Vos saisies restent sur cet appareil.
       </PageHead>
       <div className="field" style={{ maxWidth: 420 }}>
