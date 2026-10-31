@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
+import { businessTakeaway } from '../lib/takeaways';
 import { BUSINESS_SCENARIOS, fmtEur, fmtPct, lowestCash, projectBusiness, type BusinessInput } from '../lib/finance';
-import { Crumbs, Disclaimer, Fold, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, Tabs, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, Tabs, usePersistentState } from '../components/ui';
 
 const DEFAULTS: BusinessInput = {
   revenueY1: 120000, revenueGrowth: 0.1, grossMarginRate: 0.6, fixedCosts: 30000, fixedCostsGrowth: 0.02,
@@ -88,6 +89,7 @@ export default function SimEntreprise() {
               </tbody>
             </table>
           </div>
+          <Takeaway>{businessTakeaway({ years: s.years, revenueFirst: runs[1][0]?.revenue ?? 0, revenueLast: runs[1][runs[1].length - 1]?.revenue ?? 0, netResultLast: runs[1][runs[1].length - 1]?.netResult ?? 0, cashLast: runs[1][runs[1].length - 1]?.cash ?? 0, pessimisticLowestCash: lowestCash(runs[0], start) })}</Takeaway>
           <p className="small muted">
             Pessimiste : CA de départ −20 %, croissance −5 points, marge −5 points. Optimiste : CA +15 %, croissance +5 points, marge +3 points.
             Une trésorerie négative signale un besoin de financement.

@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
+import { portfolioTakeaway } from '../lib/takeaways';
 import { fmtEur, fmtPct, projectGrowth, rebalance, summarizePortfolio, type PortfolioLine } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type Line = PortfolioLine & { target: number };
 type State = { lines: Line[]; monthly: number; years: number };
@@ -19,6 +20,7 @@ const COLORS = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)', 'var(--cha
 export default function SimPortefeuille() {
   const [s, setS] = usePersistentState<State>('portefeuille', DEFAULTS);
   const sum = useMemo(() => summarizePortfolio(s.lines), [s.lines]);
+  const top = sum.weights.reduce<(typeof sum.weights)[number] | undefined>((a, w) => (!a || w.weight > a.weight ? w : a), undefined);
   const targetTotal = s.lines.reduce((a, l) => a + l.target, 0);
   const moves = useMemo(() => rebalance(s.lines, Object.fromEntries(s.lines.map((l) => [l.id, l.target]))), [s.lines]);
   const proj = useMemo(
@@ -42,6 +44,8 @@ export default function SimPortefeuille() {
         <Kpi label="Frais annuels" value={fmtEur(sum.annualFeesEuro)} sub={`${fmtPct(sum.weightedFees)} en moyenne`} tone="neg" />
         <Kpi label="Risque moyen pondéré" value={`${sum.weightedRisk.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} / 7`} sub="échelle saisie par vous" />
       </div>
+
+      <Takeaway>{portfolioTakeaway({ total: sum.total, netReturn: sum.netReturn, annualFeesEuro: sum.annualFeesEuro, topLabel: top?.label ?? '', topWeight: top?.weight ?? 0, years: s.years, monthly: s.monthly, contributed: proj[proj.length - 1]?.contributed ?? 0, value: proj[proj.length - 1]?.value ?? 0 })}</Takeaway>
 
       <h2>Lignes du portefeuille</h2>
       <div className="table-wrap" tabIndex={0}>

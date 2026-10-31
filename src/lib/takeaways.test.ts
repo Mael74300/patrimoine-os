@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
+import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio } from './finance';
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
-import { wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { businessTakeaway, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -303,5 +304,40 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(sansImpot).not.toContain('impôt');
     expect(sansImpot).not.toContain('inflation');
     expect(wealthTakeaway({ years: 0, contributed: 1, withdrawn: 0, value: 1, gains: 0, netValue: 1, netRealValue: 1, taxRate: 0, inflation: 0 })).toBe('');
+  });
+  it('entreprise : CA, résultat, trésorerie et besoin de financement viennent de projectBusiness', () => {
+    const inp = { revenueY1: 120000, revenueGrowth: 0.1, grossMarginRate: 0.6, fixedCosts: 30000, fixedCostsGrowth: 0.02, founderPay: 24000, socialRate: 0.45, corporateTaxRate: 0.25, receivableDays: 30, initialCash: 15000, initialInvestment: 10000, valuationMultiple: 5, years: 5 };
+    const c = projectBusiness(inp, BUSINESS_SCENARIOS.central);
+    const low = lowestCash(projectBusiness(inp, BUSINESS_SCENARIOS.pessimiste), 5000);
+    const l = c[c.length - 1];
+    const t = digits(businessTakeaway({ years: 5, revenueFirst: c[0].revenue, revenueLast: l.revenue, netResultLast: l.netResult, cashLast: l.cash, pessimisticLowestCash: low }));
+    expect(t).toContain(eur(c[0].revenue) + '€');
+    expect(t).toContain(eur(l.revenue) + '€');
+    expect(t).toContain(eur(l.netResult) + '€');
+    expect(t).toContain(eur(l.cash) + '€');
+    expect(t.includes('scénariopessimiste')).toBe(low < 0);
+    const perte = businessTakeaway({ years: 1, revenueFirst: 1000, revenueLast: 1000, netResultLast: -500, cashLast: -200, pessimisticLowestCash: -900 });
+    expect(perte).toContain('perd');
+    expect(perte).toContain('négative');
+    expect(businessTakeaway({ years: 0, revenueFirst: 0, revenueLast: 0, netResultLast: 0, cashLast: 0, pessimisticLowestCash: 0 })).toBe('');
+  });
+
+  it('portefeuille : gain annuel, frais, support dominant et projection viennent de summarizePortfolio et projectGrowth', () => {
+    const lines = [
+      { id: 'a', label: 'ETF monde', amount: 12000, expectedReturn: 0.06, fees: 0.002, risk: 4 },
+      { id: 'b', label: 'Livret', amount: 8000, expectedReturn: 0.02, fees: 0, risk: 1 },
+    ];
+    const sum = summarizePortfolio(lines);
+    const proj = projectGrowth({ initial: sum.total, monthly: 300, annualReturn: sum.netReturn, annualFees: 0, years: 20, inflation: 0 });
+    const f = proj[proj.length - 1];
+    const t = digits(portfolioTakeaway({ total: sum.total, netReturn: sum.netReturn, annualFeesEuro: sum.annualFeesEuro, topLabel: 'ETF monde', topWeight: 0.6, years: 20, monthly: 300, contributed: f.contributed, value: f.value }));
+    expect(t).toContain(eur(sum.total) + '€');
+    expect(t).toContain(eur(sum.total * sum.netReturn) + '€');
+    expect(t).toContain(eur(sum.annualFeesEuro) + '€');
+    expect(t).toContain('ETFmonde');
+    expect(t).toContain(eur(f.value) + '€');
+    expect(t).toContain(eur(f.contributed) + '€');
+    expect(portfolioTakeaway({ total: 1000, netReturn: 0.02, annualFeesEuro: 0, topLabel: 'X', topWeight: 0.4, years: 5, monthly: 0, contributed: 1000, value: 1100 })).not.toContain('pèse');
+    expect(portfolioTakeaway({ total: 0, netReturn: 0, annualFeesEuro: 0, topLabel: '', topWeight: 0, years: 5, monthly: 0, contributed: 0, value: 0 })).toBe('');
   });
 });
