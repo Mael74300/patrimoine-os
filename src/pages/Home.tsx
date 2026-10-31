@@ -100,7 +100,7 @@ export default function Home() {
               <li key={s.slug}><Link className="inv-row" to={`/simulateurs/${s.slug}`}><div><h3>{s.title}</h3><p>{s.excerpt}</p></div></Link></li>
             ))}
           </ul>
-          <p><Link to="/simulateurs">Voir les {simulators.length} simulateurs, classés par thème</Link></p>
+          <p className="link-block"><Link to="/simulateurs">Voir les {simulators.length} simulateurs, classés par thème</Link></p>
         </section>
         <section>
           <h2>Guides essentiels</h2>
@@ -109,7 +109,7 @@ export default function Home() {
               <li key={g.slug}><Link className="inv-row" to={`/guides/${g.slug}`}><div><h3>{g.title}</h3><p>{g.summary}</p></div></Link></li>
             ))}
           </ul>
-          <p><Link to="/guides">Voir les {guides.length} guides</Link></p>
+          <p className="link-block"><Link to="/guides">Voir les {guides.length} guides</Link></p>
         </section>
       </div>
 
