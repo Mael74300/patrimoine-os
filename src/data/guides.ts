@@ -376,7 +376,7 @@ export const guides: Guide[] = [
     title: 'Taux d’endettement : quel repère pour emprunter ?',
     summary: 'Comment se calcule le taux d’endettement, d’où vient le repère de 35 % et pourquoi le reste à vivre compte autant.',
     readingMinutes: 5,
-    updatedOn: '2026-10-31',
+    updatedOn: '2026-10-27',
     sections: [
       {
         heading: 'Le calcul',
