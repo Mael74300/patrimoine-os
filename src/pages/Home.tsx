@@ -33,8 +33,9 @@ export default function Home() {
 
   return (
     <>
+      <div className="home-top">
       <section className="hero">
-        <div>
+        <div className="hero-main">
           <PageHead eyebrow="Patrimoine OS" title="Toutes les stratégies pour construire votre patrimoine, au même endroit.">
             Explorez les investissements, comparez les possibilités et simulez votre avenir financier.
           </PageHead>
@@ -55,7 +56,7 @@ export default function Home() {
             <Link className="btn secondary" to="/comparateur">Comparateur</Link>
           </div>
         </div>
-        <div className="panel">
+        <div className="panel hero-example">
           <div className="eyebrow" style={{ color: 'var(--warn)' }}>Exemple fictif</div>
           <p className="small" style={{ marginBottom: 8 }}>
             5 000 € de départ, puis 200 € par mois pendant 25 ans, avec une <strong>hypothèse</strong> de 5 % par an, 0,5 % de frais et 2 % d'inflation.
@@ -91,6 +92,7 @@ export default function Home() {
           </li>
         ))}
       </ul>
+      </div>
 
       <div className="split" style={{ marginTop: 8 }}>
         <section>

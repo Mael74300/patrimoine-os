@@ -112,6 +112,15 @@ label.btn { position: relative; }
 /* ---------- Hero */
 .hero { padding: 24px 0 8px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: center; }
 @media (max-width: 860px) { .hero { grid-template-columns: 1fr; } }
+/* Mobile : « Par où commencer ? » avant l'exemple chiffré, pour que le débutant voie ses points d'entrée sans long défilement. */
+@media (max-width: 860px) {
+  .home-top { display: flex; flex-direction: column; }
+  .home-top .hero { display: contents; }
+  .home-top .hero-main { order: 0; }
+  .home-top > h2 { order: 1; }
+  .home-top > .situations { order: 2; }
+  .home-top .hero-example { order: 3; margin-top: 20px; }
+}
 .search-box { display: flex; gap: 8px; margin: 20px 0 16px; max-width: 560px; }
 .search-box input { flex: 1; min-width: 0; }
 

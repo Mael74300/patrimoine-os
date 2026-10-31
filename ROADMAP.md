@@ -59,6 +59,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-10-31 : illustrations : schémas en place pour intérêts, mensualité, inflation, levier, diversification, escalier, enveloppe, séparer entreprise et patrimoine, PEA, quinzaines ; reste les en-têtes de rubrique.
 - 2026-10-31 : pages longues à 375 px : épargne de précaution (5 191 px), simulateur d'entreprise (5 394 px), comparateur (4 906 px) ; accueil (4 923 px) et guides (4 140 px) corrects.
 - 2026-10-31 : visiteur du simulateur d'épargne de précaution (375 px) : dans les listes de sources, un titre de lien qui passe à la ligne décalait la puce sur la dernière ligne ; corrigé (voir « Fait »). Piste vue : tableau de répartition des livrets à défilement latéral (colonne « Intérêts » coupée) sur mobile.
+- 2026-10-31 : visiteur débutant (375 px) : sur l'accueil, l'exemple chiffré passait avant « Par où commencer ? » (quatre cartes à environ 1 000 px de défilement) ; corrigé (voir « Fait »).
 - 2026-10-31 : pistes vues : liens dans les cellules de tableau (Livret A, LDDS) encore à 18 px ; champ de recherche de l'accueil à 375 px tronque son texte d'exemple. Aucune erreur de console (hors GoatCounter, bloqué par le bac à sable).
 
 ## À faire
@@ -81,6 +82,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-10-31 : **Accueil mobile : « Par où commencer ? » avant l'exemple chiffré** : sous 860 px, les quatre cartes de parcours viennent juste après la recherche, l'exemple fictif (inchangé) passe en dessous ; CSS et ordre des blocs seulement, aucun texte ni chiffre modifié. Accueil à 375 px : 4 923 → 4 887 px ; 1280 px inchangé (3 099 px) (PR à venir).
 - 2026-10-31 : **Listes de sources : puce alignée** : lien en ligne (zone touchable agrandie par le padding vertical, 28 px) au lieu d'un bloc, pour que la puce reste devant la première ligne d'un titre long ; CSS seul, aucun texte ni chiffre modifié. Épargne de précaution à 375 px : 5 241 → 5 191 px ; 1280 px inchangé (PR à venir).
 - 2026-10-31 : comparateur, critères longs repliés par ligne sur mobile (capital, frais, fiscalité, avantages, inconvénients), ouverts sans JavaScript et sur grand écran ; 6 083 → 4 906 px à 375 px (PR à venir).
 
