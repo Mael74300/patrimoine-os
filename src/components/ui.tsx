@@ -113,6 +113,34 @@ export function Dots({ level, kind, label }: { level: Level; kind?: 'risk' | 'li
   );
 }
 
+const METER_HELP: { label: string; kind?: 'risk' | 'liq'; level: Level; text: string }[] = [
+  { label: 'Risque', kind: 'risk', level: 4, text: 'plus c’est rempli, plus on peut perdre une partie de son argent.' },
+  { label: 'Liquidité', kind: 'liq', level: 4, text: 'plus c’est rempli, plus on récupère son argent vite et sans perte.' },
+  { label: 'Effort', level: 4, text: 'plus c’est rempli, plus il faut de temps, de suivi et de connaissances.' },
+];
+
+/** Explication repliable des trois repères sur 5 affichés avec les points. */
+export function MetersLegend() {
+  return (
+    <details className="meters-legend">
+      <summary>Comment lire ces repères ?</summary>
+      <ul>
+        {METER_HELP.map((m) => (
+          <li key={m.label}>
+            <div className={'dots ' + (m.kind ?? '')} aria-hidden="true">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <i key={i} className={i <= m.level ? 'on' : ''} />
+              ))}
+            </div>
+            <span><strong>{m.label}</strong> : {m.text}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="small muted">Notes de 1 à 5 attribuées par Patrimoine OS pour comparer rapidement : elles sont indicatives et ne remplacent pas la lecture de la fiche.</p>
+    </details>
+  );
+}
+
 export function CheckedText({ c }: { c: Checked }) {
   return (
     <p>

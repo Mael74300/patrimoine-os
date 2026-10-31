@@ -4,7 +4,7 @@ import { config } from '../config';
 import { categoryById } from '../data/categories';
 import { investmentBySlug } from '../data/investments';
 import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
-import { AdSlot, CheckedText, Crumbs, Dots, Fold, PageHead, Sources } from '../components/ui';
+import { AdSlot, CheckedText, Crumbs, Dots, Fold, MetersLegend, PageHead, Sources } from '../components/ui';
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
 
@@ -32,6 +32,7 @@ export default function InvestmentPage() {
               <Dots level={inv.liquidity} kind="liq" label="Liquidité" />
               <Dots level={inv.effort} label="Effort" />
             </div>
+            <MetersLegend />
             <p className="small" style={{ margin: '10px 0 0' }}>
               <strong>Horizon :</strong> {inv.horizon}. <strong>Capital :</strong> {inv.minCapital.text}{' '}
               {!inv.minCapital.verified && <span className="badge-unverified">à vérifier</span>}
@@ -115,6 +116,7 @@ export default function InvestmentPage() {
               <Dots level={inv.liquidity} kind="liq" label="Liquidité" />
               <Dots level={inv.effort} label="Effort" />
             </div>
+            <MetersLegend />
             <dl className="facts">
               <dt>Horizon</dt><dd>{inv.horizon}</dd>
               <dt>Capital nécessaire</dt>
