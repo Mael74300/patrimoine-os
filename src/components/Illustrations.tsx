@@ -544,3 +544,34 @@ export function SchemaPea() {
     </figure>
   );
 }
+
+/** Schéma « Livret A : le jour de l’opération décide » : un mois coupé au 15, ce que devient un dépôt ou un retrait de chaque côté. Seuls chiffres : 1er, 15, 16 ; reprend le texte du guide (Service-Public.fr). */
+export function SchemaQuinzaines() {
+  const cols = [
+    { x: 0, c: 'var(--accent)', soft: 'var(--accent-soft)', jour: 'Du 1er au 15 du mois', dep: ['Dépôt : il rapporte', 'dès le 16 du même mois'], ret: ['Retrait : calcul sur le solde', 'du dernier jour du mois précédent'] },
+    { x: 214, c: 'var(--warn)', soft: 'var(--warn-soft)', jour: 'À partir du 16', dep: ['Dépôt : il rapporte', 'dès le 1er du mois suivant'], ret: ['Retrait : calcul sur', 'le solde du 15 du mois'] },
+  ];
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 262" role="img" aria-labelledby="ill-quinz-t ill-quinz-d" className="ill-svg">
+        <title id="ill-quinz-t">Livret A : le jour du dépôt ou du retrait décide</title>
+        <desc id="ill-quinz-d">Un dépôt du 1er au 15 du mois rapporte à partir du 16 du même mois ; un dépôt à partir du 16 rapporte à partir du 1er du mois suivant. Un retrait du 1er au 15 est calculé sur le solde arrêté au dernier jour du mois précédent ; un retrait à partir du 16, sur le solde arrêté au 15.</desc>
+        <text x={210} y={16} textAnchor="middle" className="ill-sub">Le mois est coupé en deux quinzaines</text>
+        {cols.map((k) => (
+          <g key={k.x}>
+            <rect x={k.x} y={28} width={206} height={30} rx={15} fill={k.soft} stroke={k.c} strokeWidth={2} />
+            <text x={k.x + 103} y={48} textAnchor="middle" className="ill-step">{k.jour}</text>
+            <path d={`M ${k.x + 103} 58 V 78 m -6 -7 l 6 7 l 6 -7`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+            <rect x={k.x} y={86} width={206} height={62} rx={12} fill="var(--surface)" stroke={k.c} strokeWidth={2} />
+            <text x={k.x + 103} y={112} textAnchor="middle" className="ill-sub">{k.dep[0]}</text>
+            <text x={k.x + 103} y={130} textAnchor="middle" className="ill-sub">{k.dep[1]}</text>
+            <rect x={k.x} y={156} width={206} height={62} rx={12} fill="var(--surface)" stroke={k.c} strokeWidth={2} />
+            <text x={k.x + 103} y={182} textAnchor="middle" className="ill-sub">{k.ret[0]}</text>
+            <text x={k.x + 103} y={200} textAnchor="middle" className="ill-sub">{k.ret[1]}</text>
+          </g>
+        ))}
+        <text x={210} y={246} textAnchor="middle" className="ill-sub">Le jour de l’opération compte autant que le montant</text>
+      </svg>
+    </figure>
+  );
+}
