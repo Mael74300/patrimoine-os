@@ -6,7 +6,7 @@ import { investmentBySlug, investments } from '../data/investments';
 import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
 import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
 import { Crumbs, MobileFold, PageHead, SimFaq, Sources, usePersistentState } from '../components/ui';
-import { GuideGroupIcon, SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaEscalier, SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite } from '../components/Illustrations';
+import { GuideGroupIcon, SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite } from '../components/Illustrations';
 import NotFound from './NotFound';
 
 const fmtDate = (iso: string) => new Date(iso + 'T12:00:00Z').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -126,6 +126,7 @@ export function GuidePage() {
             {g.slug === 'types-investissements' && s.heading.startsWith('Placement et enveloppe') && <SchemaEnveloppe />}
             {g.slug === 'fonctionnement-pea' && s.heading === 'Retraits et fiscalité' && <SchemaPea />}
             {g.slug === 'livret-a-calcul-interets-quinzaines' && s.heading === 'Et un retrait ?' && <SchemaQuinzaines />}
+            {g.slug === 'rentabilite-locative' && s.heading === 'Le rendement net de charges' && <SchemaRendement />}
             {g.slug === 'interets-composes' && i === 0 && <SchemaInterets />}
             {g.slug === 'inflation-pouvoir-d-achat-epargne' && s.heading === 'Un exemple fictif chiffré' && <SchemaInflation />}
             {g.slug === 'diversification-placements' && s.heading === 'Un exemple fictif chiffré' && <SchemaDiversification />}

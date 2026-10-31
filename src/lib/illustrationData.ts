@@ -83,3 +83,21 @@ export function leverageBars(): { interest: number; down: number; bars: Leverage
     }),
   };
 }
+
+/** Exemple fictif du guide « Rentabilité locative » : bien à 150 000 €, loyer 750 €/mois, frais d'acquisition 8 %, travaux 10 000 €, un mois de vacance, 2 060 € de charges par an. */
+export const RENDEMENT_EXAMPLE = { price: 150000, monthlyRent: 750, acquisitionFeesRate: 0.08, works: 10000, vacancyMonths: 1, yearlyCharges: 2060 };
+
+export type RendementStep = { label: string; detail: string; value: number };
+
+/** Les quatre étapes de la chute du rendement, du « brut des annonces » au « net de charges », calculées avec les formules du guide. */
+export function rendementSteps(): RendementStep[] {
+  const { price, monthlyRent, acquisitionFeesRate, works, vacancyMonths, yearlyCharges } = RENDEMENT_EXAMPLE;
+  const cost = price * (1 + acquisitionFeesRate) + works;
+  const rents = monthlyRent * (12 - vacancyMonths);
+  return [
+    { label: 'Rendement brut', detail: 'loyers annuels ÷ prix d’achat', value: (monthlyRent * 12) / price },
+    { label: 'En ajoutant frais d’achat et travaux', detail: 'même loyer, mais un coût total plus élevé', value: (monthlyRent * 12) / cost },
+    { label: 'En retirant un mois sans locataire', detail: 'seuls 11 loyers sur 12 sont encaissés', value: rents / cost },
+    { label: 'Rendement net de charges', detail: 'après taxe foncière, assurance, entretien…', value: (rents - yearlyCharges) / cost },
+  ];
+}
