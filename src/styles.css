@@ -156,11 +156,25 @@ legend { font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; }
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .table-wrap:focus-visible { outline-offset: -3px; }
 .table-wrap { position: relative; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+/* Tableaux larges : ombre sur le bord où il reste du contenu à faire défiler (CSS seul, sans script) */
+.table-wrap {
+  background:
+    linear-gradient(to right, var(--surface) 30%, transparent) left center / 24px 100% no-repeat local,
+    linear-gradient(to left, var(--surface) 30%, transparent) right center / 24px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, rgba(0, 0, 0, 0.22), transparent) left center / 10px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0, 0.22), transparent) right center / 10px 100% no-repeat scroll,
+    var(--surface);
+}
 table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
 th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { background: var(--surface-2); font-weight: 600; color: var(--ink-2); }
 td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
 tr:last-child td { border-bottom: 0; }
+@media (max-width: 520px) {
+  th, td { padding: 8px 8px; }
+  table { font-size: 0.86rem; }
+  thead th { vertical-align: bottom; }
+}
 
 /* ---------- Encyclopédie */
 .filters { display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
