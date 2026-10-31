@@ -62,6 +62,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-10-30 : illustrations : les neuf schémas prévus (intérêts, mensualité, inflation, levier, diversification, escalier, enveloppe…) sont en place ; reste les en-têtes de rubrique.
 - 2026-10-30 : visiteur curieux d'entreprendre, page Entrepreneuriat : texte seul, 3 709 px à 375 px, aucun visuel pour l'idée centrale (séparer l'entreprise et le patrimoine) ; schéma ajouté (voir « Fait »). 
 - 2026-10-31 : visiteur qui cherche un mot, page Glossaire : liste de 20 notions en texte continu, sans repère ni accès par lettre, liens « Voir aussi » en petit texte ; refait (voir « Fait »). Audit à 375 et 1280 px de l'accueil, du glossaire et des guides : aucune erreur de console.
+- 2026-10-31 : visiteur de l'encyclopédie (375 et 1280 px) : points Risque, Liquidité, Effort affichés partout sans légende ; légende repliable ajoutée (voir « Fait »). Autres pistes vues : grille des familles de l'accueil terminée par une ligne incomplète (3 cartes sur 4), pied de page à 10 liens en une seule colonne sur grand écran, encyclopédie encore longue à 375 px (5 625 px).
 
 ## À faire
 
@@ -84,6 +85,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 ## Fait
 
 (Les chantiers terminés sont déplacés ici avec la date et le numéro de pull request.)
+- **Encyclopédie et fiches : légende des repères** (2026-10-31, PR à venir) : bloc repliable « Comment lire ces repères ? » (Risque, Liquidité, Effort : notes de 1 à 5 de Patrimoine OS, indicatives) sur l'encyclopédie et chaque fiche ; phrase vague retirée de l'introduction, lignes de liste resserrées. Hauteur de l'encyclopédie à 375 px : 5 698 → 5 625 px (fermé) ; à 1 280 px : 3 528 → 3 559 px.
 - **Vulgarisation, étape 11** (2026-10-31, PR à venir) : phrase « Concrètement » sous les résultats du simulateur d'entreprise (CA ≠ gain, résultat net, trésorerie, besoin de financement du scénario pessimiste) et du portefeuille (gain annuel supposé, frais, support dominant, projection) ; chiffres repris des calculs, testés dans `takeaways.test.ts`.
 - **Glossaire plus lisible** (2026-10-31, PR à venir) : barre de lettres, notions en fiches sur deux colonnes (grand écran), liens « Voir aussi » en pastilles ; aucun texte modifié. Hauteur : 4 867 → 4 956 px à 375 px, 3 413 → 3 515 px à 1 280 px.
 - [~] **Illustrations maison, étape 11** (2026-10-30, PR à venir) : schéma `SchemaSeparer` (entreprise → une partie des bénéfices → épargne personnelle : livrets, PEA, assurance-vie) sur la page Entrepreneuriat ; aucun chiffre, il reprend le texte de la page (testé). Hauteur à 375 px : 3 709 → 3 991 px ; 1280 px : 2 017 → 2 393 px. Reste : en-têtes de rubrique.

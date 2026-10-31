@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { categories, categoryById } from '../data/categories';
 import { investments } from '../data/investments';
 import { norm } from '../lib/search';
-import { Dots, PageHead } from '../components/ui';
+import { Dots, MetersLegend, PageHead } from '../components/ui';
 
 export default function Encyclopedia() {
   const [params, setParams] = useSearchParams();
@@ -46,7 +46,7 @@ export default function Encyclopedia() {
   return (
     <>
       <PageHead eyebrow="Encyclopédie" title={currentCat ? currentCat.name : 'Encyclopédie des investissements'}>
-        {currentCat ? currentCat.short : `${investments.length} fiches structurées, avec fiscalité datée et sources. Le catalogue s'enrichit progressivement.`}
+        {currentCat ? currentCat.short : `${investments.length} fiches structurées, avec fiscalité datée et sources.`}
       </PageHead>
 
       <div className="filters" role="group" aria-label="Filtres">
@@ -85,6 +85,7 @@ export default function Encyclopedia() {
       {currentCat && list.length === 0 && !q && (
         <p className="notice info">Les fiches de cette famille sont en préparation. Elles seront publiées une fois leurs informations vérifiées.</p>
       )}
+      <MetersLegend />
       {groups.map((g) => (
         <section key={g.cat.id} className="inv-group" aria-labelledby={`fam-${g.cat.id}`}>
           <h2 id={`fam-${g.cat.id}`} className="inv-group-title">
