@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { AS_OF, investments } from '../data/investments';
 import { Fold, PageHead } from '../components/ui';
 
-const FORMULAS: [string, string[]][] = [
+export const FORMULAS: [string, string[]][] = [
   ['Conventions générales', [
     'Taux en pourcentage annuel. Placements : taux mensuel équivalent (1 + r)^(1/12) − 1. Crédits : taux mensuel = taux nominal / 12, convention bancaire française.',
     'Rendement net de frais : (1 + r) × (1 − f) − 1. Rendement réel : (1 + r) / (1 + i) − 1. Valeur en euros d’aujourd’hui : valeur / (1 + i)^années.',
@@ -130,6 +130,22 @@ const FORMULAS: [string, string[]][] = [
   ]],
 ];
 
+export const GROUPS: [string, string[]][] = [
+  ['Règles communes', ['Conventions générales']],
+  ['Épargne et placements', [
+    'Patrimoine à long terme', 'Rendement réel d’un placement', 'Coût d’attendre pour épargner', 'Durée pour atteindre un capital',
+    'Capital à placer aujourd’hui', 'Rendement nécessaire pour atteindre un objectif', 'Convertir un taux annuel', 'Intérêts simples ou composés',
+    'Augmenter son épargne chaque année', 'Doubler son capital', 'Objectif d’épargne', 'Épargne de précaution', 'Impact des frais',
+    'Inflation et pouvoir d’achat', 'Investir d’un coup ou progressivement',
+  ]],
+  ['Crédit et dettes', [
+    'Crédit', 'Renégocier son crédit', 'Durée du crédit', 'Crédit in fine ou amortissable', 'TAEG d’un crédit', 'Rembourser ou investir',
+    'Rembourser plusieurs dettes', 'Taux d’endettement et reste à vivre',
+  ]],
+  ['Immobilier', ['Immobilier locatif', 'Comparateur ETF / immobilier', 'Louer ou acheter']],
+  ['Budget, retraite et entreprise', ['Budget et taux d’épargne', 'Retraits réguliers', 'Indépendance financière', 'Entreprise']],
+];
+
 export default function Methodologie() {
   const flagged = investments.filter((i) => !i.tax.verified || !i.fees.verified || !i.minCapital.verified).length;
   return (
@@ -138,11 +154,12 @@ export default function Methodologie() {
         Comment les informations sont vérifiées, comment les calculs sont faits et comment le site est maintenu.
       </PageHead>
 
-      <h2>Indépendance et limites</h2>
-      <p>
-        Patrimoine OS fournit des informations générales et des outils de calcul. Il ne délivre aucun conseil en investissement personnalisé.
-        Une hypothèse de rendement n'est jamais présentée comme une prévision. Aucune statistique n'est inventée.
-      </p>
+      <ul className="plain-list">
+        <li><strong>Sources officielles</strong> : chaque chiffre vient d'un site public (impots.gouv.fr, Service-Public.fr, Banque de France…) et porte sa date.</li>
+        <li><strong>Pas de conseil personnalisé</strong> : une hypothèse de rendement n'est jamais présentée comme une prévision, et aucune statistique n'est inventée.</li>
+        <li><strong>Calculs vérifiables</strong> : les formules sont publiées plus bas et testées automatiquement.</li>
+        <li><strong>Vos données restent chez vous</strong> : aucun cookie, vos saisies ne quittent pas votre navigateur.</li>
+      </ul>
 
       <h2>Sources et vérification</h2>
       <p>
@@ -152,26 +169,37 @@ export default function Methodologie() {
         générale : {AS_OF}. À ce jour, {flagged} fiche{flagged > 1 ? 's comportent' : ' comporte'} au moins un élément signalé « à vérifier ».
       </p>
 
-      <h2>Mises à jour automatisées, validation humaine</h2>
-      <p>Des tâches gratuites s'exécutent chaque semaine sur GitHub Actions :</p>
+      <h2>Contrôles automatiques, décision humaine</h2>
+      <p>Chaque semaine, des contrôles gratuits et automatiques :</p>
       <ul>
-        <li>vérification des liens cités et de la présence des pages sources ;</li>
-        <li>détection des modifications des pages officielles suivies, par comparaison d'empreintes, en respectant leurs règles d'accès (robots.txt) et sans copier leur contenu ;</li>
-        <li>signalement des fiches dont la date de révision est passée ;</li>
-        <li>exécution des tests et vérification que le site se construit.</li>
+        <li>vérifient que les liens vers les sources fonctionnent ;</li>
+        <li>repèrent si une page officielle suivie a changé (le site compare une simple empreinte, sans copier son contenu, et respecte les règles d'accès de ces sites) ;</li>
+        <li>signalent les fiches dont la date de révision est dépassée ;</li>
+        <li>relancent les tests et vérifient que le site se construit.</li>
       </ul>
       <p>
-        Une modification détectée ouvre un ticket de révision ; elle ne remplace jamais automatiquement une règle fiscale. Si une information ne peut
-        pas être vérifiée de façon fiable, la version existante est conservée et signalée. Aucun contenu financier n'est généré automatiquement.
+        Quand un changement est repéré, une demande de révision est ouverte pour qu'une personne vérifie. Une règle fiscale n'est jamais modifiée
+        automatiquement. Si une information ne peut pas être vérifiée de façon fiable, la version existante est conservée et signalée.
+        Aucun contenu financier n'est généré automatiquement.
       </p>
 
       <h2>Formules de calcul</h2>
-      <p>Les formules utilisées par les simulateurs, à déplier si vous voulez vérifier un calcul.</p>
-      {FORMULAS.map(([t, list]) => (
-        <Fold key={t} title={t}>
-          <ul>{list.map((l) => <li key={l}>{l}</li>)}</ul>
-        </Fold>
+      <p>Pour les curieux : vous n'avez pas besoin de lire les formules pour utiliser le site, mais elles sont toutes publiées.</p>
+      <Fold title="Afficher les formules des simulateurs">
+      {GROUPS.map(([group, titles]) => (
+        <section key={group} aria-label={group}>
+          <h3>{group}</h3>
+          {titles.map((t) => {
+            const list = FORMULAS.find(([name]) => name === t)![1];
+            return (
+              <Fold key={t} title={t}>
+                <ul>{list.map((l) => <li key={l}>{l}</li>)}</ul>
+              </Fold>
+            );
+          })}
+        </section>
       ))}
+      </Fold>
       <p>Chaque module de calcul est indépendant et couvert par des tests automatisés, y compris sur des exemples connus et des valeurs limites.</p>
 
       <h2>Liens commerciaux et publicité</h2>
