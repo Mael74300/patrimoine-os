@@ -63,6 +63,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-10-30 : visiteur curieux d'entreprendre, page Entrepreneuriat : texte seul, 3 709 px à 375 px, aucun visuel pour l'idée centrale (séparer l'entreprise et le patrimoine) ; schéma ajouté (voir « Fait »). 
 - 2026-10-31 : visiteur qui cherche un mot, page Glossaire : liste de 20 notions en texte continu, sans repère ni accès par lettre, liens « Voir aussi » en petit texte ; refait (voir « Fait »). Audit à 375 et 1280 px de l'accueil, du glossaire et des guides : aucune erreur de console.
 - 2026-10-31 : visiteur de l'encyclopédie (375 et 1280 px) : points Risque, Liquidité, Effort affichés partout sans légende ; légende repliable ajoutée (voir « Fait »). Pistes vues : grille des familles de l'accueil et pied de page sur grand écran corrigés le 2026-10-31 (voir « Fait ») ; encyclopédie longue à 375 px (5 625 px) : familles repliées le 2026-10-31 (voir « Fait »). Audit du 2026-10-31 (accueil, guides, encyclopédie, 375 et 1280 px) : aucune erreur de console.
+- 2026-10-31 : visiteur qui veut comprendre le PEA (guide « Comment fonctionne le PEA », 375 et 1280 px) : règle des 5 ans expliquée en texte seul, page sans visuel ; schéma « avant et après 5 ans » ajouté (voir « Fait »). Pistes vues : la FAQ des guides répète le corps du texte (à dédoublonner), fiches des familles toujours à écrire. Aucune erreur de console.
 
 ## À faire
 
@@ -84,6 +85,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-10-31 : **Illustrations maison, étape 12 : schéma du PEA** : frise « avant 5 ans / après 5 ans » (clôture du plan en principe, sauf exceptions ; après : retrait sans clôture, gains exonérés d'impôt sur le revenu, prélèvements sociaux dus) dans le guide « Comment fonctionne le PEA » ; seul chiffre : « 5 ans », testé contre le texte du guide (`pea.test.ts`). Page à 375 px : 3 920 → 4 167 px ; 1280 px : 2 560 → 2 888 px.
 - 2026-10-31 : **Encyclopédie sur mobile** : chaque famille de plusieurs fiches est repliée (« Voir les N fiches ») tant qu'aucun filtre ni recherche n'est actif ; repliée à 375 px seulement, toujours ouverte à 1280 px et dans le HTML pré-rendu ; page à 375 px : 5 625 → 3 508 px, 1280 px inchangé (3 414 px) (#112).
 - 2026-10-31 : **Accueil et pied de page sur grand écran** : familles d'investissement en 3 colonnes (15 cartes = 5 lignes pleines au lieu d'une dernière ligne incomplète), liens « Explorer » du pied de page sur deux colonnes ; accueil à 1280 px : 3 189 → 3 063 px, mobile inchangé (4 899 px). Aucune information factuelle modifiée.
 
