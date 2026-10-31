@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { categories, categoryById } from '../data/categories';
 import { investments } from '../data/investments';
 import { norm } from '../lib/search';
-import { Dots, MetersLegend, PageHead } from '../components/ui';
+import { Dots, MetersLegend, MobileFold, PageHead } from '../components/ui';
 
 export default function Encyclopedia() {
   const [params, setParams] = useSearchParams();
@@ -40,6 +40,28 @@ export default function Encyclopedia() {
     }
     return out;
   }, [list]);
+
+  // Sans filtre, les familles de plusieurs fiches sont repliées sur mobile ; dès qu'on filtre, tout reste visible.
+  const unfiltered = !q && !cat && maxRisk === 5 && minLiq === 1;
+  const rows = (items: typeof list) => (
+    <ul className="inv-list inv-list--compact">
+      {items.map((i) => (
+        <li key={i.slug}>
+          <Link className="inv-row" to={`/encyclopedie/${i.slug}`}>
+            <div>
+              <h3>{i.name}</h3>
+              <p>{i.summary}</p>
+            </div>
+            <div className="meters">
+              <Dots level={i.risk} kind="risk" label="Risque" />
+              <Dots level={i.liquidity} kind="liq" label="Liquidité" />
+              <Dots level={i.effort} label="Effort" />
+            </div>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
 
   const currentCat = cat ? categoryById[cat] : null;
 
@@ -91,23 +113,7 @@ export default function Encyclopedia() {
           <h2 id={`fam-${g.cat.id}`} className="inv-group-title">
             {g.cat.name} <span>{g.items.length}</span>
           </h2>
-          <ul className="inv-list inv-list--compact">
-            {g.items.map((i) => (
-              <li key={i.slug}>
-                <Link className="inv-row" to={`/encyclopedie/${i.slug}`}>
-                  <div>
-                    <h3>{i.name}</h3>
-                    <p>{i.summary}</p>
-                  </div>
-                  <div className="meters">
-                    <Dots level={i.risk} kind="risk" label="Risque" />
-                    <Dots level={i.liquidity} kind="liq" label="Liquidité" />
-                    <Dots level={i.effort} label="Effort" />
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {unfiltered && g.items.length > 1 ? <MobileFold label={`Voir les ${g.items.length} fiches`}>{rows(g.items)}</MobileFold> : rows(g.items)}
         </section>
       ))}
     </>
