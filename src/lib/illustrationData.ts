@@ -1,4 +1,5 @@
 import { amortize } from './calc/loan';
+import { debtRatio, HCSF } from './calc/debtRatio';
 import { simpleVsCompound } from './calc/simpleVsCompound';
 
 /** Exemple fictif du schéma « Intérêts simples ou composés » : toutes les valeurs sont calculées, jamais saisies à la main. */
@@ -100,4 +101,22 @@ export function rendementSteps(): RendementStep[] {
     { label: 'En retirant un mois sans locataire', detail: 'seuls 11 loyers sur 12 sont encaissés', value: rents / cost },
     { label: 'Rendement net de charges', detail: 'après taxe foncière, assurance, entretien…', value: (rents - yearlyCharges) / cost },
   ];
+}
+
+/** Exemple fictif du guide « Taux d'endettement » : 3 000 € de revenus nets par mois, 200 € de crédit en cours, 850 € de nouvelle mensualité. */
+export const ENDETTEMENT_EXAMPLE = { income: 3000, existingPayments: 200, newPayment: 850 };
+
+/** Découpage des revenus de l'exemple, calculé avec le simulateur d'endettement (aucune valeur saisie à la main). */
+export function endettementParts() {
+  const { income, existingPayments, newPayment } = ENDETTEMENT_EXAMPLE;
+  const r = debtRatio({ income, existingPayments, newPayment, livingCosts: 0, householdSize: 1 });
+  return {
+    income,
+    existing: existingPayments,
+    added: newPayment,
+    rest: income - existingPayments - newPayment,
+    ratioAfter: r.ratioAfter,
+    limit: income * HCSF.maxRatio,
+    maxNewPayment: r.maxNewPayment,
+  };
 }
