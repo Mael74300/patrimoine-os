@@ -356,7 +356,9 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 details.fold > section { margin: 0 14px 10px; }
 
 /* Cibles tactiles : liens isolés d'au moins 24 px de haut (WCAG 2.2, 2.5.8) ; les liens dans une phrase restent en ligne. */
-.link-block a, .source-list a, .breadcrumb a { display: inline-block; padding: 4px 0; }
+.link-block a, .breadcrumb a { display: inline-block; padding: 4px 0; }
+/* Sources : lien en ligne (la puce reste devant la première ligne quand le titre passe à la ligne) ; le padding vertical agrandit quand même la zone touchable. */
+.source-list a { display: inline; padding: 4px 0; }
 .source-list li { margin-bottom: 2px; }
 @media (max-width: 899px) {
   .gloss-links { line-height: 1.2; }
