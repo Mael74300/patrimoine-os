@@ -27,8 +27,10 @@ function ScrollTop() {
 export function Logo() {
   return (
     <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true">
-      <rect width="32" height="32" rx="7" fill="#123a4a" />
-      <path d="M8 22 L14 15 L18 18 L24 10" stroke="#e8f1ee" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <defs><linearGradient id="logo-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#17358a" /><stop offset="1" stopColor="#0a7658" /></linearGradient></defs>
+      <rect width="32" height="32" rx="9" fill="url(#logo-grad)" />
+      <circle cx="24" cy="10" r="2.4" fill="#e8a61c" />
+      <path d="M8 22 L14 15 L18 18 L24 10" stroke="#ffffff" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
