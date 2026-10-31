@@ -84,6 +84,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-10-31 : accueil épuré (retour du propriétaire : trop d'informations) : bandeau d'accueil sombre avec recherche, 4 situations, 3 portes d'entrée (encyclopédie, simulateurs, guides), un exemple fictif ; listes de simulateurs, guides, familles et sources retirées de l'accueil (toujours dans les rubriques et le pied de page). Design poussé : pastilles en pointillé, cartes, titres. Accueil 3 142 → 1 852 px (1280 px) et 4 993 → 3 336 px (375 px).
+
 - 2026-10-31 : refonte visuelle (demande du propriétaire) : nouvelle palette (bleu nuit, vert émeraude, or), bandeaux d'en-tête, cartes en relief, boutons dégradés, pied de page sombre, nouveau logo. Étapes suivantes possibles : en-têtes de rubrique illustrés, graphiques, pages de simulateur.
 
 - 2026-10-31 : encyclopédie sur mobile : les noms des fiches restent visibles sous chaque famille repliée (ergonomie).
