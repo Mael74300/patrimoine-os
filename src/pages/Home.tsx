@@ -47,7 +47,7 @@ export default function Home() {
               nav(`/recherche?q=${encodeURIComponent(q)}`);
             }}
           >
-            <input type="search" placeholder="Rechercher : PEA, SCPI, crédit, livret…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Rechercher sur le site" />
+            <input type="search" placeholder="PEA, SCPI, crédit…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Rechercher sur le site" />
             <button className="btn" type="submit">Rechercher</button>
           </form>
           <div className="btn-row">

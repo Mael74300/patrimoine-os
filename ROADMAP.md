@@ -60,7 +60,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-10-31 : pages longues à 375 px : épargne de précaution (5 191 px), simulateur d'entreprise (5 394 px), comparateur (4 906 px) ; accueil (4 923 px) et guides (4 140 px) corrects.
 - 2026-10-31 : visiteur du simulateur d'épargne de précaution (375 px) : dans les listes de sources, un titre de lien qui passe à la ligne décalait la puce sur la dernière ligne ; corrigé (voir « Fait »). Tableaux à défilement latéral sur mobile : traité le 2026-10-31 (voir « Fait »).
 - 2026-10-31 : visiteur débutant (375 px) : sur l'accueil, l'exemple chiffré passait avant « Par où commencer ? » (quatre cartes à environ 1 000 px de défilement) ; corrigé (voir « Fait »).
-- 2026-10-31 : pistes vues : liens dans les cellules de tableau (Livret A, LDDS) encore à 18 px ; champ de recherche de l'accueil à 375 px tronque son texte d'exemple. Aucune erreur de console (hors GoatCounter, bloqué par le bac à sable).
+- 2026-10-31 : pistes vues : liens dans les cellules de tableau (Livret A, LDDS) encore à 18 px ; champ de recherche de l'accueil à 375 px tronquait son texte d'exemple (corrigé le 2026-10-31, texte raccourci). Contrôle fait le même jour : tous les liens isolés des 90 pages mesurent au moins 24 px à 375 px ; les liens en ligne dans les cellules sont exemptés (WCAG 2.5.8). Aucune erreur de console (hors GoatCounter, bloqué par le bac à sable).
 
 ## À faire
 
@@ -81,6 +81,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 11. [x] **Test de fumée dans l'intégration continue** : fait le 2026-10-30, voir « Fait ».
 
 ## Fait
+
+- 2026-10-31 : accueil mobile : texte d'exemple du champ de recherche raccourci (« PEA, SCPI, crédit… ») pour qu'il ne soit plus coupé à 375 px.
 
 - 2026-10-31 : **Illustrations maison, étape 14 : schéma « du rendement brut au net » dans le guide de rentabilité locative** : quatre barres (6,0 % → 5,2 % → 4,8 % → 3,6 %) qui montrent l’effet des frais d’achat, de la vacance et des charges sur l’exemple fictif du guide ; chiffres recalculés par un test (`src/rendement.test.ts`). Page à 375 px : 3 111 → 3 485 px (1 280 px : 2 439 px) (une image ajoutée, texte inchargé). PR à venir.
 - 2026-10-31 : **Tableaux sur mobile** : sous 520 px, cellules et police resserrées (le tableau de répartition de l'épargne de précaution tient désormais en 341 px, colonne « Intérêts » comprise) ; ombre sur le bord où il reste du contenu à faire défiler, pour les 15 pages dont un tableau déborde encore (CSS seul). Aucun texte ni chiffre modifié. Épargne de précaution à 375 px : 5 191 → 5 166 px ; 1280 px inchangé. Piste : tableaux de saisie du portefeuille (944 px) à empiler en cartes. (PR à venir)
