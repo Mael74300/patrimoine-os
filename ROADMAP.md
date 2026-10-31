@@ -59,7 +59,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-10-31 : illustrations : schémas en place pour intérêts, mensualité, inflation, levier, diversification, escalier, enveloppe, séparer entreprise et patrimoine, PEA, quinzaines, rendement locatif ; reste les en-têtes de rubrique.
 - 2026-10-31 : pages longues à 375 px : épargne de précaution (5 166 px), simulateur d'entreprise (5 394 px), comparateur (4 906 px).
 - 2026-10-31 : visiteur débutant (375 px), simulateur de budget : colonne « Écart au repère », la plus utile, coupée à droite du tableau et cinq champs à saisir d'emblée ; corrigé (voir « Fait »). Même traitement (curseurs, réglages avancés) à faire pour immobilier, entreprise, retraits.
-- 2026-10-31 : encyclopédie sur mobile : ordre de tabulation et en-têtes de rubrique restent à traiter ; tableaux de saisie du portefeuille (944 px) à empiler en cartes.
+- 2026-10-31 : encyclopédie sur mobile : ordre de tabulation et en-têtes de rubrique restent à traiter.
+- 2026-10-31 : visiteur épargnant (375 px), simulateur de portefeuille : tableau de saisie de 944 px dont 6 colonnes sur 9, rééquilibrage compris, cachées à droite ; corrigé (voir « Fait »).
 
 ## À faire
 
@@ -81,6 +82,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-10-31 : **Portefeuille : lignes en cartes sur mobile** (PR à venir) : sous 700 px, chaque ligne du tableau de saisie devient une carte (nom, montant, rendement, frais, risque, cible, poids, rééquilibrage visibles sans défilement latéral) ; CSS et attributs `data-label`, aucun texte ni chiffre modifié. Hauteur à 375 px : 3 883 → 4 439 px (le contenu caché devient visible) ; 1280 px inchangé (2 726 px).
 - 2026-10-31 : **Simulateur de budget plus simple** (PR à venir) : quatre montants avec curseurs (revenu, besoins, envies, épargne) ; taux visé, rendement et durée dans « Réglages avancés » repliés ; en-têtes du tableau raccourcis (« Part », « Écart », texte complet pour lecteurs d'écran) avec une ligne d'explication, pour que la colonne « Écart » ne soit plus coupée à 375 px. Aucun chiffre ni règle modifié. Hauteur : 375 px 4 553 → 4 435 px ; 1280 px 2 231 → 2 253 px.
 - 2026-10-31 : simulateurs plus interactifs et plus simples (retour du propriétaire : trop de données à saisir, pas connues de tous) : curseurs synchronisés avec les champs (patrimoine, crédit, intérêts composés) ; simulateur de patrimoine réduit à 3 réglages + 3 hypothèses de rendement en un clic, le reste dans « Réglages avancés » avec aides en langage simple. Étape suivante : même traitement pour les autres simulateurs (budget, immobilier, entreprise, retraits).
 

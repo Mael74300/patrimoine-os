@@ -48,8 +48,8 @@ export default function SimPortefeuille() {
       <Takeaway>{portfolioTakeaway({ total: sum.total, netReturn: sum.netReturn, annualFeesEuro: sum.annualFeesEuro, topLabel: top?.label ?? '', topWeight: top?.weight ?? 0, years: s.years, monthly: s.monthly, contributed: proj[proj.length - 1]?.contributed ?? 0, value: proj[proj.length - 1]?.value ?? 0 })}</Takeaway>
 
       <h2>Lignes du portefeuille</h2>
-      <div className="table-wrap" tabIndex={0}>
-        <table>
+      <div className="table-wrap line-wrap" tabIndex={0}>
+        <table className="line-table">
           <thead>
             <tr>
               <th>Support</th><th className="r">Montant (€)</th><th className="r">Rendement supposé (%)</th><th className="r">Frais (%)</th>
@@ -65,20 +65,20 @@ export default function SimPortefeuille() {
               );
               return (
                 <tr key={l.id}>
-                  <td style={{ whiteSpace: 'nowrap' }}>
+                  <td className="lt-name" data-label="Support" style={{ whiteSpace: 'nowrap' }}>
                     <span style={{ color: COLORS[idx % COLORS.length] }}>●</span>{' '}
                     <input type="text" aria-label="Nom du support" value={l.label} style={{ width: 170 }} onChange={(e) => setLine(l.id, { label: e.target.value })} />
                   </td>
-                  <td className="r">{num(l.amount, (n) => setLine(l.id, { amount: Math.max(0, n) }), 100, 'Montant')}</td>
-                  <td className="r">{num(+(l.expectedReturn * 100).toFixed(4), (n) => setLine(l.id, { expectedReturn: n / 100 }), 0.25, 'Rendement')}</td>
-                  <td className="r">{num(+(l.fees * 100).toFixed(4), (n) => setLine(l.id, { fees: Math.max(0, n / 100) }), 0.05, 'Frais')}</td>
-                  <td className="r">{num(l.risk, (n) => setLine(l.id, { risk: Math.min(7, Math.max(1, n)) }), 1, 'Risque')}</td>
-                  <td className="r">{num(+(l.target * 100).toFixed(4), (n) => setLine(l.id, { target: Math.max(0, n / 100) }), 5, 'Cible')}</td>
-                  <td className="r">{fmtPct(w)}</td>
-                  <td className="r" style={{ color: moves[l.id] >= 0 ? 'var(--accent)' : 'var(--danger)' }}>
+                  <td className="r" data-label="Montant €">{num(l.amount, (n) => setLine(l.id, { amount: Math.max(0, n) }), 100, 'Montant')}</td>
+                  <td className="r" data-label="Rendement %">{num(+(l.expectedReturn * 100).toFixed(4), (n) => setLine(l.id, { expectedReturn: n / 100 }), 0.25, 'Rendement')}</td>
+                  <td className="r" data-label="Frais %">{num(+(l.fees * 100).toFixed(4), (n) => setLine(l.id, { fees: Math.max(0, n / 100) }), 0.05, 'Frais')}</td>
+                  <td className="r" data-label="Risque 1-7">{num(l.risk, (n) => setLine(l.id, { risk: Math.min(7, Math.max(1, n)) }), 1, 'Risque')}</td>
+                  <td className="r" data-label="Cible %">{num(+(l.target * 100).toFixed(4), (n) => setLine(l.id, { target: Math.max(0, n / 100) }), 5, 'Cible')}</td>
+                  <td className="r lt-res" data-label="Poids actuel">{fmtPct(w)}</td>
+                  <td className="r lt-res" data-label="Rééquilibrage" style={{ color: moves[l.id] >= 0 ? 'var(--accent)' : 'var(--danger)' }}>
                     {moves[l.id] >= 0 ? '+' : ''}{fmtEur(moves[l.id])}
                   </td>
-                  <td>
+                  <td className="lt-del">
                     <button className="btn small secondary" aria-label={`Retirer ${l.label}`} onClick={() => setS((st) => ({ ...st, lines: st.lines.filter((x) => x.id !== l.id) }))}>×</button>
                   </td>
                 </tr>
