@@ -319,3 +319,22 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 .search-ideas { list-style: none; padding: 0; margin: 12px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .search-ideas .tag { margin: 0; padding: 10px 14px; min-height: 44px; display: inline-flex; align-items: center; font-size: 0.95rem; text-decoration: none; border: 1px solid var(--line); background: var(--surface); color: var(--primary); }
 .search-ideas .tag:hover { background: var(--surface-2); }
+
+/* Glossaire : barre de lettres, fiches en deux colonnes, liens « Voir aussi » en pastilles */
+.gloss-nav { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 18px; }
+.gloss-nav a { min-width: 32px; padding: 3px 8px; text-align: center; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-weight: 600; text-decoration: none; color: var(--primary); }
+.gloss-nav a:hover { background: var(--accent-soft); }
+.gloss-list { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 0; }
+@media (min-width: 900px) { .gloss-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; } }
+.gloss-item { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: var(--radius); padding: 12px 14px; scroll-margin-top: 80px; }
+.gloss-item:target { background: var(--accent-soft); }
+.gloss-item dt { font-weight: 700; font-size: 1.05rem; color: var(--primary); }
+.gloss-item dd { margin: 4px 0 0; }
+.gloss-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; font-size: 0.85rem; align-items: center; }
+.gloss-links span { color: var(--ink-2); }
+.gloss-links a { padding: 2px 10px; border-radius: 999px; background: var(--surface-2); text-decoration: none; color: var(--ink); }
+.gloss-links a:hover { background: var(--accent-soft); color: var(--primary); }
+
+@media (max-width: 899px) { .gloss-item { background: none; border-width: 0 0 0 3px; border-radius: 0; padding: 0 0 0 12px; } .gloss-links { display: block; margin-top: 4px; } .gloss-links span { margin-right: 6px; } .gloss-links a { padding: 0; background: none; text-decoration: underline; color: var(--primary); } .gloss-links a + a::before { content: ' · '; display: inline-block; margin: 0 4px; text-decoration: none; color: var(--ink-2); } }
+@media (max-width: 899px) { .gloss-list { gap: 10px; } }
+.gloss-list + p { margin-top: 18px; }
