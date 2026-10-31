@@ -53,10 +53,10 @@ function Placer() {
       form={(
         <fieldset>
           <legend>Votre objectif</legend>
-          <NumberField label="Capital visé" unit="€" value={s.target} onChange={up('target')} min={0} step={1000} />
-          <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={1} max={100} step={1} />
-          <NumberField label="Rendement annuel supposé" unit="%" value={s.ratePct} onChange={up('ratePct')} min={-50} max={100} step={0.5} />
-          <NumberField label="Versement mensuel prévu" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} />
+          <NumberField label="Capital visé" unit="€" value={s.target} onChange={up('target')} min={0} step={1000} sliderMax={1000000} />
+          <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={1} max={100} step={1} sliderMax={50} />
+          <NumberField label="Rendement annuel supposé" unit="%" value={s.ratePct} onChange={up('ratePct')} min={-50} max={100} step={0.5} sliderMax={15} />
+          <NumberField label="Versement mensuel prévu" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} sliderMax={2000} />
         </fieldset>
       )}
     >
@@ -89,10 +89,10 @@ function Duree() {
       form={(
         <fieldset>
           <legend>Votre épargne</legend>
-          <NumberField label="Capital de départ" unit="€" value={s.initial} onChange={up('initial')} min={0} step={500} />
-          <NumberField label="Versement mensuel" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} />
-          <NumberField label="Rendement annuel supposé" unit="%" value={s.annualRate} onChange={up('annualRate')} min={-50} max={50} step={0.5} />
-          <NumberField label="Capital visé" unit="€" value={s.target} onChange={up('target')} min={0} step={1000} />
+          <NumberField label="Capital de départ" unit="€" value={s.initial} onChange={up('initial')} min={0} step={500} sliderMax={1000000} />
+          <NumberField label="Versement mensuel" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} sliderMax={2000} />
+          <NumberField label="Rendement annuel supposé" unit="%" value={s.annualRate} onChange={up('annualRate')} min={-50} max={50} step={0.5} sliderMax={15} />
+          <NumberField label="Capital visé" unit="€" value={s.target} onChange={up('target')} min={0} step={1000} sliderMax={1000000} />
         </fieldset>
       )}
     >
@@ -129,10 +129,10 @@ function Rendement() {
       form={(
         <fieldset>
           <legend>Votre objectif</legend>
-          <NumberField label="Capital de départ" unit="€" value={s.initial} onChange={up('initial')} min={0} step={500} />
-          <NumberField label="Versement mensuel" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} />
-          <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={1} max={100} step={1} />
-          <NumberField label="Capital visé" unit="€" value={s.target} onChange={up('target')} min={0} step={1000} />
+          <NumberField label="Capital de départ" unit="€" value={s.initial} onChange={up('initial')} min={0} step={500} sliderMax={1000000} />
+          <NumberField label="Versement mensuel" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} sliderMax={2000} />
+          <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={1} max={100} step={1} sliderMax={50} />
+          <NumberField label="Capital visé" unit="€" value={s.target} onChange={up('target')} min={0} step={1000} sliderMax={1000000} />
         </fieldset>
       )}
     >
@@ -169,13 +169,13 @@ function Doubler() {
         <>
           <fieldset>
             <legend>Votre capital</legend>
-            <NumberField label="Capital de départ" unit="€" value={s.initial} onChange={up('initial')} min={0} step={500} />
+            <NumberField label="Capital de départ" unit="€" value={s.initial} onChange={up('initial')} min={0} step={500} sliderMax={1000000} />
             <NumberField label="Multiple visé (2 = doubler)" unit="×" value={s.multiple} onChange={up('multiple')} min={1} max={1000} step={0.5} />
           </fieldset>
           <fieldset>
             <legend>Hypothèses</legend>
-            <NumberField label="Rendement annuel supposé" unit="%" value={s.annualReturn} onChange={up('annualReturn')} min={-50} max={50} step={0.5} />
-            <NumberField label="Inflation annuelle supposée" unit="%" value={s.inflation} onChange={up('inflation')} min={-10} max={50} step={0.5} />
+            <NumberField label="Rendement annuel supposé" unit="%" value={s.annualReturn} onChange={up('annualReturn')} min={-50} max={50} step={0.5} sliderMax={15} />
+            <NumberField label="Inflation annuelle supposée" unit="%" value={s.inflation} onChange={up('inflation')} min={-10} max={50} step={0.5} sliderMax={10} />
           </fieldset>
         </>
       )}
@@ -221,9 +221,9 @@ function Simple() {
         <>
       <fieldset>
         <legend>Votre placement</legend>
-        <NumberField label="Capital de départ" unit="€" value={s.initial} onChange={up('initial')} min={0} step={500} />
-        <NumberField label="Taux annuel supposé" unit="%" value={s.annualRate} onChange={up('annualRate')} min={-50} max={50} step={0.5} />
-        <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={0} max={100} step={1} />
+        <NumberField label="Capital de départ" unit="€" value={s.initial} onChange={up('initial')} min={0} step={500} sliderMax={1000000} />
+        <NumberField label="Taux annuel supposé" unit="%" value={s.annualRate} onChange={up('annualRate')} min={-50} max={50} step={0.5} sliderMax={15} />
+        <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={0} max={100} step={1} sliderMax={50} />
       </fieldset>
         </>
       )}
@@ -266,13 +266,13 @@ function Attendre() {
         <>
       <fieldset>
         <legend>Votre épargne</legend>
-        <NumberField label="Versement mensuel" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} />
-        <NumberField label="Rendement annuel supposé" unit="%" value={s.annualReturn} onChange={up('annualReturn')} min={-50} max={50} step={0.5} />
+        <NumberField label="Versement mensuel" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} sliderMax={2000} />
+        <NumberField label="Rendement annuel supposé" unit="%" value={s.annualReturn} onChange={up('annualReturn')} min={-50} max={50} step={0.5} sliderMax={15} />
       </fieldset>
       <fieldset>
         <legend>Calendrier</legend>
-        <NumberField label="Horizon d’arrivée" unit="ans" value={s.years} onChange={up('years')} min={1} max={80} step={1} />
-        <NumberField label="Délai avant de commencer" unit="ans" value={s.delayYears} onChange={up('delayYears')} min={0} max={80} step={0.5} />
+        <NumberField label="Horizon d’arrivée" unit="ans" value={s.years} onChange={up('years')} min={1} max={80} step={1} sliderMax={50} />
+        <NumberField label="Délai avant de commencer" unit="ans" value={s.delayYears} onChange={up('delayYears')} min={0} max={80} step={0.5} sliderMax={50} />
       </fieldset>
         </>
       )}
@@ -307,13 +307,13 @@ function Progressif() {
         <>
       <fieldset>
         <legend>Votre épargne</legend>
-        <NumberField label="Versement mensuel la première année" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={25} />
-        <NumberField label="Hausse annuelle du versement" unit="%" value={s.annualIncrease} onChange={up('annualIncrease')} min={-50} max={100} step={0.5} />
-        <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={0} max={80} step={1} />
+        <NumberField label="Versement mensuel la première année" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={25} sliderMax={2000} />
+        <NumberField label="Hausse annuelle du versement" unit="%" value={s.annualIncrease} onChange={up('annualIncrease')} min={-50} max={100} step={0.5} sliderMax={10} />
+        <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={0} max={80} step={1} sliderMax={50} />
       </fieldset>
       <fieldset>
         <legend>Hypothèse</legend>
-        <NumberField label="Rendement annuel supposé" unit="%" value={s.annualReturn} onChange={up('annualReturn')} min={-50} max={50} step={0.5} />
+        <NumberField label="Rendement annuel supposé" unit="%" value={s.annualReturn} onChange={up('annualReturn')} min={-50} max={50} step={0.5} sliderMax={15} />
       </fieldset>
         </>
       )}
@@ -349,7 +349,7 @@ function Taux() {
         <>
       <fieldset>
         <legend>Votre taux</legend>
-        <NumberField label="Taux annuel effectif" unit="%" value={s.annualRate} onChange={up('annualRate')} min={-50} max={100} step={0.1} />
+        <NumberField label="Taux annuel effectif" unit="%" value={s.annualRate} onChange={up('annualRate')} min={-50} max={100} step={0.1} sliderMax={15} />
         <SelectField label="Période visée" value={s.periods} options={PERIODS} onChange={up('periods')} />
       </fieldset>
         </>
