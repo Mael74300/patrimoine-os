@@ -1,5 +1,5 @@
 import { fmtEur } from '../lib/finance';
-import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, type SnowballBar } from '../lib/illustrationData';
+import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, type SnowballBar } from '../lib/illustrationData';
 
 const W = 420;
 const BASE = 262;
@@ -572,6 +572,41 @@ export function SchemaQuinzaines() {
         ))}
         <text x={210} y={246} textAnchor="middle" className="ill-sub">Le jour de l’opération compte autant que le montant</text>
       </svg>
+    </figure>
+  );
+}
+
+/** Schéma « De 6 % à 3,6 % » : le rendement brut d’une annonce fond quand on compte les frais, la vacance et les charges. Exemple fictif calculé (illustrationData). */
+export function SchemaRendement() {
+  const steps = rendementSteps();
+  const pctFr = (v: number) => `${(Math.round(v * 1000) / 10).toLocaleString('fr-FR', { minimumFractionDigits: 1 })} %`;
+  const max = steps[0].value;
+  const X0 = 14;
+  const BW = 300;
+  const alt = steps.map((s) => `${s.label} : ${pctFr(s.value)}`).join(' ; ');
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 272" role="img" aria-labelledby="ill-rend-t ill-rend-d" className="ill-svg">
+        <title id="ill-rend-t">Le rendement locatif baisse à mesure qu’on compte les vrais coûts</title>
+        <desc id="ill-rend-d">{`Exemple fictif d’un bien à ${fmtEur(RENDEMENT_EXAMPLE.price)} loué ${fmtEur(RENDEMENT_EXAMPLE.monthlyRent)} par mois. ${alt}.`}</desc>
+        {steps.map((s, i) => {
+          const y = 4 + i * 66;
+          const w = (s.value / max) * BW;
+          const last = i === steps.length - 1;
+          return (
+            <g key={s.label}>
+              <text x={X0} y={y + 14} className="ill-step">{s.label}</text>
+              <rect x={X0} y={y + 22} width={BW} height={26} rx={6} fill="var(--surface-2)" />
+              <rect x={X0} y={y + 22} width={w} height={26} rx={6} fill={last ? 'var(--accent)' : 'var(--primary)'} />
+              <text x={X0 + BW + 12} y={y + 41} className="ill-total">{pctFr(s.value)}</text>
+              <text x={X0} y={y + 63} className="ill-sub">{s.detail}</text>
+            </g>
+          );
+        })}
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : le même bien de {fmtEur(RENDEMENT_EXAMPLE.price)}, loué {fmtEur(RENDEMENT_EXAMPLE.monthlyRent)} par mois, vu sous quatre angles. Barres proportionnelles aux pourcentages ; le rendement après impôt dépend de votre situation et n’est pas montré.
+      </figcaption>
     </figure>
   );
 }
