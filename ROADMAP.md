@@ -73,7 +73,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 5. [x] **Exporter et importer ses données locales** : fait le 2026-10-30, voir « Fait ».
 6. [~] **Accessibilité** (étape 1 faite le 2026-10-29 : contrastes, tableaux, en-têtes, test automatisé). Étape 2 faite le 2026-10-29 (graphiques). Étape 3 faite le 2026-10-30 (annonce des résultats). Étape 4 faite le 2026-10-30 (pied de page tactile sur mobile). Étape 5 faite le 2026-10-31 (cibles tactiles des liens isolés). Étape suivante : ordre de tabulation.
 7. [ ] **Relecture éditoriale d'ensemble.** Repérer les doublons et contradictions entre guides, fiches et simulateurs (par exemple le guide et le simulateur sur la règle de 72), harmoniser le vocabulaire et les liens, raccourcir ce qui se répète.
-8. [ ] **Identité visuelle (propriétaire).** Revoir l'esthétique d'ensemble : palette, typographie (polices système), échelle d'espacements, cartes, boutons, en-tête, pied de page, graphiques. Une refonte cohérente par petites étapes, page par page, en gardant les contrastes accessibles. Captures avant et après dans chaque pull request.
+8. [~] **Identité visuelle (propriétaire).** (étape 1 faite le 2026-10-31 : palette, bandeaux, cartes, boutons, pied de page, logo) Revoir l'esthétique d'ensemble : palette, typographie (polices système), échelle d'espacements, cartes, boutons, en-tête, pied de page, graphiques. Une refonte cohérente par petites étapes, page par page, en gardant les contrastes accessibles. Captures avant et après dans chaque pull request.
 9. [~] **Vulgarisation (propriétaire).** (étapes 1 à 4 faites le 2026-10-29 : 10 simulateurs ; étape 5 le 2026-10-30 : intérêts composés, 8 onglets ; étape 6 le 2026-10-30 : budget ; étape 7 le 2026-10-30 : inflation ; étape 8 le 2026-10-30 : dettes ; étape 9 le 2026-10-30 : frais ; étape 10 le 2026-10-30 : patrimoine ; étape 11 le 2026-10-31 : entreprise et portefeuille ; chantier terminé sur les simulateurs) Réécrire en langage simple, page par page en commençant par les plus visitées (accueil, simulateurs principaux, guides d'entrée) : phrases courtes, jargon expliqué, exemple concret, phrase de synthèse sous chaque résultat de simulateur. Sans changer aucun chiffre ni règle.
 10. [ ] **Illustrations maison (propriétaire).** Des images créées par la tâche elle-même, en SVG écrit à la main, pour rendre le site plus agréable et plus facile à comprendre :
    - **schémas explicatifs** qui vulgarisent une notion (intérêts composés, amortissement d'un crédit, effet de levier, diversification, inflation) : priorité, car ils aident à comprendre ;
@@ -83,6 +83,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 11. [x] **Test de fumée dans l'intégration continue** : fait le 2026-10-30, voir « Fait ».
 
 ## Fait
+
+- 2026-10-31 : refonte visuelle (demande du propriétaire) : nouvelle palette (bleu nuit, vert émeraude, or), bandeaux d'en-tête, cartes en relief, boutons dégradés, pied de page sombre, nouveau logo. Étapes suivantes possibles : en-têtes de rubrique illustrés, graphiques, pages de simulateur.
 
 - 2026-10-31 : encyclopédie sur mobile : les noms des fiches restent visibles sous chaque famille repliée (ergonomie).
 - 2026-10-31 : accueil mobile : texte d'exemple du champ de recherche raccourci (« PEA, SCPI, crédit… ») pour qu'il ne soit plus coupé à 375 px.

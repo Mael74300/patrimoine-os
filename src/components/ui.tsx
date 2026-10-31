@@ -172,7 +172,7 @@ export function PageHead({ eyebrow, title, children }: { eyebrow?: string; title
     document.title = `${title} · ${config.siteName}`;
   }, [title]);
   return (
-    <header style={{ marginBottom: 24 }}>
+    <header className="page-head">
       {eyebrow && <div className="eyebrow">{eyebrow}</div>}
       <h1>{title}</h1>
       {children && <div className="lede">{children}</div>}
