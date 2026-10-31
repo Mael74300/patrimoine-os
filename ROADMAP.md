@@ -54,20 +54,12 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
-- 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (31, chantiers 1 et 2).
-- 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public ; ajouter des images créées par la tâche elle-même.
+- 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (chantiers 1 et 2, faits) ; tout améliorer, y compris esthétique, vulgarisation et illustrations maison.
 - 2026-10-30 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable ce jour (service-public.gouv.fr et economie.gouv.fr renvoient une page de vérification, legifrance 403) ; fiches non écrites faute de confirmation.
-- 2026-10-30 : illustrations : les neuf schémas prévus (intérêts, mensualité, inflation, levier, diversification, escalier, enveloppe…) sont en place ; reste les en-têtes de rubrique.
-- 2026-10-30 : visiteur curieux d'entreprendre, page Entrepreneuriat : texte seul, 3 709 px à 375 px, aucun visuel pour l'idée centrale (séparer l'entreprise et le patrimoine) ; schéma ajouté (voir « Fait »). 
-- 2026-10-31 : visiteur qui cherche un mot, page Glossaire : liste de 20 notions en texte continu, sans repère ni accès par lettre, liens « Voir aussi » en petit texte ; refait (voir « Fait »). Audit à 375 et 1280 px de l'accueil, du glossaire et des guides : aucune erreur de console.
-- 2026-10-31 : visiteur de l'encyclopédie (375 et 1280 px) : points Risque, Liquidité, Effort affichés partout sans légende ; légende repliable ajoutée (voir « Fait »). Pistes vues : grille des familles de l'accueil et pied de page sur grand écran corrigés le 2026-10-31 (voir « Fait ») ; encyclopédie longue à 375 px (5 625 px) : familles repliées le 2026-10-31 (voir « Fait »). Audit du 2026-10-31 (accueil, guides, encyclopédie, 375 et 1280 px) : aucune erreur de console.
-- 2026-10-31 : visiteur qui veut comprendre le PEA (guide « Comment fonctionne le PEA », 375 et 1280 px) : règle des 5 ans expliquée en texte seul, page sans visuel ; schéma « avant et après 5 ans » ajouté (voir « Fait »). Pistes vues : la FAQ des guides repliée le 2026-10-31 (voir « Fait »), fiches des familles toujours à écrire. Aucune erreur de console.
-- 2026-10-31 : visiteur méfiant qui ouvre « Méthode et sources » (375 et 1280 px) : jargon technique (GitHub Actions, robots.txt, ticket de révision), 30 formules en liste ouverte (4 891 px à 375 px) avant l'essentiel ; réécrit (voir « Fait »). Pistes vues : listes de guides et de simulateurs correctes à 375 px (4 140 et 4 056 px), aucune erreur de console.
-- 2026-10-31 : visiteur du simulateur immobilier (375 px, page la plus longue : 6 457 px) : l'axe vertical du graphique coupait le signe moins (« −200 k€ » lu « 200 k€ ») alors que la courbe de trésorerie est négative ; bouton « Réinitialiser » collé au bloc replié ; corrigé (voir « Fait »). Pistes vues : comparateur (6 083 px), simulateur entreprise (5 394 px) et épargne de précaution (5 179 px) restent longs à 375 px. Aucune erreur de console.
-- 2026-10-31 : visiteur mobile (375 px) : 29 liens « Voir aussi » du glossaire, fil d'Ariane, listes de sources et deux liens de l'accueil hauts de 16 à 20 px, difficiles à toucher ; corrigé (voir « Fait »). Pistes vues : liens dans les cellules de tableau (Livret A, LDDS) encore à 18 px. Aucune erreur de console.
-- 2026-10-31 : visiteur du guide « Livret A : quinzaines » (375 et 1280 px) : règles de dates (1er, 15, 16) en texte seul, difficiles à retenir ; schéma ajouté (voir « Fait »). Pistes vues : fiche Livret A correcte (4 462 px à 375 px), épargne de précaution longue (5 241 px). Aucune erreur de console.
-
-- 2026-10-31 : visiteur du comparateur (375 px) : page de 6 083 px, critères longs (capital, frais, fiscalité, avantages, inconvénients) empilés ×3 placements ; repliés par critère (voir « Fait »). Pistes vues : épargne de précaution (5 241 px) toujours longue ; accueil (4 931 px) et simulateur louer ou acheter (4 859 px) corrects. Aucune erreur de console.
+- 2026-10-31 : illustrations : schémas en place pour intérêts, mensualité, inflation, levier, diversification, escalier, enveloppe, séparer entreprise et patrimoine, PEA, quinzaines ; reste les en-têtes de rubrique.
+- 2026-10-31 : pages longues à 375 px : épargne de précaution (5 191 px), simulateur d'entreprise (5 394 px), comparateur (4 906 px) ; accueil (4 923 px) et guides (4 140 px) corrects.
+- 2026-10-31 : visiteur du simulateur d'épargne de précaution (375 px) : dans les listes de sources, un titre de lien qui passe à la ligne décalait la puce sur la dernière ligne ; corrigé (voir « Fait »). Piste vue : tableau de répartition des livrets à défilement latéral (colonne « Intérêts » coupée) sur mobile.
+- 2026-10-31 : pistes vues : liens dans les cellules de tableau (Livret A, LDDS) encore à 18 px ; champ de recherche de l'accueil à 375 px tronque son texte d'exemple. Aucune erreur de console (hors GoatCounter, bloqué par le bac à sable).
 
 ## À faire
 
@@ -89,6 +81,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-10-31 : **Listes de sources : puce alignée** : lien en ligne (zone touchable agrandie par le padding vertical, 28 px) au lieu d'un bloc, pour que la puce reste devant la première ligne d'un titre long ; CSS seul, aucun texte ni chiffre modifié. Épargne de précaution à 375 px : 5 241 → 5 191 px ; 1280 px inchangé (PR à venir).
 - 2026-10-31 : comparateur, critères longs repliés par ligne sur mobile (capital, frais, fiscalité, avantages, inconvénients), ouverts sans JavaScript et sur grand écran ; 6 083 → 4 906 px à 375 px (PR à venir).
 
 - 2026-10-31 : **Illustrations maison, étape 13 : schéma des quinzaines du Livret A** : mois coupé au 15, règle du dépôt (rapporte dès le 16 ou dès le 1er du mois suivant) et du retrait (solde du dernier jour du mois précédent ou du 15), dans le guide « Livret A : comment sont calculés les intérêts » ; seuls chiffres : 1er, 15, 16, testés contre le texte du guide (`quinzaines.test.ts`), règles reconfirmées sur Service-Public.fr le 2026-10-31. Page à 375 px : 4 153 → 4 400 px. (PR à venir)
