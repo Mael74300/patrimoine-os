@@ -100,7 +100,7 @@ export default function SimPatrimoine() {
                 </button>
               ))}
             </div>
-            <p className="small muted">Ce sont des hypothèses de calcul, pas des prévisions : personne ne peut garantir un rendement. En général, plus l'hypothèse est haute, plus le risque de perdre de l'argent est fort. Vous pouvez saisir votre propre valeur dans les réglages avancés.</p>
+            <p className="small muted">Ce sont des hypothèses de calcul, pas des prévisions : personne ne peut garantir un rendement. Les placements peuvent aussi perdre de la valeur. Vous pouvez saisir votre propre valeur dans les réglages avancés.</p>
           </fieldset>
           <details className="fold advanced">
             <summary>Réglages avancés (facultatif)</summary>
