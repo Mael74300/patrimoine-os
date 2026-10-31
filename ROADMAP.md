@@ -55,12 +55,12 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 ## Constats
 
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (faits) ; tout améliorer, y compris esthétique, vulgarisation et illustrations maison.
-- 2026-10-30 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable ce jour (service-public.gouv.fr et economie.gouv.fr renvoient une page de vérification, legifrance 403) ; fiches non écrites faute de confirmation.
-- 2026-10-31 : illustrations : schémas en place pour intérêts, mensualité, inflation, levier, diversification, escalier, enveloppe, séparer entreprise et patrimoine, PEA, quinzaines, rendement locatif ; en-têtes de rubrique faits le 2026-10-31 (PR à venir).
-- 2026-10-31 : pages longues à 375 px : simulateur immobilier (6 512 px avant correction, 18 champs d'emblée ; corrigé : 5 767 px), simulateur d'entreprise (5 527 px), épargne de précaution (5 344 px), comparateur (4 906 px).
-- 2026-10-31 : visiteur débutant (375 px), simulateur de budget : colonne « Écart au repère », la plus utile, coupée à droite du tableau et cinq champs à saisir d'emblée ; corrigé (voir « Fait »). Même traitement fait pour l'immobilier le 2026-10-31 ; reste entreprise et retraits.
-- 2026-10-31 : encyclopédie sur mobile : ordre de tabulation et en-têtes de rubrique restent à traiter.
-- 2026-10-31 : visiteur épargnant (375 px), simulateur de portefeuille : tableau de saisie de 944 px dont 6 colonnes sur 9, rééquilibrage compris, cachées à droite ; corrigé (voir « Fait »).
+- 2026-10-30 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable (service-public.gouv.fr et economie.gouv.fr renvoient une page de vérification ou 403, legifrance 403) ; fiches non écrites faute de confirmation. Même blocage constaté le 2026-10-31 (economie.gouv.fr, banque-france.fr, legifrance : 403) ; seul lafinancepourtous.com répond.
+- 2026-10-31 : pages longues à 375 px : simulateur d'entreprise (5 527 px), épargne de précaution (5 344 px), comparateur (5 004 px), fiche Livret A (4 495 px), guide de précaution (4 283 px).
+- 2026-10-31 : simulateur d'entreprise et retraits : même traitement que budget, portefeuille et immobilier à faire (curseurs, réglages avancés repliés).
+- 2026-10-31 : encyclopédie sur mobile : l'ordre de tabulation est logique (vérifié au clavier, 375 et 1280 px, focus visible partout) ; reste à traiter la longueur de la liste de filtres.
+- 2026-10-31 : guides d'entrée : visiteur futur acheteur sur « Taux d'endettement » : texte clair mais le repère de 35 % restait abstrait sans image ; corrigé (schéma, voir « Fait »). Guides encore sans schéma : épargne de précaution, patrimoine net, remboursement anticipé.
+- 2026-10-31 : fiches de l'encyclopédie sans aucun visuel hors icône de famille ; à étudier un schéma de lecture des repères risque/liquidité/effort.
 
 ## À faire
 
@@ -82,6 +82,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-10-31 : **Illustrations maison, étape 16 : schéma « taux d'endettement »** (PR à venir) : barre des 3 000 € de revenus de l'exemple fictif du guide (200 € de crédit en cours, 850 € de nouvelle mensualité, 1 950 € restants) avec le repère de 35 % (1 050 €) ; chiffres calculés par `debtRatio` et testés contre le texte (`src/endettement.test.ts`), paragraphe redondant du guide retiré (ses chiffres sont dans la légende). Aucune information factuelle ajoutée. Hauteur du guide à 375 px : 3 958 → 4 188 px, à 1 280 px : 2 949 px.
 - 2026-10-31 : **Simulateur immobilier plus simple** (PR à venir) : 5 réglages essentiels avec curseurs (prix, apport, taux, durée, loyer) ; frais d'acquisition, travaux, mobilier, assurance, charges, fiscalité et projection dans « Réglages avancés » repliés, avec aides en langage simple. Calculs, valeurs de départ et résultats inchangés. Hauteur à 375 px : 6 512 → 5 767 px (replié) ; 1280 px inchangé (3 215 px). Reste : entreprise et retraits.
 - 2026-10-31 : **Illustrations maison, étape 15 : scènes d'en-tête des rubriques** (PR à venir) : cinq illustrations SVG décoratives (livre et ampoule, calculatrice et courbe, étagère et loupe, balance, pousse et boutique) dans les bandeaux de Guides, Simulateurs, Encyclopédie, Comparateur et Entrepreneuriat ; visibles à partir de 761 px, masquées sur mobile pour ne pas allonger les pages ; aucun chiffre ni texte modifié. Hauteurs mesurées inchangées à 375 px et à 1280 px (guides 4 243 / 2 061 px, simulateurs 4 074 / 2 845 px, encyclopédie 3 890 / 3 693 px, comparateur 5 004 / 2 847 px, entrepreneuriat 4 147 / 2 335 px). Reste : icônes de thème sur mobile, en-têtes des guides et de l'accueil.
 - 2026-10-31 : **Portefeuille : lignes en cartes sur mobile** (PR à venir) : sous 700 px, chaque ligne du tableau de saisie devient une carte (nom, montant, rendement, frais, risque, cible, poids, rééquilibrage visibles sans défilement latéral) ; CSS et attributs `data-label`, aucun texte ni chiffre modifié. Hauteur à 375 px : 3 883 → 4 439 px (le contenu caché devient visible) ; 1280 px inchangé (2 726 px).

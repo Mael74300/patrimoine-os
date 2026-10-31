@@ -376,7 +376,7 @@ export const guides: Guide[] = [
     title: 'Taux d’endettement : quel repère pour emprunter ?',
     summary: 'Comment se calcule le taux d’endettement, d’où vient le repère de 35 % et pourquoi le reste à vivre compte autant.',
     readingMinutes: 5,
-    updatedOn: '2026-10-27',
+    updatedOn: '2026-10-31',
     sections: [
       {
         heading: 'Le calcul',
@@ -388,7 +388,6 @@ export const guides: Guide[] = [
         heading: 'Le repère de 35 %',
         body: [
           'Le Haut Conseil de stabilité financière (décision D-HCSF-2021-7, applicable depuis le 1er janvier 2022) recommande aux banques de limiter les charges d’emprunt à 35 % des revenus, assurance comprise, et la durée à 25 ans (27 ans avec différé pour un bien neuf ou des travaux). Les banques disposent d’une marge de dérogation, qui reste limitée : c’est un repère, pas un droit à emprunter.',
-          'Avec 3 000 € de revenus, la charge totale de crédit maximale est donc de 1 050 € par mois ; si 200 € sont déjà engagés, il reste 850 € pour le nouveau crédit.',
         ],
       },
       {

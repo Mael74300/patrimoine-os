@@ -1,5 +1,5 @@
 import { fmtEur } from '../lib/finance';
-import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, type SnowballBar } from '../lib/illustrationData';
+import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, type SnowballBar } from '../lib/illustrationData';
 
 const W = 420;
 const BASE = 262;
@@ -606,6 +606,44 @@ export function SchemaRendement() {
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : le même bien de {fmtEur(RENDEMENT_EXAMPLE.price)}, loué {fmtEur(RENDEMENT_EXAMPLE.monthlyRent)} par mois, vu sous quatre angles. Barres proportionnelles aux pourcentages ; le rendement après impôt dépend de votre situation et n’est pas montré.
+      </figcaption>
+    </figure>
+  );
+}
+
+/** Schéma « Où va un revenu de 3 000 € » : part des crédits et repère de 35 % (HCSF) sur l’exemple fictif du guide « Taux d’endettement ». */
+export function SchemaEndettement() {
+  const p = endettementParts();
+  const X0 = 14;
+  const BW = 312;
+  const x = (v: number) => X0 + (v / p.income) * BW;
+  const xLimit = x(p.limit);
+  const rows = [
+    { fill: 'var(--primary)', label: `${fmtEur(p.existing)} : crédit déjà en cours` },
+    { fill: 'var(--accent)', label: `${fmtEur(p.added)} : nouvelle mensualité` },
+    { fill: 'var(--surface-2)', label: `${fmtEur(p.rest)} : le reste de vos revenus`, stroke: true },
+  ];
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 192" role="img" aria-labelledby="ill-end-t ill-end-d" className="ill-svg">
+        <title id="ill-end-t">Les crédits ne doivent pas dépasser 35 % des revenus</title>
+        <desc id="ill-end-d">{`Exemple fictif : ${fmtEur(p.income)} de revenus nets par mois. ${rows.map((r) => r.label).join(' ; ')}. Les crédits (${fmtEur(p.existing + p.added)}) représentent ${Math.round(p.ratioAfter * 100)} % des revenus, soit le repère de 35 % (${fmtEur(p.limit)}).`}</desc>
+        <text x={X0} y="16" className="ill-step">{`Revenus nets : ${fmtEur(p.income)} par mois`}</text>
+        <rect x={X0} y="30" width={BW} height="34" rx="8" fill="var(--surface-2)" stroke="var(--line)" />
+        <rect x={X0} y="30" width={x(p.existing) - X0} height="34" rx="8" fill="var(--primary)" />
+        <rect x={x(p.existing)} y="30" width={x(p.existing + p.added) - x(p.existing)} height="34" fill="var(--accent)" />
+        <rect x={X0 + 8} y="30" width={x(p.existing) - X0 - 8} height="34" fill="var(--primary)" />
+        <line x1={xLimit} x2={xLimit} y1="22" y2="74" stroke="var(--ink)" strokeWidth="2.5" strokeDasharray="4 3" />
+        <text x={xLimit} y="92" textAnchor="middle" className="ill-total">{`Repère : 35 % = ${fmtEur(p.limit)}`}</text>
+        {rows.map((r, i) => (
+          <g key={r.label}>
+            <rect x={X0} y={112 + i * 26} width="18" height="18" rx="4" fill={r.fill} stroke={r.stroke ? 'var(--line)' : 'none'} />
+            <text x={X0 + 28} y={126 + i * 26} className="ill-step">{r.label}</text>
+          </g>
+        ))}
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : avec {fmtEur(p.income)} de revenus, la charge totale de crédit maximale est de {fmtEur(p.limit)} par mois ; si {fmtEur(p.existing)} sont déjà engagés, il reste {fmtEur(p.maxNewPayment)} pour le nouveau crédit. Largeurs proportionnelles aux montants.
       </figcaption>
     </figure>
   );
