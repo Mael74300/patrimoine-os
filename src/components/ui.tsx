@@ -217,7 +217,6 @@ export function LineChart({ series, xLabels, format, title, height = 300 }: Char
   const [W, setW] = useState(720);
   const narrow = W < 480;
   const H = narrow ? Math.min(height, 240) : height;
-  const pad = { l: narrow ? 48 : 64, r: 16, t: 16, b: 32 };
   const n = xLabels.length;
   const [hover, setHover] = useState<number | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -244,6 +243,10 @@ export function LineChart({ series, xLabels, format, title, height = 300 }: Char
     for (let v = bottom; v <= top + step / 2; v += step) t.push(v);
     return { max: top, min: bottom, ticks: t };
   }, [series]);
+
+  // Marge gauche adaptée à la plus longue graduation, pour ne jamais couper un signe moins ou un chiffre.
+  const widest = Math.max(...ticks.map((t) => compact(t).length));
+  const pad = { l: Math.max(narrow ? 48 : 64, Math.ceil(widest * 6.6) + 16), r: 16, t: 16, b: 32 };
 
   const x = (i: number) => pad.l + (n <= 1 ? 0 : (i / (n - 1)) * (W - pad.l - pad.r));
   const y = (v: number) => pad.t + (1 - (v - min) / (max - min || 1)) * (H - pad.t - pad.b);
@@ -360,11 +363,12 @@ function niceStep(raw: number) {
   return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * p;
 }
 
-function compact(n: number) {
+export function compact(n: number) {
   const a = Math.abs(n);
-  if (a >= 1e6) return (n / 1e6).toLocaleString('fr-FR', { maximumFractionDigits: 1 }) + ' M€';
-  if (a >= 1e3) return (n / 1e3).toLocaleString('fr-FR', { maximumFractionDigits: 0 }) + ' k€';
-  return n.toLocaleString('fr-FR') + ' €';
+  const sign = n < 0 ? '\u2212' : '';
+  if (a >= 1e6) return sign + (a / 1e6).toLocaleString('fr-FR', { maximumFractionDigits: 1 }) + ' M€';
+  if (a >= 1e3) return sign + (a / 1e3).toLocaleString('fr-FR', { maximumFractionDigits: 0 }) + ' k€';
+  return sign + a.toLocaleString('fr-FR') + ' €';
 }
 
 // ------------------------------------------------------------ Simulations enregistrées

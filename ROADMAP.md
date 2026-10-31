@@ -56,7 +56,6 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (31, chantiers 1 et 2).
 - 2026-10-28 (propriétaire) : tout améliorer, y compris l'esthétique et la vulgarisation pour le grand public ; ajouter des images créées par la tâche elle-même.
-- 2026-10-30 : visiteur sur mobile, pied de page (toutes les pages) : dix liens de navigation et quatre sources hauts de 17 px, cibles tactiles bien trop petites ; passés à 44 px, sur deux colonnes (voir « Fait »). Audit à 375 et 1280 px de l'accueil, du glossaire et des simulateurs : aucune erreur de console.
 - 2026-10-30 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable ce jour (service-public.gouv.fr et economie.gouv.fr renvoient une page de vérification, legifrance 403) ; fiches non écrites faute de confirmation.
 - 2026-10-30 : illustrations : les neuf schémas prévus (intérêts, mensualité, inflation, levier, diversification, escalier, enveloppe…) sont en place ; reste les en-têtes de rubrique.
 - 2026-10-30 : visiteur curieux d'entreprendre, page Entrepreneuriat : texte seul, 3 709 px à 375 px, aucun visuel pour l'idée centrale (séparer l'entreprise et le patrimoine) ; schéma ajouté (voir « Fait »). 
@@ -64,6 +63,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-10-31 : visiteur de l'encyclopédie (375 et 1280 px) : points Risque, Liquidité, Effort affichés partout sans légende ; légende repliable ajoutée (voir « Fait »). Pistes vues : grille des familles de l'accueil et pied de page sur grand écran corrigés le 2026-10-31 (voir « Fait ») ; encyclopédie longue à 375 px (5 625 px) : familles repliées le 2026-10-31 (voir « Fait »). Audit du 2026-10-31 (accueil, guides, encyclopédie, 375 et 1280 px) : aucune erreur de console.
 - 2026-10-31 : visiteur qui veut comprendre le PEA (guide « Comment fonctionne le PEA », 375 et 1280 px) : règle des 5 ans expliquée en texte seul, page sans visuel ; schéma « avant et après 5 ans » ajouté (voir « Fait »). Pistes vues : la FAQ des guides repliée le 2026-10-31 (voir « Fait »), fiches des familles toujours à écrire. Aucune erreur de console.
 - 2026-10-31 : visiteur méfiant qui ouvre « Méthode et sources » (375 et 1280 px) : jargon technique (GitHub Actions, robots.txt, ticket de révision), 30 formules en liste ouverte (4 891 px à 375 px) avant l'essentiel ; réécrit (voir « Fait »). Pistes vues : listes de guides et de simulateurs correctes à 375 px (4 140 et 4 056 px), aucune erreur de console.
+- 2026-10-31 : visiteur du simulateur immobilier (375 px, page la plus longue : 6 457 px) : l'axe vertical du graphique coupait le signe moins (« −200 k€ » lu « 200 k€ ») alors que la courbe de trésorerie est négative ; bouton « Réinitialiser » collé au bloc replié ; corrigé (voir « Fait »). Pistes vues : comparateur (6 083 px), simulateur entreprise (5 394 px) et épargne de précaution (5 179 px) restent longs à 375 px. Aucune erreur de console.
 
 ## À faire
 
@@ -85,6 +85,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-10-31 : **Graphiques : axe vertical lisible** : la marge gauche s'adapte à la plus longue graduation (le signe moins n'est plus coupé), vrai signe moins (−) pour les valeurs négatives, test `chartAxis.test.ts` ; sur mobile, espace entre le bloc replié et « Réinitialiser » du simulateur immobilier. Aucun chiffre ni règle modifié. (PR à venir)
 - 2026-10-31 : **Page « Méthode et sources »** : résumé en quatre points en tête, section d'indépendance fusionnée dans ce résumé, contrôles automatiques décrits en mots simples (plus de GitHub Actions ni de robots.txt), 30 formules rangées en cinq thèmes et repliées sous un seul bouton ; aucune règle ni valeur modifiée ; hauteur à 375 px : 4 891 → 3 282 px, à 1280 px : 3 628 → 1 967 px.
 - 2026-10-31 : **Illustrations maison, étape 12 : schéma du PEA** : frise « avant 5 ans / après 5 ans » (clôture du plan en principe, sauf exceptions ; après : retrait sans clôture, gains exonérés d'impôt sur le revenu, prélèvements sociaux dus) dans le guide « Comment fonctionne le PEA » ; seul chiffre : « 5 ans », testé contre le texte du guide (`pea.test.ts`). Page à 375 px : 3 920 → 4 167 px ; 1280 px : 2 560 → 2 888 px.
 - 2026-10-31 : **Encyclopédie sur mobile** : chaque famille de plusieurs fiches est repliée (« Voir les N fiches ») tant qu'aucun filtre ni recherche n'est actif ; repliée à 375 px seulement, toujours ouverte à 1280 px et dans le HTML pré-rendu ; page à 375 px : 5 625 → 3 508 px, 1280 px inchangé (3 414 px) (#112).
