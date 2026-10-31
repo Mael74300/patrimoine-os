@@ -523,3 +523,24 @@ main { padding-top: 28px; }
 .choice.on strong, .choice.on span { color: #fff; }
 details.advanced { margin: 4px 0 14px; }
 .advanced-body { padding: 0 14px 12px; }
+
+/* Portefeuille : sous 700 px, chaque ligne devient une carte (champs étiquetés, résultats en bas) */
+@media (max-width: 700px) {
+  .line-wrap { overflow-x: visible; border: 0; background: none; box-shadow: none; }
+  .line-table, .line-table tbody, .line-table tr, .line-table td { display: block; }
+  .line-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .line-table tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 10px; padding: 12px; margin-bottom: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; position: relative; }
+  .line-table td { padding: 0; border: 0; text-align: left; }
+  .line-table td::before { content: attr(data-label); display: block; font-weight: 600; font-size: .85rem; color: var(--ink-2); margin-bottom: 2px; }
+  .line-table .lt-name { grid-column: 1 / -1; padding-right: 44px; }
+  .line-table td:nth-child(8) { grid-column: 1 / -1; display: flex; justify-content: space-between; }
+  .line-table td:nth-child(8)::before { display: inline; margin: 0; }
+  .line-table td input[type=number] { padding-left: 8px; padding-right: 8px; }
+  .line-table .lt-name::before { display: none; }
+  .line-table .lt-name input { width: calc(100% - 24px) !important; }
+  .line-table td input[type=number] { width: 100% !important; text-align: left !important; }
+  .line-table .lt-res { font-weight: 600; }
+  .line-table td:nth-child(8) { padding-top: 8px; border-top: 1px solid var(--line); }
+  .line-table .lt-del { position: absolute; top: 10px; right: 10px; }
+  .line-table .lt-del::before { display: none; }
+}
