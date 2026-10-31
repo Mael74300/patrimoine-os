@@ -20,9 +20,11 @@ type NumberFieldProps = {
   hint?: string;
   /** Si true, la valeur affichée est en % et stockée en décimal. */
   percent?: boolean;
+  /** Affiche un curseur en plus du champ (valeur maximale du curseur ; le champ accepte toujours jusqu'à `max`). */
+  sliderMax?: number;
 };
 
-export function NumberField({ label, value, onChange, unit, step = 1, min, max, hint, percent }: NumberFieldProps) {
+export function NumberField({ label, value, onChange, unit, step = 1, min, max, hint, percent, sliderMax }: NumberFieldProps) {
   const id = useId();
   const shown = percent ? round(value * 100, 4) : value;
   const [text, setText] = useState(String(shown));
@@ -58,6 +60,24 @@ export function NumberField({ label, value, onChange, unit, step = 1, min, max, 
         />
         {unit && <span aria-hidden="true">{unit}</span>}
       </div>
+      {sliderMax !== undefined && (
+        <input
+          className="slider"
+          type="range"
+          aria-label={`${label} (curseur)`}
+          min={Math.max(0, min ?? 0)}
+          max={sliderMax}
+          step={step}
+          value={Math.min(sliderMax, Math.max(Math.max(0, min ?? 0), shown))}
+          style={{ ['--pos' as string]: `${Math.min(100, Math.max(0, ((shown - Math.max(0, min ?? 0)) / (sliderMax - Math.max(0, min ?? 0))) * 100))}%` }}
+          onChange={(e) => {
+            const n = parseFloat(e.target.value);
+            setText(String(n));
+            last.current = n;
+            onChange(percent ? n / 100 : n);
+          }}
+        />
+      )}
       {hint && <div className="hint" id={id + '-h'}>{hint}</div>}
     </div>
   );

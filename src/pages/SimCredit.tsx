@@ -40,10 +40,10 @@ export default function SimCredit() {
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
             <legend>Prêt</legend>
-            <NumberField label="Montant emprunté" unit="€" value={s.principal} onChange={up('principal')} min={0} step={5000} />
-            <NumberField label="Taux annuel nominal" unit="%" percent value={s.annualRate} onChange={up('annualRate')} step={0.05} min={0} max={20} hint="Taux mensuel appliqué : taux annuel / 12." />
-            <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={0} max={30} />
-            <NumberField label="Assurance emprunteur" unit="%" percent value={s.insuranceRate} onChange={up('insuranceRate')} step={0.05} min={0} max={2} />
+            <NumberField label="Montant emprunté" unit="€" value={s.principal} onChange={up('principal')} min={0} step={5000} sliderMax={1000000} />
+            <NumberField label="Taux annuel nominal" unit="%" percent value={s.annualRate} onChange={up('annualRate')} step={0.05} min={0} max={20} sliderMax={8} hint="Le taux figure dans l'offre de votre banque ; la valeur proposée n'est qu'un exemple." />
+            <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={0} max={30} sliderMax={30} />
+            <NumberField label="Assurance emprunteur" unit="%" percent value={s.insuranceRate} onChange={up('insuranceRate')} step={0.05} min={0} max={2} sliderMax={1} hint="L'assurance couvre le prêt en cas de coup dur. Ici : un pourcentage du capital emprunté, par an. À reprendre de votre offre de prêt." />
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
         </form>

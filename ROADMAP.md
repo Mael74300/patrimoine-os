@@ -84,6 +84,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-10-31 : simulateurs plus interactifs et plus simples (retour du propriétaire : trop de données à saisir, pas connues de tous) : curseurs synchronisés avec les champs (patrimoine, crédit, intérêts composés) ; simulateur de patrimoine réduit à 3 réglages + 3 hypothèses de rendement en un clic, le reste dans « Réglages avancés » avec aides en langage simple. Étape suivante : même traitement pour les autres simulateurs (budget, immobilier, entreprise, retraits).
+
 - 2026-10-31 : accueil épuré (retour du propriétaire : trop d'informations) : bandeau d'accueil sombre avec recherche, 4 situations, 3 portes d'entrée (encyclopédie, simulateurs, guides), un exemple fictif ; listes de simulateurs, guides, familles et sources retirées de l'accueil (toujours dans les rubriques et le pied de page). Design poussé : pastilles en pointillé, cartes, titres. Accueil 3 142 → 1 852 px (1280 px) et 4 993 → 3 336 px (375 px).
 
 - 2026-10-31 : refonte visuelle (demande du propriétaire) : nouvelle palette (bleu nuit, vert émeraude, or), bandeaux d'en-tête, cartes en relief, boutons dégradés, pied de page sombre, nouveau logo. Étapes suivantes possibles : en-têtes de rubrique illustrés, graphiques, pages de simulateur.
