@@ -58,7 +58,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-01 (audit, accueil à 375 px, visiteur débutant) : dans « Par où commencer ? », la pastille d'icône de 64 px débordait de sa colonne de 48 px et touchait le titre (conflit de cascade CSS) ; corrigé (voir « Fait »). Reste de l'accueil relu : rien de bloquant.
 - 2026-11-01 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable (economie.gouv.fr, banque-france.fr, legifrance : 403 ; service-public : 404 ou page de vérification ; seul lafinancepourtous.com répond parfois) ; fiches non écrites faute de confirmation.
 - 2026-11-01 : guide « épargne de précaution » (4 283 px à 375 px) toujours sans schéma : repères 3/6/9 mois non confirmables sur source officielle (vérifié le 2026-11-01).
-- 2026-11-01 : guides sans schéma restants : épargne de précaution, comparer les frais, épargne limitée.
+- 2026-11-01 (audit, comparateur et fiche Livret A à 375 px) : lisibles, rien de bloquant ; guides sans schéma restants : épargne de précaution (repères non confirmables), épargne limitée. « Comparer les frais » a maintenant son schéma (voir « Fait »).
 - 2026-11-01 : le chiffre « PFU de 31,4 % en 2026 » (guide « choisir son enveloppe ») n'a pas pu être reconfirmé depuis le bac à sable ; laissé tel quel, à revérifier dès qu'une source répond.
 - 2026-11-01 : pages longues à 375 px : fiche Livret A (4 495 px, sections de texte brut sans visuel), comparateur (critères textuels empilés), guide de précaution (4 283 px).
 - 2026-11-01 : encyclopédie sur mobile : ordre de tabulation logique, focus visible ; reste la longueur de la liste de filtres.
@@ -87,6 +87,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-01 : **Illustrations : schéma « effet des frais »** dans le guide « comparer les frais » (10 000 € placés 25 ans à 6 % brut supposé : sans frais, 0,2 % et 1,5 % par an, manque en pointillés ; montants recalculés par un test avec `feeImpact` et identiques au texte du guide) ; 3 185 → 3 541 px à 375 px (+356 px), 2 204 → 2 635 px à 1280 px, un schéma à la place d'un calcul à imaginer. (#154).
 - 2026-11-01 : **Simulateur immobilier : « Concrètement » en quatre lignes courtes** : le paragraphe de plus de 10 lignes devient quatre phrases brèves, une par idée (rendement, mensualité, après impôt, patrimoine à l'horizon), mêmes chiffres, mêmes tests ; le composant `Takeaway` accepte des retours à la ligne. Hauteur à 375 px : 5 747 → 5 789 px (aération) ; 1 280 px : 3 257 px. Aucune information factuelle modifiée.
 - 2026-11-01 : **Simulateurs : dernière carte de résultats pleine largeur sur mobile** : dans 19 simulateurs, une carte de résultat restée seule sur sa ligne (3 ou 5 cartes en deux colonnes) laissait un trou à droite ; elle occupe maintenant toute la largeur à 375 px (immobilier 5 767 → 5 747 px ; bureau inchangé). Aucune information factuelle modifiée.
 - 2026-11-01 : **Accueil mobile : « Par où commencer ? » réparé** : la pastille d'icône (64 px) débordait de la colonne de 48 px et touchait le titre ; colonne portée à 64 px avec espacement, règle placée après les styles communs. Accueil 3 336 → 3 288 px à 375 px, inchangé à 1280 px (1 852 px). Aucune information factuelle touchée.

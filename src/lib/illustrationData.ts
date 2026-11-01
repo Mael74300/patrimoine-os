@@ -3,6 +3,7 @@ import { amortize } from './calc/loan';
 import { debtRatio, HCSF } from './calc/debtRatio';
 import { simpleVsCompound } from './calc/simpleVsCompound';
 import { savingsGoal } from './calc/savingsGoal';
+import { feeImpact } from './calc/fees';
 
 /** Exemple fictif du schéma « Intérêts simples ou composés » : toutes les valeurs sont calculées, jamais saisies à la main. */
 export const SNOWBALL_EXAMPLE = { initial: 10000, annualRate: 0.05, years: [10, 20] as const };
@@ -169,4 +170,15 @@ export function epargneMoisRows() {
     plain: savingsGoal({ target, current: 0, years: y, annualRate: 0 }).monthly,
     withRate: savingsGoal({ target, current: 0, years: y, annualRate: rate }).monthly,
   }));
+}
+
+/** Schéma « effet des frais » : 10 000 € placés 25 ans à 6 % brut supposé, trois niveaux de frais annuels (exemple fictif, mêmes chiffres que le guide). */
+export const FRAIS_EXAMPLE = { initial: 10000, annualReturn: 0.06, years: 25, levels: [0, 0.002, 0.015] as const };
+
+/** Montants arrondis à 100 € (le guide dit « environ »). */
+export function fraisRows() {
+  const { initial, annualReturn, years, levels } = FRAIS_EXAMPLE;
+  const r100 = (v: number) => Math.round(v / 100) * 100;
+  const res = feeImpact({ initial, monthly: 0, annualReturn, years, inflation: 0 }, [...levels]);
+  return res.map((x) => ({ fees: x.fees, final: r100(x.finalValue), cost: r100(x.cost) }));
 }
