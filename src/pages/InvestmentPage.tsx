@@ -51,10 +51,12 @@ export default function InvestmentPage() {
           <h2>Comment investir</h2>
           <ul>{inv.howToInvest.map((s) => <li key={s}>{s}</li>)}</ul>
 
-          <h2>Frais</h2>
-          <CheckedText c={inv.fees} />
-          <h2>Fiscalité française</h2>
-          <CheckedText c={inv.tax} />
+          <h2>En pratique</h2>
+          <div className="facts-grid">
+            <div className="panel"><h3>Frais</h3><CheckedText c={inv.fees} /></div>
+            <div className="panel"><h3>Fiscalité française</h3><CheckedText c={inv.tax} /></div>
+            <p className="facts-wide"><strong>Temps et compétences :</strong> {inv.timeSkills}</p>
+          </div>
 
           <h2>Avantages et inconvénients</h2>
           <div className="proscons">
@@ -62,8 +64,6 @@ export default function InvestmentPage() {
             <div className="panel cons"><h3 style={{ marginTop: 0, color: 'var(--danger)' }}>Inconvénients</h3><ul>{inv.cons.map((p) => <li key={p}>{p}</li>)}</ul></div>
           </div>
 
-          <h2>Temps et compétences</h2>
-          <p>{inv.timeSkills}</p>
           <h2>Exemple chiffré</h2>
           <p className="notice info">{inv.example}</p>
 
