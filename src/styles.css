@@ -223,6 +223,11 @@ details.fold > p { margin-left: 14px; margin-right: 14px; }
 .proscons { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 600px) { .proscons { grid-template-columns: 1fr; } }
 .proscons ul { padding-left: 1.3rem; margin: 0; }
+.facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.facts-grid .panel { margin: 0; }
+.facts-grid h3 { margin: 0 0 6px; font-size: 1rem; }
+.facts-grid p { margin: 0; font-size: .95rem; }
+.facts-grid .facts-wide { grid-column: 1 / -1; padding: 2px 4px; }
 /* Marqueurs ✓ et ✕ : le sens ne repose pas sur la seule couleur */
 .proscons .pros li::marker { content: "✓  "; color: var(--accent); font-weight: 700; }
 .proscons .cons li::marker { content: "✕  "; color: var(--danger); font-weight: 700; }
