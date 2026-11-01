@@ -74,12 +74,11 @@ export default function InvestmentPage() {
 
           <h2>Suivi de vérification</h2>
           {stale && <p className="notice small">La date de révision prévue est dépassée : certaines informations ont pu changer. Vérifiez-les auprès des sources officielles.</p>}
-          <dl className="facts">
-            <dt>Dernière vérification</dt><dd>{fmtDate(inv.review.verifiedOn)}</dd>
-            <dt>Fiscalité considérée valable au</dt><dd>{fmtDate(inv.review.taxValidAsOf)}</dd>
-            <dt>Prochaine révision prévue</dt><dd>{fmtDate(inv.review.nextReview)}</dd>
-          </dl>
-          <Fold title="Données et hypothèses utilisées">
+          <p>Dernière vérification : <strong>{fmtDate(inv.review.verifiedOn)}</strong>. Prochaine révision prévue : <strong>{fmtDate(inv.review.nextReview)}</strong>.</p>
+          <Fold title="Détail du suivi, données et hypothèses">
+            <dl className="facts">
+              <dt>Fiscalité considérée valable au</dt><dd>{fmtDate(inv.review.taxValidAsOf)}</dd>
+            </dl>
             {inv.review.data.length > 0 && (<><h3>Données utilisées</h3><ul>{inv.review.data.map((d) => <li key={d}>{d}</li>)}</ul></>)}
             <h3>Hypothèses</h3>
             <ul>{inv.review.assumptions.map((d) => <li key={d}>{d}</li>)}</ul>
