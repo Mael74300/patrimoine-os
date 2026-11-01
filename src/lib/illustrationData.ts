@@ -4,6 +4,7 @@ import { debtRatio, HCSF } from './calc/debtRatio';
 import { simpleVsCompound } from './calc/simpleVsCompound';
 import { savingsGoal } from './calc/savingsGoal';
 import { feeImpact } from './calc/fees';
+import { projectGrowth } from './calc/growth';
 
 /** Exemple fictif du schéma « Intérêts simples ou composés » : toutes les valeurs sont calculées, jamais saisies à la main. */
 export const SNOWBALL_EXAMPLE = { initial: 10000, annualRate: 0.05, years: [10, 20] as const };
@@ -181,4 +182,30 @@ export function fraisRows() {
   const r100 = (v: number) => Math.round(v / 100) * 100;
   const res = feeImpact({ initial, monthly: 0, annualReturn, years, inflation: 0 }, [...levels]);
   return res.map((x) => ({ fees: x.fees, final: r100(x.finalValue), cost: r100(x.cost) }));
+}
+
+/** Schéma « petits versements » : 50 € par mois pendant 30 ans à 4 % par an supposé, avec ou sans hausse des versements (exemple fictif, mêmes chiffres que le guide « épargne limitée »). */
+export const PETITS_VERSEMENTS_EXAMPLE = {
+  years: 30,
+  annualReturn: 0.04,
+  monthly: 50,
+  raises: [{ fromYear: 6, monthly: 100 }, { fromYear: 11, monthly: 150 }],
+};
+
+/** Versé et capital final (arrondi à 100 €, le guide dit « environ ») dans les deux scénarios. */
+export function petitsVersementsRows() {
+  const { years, annualReturn, monthly, raises } = PETITS_VERSEMENTS_EXAMPLE;
+  const base = { initial: 0, annualReturn, annualFees: 0, inflation: 0, years, monthly };
+  const r100 = (v: number) => Math.round(v / 100) * 100;
+  const end = (savingsChanges?: { fromYear: number; monthly: number }[]) => {
+    const p = projectGrowth({ ...base, savingsChanges });
+    const last = p[p.length - 1];
+    const paid = Math.round(last.contributed);
+    const total = r100(last.value);
+    return { paid, total, gains: total - paid };
+  };
+  return [
+    { label: '50 € par mois, toujours', ...end() },
+    { label: '50, puis 100, puis 150 €', ...end(raises) },
+  ];
 }
