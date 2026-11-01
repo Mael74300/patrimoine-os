@@ -95,6 +95,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-01 : **Louer ou acheter : 6 réglages essentiels avec curseurs, réglages avancés repliés** : prix, apport, taux, durée du prêt, loyer et horizon en premier ; frais, charges, hausses et rendement (6 hypothèses) repliés avec une phrase d'explication chacun. Page 4 942 px → 4 683 px à 375 px (2 460 px à 1280 px). Aucune donnée ni calcul modifiés.
 - 2026-11-01 : **Illustrations : schéma de la règle de 72** dans le guide (durées exactes et règle à 2, 4, 6, 8 et 12 %, valeurs recalculées par un test et identiques au texte) ; 3 871 → 4 345 px à 375 px (+474 px, un schéma à la place de la lecture de chiffres alignés), 2 615 → 3 149 px à 1280 px. Pas de changement factuel.
 - 2026-11-01 : **Plan du site : accès rapide et deux colonnes** : boutons d'accès aux rubriques (44 px), listes de simulateurs et de guides sur deux colonnes dès 701 px (3 616 → 3 381 px à 1280 px) ; mobile 4 887 → 5 007 px (+120 px, boutons d'accès, assumé). Pas de changement factuel.
 - 2026-11-01 : **Glossaire : lettres en marge et navigation tactile** : notions regroupées par lettre (grande initiale en marge, sections repérables), boutons de lettres de 40 px, deux colonnes de groupes sur grand écran ; 5 206 px → 5 499 px à 375 px, 3 462 px → 3 708 px à 1280 px (le gain de repérage compense le léger allongement).

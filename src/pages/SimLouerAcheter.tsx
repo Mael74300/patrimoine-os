@@ -36,22 +36,28 @@ export default function SimLouerAcheter() {
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
             <legend>Achat</legend>
-            <NumberField label="Prix du bien" unit="€" value={s.price} onChange={up('price')} min={0} step={5000} />
-            <NumberField label="Apport" unit="€" value={s.downPayment} onChange={up('downPayment')} min={0} step={5000} />
-            <NumberField label="Frais d’acquisition (en % du prix)" unit="%" percent value={s.acquisitionRate} onChange={up('acquisitionRate')} min={0} max={30} step={0.5} />
-            <NumberField label="Taux du prêt" unit="%" percent value={s.loanRate} onChange={up('loanRate')} min={0} max={20} step={0.05} />
-            <NumberField label="Durée du prêt" unit="ans" value={s.loanYears} onChange={up('loanYears')} min={0} max={50} step={1} />
-            <NumberField label="Taxe foncière, charges non récupérables, entretien (par an, en % de la valeur)" unit="%" percent value={s.ownerCostRate} onChange={up('ownerCostRate')} min={0} max={10} step={0.1} />
-            <NumberField label="Hausse annuelle du prix du bien" unit="%" percent value={s.priceGrowth} onChange={up('priceGrowth')} min={-10} max={15} step={0.25} />
-            <NumberField label="Frais de revente (en % du prix de vente)" unit="%" percent value={s.sellingRate} onChange={up('sellingRate')} min={0} max={30} step={0.5} />
+            <NumberField label="Prix du bien" unit="€" value={s.price} onChange={up('price')} min={0} step={5000} sliderMax={1000000} />
+            <NumberField label="Apport" unit="€" value={s.downPayment} onChange={up('downPayment')} min={0} step={5000} sliderMax={500000} />
+            <NumberField label="Taux du prêt" unit="%" percent value={s.loanRate} onChange={up('loanRate')} min={0} max={20} step={0.05} sliderMax={8} />
+            <NumberField label="Durée du prêt" unit="ans" value={s.loanYears} onChange={up('loanYears')} min={0} max={50} step={1} sliderMax={30} />
           </fieldset>
           <fieldset>
             <legend>Location et horizon</legend>
-            <NumberField label="Loyer mensuel charges comprises" unit="€" value={s.monthlyRent} onChange={up('monthlyRent')} min={0} step={50} />
-            <NumberField label="Hausse annuelle du loyer" unit="%" percent value={s.rentGrowth} onChange={up('rentGrowth')} min={-10} max={15} step={0.25} />
-            <NumberField label="Rendement annuel du placement (avant impôt)" unit="%" percent value={s.investReturn} onChange={up('investReturn')} min={-10} max={20} step={0.25} />
-            <NumberField label="Horizon de comparaison" unit="ans" value={s.horizonYears} onChange={up('horizonYears')} min={0} max={50} step={1} />
+            <NumberField label="Loyer mensuel charges comprises" unit="€" value={s.monthlyRent} onChange={up('monthlyRent')} min={0} step={50} sliderMax={3000} />
+            <NumberField label="Horizon de comparaison" unit="ans" value={s.horizonYears} onChange={up('horizonYears')} min={0} max={50} step={1} sliderMax={30} />
           </fieldset>
+          <details className="fold advanced">
+            <summary>Réglages avancés (facultatif)</summary>
+            <div className="advanced-body">
+              <p className="small muted">Déjà remplis avec des valeurs d’exemple. Si vous ne savez pas, laissez-les telles quelles : ce sont des hypothèses, pas des prévisions.</p>
+              <NumberField label="Frais d’acquisition (en % du prix)" unit="%" percent value={s.acquisitionRate} onChange={up('acquisitionRate')} min={0} max={30} step={0.5} hint="Les frais payés en plus du prix à l’achat (notaire, taxes)." />
+              <NumberField label="Taxe foncière, charges non récupérables, entretien (par an, en % de la valeur)" unit="%" percent value={s.ownerCostRate} onChange={up('ownerCostRate')} min={0} max={10} step={0.1} hint="Ce que le propriétaire paie chaque année en plus du prêt." />
+              <NumberField label="Hausse annuelle du prix du bien" unit="%" percent value={s.priceGrowth} onChange={up('priceGrowth')} min={-10} max={15} step={0.25} hint="Hypothèse : le prix peut aussi baisser (valeur négative)." />
+              <NumberField label="Frais de revente (en % du prix de vente)" unit="%" percent value={s.sellingRate} onChange={up('sellingRate')} min={0} max={30} step={0.5} hint="Ce qui est perdu à la revente (agence, diagnostics, etc.)." />
+              <NumberField label="Hausse annuelle du loyer" unit="%" percent value={s.rentGrowth} onChange={up('rentGrowth')} min={-10} max={15} step={0.25} hint="De combien le loyer augmente chaque année (hypothèse)." />
+              <NumberField label="Rendement annuel du placement (avant impôt)" unit="%" percent value={s.investReturn} onChange={up('investReturn')} min={-10} max={20} step={0.25} hint="Ce que rapporte l’argent que le locataire place au lieu d’acheter (hypothèse)." />
+            </div>
+          </details>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
         </form>
         <section aria-label="Résultats">
