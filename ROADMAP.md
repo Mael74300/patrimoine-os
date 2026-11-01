@@ -61,6 +61,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-01 : audit mobile du guide « Patrimoine net » (visiteur arrivé par Google) : trois paragraphes denses sans image avant le calculateur ; schéma ajouté. Retraits traité (voir « Fait »).
 - 2026-10-31 : encyclopédie sur mobile : l'ordre de tabulation est logique (vérifié au clavier, 375 et 1280 px, focus visible partout) ; reste à traiter la longueur de la liste de filtres.
 - 2026-10-31 : guides d'entrée : visiteur futur acheteur sur « Taux d'endettement » : texte clair mais le repère de 35 % restait abstrait sans image ; corrigé (schéma, voir « Fait »). Guides encore sans schéma : épargne de précaution, remboursement anticipé (patrimoine net traité le 2026-11-01).
+- 2026-11-01 : fiches de l'encyclopédie longues sur mobile (Livret A 4 495 px) : bloc de suivi allégé ; reste à voir avantages/inconvénients et alternatives.
 - 2026-10-31 : fiches de l'encyclopédie sans aucun visuel hors icône de famille ; à étudier un schéma de lecture des repères risque/liquidité/effort.
 
 ## À faire
@@ -83,6 +84,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-01 : **Fiches de l'encyclopédie plus courtes** (PR à venir) : « Suivi de vérification » réduit à une phrase (dernière vérification, prochaine révision) ; date de validité de la fiscalité, données et hypothèses repliées dans « Détail du suivi ». Aucune donnée modifiée. Hauteur de la fiche Livret A : 375 px 4 495 → 4 401 px ; 1 280 px 2 816 → 2 670 px.
 - 2026-11-01 : **Simulateur de retraits plus simple** (PR à venir) : 3 réglages essentiels avec curseurs (capital, premier retrait, horizon) ; rendement et revalorisation dans « Réglages avancés » repliés, avec aides en langage simple. Calculs, valeurs de départ et résultats inchangés. Hauteur à 375 px : 3 408 → 3 379 px ; 1280 px inchangé (1 686 px).
 - 2026-11-01 : **Illustrations maison, étape 17 : schéma « patrimoine net »** (PR à venir) : deux barres à la même échelle (265 000 € possédés = logement 250 000 € + épargne 15 000 € ; 180 000 € de crédit restant dû ; reste 85 000 € de patrimoine net), exemple fictif de la définition du guide ; chiffres calculés et testés contre le texte (`src/patrimoineNet.test.ts`). Aucune information factuelle ajoutée. Hauteur du guide à 375 px : 4 108 → 4 487 px ; 1 280 px : 2 698 → 3 098 px.
 - 2026-11-01 : **Simulateur d'épargne de précaution plus simple** (PR à venir) : 5 réglages essentiels avec curseurs (situation, dépenses, épargne actuelle, versement, délai) ; nombre de mois, réserve prévisible, taux et éligibilité LEP dans « Réglages avancés » repliés. Aucun chiffre ni règle modifié.
