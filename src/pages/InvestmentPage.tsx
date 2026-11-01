@@ -58,8 +58,8 @@ export default function InvestmentPage() {
 
           <h2>Avantages et inconvénients</h2>
           <div className="proscons">
-            <div className="panel"><h3 style={{ marginTop: 0, color: 'var(--accent)' }}>Avantages</h3><ul>{inv.pros.map((p) => <li key={p}>{p}</li>)}</ul></div>
-            <div className="panel"><h3 style={{ marginTop: 0, color: 'var(--danger)' }}>Inconvénients</h3><ul>{inv.cons.map((p) => <li key={p}>{p}</li>)}</ul></div>
+            <div className="panel pros"><h3 style={{ marginTop: 0, color: 'var(--accent)' }}>Avantages</h3><ul>{inv.pros.map((p) => <li key={p}>{p}</li>)}</ul></div>
+            <div className="panel cons"><h3 style={{ marginTop: 0, color: 'var(--danger)' }}>Inconvénients</h3><ul>{inv.cons.map((p) => <li key={p}>{p}</li>)}</ul></div>
           </div>
 
           <h2>Temps et compétences</h2>
@@ -92,17 +92,17 @@ export default function InvestmentPage() {
 
           {relatedSimulators(simsForInvestment[inv.slug]).length > 0 && (<>
             <h2>Simulateurs liés</h2>
-            <ul>
+            <ul className="next-list">
               {relatedSimulators(simsForInvestment[inv.slug]).map((sim) => (
-                <li key={sim.slug}><Link to={`/simulateurs/${sim.slug}`}>{sim.title}</Link> — {sim.excerpt}</li>
+                <li key={sim.slug}><Link to={`/simulateurs/${sim.slug}`}>{sim.title}</Link><span>{sim.excerpt}</span></li>
               ))}
             </ul>
           </>)}
 
           <h2>Alternatives comparables</h2>
-          <ul>
+          <ul className="next-list">
             {inv.alternatives.filter((a) => investmentBySlug[a]).map((a) => (
-              <li key={a}><Link to={`/encyclopedie/${a}`}>{investmentBySlug[a].name}</Link> — {investmentBySlug[a].summary}</li>
+              <li key={a}><Link to={`/encyclopedie/${a}`}>{investmentBySlug[a].name}</Link><span>{investmentBySlug[a].summary}</span></li>
             ))}
           </ul>
         </article>
