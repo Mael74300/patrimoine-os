@@ -1,5 +1,5 @@
 import { fmtEur } from '../lib/finance';
-import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, type SnowballBar } from '../lib/illustrationData';
+import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, type SnowballBar } from '../lib/illustrationData';
 
 const W = 420;
 const BASE = 262;
@@ -644,6 +644,45 @@ export function SchemaEndettement() {
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : avec {fmtEur(p.income)} de revenus, la charge totale de crédit maximale est de {fmtEur(p.limit)} par mois ; si {fmtEur(p.existing)} sont déjà engagés, il reste {fmtEur(p.maxNewPayment)} pour le nouveau crédit. Largeurs proportionnelles aux montants.
+      </figcaption>
+    </figure>
+  );
+}
+
+/** Schéma « Patrimoine net = ce que l’on possède − ce que l’on doit » sur l’exemple fictif du guide. */
+export function SchemaPatrimoineNet() {
+  const p = patrimoineParts();
+  const X0 = 14;
+  const BW = 312;
+  const x = (v: number) => X0 + (v / p.assets) * BW;
+  const rows = [
+    { fill: 'var(--primary)', label: `${fmtEur(p.home)} : logement (valeur estimée)` },
+    { fill: 'var(--gold)', label: `${fmtEur(p.savings)} : épargne` },
+    { fill: 'var(--surface-2)', label: `${fmtEur(p.debt)} : crédit restant dû`, stroke: true },
+    { fill: 'var(--accent)', label: `${fmtEur(p.net)} : patrimoine net` },
+  ];
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 226" role="img" aria-labelledby="ill-pn-t ill-pn-d" className="ill-svg">
+        <title id="ill-pn-t">Patrimoine net : ce que l’on possède moins ce que l’on doit</title>
+        <desc id="ill-pn-d">{`Exemple fictif : ${rows.slice(0, 3).map((r) => r.label).join(' ; ')}. Ce que l’on possède (${fmtEur(p.assets)}) moins ce que l’on doit (${fmtEur(p.debt)}) donne un patrimoine net de ${fmtEur(p.net)}.`}</desc>
+        <text x={X0} y="16" className="ill-step">{`Ce que l’on possède : ${fmtEur(p.assets)}`}</text>
+        <rect x={X0} y="24" width={BW} height="30" rx="8" fill="var(--primary)" />
+        <rect x={x(p.home)} y="24" width={x(p.assets) - x(p.home)} height="30" rx="8" fill="var(--gold)" />
+        <rect x={x(p.home) - 8} y="24" width="8" height="30" fill="var(--primary)" />
+        <text x={X0} y="80" className="ill-step">{`Ce que l’on doit : ${fmtEur(p.debt)}`}</text>
+        <rect x={X0} y="88" width={BW} height="30" rx="8" fill="var(--accent)" />
+        <rect x={X0} y="88" width={x(p.debt) - X0} height="30" rx="8" fill="var(--surface-2)" stroke="var(--line)" />
+        <rect x={x(p.debt) - 8} y="88" width="8" height="30" fill="var(--surface-2)" />
+        {rows.map((r, i) => (
+          <g key={r.label}>
+            <rect x={X0} y={134 + i * 24} width="16" height="16" rx="4" fill={r.fill} stroke={r.stroke ? 'var(--line)' : 'none'} />
+            <text x={X0 + 26} y={147 + i * 24} className="ill-step">{r.label}</text>
+          </g>
+        ))}
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : ce que l’on possède moins ce que l’on doit donne le patrimoine net ({fmtEur(p.assets)} − {fmtEur(p.debt)} = {fmtEur(p.net)}). Largeurs proportionnelles aux montants.
       </figcaption>
     </figure>
   );
