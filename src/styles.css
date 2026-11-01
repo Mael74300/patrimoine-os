@@ -601,3 +601,6 @@ h2.gloss-letter::before { content: none; }
 @media (max-width: 500px) {
   .kpis > .kpi:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
+
+.takeaway-line { display: block; }
+.takeaway-line + .takeaway-line { margin-top: 6px; }
