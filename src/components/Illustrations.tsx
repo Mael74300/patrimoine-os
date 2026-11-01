@@ -427,7 +427,7 @@ export function GuideGroupIcon({ index, size = 36 }: { index: number; size?: num
 /** Schéma « escalier » : les étapes d’un guide, dans l’ordre, chacune un cran plus haut. Les libellés viennent des titres du guide. */
 export function SchemaEscalier({ steps, title }: { steps: string[]; title: string }) {
   const ROW = 46;
-  const STEP = 22;
+  const STEP = 14;
   const H = steps.length * ROW + 34;
   const alt = steps.map((s, i) => `Étape ${i + 1} : ${s}.`).join(' ');
   return (
