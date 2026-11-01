@@ -69,6 +69,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-01 : comparateur à 375 px : le graphique de résultat arrivait après trois cartes de réglages ; réordonné (voir « Fait »). Repères risque/liquidité/effort compactés le 2026-11-01 ; reste la longueur des critères textuels empilés.
 
 - 2026-11-01 (audit, visiteur arrivé par Google sur le guide « Tous les types d'investissements ») : catalogue de 20 familles qui répète l'encyclopédie, dont 6 cartes vides « Fiches en préparation » ; schéma en escalier de « Par où commencer » : dernière ligne collée au bord à 375 px. Corrigés (voir « Fait »).
+- 2026-11-01 (audit, glossaire, visiteur débutant) : liste de 20 notions sans repère de lettre, boutons de lettres de 32 px, dernière ligne orpheline (« V ») ; corrigé (voir « Fait »). Guide « épargne de précaution » (4 283 px) toujours sans schéma : repères 3/6/9 mois non confirmables (service-public 200 sans ces repères, economie.gouv 403, lafinancepourtous 404, vérifié le 2026-11-01).
 
 ## À faire
 
@@ -90,6 +91,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-01 : **Glossaire : lettres en marge et navigation tactile** : notions regroupées par lettre (grande initiale en marge, sections repérables), boutons de lettres de 40 px, deux colonnes de groupes sur grand écran ; 5 206 px → 5 499 px à 375 px, 3 462 px → 3 708 px à 1280 px (le gain de repérage compense le léger allongement).
 - 2026-11-01 : **Guide « types d'investissements » plus court, escalier plus lisible** (PR à venir) : catalogue limité aux familles qui ont des fiches ; les 6 familles sans fiche tiennent en une phrase au lieu de six cartes vides ; schéma en escalier du guide « Par où commencer » décalé moins fort pour que le texte de l'étape 5 ne touche plus le bord. Page 1280 px : 4 153 → 3 934 px ; 375 px inchangée (3 557 px, catalogue replié). Aucune donnée modifiée.
 - 2026-11-01 : **Comparateur : repères sur une ligne sur mobile** (PR à venir) : risque, liquidité et effort affichent le nom du placement à gauche et les points à droite, sans répéter le libellé du critère ; page 4 703 px → 4 429 px à 375 px.
 - 2026-11-01 : **Fiches de l'encyclopédie : fin de page en cartes** (PR à venir) : simulateurs liés et alternatives en cartes (lien en titre, description limitée à 2 lignes sur mobile, deux colonnes sur grand écran) ; avantages et inconvénients marqués ✓ et ✕ (le sens ne repose plus sur la seule couleur). Fiche Livret A : 4 401 à 4 385 px à 375 px. Aucune donnée modifiée.

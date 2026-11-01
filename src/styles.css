@@ -372,8 +372,8 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 .search-ideas .tag:hover { background: var(--surface-2); }
 
 /* Glossaire : barre de lettres, fiches en deux colonnes, liens « Voir aussi » en pastilles */
-.gloss-nav { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 18px; }
-.gloss-nav a { min-width: 32px; padding: 3px 8px; text-align: center; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-weight: 600; text-decoration: none; color: var(--primary); }
+.gloss-nav { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
+.gloss-nav a { min-width: 40px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; padding: 3px 8px; text-align: center; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-weight: 600; text-decoration: none; color: var(--primary); }
 .gloss-nav a:hover { background: var(--accent-soft); }
 .gloss-list { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 0; }
 @media (min-width: 900px) { .gloss-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; } }
@@ -388,7 +388,11 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 
 @media (max-width: 899px) { .gloss-item { background: none; border-width: 0 0 0 3px; border-radius: 0; padding: 0 0 0 12px; } .gloss-links { display: block; margin-top: 4px; } .gloss-links span { margin-right: 6px; } .gloss-links a { padding: 0; background: none; text-decoration: underline; color: var(--primary); } .gloss-links a + a::before { content: ' · '; display: inline-block; margin: 0 4px; text-decoration: none; color: var(--ink-2); } }
 @media (max-width: 899px) { .gloss-list { gap: 10px; } }
-.gloss-list + p { margin-top: 18px; }
+.gloss-group { scroll-margin-top: 80px; }
+.gloss-group { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 0 8px; margin-top: 8px; }
+.gloss-letter { margin: 0; font-size: 1.3rem; line-height: 1.1; color: var(--primary-deep); }
+@media (min-width: 900px) { .gloss-groups { column-count: 2; column-gap: 24px; } .gloss-group { grid-template-columns: 40px minmax(0, 1fr); gap: 0 10px; margin-top: 0; margin-bottom: 14px; break-inside: avoid; } .gloss-group .gloss-list { grid-template-columns: 1fr; gap: 10px; } .gloss-letter { font-size: 1.6rem; } }
+.gloss-group + p { margin-top: 18px; }
 .fiche aside .meters-legend li { flex-direction: column; align-items: flex-start; gap: 4px; }
 
 /* Résumé en tête de la page Méthode */
@@ -568,3 +572,5 @@ details.advanced { margin: 4px 0 14px; }
   .page-head.has-art { padding-right: 300px; min-height: 170px; }
   .page-head.has-art .header-art { display: block; position: absolute; right: 24px; top: 50%; transform: translateY(-50%); width: 240px; height: 150px; z-index: 1; }
 }
+h2.gloss-letter { margin: 0; }
+h2.gloss-letter::before { content: none; }
