@@ -361,6 +361,10 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
   .cmp-closed td { display: none; }
   .cmp-closed th { border-bottom: 1px solid var(--line); padding-bottom: 4px; }
   .cmp-table tbody td::before { content: attr(data-label); display: block; font-weight: 600; font-size: 0.85rem; color: var(--ink-2); }
+  /* Repères sur 5 : nom du placement à gauche, points à droite, sur une seule ligne (le critère est déjà dans l'intitulé de la ligne). */
+  .cmp-table tbody td.cmp-meter { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .cmp-table tbody td.cmp-meter::before { display: inline; }
+  .cmp-table tbody td.cmp-meter .meter > span { display: none; }
 }
 
 .search-ideas { list-style: none; padding: 0; margin: 12px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }

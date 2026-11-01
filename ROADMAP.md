@@ -66,7 +66,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-10-31 : fiches de l'encyclopédie sans aucun visuel hors icône de famille ; à étudier un schéma de lecture des repères risque/liquidité/effort.
 
 - 2026-11-01 : audit du guide « Rembourser ou investir » (visiteur proche d'un crédit, arrivé par Google) : quatre blocs de texte dense, comparaison des deux options sans image ; schéma ajouté (voir « Fait »).
-- 2026-11-01 : comparateur à 375 px : le graphique de résultat arrivait après trois cartes de réglages ; réordonné (voir « Fait »). Reste la longueur du tableau comparatif empilé (une ligne par placement et par critère).
+- 2026-11-01 : comparateur à 375 px : le graphique de résultat arrivait après trois cartes de réglages ; réordonné (voir « Fait »). Repères risque/liquidité/effort compactés le 2026-11-01 ; reste la longueur des critères textuels empilés.
 
 ## À faire
 
@@ -88,6 +88,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-01 : **Comparateur : repères sur une ligne sur mobile** (PR à venir) : risque, liquidité et effort affichent le nom du placement à gauche et les points à droite, sans répéter le libellé du critère ; page 4 703 px → 4 429 px à 375 px.
 - 2026-11-01 : **Fiches de l'encyclopédie : fin de page en cartes** (PR à venir) : simulateurs liés et alternatives en cartes (lien en titre, description limitée à 2 lignes sur mobile, deux colonnes sur grand écran) ; avantages et inconvénients marqués ✓ et ✕ (le sens ne repose plus sur la seule couleur). Fiche Livret A : 4 401 à 4 385 px à 375 px. Aucune donnée modifiée.
 - 2026-11-01 : **Comparateur plus court sur mobile** (PR à venir) : graphique de projection placé avant les réglages par placement ; rendement et frais côte à côte ; montant et versement sur une ligne. Page de 5 004 à 4 703 px à 375 px (2 782 px à 1280 px). Aucune donnée modifiée.
 - 2026-11-01 : **Illustrations maison, étape 18 : schéma « rembourser ou investir »** (PR à venir) : deux barres proportionnelles du patrimoine net final (environ 43 900 € en remboursant, 41 700 € en investissant, écart 2 200 €) sur l'exemple fictif du guide ; chiffres calculés par `prepayVsInvest` et testés contre le texte (`src/rembourser.test.ts`). Aucune information factuelle ajoutée. Hauteur du guide à 375 px : 4 195 → 4 605 px ; 1 280 px : 2 765 → 3 166 px.

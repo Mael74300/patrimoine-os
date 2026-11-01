@@ -96,7 +96,7 @@ export default function Compare() {
                       <button type="button" className="cmp-toggle" aria-expanded={!closed.includes(label)} onClick={() => toggle(label)}>{label}</button>
                     ) : label}
                   </th>
-                  {items.map((i) => <td key={i.slug} data-label={i.name}>{render(i)}</td>)}
+                  {items.map((i) => <td key={i.slug} data-label={i.name} className={['Risque', 'Liquidité', 'Effort'].includes(label) ? 'cmp-meter' : undefined}>{render(i)}</td>)}
                 </tr>
               ))}
             </tbody>
