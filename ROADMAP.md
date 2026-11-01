@@ -65,6 +65,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-10-31 : fiches de l'encyclopédie sans aucun visuel hors icône de famille ; à étudier un schéma de lecture des repères risque/liquidité/effort.
 
 - 2026-11-01 : audit du guide « Rembourser ou investir » (visiteur proche d'un crédit, arrivé par Google) : quatre blocs de texte dense, comparaison des deux options sans image ; schéma ajouté (voir « Fait »).
+- 2026-11-01 : comparateur à 375 px : le graphique de résultat arrivait après trois cartes de réglages ; réordonné (voir « Fait »). Reste la longueur du tableau comparatif empilé (une ligne par placement et par critère).
 
 ## À faire
 
@@ -86,6 +87,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-01 : **Comparateur plus court sur mobile** (PR à venir) : graphique de projection placé avant les réglages par placement ; rendement et frais côte à côte ; montant et versement sur une ligne. Page de 5 004 à 4 703 px à 375 px (2 782 px à 1280 px). Aucune donnée modifiée.
 - 2026-11-01 : **Illustrations maison, étape 18 : schéma « rembourser ou investir »** (PR à venir) : deux barres proportionnelles du patrimoine net final (environ 43 900 € en remboursant, 41 700 € en investissant, écart 2 200 €) sur l'exemple fictif du guide ; chiffres calculés par `prepayVsInvest` et testés contre le texte (`src/rembourser.test.ts`). Aucune information factuelle ajoutée. Hauteur du guide à 375 px : 4 195 → 4 605 px ; 1 280 px : 2 765 → 3 166 px.
 - 2026-11-01 : **Fiches de l'encyclopédie plus courtes** (PR à venir) : « Suivi de vérification » réduit à une phrase (dernière vérification, prochaine révision) ; date de validité de la fiscalité, données et hypothèses repliées dans « Détail du suivi ». Aucune donnée modifiée. Hauteur de la fiche Livret A : 375 px 4 495 → 4 401 px ; 1 280 px 2 816 → 2 670 px.
 - 2026-11-01 : **Simulateur de retraits plus simple** (PR à venir) : 3 réglages essentiels avec curseurs (capital, premier retrait, horizon) ; rendement et revalorisation dans « Réglages avancés » repliés, avec aides en langage simple. Calculs, valeurs de départ et résultats inchangés. Hauteur à 375 px : 3 408 → 3 379 px ; 1280 px inchangé (1 686 px).

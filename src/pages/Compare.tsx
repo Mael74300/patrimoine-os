@@ -106,16 +106,26 @@ export default function Compare() {
 
       <h2>Projection selon vos hypothèses</h2>
       <p className="muted">Les rendements pré-remplis sont des hypothèses d'illustration, pas des prévisions. Modifiez-les librement.</p>
-      <div className="grid cols-3">
+      <div className="grid cols-3 keep-2">
         <NumberField label="Montant initial" unit="€" value={amount} onChange={setAmount} min={0} step={1000} />
         <NumberField label="Versement mensuel" unit="€" value={monthly} onChange={setMonthly} min={0} step={50} />
         <NumberField label="Durée" unit="ans" value={years} onChange={setYears} min={1} max={50} />
       </div>
+      {items.length > 0 && (
+        <div className="panel" style={{ marginBottom: 16 }}>
+          <LineChart
+            title="Comparaison des projections"
+            xLabels={proj[0].map((p) => `An ${p.year}`)}
+            format={fmtEur}
+            series={items.map((i, k) => ({ name: i.name, color: COLORS[k], values: proj[k].map((p) => p.value) }))}
+          />
+        </div>
+      )}
       <div className="grid cols-3">
         {items.map((i, k) => (
           <div className="panel" key={i.slug}>
             <strong><span style={{ color: COLORS[k] }} aria-hidden="true">●</span> {i.name}</strong>
-            <div style={{ marginTop: 10 }}>
+            <div className="field-pair" style={{ marginTop: 10 }}>
               <NumberField label="Rendement brut supposé" unit="%" percent value={getH(i.slug).r} step={0.25} min={-10} max={20}
                 onChange={(v) => setHyp((h) => ({ ...h, [i.slug]: { ...getH(i.slug), r: v } }))} />
               <NumberField label="Frais annuels" unit="%" percent value={getH(i.slug).f} step={0.1} min={0} max={5}
@@ -125,16 +135,6 @@ export default function Compare() {
           </div>
         ))}
       </div>
-      {items.length > 0 && (
-        <div className="panel" style={{ marginTop: 16 }}>
-          <LineChart
-            title="Comparaison des projections"
-            xLabels={proj[0].map((p) => `An ${p.year}`)}
-            format={fmtEur}
-            series={items.map((i, k) => ({ name: i.name, color: COLORS[k], values: proj[k].map((p) => p.value) }))}
-          />
-        </div>
-      )}
       <p className="small muted" style={{ marginTop: 12 }}>Projection avant fiscalité et sans volatilité : un placement risqué peut finir sous un placement sûr.</p>
       <Disclaimer />
     </>
