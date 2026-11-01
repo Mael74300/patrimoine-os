@@ -67,7 +67,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 - 2026-11-01 (audit, fiche Livret A à 375 px) : sections « Sources » et « Suivi de vérification » séparées pour une même information ; regroupées en « Sources et vérification » (-57 px). Fiche encore longue (4 328 px) : texte brut sans visuel.
 
-- 2026-11-01 (audit, guide « précaution » à 375 px et 1 280 px) : fin des guides en listes à tirets (« Fiches liées », « Simulateurs liés ») alors que les fiches de l'encyclopédie utilisent des cartes ; harmonisé (voir « Fait »). Reste : « Autres guides » et « Sources » en listes simples.
+- 2026-11-01 (audit, guide « précaution » à 375 px et 1 280 px) : fin des guides en listes à tirets (« Fiches liées », « Simulateurs liés ») alors que les fiches de l'encyclopédie utilisent des cartes ; harmonisé (voir « Fait »). « Autres guides » est passé en cartes compactes (voir « Fait ») ; reste « Sources » en liste simple.
 
 ## À faire
 
@@ -89,6 +89,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-01 : **Guides : « Autres guides » en cartes** : liste à puces remplacée par des cartes compactes (titre seul, même style que « Fiches liées »), mêmes liens. « Par où commencer » : 4 260 → 4 323 px à 375 px, 3 000 → 3 059 px à 1 280 px. Aucune information factuelle modifiée.
 - 2026-11-01 : **Guides : fin de page en cartes** : « Fiches liées » et « Simulateurs liés » reprennent les cartes des fiches de l'encyclopédie (lien en titre, description limitée à 2 lignes sur mobile, deux colonnes dès 701 px) au lieu de listes à tirets ; mêmes textes et mêmes liens. Guide « précaution » : 4 283 → 4 293 px à 375 px, 2 785 → 2 886 px à 1 280 px ; « par où commencer » 4 220 → 4 260 / 2 850 → 3 000 px. Aucune information factuelle modifiée.
 - 2026-11-01 : **Illustrations : schéma « petits versements »** dans le guide « construire un patrimoine avec une épargne limitée » (50 € par mois pendant 30 ans à 4 % supposé, constants ou portés à 100 puis 150 € : 18 000 € versés → environ 34 400 €, 45 000 € versés → environ 78 200 € ; montants recalculés par `projectGrowth` et testés contre le texte, `src/petitsVersements.test.ts`). Guide : 3 960 → 4 336 px à 375 px, 2 564 → 2 980 px à 1 280 px. Aucune information factuelle ajoutée.
 - 2026-11-01 : **Fiches de l'encyclopédie : « En pratique »** : « Frais » et « Fiscalité française » deviennent deux cartes côte à côte (une seule section au lieu de deux titres), « Temps et compétences » tient en une ligne au lieu d'une section d'un mot. Mêmes textes, mêmes badges de vérification. Fiche SCPI : 2 460 → 2 393 px à 1 280 px, 3 967 → 3 969 px à 375 px ; Livret A 4 328 → 4 351 px à 375 px (cartes aérées). Aucune information factuelle modifiée.

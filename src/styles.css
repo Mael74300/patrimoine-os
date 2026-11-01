@@ -238,6 +238,8 @@ details.fold > p { margin-left: 14px; margin-right: 14px; }
 .next-list a { display: block; padding: 10px 14px 0; font-weight: 700; min-height: 24px; }
 .next-list a::after { content: " →"; }
 .next-list span { display: block; padding: 2px 14px 0; margin-bottom: 10px; font-size: 0.9rem; color: var(--ink-3); }
+/* Variante compacte : titre seul, même carte que les autres listes de fin de page. */
+.next-list-compact a { padding-bottom: 10px; }
 @media (max-width: 700px) { .next-list span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } }
 @media (min-width: 701px) { .prose ul.next-list { grid-template-columns: 1fr 1fr; } }
 .source-list { padding-left: 1.1rem; }
