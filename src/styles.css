@@ -222,7 +222,19 @@ details.fold > p { margin-left: 14px; margin-right: 14px; }
 .facts dd { margin: 2px 0 0; font-weight: 600; }
 .proscons { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 600px) { .proscons { grid-template-columns: 1fr; } }
-.proscons ul { padding-left: 1.1rem; margin: 0; }
+.proscons ul { padding-left: 1.3rem; margin: 0; }
+/* Marqueurs ✓ et ✕ : le sens ne repose pas sur la seule couleur */
+.proscons .pros li::marker { content: "✓  "; color: var(--accent); font-weight: 700; }
+.proscons .cons li::marker { content: "✕  "; color: var(--danger); font-weight: 700; }
+@media (max-width: 600px) { .proscons { gap: 12px; } .proscons .panel { padding: 14px 16px; } }
+/* Pistes de suite (simulateurs liés, alternatives) : une carte par lien, description courte en dessous */
+.prose ul.next-list { list-style: none; padding: 0; margin: 0.6rem 0 0; display: grid; gap: 8px; }
+.next-list li { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.next-list a { display: block; padding: 10px 14px 0; font-weight: 700; min-height: 24px; }
+.next-list a::after { content: " →"; }
+.next-list span { display: block; padding: 2px 14px 0; margin-bottom: 10px; font-size: 0.9rem; color: var(--ink-3); }
+@media (max-width: 700px) { .next-list span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } }
+@media (min-width: 701px) { .prose ul.next-list { grid-template-columns: 1fr 1fr; } }
 .source-list { padding-left: 1.1rem; }
 
 /* ---------- Catégories */

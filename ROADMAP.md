@@ -61,7 +61,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-01 : audit mobile du guide « Patrimoine net » (visiteur arrivé par Google) : trois paragraphes denses sans image avant le calculateur ; schéma ajouté. Retraits traité (voir « Fait »).
 - 2026-10-31 : encyclopédie sur mobile : l'ordre de tabulation est logique (vérifié au clavier, 375 et 1280 px, focus visible partout) ; reste à traiter la longueur de la liste de filtres.
 - 2026-10-31 : guides d'entrée : visiteur futur acheteur sur « Taux d'endettement » : texte clair mais le repère de 35 % restait abstrait sans image ; corrigé (schéma, voir « Fait »). Guides encore sans schéma : épargne de précaution (patrimoine net traité le 2026-11-01, remboursement anticipé le 2026-11-01).
-- 2026-11-01 : fiches de l'encyclopédie longues sur mobile (Livret A 4 495 px) : bloc de suivi allégé ; reste à voir avantages/inconvénients et alternatives.
+- 2026-11-01 : fiches de l'encyclopédie longues sur mobile (Livret A 4 495 px) : suivi allégé, fin de page en cartes ; reste les sections de texte brut sans visuel.
+- 2026-11-01 : guide « épargne de précaution » sans schéma : repères 3/6/9 mois non confirmables sur source officielle depuis le bac à sable (service-public 200 mais sans ces repères, economie.gouv 403, lafinancepourtous 404) ; schéma reporté.
 - 2026-10-31 : fiches de l'encyclopédie sans aucun visuel hors icône de famille ; à étudier un schéma de lecture des repères risque/liquidité/effort.
 
 - 2026-11-01 : audit du guide « Rembourser ou investir » (visiteur proche d'un crédit, arrivé par Google) : quatre blocs de texte dense, comparaison des deux options sans image ; schéma ajouté (voir « Fait »).
@@ -87,6 +88,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-01 : **Fiches de l'encyclopédie : fin de page en cartes** (PR à venir) : simulateurs liés et alternatives en cartes (lien en titre, description limitée à 2 lignes sur mobile, deux colonnes sur grand écran) ; avantages et inconvénients marqués ✓ et ✕ (le sens ne repose plus sur la seule couleur). Fiche Livret A : 4 401 à 4 385 px à 375 px. Aucune donnée modifiée.
 - 2026-11-01 : **Comparateur plus court sur mobile** (PR à venir) : graphique de projection placé avant les réglages par placement ; rendement et frais côte à côte ; montant et versement sur une ligne. Page de 5 004 à 4 703 px à 375 px (2 782 px à 1280 px). Aucune donnée modifiée.
 - 2026-11-01 : **Illustrations maison, étape 18 : schéma « rembourser ou investir »** (PR à venir) : deux barres proportionnelles du patrimoine net final (environ 43 900 € en remboursant, 41 700 € en investissant, écart 2 200 €) sur l'exemple fictif du guide ; chiffres calculés par `prepayVsInvest` et testés contre le texte (`src/rembourser.test.ts`). Aucune information factuelle ajoutée. Hauteur du guide à 375 px : 4 195 → 4 605 px ; 1 280 px : 2 765 → 3 166 px.
 - 2026-11-01 : **Fiches de l'encyclopédie plus courtes** (PR à venir) : « Suivi de vérification » réduit à une phrase (dernière vérification, prochaine révision) ; date de validité de la fiscalité, données et hypothèses repliées dans « Détail du suivi ». Aucune donnée modifiée. Hauteur de la fiche Livret A : 375 px 4 495 → 4 401 px ; 1 280 px 2 816 → 2 670 px.
