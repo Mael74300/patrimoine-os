@@ -172,7 +172,7 @@ export function GuidePage() {
         <h2>Sources</h2>
         <Sources list={g.sources} />
         <h2>Autres guides</h2>
-        <ul>{others.map((o) => <li key={o.slug}><Link to={`/guides/${o.slug}`}>{o.title}</Link></li>)}</ul>
+        <ul className="next-list next-list-compact">{others.map((o) => <li key={o.slug}><Link to={`/guides/${o.slug}`}>{o.title}</Link></li>)}</ul>
       </div>
     </article>
   );
