@@ -120,3 +120,12 @@ export function endettementParts() {
     maxNewPayment: r.maxNewPayment,
   };
 }
+
+/** Exemple fictif du guide « Patrimoine net » (même chiffres que sa définition). */
+export const PATRIMOINE_EXAMPLE = { home: 250000, savings: 15000, debt: 180000 };
+
+export function patrimoineParts() {
+  const { home, savings, debt } = PATRIMOINE_EXAMPLE;
+  const assets = home + savings;
+  return { home, savings, debt, assets, net: assets - debt };
+}
