@@ -155,17 +155,17 @@ export function GuidePage() {
         {g.cta && <p style={{ marginTop: 24 }}><Link className="btn" to={g.cta.to}>{g.cta.label}</Link></p>}
         {g.slug !== 'choisir-son-enveloppe' && (<>
           <h2>Fiches liées</h2>
-          <ul>
+          <ul className="next-list">
             {g.related.filter((r) => investmentBySlug[r]).map((r) => (
-              <li key={r}><Link to={`/encyclopedie/${r}`}>{investmentBySlug[r].name}</Link> — {investmentBySlug[r].summary}</li>
+              <li key={r}><Link to={`/encyclopedie/${r}`}>{investmentBySlug[r].name}</Link><span>{investmentBySlug[r].summary}</span></li>
             ))}
           </ul>
         </>)}
         {relatedSimulators(simsForGuide[g.slug]).length > 0 && (<>
           <h2>Simulateurs liés</h2>
-          <ul>
+          <ul className="next-list">
             {relatedSimulators(simsForGuide[g.slug]).map((sim) => (
-              <li key={sim.slug}><Link to={`/simulateurs/${sim.slug}`}>{sim.title}</Link> — {sim.excerpt}</li>
+              <li key={sim.slug}><Link to={`/simulateurs/${sim.slug}`}>{sim.title}</Link><span>{sim.excerpt}</span></li>
             ))}
           </ul>
         </>)}
