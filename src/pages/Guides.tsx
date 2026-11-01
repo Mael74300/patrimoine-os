@@ -7,7 +7,7 @@ import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
 import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
 import { Crumbs, MobileFold, PageHead, SimFaq, Sources, usePersistentState } from '../components/ui';
 import { EnvelopeCards } from '../components/EnvelopeCards';
-import { GuideGroupIcon, SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaRegle72, SchemaEpargneMois } from '../components/Illustrations';
+import { GuideGroupIcon, SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaRegle72, SchemaEpargneMois, SchemaFrais } from '../components/Illustrations';
 import NotFound from './NotFound';
 
 const fmtDate = (iso: string) => new Date(iso + 'T12:00:00Z').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
@@ -135,6 +135,7 @@ export function GuidePage() {
             {g.slug === 'rembourser-credit-par-anticipation-ou-investir' && s.heading === 'Un exemple fictif chiffré' && <SchemaRembourser />}
             {g.slug === 'regle-de-72-doubler-son-capital' && s.heading.startsWith('Jusqu’où') && <SchemaRegle72 />}
             {g.slug === 'combien-epargner-par-mois-objectif' && s.heading.startsWith('La durée') && <SchemaEpargneMois />}
+            {g.slug === 'comparer-les-frais' && s.heading.startsWith('L’effet') && <SchemaFrais />}
             {g.slug === 'patrimoine-net' && s.heading === 'La définition' && <SchemaPatrimoineNet />}
             {g.slug === 'types-investissements' && s.heading.startsWith('Placement et enveloppe') && <SchemaEnveloppe />}
             {g.slug === 'fonctionnement-pea' && s.heading === 'Retraits et fiscalité' && <SchemaPea />}

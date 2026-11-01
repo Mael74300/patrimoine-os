@@ -1,5 +1,5 @@
 import { fmtEur } from '../lib/finance';
-import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, type SnowballBar } from '../lib/illustrationData';
+import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, type SnowballBar } from '../lib/illustrationData';
 
 const W = 420;
 const BASE = 262;
@@ -791,6 +791,44 @@ export function SchemaEpargneMois() {
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : versement mensuel pour atteindre 20 000 € en 3, 5 ou 10 ans, sans intérêts puis à 1,7 % par an, avant impôt. Barres proportionnelles aux montants.
+      </figcaption>
+    </figure>
+  );
+}
+
+/** Schéma « effet des frais » : capital final de 10 000 € placés 25 ans à 6 % brut supposé, sans frais, 0,2 % et 1,5 % par an (exemple fictif). */
+export function SchemaFrais() {
+  const rows = fraisRows();
+  const { initial, annualReturn, years } = FRAIS_EXAMPLE;
+  const X0 = 14;
+  const BW = 236;
+  const max = rows[0].final;
+  const pct = (v: number) => `${(v * 100).toLocaleString('fr-FR')} %`;
+  const label = (f: number) => (f === 0 ? 'Sans frais (référence)' : `${pct(f)} de frais par an`);
+  const alt = rows.map((r) => `${r.fees === 0 ? 'sans frais' : `avec ${pct(r.fees)} de frais par an`}, environ ${fmtEur(r.final)}${r.cost ? ` (${fmtEur(r.cost)} de moins)` : ''}`).join(' ; ');
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 250" role="img" aria-labelledby="ill-fr-t ill-fr-d" className="ill-svg">
+        <title id="ill-fr-t">Effet des frais annuels sur un capital après 25 ans</title>
+        <desc id="ill-fr-d">{`Exemple fictif : ${fmtEur(initial)} placés ${years} ans avec un rendement brut supposé de ${pct(annualReturn)}. Capital obtenu : ${alt}.`}</desc>
+        <text x={X0} y="16" className="ill-step">{`Capital après ${years} ans (environ)`}</text>
+        {rows.map((r, i) => {
+          const y = 46 + i * 66;
+          const w = (r.final / max) * BW;
+          return (
+            <g key={r.fees}>
+              <text x={X0} y={y - 8} className="ill-in">{label(r.fees)}</text>
+              {r.cost > 0 && <rect x={X0 + w} y={y} width={BW - w} height="26" rx="7" fill="none" stroke="var(--danger)" strokeWidth="1.5" strokeDasharray="4 3" />}
+              <rect x={X0} y={y} width={w} height="26" rx="7" fill={r.fees === 0 ? 'var(--accent)' : 'var(--primary)'} />
+              <text x={X0 + 10} y={y + 18} className="ill-in ill-on-dark">{fmtEur(r.final)}</text>
+              {r.cost > 0 && <text x={X0 + BW + 8} y={y + 18} className="ill-loss">{`− ${fmtEur(r.cost)}`}</text>}
+            </g>
+          );
+        })}
+        <text x={X0} y="244" className="ill-sub">{`Pointillés : ce que les frais retirent.`}</text>
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : {fmtEur(initial)} placés {years} ans à {pct(annualReturn)} brut supposé, sans versement ni impôt. Barres proportionnelles aux montants.
       </figcaption>
     </figure>
   );
