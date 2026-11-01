@@ -39,23 +39,30 @@ export function GuideList() {
 }
 
 function Catalogue() {
+  const withFiches = categories.filter((c) => investments.some((i) => i.category === c.id));
+  const pending = categories.filter((c) => !investments.some((i) => i.category === c.id));
   return (
-    <div className="grid cols-2" style={{ marginTop: 8 }}>
-      {categories.map((c) => {
-        const list = investments.filter((i) => i.category === c.id);
-        return (
-          <div key={c.id} className="panel">
-            <h3 style={{ margin: 0 }}><Link to={`/encyclopedie?cat=${c.id}`}>{c.name}</Link></h3>
-            <p className="small muted" style={{ margin: '4px 0 6px' }}>{c.short}</p>
-            {list.length ? (
+    <>
+      <div className="grid cols-2" style={{ marginTop: 8 }}>
+        {withFiches.map((c) => {
+          const list = investments.filter((i) => i.category === c.id);
+          return (
+            <div key={c.id} className="panel">
+              <h3 style={{ margin: 0 }}><Link to={`/encyclopedie?cat=${c.id}`}>{c.name}</Link></h3>
+              <p className="small muted" style={{ margin: '4px 0 6px' }}>{c.short}</p>
               <ul className="small" style={{ margin: 0, paddingLeft: 18 }}>
                 {list.map((i) => <li key={i.slug}><Link to={`/encyclopedie/${i.slug}`}>{i.name}</Link></li>)}
               </ul>
-            ) : <p className="small muted" style={{ margin: 0 }}>Fiches en préparation.</p>}
-          </div>
-        );
-      })}
-    </div>
+            </div>
+          );
+        })}
+      </div>
+      {pending.length > 0 && (
+        <p className="small muted" style={{ marginTop: 12 }}>
+          Familles dont les fiches sont en préparation : {pending.map((c) => c.name).join(', ')}.
+        </p>
+      )}
+    </>
   );
 }
 
@@ -137,7 +144,7 @@ export function GuidePage() {
         ))}
         <SimFaq slug={g.slug} items={g.faq} />
       </div>
-      {g.widget === 'catalogue' && <MobileFold label={`Voir les ${categories.length} familles et leurs fiches`}><Catalogue /></MobileFold>}
+      {g.widget === 'catalogue' && <MobileFold label={`Voir les familles et leurs fiches`}><Catalogue /></MobileFold>}
       {g.widget === 'patrimoine-net' && (<><h2>Calculer votre patrimoine net</h2><NetWorthCalculator /></>)}
       <div className="prose">
         {g.cta && <p style={{ marginTop: 24 }}><Link className="btn" to={g.cta.to}>{g.cta.label}</Link></p>}
