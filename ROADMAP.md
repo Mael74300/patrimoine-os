@@ -63,6 +63,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-01 : pages longues à 375 px : fiche Livret A (4 495 px, sections de texte brut sans visuel), comparateur (critères textuels empilés), guide de précaution (4 283 px).
 - 2026-11-01 : encyclopédie sur mobile : ordre de tabulation logique, focus visible ; reste la longueur de la liste de filtres.
 - 2026-11-01 : fiches de l'encyclopédie sans visuel hors icône de famille ; à étudier un schéma de lecture des repères risque/liquidité/effort.
+- 2026-11-01 (audit, simulateurs à 375 px) : pages encore longues : immobilier 5 767 px, dettes 4 814, entreprise 4 682 ; le paragraphe « Concrètement » de l'immobilier est long (plus de 10 lignes) ; carte de résultat orpheline corrigée.
 
 ## À faire
 
@@ -84,6 +85,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-01 : **Simulateurs : dernière carte de résultats pleine largeur sur mobile** : dans 19 simulateurs, une carte de résultat restée seule sur sa ligne (3 ou 5 cartes en deux colonnes) laissait un trou à droite ; elle occupe maintenant toute la largeur à 375 px (immobilier 5 767 → 5 747 px ; bureau inchangé). Aucune information factuelle modifiée.
 - 2026-11-01 : **Accueil mobile : « Par où commencer ? » réparé** : la pastille d'icône (64 px) débordait de la colonne de 48 px et touchait le titre ; colonne portée à 64 px avec espacement, règle placée après les styles communs. Accueil 3 336 → 3 288 px à 375 px, inchangé à 1280 px (1 852 px). Aucune information factuelle touchée.
 - 2026-11-01 : **Guide « choisir son enveloppe » : comparaison en cartes** : les quatre paragraphes deviennent quatre cartes (PEA, assurance-vie, PER, compte-titres) avec lignes Placements / Plafond / Fiscalité / Disponibilité, extraits mot pour mot du texte et testés (`src/envelopeCards.test.ts`) ; liste « Fiches liées » retirée de ce guide (les cartes renvoient vers les fiches). Hauteur à 375 px : 3 175 → 3 336 px ; 1 280 px : 2 157 → 2 116 px. Aucune information factuelle modifiée.
 - 2026-11-01 : **Illustrations : schéma « combien épargner par mois »** dans le guide (versement pour 20 000 € en 3, 5 et 10 ans, sans intérêts puis à 1,7 %, valeurs recalculées par un test et identiques au texte) ; 4 255 → 4 602 px à 375 px (+347 px, un schéma à la place de chiffres dans un paragraphe), 2 688 → 3 073 px à 1280 px. Pas de changement factuel.

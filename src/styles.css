@@ -596,3 +596,8 @@ h2.gloss-letter::before { content: none; }
 .env-card dt { color: var(--ink-3); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; padding-top: 2px; }
 .env-card dd { margin: 0; }
 @media (min-width: 700px) { .env-cards { grid-template-columns: 1fr 1fr; } }
+
+/* Mobile : une dernière carte seule sur sa ligne occupe toute la largeur (pas de trou à droite). */
+@media (max-width: 500px) {
+  .kpis > .kpi:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
