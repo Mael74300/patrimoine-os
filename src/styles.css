@@ -518,6 +518,7 @@ th { background: var(--surface-2); color: var(--primary-deep); }
 .situations a { border-radius: 18px; padding: 20px; }
 .situations .situation-icon { padding: 8px; border-radius: 14px; background: var(--grad-soft); box-sizing: content-box; }
 .situations em { color: var(--accent); }
+@media (max-width: 520px) { .situations a { padding: 14px 16px; grid-template-columns: 64px 1fr; column-gap: 14px; } }
 .cat-grid a, .gloss-item, .panel { border-radius: 16px; }
 .inv-group-title { padding-left: 12px; border-left: 4px solid var(--gold); }
 .inv-row { border-radius: 12px; transition: background .15s, box-shadow .15s; }

@@ -55,27 +55,14 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 ## Constats
 
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (faits) ; tout améliorer, y compris esthétique, vulgarisation et illustrations maison.
-- 2026-10-30 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable (service-public.gouv.fr et economie.gouv.fr renvoient une page de vérification ou 403, legifrance 403) ; fiches non écrites faute de confirmation. Même blocage constaté le 2026-10-31 (economie.gouv.fr, banque-france.fr, legifrance : 403) ; seul lafinancepourtous.com répond.
-- 2026-10-31 : pages longues à 375 px : simulateur d'entreprise (5 527 px), épargne de précaution (5 344 px), comparateur (5 004 px), fiche Livret A (4 495 px), guide de précaution (4 283 px).
-- 2026-10-31 : simulateur d'entreprise traité (voir « Fait ») ; simulateurs de précaution et de retraits traités le 2026-11-01 (les simulateurs principaux ont tous des curseurs).
-- 2026-11-01 : audit mobile du guide « Patrimoine net » (visiteur arrivé par Google) : trois paragraphes denses sans image avant le calculateur ; schéma ajouté. Retraits traité (voir « Fait »).
-- 2026-10-31 : encyclopédie sur mobile : l'ordre de tabulation est logique (vérifié au clavier, 375 et 1280 px, focus visible partout) ; reste à traiter la longueur de la liste de filtres.
-- 2026-10-31 : guides d'entrée : visiteur futur acheteur sur « Taux d'endettement » : texte clair mais le repère de 35 % restait abstrait sans image ; corrigé (schéma, voir « Fait »). Guides encore sans schéma : épargne de précaution (patrimoine net traité le 2026-11-01, remboursement anticipé le 2026-11-01).
-- 2026-11-01 : fiches de l'encyclopédie longues sur mobile (Livret A 4 495 px) : suivi allégé, fin de page en cartes ; reste les sections de texte brut sans visuel.
-- 2026-11-01 : guide « épargne de précaution » sans schéma : repères 3/6/9 mois non confirmables sur source officielle depuis le bac à sable (service-public 200 mais sans ces repères, economie.gouv 403, lafinancepourtous 404) ; schéma reporté.
-- 2026-10-31 : fiches de l'encyclopédie sans aucun visuel hors icône de famille ; à étudier un schéma de lecture des repères risque/liquidité/effort.
-
-- 2026-11-01 : audit du guide « Rembourser ou investir » (visiteur proche d'un crédit, arrivé par Google) : quatre blocs de texte dense, comparaison des deux options sans image ; schéma ajouté (voir « Fait »).
-- 2026-11-01 : comparateur à 375 px : le graphique de résultat arrivait après trois cartes de réglages ; réordonné (voir « Fait »). Repères risque/liquidité/effort compactés le 2026-11-01 ; reste la longueur des critères textuels empilés.
-
-- 2026-11-01 (audit, visiteur arrivé par Google sur le guide « Tous les types d'investissements ») : catalogue de 20 familles qui répète l'encyclopédie, dont 6 cartes vides « Fiches en préparation » ; schéma en escalier de « Par où commencer » : dernière ligne collée au bord à 375 px. Corrigés (voir « Fait »).
-- 2026-11-01 (audit, glossaire, visiteur débutant) : liste de 20 notions sans repère de lettre, boutons de lettres de 32 px, dernière ligne orpheline (« V ») ; corrigé (voir « Fait »). Guide « épargne de précaution » (4 283 px) toujours sans schéma : repères 3/6/9 mois non confirmables (service-public 200 sans ces repères, economie.gouv 403, lafinancepourtous 404, vérifié le 2026-11-01).
-
-- 2026-11-01 (audit, plan du site, visiteur perdu) : page de secours de 4 887 px à 375 px, liste à plat sans accès aux rubriques ; corrigé (voir « Fait »). Accueil et fiche PEA relus : rien de bloquant.
-
-- 2026-11-01 (audit, guide « règle de 72 », visiteur arrivé par Google) : cinq couples de durées dans un paragraphe, sans image ; schéma ajouté (voir « Fait »). Guides sans schéma restants : épargne de précaution, comparer les frais, épargne limitée. « Combien épargner par mois » traité le 2026-11-01 (voir « Fait »).
-
-- 2026-11-01 (audit, guide « choisir son enveloppe », visiteur épargnant de 45 ans) : quatre paragraphes denses pour comparer PEA, assurance-vie, PER et compte-titres, sans repère visuel ; corrigé en cartes (voir « Fait »). Le chiffre « PFU de 31,4 % en 2026 » n'a pas pu être reconfirmé depuis le bac à sable (service-public : 404 sur les pages tentées) : laissé tel quel, à revérifier.
+- 2026-11-01 (audit, accueil à 375 px, visiteur débutant) : dans « Par où commencer ? », la pastille d'icône de 64 px débordait de sa colonne de 48 px et touchait le titre (conflit de cascade CSS) ; corrigé (voir « Fait »). Reste de l'accueil relu : rien de bloquant.
+- 2026-11-01 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable (economie.gouv.fr, banque-france.fr, legifrance : 403 ; service-public : 404 ou page de vérification ; seul lafinancepourtous.com répond parfois) ; fiches non écrites faute de confirmation.
+- 2026-11-01 : guide « épargne de précaution » (4 283 px à 375 px) toujours sans schéma : repères 3/6/9 mois non confirmables sur source officielle (vérifié le 2026-11-01).
+- 2026-11-01 : guides sans schéma restants : épargne de précaution, comparer les frais, épargne limitée.
+- 2026-11-01 : le chiffre « PFU de 31,4 % en 2026 » (guide « choisir son enveloppe ») n'a pas pu être reconfirmé depuis le bac à sable ; laissé tel quel, à revérifier dès qu'une source répond.
+- 2026-11-01 : pages longues à 375 px : fiche Livret A (4 495 px, sections de texte brut sans visuel), comparateur (critères textuels empilés), guide de précaution (4 283 px).
+- 2026-11-01 : encyclopédie sur mobile : ordre de tabulation logique, focus visible ; reste la longueur de la liste de filtres.
+- 2026-11-01 : fiches de l'encyclopédie sans visuel hors icône de famille ; à étudier un schéma de lecture des repères risque/liquidité/effort.
 
 ## À faire
 
@@ -97,6 +84,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-01 : **Accueil mobile : « Par où commencer ? » réparé** : la pastille d'icône (64 px) débordait de la colonne de 48 px et touchait le titre ; colonne portée à 64 px avec espacement, règle placée après les styles communs. Accueil 3 336 → 3 288 px à 375 px, inchangé à 1280 px (1 852 px). Aucune information factuelle touchée.
 - 2026-11-01 : **Guide « choisir son enveloppe » : comparaison en cartes** : les quatre paragraphes deviennent quatre cartes (PEA, assurance-vie, PER, compte-titres) avec lignes Placements / Plafond / Fiscalité / Disponibilité, extraits mot pour mot du texte et testés (`src/envelopeCards.test.ts`) ; liste « Fiches liées » retirée de ce guide (les cartes renvoient vers les fiches). Hauteur à 375 px : 3 175 → 3 336 px ; 1 280 px : 2 157 → 2 116 px. Aucune information factuelle modifiée.
 - 2026-11-01 : **Illustrations : schéma « combien épargner par mois »** dans le guide (versement pour 20 000 € en 3, 5 et 10 ans, sans intérêts puis à 1,7 %, valeurs recalculées par un test et identiques au texte) ; 4 255 → 4 602 px à 375 px (+347 px, un schéma à la place de chiffres dans un paragraphe), 2 688 → 3 073 px à 1280 px. Pas de changement factuel.
 - 2026-11-01 : **Louer ou acheter : 6 réglages essentiels avec curseurs, réglages avancés repliés** : prix, apport, taux, durée du prêt, loyer et horizon en premier ; frais, charges, hausses et rendement (6 hypothèses) repliés avec une phrase d'explication chacun. Page 4 942 px → 4 683 px à 375 px (2 460 px à 1280 px). Aucune donnée ni calcul modifiés.
