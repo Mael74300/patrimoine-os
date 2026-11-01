@@ -604,3 +604,6 @@ h2.gloss-letter::before { content: none; }
 
 .takeaway-line { display: block; }
 .takeaway-line + .takeaway-line { margin-top: 6px; }
+
+/* Fiche : ligne de vérification compacte sous les sources */
+.verif-line { margin: 10px 0; padding: 8px 12px; border-left: 3px solid var(--accent); background: var(--surface-2, rgba(0,0,0,.03)); border-radius: 0 8px 8px 0; font-size: .92rem; }

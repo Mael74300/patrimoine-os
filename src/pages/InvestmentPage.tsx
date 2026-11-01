@@ -69,12 +69,10 @@ export default function InvestmentPage() {
 
           <AdSlot id={`fiche-${inv.slug}`} />
 
-          <h2>Sources</h2>
+          <h2>Sources et vérification</h2>
           <Sources list={inv.sources} />
-
-          <h2>Suivi de vérification</h2>
           {stale && <p className="notice small">La date de révision prévue est dépassée : certaines informations ont pu changer. Vérifiez-les auprès des sources officielles.</p>}
-          <p>Dernière vérification : <strong>{fmtDate(inv.review.verifiedOn)}</strong>. Prochaine révision prévue : <strong>{fmtDate(inv.review.nextReview)}</strong>.</p>
+          <p className="verif-line">Dernière vérification : <strong>{fmtDate(inv.review.verifiedOn)}</strong> · prochaine révision prévue : <strong>{fmtDate(inv.review.nextReview)}</strong></p>
           <Fold title="Détail du suivi, données et hypothèses">
             <dl className="facts">
               <dt>Fiscalité considérée valable au</dt><dd>{fmtDate(inv.review.taxValidAsOf)}</dd>
