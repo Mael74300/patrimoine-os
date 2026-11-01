@@ -1,5 +1,5 @@
 import { fmtEur } from '../lib/finance';
-import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, type SnowballBar } from '../lib/illustrationData';
+import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, petitsVersementsRows, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../lib/illustrationData';
 
 const W = 420;
 const BASE = 262;
@@ -791,6 +791,46 @@ export function SchemaEpargneMois() {
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : versement mensuel pour atteindre 20 000 € en 3, 5 ou 10 ans, sans intérêts puis à 1,7 % par an, avant impôt. Barres proportionnelles aux montants.
+      </figcaption>
+    </figure>
+  );
+}
+
+/** Schéma « petits versements » : versé et gains après 30 ans, 50 € par mois constants ou augmentés (exemple fictif, 4 % par an supposé). */
+export function SchemaPetitsVersements() {
+  const rows = petitsVersementsRows();
+  const { years, annualReturn } = PETITS_VERSEMENTS_EXAMPLE;
+  const X0 = 14;
+  const BW = 312;
+  const max = Math.max(...rows.map((r) => r.total));
+  const alt = rows.map((r) => `${r.label} : ${fmtEur(r.paid)} versés et ${fmtEur(r.gains)} de gains, soit environ ${fmtEur(r.total)}`).join(' ; ');
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 222" role="img" aria-labelledby="ill-pv-t ill-pv-d" className="ill-svg">
+        <title id="ill-pv-t">Ce que deviennent de petits versements après 30 ans</title>
+        <desc id="ill-pv-d">{`Exemple fictif, ${(annualReturn * 100).toLocaleString('fr-FR')} % par an supposé, avant impôt, sur ${years} ans. ${alt}.`}</desc>
+        {rows.map((r, i) => {
+          const y = 30 + i * 78;
+          const wp = (r.paid / max) * BW;
+          const wg = (r.gains / max) * BW;
+          return (
+            <g key={r.label}>
+              <text x={X0} y={y - 10} className="ill-in">{r.label}</text>
+              <rect x={X0} y={y} width={wp} height="28" rx="7" fill="var(--primary)" />
+              <rect x={X0 + wp} y={y} width={wg} height="28" rx="7" fill="var(--accent)" />
+              <text x={X0 + 8} y={y + 19} className="ill-in ill-on-dark">{fmtEur(r.paid)}</text>
+              {wg > 90 && <text x={X0 + wp + 8} y={y + 19} className="ill-in ill-on-dark">{`+ ${fmtEur(r.gains)}`}</text>}
+              <text x={X0} y={y + 46} className="ill-sub">{`Total : environ ${fmtEur(r.total)}, dont ${fmtEur(r.gains)} de gains`}</text>
+            </g>
+          );
+        })}
+        <rect x={X0} y="194" width="12" height="9" rx="2" fill="var(--primary)" />
+        <text x={X0 + 18} y="203" className="ill-sub">versé</text>
+        <rect x={X0 + 78} y="194" width="12" height="9" rx="2" fill="var(--accent)" />
+        <text x={X0 + 96} y="203" className="ill-sub">gains supposés</text>
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : {years} ans à {(annualReturn * 100).toLocaleString('fr-FR')} % par an supposé, avant impôt, versements en début de mois. Les hausses interviennent après 5 ans (100 €) puis 10 ans (150 €). Barres proportionnelles aux montants.
       </figcaption>
     </figure>
   );
