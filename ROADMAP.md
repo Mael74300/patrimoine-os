@@ -73,6 +73,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 - 2026-11-01 (audit, plan du site, visiteur perdu) : page de secours de 4 887 px à 375 px, liste à plat sans accès aux rubriques ; corrigé (voir « Fait »). Accueil et fiche PEA relus : rien de bloquant.
 
+- 2026-11-01 (audit, guide « règle de 72 », visiteur arrivé par Google) : cinq couples de durées dans un paragraphe, sans image ; schéma ajouté (voir « Fait »). Guides sans schéma restants : épargne de précaution, comparer les frais, épargne limitée, combien épargner par mois.
+
 ## À faire
 
 1. [x] **Regrouper les simulateurs d'intérêts composés** : terminé le 2026-10-30 (étape 2 : simples ou composés, coût d'attendre, épargne qui augmente, conversion de taux, voir « Fait »). Historique : (étape 1 faite le 2026-10-29 : `capital-a-placer-aujourd-hui`, `duree-pour-atteindre-un-capital`, `rendement-necessaire-pour-atteindre-un-objectif` et `doubler-son-capital-regle-de-72` réunis dans `/simulateurs/interets-composes/`). Reste à intégrer : `doubler-son-capital-regle-de-72`, `duree-pour-atteindre-un-capital`, `capital-a-placer-aujourd-hui`, `rendement-necessaire-pour-atteindre-un-objectif`, `interets-simples-ou-composes`, `convertir-un-taux-annuel-en-taux-mensuel`, `augmenter-son-epargne-chaque-annee`, `cout-d-attendre-pour-epargner` et `objectif-epargne` répondent à des variantes d'une même question. Les réunir en un simulateur « Intérêts composés » à onglets (quelle valeur chercher : capital final, durée, versement, capital de départ, rendement), en gardant les calculs et tests existants. Les anciennes adresses restent valides : page courte pré-rendue qui renvoie vers le bon onglet (lien visible, `<link rel="canonical">` vers la nouvelle page, `noindex`), retirée du plan du site et du flux. Un regroupement par exécution si nécessaire.
@@ -93,6 +95,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-01 : **Illustrations : schéma de la règle de 72** dans le guide (durées exactes et règle à 2, 4, 6, 8 et 12 %, valeurs recalculées par un test et identiques au texte) ; 3 871 → 4 345 px à 375 px (+474 px, un schéma à la place de la lecture de chiffres alignés), 2 615 → 3 149 px à 1280 px. Pas de changement factuel.
 - 2026-11-01 : **Plan du site : accès rapide et deux colonnes** : boutons d'accès aux rubriques (44 px), listes de simulateurs et de guides sur deux colonnes dès 701 px (3 616 → 3 381 px à 1280 px) ; mobile 4 887 → 5 007 px (+120 px, boutons d'accès, assumé). Pas de changement factuel.
 - 2026-11-01 : **Glossaire : lettres en marge et navigation tactile** : notions regroupées par lettre (grande initiale en marge, sections repérables), boutons de lettres de 40 px, deux colonnes de groupes sur grand écran ; 5 206 px → 5 499 px à 375 px, 3 462 px → 3 708 px à 1280 px (le gain de repérage compense le léger allongement).
 - 2026-11-01 : **Guide « types d'investissements » plus court, escalier plus lisible** (PR à venir) : catalogue limité aux familles qui ont des fiches ; les 6 familles sans fiche tiennent en une phrase au lieu de six cartes vides ; schéma en escalier du guide « Par où commencer » décalé moins fort pour que le texte de l'étape 5 ne touche plus le bord. Page 1280 px : 4 153 → 3 934 px ; 375 px inchangée (3 557 px, catalogue replié). Aucune donnée modifiée.

@@ -1,5 +1,5 @@
 import { fmtEur } from '../lib/finance';
-import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, rembourserParts, type SnowballBar } from '../lib/illustrationData';
+import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, rembourserParts, regle72Rows, type SnowballBar } from '../lib/illustrationData';
 
 const W = 420;
 const BASE = 262;
@@ -716,6 +716,44 @@ export function SchemaRembourser() {
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : avec {fmtEur(p.lump)} à placer, rembourser l’emporte d’environ {fmtEur(p.gap)} (intérêts économisés : environ {fmtEur(p.interestSaved)}). Si le placement rapportait davantage que le rendement d’équilibre, investir gagnerait. Barres proportionnelles aux montants.
+      </figcaption>
+    </figure>
+  );
+}
+
+/** Schéma « règle de 72 » : années pour doubler un capital, calcul exact et règle de 72, à cinq taux fictifs. */
+export function SchemaRegle72() {
+  const rows = regle72Rows();
+  const X0 = 52;
+  const BW = 215;
+  const max = Math.max(...rows.map((r) => r.rule));
+  const f1 = (v: number) => v.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const f0 = (v: number) => v.toLocaleString('fr-FR', { maximumFractionDigits: 0 });
+  const alt = rows.map((r) => `à ${f0(r.rate * 100)} %, ${f1(r.exact)} ans en calcul exact et ${f0(r.rule)} ans par la règle de 72`).join(' ; ');
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 330" role="img" aria-labelledby="ill-72-t ill-72-d" className="ill-svg">
+        <title id="ill-72-t">Années pour doubler un capital : calcul exact et règle de 72</title>
+        <desc id="ill-72-d">{`Exemple fictif, sans frais ni impôts. ${alt}.`}</desc>
+        {rows.map((r, i) => {
+          const y = 8 + i * 62;
+          return (
+            <g key={r.rate}>
+              <text x="8" y={y + 24} className="ill-step">{`${f0(r.rate * 100)} %`}</text>
+              <rect x={X0} y={y} width={(r.exact / max) * BW} height="20" rx="5" fill="var(--primary)" />
+              <text x={X0 + (r.exact / max) * BW + 6} y={y + 15} className="ill-sub">{`${f1(r.exact)} ans`}</text>
+              <rect x={X0} y={y + 26} width={(r.rule / max) * BW} height="20" rx="5" fill="var(--accent)" />
+              <text x={X0 + (r.rule / max) * BW + 6} y={y + 41} className="ill-sub">{`${f0(r.rule)} ans`}</text>
+            </g>
+          );
+        })}
+        <rect x="52" y="318" width="12" height="9" rx="2" fill="var(--primary)" />
+        <text x="70" y="327" className="ill-sub">calcul exact</text>
+        <rect x="170" y="318" width="12" height="9" rx="2" fill="var(--accent)" />
+        <text x="188" y="327" className="ill-sub">règle de 72</text>
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : années nécessaires pour doubler un capital à cinq rendements annuels supposés, sans frais, impôts ni inflation. Barres proportionnelles aux durées.
       </figcaption>
     </figure>
   );

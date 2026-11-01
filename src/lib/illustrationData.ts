@@ -147,3 +147,13 @@ export function rembourserParts() {
     interestSaved: Math.round(r.interestSaved / 50) * 50,
   };
 }
+
+/** Schéma « règle de 72 » : durées pour doubler à plusieurs taux (exemple fictif, calcul mathématique pur, taux choisis comme dans le guide). */
+export const REGLE72_RATES = [0.02, 0.04, 0.06, 0.08, 0.12] as const;
+
+export function regle72Rows() {
+  return REGLE72_RATES.map((rate) => {
+    const exact = Math.log(2) / Math.log(1 + rate);
+    return { rate, exact, rule: 72 / (rate * 100) };
+  });
+}
