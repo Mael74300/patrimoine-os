@@ -1,5 +1,5 @@
 import { fmtEur } from '../lib/finance';
-import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, type SnowballBar } from '../lib/illustrationData';
+import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, rembourserParts, type SnowballBar } from '../lib/illustrationData';
 
 const W = 420;
 const BASE = 262;
@@ -683,6 +683,39 @@ export function SchemaPatrimoineNet() {
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : ce que l’on possède moins ce que l’on doit donne le patrimoine net ({fmtEur(p.assets)} − {fmtEur(p.debt)} = {fmtEur(p.net)}). Largeurs proportionnelles aux montants.
+      </figcaption>
+    </figure>
+  );
+}
+
+/** Schéma « Rembourser ou investir » : patrimoine net final des deux options sur l’exemple fictif du guide. */
+export function SchemaRembourser() {
+  const p = rembourserParts();
+  const pctFr = (v: number) => `${(Math.round(v * 1000) / 10).toLocaleString('fr-FR')} %`;
+  const X0 = 14;
+  const BW = 250;
+  const w = (v: number) => (v / Math.max(p.wealthPrepay, p.wealthInvest)) * BW;
+  const bars = [
+    { y: 52, v: p.wealthPrepay, fill: 'var(--accent)', title: 'Option 1 : rembourser', sub: `crédit éteint ${p.monthsSaved} mois plus tôt, mensualité inchangée` },
+    { y: 136, v: p.wealthInvest, fill: 'var(--primary)', title: 'Option 2 : investir', sub: `placement à ${pctFr(p.annualReturn)} par an, crédit inchangé` },
+  ];
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 210" role="img" aria-labelledby="ill-rb-t ill-rb-d" className="ill-svg">
+        <title id="ill-rb-t">Rembourser ou investir : le patrimoine net obtenu dans chaque cas</title>
+        <desc id="ill-rb-d">{`Exemple fictif : ${fmtEur(p.lump)} disponibles, crédit de ${fmtEur(p.balance)} à ${pctFr(p.annualRate)} sur ${p.remainingYears} ans restants. Au bout de ${p.remainingYears} ans, patrimoine net d’environ ${fmtEur(p.wealthPrepay)} en remboursant, contre environ ${fmtEur(p.wealthInvest)} en investissant : écart d’environ ${fmtEur(p.gap)}.`}</desc>
+        <text x={X0} y="16" className="ill-step">{`Patrimoine net après ${p.remainingYears} ans (environ)`}</text>
+        {bars.map((b) => (
+          <g key={b.title}>
+            <text x={X0} y={b.y - 10} className="ill-step">{b.title}</text>
+            <rect x={X0} y={b.y} width={w(b.v)} height="28" rx="7" fill={b.fill} />
+            <text x={X0 + w(b.v) + 8} y={b.y + 19} className="ill-total">{fmtEur(b.v)}</text>
+            <text x={X0} y={b.y + 46} className="ill-sub">{b.sub}</text>
+          </g>
+        ))}
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : avec {fmtEur(p.lump)} à placer, rembourser l’emporte d’environ {fmtEur(p.gap)} (intérêts économisés : environ {fmtEur(p.interestSaved)}). Si le placement rapportait davantage que le rendement d’équilibre, investir gagnerait. Barres proportionnelles aux montants.
       </figcaption>
     </figure>
   );

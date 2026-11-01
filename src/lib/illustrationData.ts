@@ -1,3 +1,4 @@
+import { prepayVsInvest } from './calc/prepayVsInvest';
 import { amortize } from './calc/loan';
 import { debtRatio, HCSF } from './calc/debtRatio';
 import { simpleVsCompound } from './calc/simpleVsCompound';
@@ -128,4 +129,21 @@ export function patrimoineParts() {
   const { home, savings, debt } = PATRIMOINE_EXAMPLE;
   const assets = home + savings;
   return { home, savings, debt, assets, net: assets - debt };
+}
+
+/** Exemple fictif du guide « Rembourser son crédit par anticipation ou investir ? » (mêmes chiffres que le texte). */
+export const REMBOURSER_EXAMPLE = { balance: 150000, annualRate: 0.04, remainingYears: 20, lump: 20000, annualReturn: 0.05, annualFees: 0.002, taxRate: 0.3 };
+
+/** Résultat de l'exemple, calculé avec le simulateur « rembourser ou investir » ; montants arrondis à 100 € (le guide dit « environ »). */
+export function rembourserParts() {
+  const r = prepayVsInvest(REMBOURSER_EXAMPLE);
+  const round100 = (v: number) => Math.round(v / 100) * 100;
+  return {
+    ...REMBOURSER_EXAMPLE,
+    wealthPrepay: round100(r.wealthPrepay),
+    wealthInvest: round100(r.wealthInvest),
+    gap: round100(r.wealthPrepay - r.wealthInvest),
+    monthsSaved: r.monthsSaved,
+    interestSaved: Math.round(r.interestSaved / 50) * 50,
+  };
 }
