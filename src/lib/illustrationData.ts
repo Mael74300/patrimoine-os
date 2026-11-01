@@ -2,6 +2,7 @@ import { prepayVsInvest } from './calc/prepayVsInvest';
 import { amortize } from './calc/loan';
 import { debtRatio, HCSF } from './calc/debtRatio';
 import { simpleVsCompound } from './calc/simpleVsCompound';
+import { savingsGoal } from './calc/savingsGoal';
 
 /** Exemple fictif du schéma « Intérêts simples ou composés » : toutes les valeurs sont calculées, jamais saisies à la main. */
 export const SNOWBALL_EXAMPLE = { initial: 10000, annualRate: 0.05, years: [10, 20] as const };
@@ -156,4 +157,16 @@ export function regle72Rows() {
     const exact = Math.log(2) / Math.log(1 + rate);
     return { rate, exact, rule: 72 / (rate * 100) };
   });
+}
+
+/** Schéma « combien épargner par mois » : versement mensuel pour 20 000 € à trois durées, sans intérêts et à 1,7 % (exemple fictif, calcul du simulateur). */
+export const EPARGNE_MOIS_EXAMPLE = { target: 20000, rate: 0.017, years: [3, 5, 10] as const };
+
+export function epargneMoisRows() {
+  const { target, rate, years } = EPARGNE_MOIS_EXAMPLE;
+  return years.map((y) => ({
+    years: y,
+    plain: savingsGoal({ target, current: 0, years: y, annualRate: 0 }).monthly,
+    withRate: savingsGoal({ target, current: 0, years: y, annualRate: rate }).monthly,
+  }));
 }

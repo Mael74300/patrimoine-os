@@ -73,7 +73,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 - 2026-11-01 (audit, plan du site, visiteur perdu) : page de secours de 4 887 px à 375 px, liste à plat sans accès aux rubriques ; corrigé (voir « Fait »). Accueil et fiche PEA relus : rien de bloquant.
 
-- 2026-11-01 (audit, guide « règle de 72 », visiteur arrivé par Google) : cinq couples de durées dans un paragraphe, sans image ; schéma ajouté (voir « Fait »). Guides sans schéma restants : épargne de précaution, comparer les frais, épargne limitée, combien épargner par mois.
+- 2026-11-01 (audit, guide « règle de 72 », visiteur arrivé par Google) : cinq couples de durées dans un paragraphe, sans image ; schéma ajouté (voir « Fait »). Guides sans schéma restants : épargne de précaution, comparer les frais, épargne limitée. « Combien épargner par mois » traité le 2026-11-01 (voir « Fait »).
 
 ## À faire
 
@@ -95,6 +95,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-01 : **Illustrations : schéma « combien épargner par mois »** dans le guide (versement pour 20 000 € en 3, 5 et 10 ans, sans intérêts puis à 1,7 %, valeurs recalculées par un test et identiques au texte) ; 4 255 → 4 602 px à 375 px (+347 px, un schéma à la place de chiffres dans un paragraphe), 2 688 → 3 073 px à 1280 px. Pas de changement factuel.
 - 2026-11-01 : **Louer ou acheter : 6 réglages essentiels avec curseurs, réglages avancés repliés** : prix, apport, taux, durée du prêt, loyer et horizon en premier ; frais, charges, hausses et rendement (6 hypothèses) repliés avec une phrase d'explication chacun. Page 4 942 px → 4 683 px à 375 px (2 460 px à 1280 px). Aucune donnée ni calcul modifiés.
 - 2026-11-01 : **Illustrations : schéma de la règle de 72** dans le guide (durées exactes et règle à 2, 4, 6, 8 et 12 %, valeurs recalculées par un test et identiques au texte) ; 3 871 → 4 345 px à 375 px (+474 px, un schéma à la place de la lecture de chiffres alignés), 2 615 → 3 149 px à 1280 px. Pas de changement factuel.
 - 2026-11-01 : **Plan du site : accès rapide et deux colonnes** : boutons d'accès aux rubriques (44 px), listes de simulateurs et de guides sur deux colonnes dès 701 px (3 616 → 3 381 px à 1280 px) ; mobile 4 887 → 5 007 px (+120 px, boutons d'accès, assumé). Pas de changement factuel.

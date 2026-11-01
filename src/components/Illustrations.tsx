@@ -1,5 +1,5 @@
 import { fmtEur } from '../lib/finance';
-import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, rembourserParts, regle72Rows, type SnowballBar } from '../lib/illustrationData';
+import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, type SnowballBar } from '../lib/illustrationData';
 
 const W = 420;
 const BASE = 262;
@@ -754,6 +754,43 @@ export function SchemaRegle72() {
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : années nécessaires pour doubler un capital à cinq rendements annuels supposés, sans frais, impôts ni inflation. Barres proportionnelles aux durées.
+      </figcaption>
+    </figure>
+  );
+}
+
+/** Schéma « combien épargner par mois » : versement mensuel pour atteindre 20 000 € selon la durée, sans intérêts et à 1,7 % (exemple fictif). */
+export function SchemaEpargneMois() {
+  const rows = epargneMoisRows();
+  const X0 = 66;
+  const BW = 180;
+  const max = Math.max(...rows.map((r) => r.plain));
+  const f0 = (v: number) => Math.round(v).toLocaleString('fr-FR');
+  const alt = rows.map((r) => `sur ${r.years} ans, ${f0(r.plain)} € par mois sans intérêts et ${f0(r.withRate)} € à 1,7 %`).join(' ; ');
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 215" role="img" aria-labelledby="ill-em-t ill-em-d" className="ill-svg">
+        <title id="ill-em-t">Versement mensuel pour atteindre 20 000 € selon la durée</title>
+        <desc id="ill-em-d">{`Exemple fictif, avant impôt. ${alt}.`}</desc>
+        {rows.map((r, i) => {
+          const y = 8 + i * 62;
+          return (
+            <g key={r.years}>
+              <text x="8" y={y + 24} className="ill-step">{`${r.years} ans`}</text>
+              <rect x={X0} y={y} width={(r.plain / max) * BW} height="20" rx="5" fill="var(--primary)" />
+              <text x={X0 + (r.plain / max) * BW + 6} y={y + 15} className="ill-sub">{`${f0(r.plain)} €`}</text>
+              <rect x={X0} y={y + 26} width={(r.withRate / max) * BW} height="20" rx="5" fill="var(--accent)" />
+              <text x={X0 + (r.withRate / max) * BW + 6} y={y + 41} className="ill-sub">{`${f0(r.withRate)} €`}</text>
+            </g>
+          );
+        })}
+        <rect x="66" y="200" width="12" height="9" rx="2" fill="var(--primary)" />
+        <text x="84" y="209" className="ill-sub">sans intérêts</text>
+        <rect x="184" y="200" width="12" height="9" rx="2" fill="var(--accent)" />
+        <text x="202" y="209" className="ill-sub">{`à ${(EPARGNE_MOIS_EXAMPLE.rate * 100).toLocaleString('fr-FR')} % par an`}</text>
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : versement mensuel pour atteindre 20 000 € en 3, 5 ou 10 ans, sans intérêts puis à 1,7 % par an, avant impôt. Barres proportionnelles aux montants.
       </figcaption>
     </figure>
   );
