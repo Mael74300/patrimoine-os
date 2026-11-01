@@ -6,6 +6,7 @@ import { investmentBySlug, investments } from '../data/investments';
 import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
 import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
 import { Crumbs, MobileFold, PageHead, SimFaq, Sources, usePersistentState } from '../components/ui';
+import { EnvelopeCards } from '../components/EnvelopeCards';
 import { GuideGroupIcon, SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaRegle72, SchemaEpargneMois } from '../components/Illustrations';
 import NotFound from './NotFound';
 
@@ -124,7 +125,7 @@ export function GuidePage() {
         {g.sections.map((s, i) => (
           <section key={s.heading}>
             <h2>{g.slug === 'par-ou-commencer' ? `${i + 1}. ${s.heading}` : s.heading}</h2>
-            {s.body.map((p, k) => (
+            {g.slug === 'choisir-son-enveloppe' && s.heading === 'Les grandes différences' ? <EnvelopeCards /> : s.body.map((p, k) => (
               <Fragment key={p}>
                 <p>{p}</p>
                 {g.slug === 'investir-a-credit' && s.heading === 'Un exemple fictif' && (k === 0 ? <SchemaMensualite /> : <SchemaLevier />)}
@@ -150,12 +151,14 @@ export function GuidePage() {
       {g.widget === 'patrimoine-net' && (<><h2>Calculer votre patrimoine net</h2><NetWorthCalculator /></>)}
       <div className="prose">
         {g.cta && <p style={{ marginTop: 24 }}><Link className="btn" to={g.cta.to}>{g.cta.label}</Link></p>}
-        <h2>Fiches liées</h2>
-        <ul>
-          {g.related.filter((r) => investmentBySlug[r]).map((r) => (
-            <li key={r}><Link to={`/encyclopedie/${r}`}>{investmentBySlug[r].name}</Link> — {investmentBySlug[r].summary}</li>
-          ))}
-        </ul>
+        {g.slug !== 'choisir-son-enveloppe' && (<>
+          <h2>Fiches liées</h2>
+          <ul>
+            {g.related.filter((r) => investmentBySlug[r]).map((r) => (
+              <li key={r}><Link to={`/encyclopedie/${r}`}>{investmentBySlug[r].name}</Link> — {investmentBySlug[r].summary}</li>
+            ))}
+          </ul>
+        </>)}
         {relatedSimulators(simsForGuide[g.slug]).length > 0 && (<>
           <h2>Simulateurs liés</h2>
           <ul>
