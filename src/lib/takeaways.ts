@@ -107,19 +107,19 @@ export function prepayTakeaway(p: { lump: number; advantageInvest: number; inter
 /** Immobilier locatif : ce que rapporte le bien, ce que le propriétaire paie de sa poche, et le patrimoine à l'horizon. */
 export function rentalTakeaway(p: { totalCost: number; netYield: number; monthlyCashflow: number; monthlyCashflowAfterTax: number | null; horizon: number; netEquity: number }): string {
   if (!(p.totalCost > 0) || !Number.isFinite(p.netYield)) return '';
-  const rendement = `Chaque année, les loyers encaissés, une fois les charges payées, représentent environ ${fmtPct(p.netYield)} de ce que coûtent l'achat, les frais et les travaux (avant crédit et impôt).`;
+  const rendement = `Par an, les loyers moins les charges représentent environ ${fmtPct(p.netYield)} du coût total (achat, frais, travaux), avant crédit et impôt.`;
   const mois = Math.round(p.monthlyCashflow);
   const tresorerie = mois >= 0
-    ? ` Chaque mois, le loyer couvre la mensualité du crédit et les charges, et il reste environ ${fmtEur(mois)} avant impôt.`
-    : ` Chaque mois, le loyer ne suffit pas à payer la mensualité du crédit et les charges : il faut sortir environ ${fmtEur(-mois)} de votre poche avant impôt.`;
+    ? `\nChaque mois, le loyer couvre la mensualité du crédit et les charges : il reste environ ${fmtEur(mois)} avant impôt.`
+    : `\nChaque mois, le loyer ne couvre pas la mensualité du crédit et les charges : il faut sortir environ ${fmtEur(-mois)} de votre poche avant impôt.`;
   let apres = '';
   if (p.monthlyCashflowAfterTax !== null) {
     const a = Math.round(p.monthlyCashflowAfterTax);
     apres = a >= 0
-      ? ` Après l'impôt estimé de la première année, il reste environ ${fmtEur(a)} par mois.`
-      : ` Après l'impôt estimé de la première année, l'effort mensuel est d'environ ${fmtEur(-a)}.`;
+      ? `\nAprès l'impôt estimé de la première année, il reste environ ${fmtEur(a)} par mois.`
+      : `\nAprès l'impôt estimé de la première année, l'effort mensuel est d'environ ${fmtEur(-a)}.`;
   }
-  const fin = ` À ${p.horizon} an${p.horizon > 1 ? 's' : ''}, une fois le crédit déduit, le bien représenterait environ ${fmtEur(p.netEquity)} de patrimoine : c'est une estimation qui suppose que le prix et les loyers évoluent comme saisi.`;
+  const fin = `\nÀ ${p.horizon} an${p.horizon > 1 ? 's' : ''}, crédit déduit, le bien représenterait environ ${fmtEur(p.netEquity)} de patrimoine (estimation, si prix et loyers évoluent comme saisi).`;
   return rendement + tresorerie + apres + fin;
 }
 

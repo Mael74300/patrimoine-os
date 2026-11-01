@@ -589,7 +589,9 @@ export function Takeaway({ children }: { children: ReactNode }) {
   return (
     <p className="takeaway" role="status" aria-atomic="true">
       <strong>Concrètement. </strong>
-      {children}
+      {typeof children === 'string' && children.includes('\n')
+        ? children.split('\n').map((l, i) => <span key={i} className="takeaway-line">{l}</span>)
+        : children}
     </p>
   );
 }
