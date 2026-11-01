@@ -51,32 +51,35 @@ export default function SimPrecaution() {
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
-            <legend>Montant visé</legend>
+            <legend>Votre situation</legend>
             <SelectField
               label="Situation professionnelle"
               value={s.profile}
               onChange={setProfile}
               options={(Object.keys(PROFILE_MONTHS) as PrecautionProfile[]).map((k) => ({ v: k, label: PROFILE_MONTHS[k].label }))}
-              hint="Propose un nombre de mois, modifiable ci-dessous."
+              hint="Propose un nombre de mois, modifiable dans les réglages avancés."
             />
-            <NumberField label="Dépenses mensuelles incompressibles" unit="€" value={s.monthlyExpenses} onChange={up('monthlyExpenses')} min={0} step={100} hint="Logement, alimentation, énergie, transport, assurances, remboursements de crédit." />
-            <NumberField label="Nombre de mois à couvrir" unit="mois" value={s.months} onChange={up('months')} min={0} max={24} step={1} />
-            <NumberField label="Réserve pour dépenses prévisibles" unit="€" value={s.extraReserve} onChange={up('extraReserve')} min={0} step={500} hint="Franchise d'assurance, réparation, remplacement d'un appareil…" />
+            <NumberField label="Dépenses mensuelles incompressibles" unit="€" value={s.monthlyExpenses} onChange={up('monthlyExpenses')} min={0} step={100} sliderMax={6000} hint="Logement, alimentation, énergie, transport, assurances, remboursements de crédit." />
+            <NumberField label="Épargne disponible aujourd'hui" unit="€" value={s.currentSavings} onChange={up('currentSavings')} min={0} step={500} sliderMax={50000} hint="Sommes mobilisables sans délai ni perte." />
+            <NumberField label="Versement mensuel" unit="€" value={s.monthlySaving} onChange={up('monthlySaving')} min={0} step={50} sliderMax={2000} />
+            <NumberField label="Délai souhaité" unit="mois" value={s.deadline} onChange={up('deadline')} min={1} max={120} step={1} sliderMax={60} />
           </fieldset>
-          <fieldset>
-            <legend>Constitution</legend>
-            <NumberField label="Épargne disponible aujourd'hui" unit="€" value={s.currentSavings} onChange={up('currentSavings')} min={0} step={500} hint="Sommes mobilisables sans délai ni perte." />
-            <NumberField label="Versement mensuel" unit="€" value={s.monthlySaving} onChange={up('monthlySaving')} min={0} step={50} />
-            <NumberField label="Taux de rémunération" unit="%" percent value={s.annualRate} onChange={up('annualRate')} min={0} max={10} step={0.1} hint={`Livret A et LDDS : ${fmtPct(LIVRETS[1].rate)} ${LIVRETS_PERIOD}.`} />
-            <NumberField label="Délai souhaité" unit="mois" value={s.deadline} onChange={up('deadline')} min={1} max={120} step={1} />
-            <SelectField
-              label="Éligible au LEP"
-              value={s.lep}
-              onChange={up('lep')}
-              options={[{ v: 'non', label: 'Non ou je ne sais pas' }, { v: 'oui', label: 'Oui' }]}
-              hint="Selon le revenu fiscal de référence : vérifiez le plafond de l'année sur Service-Public.fr."
-            />
-          </fieldset>
+          <details className="fold advanced">
+            <summary>Réglages avancés (facultatif)</summary>
+            <div className="advanced-body">
+              <p className="small muted">Déjà remplis avec des valeurs d'exemple. Si vous ne savez pas, laissez-les telles quelles.</p>
+              <NumberField label="Nombre de mois à couvrir" unit="mois" value={s.months} onChange={up('months')} min={0} max={24} step={1} />
+              <NumberField label="Réserve pour dépenses prévisibles" unit="€" value={s.extraReserve} onChange={up('extraReserve')} min={0} step={500} hint="Franchise d'assurance, réparation, remplacement d'un appareil…" />
+              <NumberField label="Taux de rémunération" unit="%" percent value={s.annualRate} onChange={up('annualRate')} min={0} max={10} step={0.1} hint={`Livret A et LDDS : ${fmtPct(LIVRETS[1].rate)} ${LIVRETS_PERIOD}.`} />
+              <SelectField
+                label="Éligible au LEP"
+                value={s.lep}
+                onChange={up('lep')}
+                options={[{ v: 'non', label: 'Non ou je ne sais pas' }, { v: 'oui', label: 'Oui' }]}
+                hint="Selon le revenu fiscal de référence : vérifiez le plafond de l'année sur Service-Public.fr."
+              />
+            </div>
+          </details>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
         </form>
         <section aria-label="Résultats">
