@@ -574,3 +574,11 @@ details.advanced { margin: 4px 0 14px; }
 }
 h2.gloss-letter { margin: 0; }
 h2.gloss-letter::before { content: none; }
+
+/* Plan du site : accès rapide, liens tactiles, colonnes sur grand écran */
+.sitemap-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 1rem 0 0; }
+.sitemap-jump a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--primary); font-weight: 600; text-decoration: none; }
+.sitemap-jump a:hover { border-color: var(--primary); }
+.prose h2[id^="plan-"] { scroll-margin-top: 80px; }
+.prose ul.sitemap-list li { margin: 0; }
+@media (min-width: 701px) { .prose:has(.sitemap-jump) { max-width: 60rem; } .prose ul.sitemap-list:not(section ul) { columns: 2; column-gap: 2rem; } .prose ul.sitemap-list li { break-inside: avoid; } }
