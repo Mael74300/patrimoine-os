@@ -28,15 +28,18 @@ export default function SimRetraits() {
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
             <legend>Capital et retraits</legend>
-            <NumberField label="Capital de départ" unit="€" value={s.capital} onChange={up('capital')} min={0} step={1000} />
-            <NumberField label="Premier retrait mensuel" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} />
-            <NumberField label="Horizon d’observation" unit="ans" value={s.years} onChange={up('years')} min={1} max={80} step={1} />
+            <NumberField label="Capital de départ" unit="€" value={s.capital} onChange={up('capital')} min={0} step={1000} sliderMax={1000000} />
+            <NumberField label="Premier retrait mensuel" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} sliderMax={5000} />
+            <NumberField label="Horizon d’observation" unit="ans" value={s.years} onChange={up('years')} min={1} max={80} step={1} sliderMax={50} />
           </fieldset>
-          <fieldset>
-            <legend>Hypothèses</legend>
-            <NumberField label="Rendement annuel du capital" unit="%" percent value={s.ret} onChange={up('ret')} min={-50} max={100} step={0.5} />
-            <NumberField label="Revalorisation annuelle du retrait" unit="%" percent value={s.idx} onChange={up('idx')} min={-50} max={100} step={0.5} />
-          </fieldset>
+          <details className="fold advanced">
+            <summary>Réglages avancés (facultatif)</summary>
+            <div className="advanced-body">
+              <p className="small muted">Déjà remplis avec des valeurs d’exemple. Si vous ne savez pas, laissez-les telles quelles.</p>
+              <NumberField label="Rendement annuel du capital" unit="%" percent value={s.ret} onChange={up('ret')} min={-50} max={100} step={0.5} hint="Ce que rapporte le capital chaque année, en moyenne (hypothèse)." />
+              <NumberField label="Revalorisation annuelle du retrait" unit="%" percent value={s.idx} onChange={up('idx')} min={-50} max={100} step={0.5} hint="De combien le retrait augmente chaque année, par exemple pour suivre l’inflation." />
+            </div>
+          </details>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
         </form>
         <section aria-label="Résultats">
