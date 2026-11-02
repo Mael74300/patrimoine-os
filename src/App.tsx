@@ -18,8 +18,16 @@ function ScrollTop() {
   const { pathname } = useLocation();
   // Accolades obligatoires : dans les navigateurs récents, scrollTo renvoie une promesse,
   // que React prendrait pour une fonction de nettoyage et appellerait au changement de page.
+  const premiere = useRef(true);
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Après un changement de page (pas au premier affichage), le focus passe au contenu :
+    // sans cela, il retombe sur le corps de la page et le clavier repart du haut, menu compris.
+    if (premiere.current) {
+      premiere.current = false;
+      return;
+    }
+    document.getElementById('contenu')?.focus({ preventScroll: true });
   }, [pathname]);
   return null;
 }
