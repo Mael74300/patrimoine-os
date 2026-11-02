@@ -64,7 +64,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-02 (audit, accueil et guides) : scène du bandeau d'accueil et accès rapide aux rubriques des guides ajoutés (voir « Fait »).
 - 2026-11-01 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable pour la plupart (economie.gouv.fr, banque-france.fr, legifrance : 403) ; fiches non écrites faute de confirmation.
 - 2026-11-01 : guide « épargne de précaution » (4 283 px à 375 px) toujours sans schéma : repères 3/6/9 mois non confirmables sur source officielle.
-- 2026-11-01 : pages longues à 375 px : simulateur immobilier (5 789 px), dettes (4 814), entreprise (4 682), fiche Livret A (4 328).
+- 2026-11-02 (audit, simulateur d'indépendance financière à 375 et 1 280 px) : aucune erreur de console ni débordement ; « Capital visé » (dépenses ÷ taux de retrait) donné sans schéma pour un lecteur qui découvre la notion (schéma ajouté, voir « Fait »). Pages longues à 375 px : simulateur immobilier (5 759 px), dettes, entreprise, fiche Livret A.
 
 ## À faire
 
@@ -86,6 +86,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-02 : **Illustrations : schéma « capital visé »** dans le simulateur d'indépendance financière (replié sous « Comprendre le capital visé » ; 30 000 € de dépenses par an sans autre revenu à 3, 4 et 5 % de retrait supposés : 1 000 000, 750 000 et 600 000 € ; montants calculés par `fireTarget` et testés, `src/capitalVise.test.ts`, marqué « exemple fictif »). Page fermée : 4 464 → 4 531 px à 375 px, 2 484 → 2 551 px à 1 280 px (ligne du repli). Aucune information factuelle ajoutée.
 - 2026-11-02 : **Ergonomie : bouton « Haut de page »** flottant, affiché après 1 200 px de défilement, rend aussi le focus au contenu ; masqué à l'impression (test de garde). Hauteurs de page inchangées (glossaire 5 499 px à 375 px, 3 708 px à 1 280 px). Aucune information factuelle modifiée.
 - 2026-11-02 : **Typographie : espaces insécables dans les pages de simulateurs** (montants, pourcentages, « 1er août » ne se coupent plus en fin de ligne ; aucun chiffre ni règle modifié).
 
