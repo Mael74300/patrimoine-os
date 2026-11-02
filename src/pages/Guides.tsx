@@ -17,9 +17,12 @@ export function GuideList() {
   return (
     <>
       <PageHead eyebrow="Guides" title="Guides pédagogiques" art="guides">Des explications courtes pour comprendre les mécanismes avant de choisir.</PageHead>
+      <nav className="guide-jump" aria-label="Aller à une rubrique">
+        {guideGroups.map((grp) => <a key={grp.title} href={`#grp-${grp.slugs[0]}`}>{grp.title}</a>)}
+      </nav>
       <div className="guide-groups">
       {guideGroups.map((grp, gi) => (
-        <section key={grp.title} aria-labelledby={`grp-${grp.slugs[0]}`} style={{ marginTop: 28 }}>
+        <section key={grp.title} aria-labelledby={`grp-${grp.slugs[0]}`} className="guide-group">
           <h2 id={`grp-${grp.slugs[0]}`} className="theme-title" style={{ margin: 0 }}><GuideGroupIcon index={gi} size={28} />{grp.title}</h2>
           <p className="small muted" style={{ margin: '4px 0 8px' }}>{grp.intro}</p>
           <ul className="inv-list inv-list--compact">
