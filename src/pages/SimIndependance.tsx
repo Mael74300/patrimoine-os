@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { drawdown, fireTarget, fmtEur, fmtPct, fmtYears, realRate, yearsToTarget, type FireInput } from '../lib/finance';
 import { fireTakeaway } from '../lib/takeaways';
+import { SchemaCapitalVise } from '../components/Illustrations';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 const DEFAULTS: FireInput = {
@@ -55,6 +56,11 @@ export default function SimIndependance() {
             <Kpi label="Rendement réel retenu" value={fmtPct(realRate(s.nominalReturn, s.inflation))} sub="(1 + rendement) / (1 + inflation) − 1" />
           </div>
           <Takeaway>{fireTakeaway({ gap: Math.max(0, s.annualExpenses - s.recurringIncome), withdrawalRate: s.withdrawalRate, target, currentWealth: s.currentWealth, annualSavings: s.annualSavings, years: yrs })}</Takeaway>
+
+          <details className="fold">
+            <summary>Comprendre le capital visé (schéma)</summary>
+            <SchemaCapitalVise />
+          </details>
 
           <h2>Selon le taux de retrait</h2>
           <div className="table-wrap" tabIndex={0}>

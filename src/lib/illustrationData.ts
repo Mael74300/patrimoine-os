@@ -5,6 +5,7 @@ import { simpleVsCompound } from './calc/simpleVsCompound';
 import { savingsGoal } from './calc/savingsGoal';
 import { feeImpact } from './calc/fees';
 import { projectGrowth } from './calc/growth';
+import { fireTarget } from './calc/fire';
 
 /** Exemple fictif du schéma « Intérêts simples ou composés » : toutes les valeurs sont calculées, jamais saisies à la main. */
 export const SNOWBALL_EXAMPLE = { initial: 10000, annualRate: 0.05, years: [10, 20] as const };
@@ -208,4 +209,12 @@ export function petitsVersementsRows() {
     { label: '50 € par mois, toujours', ...end() },
     { label: '50, puis 100, puis 150 €', ...end(raises) },
   ];
+}
+
+/** Schéma « capital visé » : 30 000 € de dépenses par an sans autre revenu, à trois taux de retrait supposés (exemple fictif, calcul du simulateur). */
+export const CAPITAL_VISE_EXAMPLE = { expenses: 30000, rates: [0.03, 0.04, 0.05] as const };
+
+export function capitalViseRows() {
+  const { expenses, rates } = CAPITAL_VISE_EXAMPLE;
+  return rates.map((rate) => ({ rate, capital: fireTarget(expenses, 0, rate) }));
 }
