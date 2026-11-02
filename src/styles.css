@@ -631,3 +631,7 @@ h2.gloss-letter::before { content: none; }
 
 /* Simulateurs : une pastille de thème trop longue passe à la ligne au lieu de déborder (mobile) */
 @media (max-width: 600px) { .theme-nav a { max-width: 100%; white-space: normal; padding-top: 6px; padding-bottom: 6px; line-height: 1.25; } }
+
+.sentence-list { margin: 0; padding-left: 1.1rem; font-size: .95rem; }
+.sentence-list li { margin: 0 0 5px; }
+.sentence-badge { margin: 6px 0 0; }
