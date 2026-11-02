@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { advantageByHorizon, advantageByPriceGrowth, fmtEur, fmtPct, rentVsBuy } from '../lib/finance';
 import { rentVsBuyTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = {
   price: number; downPayment: number; acquisitionRate: number; loanRate: number; loanYears: number; ownerCostRate: number;
@@ -74,6 +74,7 @@ export default function SimLouerAcheter() {
           <Takeaway>{rentVsBuyTakeaway({ horizonYears: Math.floor(s.horizonYears), advantage: r.advantage, breakEvenMonth: r.breakEvenMonth })}</Takeaway>
           <p className="muted small">Mensualité du prêt hors assurance : {fmtEur(r.monthlyPayment)} sur un capital emprunté de {fmtEur(r.loanAmount)}.</p>
           <h2>Si le prix du bien évolue autrement</h2>
+          <MobileFold label="Afficher le tableau selon la hausse du prix">
           <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th scope="col">Hausse annuelle du prix</th><th scope="col" className="r">Acheter − louer</th><th scope="col">Le plus avantageux</th></tr></thead>
@@ -84,7 +85,9 @@ export default function SimLouerAcheter() {
               </tbody>
             </table>
           </div>
+          </MobileFold>
           <h2>Si l’on revend plus tôt ou plus tard</h2>
+          <MobileFold label="Afficher le tableau selon l’horizon de revente">
           <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th scope="col">Horizon</th><th scope="col" className="r">Acheter − louer</th><th scope="col">Le plus avantageux</th></tr></thead>
@@ -95,6 +98,7 @@ export default function SimLouerAcheter() {
               </tbody>
             </table>
           </div>
+          </MobileFold>
           <p className="muted small">
             Un écart positif signifie que le propriétaire est plus riche à l’horizon. Les exemples ci-dessus sont fictifs. Le modèle ignore les impôts, l’assurance du prêt,
             les travaux exceptionnels et la valeur d’usage (stabilité, liberté de déménager). Pour l’arbitrage rembourser ou investir, voir <Link to="/simulateurs/rembourser-ou-investir">rembourser ou investir</Link>.
