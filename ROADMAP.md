@@ -54,27 +54,16 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
-- 2026-11-02 (audit, comparateur à 375 px, visiteur débutant) : la projection donnait des « valeurs à 15 ans » sans dire ce qui vient de soi et ce qui vient du rendement ; phrase « Concrètement » et ligne « dont X € de gains » ajoutées (voir « Fait »). Page de 4 429 → 4 610 px à 375 px. Fiche Livret A à 1 280 px relue : rien de bloquant.
-- 2026-11-02 (audit, « Louer ou acheter » à 375 px, futur acheteur) : les deux tableaux de sensibilité donnaient un écart « Acheter − louer » négatif sans dire quel choix gagne ; colonne « Le plus avantageux » ajoutée (voir « Fait »). Page de 4 642 → 4 686 px. Guide « diversification » et simulateur de retraits relus : rien de bloquant.
-- 2026-11-02 : service-public.gouv.fr répond de nouveau ; PFU de 31,4 % (12,8 % + 18,6 %) reconfirmé sur la plus-value de valeurs mobilières (F21618). Les autres usages du chiffre (intérêts, PER, crypto) restent à reconfirmer fiche par fiche.
-- 2026-11-02 (audit, accueil à 1 280 px, visiteur débutant) : bandeau bleu sans visuel, moitié droite vide alors que les rubriques ont leur scène ; scène ajoutée (voir « Fait »). Fiche Livret A à 375 px relue : rien de bloquant.
-- 2026-11-02 (audit technique, 77 pages indexables à 375 px) : aucune erreur de console, aucun débordement horizontal, un seul h1 partout ; page de simulateur la plus longue : immobilier (5 789 px) ; introduction de la page la plus technique des simulateurs réécrite (voir « Fait »). Encyclopédie et fiche Livret A relues : rien de bloquant.
-- 2026-11-02 (audit, accueil, encyclopédie et liste des guides à 375 px, visiteur débutant) : liste des guides de 4 243 px sans repère pour aller à une rubrique ; pastilles d'accès rapide ajoutées (voir « Fait »). Encyclopédie et accueil : rien de bloquant.
+- 2026-11-02 (audit, glossaire, entrepreneuriat, liste des simulateurs, fiche PER, guide PEA à 375 et 1 280 px) : aucune erreur de console, aucun débordement horizontal ; pages relues sans gêne bloquante (glossaire 5 499 px à 375 px avec index des lettres, entrepreneuriat 4 147, simulateurs 4 074, guide PEA 4 131). Aucun changement de code justifié cette fois.
+- 2026-11-02 : service-public.gouv.fr (F2329) confirme 18,6 % de prélèvements sociaux « cas général » sur les revenus 2026 et 17,2 % pour assurance-vie, PEL, CEL et PEP ; la fiche ne donne pas de taux pour le PEA (« règles particulières »). Le taux 2026 sur les gains de PEA reste donc non confirmé : ne pas le présenter comme vérifié (libellés « à vérifier » du simulateur ETF/immobilier conservés).
+- 2026-11-02 : PFU de 31,4 % (12,8 % + 18,6 %) reconfirmé sur service-public.gouv.fr (F21618, F2329). Les usages du chiffre dans les fiches (intérêts, PER, crypto) restent à reconfirmer fiche par fiche.
+- 2026-11-02 (audit, comparateur et « Louer ou acheter » à 375 px) : projection et tableaux de sensibilité traduits en clair (voir « Fait »).
+- 2026-11-02 (audit, accueil et guides) : scène du bandeau d'accueil et accès rapide aux rubriques des guides ajoutés (voir « Fait »).
+- 2026-11-01 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable pour la plupart (economie.gouv.fr, banque-france.fr, legifrance : 403) ; fiches non écrites faute de confirmation.
+- 2026-11-01 : guide « épargne de précaution » (4 283 px à 375 px) toujours sans schéma : repères 3/6/9 mois non confirmables sur source officielle.
+- 2026-11-01 : pages longues à 375 px : simulateur immobilier (5 789 px), dettes (4 814), entreprise (4 682), fiche Livret A (4 328).
+- 2026-11-01 : fiches de l'encyclopédie sans visuel hors icône de famille ; à étudier : un schéma de lecture des repères risque/liquidité/effort.
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (faits) ; tout améliorer, y compris esthétique, vulgarisation et illustrations maison.
-- 2026-11-01 (audit, accueil à 375 px, visiteur débutant) : dans « Par où commencer ? », la pastille d'icône de 64 px débordait de sa colonne de 48 px et touchait le titre (conflit de cascade CSS) ; corrigé (voir « Fait »). Reste de l'accueil relu : rien de bloquant.
-- 2026-11-01 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable (economie.gouv.fr, banque-france.fr, legifrance : 403 ; service-public : 404 ou page de vérification ; seul lafinancepourtous.com répond parfois) ; fiches non écrites faute de confirmation.
-- 2026-11-01 : guide « épargne de précaution » (4 283 px à 375 px) toujours sans schéma : repères 3/6/9 mois non confirmables sur source officielle (vérifié le 2026-11-01).
-- 2026-11-01 (audit, comparateur et fiche Livret A à 375 px) : lisibles, rien de bloquant ; guide sans schéma restant : épargne de précaution (repères non confirmables) ; « épargne limitée » a maintenant le sien (voir « Fait »). « Comparer les frais » a maintenant son schéma (voir « Fait »).
-- 2026-11-01 : le chiffre « PFU de 31,4 % en 2026 » (guide « choisir son enveloppe ») n'a pas pu être reconfirmé depuis le bac à sable ; laissé tel quel, à revérifier dès qu'une source répond.
-- 2026-11-01 : pages longues à 375 px : fiche Livret A (4 495 px, sections de texte brut sans visuel), comparateur (critères textuels empilés), guide de précaution (4 283 px).
-- 2026-11-02 (audit, simulateur de précaution à 375 px, visiteur débutant) : sur le graphique, les étiquettes « Mois 15 » et « Mois 18 » se chevauchaient et la dernière touchait le bord ; corrigé (voir « Fait »). 18 graphiques de 14 pages revérifiés à 375 et 1280 px : plus de chevauchement.
-- 2026-11-01 : encyclopédie sur mobile : ordre de tabulation logique, focus visible ; reste la longueur de la liste de filtres.
-- 2026-11-01 : fiches de l'encyclopédie sans visuel hors icône de famille ; à étudier un schéma de lecture des repères risque/liquidité/effort.
-- 2026-11-01 (audit, simulateurs à 375 px) : pages encore longues : immobilier 5 767 px, dettes 4 814, entreprise 4 682 ; le paragraphe « Concrètement » de l'immobilier, long, a été scindé en quatre lignes (voir « Fait ») ; carte de résultat orpheline corrigée.
-
-- 2026-11-01 (audit, fiche Livret A à 375 px) : sections « Sources » et « Suivi de vérification » séparées pour une même information ; regroupées en « Sources et vérification » (-57 px). Fiche encore longue (4 328 px) : texte brut sans visuel.
-
-- 2026-11-01 (audit, guide « précaution » à 375 px et 1 280 px) : fin des guides en listes à tirets (« Fiches liées », « Simulateurs liés ») alors que les fiches de l'encyclopédie utilisent des cartes ; harmonisé (voir « Fait »). « Autres guides » est passé en cartes compactes (voir « Fait ») ; reste « Sources » en liste simple.
 
 ## À faire
 
