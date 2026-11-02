@@ -13,7 +13,7 @@ describe('guide « choisir son enveloppe » : cartes des enveloppes', () => {
   it('chaque ligne de carte reprend mot pour mot le paragraphe du guide', () => {
     expect(ENVELOPE_CARDS).toHaveLength(section.body.length);
     for (const c of ENVELOPE_CARDS) {
-      const p = section.body[c.paragraph];
+      const p = section.body[c.paragraph].replace(/\u00a0/g, ' ');
       expect(p.startsWith(c.name + ' :')).toBe(true);
       for (const r of c.rows) expect(p).toContain(r.text);
     }

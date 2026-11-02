@@ -7,7 +7,7 @@ import { guideBySlug } from './data/guides';
 
 describe('schéma « petits versements »', () => {
   const guide = guideBySlug['epargne-limitee'];
-  const texte = guide.sections.map((s) => s.body.join(' ')).join(' ');
+  const texte = guide.sections.map((s) => s.body.join(' ')).join(' ').replace(/\u00a0/g, ' ');
   it('recalcule les montants cités dans le guide', () => {
     const r = petitsVersementsRows();
     expect(r.map((x) => [x.paid, x.total, x.gains])).toEqual([[18000, 34400, 16400], [45000, 78200, 33200]]);

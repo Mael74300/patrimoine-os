@@ -7,7 +7,7 @@ import { guideBySlug } from './data/guides';
 
 describe('schéma « effet des frais »', () => {
   const guide = guideBySlug['comparer-les-frais'];
-  const texte = guide.sections.map((s) => s.body.join(' ')).join(' ');
+  const texte = guide.sections.map((s) => s.body.join(' ')).join(' ').replace(/\u00a0/g, ' ');
   it('recalcule les montants cités dans le guide', () => {
     const r = fraisRows();
     expect(r.map((x) => [x.fees, x.final])).toEqual([[0, 42900], [0.002, 40800], [0.015, 29400]]);

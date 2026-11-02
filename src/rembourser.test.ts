@@ -7,7 +7,7 @@ import { guideBySlug } from './data/guides';
 
 describe('schéma « rembourser ou investir »', () => {
   const guide = guideBySlug['rembourser-credit-par-anticipation-ou-investir'];
-  const texte = guide.sections.map((s) => [s.heading, ...s.body].join(' ')).join(' ');
+  const texte = guide.sections.map((s) => [s.heading, ...s.body].join(' ')).join(' ').replace(/\u00a0/g, ' ');
   it('recalcule l’exemple fictif du guide (43 900 € contre 41 700 €, 45 mois, ≈ 21 250 €)', () => {
     const p = rembourserParts();
     expect(p.wealthPrepay).toBe(43900);

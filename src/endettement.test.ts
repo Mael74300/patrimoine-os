@@ -8,7 +8,7 @@ import { HCSF } from './lib/calc/debtRatio';
 
 describe('schéma « taux d’endettement »', () => {
   const guide = guideBySlug['taux-endettement-capacite-emprunt'];
-  const texte = guide.sections.map((s) => [s.heading, ...s.body].join(' ')).join(' ');
+  const texte = guide.sections.map((s) => [s.heading, ...s.body].join(' ')).join(' ').replace(/\u00a0/g, ' ');
   const p = endettementParts();
   it('recalcule l’exemple fictif du guide (200 + 850 sur 3 000 € = 35 %)', () => {
     expect(p.income).toBe(3000);

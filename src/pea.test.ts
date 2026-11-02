@@ -7,7 +7,7 @@ import { guideBySlug } from './data/guides';
 describe('schéma « PEA : avant et après 5 ans »', () => {
   const svg = renderToStaticMarkup(createElement(SchemaPea));
   const guide = guideBySlug['fonctionnement-pea'];
-  const texte = guide.sections.map((s) => [s.heading, ...s.body].join(' ')).join(' ');
+  const texte = guide.sections.map((s) => [s.heading, ...s.body].join(' ')).join(' ').replace(/\u00a0/g, ' ');
 
   it('est placé sous une section qui existe et reprend les règles du texte du guide', () => {
     expect(guide.sections.some((s) => s.heading === 'Retraits et fiscalité')).toBe(true);

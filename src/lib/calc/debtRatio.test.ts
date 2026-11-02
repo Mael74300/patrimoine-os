@@ -41,7 +41,7 @@ describe('taux d’endettement', () => {
   });
 
   it('cohérence : le guide cite le même taux d’effort et la même durée que le repère', () => {
-    const text = JSON.stringify(guides);
+    const text = JSON.stringify(guides).replace(/\u00a0/g, ' ');
     expect(text).toContain(`${HCSF.maxRatio * 100} %`);
     expect(text).toContain(`${HCSF.maxYears} ans`);
   });

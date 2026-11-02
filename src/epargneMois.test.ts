@@ -7,7 +7,7 @@ import { guideBySlug } from './data/guides';
 
 describe('schéma « combien épargner par mois »', () => {
   const guide = guideBySlug['combien-epargner-par-mois-objectif'];
-  const texte = guide.sections.map((s) => s.body.join(' ')).join(' ');
+  const texte = guide.sections.map((s) => s.body.join(' ')).join(' ').replace(/\u00a0/g, ' ');
   it('recalcule les versements cités dans le guide', () => {
     const r = epargneMoisRows().map((x) => [x.years, Math.round(x.plain), Math.round(x.withRate)]);
     expect(r).toEqual([[3, 556, 542], [5, 333, 320], [10, 167, 153]]);
