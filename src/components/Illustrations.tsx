@@ -944,3 +944,25 @@ export function HeaderArt({ name }: { name: HeaderArtName }) {
   }
   return <svg viewBox="0 0 240 150" aria-hidden="true" focusable="false" className="header-art">{scene}</svg>;
 }
+
+/** Scène décorative du bandeau d'accueil (260 × 200), pensée pour le fond bleu : piles de pièces de plus en plus hautes et pousse. Aucune donnée chiffrée. */
+export function HomeArt() {
+  const w = { fill: 'rgba(255,255,255,.12)', stroke: '#fff', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const g = { fill: 'var(--gold)', stroke: '#fff', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const l = { fill: 'none', stroke: '#fff', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const pile = (x: number, n: number) => Array.from({ length: n }, (_, i) => {
+    const y = 172 - i * 16;
+    return <path key={`${x}-${i}`} d={`M${x - 26} ${y}v-10a26 9 0 0 1 52 0v10a26 9 0 0 1-52 0z`} {...(i === n - 1 ? g : w)} />;
+  });
+  return (
+    <svg viewBox="0 0 260 200" aria-hidden="true" focusable="false" className="home-art">
+      <path d="M8 184h244" {...l} opacity=".5" />
+      {pile(50, 2)}
+      {pile(130, 4)}
+      {pile(210, 6)}
+      <path d="M50 118c34-6 60-26 80-56M210 66V44" {...l} strokeDasharray="2 9" opacity=".7" />
+      <path d="M210 52V28" {...l} />
+      <path d="M210 40C192 40 184 28 184 14c18 0 26 10 26 26zM210 32c0-16 10-26 28-26 0 16-10 26-28 26z" fill="var(--accent-soft)" stroke="#fff" strokeWidth={3} strokeLinejoin="round" />
+    </svg>
+  );
+}
