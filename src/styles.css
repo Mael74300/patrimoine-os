@@ -644,3 +644,8 @@ h2.gloss-letter::before { content: none; }
 
 /* Choix long d'un menu déroulant : affiché en entier sous le menu quand il est coupé */
 .select-full { margin-top: 4px; font-size: 0.85rem; line-height: 1.35; color: var(--ink-2); }
+
+/* Bouton « Haut de page » (affiché après un long défilement) */
+.back-top { position: fixed; right: 12px; bottom: 12px; z-index: 40; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--primary); font: inherit; font-weight: 600; box-shadow: var(--shadow-sm); cursor: pointer; }
+.back-top:hover { background: var(--accent-soft); }
+@media print { .back-top { display: none; } }

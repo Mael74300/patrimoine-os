@@ -60,7 +60,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-02 : service-public.gouv.fr (F2329) confirme 18,6 % de prélèvements sociaux « cas général » sur les revenus 2026 et 17,2 % pour assurance-vie, PEL, CEL et PEP ; la fiche ne donne pas de taux pour le PEA (« règles particulières »). Le taux 2026 sur les gains de PEA reste donc non confirmé : ne pas le présenter comme vérifié (libellés « à vérifier » du simulateur ETF/immobilier conservés).
 - 2026-11-02 : PFU de 31,4 % (12,8 % + 18,6 %) reconfirmé sur service-public.gouv.fr (F21618, F2329). Les usages du chiffre dans les fiches (intérêts, PER, crypto) restent à reconfirmer fiche par fiche.
 - 2026-11-02 (audit clavier, guides à 375 et 1 280 px) : ordre de tabulation correct (lien d'évitement, en-tête, contenu) ; le menu mobile ne se refermait pas avec Échap (corrigé, voir « Fait »). Après un changement de page par le menu, le focus retombait sur le corps de la page (corrigé, voir « Fait »).
-- 2026-11-02 (audit, comparateur et « Louer ou acheter » à 375 px) : projection et tableaux de sensibilité traduits en clair (voir « Fait »).
+- 2026-11-02 (audit, glossaire, entrepreneuriat, encyclopédie, comparateur, guides à 375 et 1 280 px) : aucune erreur de console ni débordement ; pages de 4 000 à 5 500 px à 375 px (glossaire 5 499) sans moyen de remonter : bouton « Haut de page » ajouté (voir « Fait »).
 - 2026-11-02 (audit, accueil et guides) : scène du bandeau d'accueil et accès rapide aux rubriques des guides ajoutés (voir « Fait »).
 - 2026-11-01 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable pour la plupart (economie.gouv.fr, banque-france.fr, legifrance : 403) ; fiches non écrites faute de confirmation.
 - 2026-11-01 : guide « épargne de précaution » (4 283 px à 375 px) toujours sans schéma : repères 3/6/9 mois non confirmables sur source officielle.
@@ -86,6 +86,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-02 : **Ergonomie : bouton « Haut de page »** flottant, affiché après 1 200 px de défilement, rend aussi le focus au contenu ; masqué à l'impression (test de garde). Hauteurs de page inchangées (glossaire 5 499 px à 375 px, 3 708 px à 1 280 px). Aucune information factuelle modifiée.
 - 2026-11-02 : **Typographie : espaces insécables dans les pages de simulateurs** (montants, pourcentages, « 1er août » ne se coupent plus en fin de ligne ; aucun chiffre ni règle modifié).
 
 - 2026-11-02 : **Menus déroulants : choix long affiché en entier sur mobile** : quand le texte du choix est coupé, il est répété en clair sous le menu (`SelectField`, mesure du texte, masqué aux lecteurs d'écran, absent à 1 280 px). Six simulateurs concernés. Épargne de précaution à 375 px : 5 053 → 5 094 px (+41 px), 1 280 px inchangé (2 811 px). Aucune information factuelle modifiée.
