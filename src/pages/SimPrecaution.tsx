@@ -45,7 +45,7 @@ export default function SimPrecaution() {
         Estimez la réserve à garder disponible pour un imprévu, le temps pour la constituer et sa répartition possible sur les livrets réglementés.
       </PageHead>
       <p className="notice" role="note">
-        Aucune règle officielle ne fixe le montant d'une épargne de précaution. Les durées proposées (3, 6 ou 9 mois de dépenses) sont des repères
+        Aucune règle officielle ne fixe le montant d'une épargne de précaution. Les durées proposées (3, 6 ou 9 mois de dépenses) sont des repères
         pédagogiques courants, à adapter à votre situation : stabilité des revenus, personnes à charge, état du logement et de la voiture, couverture santé.
       </p>
       <div className="sim" style={{ marginTop: 24 }}>
@@ -152,7 +152,7 @@ export default function SimPrecaution() {
           </div>
           <p className="muted small">
             Les intérêts des livrets réglementés sont exonérés d'impôt sur le revenu et de prélèvements sociaux. Au-delà des plafonds, d'autres livrets
-            bancaires existent, généralement imposables. Un taux réglementé peut changer au 1er février et au 1er août.
+            bancaires existent, généralement imposables. Un taux réglementé peut changer au 1er février et au 1er août.
           </p>
           <h2>Sources</h2>
           <Sources list={LIVRETS.map((l) => ({ ...l.source, official: true }))} />

@@ -101,7 +101,7 @@ export default function SimEntreprise() {
           </div>
           <Takeaway>{businessTakeaway({ years: s.years, revenueFirst: runs[1][0]?.revenue ?? 0, revenueLast: runs[1][runs[1].length - 1]?.revenue ?? 0, netResultLast: runs[1][runs[1].length - 1]?.netResult ?? 0, cashLast: runs[1][runs[1].length - 1]?.cash ?? 0, pessimisticLowestCash: lowestCash(runs[0], start) })}</Takeaway>
           <p className="small muted">
-            Pessimiste : CA de départ −20 %, croissance −5 points, marge −5 points. Optimiste : CA +15 %, croissance +5 points, marge +3 points.
+            Pessimiste : CA de départ −20 %, croissance −5 points, marge −5 points. Optimiste : CA +15 %, croissance +5 points, marge +3 points.
             Une trésorerie négative signale un besoin de financement.
           </p>
           <div className="panel">
