@@ -41,6 +41,14 @@ describe('Louer ou acheter', () => {
     expect(Number.isFinite(r.advantage)).toBe(true);
   });
 
+  it('série annuelle : le dernier point reprend les patrimoines finaux', () => {
+    const r = rentVsBuy(B);
+    const last = r.series[r.series.length - 1];
+    expect(last.year).toBe(20);
+    expect(last.buyer).toBeCloseTo(r.buyerWealth, 6);
+    expect(last.renter).toBeCloseTo(r.renterWealth, 6);
+  });
+
   it('point d’équilibre : si acheter l’emporte à l’horizon, le mois renvoyé est dans la période', () => {
     const r = rentVsBuy({ ...B, priceGrowth: 0.04 });
     expect(r.advantage).toBeGreaterThan(0);

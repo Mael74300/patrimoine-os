@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { advantageByHorizon, advantageByPriceGrowth, fmtEur, fmtPct, rentVsBuy } from '../lib/finance';
 import { rentVsBuyTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = {
   price: number; downPayment: number; acquisitionRate: number; loanRate: number; loanYears: number; ownerCostRate: number;
@@ -72,6 +72,21 @@ export default function SimLouerAcheter() {
             <Kpi label={buyWins ? 'Avantage à l’achat' : 'Avantage à la location'} value={fmtEur(Math.abs(r.advantage))} sub={r.breakEvenMonth !== null ? `l’achat l’emporte durablement dès le mois ${r.breakEvenMonth}` : 'l’achat ne l’emporte pas à cet horizon'} />
           </div>
           <Takeaway>{rentVsBuyTakeaway({ horizonYears: Math.floor(s.horizonYears), advantage: r.advantage, breakEvenMonth: r.breakEvenMonth })}</Takeaway>
+          {r.series.length > 1 && (
+            <>
+              <h2>Qui est le plus riche, année après année ?</h2>
+              <LineChart
+                title="Patrimoine du propriétaire et du locataire à la fin de chaque année"
+                xLabels={r.series.map((p) => `An ${p.year}`)}
+                format={fmtEur}
+                series={[
+                  { name: 'Propriétaire', color: 'var(--chart-1)', values: r.series.map((p) => p.buyer) },
+                  { name: 'Locataire', color: 'var(--chart-2)', values: r.series.map((p) => p.renter) },
+                ]}
+              />
+              <p className="muted small">Les deux courbes se croisent quand acheter devient plus avantageux que louer. À chaque date, le patrimoine du propriétaire est calculé comme s’il revendait le bien ce jour-là, frais de revente déduits.</p>
+            </>
+          )}
           <p className="muted small">Mensualité du prêt hors assurance : {fmtEur(r.monthlyPayment)} sur un capital emprunté de {fmtEur(r.loanAmount)}.</p>
           <h2>Si le prix du bien évolue autrement</h2>
           <MobileFold label="Afficher le tableau selon la hausse du prix">
