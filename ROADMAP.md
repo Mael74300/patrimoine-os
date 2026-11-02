@@ -54,6 +54,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-02 (audit des simulateurs à 375 px) : six menus déroulants affichaient un choix coupé (« Revenus stables (CDI, fonction pu… », « Location nue — micro-foncier (abat… ») ; corrigé, voir « Fait ».
 - 2026-11-02 (audit, fiches assurance-vie, Livret A, PEA et recherche à 375 et 1 280 px) : aucune erreur de console ni débordement ; le bloc fiscalité des fiches était un pavé de chiffres difficile à parcourir (corrigé, voir « Fait »). Les espaces dans les montants et unités des textes écrits à la main (« 4 600 € », « 2 % ») se coupent en fin de ligne : corrigé sur l'accueil le 2026-11-02 ; fait pour les guides le 2026-11-02 ; reste à faire pour les fiches et simulateurs (essai global abandonné : une cinquantaine de fichiers et une quinzaine de tests qui comparent le texte à des chaînes avec espace simple ; à faire par lots, en adaptant les tests).
 - 2026-11-02 (audit, fiche cryptomonnaies, guide diversification, guide précaution à 375 px) : aucune erreur de console ni débordement ; fil d'Ariane en double (« Cryptomonnaies / Cryptomonnaies ») et « Capital : » orphelin en fin de ligne dans le cartouche des fiches (corrigés, voir « Fait »).
 - 2026-11-02 : service-public.gouv.fr (F2329) confirme 18,6 % de prélèvements sociaux « cas général » sur les revenus 2026 et 17,2 % pour assurance-vie, PEL, CEL et PEP ; la fiche ne donne pas de taux pour le PEA (« règles particulières »). Le taux 2026 sur les gains de PEA reste donc non confirmé : ne pas le présenter comme vérifié (libellés « à vérifier » du simulateur ETF/immobilier conservés).
@@ -85,6 +86,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-02 : **Menus déroulants : choix long affiché en entier sur mobile** : quand le texte du choix est coupé, il est répété en clair sous le menu (`SelectField`, mesure du texte, masqué aux lecteurs d'écran, absent à 1 280 px). Six simulateurs concernés. Épargne de précaution à 375 px : 5 053 → 5 094 px (+41 px), 1 280 px inchangé (2 811 px). Aucune information factuelle modifiée.
 - 2026-11-02 : **Fiches : fil d'Ariane sans doublon et cartouche lisible** : le niveau de famille est omis quand il porte le même nom que la fiche ; « Horizon » et « Capital » chacun sur sa ligne sur mobile. Textes et chiffres inchangés. Aucune information factuelle modifiée.
 
 - 2026-11-02 : **Typographie : espaces insécables dans les guides** : montants, pourcentages et durées des 19 guides (« 22 950 € », « 5 % », « 10 ans ») ne se coupent plus en fin de ligne ; texte et chiffres identiques (vérifié : le fichier est identique une fois les espaces normalisés). Tests des guides adaptés pour comparer sans tenir compte de l'espace insécable. Restent les fiches et les simulateurs.

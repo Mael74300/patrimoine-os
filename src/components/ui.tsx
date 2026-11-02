@@ -596,18 +596,39 @@ export function SelectField<V extends string | number>({ label, value, options, 
   hint?: string;
 }) {
   const id = useId();
+  const ref = useRef<HTMLSelectElement>(null);
+  const [cut, setCut] = useState(false);
+  const current = options.find((x) => String(x.v) === String(value))?.label ?? '';
+  useEffect(() => {
+    const measure = () => setCut(selectTextIsCut(ref.current, current));
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [current]);
   return (
     <div className="field">
       <label htmlFor={id}>{label}</label>
-      <select id={id} value={String(value)} onChange={(e) => {
+      <select ref={ref} id={id} value={String(value)} onChange={(e) => {
         const o = options.find((x) => String(x.v) === e.target.value);
         if (o) onChange(o.v);
       }}>
         {options.map((o) => <option key={String(o.v)} value={String(o.v)}>{o.label}</option>)}
       </select>
+      {cut && <div className="select-full" aria-hidden="true">{current}</div>}
       {hint && <div className="hint">{hint}</div>}
     </div>
   );
+}
+
+/** Vrai si le choix affiché est plus long que la place du menu (texte coupé sur mobile). */
+function selectTextIsCut(el: HTMLSelectElement | null, text: string): boolean {
+  if (!el || !text) return false;
+  const ctx = document.createElement('canvas').getContext('2d');
+  if (!ctx) return false;
+  const cs = getComputedStyle(el);
+  ctx.font = cs.font;
+  const room = el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 28;
+  return ctx.measureText(text).width > room;
 }
 
 export function Tabs({ items, active, onSelect, label }: { items: string[]; active: number; onSelect: (i: number) => void; label: string }) {
