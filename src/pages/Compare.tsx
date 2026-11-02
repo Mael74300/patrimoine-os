@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { categoryById } from '../data/categories';
 import { investmentBySlug, investments } from '../data/investments';
 import { fmtEur, projectGrowth } from '../lib/finance';
+import { projectionSplit, totalContributed } from '../lib/calc/compareSummary';
 import { Disclaimer, Dots, LineChart, NumberField, PageHead } from '../components/ui';
 
 /** Critères longs : repliés par ligne sur mobile (le tableau y est empilé), toujours ouverts sans JavaScript et en écran large. */
@@ -18,6 +19,12 @@ export function useIsMobile(): boolean {
     return () => mq.removeEventListener('change', update);
   }, []);
   return mobile;
+}
+
+function splitText(value: number, amount: number, monthly: number, years: number): string {
+  const { gains } = projectionSplit(value, totalContributed(amount, monthly, years));
+  const g = fmtEur(Math.abs(gains));
+  return gains >= 0 ? `dont ${g} de gains` : `soit ${g} de moins que vos versements`;
 }
 
 const COLORS = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)'];
@@ -121,6 +128,12 @@ export default function Compare() {
           />
         </div>
       )}
+      {items.length > 0 && (
+        <p className="small" style={{ marginBottom: 12 }}>
+          <strong>Concrètement :</strong> vous versez <strong className="num">{fmtEur(totalContributed(amount, monthly, years))}</strong> de votre poche en {years} ans.
+          Le reste de la valeur finale vient du rendement supposé (moins les frais), pas de vous.
+        </p>
+      )}
       <div className="grid cols-3">
         {items.map((i, k) => (
           <div className="panel" key={i.slug}>
@@ -132,6 +145,7 @@ export default function Compare() {
                 onChange={(v) => setHyp((h) => ({ ...h, [i.slug]: { ...getH(i.slug), f: v } }))} />
             </div>
             <div className="small">Valeur à {years} ans : <strong className="num">{fmtEur(proj[k][years].value)}</strong></div>
+            <div className="small muted" style={{ marginTop: 4 }}>{splitText(proj[k][years].value, amount, monthly, years)}</div>
           </div>
         ))}
       </div>
