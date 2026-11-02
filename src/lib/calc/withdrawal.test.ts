@@ -43,3 +43,21 @@ describe('Retraits réguliers', () => {
     expect(Number.isFinite(r.sustainable)).toBe(true);
   });
 });
+
+import { withdrawalSeries } from './withdrawal';
+
+describe('Retraits réguliers : courbe du capital', () => {
+  it('rendement nul : baisse de 12 retraits par an', () => {
+    expect(withdrawalSeries({ ...base, years: 3 })).toEqual([120000, 108000, 96000, 84000]);
+  });
+  it('reste à 0 après l’épuisement', () => {
+    const s = withdrawalSeries({ ...base, capital: 30000, years: 4 });
+    expect(s).toEqual([30000, 18000, 6000, 0, 0]);
+  });
+  it('dernier point = capital restant de withdrawal()', () => {
+    const i = { capital: 200000, monthly: 1000, annualReturn: 0.03, indexation: 0.02, years: 25 };
+    const s = withdrawalSeries(i);
+    expect(s).toHaveLength(26);
+    expect(s[25]).toBeCloseTo(withdrawal(i).remaining, 6);
+  });
+});

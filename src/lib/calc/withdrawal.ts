@@ -66,3 +66,24 @@ export function withdrawal(input: WithdrawalInput): WithdrawalResult {
 
   return { monthsUntilEmpty: r.empty, remaining: r.remaining, totalWithdrawn: r.total, sustainable };
 }
+
+/**
+ * Capital restant à la fin de chaque année (indice 0 = capital de départ), jusqu'à l'horizon.
+ * Même règle que `withdrawal` ; une fois le capital épuisé, les valeurs restent à 0.
+ */
+export function withdrawalSeries(input: WithdrawalInput): number[] {
+  const capital = Math.max(0, num(input.capital));
+  const monthly = Math.max(0, num(input.monthly));
+  const mr = monthlyRate(clamp(input.annualReturn, -0.5, 1, 0));
+  const idx = clamp(input.indexation, -0.5, 1, 0);
+  const months = Math.floor(clamp(input.years, 0, 80, 0) * 12);
+  const out = [capital];
+  let cap = capital;
+  for (let t = 0; t < months; t++) {
+    cap *= 1 + mr;
+    const w = monthly * Math.pow(1 + idx, Math.floor(t / 12));
+    cap = cap < w ? 0 : cap - w;
+    if ((t + 1) % 12 === 0) out.push(cap);
+  }
+  return out;
+}
