@@ -44,8 +44,8 @@ export default function SimImmobilier() {
     <>
       <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: 'Immobilier locatif' }]} />
       <PageHead eyebrow="Calculateur" title="Calculateur immobilier locatif">
-        Mensualité, coût du crédit, rendements, flux de trésorerie, capital restant dû et patrimoine net estimé, avec un scénario défavorable.
-        Les calculs avant impôt sont séparés des estimations après impôt.
+        Combien coûte le crédit, ce que rapporte le loyer et ce qu'il reste à votre charge chaque mois, avec un scénario défavorable.
+        Calculs avant impôt et estimations après impôt sont présentés séparément.
       </PageHead>
       <div className="sim">
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>

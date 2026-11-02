@@ -54,6 +54,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-02 (audit technique, 77 pages indexables à 375 px) : aucune erreur de console, aucun débordement horizontal, un seul h1 partout ; page de simulateur la plus longue : immobilier (5 789 px) ; introduction de la page la plus technique des simulateurs réécrite (voir « Fait »). Encyclopédie et fiche Livret A relues : rien de bloquant.
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (faits) ; tout améliorer, y compris esthétique, vulgarisation et illustrations maison.
 - 2026-11-01 (audit, accueil à 375 px, visiteur débutant) : dans « Par où commencer ? », la pastille d'icône de 64 px débordait de sa colonne de 48 px et touchait le titre (conflit de cascade CSS) ; corrigé (voir « Fait »). Reste de l'accueil relu : rien de bloquant.
 - 2026-11-01 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable (economie.gouv.fr, banque-france.fr, legifrance : 403 ; service-public : 404 ou page de vérification ; seul lafinancepourtous.com répond parfois) ; fiches non écrites faute de confirmation.
@@ -90,6 +91,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-02 : **Simulateur immobilier : introduction en langage simple** : la liste de termes techniques (7 lignes à 375 px, la plus longue des simulateurs) devient deux phrases sur ce que l'on obtient (coût du crédit, loyer, reste à charge mensuel). Aucun chiffre ni règle modifiés ; hauteur à 375 px : 5 789 → 5 759 px (1 280 px : 3 257, inchangée).
 - 2026-11-02 : **Graphiques : étiquettes de l'axe horizontal sans chevauchement** : la dernière étiquette est toujours affichée (alignée vers l'intérieur si elle dépasserait) et les autres ne sont gardées que si elles ne la touchent pas ; `placeXLabels` testée (`src/chartXLabels.test.ts`). Hauteurs de page inchangées. Aucune information factuelle modifiée.
 - 2026-11-01 : **Guides : « Autres guides » en cartes** : liste à puces remplacée par des cartes compactes (titre seul, même style que « Fiches liées »), mêmes liens. « Par où commencer » : 4 260 → 4 323 px à 375 px, 3 000 → 3 059 px à 1 280 px. Aucune information factuelle modifiée.
 - 2026-11-01 : **Guides : fin de page en cartes** : « Fiches liées » et « Simulateurs liés » reprennent les cartes des fiches de l'encyclopédie (lien en titre, description limitée à 2 lignes sur mobile, deux colonnes dès 701 px) au lieu de listes à tirets ; mêmes textes et mêmes liens. Guide « précaution » : 4 283 → 4 293 px à 375 px, 2 785 → 2 886 px à 1 280 px ; « par où commencer » 4 220 → 4 260 / 2 850 → 3 000 px. Aucune information factuelle modifiée.
