@@ -7,7 +7,7 @@ import { guideBySlug } from './data/guides';
 
 describe('schéma « règle de 72 »', () => {
   const guide = guideBySlug['regle-de-72-doubler-son-capital'];
-  const texte = guide.sections.map((s) => s.body.join(' ')).join(' ');
+  const texte = guide.sections.map((s) => s.body.join(' ')).join(' ').replace(/\u00a0/g, ' ');
   it('recalcule les durées citées dans le guide', () => {
     const r = regle72Rows().map((x) => [x.rate, x.exact.toFixed(2), x.rule]);
     expect(r).toEqual([[0.02, '35.00', 36], [0.04, '17.67', 18], [0.06, '11.90', 12], [0.08, '9.01', 9], [0.12, '6.12', 6]]);

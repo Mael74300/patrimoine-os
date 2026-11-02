@@ -90,7 +90,7 @@ describe('les exemples chiffrés des guides sont exacts', () => {
     expect(PROFILE_MONTHS.independant.months).toBe(9);
   });
   it('plafonds et taux des livrets cités dans le guide précaution = LIVRETS', () => {
-    const t = guides.find((x) => x.slug === 'combien-epargne-de-precaution')!.sections.flatMap((s) => s.body).join(' ');
+    const t = guides.find((x) => x.slug === 'combien-epargne-de-precaution')!.sections.flatMap((s) => s.body).join(' ').replace(/\u00a0/g, ' ');
     const by = Object.fromEntries(LIVRETS.map((l) => [l.id, l]));
     expect(by.lep.cap).toBe(10000); expect(by.livretA.cap).toBe(22950); expect(by.ldds.cap).toBe(12000);
     expect(by.lep.rate).toBe(0.025); expect(by.livretA.rate).toBe(0.017);
@@ -129,8 +129,8 @@ describe('guide diversification', () => {
   it('exemple fictif : 70 % à −20 % et 30 % à +2 % → −13,4 %', () => {
     expect(0.7 * -20 + 0.3 * 2).toBeCloseTo(-13.4, 10);
     const g = guides.find((x) => x.slug === 'diversification-placements')!;
-    expect(JSON.stringify(g)).toContain('−13,4 %');
-    expect(JSON.stringify(g)).toContain('fictif');
+    expect(JSON.stringify(g).replace(/\u00a0/g, ' ')).toContain('−13,4 %');
+    expect(JSON.stringify(g).replace(/\u00a0/g, ' ')).toContain('fictif');
   });
 });
 
@@ -140,7 +140,7 @@ describe('guide inflation', () => {
     expect(10000 * 1.03 ** 10).toBeCloseTo(13439, 0);
     expect(10000 * 1.03 ** 10 / 1.02 ** 10).toBeCloseTo(11025, 0);
     expect(1.03 / 1.02 - 1).toBeCloseTo(0.0098, 4);
-    const t = JSON.stringify(guides.find((x) => x.slug === 'inflation-pouvoir-d-achat-epargne')!);
+    const t = JSON.stringify(guides.find((x) => x.slug === 'inflation-pouvoir-d-achat-epargne')!).replace(/\u00a0/g, ' ');
     for (const v of ['8 203', '13 439', '11 025', '0,98 %', 'fictif']) expect(t).toContain(v);
   });
 });
@@ -197,7 +197,7 @@ describe('guide Livret A quinzaines : exemple fictif et taux cohérents', () => 
   it('une quinzaine sur 1 000 € à 1,70 % ≈ 0,71 €, taux et plafond = LIVRETS', () => {
     const a = LIVRETS.find((l) => l.id === 'livretA')!;
     expect(((1000 * a.rate) / 24).toFixed(2)).toBe('0.71');
-    const t = JSON.stringify(guides.find((x) => x.slug === 'livret-a-calcul-interets-quinzaines')!);
+    const t = JSON.stringify(guides.find((x) => x.slug === 'livret-a-calcul-interets-quinzaines')!).replace(/\u00a0/g, ' ');
     expect(t).toContain('1,70 %');
     expect(t).toContain('22 950 €');
     expect(a.rate).toBe(0.017);

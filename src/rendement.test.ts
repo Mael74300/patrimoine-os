@@ -7,7 +7,7 @@ import { guideBySlug } from './data/guides';
 
 describe('schéma « rendement locatif : du brut au net »', () => {
   const guide = guideBySlug['rentabilite-locative'];
-  const texte = guide.sections.map((s) => [s.heading, ...s.body].join(' ')).join(' ');
+  const texte = guide.sections.map((s) => [s.heading, ...s.body].join(' ')).join(' ').replace(/\u00a0/g, ' ');
   const steps = rendementSteps();
   it('recalcule les chiffres du guide (6 % brut, environ 3,6 % net)', () => {
     expect(steps[0].value).toBeCloseTo(0.06, 6);

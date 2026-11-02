@@ -7,7 +7,7 @@ import { guideBySlug } from './data/guides';
 
 describe('schéma « patrimoine net »', () => {
   const guide = guideBySlug['patrimoine-net'];
-  const texte = guide.sections.map((s) => [s.heading, ...s.body].join(' ')).join(' ');
+  const texte = guide.sections.map((s) => [s.heading, ...s.body].join(' ')).join(' ').replace(/\u00a0/g, ' ');
   it('recalcule l’exemple fictif de la définition (250 000 + 15 000 − 180 000 = 85 000 €)', () => {
     const p = patrimoineParts();
     expect(p.assets).toBe(265000);
