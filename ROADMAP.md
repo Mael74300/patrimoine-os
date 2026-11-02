@@ -54,6 +54,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-02 (audit, « Louer ou acheter » à 375 px, futur acheteur) : les deux tableaux de sensibilité donnaient un écart « Acheter − louer » négatif sans dire quel choix gagne ; colonne « Le plus avantageux » ajoutée (voir « Fait »). Page de 4 642 → 4 686 px. Guide « diversification » et simulateur de retraits relus : rien de bloquant.
+- 2026-11-02 : service-public.gouv.fr répond de nouveau ; PFU de 31,4 % (12,8 % + 18,6 %) reconfirmé sur la plus-value de valeurs mobilières (F21618). Les autres usages du chiffre (intérêts, PER, crypto) restent à reconfirmer fiche par fiche.
 - 2026-11-02 (audit, accueil à 1 280 px, visiteur débutant) : bandeau bleu sans visuel, moitié droite vide alors que les rubriques ont leur scène ; scène ajoutée (voir « Fait »). Fiche Livret A à 375 px relue : rien de bloquant.
 - 2026-11-02 (audit technique, 77 pages indexables à 375 px) : aucune erreur de console, aucun débordement horizontal, un seul h1 partout ; page de simulateur la plus longue : immobilier (5 789 px) ; introduction de la page la plus technique des simulateurs réécrite (voir « Fait »). Encyclopédie et fiche Livret A relues : rien de bloquant.
 - 2026-11-02 (audit, accueil, encyclopédie et liste des guides à 375 px, visiteur débutant) : liste des guides de 4 243 px sans repère pour aller à une rubrique ; pastilles d'accès rapide ajoutées (voir « Fait »). Encyclopédie et accueil : rien de bloquant.
@@ -92,6 +94,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 11. [x] **Test de fumée dans l'intégration continue** : fait le 2026-10-30, voir « Fait ».
 
 ## Fait
+
+- 2026-11-02 : « Louer ou acheter » : colonne « Le plus avantageux » dans les tableaux de sensibilité (#PR).
 
 - 2026-11-02 : **Illustrations : scène du bandeau d'accueil** : piles de pièces de plus en plus hautes et pousse, en SVG décoratif (`HomeArt`, aria-hidden, sans chiffre), affichée dès 960 px ; masquée sur mobile ; hauteur de l'accueil inchangée (1 852 px à 1 280, 3 288 px à 375).
 - 2026-11-02 : **Simulateurs : pastille de thème qui débordait à 375 px** : le test de fumée en intégration continue signalait 22 px de débordement horizontal sur /simulateurs/ (pastille sans retour à la ligne) ; elle peut maintenant passer à la ligne ; le test de fumée liste désormais les éléments fautifs (#163). Aucune information factuelle modifiée.

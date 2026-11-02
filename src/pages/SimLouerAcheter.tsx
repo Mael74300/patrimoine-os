@@ -14,6 +14,11 @@ const DEFAULTS: State = {
   priceGrowth: 0.02, sellingRate: 0.05, monthlyRent: 900, rentGrowth: 0.02, investReturn: 0.04, horizonYears: 15,
 };
 
+function verdict(advantage: number): string {
+  if (Math.round(advantage) === 0) return 'À égalité';
+  return advantage > 0 ? 'Acheter' : 'Louer';
+}
+
 export default function SimLouerAcheter() {
   const [s, setS, up] = usePersistentState<State>('louer-acheter', DEFAULTS);
   const r = rentVsBuy(s);
@@ -71,10 +76,10 @@ export default function SimLouerAcheter() {
           <h2>Si le prix du bien évolue autrement</h2>
           <div className="table-wrap" tabIndex={0}>
             <table>
-              <thead><tr><th scope="col">Hausse annuelle du prix</th><th scope="col" className="r">Acheter − louer</th></tr></thead>
+              <thead><tr><th scope="col">Hausse annuelle du prix</th><th scope="col" className="r">Acheter − louer</th><th scope="col">Le plus avantageux</th></tr></thead>
               <tbody>
                 {byGrowth.map((d) => (
-                  <tr key={d.growth}><th scope="row">{fmtPct(d.growth)}</th><td className="r">{fmtEur(d.advantage)}</td></tr>
+                  <tr key={d.growth}><th scope="row">{fmtPct(d.growth)}</th><td className="r">{fmtEur(d.advantage)}</td><td>{verdict(d.advantage)}</td></tr>
                 ))}
               </tbody>
             </table>
@@ -82,10 +87,10 @@ export default function SimLouerAcheter() {
           <h2>Si l’on revend plus tôt ou plus tard</h2>
           <div className="table-wrap" tabIndex={0}>
             <table>
-              <thead><tr><th scope="col">Horizon</th><th scope="col" className="r">Acheter − louer</th></tr></thead>
+              <thead><tr><th scope="col">Horizon</th><th scope="col" className="r">Acheter − louer</th><th scope="col">Le plus avantageux</th></tr></thead>
               <tbody>
                 {byHorizon.map((d) => (
-                  <tr key={d.years}><th scope="row">{d.years} ans</th><td className="r">{fmtEur(d.advantage)}</td></tr>
+                  <tr key={d.years}><th scope="row">{d.years} ans</th><td className="r">{fmtEur(d.advantage)}</td><td>{verdict(d.advantage)}</td></tr>
                 ))}
               </tbody>
             </table>
