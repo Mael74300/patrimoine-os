@@ -625,3 +625,6 @@ h2.gloss-letter::before { content: none; }
 .guide-jump a:hover { background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--accent); }
 @media (min-width: 900px) { .guide-jump { display: none; } }
 @media (max-width: 600px) { .guide-group { margin-top: 18px; } .guide-group .inv-list--compact .inv-row { padding: 7px 4px; } }
+
+/* Simulateurs : une pastille de thème trop longue passe à la ligne au lieu de déborder (mobile) */
+@media (max-width: 600px) { .theme-nav a { max-width: 100%; white-space: normal; padding-top: 6px; padding-bottom: 6px; line-height: 1.25; } }

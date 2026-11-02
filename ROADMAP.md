@@ -92,6 +92,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-02 : **Simulateurs : pastille de thème qui débordait à 375 px** : le test de fumée en intégration continue signalait 22 px de débordement horizontal sur /simulateurs/ (pastille sans retour à la ligne) ; elle peut maintenant passer à la ligne ; le test de fumée liste désormais les éléments fautifs (#163). Aucune information factuelle modifiée.
 - 2026-11-02 : **Guides : accès rapide aux rubriques sur mobile** : barre de quatre pastilles défilable (Pour démarrer, Comprendre les mécanismes, Choisir ses placements, Immobilier et crédit) en haut de la liste ; masquée dès 900 px (deux colonnes). Lignes un peu resserrées pour compenser : 4 243 → 4 165 px à 375 px, 2 061 px inchangé à 1 280 px. Aucune information factuelle modifiée.
 - 2026-11-02 : **Simulateur immobilier : introduction en langage simple** : la liste de termes techniques (7 lignes à 375 px, la plus longue des simulateurs) devient deux phrases sur ce que l'on obtient (coût du crédit, loyer, reste à charge mensuel). Aucun chiffre ni règle modifiés ; hauteur à 375 px : 5 789 → 5 759 px (1 280 px : 3 257, inchangée).
 - 2026-11-02 : **Graphiques : étiquettes de l'axe horizontal sans chevauchement** : la dernière étiquette est toujours affichée (alignée vers l'intérieur si elle dépasserait) et les autres ne sont gardées que si elles ne la touchent pas ; `placeXLabels` testée (`src/chartXLabels.test.ts`). Hauteurs de page inchangées. Aucune information factuelle modifiée.
