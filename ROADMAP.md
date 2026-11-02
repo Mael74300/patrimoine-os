@@ -57,7 +57,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-02 (audit, glossaire, entrepreneuriat, liste des simulateurs, fiche PER, guide PEA à 375 et 1 280 px) : aucune erreur de console, aucun débordement horizontal ; pages relues sans gêne bloquante (glossaire 5 499 px à 375 px avec index des lettres, entrepreneuriat 4 147, simulateurs 4 074, guide PEA 4 131). Aucun changement de code justifié cette fois.
 - 2026-11-02 : service-public.gouv.fr (F2329) confirme 18,6 % de prélèvements sociaux « cas général » sur les revenus 2026 et 17,2 % pour assurance-vie, PEL, CEL et PEP ; la fiche ne donne pas de taux pour le PEA (« règles particulières »). Le taux 2026 sur les gains de PEA reste donc non confirmé : ne pas le présenter comme vérifié (libellés « à vérifier » du simulateur ETF/immobilier conservés).
 - 2026-11-02 : PFU de 31,4 % (12,8 % + 18,6 %) reconfirmé sur service-public.gouv.fr (F21618, F2329). Les usages du chiffre dans les fiches (intérêts, PER, crypto) restent à reconfirmer fiche par fiche.
-- 2026-11-02 (audit clavier, guides à 375 et 1 280 px) : ordre de tabulation correct (lien d'évitement, en-tête, contenu) ; le menu mobile ne se refermait pas avec Échap (corrigé, voir « Fait »). Après un changement de page par le menu, le focus retombe sur le corps de la page : à traiter.
+- 2026-11-02 (audit clavier, guides à 375 et 1 280 px) : ordre de tabulation correct (lien d'évitement, en-tête, contenu) ; le menu mobile ne se refermait pas avec Échap (corrigé, voir « Fait »). Après un changement de page par le menu, le focus retombait sur le corps de la page (corrigé, voir « Fait »).
 - 2026-11-02 (audit, comparateur et « Louer ou acheter » à 375 px) : projection et tableaux de sensibilité traduits en clair (voir « Fait »).
 - 2026-11-02 (audit, accueil et guides) : scène du bandeau d'accueil et accès rapide aux rubriques des guides ajoutés (voir « Fait »).
 - 2026-11-01 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable pour la plupart (economie.gouv.fr, banque-france.fr, legifrance : 403) ; fiches non écrites faute de confirmation.
@@ -86,6 +86,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-02 : **Accessibilité : le focus passe au contenu après un changement de page** (pas au premier affichage ; pas de cadre autour de la page ; test de garde dans `accessibility.test.ts`). Hauteurs de page inchangées. Aucune information factuelle modifiée.
 - 2026-11-02 : **Accessibilité : Échap referme le menu mobile** et rend le focus au bouton « Menu » (test de garde dans `accessibility.test.ts`). Hauteurs de page inchangées. Aucune information factuelle modifiée.
 - 2026-11-02 : **Comparateur : projection traduite en clair** : phrase « Concrètement : vous versez X € de votre poche » et, sous chaque placement, « dont Y € de gains » (calcul pur `compareSummary`, testé contre `projectGrowth`). Aucun chiffre réglementaire.
 

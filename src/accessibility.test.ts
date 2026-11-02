@@ -93,3 +93,11 @@ describe('menu mobile au clavier', () => {
     expect(app).toContain('btnRef.current?.focus()');
   });
 });
+
+describe('changement de page au clavier', () => {
+  it('place le focus sur le contenu après navigation, sans le faire au premier affichage', () => {
+    const app: string = readFileSync('src/App.tsx', 'utf8');
+    expect(app).toContain("getElementById('contenu')?.focus({ preventScroll: true })");
+    expect(app).toContain('premiere.current');
+  });
+});
