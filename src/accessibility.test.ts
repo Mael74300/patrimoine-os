@@ -101,3 +101,10 @@ describe('changement de page au clavier', () => {
     expect(app).toContain('premiere.current');
   });
 });
+
+describe('bouton « Haut de page »', () => {
+  it('est masqué à l’impression et a une cible tactile d’au moins 44 px', () => {
+    expect(css).toMatch(/\.back-top\s*\{[^}]*min-height:\s*44px/);
+    expect(css).toMatch(/@media print\s*\{\s*\.back-top\s*\{\s*display:\s*none/);
+  });
+});
