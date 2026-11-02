@@ -54,6 +54,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-02 (audit, comparateur à 375 px, visiteur débutant) : la projection donnait des « valeurs à 15 ans » sans dire ce qui vient de soi et ce qui vient du rendement ; phrase « Concrètement » et ligne « dont X € de gains » ajoutées (voir « Fait »). Page de 4 429 → 4 610 px à 375 px. Fiche Livret A à 1 280 px relue : rien de bloquant.
 - 2026-11-02 (audit, « Louer ou acheter » à 375 px, futur acheteur) : les deux tableaux de sensibilité donnaient un écart « Acheter − louer » négatif sans dire quel choix gagne ; colonne « Le plus avantageux » ajoutée (voir « Fait »). Page de 4 642 → 4 686 px. Guide « diversification » et simulateur de retraits relus : rien de bloquant.
 - 2026-11-02 : service-public.gouv.fr répond de nouveau ; PFU de 31,4 % (12,8 % + 18,6 %) reconfirmé sur la plus-value de valeurs mobilières (F21618). Les autres usages du chiffre (intérêts, PER, crypto) restent à reconfirmer fiche par fiche.
 - 2026-11-02 (audit, accueil à 1 280 px, visiteur débutant) : bandeau bleu sans visuel, moitié droite vide alors que les rubriques ont leur scène ; scène ajoutée (voir « Fait »). Fiche Livret A à 375 px relue : rien de bloquant.
@@ -94,6 +95,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 11. [x] **Test de fumée dans l'intégration continue** : fait le 2026-10-30, voir « Fait ».
 
 ## Fait
+
+- 2026-11-02 : **Comparateur : projection traduite en clair** : phrase « Concrètement : vous versez X € de votre poche » et, sous chaque placement, « dont Y € de gains » (calcul pur `compareSummary`, testé contre `projectGrowth`). Aucun chiffre réglementaire.
 
 - 2026-11-02 : « Louer ou acheter » : colonne « Le plus avantageux » dans les tableaux de sensibilité (#166).
 
