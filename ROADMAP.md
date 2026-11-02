@@ -95,7 +95,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
-- 2026-11-02 : « Louer ou acheter » : colonne « Le plus avantageux » dans les tableaux de sensibilité (#PR).
+- 2026-11-02 : « Louer ou acheter » : colonne « Le plus avantageux » dans les tableaux de sensibilité (#166).
 
 - 2026-11-02 : **Illustrations : scène du bandeau d'accueil** : piles de pièces de plus en plus hautes et pousse, en SVG décoratif (`HomeArt`, aria-hidden, sans chiffre), affichée dès 960 px ; masquée sur mobile ; hauteur de l'accueil inchangée (1 852 px à 1 280, 3 288 px à 375).
 - 2026-11-02 : **Simulateurs : pastille de thème qui débordait à 375 px** : le test de fumée en intégration continue signalait 22 px de débordement horizontal sur /simulateurs/ (pastille sans retour à la ligne) ; elle peut maintenant passer à la ligne ; le test de fumée liste désormais les éléments fautifs (#163). Aucune information factuelle modifiée.
