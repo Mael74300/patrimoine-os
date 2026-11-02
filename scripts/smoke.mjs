@@ -57,7 +57,13 @@ for (const viewport of VIEWPORTS) {
     await page.goto(origin + path, { waitUntil: 'load' });
     await page.waitForTimeout(100);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-    if (overflow > 0) errors.push(`débordement horizontal de ${overflow} px`);
+    if (overflow > 0) {
+      const fautifs = await page.evaluate(() => [...document.querySelectorAll('body *')]
+        .filter((e) => e.getBoundingClientRect().right > window.innerWidth + 1)
+        .slice(0, 4)
+        .map((e) => `${e.tagName.toLowerCase()}${e.className && typeof e.className === 'string' ? '.' + e.className.split(' ').join('.') : ''} (droite à ${Math.round(e.getBoundingClientRect().right)} px)`));
+      errors.push(`débordement horizontal de ${overflow} px${fautifs.length ? ' ; éléments : ' + fautifs.join(', ') : ''}`);
+    }
     for (const e of errors) problems.push(`${path} (${viewport.width} px) : ${e}`);
   }
   await ctx.close();
