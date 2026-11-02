@@ -85,3 +85,11 @@ describe('cibles tactiles des liens isolés', () => {
     expect(css).toMatch(/\.gloss-links a \{ display: inline-block; padding: 4px 2px; margin-right: 12px; \}/);
   });
 });
+
+describe('menu mobile au clavier', () => {
+  it('se referme avec Échap et rend le focus au bouton', () => {
+    const app: string = readFileSync('src/App.tsx', 'utf8');
+    expect(app).toContain("e.key !== 'Escape'");
+    expect(app).toContain('btnRef.current?.focus()');
+  });
+});

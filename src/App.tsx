@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { config } from './config';
 import { trackPageview } from './lib/analytics';
@@ -50,11 +50,23 @@ function Header() {
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  // Échap referme le menu mobile ouvert et rend le focus au bouton « Menu ».
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setOpen(false);
+      btnRef.current?.focus();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open]);
   return (
     <header className="site-header">
       <div className="container">
         <Link to="/" className="brand"><Logo /> {config.siteName}</Link>
-        <button className="menu-btn" aria-expanded={open} aria-controls="main-nav" onClick={() => setOpen(!open)}>
+        <button ref={btnRef} className="menu-btn" aria-expanded={open} aria-controls="main-nav" onClick={() => setOpen(!open)}>
           Menu
         </button>
         <nav id="main-nav" className={'nav' + (open ? ' open' : '')} aria-label="Navigation principale">
