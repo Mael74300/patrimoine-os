@@ -27,7 +27,7 @@ export default function SimBudget() {
       </PageHead>
       <p className="notice" role="note">
         La répartition 50 / 30 / 20 (besoins, envies, épargne) est un repère pédagogique courant, pas une règle officielle. Selon le logement, la région
-        et la composition du foyer, les besoins peuvent dépasser 50 % du revenu : le repère sert à situer votre budget, pas à le juger.
+        et la composition du foyer, les besoins peuvent dépasser 50 % du revenu : le repère sert à situer votre budget, pas à le juger.
       </p>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
