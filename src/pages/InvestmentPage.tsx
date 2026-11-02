@@ -21,7 +21,11 @@ export default function InvestmentPage() {
 
   return (
     <>
-      <Crumbs items={[{ to: '/encyclopedie', label: 'Encyclopédie' }, { to: `/encyclopedie?cat=${cat.id}`, label: cat.name }, { label: inv.name }]} />
+      <Crumbs items={[
+        { to: '/encyclopedie', label: 'Encyclopédie' },
+        ...(cat.name === inv.name ? [] : [{ to: `/encyclopedie?cat=${cat.id}`, label: cat.name }]),
+        { label: inv.name },
+      ]} />
       <div className="fiche">
         <article className="prose">
           <PageHead eyebrow={cat.name} title={inv.name}>{inv.summary}</PageHead>
@@ -33,9 +37,10 @@ export default function InvestmentPage() {
               <Dots level={inv.effort} label="Effort" />
             </div>
             <MetersLegend />
-            <p className="small" style={{ margin: '10px 0 0' }}>
-              <strong>Horizon :</strong> {inv.horizon}. <strong>Capital :</strong> {inv.minCapital.text}{' '}
-              {!inv.minCapital.verified && <span className="badge-unverified">à vérifier</span>}
+            <p className="small fiche-facts" style={{ margin: '10px 0 0' }}>
+              <span><strong>Horizon :</strong> {inv.horizon}.</span>{' '}
+              <span><strong>Capital :</strong> {inv.minCapital.text}{' '}
+              {!inv.minCapital.verified && <span className="badge-unverified">à vérifier</span>}</span>
             </p>
             <div className="btn-row" style={{ marginTop: 12 }}>
               <Link className="btn small" to={`/comparateur?ids=${[inv.slug, ...inv.alternatives.slice(0, 2)].join(',')}`}>Comparer</Link>
