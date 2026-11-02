@@ -6,7 +6,7 @@ import { guides } from '../data/guides';
 import { simulators } from '../lib/search';
 import { config } from '../config';
 import { LineChart } from '../components/ui';
-import { SituationIcon, type SituationIconName } from '../components/Illustrations';
+import { HomeArt, SituationIcon, type SituationIconName } from '../components/Illustrations';
 
 const situations: { icon: SituationIconName; title: string; text: string; cta: string; to: string }[] = [
   { icon: 'pousse', title: 'Je débute', text: 'Un premier salaire, par où commencer ?', cta: 'Le guide pour démarrer', to: '/guides/par-ou-commencer' },
@@ -48,6 +48,7 @@ export default function Home() {
   return (
     <>
       <section className="home-hero">
+        <HomeArt />
         <div className="eyebrow">Patrimoine OS</div>
         <h1>Comprendre et construire votre patrimoine, simplement.</h1>
         <p className="lede">Des guides clairs, des fiches par placement et des simulateurs gratuits. Sans inscription, sans cookie.</p>

@@ -54,6 +54,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-02 (audit, accueil à 1 280 px, visiteur débutant) : bandeau bleu sans visuel, moitié droite vide alors que les rubriques ont leur scène ; scène ajoutée (voir « Fait »). Fiche Livret A à 375 px relue : rien de bloquant.
 - 2026-11-02 (audit technique, 77 pages indexables à 375 px) : aucune erreur de console, aucun débordement horizontal, un seul h1 partout ; page de simulateur la plus longue : immobilier (5 789 px) ; introduction de la page la plus technique des simulateurs réécrite (voir « Fait »). Encyclopédie et fiche Livret A relues : rien de bloquant.
 - 2026-11-02 (audit, accueil, encyclopédie et liste des guides à 375 px, visiteur débutant) : liste des guides de 4 243 px sans repère pour aller à une rubrique ; pastilles d'accès rapide ajoutées (voir « Fait »). Encyclopédie et accueil : rien de bloquant.
 - 2026-10-28 (propriétaire) : site jugé encombré et illisible ; trop de simulateurs qui se recoupent (faits) ; tout améliorer, y compris esthétique, vulgarisation et illustrations maison.
@@ -92,6 +93,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-02 : **Illustrations : scène du bandeau d'accueil** : piles de pièces de plus en plus hautes et pousse, en SVG décoratif (`HomeArt`, aria-hidden, sans chiffre), affichée dès 960 px ; masquée sur mobile ; hauteur de l'accueil inchangée (1 852 px à 1 280, 3 288 px à 375).
 - 2026-11-02 : **Simulateurs : pastille de thème qui débordait à 375 px** : le test de fumée en intégration continue signalait 22 px de débordement horizontal sur /simulateurs/ (pastille sans retour à la ligne) ; elle peut maintenant passer à la ligne ; le test de fumée liste désormais les éléments fautifs (#163). Aucune information factuelle modifiée.
 - 2026-11-02 : **Guides : accès rapide aux rubriques sur mobile** : barre de quatre pastilles défilable (Pour démarrer, Comprendre les mécanismes, Choisir ses placements, Immobilier et crédit) en haut de la liste ; masquée dès 900 px (deux colonnes). Lignes un peu resserrées pour compenser : 4 243 → 4 165 px à 375 px, 2 061 px inchangé à 1 280 px. Aucune information factuelle modifiée.
 - 2026-11-02 : **Simulateur immobilier : introduction en langage simple** : la liste de termes techniques (7 lignes à 375 px, la plus longue des simulateurs) devient deux phrases sur ce que l'on obtient (coût du crédit, loyer, reste à charge mensuel). Aucun chiffre ni règle modifiés ; hauteur à 375 px : 5 789 → 5 759 px (1 280 px : 3 257, inchangée).
