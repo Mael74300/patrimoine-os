@@ -54,7 +54,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
-- 2026-11-02 (audit, fiches assurance-vie, Livret A, PEA et recherche à 375 et 1 280 px) : aucune erreur de console ni débordement ; le bloc fiscalité des fiches était un pavé de chiffres difficile à parcourir (corrigé, voir « Fait »). Les espaces dans les montants (« 4 600 € ») se coupent en fin de ligne : à traiter avec des espaces insécables.
+- 2026-11-02 (audit, fiches assurance-vie, Livret A, PEA et recherche à 375 et 1 280 px) : aucune erreur de console ni débordement ; le bloc fiscalité des fiches était un pavé de chiffres difficile à parcourir (corrigé, voir « Fait »). Les espaces dans les montants et unités des textes écrits à la main (« 4 600 € », « 2 % ») se coupent en fin de ligne : corrigé sur l'accueil le 2026-11-02 ; reste à faire pour les guides, fiches et simulateurs (essai global abandonné : une cinquantaine de fichiers et une quinzaine de tests qui comparent le texte à des chaînes avec espace simple ; à faire par lots, en adaptant les tests).
 - 2026-11-02 (audit, glossaire, entrepreneuriat, liste des simulateurs, fiche PER, guide PEA à 375 et 1 280 px) : aucune erreur de console, aucun débordement horizontal ; pages relues sans gêne bloquante (glossaire 5 499 px à 375 px avec index des lettres, entrepreneuriat 4 147, simulateurs 4 074, guide PEA 4 131). Aucun changement de code justifié cette fois.
 - 2026-11-02 : service-public.gouv.fr (F2329) confirme 18,6 % de prélèvements sociaux « cas général » sur les revenus 2026 et 17,2 % pour assurance-vie, PEL, CEL et PEP ; la fiche ne donne pas de taux pour le PEA (« règles particulières »). Le taux 2026 sur les gains de PEA reste donc non confirmé : ne pas le présenter comme vérifié (libellés « à vérifier » du simulateur ETF/immobilier conservés).
 - 2026-11-02 : PFU de 31,4 % (12,8 % + 18,6 %) reconfirmé sur service-public.gouv.fr (F21618, F2329). Les usages du chiffre dans les fiches (intérêts, PER, crypto) restent à reconfirmer fiche par fiche.
@@ -85,6 +85,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-02 : **Typographie : espaces insécables sur l'accueil** : « 5 000 € », « 25 ans », « 2 % » ne se coupent plus en fin de ligne dans l'exemple chiffré (même texte, mêmes chiffres). Hauteurs inchangées (3 288 px à 375 px, 1 852 px à 1 280 px).
 - 2026-11-02 : **Fiches : frais et fiscalité phrase par phrase** : quand le texte compte au moins trois phrases, la rubrique « En pratique » l'affiche en liste courte au lieu d'un bloc ; contenu et sources inchangés (test : aucun mot perdu). Assurance-vie 4 441 → 4 510 px à 375 px (+69 px), 1 280 px : 2 889 → 2 958 px (PR à venir).
 
 - 2026-11-02 : **Accessibilité : le focus passe au contenu après un changement de page** (pas au premier affichage ; pas de cadre autour de la page ; test de garde dans `accessibility.test.ts`). Hauteurs de page inchangées. Aucune information factuelle modifiée.

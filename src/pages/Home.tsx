@@ -98,13 +98,13 @@ export default function Home() {
           <div className="eyebrow eyebrow-warn">Exemple fictif</div>
           <h2 className="plain">Ce que peut donner l'épargne régulière</h2>
           <p>
-            5 000 € de départ, puis 200 € par mois pendant 25 ans, avec une <strong>hypothèse</strong> de 5 % par an, 0,5 % de frais et 2 % d'inflation :
+            5 000 € de départ, puis 200 € par mois pendant 25 ans, avec une <strong>hypothèse</strong> de 5 % par an, 0,5 % de frais et 2 % d'inflation :
             {' '}{fmtEur(last.value)} pour {fmtEur(last.contributed)} versés. Ce n'est ni une prévision ni une promesse.
           </p>
           <Link className="btn" to="/simulateurs/patrimoine">Faire ma simulation</Link>
         </div>
         <LineChart
-          title="Exemple fictif de projection sur 25 ans"
+          title="Exemple fictif de projection sur 25 ans"
           height={220}
           xLabels={example.map((p) => `An ${p.year}`)}
           format={fmtEur}
