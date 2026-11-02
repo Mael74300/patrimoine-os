@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { withdrawal, fmtEur } from '../lib/finance';
+import { withdrawal, withdrawalSeries, fmtEur } from '../lib/finance';
 import { withdrawalTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type State = { capital: number; monthly: number; ret: number; idx: number; years: number };
 
@@ -13,6 +13,8 @@ export default function SimRetraits() {
   const r = withdrawal({ capital: s.capital, monthly: s.monthly, annualReturn: s.ret, indexation: s.idx, years: s.years });
   const dur = r.monthsUntilEmpty;
   const durLabel = dur === null ? `Au-delà de ${s.years} ans` : `${Math.floor(dur / 12)} ans et ${dur % 12} mois`;
+
+  const series = withdrawalSeries({ capital: s.capital, monthly: s.monthly, annualReturn: s.ret, indexation: s.idx, years: s.years });
 
   return (
     <>
@@ -49,6 +51,13 @@ export default function SimRetraits() {
             <Kpi label="Retrait mensuel tenable" value={fmtEur(r.sustainable)} sub="premier retrait maximal jusqu’à l’horizon" />
           </div>
           <Takeaway>{withdrawalTakeaway({ capital: s.capital, monthly: s.monthly, years: s.years, monthsUntilEmpty: r.monthsUntilEmpty, remaining: r.remaining, totalWithdrawn: r.totalWithdrawn, sustainable: r.sustainable })}</Takeaway>
+          <h2>Capital restant année après année</h2>
+          <LineChart
+            title="Capital restant à la fin de chaque année de retraits"
+            xLabels={series.map((_, i) => `An ${i}`)}
+            format={fmtEur}
+            series={[{ name: 'Capital restant', color: 'var(--chart-1)', values: series }]}
+          />
           <p className="muted small">
             Le rendement est appliqué chaque mois, puis le retrait est prélevé en fin de mois ; le retrait est revalorisé chaque année du taux saisi.
             Total retiré sur la période : {fmtEur(r.totalWithdrawn)}. Les exemples ci-dessus sont fictifs.
