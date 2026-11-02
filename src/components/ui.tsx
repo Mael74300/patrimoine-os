@@ -162,16 +162,32 @@ export function MetersLegend() {
   );
 }
 
-export function CheckedText({ c }: { c: Checked }) {
+/** Découpe un texte en phrases (sans rien modifier au contenu) pour l'afficher ligne par ligne. */
+export function splitSentences(text: string): string[] {
+  return text.split(/(?<=[.!?])\s+(?=[A-ZÉÈÀÂÎÔ])/).map((t) => t.trim()).filter(Boolean);
+}
+
+export function CheckedText({ c, split = false }: { c: Checked; split?: boolean }) {
+  const badge = c.verified ? (
+    <span className="badge-verified">✓ vérifié{c.asOf ? ` au ${c.asOf}` : ''}</span>
+  ) : (
+    <span className="badge-unverified">à vérifier</span>
+  );
+  const parts = split ? splitSentences(c.text) : [c.text];
+  if (parts.length < 3) {
+    return (
+      <p>
+        {c.text} {badge}
+      </p>
+    );
+  }
   return (
-    <p>
-      {c.text}{' '}
-      {c.verified ? (
-        <span className="badge-verified">✓ vérifié{c.asOf ? ` au ${c.asOf}` : ''}</span>
-      ) : (
-        <span className="badge-unverified">à vérifier</span>
-      )}
-    </p>
+    <>
+      <ul className="sentence-list">
+        {parts.map((t) => <li key={t}>{t}</li>)}
+      </ul>
+      <p className="sentence-badge">{badge}</p>
+    </>
   );
 }
 

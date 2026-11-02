@@ -53,8 +53,8 @@ export default function InvestmentPage() {
 
           <h2>En pratique</h2>
           <div className="facts-grid">
-            <div className="panel"><h3>Frais</h3><CheckedText c={inv.fees} /></div>
-            <div className="panel"><h3>Fiscalité française</h3><CheckedText c={inv.tax} /></div>
+            <div className="panel"><h3>Frais</h3><CheckedText c={inv.fees} split /></div>
+            <div className="panel"><h3>Fiscalité française</h3><CheckedText c={inv.tax} split /></div>
             <p className="facts-wide"><strong>Temps et compétences :</strong> {inv.timeSkills}</p>
           </div>
 
