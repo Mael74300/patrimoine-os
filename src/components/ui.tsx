@@ -233,6 +233,39 @@ type ChartProps = {
   height?: number;
 };
 
+const CHAR_W = 6.6; // largeur moyenne d'un caractère de la police des graduations (px)
+
+/**
+ * Choisit les étiquettes de l'axe horizontal : toujours la dernière, alignée vers l'intérieur si elle
+ * dépasserait du dessin, et les autres seulement si elles ne la chevauchent pas ni ne chevauchent la précédente.
+ */
+export function placeXLabels(
+  labels: string[],
+  every: number,
+  x: (i: number) => number,
+  width: number,
+): ({ x: number; anchor: 'middle' | 'end' } | null)[] {
+  const n = labels.length;
+  const out: ({ x: number; anchor: 'middle' | 'end' } | null)[] = labels.map(() => null);
+  if (n === 0) return out;
+  const gap = 8;
+  const last = n - 1;
+  const wLast = labels[last].length * CHAR_W;
+  const lastAnchor = x(last) + wLast / 2 > width ? 'end' : 'middle';
+  const lastLeft = lastAnchor === 'end' ? x(last) - wLast : x(last) - wLast / 2;
+  out[last] = { x: x(last), anchor: lastAnchor };
+  let prevRight = -Infinity;
+  for (let i = 0; i < last; i += every) {
+    const w = labels[i].length * CHAR_W;
+    const left = x(i) - w / 2;
+    const right = x(i) + w / 2;
+    if (left < prevRight + gap || right + gap > lastLeft) continue;
+    out[i] = { x: x(i), anchor: 'middle' };
+    prevRight = right;
+  }
+  return out;
+}
+
 /** Graphique en lignes SVG, sans dépendance, utilisable à la souris, au doigt et au clavier. */
 export function LineChart({ series, xLabels, format, title, height = 300 }: ChartProps) {
   // Largeur du dessin = largeur affichée : les textes gardent leur taille réelle (lisibles sur mobile).
@@ -273,6 +306,11 @@ export function LineChart({ series, xLabels, format, title, height = 300 }: Char
   const x = (i: number) => pad.l + (n <= 1 ? 0 : (i / (n - 1)) * (W - pad.l - pad.r));
   const y = (v: number) => pad.t + (1 - (v - min) / (max - min || 1)) * (H - pad.t - pad.b);
   const labelEvery = Math.max(1, Math.ceil(n / Math.max(3, Math.floor((W - pad.l - pad.r) / 56))));
+  const xLabelBoxes = useMemo(
+    () => placeXLabels(xLabels.map(String), labelEvery, (i) => x(i), W),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [xLabels, labelEvery, W, pad.l, pad.r],
+  );
 
   const onMove = (clientX: number) => {
     const svg = svgRef.current;
@@ -310,11 +348,12 @@ export function LineChart({ series, xLabels, format, title, height = 300 }: Char
             <text x={pad.l - 8} y={y(t) + 4} textAnchor="end">{compact(t)}</text>
           </g>
         ))}
-        {xLabels.map((l, i) =>
-          (i % labelEvery === 0 && n - 1 - i >= labelEvery * 0.6) || i === n - 1 ? (
-            <text key={i} x={x(i)} y={H - 10} textAnchor="middle">{l}</text>
-          ) : null,
-        )}
+        {xLabels.map((l, i) => {
+          const box = xLabelBoxes[i];
+          return box ? (
+            <text key={i} x={box.x} y={H - 10} textAnchor={box.anchor}>{l}</text>
+          ) : null;
+        })}
         {series.map((s, idx) => (
           <path
             key={idx}
