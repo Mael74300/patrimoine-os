@@ -18,3 +18,16 @@ describe('schéma en escalier du guide « Par où commencer »', () => {
     expect(svg.length).toBeLessThan(15000);
   });
 });
+
+describe('liens « pour aller plus loin » du guide « Par où commencer »', () => {
+  it('un lien par étape, vers une page existante du site', async () => {
+    const { etapesSuite } = await import('./pages/Guides');
+    const { simulators } = await import('./lib/search');
+    expect(etapesSuite).toHaveLength(guideBySlug['par-ou-commencer'].sections.length);
+    etapesSuite.forEach((e) => {
+      const [, kind, slug] = e.to.split('/');
+      if (kind === 'guides') expect(guideBySlug[slug]).toBeTruthy();
+      else expect(simulators.some((s: { slug: string }) => s.slug === slug)).toBe(true);
+    });
+  });
+});
