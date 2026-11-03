@@ -24,19 +24,21 @@ export default function SearchPage() {
           </ul>
         </section>
       )}
-      <ul className="inv-list">
-        {hits.map((h) => (
-          <li key={h.to}>
-            <Link className="inv-row" to={h.to}>
-              <div>
-                <div className="small muted">{h.kind}</div>
-                <h3>{h.title}</h3>
-                <p>{h.excerpt}</p>
-              </div>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {hits.length > 0 && (
+        <ul className="inv-list">
+          {hits.map((h) => (
+            <li key={h.to}>
+              <Link className="inv-row" to={h.to}>
+                <div>
+                  <div className="small muted">{h.kind}</div>
+                  <h3>{h.title}</h3>
+                  <p>{h.excerpt}</p>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 }
