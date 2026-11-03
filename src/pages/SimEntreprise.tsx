@@ -62,7 +62,7 @@ export default function SimEntreprise() {
                 <legend>Charges et impôt</legend>
                 <NumberField label="Évolution des charges fixes" unit="%/an" percent value={s.fixedCostsGrowth} onChange={up('fixedCostsGrowth')} step={0.5} min={-20} max={50} />
                 <NumberField label="Charges sociales" unit="% du net" percent value={s.socialRate} onChange={up('socialRate')} step={1} min={0} max={150} hint="Varie fortement selon le statut : à vérifier avec l'URSSAF." />
-                <NumberField label="Impôt sur les sociétés" unit="%" percent value={s.corporateTaxRate} onChange={up('corporateTaxRate')} step={1} min={0} max={50} hint="Taux normal 25 % ; un taux réduit existe sous conditions pour les PME (à vérifier)." />
+                <NumberField label="Impôt sur les sociétés" unit="%" percent value={s.corporateTaxRate} onChange={up('corporateTaxRate')} step={1} min={0} max={50} hint="Taux normal 25 % ; un taux réduit existe sous conditions pour les PME (à vérifier)." />
               </fieldset>
               <fieldset>
                 <legend>Trésorerie et valorisation</legend>

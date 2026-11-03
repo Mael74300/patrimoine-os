@@ -76,7 +76,7 @@ export default function SimIndependance() {
                       <td>{fmtPct(w)}</td>
                       <td className="r">{Number.isFinite(t) ? fmtEur(t) : '—'}</td>
                       <td className="r">{fmtYears(yearsToTarget({ ...s, withdrawalRate: w }))}</td>
-                      <td className="r">{d === null ? 'plus de 60 ans' : `${d} ans`}</td>
+                      <td className="r">{d === null ? 'plus de 60 ans' : `${d} ans`}</td>
                     </tr>
                   );
                 })}

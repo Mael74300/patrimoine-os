@@ -16,13 +16,13 @@ export const FORMULAS: [string, string[]][] = [
   ]],
   ['Crédit', [
     'Mensualité : C × t / (1 − (1 + t)^−n). Assurance : taux annuel × capital initial / 12.',
-    'Remboursement anticipé : indemnités = min(6 mois d’intérêts sur la somme remboursée, 3 % du capital restant dû avant remboursement).',
+    'Remboursement anticipé : indemnités = min(6 mois d’intérêts sur la somme remboursée, 3 % du capital restant dû avant remboursement).',
   ]],
   ['Immobilier locatif', [
     'Rendement brut = loyers annuels / prix. Rendement net de charges = (loyers encaissés − charges) / (prix + frais + travaux + mobilier).',
     'Flux de trésorerie avant impôt = loyers − charges − intérêts − capital remboursé − assurance.',
     'Impôt estimé = base × (tranche marginale + prélèvements sociaux). Micro : base = loyers × (1 − abattement). Réel : loyers − charges − intérêts − assurance, déficit reporté ; LMNP : amortissement sans création de déficit.',
-    'Patrimoine net immobilier = prix × (1 + évolution)^années − capital restant dû. Plus-value : 19 % + 17,2 % avec abattements pour durée de détention.',
+    'Patrimoine net immobilier = prix × (1 + évolution)^années − capital restant dû. Plus-value : 19 % + 17,2 % avec abattements pour durée de détention.',
   ]],
   ['Comparateur ETF / immobilier', [
     'Même capital de départ (l’apport) ; même effort annuel : le flux négatif après impôt du bien est investi en ETF ; un excédent est placé au taux choisi.',
@@ -45,7 +45,7 @@ export const FORMULAS: [string, string[]][] = [
     'Gain net = intérêts restants du prêt actuel − intérêts du nouveau prêt − frais saisis. Point mort = frais / (mensualité actuelle − nouvelle mensualité). Assurance exclue, échéances constantes, taux et frais saisis uniquement.',
   ]],
   ['Durée pour atteindre un capital', [
-    'Chaque mois : capital = capital × (1 + rendement mensuel équivalent) + versement (fin de mois), jusqu’à atteindre le capital visé (100 ans au plus). Intérêts = capital à l’arrivée − total versé. Durée sans rendement = ⌈(objectif − capital de départ) ÷ versement⌉. Rendement supposé constant, avant frais, impôts et inflation ; ce sont des hypothèses, pas des prévisions.',
+    'Chaque mois : capital = capital × (1 + rendement mensuel équivalent) + versement (fin de mois), jusqu’à atteindre le capital visé (100 ans au plus). Intérêts = capital à l’arrivée − total versé. Durée sans rendement = ⌈(objectif − capital de départ) ÷ versement⌉. Rendement supposé constant, avant frais, impôts et inflation ; ce sont des hypothèses, pas des prévisions.',
   ]],
   ['Durée du crédit', [
     'Pour chaque durée : mensualité = capital × (taux / 12) ÷ (1 − (1 + taux / 12)^(−mois)) (capital ÷ mois si taux nul) ; assurance mensuelle = capital × taux d’assurance ÷ 12 ; intérêts = mensualité × mois − capital ; coût total = intérêts + assurance. Taux fixe identique pour toutes les durées ; ce sont des hypothèses, pas une offre de prêt.',
@@ -54,10 +54,10 @@ export const FORMULAS: [string, string[]][] = [
     'In fine : intérêts mensuels = capital × taux / 12 ; assurance mensuelle = capital × taux d’assurance / 12 ; épargne mensuelle (fin de mois) = capital × r ÷ ((1 + r)^mois − 1) avec r = (1 + rendement net)^(1/12) − 1 (capital ÷ mois si r = 0). Coût net = (intérêts + assurance) × mois − (capital − épargne mensuelle × mois). Amortissable : mensualité constante, coût = intérêts + assurance. Rendement constant, sans fiscalité ni frais ; ce sont des hypothèses, pas une offre de prêt.',
   ]],
   ['Capital à placer aujourd’hui', [
-    'Valeur actualisée : avec r = (1 + R)^(1/12) − 1 et n le nombre de mois, capital à placer = (capital visé − versement × ((1 + r)^n − 1) / r) / (1 + r)^n, borné à 0 € ; si r = 0, capital visé − versement × n. Les versements sont en fin de mois, le rendement est constant et supposé.',
+    'Valeur actualisée : avec r = (1 + R)^(1/12) − 1 et n le nombre de mois, capital à placer = (capital visé − versement × ((1 + r)^n − 1) / r) / (1 + r)^n, borné à 0 € ; si r = 0, capital visé − versement × n. Les versements sont en fin de mois, le rendement est constant et supposé.',
   ]],
   ['Rendement nécessaire pour atteindre un objectif', [
-    'Recherche par dichotomie (80 itérations, rendement entre 0 % et 100 % par an) du rendement annuel R tel que, avec r = (1 + R)^(1/12) − 1 et pour chacun des mois de la durée : capital = capital × (1 + r) + versement (fin de mois), le capital final égale le capital visé. Si les versements seuls suffisent, le résultat est 0 % ; si même 100 % par an ne suffit pas, aucun rendement n’est affiché.',
+    'Recherche par dichotomie (80 itérations, rendement entre 0 % et 100 % par an) du rendement annuel R tel que, avec r = (1 + R)^(1/12) − 1 et pour chacun des mois de la durée : capital = capital × (1 + r) + versement (fin de mois), le capital final égale le capital visé. Si les versements seuls suffisent, le résultat est 0 % ; si même 100 % par an ne suffit pas, aucun rendement n’est affiché.',
   ]],
   ['Convertir un taux annuel', [
     'Taux équivalent par période = (1 + taux annuel)^(1/n) − 1 ; taux proportionnel = taux annuel / n ; taux annuel nominal équivalent = n × taux équivalent ; taux annuel du taux proportionnel = (1 + taux / n)^n − 1. Taux saisi uniquement, sans chiffre réglementaire.',
@@ -82,7 +82,7 @@ export const FORMULAS: [string, string[]][] = [
     'Phase de retrait : retrait en début d’année, revalorisé de l’inflation, puis rendement nominal sur le capital restant.',
   ]],
   ['Épargne de précaution', [
-    'Montant visé = dépenses mensuelles × nombre de mois + réserve pour dépenses prévisibles. Les durées proposées (3, 6, 9 mois) sont des repères, non une règle officielle.',
+    'Montant visé = dépenses mensuelles × nombre de mois + réserve pour dépenses prévisibles. Les durées proposées (3, 6, 9 mois) sont des repères, non une règle officielle.',
     'Constitution : intérêts au taux mensuel équivalent puis versement en fin de mois. Versement requis : (cible − épargne × (1 + t)^n) / [((1 + t)^n − 1) / t].',
     'Répartition : LEP (si éligible), puis Livret A, puis LDDS, dans la limite des plafonds de versement ; l’excédent est indiqué sans rémunération supposée.',
   ]],
@@ -93,7 +93,7 @@ export const FORMULAS: [string, string[]][] = [
   ['Rembourser ou investir', [
     'Horizon commun : la durée restante du crédit. Crédit à échéances constantes, taux mensuel = taux nominal / 12 ; mensualité = capital × t / (1 − (1 + t)^−n).',
     'Rembourser : la somme réduit le capital, la mensualité est conservée, le crédit s’éteint plus tôt et les mensualités libérées sont investies jusqu’à l’horizon. Investir : le crédit suit son échéancier, la somme est placée dès le départ.',
-    'Placement : rendement net de frais au taux actuariel mensuel ; patrimoine net = placement − impôt (taux unique sur les gains, jamais sur une perte) − capital restant dû. Rendement d’équilibre : recherche par dichotomie du rendement brut (0–30 %) qui égalise les deux options. Assurance et indemnités de remboursement anticipé ignorées.',
+    'Placement : rendement net de frais au taux actuariel mensuel ; patrimoine net = placement − impôt (taux unique sur les gains, jamais sur une perte) − capital restant dû. Rendement d’équilibre : recherche par dichotomie du rendement brut (0–30 %) qui égalise les deux options. Assurance et indemnités de remboursement anticipé ignorées.',
   ]],
   ['Inflation et pouvoir d’achat', [
     'Valeur d’une somme S en euros d’aujourd’hui après T années : S / (1 + i)^T. Montant nécessaire pour garder le même pouvoir d’achat : S × (1 + i)^T. Perte de pouvoir d’achat = 1 − valeur réelle / S.',
@@ -109,7 +109,7 @@ export const FORMULAS: [string, string[]][] = [
   ]],
   ['Rembourser plusieurs dettes', [
     'Chaque mois, chaque dette produit des intérêts égaux à son solde × taux annuel / 12 (convention des crédits), puis les mensualités minimales sont payées. Le reste du budget (budget total constant = somme des minimums + versement supplémentaire) va à la dette prioritaire : taux le plus élevé (avalanche) ou plus petit solde (boule de neige). Une dette soldée libère sa mensualité pour la suivante.',
-    'Hypothèses : taux fixes, aucun frais ni indemnité de remboursement anticipé, durée limitée à 50 ans (au-delà, la dette est déclarée non soldée). Toutes les valeurs sont saisies par l’utilisateur.',
+    'Hypothèses : taux fixes, aucun frais ni indemnité de remboursement anticipé, durée limitée à 50 ans (au-delà, la dette est déclarée non soldée). Toutes les valeurs sont saisies par l’utilisateur.',
   ]],
   ['Investir d’un coup ou progressivement', [
     'Le prix suit un parcours supposé : régulier (rendement annuel saisi, converti en taux mensuel équivalent), ou avec une baisse ou une hausse linéaire de l’ampleur saisie pendant la durée d’étalement, puis le rendement saisi. Investir en une fois : parts = capital / prix(0), valeur finale = parts × prix(horizon).',
@@ -120,12 +120,12 @@ export const FORMULAS: [string, string[]][] = [
     'Hypothèses : échéances constantes, assurance en pourcentage annuel du capital initial, frais payés à la signature, sans garantie à restituer ni indemnité de sortie. Estimation pédagogique : seul le TAEG de l’offre de prêt fait foi.',
   ]],
   ['Taux d’endettement et reste à vivre', [
-    'Taux d’endettement = (mensualités en cours + nouvelle mensualité, assurance comprise) / revenus nets mensuels. Repère : 35 % au plus (recommandation du HCSF, décision D-HCSF-2021-7), sur 25 ans au plus. Mensualité maximale = 35 % × revenus − mensualités en cours ; revenu minimal = charges d’emprunt / 35 %.',
+    'Taux d’endettement = (mensualités en cours + nouvelle mensualité, assurance comprise) / revenus nets mensuels. Repère : 35 % au plus (recommandation du HCSF, décision D-HCSF-2021-7), sur 25 ans au plus. Mensualité maximale = 35 % × revenus − mensualités en cours ; revenu minimal = charges d’emprunt / 35 %.',
     'Reste à vivre = revenus − crédits − autres charges ; par personne = reste à vivre / nombre de personnes. Capital empruntable = mensualité maximale / (facteur de mensualité par euro emprunté + assurance mensuelle par euro emprunté). Aucun seuil de reste à vivre officiel n’est appliqué.',
   ]],
   ['Budget et taux d’épargne', [
     'Taux d’épargne = épargne mensuelle / revenu net mensuel. Revenu non affecté = revenu − besoins − envies − épargne.',
-    'Repère 50 / 30 / 20 : besoins 50 %, envies 30 %, épargne 20 % du revenu net ; repère pédagogique, non une règle officielle. Effort pour un taux visé = revenu × taux − épargne actuelle, couvert d’abord par le revenu non affecté puis par les envies.',
+    'Repère 50 / 30 / 20 : besoins 50 %, envies 30 %, épargne 20 % du revenu net ; repère pédagogique, non une règle officielle. Effort pour un taux visé = revenu × taux − épargne actuelle, couvert d’abord par le revenu non affecté puis par les envies.',
     'Projection de l’épargne : versements mensuels constants en début de mois, capitalisés au rendement net supposé (hypothèse de l’utilisateur, sans garantie).',
   ]],
 ];

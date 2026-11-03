@@ -26,15 +26,15 @@ const DEFAULTS: State = { scenarios: [SCENARIO], active: 0, target: 300000 };
 const COLORS = ['var(--chart-1)', 'var(--chart-4)', 'var(--chart-3)'];
 
 const PROFILES = [
-  { name: 'Prudent', rate: 0.02, label: '2 % par an' },
-  { name: 'Moyen', rate: 0.05, label: '5 % par an' },
-  { name: 'Ambitieux', rate: 0.07, label: '7 % par an' },
+  { name: 'Prudent', rate: 0.02, label: '2 % par an' },
+  { name: 'Moyen', rate: 0.05, label: '5 % par an' },
+  { name: 'Ambitieux', rate: 0.07, label: '7 % par an' },
 ];
 const TAX_OPTIONS = [
   { v: 0, label: 'Aucune (livret réglementé)' },
-  { v: 0.172, label: '17,2 % (prélèvements sociaux seuls, ex. assurance-vie après abattement)' },
-  { v: 0.186, label: '18,6 % (prélèvements sociaux, taux relevé 2026)' },
-  { v: 0.314, label: '31,4 % (PFU 2026, compte-titres)' },
+  { v: 0.172, label: '17,2 % (prélèvements sociaux seuls, ex. assurance-vie après abattement)' },
+  { v: 0.186, label: '18,6 % (prélèvements sociaux, taux relevé 2026)' },
+  { v: 0.314, label: '31,4 % (PFU 2026, compte-titres)' },
 ];
 
 export default function SimPatrimoine() {

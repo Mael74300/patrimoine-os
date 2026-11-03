@@ -15,14 +15,14 @@ describe('guide « choisir son enveloppe » : cartes des enveloppes', () => {
     for (const c of ENVELOPE_CARDS) {
       const p = section.body[c.paragraph].replace(/\u00a0/g, ' ');
       expect(p.startsWith(c.name + ' :')).toBe(true);
-      for (const r of c.rows) expect(p).toContain(r.text);
+      for (const r of c.rows) expect(p).toContain(r.text.replace(/\u00a0/g, ' '));
     }
   });
   it('les cartes renvoient vers des fiches qui existent', () => {
     for (const c of ENVELOPE_CARDS) expect(investmentBySlug[c.to.split('/').pop()!]).toBeDefined();
   });
   it('le rendu contient chaque chiffre du texte', () => {
-    const html = renderToStaticMarkup(createElement(MemoryRouter, null, createElement(EnvelopeCards)));
+    const html = renderToStaticMarkup(createElement(MemoryRouter, null, createElement(EnvelopeCards))).replace(/\u00a0/g, ' ');
     for (const k of ['150 000 €', '5 ans', '8 ans', '31,4 % en 2026']) expect(html).toContain(k);
   });
 });

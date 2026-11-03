@@ -95,7 +95,7 @@ export default function SimPortefeuille() {
       </div>
       {Math.abs(targetTotal - 1) > 0.001 && (
         <p className="notice small" style={{ marginTop: 12 }}>
-          Vos allocations cibles totalisent {fmtPct(targetTotal)} au lieu de 100 % : le rééquilibrage affiché n'est pas cohérent.
+          Vos allocations cibles totalisent {fmtPct(targetTotal)} au lieu de 100 % : le rééquilibrage affiché n'est pas cohérent.
         </p>
       )}
 

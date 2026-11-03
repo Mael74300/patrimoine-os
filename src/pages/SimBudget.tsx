@@ -41,8 +41,8 @@ export default function SimBudget() {
           <details className="fold advanced">
             <summary>Réglages avancés (facultatif)</summary>
             <div className="advanced-body">
-              <NumberField label="Taux d'épargne visé" unit="%" percent value={s.targetRate} onChange={up('targetRate')} min={0} max={100} step={1} hint="20 % est le repère du 50 / 30 / 20." />
-              <NumberField label="Rendement net supposé de l'épargne" unit="%" percent value={s.projReturn} onChange={up('projReturn')} min={-10} max={20} step={0.5} hint="Hypothèse, jamais une garantie. 0 % = simple somme des versements." />
+              <NumberField label="Taux d'épargne visé" unit="%" percent value={s.targetRate} onChange={up('targetRate')} min={0} max={100} step={1} hint="20 % est le repère du 50 / 30 / 20." />
+              <NumberField label="Rendement net supposé de l'épargne" unit="%" percent value={s.projReturn} onChange={up('projReturn')} min={-10} max={20} step={0.5} hint="Hypothèse, jamais une garantie. 0 % = simple somme des versements." />
               <NumberField label="Durée de la projection" unit="ans" value={s.projYears} onChange={up('projYears')} min={1} max={50} step={1} />
             </div>
           </details>

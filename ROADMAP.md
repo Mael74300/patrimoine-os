@@ -54,6 +54,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-03 (audit, fiches donation, PEA, livret A, guide d'enveloppe, simulateur de précaution à 375 et 1 280 px ; visiteurs proche de la retraite et épargnant) : aucune erreur de console ni débordement ; 21 montants du texte (« 131 865 € », « 150 000 € ») pouvaient se couper en deux lignes (« 5 / 310 € ») car l'espace entre milliers était ordinaire : espaces insécables ajoutées dans les fiches, guides, FAQ et pages (voir « Fait »). Reste : les textes des schémas SVG gardent des espaces ordinaires ; 46 mentions « à vérifier » à confirmer.
+
 - 2026-11-03 (audit, accueil, guides, fiche SCPI, page introuvable à 375 et 1 280 px ; visiteur arrivé par Google sur une page profonde) : aucune erreur de console ni débordement ; accueil, guides et fiches sont équilibrés. La page « Page introuvable » était une impasse (un seul bouton « Retour à l'accueil ») : champ de recherche et quatre pistes ajoutés (voir « Fait »). Aucune information factuelle touchée. Reste : le glossaire est long sur mobile (6 331 px), à regrouper ou replier ; 46 mentions « à vérifier » à confirmer.
 
 - 2026-11-03 (audit, glossaire à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; le glossaire (23 notions, 6 331 px à 375 px) obligeait à défiler pour trouver un mot. Champ « Chercher une notion » ajouté (nom et définition, sans accents ; l'alphabet se masque pendant la recherche, voir « Fait »). Aucune information factuelle touchée. Reste : manquent « action », « TAEG », « reste à vivre » (source officielle à trouver) ; les 46 mentions « à vérifier » restent à confirmer.
@@ -72,7 +74,6 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 - 2026-11-03 (audit, guide PEA, fiche assurance-vie, simulateur « louer ou acheter » à 375 et 1 280 px ; visiteurs débutant et futur acheteur) : aucune erreur de console ni débordement ; dans tous les simulateurs, un montant saisi s'affiche en bloc (« 250000 », « 1200000 ») et se lit mal (écho « 250 000 € » ajouté à côté du libellé, voir « Fait »). Reste : le taux de prélèvements sociaux des gains de PEA en 2026 n'est pas confirmé (Service-Public renvoie à des « règles particulières » sans le chiffrer) et les plafonds de la micro-entreprise n'ont pu être confirmés (sources officielles inaccessibles ce jour) : à reprendre.
 
-- 2026-11-03 (audit, simulateur de retraits, indépendance financière, guide d'enveloppe, encyclopédie à 375 et 1 280 px ; visiteur proche de la retraite) : aucune erreur de console ni débordement ; le simulateur de retraits se lit bien. La fiche « Donation et transmission », seule réponse du site à ce visiteur, ne donnait que l'abattement parent-enfant (100 000 €) : abattements par lien de parenté et don familial d'argent ajoutés, sourcés Service-Public (voir « Fait »). Reste : sur mobile, un nombre peut se couper en fin de ligne dans les listes (« 5 / 310 € »).
 
 ## À faire
 
@@ -94,6 +95,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-03 : **Nombres insécables dans les textes** (« 150 000 € », « 20 ans », « 3 % » ne se coupent plus en fin de ligne : 549 espaces ordinaires remplacées par des espaces insécables dans `src/data`, les pages et les phrases « Concrètement » ; tests adaptés). Nombres coupables sur la fiche donation 14 → 0 ; hauteurs de page inchangées (donation 375 px 4 131 → 4 131, 1 280 px 2 705 → 2 705). Aucune information factuelle ajoutée ni modifiée.
 - 2026-11-03 : **Page introuvable : plus d'impasse** (champ de recherche, quatre pistes : débuter, simulateurs, encyclopédie, plan du site ; bouton d'accueil conservé). Hauteur 375 px 1 321 → 1 689 px (page courte, pied de page compris), 1 280 px 891 → 947 px. Aucune information factuelle ajoutée ni modifiée.
 - [x] **Glossaire : champ de recherche** (2026-11-03) : « Chercher une notion » filtre les notions par nom et définition (`filterGlossary`, testé), message de résultat annoncé aux lecteurs d'écran, alphabet masqué pendant la recherche. Hauteur de `/glossaire/` sans saisie : 375 px 6 331 → 6 387 px ; 1280 px 4 503 → 4 559 px (champ ajouté, une recherche ramène la page à quelques cartes).
 - 2026-11-03 : **Glossaire : trois notions ajoutées** (taux d'endettement, obligation, plus-value ; 20 → 23 notions, définitions générales sans chiffre, liens vers simulateur, fiches et guides vérifiés par les tests). Hauteur : 375 px 5 499 → 6 331 px, 1 280 px 3 708 → 4 503 px (trois notions ajoutées, assumé : contenu manquant).

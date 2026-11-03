@@ -14,7 +14,7 @@ type State = {
 const DEFAULTS: State = { b1: 2000, r1: 0.2, m1: 60, b2: 6000, r2: 0.05, m2: 150, b3: 1000, r3: 0.03, m3: 50, extra: 100 };
 
 const fmtDuration = (months: number | null) => {
-  if (months === null) return 'plus de 50 ans';
+  if (months === null) return 'plus de 50 ans';
   const y = Math.floor(months / 12);
   const m = months % 12;
   return [y ? `${y} an${y > 1 ? 's' : ''}` : '', m || !y ? `${m} mois` : ''].filter(Boolean).join(' ');
