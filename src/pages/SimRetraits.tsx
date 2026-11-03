@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { withdrawal, withdrawalSeries, fmtEur } from '../lib/finance';
 import { withdrawalTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = { capital: number; monthly: number; ret: number; idx: number; years: number };
 
@@ -43,8 +43,9 @@ export default function SimRetraits() {
             </div>
           </details>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Durée du capital" value={durLabel} sub={dur === null ? 'le capital n’est pas épuisé à l’horizon' : 'avant épuisement'} />
             <Kpi label="Capital restant à l’horizon" value={fmtEur(r.remaining)} sub={`après ${s.years} ans`} />

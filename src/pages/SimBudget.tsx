@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { analyzeBudget, BUDGET_BENCHMARK, catchUp, fmtEur, fmtNum, fmtPct, monthsOfIncomeSavedPerYear, projectBudgetSaving } from '../lib/finance';
 import { budgetTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = { netIncome: number; needs: number; wants: number; saving: number; targetRate: number; projReturn: number; projYears: number };
 
@@ -47,8 +47,9 @@ export default function SimBudget() {
             </div>
           </details>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Taux d'épargne actuel" value={fmtPct(b.savingRate)} sub={`${fmtNum(monthsOfIncomeSavedPerYear(b.savingRate))} mois de revenu épargnés par an`} />
             <Kpi

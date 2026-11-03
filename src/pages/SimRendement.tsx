@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { performance, fmtEur, fmtPct } from '../lib/finance';
 import { performanceTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = { initial: number; monthly: number; years: number; finalValue: number };
 
@@ -35,8 +35,9 @@ export default function SimRendement() {
             <NumberField label="Valeur du placement aujourd’hui" unit="€" value={s.finalValue} onChange={up('finalValue')} min={0} step={500} />
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Rendement annuel équivalent" value={r.annualized === null ? '—' : fmtPct(r.annualized)} sub="taux de rendement interne" />
             <Kpi label="Total versé" value={fmtEur(r.invested)} sub="versement initial + versements mensuels" />

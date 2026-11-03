@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { feeImpact, fmtEur, fmtPct } from '../lib/finance';
 import { feesTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = { initial: number; monthly: number; annualReturn: number; years: number; inflation: number; feesA: number; feesB: number; feesC: number };
 
@@ -46,8 +46,9 @@ export default function SimFrais() {
             <NumberField label="Frais C" unit="%" percent value={s.feesC} onChange={up('feesC')} min={0} max={10} step={0.1} />
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Capital sans aucun frais" value={fmtEur(base.finalValue)} sub={`après ${s.years} ans (référence)`} />
             <Kpi label={`Coût des frais à ${fmtPct(worst.fees)}`} value={fmtEur(worst.cost)} sub={`${fmtPct(worst.shareOfGains)} des gains absorbés`} tone={worst.cost > 0 ? 'neg' : undefined} />

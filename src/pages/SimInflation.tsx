@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { fmtEur, fmtPct, purchasingPower } from '../lib/finance';
 import { inflationTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = { amount: number; years: number; inflation: number; annualReturn: number };
 
@@ -35,8 +35,9 @@ export default function SimInflation() {
             <NumberField label="Rendement annuel net de frais du placement" unit="%" percent value={s.annualReturn} onChange={up('annualReturn')} min={-20} max={30} step={0.5} hint="Hypothèse, jamais une garantie. Avant impôt." />
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Somme inchangée après la durée" value={fmtEur(r.idleRealValue)} sub={`en euros d'aujourd'hui, soit ${fmtPct(r.idleLoss)} de pouvoir d'achat perdu`} tone={r.idleLoss > 0 ? 'neg' : undefined} />
             <Kpi label="Montant pour garder le même pouvoir d'achat" value={fmtEur(r.nominalToKeepPower)} sub={`dans ${n} an${n > 1 ? 's' : ''}, en euros courants`} />

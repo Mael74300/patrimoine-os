@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { lumpVsGradual, fmtEur, fmtPct, type PricePath } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, SelectField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, SelectField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = { amount: number; spread: number; years: number; ret: number; cash: number; path: PricePath; move: number };
 
@@ -45,8 +45,9 @@ export default function SimEtalement() {
             {s.path !== 'steady' && <NumberField label="Ampleur de la variation pendant l’étalement" unit="%" percent value={s.move} onChange={up('move')} min={0} max={90} step={5} />}
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="En une seule fois" value={fmtEur(r.lump)} sub={`valeur après ${r.months} mois`} />
             <Kpi label="En tranches égales" value={fmtEur(r.gradual)} sub={`${r.spreadMonths} mois d’étalement`} />

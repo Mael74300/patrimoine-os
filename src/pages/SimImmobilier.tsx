@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ADVERSE, adverseScenario, amortize, fmtEur, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, type TaxRegime } from '../lib/finance';
 import { rentalTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState, JumpToResults } from '../components/ui';
 
 export const RENTAL_DEFAULTS: RentalInput = {
   price: 150000, notaryRate: 0.08, works: 10000, furniture: 0,
@@ -97,9 +97,10 @@ export default function SimImmobilier() {
             </div>
           </details>
           <button type="button" className="btn small secondary" onClick={() => setS(RENTAL_DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
 
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="section-label">Calculs avant impôt · première année</div>
           <div className="kpis">
             <Kpi label="Mensualité" value={fmtEur(r.monthlyLoan)} sub="assurance comprise" />

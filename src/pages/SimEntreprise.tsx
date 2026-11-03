@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { businessTakeaway } from '../lib/takeaways';
 import { BUSINESS_SCENARIOS, fmtEur, fmtPct, lowestCash, projectBusiness, type BusinessInput } from '../lib/finance';
-import { Crumbs, Disclaimer, Fold, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, Tabs, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, Tabs, usePersistentState, JumpToResults } from '../components/ui';
 
 const DEFAULTS: BusinessInput = {
   revenueY1: 120000, revenueGrowth: 0.1, grossMarginRate: 0.6, fixedCosts: 30000, fixedCostsGrowth: 0.02,
@@ -74,9 +74,10 @@ export default function SimEntreprise() {
             </div>
           </details>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
 
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <h2 style={{ marginTop: 0 }}>Trois scénarios à {s.years} ans</h2>
           <div className="table-wrap" tabIndex={0}>
             <table>

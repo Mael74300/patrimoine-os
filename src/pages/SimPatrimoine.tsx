@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { wealthTakeaway } from '../lib/takeaways';
 import { afterTax, fmtEur, fmtPct, netOfFees, projectGrowth, requiredMonthly, type SavingsChange, type Withdrawal } from '../lib/finance';
-import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, RowsEditor, SavedSims, SelectField, Tabs, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, RowsEditor, SavedSims, SelectField, Tabs, usePersistentState, JumpToResults } from '../components/ui';
 
 type Scenario = {
   name: string;
@@ -132,9 +132,10 @@ export default function SimPatrimoine() {
             </div>
           </details>
           <button type="button" className="btn small secondary" onClick={() => setSt(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
 
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Total des versements" value={fmtEur(last.contributed)} sub={last.withdrawn ? `${fmtEur(last.withdrawn)} retirés` : undefined} />
             <Kpi label="Gains ou pertes simulés" value={fmtEur(last.gains)} tone={last.gains >= 0 ? 'pos' : 'neg'} />

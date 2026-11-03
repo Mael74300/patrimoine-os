@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { compareEtfImmo, fmtEur, fmtPct, netOfFees, rentalAnalysis, type RentalInput } from '../lib/finance';
 import { load } from '../lib/storage';
-import { Crumbs, Disclaimer, MobileFold, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, MobileFold, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState, JumpToResults } from '../components/ui';
 import { PS_OPTIONS, REGIMES, RENTAL_DEFAULTS, TMI_OPTIONS } from './SimImmobilier';
 
 type State = {
@@ -134,9 +134,10 @@ export default function SimEtfImmobilier() {
           </fieldset>
           </MobileFold>
           <button type="button" className="btn small secondary" onClick={() => setSt(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
 
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label={`ETF : patrimoine net à ${st.horizon} ans`} value={fmtEur(res.etf.netWealth)} sub={`${fmtEur(res.etf.netWealthReal)} en euros d'aujourd'hui`} />
             <Kpi label={`Immobilier : patrimoine net à ${st.horizon} ans`} value={fmtEur(res.immo.netWealth)} sub={`${fmtEur(res.immo.netWealthReal)} en euros d'aujourd'hui`} />

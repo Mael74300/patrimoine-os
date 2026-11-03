@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { advantageByHorizon, advantageByPriceGrowth, fmtEur, fmtPct, rentVsBuy } from '../lib/finance';
 import { rentVsBuyTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = {
   price: number; downPayment: number; acquisitionRate: number; loanRate: number; loanYears: number; ownerCostRate: number;
@@ -64,8 +64,9 @@ export default function SimLouerAcheter() {
             </div>
           </details>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Patrimoine du propriétaire" value={fmtEur(r.buyerWealth)} sub={`bien ${fmtEur(r.finalValue)} après frais de revente, dette restante ${fmtEur(r.remainingDebt)}`} />
             <Kpi label="Patrimoine du locataire" value={fmtEur(r.renterWealth)} sub="apport, frais et écarts mensuels placés" />

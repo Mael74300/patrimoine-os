@@ -6,7 +6,7 @@ import {
 } from '../lib/finance';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
 import { precautionTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, Sources, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, Sources, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = PrecautionInput & { profile: PrecautionProfile; lep: 'oui' | 'non'; deadline: number };
 
@@ -81,8 +81,9 @@ export default function SimPrecaution() {
             </div>
           </details>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Montant visé" value={fmtEur(target)} sub={`${fmtNum(s.months)} mois × ${fmtEur(s.monthlyExpenses)} + ${fmtEur(s.extraReserve)}`} />
             <Kpi
