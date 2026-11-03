@@ -32,6 +32,23 @@ function ScrollTop() {
   return null;
 }
 
+/** Annonce le titre de la nouvelle page aux lecteurs d'écran : le site ne recharge pas la page en naviguant, donc rien n'est annoncé sinon. */
+function RouteAnnouncer() {
+  const { pathname } = useLocation();
+  const [text, setText] = useState('');
+  const premiere = useRef(true);
+  useEffect(() => {
+    if (premiere.current) {
+      premiere.current = false;
+      return;
+    }
+    // Le titre est mis à jour par la page elle-même, après son rendu : on attend un instant.
+    const t = setTimeout(() => setText(document.title), 150);
+    return () => clearTimeout(t);
+  }, [pathname]);
+  return <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">{text}</div>;
+}
+
 /** Bouton « Haut de page » : les pages font 4 000 à 5 500 px de haut sur mobile ; il apparaît après un long défilement. */
 function BackToTop() {
   const [visible, setVisible] = useState(false);
@@ -155,6 +172,7 @@ export default function App() {
     <>
       <ScrollTop />
       <Analytics />
+      <RouteAnnouncer />
       <a href="#contenu" className="skip" onClick={(e) => { e.preventDefault(); document.getElementById('contenu')?.focus(); }}>
         Aller au contenu
       </a>
