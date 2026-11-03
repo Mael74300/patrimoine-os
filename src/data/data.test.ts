@@ -208,3 +208,12 @@ describe('guide Livret A quinzaines : exemple fictif et taux cohérents', () => 
     expect(a.cap).toBe(22950);
   });
 });
+
+describe('fiche donation : cohérence des montants', () => {
+  it('l’exemple fictif recalcule les abattements (2 × (100 000 + 31 865))', () => {
+    const f = investments.find((i) => i.slug === 'donation')!;
+    expect(2 * (100_000 + 31_865)).toBe(263_730);
+    expect(f.example).toContain('263 730');
+    expect(f.tax.text).toContain('131 865');
+  });
+});
