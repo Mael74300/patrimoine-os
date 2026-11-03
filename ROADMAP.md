@@ -54,6 +54,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-03 (audit, simulateurs louer ou acheter, retraits réguliers, indépendance financière, guides, fiche SCPI, comparateur, accueil à 375 et 1 280 px ; visiteur arrivé par Google sur une page profonde) : aucune erreur de console ni débordement ; pages équilibrées. Les simulateurs étaient des impasses : après le résultat et la FAQ, le visiteur retombait sur le pied de page sans piste de lecture. Bloc « Pour aller plus loin » ajouté (voir « Fait »). Aucune information factuelle touchée. Reste : la date « vérifiées au 10 octobre 2026 » du pied de page est globale (livrets) et ne reflète pas les vérifications fiche par fiche ; à repenser.
+
 - 2026-11-03 (audit, fiches donation, PEA, livret A, guide d'enveloppe, simulateur de précaution à 375 et 1 280 px ; visiteurs proche de la retraite et épargnant) : aucune erreur de console ni débordement ; 21 montants du texte (« 131 865 € », « 150 000 € ») pouvaient se couper en deux lignes (« 5 / 310 € ») car l'espace entre milliers était ordinaire : espaces insécables ajoutées dans les fiches, guides, FAQ et pages (voir « Fait »). Reste : les textes des schémas SVG gardent des espaces ordinaires ; 46 mentions « à vérifier » à confirmer.
 
 - 2026-11-03 (audit, accueil, guides, fiche SCPI, page introuvable à 375 et 1 280 px ; visiteur arrivé par Google sur une page profonde) : aucune erreur de console ni débordement ; accueil, guides et fiches sont équilibrés. La page « Page introuvable » était une impasse (un seul bouton « Retour à l'accueil ») : champ de recherche et quatre pistes ajoutés (voir « Fait »). Aucune information factuelle touchée. Reste : le glossaire est long sur mobile (6 331 px), à regrouper ou replier ; 46 mentions « à vérifier » à confirmer.
@@ -72,7 +74,6 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 - 2026-11-03 (audit, simulateur d'épargne de précaution, fiche assurance-vie à 375 et 1 280 px ; visiteurs débutant et épargnant) : aucune erreur de console ni débordement ; le résultat principal (« 1,2 mois couverts, il manque 4 500 € ») n'était qu'en chiffres et en phrase, sans image de l'avancement (jauge de couverture ajoutée, voir « Fait »). Dans le tableau de répartition, l'en-tête « Intérêts sur un an » se coupe en trois lignes à 375 px. Les 48 mentions « à vérifier » restent à confirmer une à une.
 
-- 2026-11-03 (audit, accueil, simulateur de crédit, comparateur à 375 et 1 280 px ; visiteurs débutant et futur acheteur) : aucune erreur de console ni débordement ; ces pages sont équilibrées, et les listes déroulantes coupées affichent déjà leur libellé complet dessous. Le taux de prélèvements sociaux des gains de PEA (18,6 % en 2026) était « à vérifier » dans la fiche PEA, le guide du PEA et le simulateur ETF ou immobilier : confirmé sur impots.gouv.fr et Service-Public, passé en « vérifié » (voir « Fait »). Reste : environ 44 autres mentions « à vérifier » dans `src/data/investments.ts`, à confirmer une par une (frais de courtage du PEA, abattement du micro-BIC meublé, taxe sur l'or).
 
 
 ## À faire
@@ -95,6 +96,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-03 : **Simulateurs : « Pour aller plus loin »** (en bas de chacun des 21 simulateurs, jusqu'à deux guides et deux fiches qui y renvoient, déduits des tables de `relatedSims.ts` donc toujours cohérents ; test : chaque simulateur a au moins une piste). Hauteur à 375 px : retraits 3 788 → 3 947 px, louer ou acheter 4 969 → 5 180 px. Aucune information factuelle touchée.
 - 2026-11-03 : **Exactitude : prélèvements sociaux du PEA confirmés** (18,6 % sur les gains en 2026, source impots.gouv.fr modifiée le 17/07/2026 et Service-Public F2329 vérifiée le 30 juin 2026 ; plafond de 150 000 € et clôture avant 5 ans confirmés par Service-Public F2385 vérifiée le 22 mai 2026). Fiche PEA et guide du PEA passés de « à vérifier » à vérifiés, libellé du simulateur ETF ou immobilier corrigé, source impots.gouv.fr ajoutée à la fiche.
 - 2026-11-03 : **Nombres insécables dans les textes** (« 150 000 € », « 20 ans », « 3 % » ne se coupent plus en fin de ligne : 549 espaces ordinaires remplacées par des espaces insécables dans `src/data`, les pages et les phrases « Concrètement » ; tests adaptés). Nombres coupables sur la fiche donation 14 → 0 ; hauteurs de page inchangées (donation 375 px 4 131 → 4 131, 1 280 px 2 705 → 2 705). Aucune information factuelle ajoutée ni modifiée.
 - 2026-11-03 : **Page introuvable : plus d'impasse** (champ de recherche, quatre pistes : débuter, simulateurs, encyclopédie, plan du site ; bouton d'accueil conservé). Hauteur 375 px 1 321 → 1 689 px (page courte, pied de page compris), 1 280 px 891 → 947 px. Aucune information factuelle ajoutée ni modifiée.
