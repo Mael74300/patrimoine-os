@@ -6,6 +6,8 @@ import type { Checked, Level, Source } from '../data/types';
 import { load, save, type SavedSim } from '../lib/storage';
 import { HeaderArt, type HeaderArtName } from './Illustrations';
 import { summarizeSeries } from '../lib/chartSummary';
+import { coveragePercent } from '../lib/coverage';
+import { fmtEur } from '../lib/finance';
 import { readableNumber } from '../lib/readableNumber';
 import { buildExport, mergeSims, parseExport } from '../lib/simExport';
 
@@ -125,6 +127,25 @@ export function Kpi({ label, value, sub, tone }: { label: string; value: string;
       <div className="k-label">{label}</div>
       <div className="k-value">{gluedUnits(value)}</div>
       {sub && <div className="k-sub">{sub}</div>}
+    </div>
+  );
+}
+
+/** Jauge « où j'en suis » : part du montant visé déjà couverte (calcul exact, pas une illustration). */
+export function CoverageGauge({ savings, target, label }: { savings: number; target: number; label: string }) {
+  if (!(target > 0)) return null;
+  const pct = coveragePercent(savings, target);
+  const done = pct >= 100;
+  return (
+    <div className="gauge">
+      <div className="gauge-bar" role="img" aria-label={`${label} : ${pct} % du montant visé`}>
+        <span className={'gauge-fill' + (done ? ' done' : '')} style={{ width: `${pct}%` }} />
+      </div>
+      <div className="gauge-scale" aria-hidden="true">
+        <span>0 €</span>
+        <strong>{done ? 'Objectif atteint' : `${pct} % couvert`}</strong>
+        <span>{fmtEur(target)}</span>
+      </div>
     </div>
   );
 }
