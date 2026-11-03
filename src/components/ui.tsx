@@ -414,19 +414,13 @@ export function LineChart({ series, xLabels, format, title, height = 300 }: Char
           </tbody>
         </table>
       </div>
-      <div className="chart-tip" aria-live="polite">
-        <strong>{xLabels[active]}</strong>{' '}
-        {series.map((s, idx) =>
-          typeof s.values[active] === 'number' ? (
-            <span key={idx} style={{ marginLeft: 12 }}>
-              <span style={{ color: s.color }}>●</span> {s.name} : <span className="num">{format(s.values[active] as number)}</span>
-            </span>
-          ) : null,
-        )}
-      </div>
-      <figcaption className="chart-legend">
+      <figcaption className="chart-legend" aria-live="polite">
+        <strong className="chart-legend-x">{xLabels[active]}</strong>
         {series.map((s, idx) => (
-          <span key={idx} style={{ ['--c' as string]: s.color }}>{s.name}</span>
+          <span key={idx} className={s.dashed ? 'dashed' : undefined} style={{ ['--c' as string]: s.color }}>
+            {s.name}
+            {typeof s.values[active] === 'number' ? <> : <span className="num">{format(s.values[active] as number)}</span></> : null}
+          </span>
         ))}
       </figcaption>
     </figure>

@@ -261,9 +261,11 @@ details.fold > p { margin-left: 14px; margin-right: 14px; }
 .chart { width: 100%; height: auto; display: block; }
 .chart text { font-family: var(--font); fill: var(--ink-3); font-size: 12px; }
 .chart .grid-line { stroke: var(--line); stroke-width: 1; }
-.chart-legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--ink-2); margin-top: 8px; }
-.chart-legend span::before { content: ''; display: inline-block; width: 12px; height: 3px; margin-right: 6px; vertical-align: middle; background: var(--c); }
-.chart-tip { font-size: 0.85rem; padding: 8px 10px; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; min-height: 2.2em; margin-top: 8px; }
+.chart-legend { display: flex; gap: 6px 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--ink-2); margin-top: 8px; padding: 8px 10px; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; }
+.chart-legend-x { flex: 0 0 100%; color: var(--ink); }
+.chart-legend > span::before { content: ''; display: inline-block; width: 14px; height: 0; margin-right: 6px; vertical-align: middle; border-top: 3px solid var(--c); }
+.chart-legend > span.dashed::before { border-top-style: dashed; }
+.chart-legend .num { color: var(--ink); font-weight: 600; }
 
 .bar { height: 10px; background: var(--surface-2); border-radius: 999px; overflow: hidden; }
 .bar > div { height: 100%; background: var(--primary); }
