@@ -54,6 +54,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-03 (audit, guide « types d'investissements » et simulateur d'épargne de précaution à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; dans les cartes de chiffres, « 1 an et 6 mois » se coupait en laissant « mois » seul sur la ligne (corrigé, voir « Fait »). Reste : le simulateur de précaution (5 098 px à 375 px) est long. Les fiches de familles vides (forêts : plafonds et dates de la réduction d'impôt contradictoires selon les sources, non confirmés sur source officielle ce jour) restent à faire.
 - 2026-11-03 (audit, guides immobilier ou ETF, rembourser ou investir, règle de 72, Livret A à 375 et 1 280 px ; visiteur futur acheteur) : aucune erreur de console ni débordement ; le guide « immobilier ou ETF » était le seul de ce type sans schéma alors que sa méthode (deux scénarios à effort égal) se comprend mieux en image (ajouté, voir « Fait »). Les guides à schéma se lisent bien.
 - 2026-11-03 (audit, guide « par où commencer » et simulateur d'épargne de précaution à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; le guide d'entrée n'offrait aucune suite sous chaque étape (liens regroupés en trois listes en bas de page, 4 392 px à 375 px) : un lien par étape ajouté, listes en double retirées (voir « Fait »). Le simulateur de précaution (5 098 px à 375 px) reste long mais lisible.
 - 2026-11-03 (audit, guide « par où commencer », liste des guides, encyclopédie, fiches à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; 131 descriptions étaient coupées par « … » en pleine phrase sur 42 pages (liste des guides, encyclopédie, cartes « fiches liées » et « simulateurs liés » ; corrigé, voir « Fait »). Reste : le guide « par où commencer » (4 392 px à 375 px) est long pour une page d'entrée.
@@ -85,6 +86,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-03 : **Cartes de chiffres : un nombre reste collé à son unité** (« 6 mois », « 1 an » ne se coupent plus ; retours à la ligne équilibrés ; `gluedUnits`, testé). Hauteurs de page inchangées (précaution 5 098 px à 375 px, 2 809 px à 1 280 px). Aucune information factuelle ajoutée ni modifiée.
 - 2026-11-03 : **Illustrations : schéma « immobilier ou ETF à effort égal »** dans le guide « Comment comparer immobilier et ETF » (`SchemaImmoEtf`, sans aucun chiffre, reprend la méthode du guide ; page 3 808 → 4 180 px à 375 px, 2 462 → 2 915 px à 1 280 px) (voir la pull request « Illustrations : schéma immobilier ou ETF »).
 - 2026-11-03 : **Guide « par où commencer » : un lien vers la suite sous chaque étape** (budget, précaution, rembourser ou investir, choisir son enveloppe, épargner peu ; `etapesSuite`, testé : une page existante par étape) ; les listes « Simulateurs liés » et « Autres guides » de ce guide, devenues redondantes, sont retirées. Hauteur : 4 392 → 3 890 px à 375 px, 2 989 → 2 761 px à 1 280 px. Aucune information factuelle ajoutée ni modifiée.
 
