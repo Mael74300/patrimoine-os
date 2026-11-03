@@ -124,10 +124,10 @@ export function Kpi({ label, value, sub, tone }: { label: string; value: string;
   );
 }
 
-export function Dots({ level, kind, label }: { level: Level; kind?: 'risk' | 'liq'; label: string }) {
+export function Dots({ level, kind, label, compact = false }: { level: Level; kind?: 'risk' | 'liq'; label: string; compact?: boolean }) {
   return (
-    <div className="meter" aria-label={`${label} : ${level} sur 5`} role="img">
-      <span>{label}</span>
+    <div className={'meter' + (compact ? ' compact' : '')} aria-label={`${label} : ${level} sur 5`} role="img">
+      {compact ? <span className="meter-score" aria-hidden="true">{level}/5</span> : <span>{label}</span>}
       <div className={'dots ' + (kind ?? '')}>
         {[1, 2, 3, 4, 5].map((i) => (
           <i key={i} className={i <= level ? 'on' : ''} />
