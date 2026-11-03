@@ -111,11 +111,14 @@ export function usePersistentState<T extends object>(key: string, initial: T) {
 
 // ------------------------------------------------------------ Affichage
 
+/** Colle le nombre à son unité (« 6 mois », « 1 an ») : une durée ne se coupe plus entre le chiffre et le mot. */
+export const gluedUnits = (s: string) => s.replace(/(\d) (ans?|mois|€|%)(?![\p{L}\d])/gu, '$1\u00a0$2');
+
 export function Kpi({ label, value, sub, tone }: { label: string; value: string; sub?: string; tone?: 'pos' | 'neg' }) {
   return (
     <div className={'kpi ' + (tone ?? '')}>
       <div className="k-label">{label}</div>
-      <div className="k-value">{value}</div>
+      <div className="k-value">{gluedUnits(value)}</div>
       {sub && <div className="k-sub">{sub}</div>}
     </div>
   );

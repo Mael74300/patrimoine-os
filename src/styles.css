@@ -144,7 +144,7 @@ legend { font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; }
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
 .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
 .kpi .k-label { font-size: 0.8rem; color: var(--ink-3); }
-.kpi .k-value { font-size: 1.45rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); }
+.kpi .k-value { text-wrap: balance; font-size: 1.45rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); }
 .kpi .k-sub { font-size: 0.8rem; color: var(--ink-3); }
 .kpi.pos .k-value { color: var(--accent); }
 .kpi.neg .k-value { color: var(--danger); }
