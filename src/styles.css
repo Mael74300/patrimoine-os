@@ -128,6 +128,8 @@ input[type='text'], input[type='number'], input[type='search'], select {
 }
 input:focus, select:focus { border-color: var(--accent); }
 .field { margin-bottom: 14px; }
+.field-label { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.field-echo { font-size: 0.85rem; font-weight: 600; color: var(--primary); white-space: nowrap; }
 .field .hint { font-size: 0.8rem; color: var(--ink-3); margin-top: 3px; }
 .input-unit { position: relative; }
 .input-unit input { padding-right: 44px; }
