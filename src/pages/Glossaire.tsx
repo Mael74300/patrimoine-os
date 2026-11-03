@@ -1,11 +1,16 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { filterGlossary } from '../lib/glossaryFilter';
 import { glossary } from '../data/glossary';
 import { Crumbs, PageHead } from '../components/ui';
 
 const idOf = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 export default function Glossaire() {
-  const terms = [...glossary].sort((a, b) => a.term.localeCompare(b.term, 'fr'));
+  const [q, setQ] = useState('');
+  const all = [...glossary].sort((a, b) => a.term.localeCompare(b.term, 'fr'));
+  const terms = filterGlossary(all, q);
+  const filtering = q.trim().length > 0;
   const strip = (t: string) => t.normalize('NFD').replace(/[̀-ͯ]/g, '')[0].toUpperCase();
   const groups = terms.reduce<{ letter: string; items: typeof terms }[]>((acc, t) => {
     const letter = strip(t.term);
@@ -18,11 +23,19 @@ export default function Glossaire() {
     <div className="prose">
       <Crumbs items={[{ to: '/', label: 'Accueil' }, { label: 'Glossaire' }]} />
       <PageHead eyebrow="Pédagogie" title="Glossaire de la finance personnelle">
-        {terms.length} notions expliquées simplement, avec des liens vers les simulateurs, fiches et guides qui les mettent en pratique.
+        {all.length} notions expliquées simplement, avec des liens vers les simulateurs, fiches et guides qui les mettent en pratique.
       </PageHead>
-      <nav className="gloss-nav" aria-label="Aller à une lettre">
-        {groups.map((g) => <a key={g.letter} href={`#lettre-${g.letter}`}>{g.letter}</a>)}
-      </nav>
+      <div className="search-box gloss-search" role="search">
+        <input type="search" value={q} aria-label="Chercher une notion" placeholder="Chercher une notion : inflation, ETF…" onChange={(e) => setQ(e.target.value)} />
+      </div>
+      <div aria-live="polite">
+        {filtering && <p className="small muted gloss-status">{terms.length ? `${terms.length} notion${terms.length > 1 ? 's' : ''} pour « ${q.trim()} »` : `Aucune notion pour « ${q.trim()} ». Essayez un mot plus simple.`}</p>}
+      </div>
+      {!filtering && (
+        <nav className="gloss-nav" aria-label="Aller à une lettre">
+          {groups.map((g) => <a key={g.letter} href={`#lettre-${g.letter}`}>{g.letter}</a>)}
+        </nav>
+      )}
       <div className="gloss-groups">
       {groups.map((g) => (
         <section key={g.letter} id={`lettre-${g.letter}`} className="gloss-group" aria-labelledby={`h-${g.letter}`}>
