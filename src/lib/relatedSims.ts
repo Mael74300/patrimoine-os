@@ -1,3 +1,5 @@
+import { guideBySlug } from '../data/guides';
+import { investmentBySlug } from '../data/investments';
 import { simulators } from './search';
 
 /** Simulateurs liés à chaque fiche (clé : slug de fiche) et à chaque guide (clé : slug de guide). Cohérence vérifiée par les tests. */
@@ -51,4 +53,26 @@ const bySlug = Object.fromEntries(simulators.map((s) => [s.slug, s]));
 
 export function relatedSimulators(slugs: string[] | undefined) {
   return (slugs ?? []).map((s) => bySlug[s]).filter(Boolean);
+}
+
+export type ReadingLink = { to: string; title: string; kind: 'Guide' | 'Fiche' };
+
+/**
+ * Pistes de lecture à la fin d'un simulateur : guides et fiches qui renvoient vers lui
+ * (déduites des tables ci-dessus, donc toujours cohérentes). Au plus deux guides et deux fiches.
+ */
+export function readingForSimulator(slug: string): ReadingLink[] {
+  const guidesOut = Object.entries(simsForGuide)
+    .filter(([, sims]) => sims.includes(slug))
+    .map(([g]) => guideBySlug[g])
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((g) => ({ to: `/guides/${g.slug}`, title: g.title, kind: 'Guide' as const }));
+  const fichesOut = Object.entries(simsForInvestment)
+    .filter(([, sims]) => sims.includes(slug))
+    .map(([i]) => investmentBySlug[i])
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((i) => ({ to: `/encyclopedie/${i.slug}`, title: i.name, kind: 'Fiche' as const }));
+  return [...guidesOut, ...fichesOut];
 }

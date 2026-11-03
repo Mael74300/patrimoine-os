@@ -8,6 +8,7 @@ import { HeaderArt, type HeaderArtName } from './Illustrations';
 import { summarizeSeries } from '../lib/chartSummary';
 import { coveragePercent } from '../lib/coverage';
 import { fmtEur } from '../lib/finance';
+import { readingForSimulator } from '../lib/relatedSims';
 import { readableNumber } from '../lib/readableNumber';
 import { buildExport, mergeSims, parseExport } from '../lib/simExport';
 
@@ -666,8 +667,9 @@ export function Tabs({ items, active, onSelect, label }: { items: string[]; acti
 
 /** Questions fréquentes d'un simulateur (mêmes questions que les données structurées FAQPage). */
 export function SimFaq({ slug, items = simFaq[slug] }: { slug: string; items?: FaqItem[] }) {
-  if (!items?.length) return null;
+  if (!items?.length) return <SimNext slug={slug} />;
   return (
+    <>
     <section aria-label="Questions fréquentes" style={{ marginTop: 32 }}>
       <h2>Questions fréquentes</h2>
       <div className="faq">
@@ -679,6 +681,24 @@ export function SimFaq({ slug, items = simFaq[slug] }: { slug: string; items?: F
         ))}
       </div>
     </section>
+    <SimNext slug={slug} />
+    </>
+  );
+}
+
+/** « Pour aller plus loin » : évite l'impasse en bas d'un simulateur (guides et fiches qui y renvoient). */
+export function SimNext({ slug }: { slug: string }) {
+  const links = readingForSimulator(slug);
+  if (!links.length) return null;
+  return (
+    <nav className="sim-next" aria-label="Pour aller plus loin">
+      <h3>Pour aller plus loin</h3>
+      <ul>
+        {links.map((l) => (
+          <li key={l.to}><span className="sim-next-kind">{l.kind}</span><Link to={l.to}>{l.title}</Link></li>
+        ))}
+      </ul>
+    </nav>
   );
 }
 
