@@ -191,7 +191,7 @@ export const guides: Guide[] = [
         heading: 'Retraits et fiscalité',
         body: [
           'Avant 5 ans, un retrait entraîne en principe la clôture du plan et l’imposition des gains au prélèvement forfaitaire unique (31,4 % en 2026), sauf exceptions prévues par la loi.',
-          'Après 5 ans, les retraits sont possibles sans clôturer le plan et sans bloquer les versements futurs. Les gains sont exonérés d’impôt sur le revenu ; seuls les prélèvements sociaux restent dus. Leur taux exact pour les gains de 2026 est à vérifier sur impots.gouv.fr.',
+          'Après 5 ans, les retraits sont possibles sans clôturer le plan et sans bloquer les versements futurs. Les gains sont exonérés d’impôt sur le revenu ; seuls les prélèvements sociaux restent dus. Leur taux est de 18,6 % en 2026.',
         ],
       },
       {
