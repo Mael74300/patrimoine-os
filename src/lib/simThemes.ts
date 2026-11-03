@@ -38,12 +38,12 @@ export const unthemedSims = () => {
  * Aucun chiffre ni règle : le descriptif détaillé (`excerpt`) reste utilisé pour la recherche et les métadonnées.
  */
 export const simBlurbs: Record<string, string> = {
-  patrimoine: 'Que vaudra mon épargne dans 10, 20 ou 30 ans ?',
+  patrimoine: 'Que vaudra mon épargne dans 10, 20 ou 30 ans ?',
   'epargne-de-precaution': 'Combien mettre de côté pour faire face aux imprévus ?',
   'objectif-epargne': 'Combien verser par mois pour atteindre un montant à une date ?',
   portefeuille: 'Mes placements sont-ils bien répartis, et à quel coût ?',
   frais: 'Combien les frais annuels me coûtent-ils sur la durée ?',
-  inflation: 'Que vaudra une somme dans 20 ans, prix en hausse ?',
+  inflation: 'Que vaudra une somme dans 20 ans, prix en hausse ?',
   'rendement-reel-de-mon-placement': 'Quel rendement annuel mon placement a-t-il vraiment eu ?',
   'investir-d-un-coup-ou-progressivement': 'Tout placer d’un coup ou petit à petit : quelle différence ?',
   'interets-composes': 'Comment une somme grossit avec le temps, en plusieurs calculs.',

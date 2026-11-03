@@ -53,7 +53,7 @@ export const guides: Guide[] = [
       {
         heading: 'La définition',
         body: [
-          'Le patrimoine net est la valeur de tout ce que vous possédez, moins tout ce que vous devez. Un ménage propriétaire d’un logement estimé 250 000 € avec 180 000 € de crédit restant dû et 15 000 € d’épargne a un patrimoine net de 85 000 €.',
+          'Le patrimoine net est la valeur de tout ce que vous possédez, moins tout ce que vous devez. Un ménage propriétaire d’un logement estimé 250 000 € avec 180 000 € de crédit restant dû et 15 000 € d’épargne a un patrimoine net de 85 000 €.',
         ],
       },
       {
@@ -125,8 +125,8 @@ export const guides: Guide[] = [
       {
         heading: 'Un exemple fictif',
         body: [
-          'Un bien de 200 000 € est acheté avec 20 000 € d’apport et 180 000 € empruntés à 3,5 % sur 20 ans. La première année, les intérêts représentent environ 6 200 €.',
-          'S’il rapporte 10 000 € par an nets de charges (5 % de son prix), il reste environ 3 800 € avant impôt, soit près de 19 % de l’apport. S’il ne rapporte que 6 000 € (3 %), il manque environ 200 € pour couvrir les seuls intérêts. Dans les deux cas, il faut aussi rembourser le capital, ce qui pèse sur la trésorerie mensuelle.',
+          'Un bien de 200 000 € est acheté avec 20 000 € d’apport et 180 000 € empruntés à 3,5 % sur 20 ans. La première année, les intérêts représentent environ 6 200 €.',
+          'S’il rapporte 10 000 € par an nets de charges (5 % de son prix), il reste environ 3 800 € avant impôt, soit près de 19 % de l’apport. S’il ne rapporte que 6 000 € (3 %), il manque environ 200 € pour couvrir les seuls intérêts. Dans les deux cas, il faut aussi rembourser le capital, ce qui pèse sur la trésorerie mensuelle.',
         ],
       },
       {
@@ -151,21 +151,21 @@ export const guides: Guide[] = [
       {
         heading: 'Le rendement brut',
         body: [
-          'Loyers annuels hors charges divisés par le prix d’achat. Un bien de 150 000 € loué 750 € par mois affiche 9 000 / 150 000 = 6 %. C’est l’indicateur des annonces : il ignore les frais d’acquisition, la vacance, les charges et les impôts.',
+          'Loyers annuels hors charges divisés par le prix d’achat. Un bien de 150 000 € loué 750 € par mois affiche 9 000 / 150 000 = 6 %. C’est l’indicateur des annonces : il ignore les frais d’acquisition, la vacance, les charges et les impôts.',
         ],
       },
       {
         heading: 'Le rendement net de charges',
         body: [
           'Loyers réellement encaissés (après vacance), moins taxe foncière, charges non récupérables, assurance, gestion et entretien, divisés par le coût total (prix, frais d’acquisition, travaux).',
-          'Sur le même exemple fictif, avec 8 % de frais d’acquisition, 10 000 € de travaux, un mois de vacance et environ 2 060 € de charges annuelles, le rendement net tombe à environ 3,6 %.',
+          'Sur le même exemple fictif, avec 8 % de frais d’acquisition, 10 000 € de travaux, un mois de vacance et environ 2 060 € de charges annuelles, le rendement net tombe à environ 3,6 %.',
         ],
       },
       {
         heading: 'Après impôt et cash-flow',
         body: [
           'Le rendement après impôt dépend du régime (micro-foncier, réel, location meublée) et de votre tranche marginale d’imposition. Il se calcule au cas par cas.',
-          'Le cash-flow mensuel mesure l’argent qui entre ou sort de votre poche chaque mois une fois la mensualité de crédit payée. Avec 150 000 € empruntés à 3,5 % sur 20 ans, l’exemple ci-dessus demande un effort d’environ 390 € par mois avant impôt.',
+          'Le cash-flow mensuel mesure l’argent qui entre ou sort de votre poche chaque mois une fois la mensualité de crédit payée. Avec 150 000 € empruntés à 3,5 % sur 20 ans, l’exemple ci-dessus demande un effort d’environ 390 € par mois avant impôt.',
         ],
       },
     ],
@@ -183,7 +183,7 @@ export const guides: Guide[] = [
       {
         heading: 'Les règles de base',
         body: [
-          'Le PEA est réservé aux personnes fiscalement domiciliées en France ; on ne peut en détenir qu’un par personne. Les versements, uniquement en euros, sont plafonnés à 150 000 €. Le PEA-PME, dédié aux petites et moyennes entreprises, partage avec lui un plafond global de 225 000 €.',
+          'Le PEA est réservé aux personnes fiscalement domiciliées en France ; on ne peut en détenir qu’un par personne. Les versements, uniquement en euros, sont plafonnés à 150 000 €. Le PEA-PME, dédié aux petites et moyennes entreprises, partage avec lui un plafond global de 225 000 €.',
           'Il accueille des actions de sociétés ayant leur siège dans l’Union européenne ou l’Espace économique européen, et des fonds ou ETF éligibles, y compris certains ETF qui répliquent des indices mondiaux.',
         ],
       },
@@ -204,7 +204,7 @@ export const guides: Guide[] = [
     related: ['pea', 'etf-monde', 'compte-titres'],
     sources: [SP('PEA', 'F2385'), IMPOTS],
     faq: [
-      { q: 'Quel est le plafond de versement du PEA ?', a: 'Les versements, uniquement en euros, sont plafonnés à 150 000 €. Le PEA-PME partage avec lui un plafond global de 225 000 €.' },
+      { q: 'Quel est le plafond de versement du PEA ?', a: 'Les versements, uniquement en euros, sont plafonnés à 150 000 €. Le PEA-PME partage avec lui un plafond global de 225 000 €.' },
       { q: 'Que se passe-t-il en cas de retrait avant 5 ans ?', a: 'En principe, le plan est clôturé et les gains sont imposés au prélèvement forfaitaire unique (31,4 % en 2026), sauf exceptions prévues par la loi.' },
       { q: 'Peut-on retirer de l’argent après 5 ans sans clôturer le PEA ?', a: 'Oui : après 5 ans, les retraits sont possibles sans clôturer le plan et sans bloquer les versements futurs. Les gains sont exonérés d’impôt sur le revenu ; seuls les prélèvements sociaux restent dus.' },
       { q: 'Combien de PEA peut-on détenir ?', a: 'Un seul par personne, à condition d’être fiscalement domicilié en France.' },
@@ -235,7 +235,7 @@ export const guides: Guide[] = [
       {
         heading: 'L’effet sur le long terme',
         body: [
-          'Exemple fictif : 10 000 € placés 25 ans avec un rendement brut supposé de 6 % deviennent environ 40 800 € avec 0,2 % de frais annuels, mais environ 29 400 € avec 1,5 %. L’écart dépasse le montant investi au départ.',
+          'Exemple fictif : 10 000 € placés 25 ans avec un rendement brut supposé de 6 % deviennent environ 40 800 € avec 0,2 % de frais annuels, mais environ 29 400 € avec 1,5 %. L’écart dépasse le montant investi au départ.',
           'Des frais élevés peuvent se justifier par un service réel, comme une gestion conseillée. Ils doivent alors être connus et acceptés.',
         ],
       },
@@ -254,8 +254,8 @@ export const guides: Guide[] = [
       {
         heading: 'Commencer petit, mais commencer',
         body: [
-          'Exemple fictif : 50 € par mois pendant 30 ans, avec un rendement supposé de 4 %, représentent environ 34 400 € pour 18 000 € versés.',
-          'Si les versements passent à 100 € au bout de 5 ans puis à 150 € au bout de 10 ans, le total atteint environ 78 200 € pour 45 000 € versés. Augmenter progressivement son effort pèse davantage que chercher le placement miracle.',
+          'Exemple fictif : 50 € par mois pendant 30 ans, avec un rendement supposé de 4 %, représentent environ 34 400 € pour 18 000 € versés.',
+          'Si les versements passent à 100 € au bout de 5 ans puis à 150 € au bout de 10 ans, le total atteint environ 78 200 € pour 45 000 € versés. Augmenter progressivement son effort pèse davantage que chercher le placement miracle.',
         ],
       },
       {
@@ -276,7 +276,7 @@ export const guides: Guide[] = [
     related: ['lep', 'livret-a', 'etf-monde', 'capital-humain'],
     sources: [SP('LEP', 'F2367'), AMF],
     faq: [
-      { q: 'Peut-on se constituer un patrimoine en épargnant 50 € par mois ?', a: 'Exemple fictif : 50 € par mois pendant 30 ans, avec un rendement supposé de 4 %, représentent environ 34 400 € pour 18 000 € versés. Ce n’est pas une prévision : les rendements réels varient.' },
+      { q: 'Peut-on se constituer un patrimoine en épargnant 50 € par mois ?', a: 'Exemple fictif : 50 € par mois pendant 30 ans, avec un rendement supposé de 4 %, représentent environ 34 400 € pour 18 000 € versés. Ce n’est pas une prévision : les rendements réels varient.' },
       { q: 'Faut-il d’abord placer ou constituer une épargne de précaution ?', a: 'Une épargne de précaution, même modeste, évite le recours au découvert ou au crédit renouvelable, dont le coût annule tout rendement. Le LEP, si vous y avez droit, est le meilleur taux sans risque, sans impôt.' },
       { q: 'Comment épargner régulièrement sans y penser ?', a: 'Un virement automatique le jour de la paie rend l’épargne régulière sans effort de volonté. Certains PEA et contrats d’assurance-vie acceptent de petits versements programmés.' },
     ],
@@ -289,7 +289,7 @@ export const guides: Guide[] = [
     readingMinutes: 6,
     updatedOn: '2026-10-10',
     sections: [
-      { heading: 'Connaître sa capacité d’épargne', body: ['Listez vos revenus nets et vos dépenses fixes sur trois mois. Passer de 100 € à 300 € d’épargne mensuelle a souvent plus d’effet que gagner un point de rendement.'] },
+      { heading: 'Connaître sa capacité d’épargne', body: ['Listez vos revenus nets et vos dépenses fixes sur trois mois. Passer de 100 € à 300 € d’épargne mensuelle a souvent plus d’effet que gagner un point de rendement.'] },
       { heading: 'Constituer une épargne de précaution', body: ['Un repère courant est de trois à six mois de dépenses, à adapter à la stabilité de vos revenus. Les livrets réglementés (LEP si vous êtes éligible, puis Livret A et LDDS) sont les supports naturels de cette réserve.'] },
       { heading: 'Rembourser les dettes coûteuses', body: ['Un crédit à la consommation à taux élevé coûte souvent plus que ce que rapporterait un placement. Le rembourser est un gain certain.'] },
       { heading: 'Ouvrir les bonnes enveloppes tôt', body: ['PEA et assurance-vie bénéficient d’avantages fiscaux qui dépendent de leur ancienneté (5 et 8 ans). Les ouvrir tôt, même avec un petit versement, fait courir ces délais.'] },
@@ -306,7 +306,7 @@ export const guides: Guide[] = [
     readingMinutes: 5,
     updatedOn: '2026-10-10',
     sections: [
-      { heading: 'Le principe', body: ['Les intérêts composés consistent à gagner des intérêts sur les intérêts déjà acquis. Avec un taux r pendant n années, un capital C devient C × (1 + r)^n.', 'Exemple fictif : 10 000 € à 5 % par an deviennent environ 16 289 € après 10 ans et 26 533 € après 20 ans. La seconde décennie rapporte plus que la première.'] },
+      { heading: 'Le principe', body: ['Les intérêts composés consistent à gagner des intérêts sur les intérêts déjà acquis. Avec un taux r pendant n années, un capital C devient C × (1 + r)^n.', 'Exemple fictif : 10 000 € à 5 % par an deviennent environ 16 289 € après 10 ans et 26 533 € après 20 ans. La seconde décennie rapporte plus que la première.'] },
       { heading: 'L’effet des frais', body: ['Des frais annuels de 1 % s’appliquent chaque année à tout le capital. Sur 25 ans, ils réduisent un capital placé en une fois d’environ 22 %.'] },
       { heading: 'L’inflation', body: ['Un capital nominal ne dit rien du pouvoir d’achat futur. Nos simulateurs affichent aussi la valeur en euros d’aujourd’hui, en divisant par (1 + inflation)^n.'] },
     ],
@@ -322,7 +322,7 @@ export const guides: Guide[] = [
     updatedOn: '2026-10-10',
     sections: [
       { heading: 'Placement et enveloppe', body: ['Le support détermine le risque ; l’enveloppe détermine la fiscalité, la disponibilité et la transmission.'] },
-      { heading: 'Les grandes différences', body: ['PEA : actions européennes, plafond de 150 000 €, exonération d’impôt sur le revenu après 5 ans (prélèvements sociaux dus).', 'Assurance-vie : supports variés, fiscalité allégée après 8 ans, avantages successoraux.', 'PER : versements déductibles mais argent bloqué jusqu’à la retraite, sauf exceptions.', 'Compte-titres : aucune limite, fiscalité standard (PFU de 31,4 % en 2026).'] },
+      { heading: 'Les grandes différences', body: ['PEA : actions européennes, plafond de 150 000 €, exonération d’impôt sur le revenu après 5 ans (prélèvements sociaux dus).', 'Assurance-vie : supports variés, fiscalité allégée après 8 ans, avantages successoraux.', 'PER : versements déductibles mais argent bloqué jusqu’à la retraite, sauf exceptions.', 'Compte-titres : aucune limite, fiscalité standard (PFU de 31,4 % en 2026).'] },
       { heading: 'Une combinaison fréquente', body: ['Épargne de précaution sur livrets, actions de long terme en PEA, assurance-vie pour la diversification et la transmission, PER si la tranche marginale d’imposition est élevée. Votre situation peut justifier d’autres choix.'] },
     ],
     related: ['pea', 'assurance-vie', 'per', 'compte-titres'],
@@ -339,7 +339,7 @@ export const guides: Guide[] = [
         heading: 'Aucune règle officielle, des repères',
         body: [
           'Aucun texte ne fixe le montant d’une épargne de précaution. Les repères courants se comptent en mois de dépenses : environ 3 mois avec des revenus stables (CDI, fonction publique, retraite), 6 mois avec des revenus variables (CDD, intérim) et jusqu’à 9 mois pour un indépendant ou un dirigeant.',
-          'Exemple fictif : avec 2 000 € de dépenses mensuelles, ces repères donnent respectivement 6 000 €, 12 000 € et 18 000 €. À ce montant, ajoutez les dépenses prévisibles (franchise d’assurance, réparation, appareil à remplacer).',
+          'Exemple fictif : avec 2 000 € de dépenses mensuelles, ces repères donnent respectivement 6 000 €, 12 000 € et 18 000 €. À ce montant, ajoutez les dépenses prévisibles (franchise d’assurance, réparation, appareil à remplacer).',
         ],
       },
       {
@@ -351,7 +351,7 @@ export const guides: Guide[] = [
       {
         heading: 'Où placer cette réserve',
         body: [
-          'La réserve doit rester disponible immédiatement et ne pas fluctuer : les livrets réglementés sont les supports naturels. Plafonds de dépôt : LEP 10 000 € (sous conditions de revenus), Livret A 22 950 € et LDDS 12 000 €. Taux au 10 octobre 2026 : 2,5 % pour le LEP et 1,7 % pour le Livret A et le LDDS, fixés pour la période du 1er août 2026 au 31 janvier 2027.',
+          'La réserve doit rester disponible immédiatement et ne pas fluctuer : les livrets réglementés sont les supports naturels. Plafonds de dépôt : LEP 10 000 € (sous conditions de revenus), Livret A 22 950 € et LDDS 12 000 €. Taux au 10 octobre 2026 : 2,5 % pour le LEP et 1,7 % pour le Livret A et le LDDS, fixés pour la période du 1er août 2026 au 31 janvier 2027.',
           'On remplit en général d’abord le mieux rémunéré (LEP si vous y avez droit), puis le Livret A, puis le LDDS. Ces taux changent à chaque révision : vérifiez-les sur les fiches Livret A et LEP.',
         ],
       },
@@ -381,11 +381,11 @@ export const guides: Guide[] = [
       {
         heading: 'Le calcul',
         body: [
-          'Le taux d’endettement est la part de vos revenus consacrée au remboursement de vos crédits : mensualités divisées par revenus nets mensuels. Exemple fictif : 200 € de crédit en cours et 850 € de nouvelle mensualité pour 3 000 € de revenus donnent (200 + 850) / 3 000 = 35 %.',
+          'Le taux d’endettement est la part de vos revenus consacrée au remboursement de vos crédits : mensualités divisées par revenus nets mensuels. Exemple fictif : 200 € de crédit en cours et 850 € de nouvelle mensualité pour 3 000 € de revenus donnent (200 + 850) / 3 000 = 35 %.',
         ],
       },
       {
-        heading: 'Le repère de 35 %',
+        heading: 'Le repère de 35 %',
         body: [
           'Le Haut Conseil de stabilité financière (décision D-HCSF-2021-7, applicable depuis le 1er janvier 2022) recommande aux banques de limiter les charges d’emprunt à 35 % des revenus, assurance comprise, et la durée à 25 ans (27 ans avec différé pour un bien neuf ou des travaux). Les banques disposent d’une marge de dérogation, qui reste limitée : c’est un repère, pas un droit à emprunter.',
         ],
@@ -397,7 +397,7 @@ export const guides: Guide[] = [
         ],
       },
       {
-        heading: 'Que faire si le taux dépasse 35 %',
+        heading: 'Que faire si le taux dépasse 35 %',
         body: [
           'Allonger la durée dans la limite du repère, augmenter l’apport, réduire le prix visé, solder un petit crédit ou emprunter à deux. Le simulateur calcule la mensualité maximale, le revenu minimal et le capital empruntable.',
         ],
@@ -406,7 +406,7 @@ export const guides: Guide[] = [
     related: ['credit-immobilier'],
     sources: [{ label: 'Haut Conseil de stabilité financière', url: 'https://www.economie.gouv.fr/hcsf', official: true }, BDF, ANIL],
     faq: [
-      { q: 'Comment calculer son taux d’endettement ?', a: 'On divise le total des mensualités de crédit par les revenus nets mensuels. Exemple fictif : 1 050 € de mensualités pour 3 000 € de revenus donnent un taux de 35 %.' },
+      { q: 'Comment calculer son taux d’endettement ?', a: 'On divise le total des mensualités de crédit par les revenus nets mensuels. Exemple fictif : 1 050 € de mensualités pour 3 000 € de revenus donnent un taux de 35 %.' },
       { q: 'Le taux d’endettement maximal est-il de 35 % ?', a: 'C’est le repère recommandé par le HCSF, assurance comprise, appliqué par les banques avec une marge de dérogation limitée. Ce n’est pas une loi : chaque banque apprécie le dossier.' },
       { q: 'Qu’est-ce que le reste à vivre ?', a: 'C’est ce qu’il vous reste chaque mois après les crédits et les charges courantes, souvent rapporté au nombre de personnes du foyer. Il complète le taux d’endettement pour juger si une mensualité est supportable.' },
     ],
@@ -422,14 +422,14 @@ export const guides: Guide[] = [
       {
         heading: 'Le calcul de base',
         body: [
-          'Sans intérêts, le versement mensuel est simplement l’objectif divisé par le nombre de mois. Exemple fictif : 20 000 € en 5 ans, soit 60 mois, demandent 20 000 / 60 ≈ 333 € par mois.',
-          'Avec un taux de 1,7 % par an (celui du Livret A au 10 octobre 2026), le même objectif demande environ 320 € par mois : les intérêts, avant impôt, apportent environ 820 € sur 5 ans, soit à peine 4 % de l’objectif.',
+          'Sans intérêts, le versement mensuel est simplement l’objectif divisé par le nombre de mois. Exemple fictif : 20 000 € en 5 ans, soit 60 mois, demandent 20 000 / 60 ≈ 333 € par mois.',
+          'Avec un taux de 1,7 % par an (celui du Livret A au 10 octobre 2026), le même objectif demande environ 320 € par mois : les intérêts, avant impôt, apportent environ 820 € sur 5 ans, soit à peine 4 % de l’objectif.',
         ],
       },
       {
         heading: 'La durée pèse plus que le taux',
         body: [
-          'Sur des durées courtes et des placements sans risque, ce sont surtout vos versements qui construisent la somme. Pour le même objectif fictif de 20 000 € à 1,7 % : environ 542 € par mois sur 3 ans, 320 € sur 5 ans et 153 € sur 10 ans. Allonger l’échéance est le levier le plus efficace, s’il est compatible avec votre projet.',
+          'Sur des durées courtes et des placements sans risque, ce sont surtout vos versements qui construisent la somme. Pour le même objectif fictif de 20 000 € à 1,7 % : environ 542 € par mois sur 3 ans, 320 € sur 5 ans et 153 € sur 10 ans. Allonger l’échéance est le levier le plus efficace, s’il est compatible avec votre projet.',
         ],
       },
       {
@@ -448,8 +448,8 @@ export const guides: Guide[] = [
     related: ['livret-a', 'lep'],
     sources: [SP('Livret A', 'F2365'), BDF],
     faq: [
-      { q: 'Comment calculer combien épargner par mois pour un objectif ?', a: 'Sans intérêts, divisez l’objectif par le nombre de mois. Exemple fictif : 20 000 € en 5 ans donnent environ 333 € par mois. Avec des intérêts, le versement est un peu plus bas ; le simulateur le calcule.' },
-      { q: 'Les intérêts changent-ils beaucoup le montant à épargner ?', a: 'Sur quelques années et avec un placement sans risque, peu : dans l’exemple fictif de 20 000 € en 5 ans à 1,7 %, les intérêts représentent environ 4 % de l’objectif, avant impôt.' },
+      { q: 'Comment calculer combien épargner par mois pour un objectif ?', a: 'Sans intérêts, divisez l’objectif par le nombre de mois. Exemple fictif : 20 000 € en 5 ans donnent environ 333 € par mois. Avec des intérêts, le versement est un peu plus bas ; le simulateur le calcule.' },
+      { q: 'Les intérêts changent-ils beaucoup le montant à épargner ?', a: 'Sur quelques années et avec un placement sans risque, peu : dans l’exemple fictif de 20 000 € en 5 ans à 1,7 %, les intérêts représentent environ 4 % de l’objectif, avant impôt.' },
       { q: 'Où placer l’argent d’un projet à court terme ?', a: 'Sur des supports disponibles et sans risque de perte en capital, comme les livrets réglementés, dans la limite de leurs plafonds.' },
     ],
     cta: { to: '/simulateurs/objectif-epargne', label: 'Calculer mon versement mensuel' },
@@ -470,7 +470,7 @@ export const guides: Guide[] = [
       {
         heading: 'Un exemple fictif chiffré',
         body: [
-          'Crédit de 150 000 € à 4 % sur 20 ans restants, 20 000 € disponibles, placement à 5 % par an, frais de 0,2 % par an, gains imposés à 30 %. Rembourser fait gagner 45 mois et économise environ 21 250 € d’intérêts ; le patrimoine net final est d’environ 43 900 €, contre 41 700 € en investissant. Dans cet exemple, rembourser l’emporte d’environ 2 200 €.',
+          'Crédit de 150 000 € à 4 % sur 20 ans restants, 20 000 € disponibles, placement à 5 % par an, frais de 0,2 % par an, gains imposés à 30 %. Rembourser fait gagner 45 mois et économise environ 21 250 € d’intérêts ; le patrimoine net final est d’environ 43 900 €, contre 41 700 € en investissant. Dans cet exemple, rembourser l’emporte d’environ 2 200 €.',
           'Le rendement d’équilibre est ici d’environ 5,3 % brut par an : au-dessus, investir gagne, en dessous, rembourser gagne. Ce rendement n’est pas garanti, alors que l’économie d’intérêts, elle, est certaine.',
         ],
       },
@@ -565,8 +565,8 @@ export const guides: Guide[] = [
       {
         heading: 'Un exemple fictif chiffré',
         body: [
-          'Supposons une inflation de 2 % par an, constante pendant 10 ans. Une somme de 10 000 € laissée telle quelle ne permet plus d’acheter que l’équivalent de 10 000 ÷ 1,02^10 ≈ 8 203 € d’aujourd’hui.',
-          'Placée à 3 % par an, la même somme atteint 10 000 × 1,03^10 ≈ 13 439 €, soit en euros d’aujourd’hui ≈ 11 025 € : le rendement réel est (1,03 ÷ 1,02) − 1 ≈ 0,98 % par an. Exemple fictif, à but pédagogique : ces taux ne sont ni observés ni prévus.',
+          'Supposons une inflation de 2 % par an, constante pendant 10 ans. Une somme de 10 000 € laissée telle quelle ne permet plus d’acheter que l’équivalent de 10 000 ÷ 1,02^10 ≈ 8 203 € d’aujourd’hui.',
+          'Placée à 3 % par an, la même somme atteint 10 000 × 1,03^10 ≈ 13 439 €, soit en euros d’aujourd’hui ≈ 11 025 € : le rendement réel est (1,03 ÷ 1,02) − 1 ≈ 0,98 % par an. Exemple fictif, à but pédagogique : ces taux ne sont ni observés ni prévus.',
         ],
       },
       {
@@ -660,14 +660,14 @@ export const guides: Guide[] = [
       {
         heading: 'Combien représente une quinzaine ?',
         body: [
-          'Exemple fictif au taux de 1,70 % par an (taux en vigueur du 1er août 2026 au 31 janvier 2027) : sur 1 000 €, une quinzaine rapporte environ 1 000 × 1,70 % ÷ 24 ≈ 0,71 €. Déposer le 10 mai plutôt que le 20 mai fait donc gagner une quinzaine, soit environ 0,71 €.',
+          'Exemple fictif au taux de 1,70 % par an (taux en vigueur du 1er août 2026 au 31 janvier 2027) : sur 1 000 €, une quinzaine rapporte environ 1 000 × 1,70 % ÷ 24 ≈ 0,71 €. Déposer le 10 mai plutôt que le 20 mai fait donc gagner une quinzaine, soit environ 0,71 €.',
           'L’écart est faible pour une somme modeste : l’enjeu est surtout de ne pas retirer ou déposer au mauvais moment sur de gros montants. Le taux est susceptible de changer au 1er février 2027.',
         ],
       },
       {
         heading: 'Quand les intérêts sont-ils ajoutés au capital ?',
         body: [
-          'Au 31 décembre de chaque année, les intérêts cumulés sur l’année s’ajoutent au capital et produisent eux-mêmes des intérêts l’année suivante, même si le plafond de 22 950 € est déjà dépassé. En cas de clôture en cours d’année, les intérêts du 1er janvier à la date de clôture sont crédités le jour de la clôture.',
+          'Au 31 décembre de chaque année, les intérêts cumulés sur l’année s’ajoutent au capital et produisent eux-mêmes des intérêts l’année suivante, même si le plafond de 22 950 € est déjà dépassé. En cas de clôture en cours d’année, les intérêts du 1er janvier à la date de clôture sont crédités le jour de la clôture.',
         ],
       },
     ],

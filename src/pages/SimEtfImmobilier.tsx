@@ -28,9 +28,9 @@ const DEFAULTS: State = {
 };
 
 const ETF_TAX = [
-  { v: 0.314, label: '31,4 % (compte-titres, PFU 2026)' },
-  { v: 0.186, label: '18,6 % (PEA après 5 ans, à vérifier)' },
-  { v: 0.172, label: '17,2 % (PEA, taux historique)' },
+  { v: 0.314, label: '31,4 % (compte-titres, PFU 2026)' },
+  { v: 0.186, label: '18,6 % (PEA après 5 ans, à vérifier)' },
+  { v: 0.172, label: '17,2 % (PEA, taux historique)' },
   { v: 0, label: 'Aucune' },
 ];
 

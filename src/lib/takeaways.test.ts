@@ -77,7 +77,7 @@ describe('phrases « Concrètement »', () => {
     expect(t).toContain(eur(target));
     expect(t).toContain(`${years}ans`);
     expect(fireTakeaway({ gap: 30000, withdrawalRate: 0.035, target, currentWealth: 900000, annualSavings: 0, years: 0 })).toContain('atteint déjà');
-    expect(fireTakeaway({ gap: 30000, withdrawalRate: 0.035, target, currentWealth: 0, annualSavings: 0, years: null })).toContain('100 ans');
+    expect(fireTakeaway({ gap: 30000, withdrawalRate: 0.035, target, currentWealth: 0, annualSavings: 0, years: null }).replace(/\u00a0/g, ' ')).toContain('100 ans');
     expect(fireTakeaway({ gap: 0, withdrawalRate: 0.035, target: 0, currentWealth: 0, annualSavings: 0, years: 0 })).toContain('aucun capital');
     expect(fireTakeaway({ gap: 30000, withdrawalRate: 0, target: Infinity, currentWealth: 0, annualSavings: 0, years: null })).toBe('');
   });
@@ -105,7 +105,7 @@ describe('phrases « Concrètement »', () => {
     expect(path.reachedAt).not.toBeNull();
     expect(precautionTakeaway({ target: 7000, savings: 8000, monthlySaving: 0, reachedAt: 0 })).toContain('couvre déjà');
     expect(precautionTakeaway({ target: 7000, savings: 0, monthlySaving: 0, reachedAt: null })).toContain('ne se comble pas');
-    expect(precautionTakeaway({ target: 7000, savings: 0, monthlySaving: 1, reachedAt: null })).toContain('50 ans');
+    expect(precautionTakeaway({ target: 7000, savings: 0, monthlySaving: 1, reachedAt: null }).replace(/\u00a0/g, ' ')).toContain('50 ans');
     expect(precautionTakeaway({ target: 0, savings: 0, monthlySaving: 0, reachedAt: 0 })).toBe('');
   });
   it('rembourser ou investir : sens de l’écart, intérêts économisés et seuil', () => {

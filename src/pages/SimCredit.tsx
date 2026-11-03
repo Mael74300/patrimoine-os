@@ -61,7 +61,7 @@ export default function SimCredit() {
           <Fold title="Régler la capacité d'emprunt (revenus, taux d'effort)">
             <div className="fold-form">
               <NumberField label="Revenus nets mensuels" unit="€" value={s.income} onChange={up('income')} min={0} step={100} />
-              <NumberField label="Taux d'effort maximal" unit="%" percent value={s.debtRatio} onChange={up('debtRatio')} step={1} min={0} max={60} hint="Recommandation du HCSF : 35 % des revenus, assurance comprise." />
+              <NumberField label="Taux d'effort maximal" unit="%" percent value={s.debtRatio} onChange={up('debtRatio')} step={1} min={0} max={60} hint="Recommandation du HCSF : 35 % des revenus, assurance comprise." />
             </div>
           </Fold>
 
@@ -73,7 +73,7 @@ export default function SimCredit() {
               options={[{ v: 'duree', label: 'Réduire la durée (mensualité inchangée)' }, { v: 'mensualite', label: 'Réduire la mensualité (durée inchangée)' }]} />
             <SelectField label="Indemnités de remboursement anticipé" value={s.withPenalty ? 1 : 0} onChange={(v) => up('withPenalty')(v === 1)}
               options={[{ v: 1, label: 'Appliquer le plafond légal' }, { v: 0, label: 'Aucune (contrat sans indemnités)' }]}
-              hint="Crédit immobilier : au plus 6 mois d'intérêts sur la somme remboursée, dans la limite de 3 % du capital restant dû." />
+              hint="Crédit immobilier : au plus 6 mois d'intérêts sur la somme remboursée, dans la limite de 3 % du capital restant dû." />
           </div>
           <div className="kpis">
             <Kpi label="Somme remboursée" value={fmtEur(pre.prepaid)} sub={`sur ${fmtEur(pre.remainingBefore)} restant dû`} />

@@ -50,7 +50,7 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
   });
   it('Objets d’art : 8 000 € revendus, taxe forfaitaire 6 % + 0,5 % de CRDS → 520 €', () => {
     expect(8000 * (0.06 + 0.005)).toBeCloseTo(520, 6);
-    expect(investmentBySlug['objets-d-art-collection'].example).toContain('520 €');
+    expect(investmentBySlug['objets-d-art-collection'].example.replace(/\u00a0/g, ' ')).toContain('520 €');
   });
   it('Compte à terme : 300 € bruts → 205,80 € nets au PFU de 31,4 %', () => {
     expect(300 * (1 - 0.314)).toBeCloseTo(205.8, 6);
@@ -213,7 +213,7 @@ describe('fiche donation : cohérence des montants', () => {
   it('l’exemple fictif recalcule les abattements (2 × (100 000 + 31 865))', () => {
     const f = investments.find((i) => i.slug === 'donation')!;
     expect(2 * (100_000 + 31_865)).toBe(263_730);
-    expect(f.example).toContain('263 730');
-    expect(f.tax.text).toContain('131 865');
+    expect(f.example.replace(/\u00a0/g, ' ')).toContain('263 730');
+    expect(f.tax.text.replace(/\u00a0/g, ' ')).toContain('131 865');
   });
 });

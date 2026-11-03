@@ -26,7 +26,7 @@ export default function SimRembourser() {
       </PageHead>
       <p className="notice" role="note">
         Le rendement saisi est une hypothèse, jamais une prévision : un placement peut perdre de la valeur, alors que le remboursement d'un crédit économise des intérêts certains.
-        Le taux d'imposition proposé (31,4 %) correspond au prélèvement forfaitaire unique de 2026 décrit dans les <Link to="/encyclopedie/compte-titres">fiches de l'encyclopédie</Link> ;
+        Le taux d'imposition proposé (31,4 %) correspond au prélèvement forfaitaire unique de 2026 décrit dans les <Link to="/encyclopedie/compte-titres">fiches de l'encyclopédie</Link> ;
         remplacez-le selon l'enveloppe utilisée. Voir aussi <Link to="/simulateurs/credit">le calculateur de crédit</Link> et le <Link to="/guides/investir-a-credit">guide sur le crédit</Link>.
       </p>
       <div className="sim" style={{ marginTop: 24 }}>

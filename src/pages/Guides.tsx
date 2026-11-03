@@ -145,7 +145,7 @@ export function GuidePage() {
                 {g.slug === 'investir-a-credit' && s.heading === 'Un exemple fictif' && (k === 0 ? <SchemaMensualite /> : <SchemaLevier />)}
               </Fragment>
             ))}
-            {g.slug === 'taux-endettement-capacite-emprunt' && s.heading === 'Le repère de 35 %' && <SchemaEndettement />}
+            {g.slug === 'taux-endettement-capacite-emprunt' && s.heading === 'Le repère de 35 %' && <SchemaEndettement />}
             {g.slug === 'rembourser-credit-par-anticipation-ou-investir' && s.heading === 'Un exemple fictif chiffré' && <SchemaRembourser />}
             {g.slug === 'immobilier-ou-etf' && s.heading.startsWith('La méthode') && <SchemaImmoEtf />}
             {g.slug === 'regle-de-72-doubler-son-capital' && s.heading.startsWith('Jusqu’où') && <SchemaRegle72 />}

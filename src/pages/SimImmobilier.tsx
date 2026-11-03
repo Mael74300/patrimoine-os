@@ -15,7 +15,7 @@ export const RENTAL_DEFAULTS: RentalInput = {
 
 export const REGIMES: { v: TaxRegime; label: string; allowance?: number }[] = [
   { v: 'aucune', label: 'Ne pas estimer l’impôt' },
-  { v: 'micro-foncier', label: 'Location nue — micro-foncier (abattement 30 %)', allowance: 0.3 },
+  { v: 'micro-foncier', label: 'Location nue — micro-foncier (abattement 30 %)', allowance: 0.3 },
   { v: 'reel-foncier', label: 'Location nue — régime réel' },
   { v: 'micro-bic', label: 'Location meublée — micro-BIC (abattement à vérifier)', allowance: 0.5 },
   { v: 'reel-bic', label: 'Location meublée — LMNP au réel' },
@@ -23,8 +23,8 @@ export const REGIMES: { v: TaxRegime; label: string; allowance?: number }[] = [
 
 export const TMI_OPTIONS = [0, 0.11, 0.3, 0.41, 0.45].map((v) => ({ v, label: `${Math.round(v * 100)} %` }));
 export const PS_OPTIONS = [
-  { v: 0.172, label: '17,2 % (revenus fonciers)' },
-  { v: 0.186, label: '18,6 % (taux relevé 2026, à vérifier pour le meublé)' },
+  { v: 0.172, label: '17,2 % (revenus fonciers)' },
+  { v: 0.186, label: '18,6 % (taux relevé 2026, à vérifier pour le meublé)' },
 ];
 
 export default function SimImmobilier() {
@@ -63,7 +63,7 @@ export default function SimImmobilier() {
               <p className="small muted">Déjà remplis avec des valeurs d'exemple. Si vous ne savez pas, laissez-les telles quelles.</p>
               <fieldset>
                 <legend>Acquisition</legend>
-                <NumberField label="Frais d'acquisition" unit="%" percent value={s.notaryRate} onChange={up('notaryRate')} step={0.5} min={0} max={20} hint="Ordre de grandeur dans l'ancien : 7 à 8 % (à vérifier)." />
+                <NumberField label="Frais d'acquisition" unit="%" percent value={s.notaryRate} onChange={up('notaryRate')} step={0.5} min={0} max={20} hint="Ordre de grandeur dans l'ancien : 7 à 8 % (à vérifier)." />
                 <NumberField label="Travaux" unit="€" value={s.works} onChange={up('works')} min={0} step={1000} />
                 <NumberField label="Mobilier" unit="€" value={s.furniture} onChange={up('furniture')} min={0} step={500} />
                 <NumberField label="Assurance emprunteur" unit="%" percent value={s.loanInsuranceRate} onChange={up('loanInsuranceRate')} step={0.05} min={0} max={2} hint="Taux annuel sur le capital emprunté." />
@@ -119,7 +119,7 @@ export default function SimImmobilier() {
           </div>
           <Takeaway>{rentalTakeaway({ totalCost: r.totalCost, netYield: r.netYield, monthlyCashflow: r.monthlyCashflow, monthlyCashflowAfterTax: s.regime === 'aucune' || !y1 ? null : y1.cashflowAfterTax / 12, horizon: s.horizon, netEquity: end?.netEquity ?? 0 })}</Takeaway>
           {s.regime === 'micro-foncier' && r.annualRentCollected > 15000 && (
-            <p className="notice small">Avec plus de 15 000 € de revenus fonciers bruts par an, le micro-foncier n'est pas applicable : choisissez le régime réel.</p>
+            <p className="notice small">Avec plus de 15 000 € de revenus fonciers bruts par an, le micro-foncier n'est pas applicable : choisissez le régime réel.</p>
           )}
 
           <div className="panel">

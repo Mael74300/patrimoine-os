@@ -18,11 +18,11 @@ describe('schéma « taux d’endettement »', () => {
     expect(p.limit).toBe(1050);
     expect(p.maxNewPayment).toBe(850);
     expect(HCSF.maxRatio).toBe(0.35);
-    expect(texte).toContain('(200 + 850) / 3 000 = 35 %');
-    expect(texte).toContain('200 € de crédit en cours et 850 € de nouvelle mensualité pour 3 000 €');
+    expect(texte.replace(/\u00a0/g, ' ')).toContain('(200 + 850) / 3 000 = 35 %');
+    expect(texte.replace(/\u00a0/g, ' ')).toContain('200 € de crédit en cours et 850 € de nouvelle mensualité pour 3 000 €');
   });
   it('est accessible, léger et marqué « exemple fictif »', () => {
-    expect(guide.sections.some((s) => s.heading === 'Le repère de 35 %')).toBe(true);
+    expect(guide.sections.some((s) => s.heading.replace(/\u00a0/g, ' ') === 'Le repère de 35 %')).toBe(true);
     const html = renderToStaticMarkup(createElement(SchemaEndettement)).replace(/[\u00a0\u202f]/g, ' ');
     expect(html).toContain('role="img"');
     expect(html).toContain('exemple fictif');

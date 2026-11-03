@@ -10,13 +10,13 @@ export function creditTakeaway(p: { principal: number; years: number; monthlyTot
   if (!(p.principal > 0) || !(p.years > 0)) return '';
   const rendu = p.principal + p.totalCost;
   const par100 = Math.round((p.totalCost / p.principal) * 100);
-  return `Vous recevez ${fmtEur(p.principal)} et vous rendez ${fmtEur(rendu)} en tout, soit ${fmtEur(p.monthlyTotal)} par mois pendant ${p.years} an${p.years > 1 ? 's' : ''}. Le crédit vous coûte donc ${fmtEur(p.totalCost)} de plus que la somme reçue (environ ${par100} € pour 100 € empruntés).`;
+  return `Vous recevez ${fmtEur(p.principal)} et vous rendez ${fmtEur(rendu)} en tout, soit ${fmtEur(p.monthlyTotal)} par mois pendant ${p.years} an${p.years > 1 ? 's' : ''}. Le crédit vous coûte donc ${fmtEur(p.totalCost)} de plus que la somme reçue (environ ${par100} € pour 100 € empruntés).`;
 }
 
 /** Taux d'endettement : la part des revenus prise par les crédits, et ce qui reste. */
 export function debtRatioTakeaway(p: { income: number; ratioAfter: number; remainingAfter: number; withinRef: boolean; refLabel: string }): string {
   if (!(p.income > 0)) return '';
-  const part = `Sur 100 € de revenus, ${Math.round(p.ratioAfter * 100)} € partent dans les crédits.`;
+  const part = `Sur 100 € de revenus, ${Math.round(p.ratioAfter * 100)} € partent dans les crédits.`;
   const reste = p.remainingAfter < 0
     ? ` Après vos autres charges, il manque ${fmtEur(-p.remainingAfter)} par mois : ce projet n'est pas tenable avec ces chiffres.`
     : ` Une fois les autres charges payées, il vous reste ${fmtEur(p.remainingAfter)} par mois pour vivre.`;
@@ -62,7 +62,7 @@ export function fireTakeaway(p: { gap: number; withdrawalRate: number; target: n
   if (p.gap === 0) return 'Vos revenus récurrents couvrent déjà vos dépenses : aucun capital n’est nécessaire pour les financer.';
   const base = `Pour financer ${fmtEur(p.gap)} de dépenses par an que vos revenus ne couvrent pas, en retirant ${fmtPct(p.withdrawalRate)} du capital la première année, il faut environ ${fmtEur(p.target)}.`;
   if (p.years === 0) return `${base} Votre patrimoine de ${fmtEur(p.currentWealth)} atteint déjà ce capital.`;
-  if (p.years === null) return `${base} Avec ces hypothèses, vous ne l’atteignez pas en 100 ans.`;
+  if (p.years === null) return `${base} Avec ces hypothèses, vous ne l’atteignez pas en 100 ans.`;
   return `${base} Avec ${fmtEur(p.currentWealth)} déjà réunis et ${fmtEur(p.annualSavings)} mis de côté chaque année, vous y arrivez dans environ ${p.years} an${p.years > 1 ? 's' : ''}, en euros constants.`;
 }
 
@@ -89,7 +89,7 @@ export function precautionTakeaway(p: { target: number; savings: number; monthly
   if (gap === 0) return `Votre épargne de ${fmtEur(p.savings)} couvre déjà le montant visé de ${fmtEur(p.target)} : en cas d'imprévu, vous avez de quoi tenir sans toucher à vos autres placements.`;
   const base = `Pour être à l'abri d'un imprévu, il faut mettre ${fmtEur(p.target)} de côté, disponibles à tout moment. Vous en avez ${fmtEur(p.savings)} : il manque ${fmtEur(gap)}.`;
   if (!(p.monthlySaving > 0)) return `${base} Sans versement mensuel, ce manque ne se comble pas.`;
-  if (p.reachedAt === null) return `${base} Avec ${fmtEur(p.monthlySaving)} par mois, ce montant n'est pas atteint en 50 ans : il faut verser davantage.`;
+  if (p.reachedAt === null) return `${base} Avec ${fmtEur(p.monthlySaving)} par mois, ce montant n'est pas atteint en 50 ans : il faut verser davantage.`;
   return `${base} Avec ${fmtEur(p.monthlySaving)} par mois, vous y arrivez en ${dureeEnMois(p.reachedAt)}.`;
 }
 
@@ -201,7 +201,7 @@ export function rateConversionTakeaway(p: { annualRate: number; periods: number;
 export function budgetTakeaway(p: { income: number; shares: { needs: number; wants: number; saving: number }; unallocated: number; targetRate: number; missing: number }): string {
   if (!(p.income > 0)) return '';
   const cent = (x: number) => Math.round(x * 100);
-  const repartition = `Sur 100 € de revenu, ${cent(p.shares.needs)} € vont aux besoins, ${cent(p.shares.wants)} € aux envies et ${cent(p.shares.saving)} € à l'épargne.`;
+  const repartition = `Sur 100 € de revenu, ${cent(p.shares.needs)} € vont aux besoins, ${cent(p.shares.wants)} € aux envies et ${cent(p.shares.saving)} € à l'épargne.`;
   const reste = p.unallocated < 0
     ? ` Vos postes dépassent le revenu de ${fmtEur(-p.unallocated)} par mois : le budget n'est pas équilibré.`
     : Math.round(p.unallocated) > 0
@@ -234,7 +234,7 @@ const durationFr = (months: number): string => {
 /** Plusieurs dettes : durée et intérêts avec l'avalanche, comparés aux seules mensualités minimales. */
 export function debtsTakeaway(p: { extra: number; minimum: { months: number | null; totalInterest: number }; avalanche: { months: number | null; totalInterest: number }; snowball: { months: number | null; totalInterest: number }; interestSavedByAvalanche: number | null }): string {
   const { minimum: min, avalanche: av, snowball: sn } = p;
-  if (av.months === null) return 'Avec ce budget, les dettes ne sont pas soldées en 50 ans : les mensualités ne couvrent pas les intérêts. Augmentez les mensualités ou le versement supplémentaire.';
+  if (av.months === null) return 'Avec ce budget, les dettes ne sont pas soldées en 50 ans : les mensualités ne couvrent pas les intérêts. Augmentez les mensualités ou le versement supplémentaire.';
   if (av.months === 0) return '';
   const ajout = p.extra > 0 ? `En ajoutant ${fmtEur(p.extra)} par mois à vos mensualités minimales, ` : 'Avec vos mensualités minimales, ';
   const duree = `vous êtes libéré de toutes vos dettes en ${durationFr(av.months)} avec l'avalanche (${fmtEur(av.totalInterest)} d'intérêts)`;

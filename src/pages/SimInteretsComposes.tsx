@@ -68,7 +68,7 @@ function Placer() {
       </div>
       <Takeaway>{presentValueTakeaway({ target: s.target, years: s.years, monthly: s.monthly, ...r })}</Takeaway>
       <p className="muted small">
-        Avec r = (1 + R)^(1/12) − 1 et n le nombre de mois : capital à placer = (capital visé − versement × ((1 + r)^n − 1) / r) / (1 + r)^n, et jamais moins de 0 €.
+        Avec r = (1 + R)^(1/12) − 1 et n le nombre de mois : capital à placer = (capital visé − versement × ((1 + r)^n − 1) / r) / (1 + r)^n, et jamais moins de 0 €.
         Les montants par défaut sont fictifs.
       </p>
       <SavedSims simKey="capital-a-placer" current={s} onLoad={(d) => setS({ ...PLACER, ...d })} />
@@ -105,11 +105,11 @@ function Duree() {
           <Kpi label="Gain de temps grâce au rendement" value={saved === null ? '—' : fmtDuration(saved)} sub={r.monthsWithoutReturn === null ? '' : `contre ${fmtDuration(r.monthsWithoutReturn)} sans rendement`} />
         </div>
       ) : (
-        <p className="notice" role="status">Avec ces hypothèses, le capital visé n’est pas atteint en 100 ans : augmentez le versement mensuel, le rendement supposé ou baissez l’objectif.</p>
+        <p className="notice" role="status">Avec ces hypothèses, le capital visé n’est pas atteint en 100 ans : augmentez le versement mensuel, le rendement supposé ou baissez l’objectif.</p>
       )}
       <Takeaway>{timeToTargetTakeaway({ target: s.target, months: r.months, interest: r.interest, contributed: r.contributed, monthsWithoutReturn: r.monthsWithoutReturn })}</Takeaway>
       <p className="muted small">
-        Chaque mois : capital = capital × (1 + rendement mensuel équivalent) + versement (en fin de mois), jusqu’à atteindre le capital visé (100 ans au plus).
+        Chaque mois : capital = capital × (1 + rendement mensuel équivalent) + versement (en fin de mois), jusqu’à atteindre le capital visé (100 ans au plus).
         Les montants par défaut sont fictifs.
       </p>
       <SavedSims simKey="duree-objectif" current={s} onLoad={(d) => setS({ ...DUREE, ...d })} />
@@ -138,7 +138,7 @@ function Rendement() {
       )}
     >
       {r.annualRate === null ? (
-        <p className="notice" role="status">Même à 100 % par an, ces hypothèses n’atteignent pas le capital visé : augmentez le versement, allongez la durée ou baissez l’objectif.</p>
+        <p className="notice" role="status">Même à 100 % par an, ces hypothèses n’atteignent pas le capital visé : augmentez le versement, allongez la durée ou baissez l’objectif.</p>
       ) : (
         <div className="kpis">
           <Kpi label="Rendement annuel nécessaire" value={fmtPct(r.annualRate)} sub={r.alreadyReached ? 'les versements suffisent sans rendement' : 'constant, avant frais, impôts et inflation'} />

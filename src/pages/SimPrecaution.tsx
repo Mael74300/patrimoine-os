@@ -16,7 +16,7 @@ const DEFAULTS: State = {
 };
 
 const fmtMonths = (m: number | null) => {
-  if (m === null) return 'non atteint en 50 ans';
+  if (m === null) return 'non atteint en 50 ans';
   if (m === 0) return 'déjà atteint';
   const y = Math.floor(m / 12);
   const r = m % 12;
