@@ -122,7 +122,7 @@ export default function SimPrecaution() {
           </p>
           <div className="table-wrap" tabIndex={0}>
             <table>
-              <thead><tr><th>Support</th><th className="r">Taux</th><th className="r">Plafond</th><th className="r">Montant</th><th className="r">Intérêts sur un an</th></tr></thead>
+              <thead><tr><th>Support</th><th className="r">Taux</th><th className="r">Plafond</th><th className="r">Montant</th><th className="r">Intérêts par an</th></tr></thead>
               <tbody>
                 {envelopes.map((l, i) => (
                   <tr key={l.id}>
