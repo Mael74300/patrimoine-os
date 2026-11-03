@@ -64,7 +64,6 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-02 (audit, fiche cryptomonnaies, guide diversification, guide précaution à 375 px) : aucune erreur de console ni débordement ; fil d'Ariane en double (« Cryptomonnaies / Cryptomonnaies ») et « Capital : » orphelin en fin de ligne dans le cartouche des fiches (corrigés, voir « Fait »).
 - 2026-11-02 : service-public.gouv.fr (F2329) confirme 18,6 % de prélèvements sociaux « cas général » sur les revenus 2026 et 17,2 % pour assurance-vie, PEL, CEL et PEP ; la fiche ne donne pas de taux pour le PEA (« règles particulières »). Le taux 2026 sur les gains de PEA reste donc non confirmé : ne pas le présenter comme vérifié (libellés « à vérifier » du simulateur ETF/immobilier conservés).
 - 2026-11-02 : PFU de 31,4 % (12,8 % + 18,6 %) reconfirmé sur service-public.gouv.fr (F21618, F2329). Les usages du chiffre dans les fiches (intérêts, PER, crypto) restent à reconfirmer fiche par fiche.
-- 2026-11-01 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable pour la plupart (economie.gouv.fr, banque-france.fr, legifrance : 403) ; fiches non écrites faute de confirmation.
 
 ## À faire
 
