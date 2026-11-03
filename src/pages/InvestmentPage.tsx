@@ -5,6 +5,7 @@ import { categoryById } from '../data/categories';
 import { investmentBySlug } from '../data/investments';
 import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Dots, Fold, MetersLegend, PageHead, Sources } from '../components/ui';
+import { simBlurb } from '../lib/simThemes';
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
 
@@ -97,7 +98,7 @@ export default function InvestmentPage() {
             <h2>Simulateurs liés</h2>
             <ul className="next-list">
               {relatedSimulators(simsForInvestment[inv.slug]).map((sim) => (
-                <li key={sim.slug}><Link to={`/simulateurs/${sim.slug}`}>{sim.title}</Link><span>{sim.excerpt}</span></li>
+                <li key={sim.slug}><Link to={`/simulateurs/${sim.slug}`}>{sim.title}</Link><span>{simBlurb(sim.slug)}</span></li>
               ))}
             </ul>
           </>)}
