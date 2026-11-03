@@ -54,6 +54,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-03 (audit, guides PEA, Livret A, investir à crédit, fiches PER et donation, simulateurs, entrepreneuriat à 375 et 1 280 px) : aucune erreur de console ni débordement ; les guides et fiches visités se lisent bien. Sur la liste des simulateurs, les descriptions étaient coupées par « … » en pleine phrase (remplacées par une question en mots simples, voir « Fait »).
 - 2026-11-02 (audit, accueil, guides, simulateurs, précaution, encyclopédie à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; accueil et listes lisibles ; l'encyclopédie affichait sur grand écran une barre « Voir les N fiches » inutile devant chaque famille (retirée, voir « Fait »). Reste : le simulateur d'épargne de précaution (5 094 px à 375 px) est le plus long des simulateurs principaux.
 - 2026-11-02 (audit, guide taux d'endettement et simulateur louer ou acheter à 375 px) : aucune erreur de console ni débordement ; le guide taux d'endettement (4 259 px) a déjà son schéma et se lit bien ; le simulateur louer ou acheter (4 686 px) empilait deux tableaux en pleine hauteur (repliés, voir « Fait »). Le graphique de l'écart acheter − louer dans le temps manquait (ajouté le 2026-11-02, voir « Fait »).
 - 2026-11-02 (audit, retraits réguliers, endettement, méthodologie à 375 et 1 280 px ; visiteur proche de la retraite) : aucune erreur de console ni débordement ; le simulateur de retraits n'avait aucun graphique alors que la question est « comment mon capital baisse-t-il ? » (courbe ajoutée, voir « Fait »). Le simulateur d'endettement (4 033 px à 375 px) n'avait aucun visuel : barre « où part votre mois » ajoutée (voir « Fait ») ; le guide taux d'endettement (4 259 px) reste à auditer visuellement.
@@ -63,7 +64,6 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-02 : PFU de 31,4 % (12,8 % + 18,6 %) reconfirmé sur service-public.gouv.fr (F21618, F2329). Les usages du chiffre dans les fiches (intérêts, PER, crypto) restent à reconfirmer fiche par fiche.
 - 2026-11-01 : fiches des familles vides (collection, forêts, énergies renouvelables, crédit) : sources officielles inaccessibles depuis le bac à sable pour la plupart (economie.gouv.fr, banque-france.fr, legifrance : 403) ; fiches non écrites faute de confirmation.
 - 2026-11-01 : guide « épargne de précaution » (4 283 px à 375 px) toujours sans schéma : repères 3/6/9 mois non confirmables sur source officielle.
-- 2026-11-02 (audit, simulateur d'indépendance financière à 375 et 1 280 px) : aucune erreur de console ni débordement ; « Capital visé » (dépenses ÷ taux de retrait) donné sans schéma pour un lecteur qui découvre la notion (schéma ajouté, voir « Fait »). Pages longues à 375 px : simulateur immobilier (5 759 px), dettes, entreprise, fiche Livret A.
 
 ## À faire
 
@@ -85,6 +85,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-03 : **Liste des simulateurs : une question en mots simples sous chaque titre** (« Que vaudra mon épargne dans 10, 20 ou 30 ans ? ») au lieu d'une description coupée par « … » ; descriptifs détaillés conservés pour la recherche et le référencement ; test : accroche présente, 70 caractères au plus, sans chiffre. Hauteur : 4 074 → 4 026 px à 375 px, 2 845 → 2 488 px à 1 280 px. Aucune information factuelle ajoutée ni modifiée.
 - 2026-11-02 : **Louer ou acheter : courbes du patrimoine du propriétaire et du locataire** année après année (série `rentVsBuy().series` déjà calculée, dernier point testé = patrimoines finaux ; graphique `LineChart` sous la phrase « Concrètement »). Hauteur : 4 343 → 4 901 px à 375 px, 2 516 → 3 017 px à 1 280 px (un graphique ajouté, assumé : il montre quand les courbes se croisent). Aucune information factuelle ajoutée.
 - 2026-11-02 : **Encyclopédie : barre « Voir les N fiches » masquée sur grand écran** (le bloc y est toujours ouvert ; le repli reste sur mobile). Hauteur à 1 280 px : 3 693 → 3 500 px ; 375 px inchangé (3 890 px). Aucune information factuelle touchée.
 - 2026-11-02 : **Louer ou acheter : deux tableaux de scénarios repliés sur mobile** (hausse du prix, horizon de revente ; ouverts sur grand écran et dans le HTML pré-rendu). Hauteur : 4 686 → 4 343 px à 375 px, inchangée à 1 280 px (2 516 px). Aucune information factuelle touchée.
