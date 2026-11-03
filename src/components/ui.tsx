@@ -6,6 +6,7 @@ import type { Checked, Level, Source } from '../data/types';
 import { load, save, type SavedSim } from '../lib/storage';
 import { HeaderArt, type HeaderArtName } from './Illustrations';
 import { summarizeSeries } from '../lib/chartSummary';
+import { readableNumber } from '../lib/readableNumber';
 import { buildExport, mergeSims, parseExport } from '../lib/simExport';
 
 // ------------------------------------------------------------ Champs
@@ -30,6 +31,7 @@ export function NumberField({ label, value, onChange, unit, step = 1, min, max, 
   const shown = percent ? round(value * 100, 4) : value;
   const [text, setText] = useState(String(shown));
   const last = useRef(shown);
+  const echo = readableNumber(shown, unit);
   useEffect(() => {
     if (shown !== last.current) {
       setText(String(shown));
@@ -38,7 +40,10 @@ export function NumberField({ label, value, onChange, unit, step = 1, min, max, 
   }, [shown]);
   return (
     <div className="field">
-      <label htmlFor={id}>{label}</label>
+      <div className="field-label">
+        <label htmlFor={id}>{label}</label>
+        {echo && <span className="field-echo" aria-hidden="true">{echo}</span>}
+      </div>
       <div className="input-unit">
         <input
           id={id}
