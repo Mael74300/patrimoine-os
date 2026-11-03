@@ -1,5 +1,5 @@
 import { fmtEur, HCSF } from '../lib/finance';
-import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, petitsVersementsRows, capitalViseRows, CAPITAL_VISE_EXAMPLE, moisParts, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../lib/illustrationData';
+import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, petitsVersementsRows, capitalViseRows, CAPITAL_VISE_EXAMPLE, precautionRows, PRECAUTION_EXAMPLE, moisParts, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../lib/illustrationData';
 
 const W = 420;
 const BASE = 262;
@@ -1032,6 +1032,39 @@ export function SchemaCapitalVise() {
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : capital à réunir pour couvrir 30 000 € de dépenses par an, à trois taux de retrait supposés. Barres proportionnelles aux montants ; aucune garantie de rendement.
+      </figcaption>
+    </figure>
+  );
+}
+
+export function SchemaPrecaution() {
+  const rows = precautionRows();
+  const X0 = 14;
+  const BW = 180;
+  const max = Math.max(...rows.map((r) => r.amount));
+  const f0 = (v: number) => v.toLocaleString('fr-FR', { maximumFractionDigits: 0 });
+  const eur = (v: number) => `${f0(v)}\u00a0€`;
+  const alt = rows.map((r) => `${r.months} mois (${r.label.toLowerCase()}) : ${eur(r.amount)}`).join(' ; ');
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 190" role="img" aria-labelledby="ill-pre-t ill-pre-d" className="ill-svg">
+        <title id="ill-pre-t">Réserve de précaution pour 3, 6 ou 9 mois de dépenses</title>
+        <desc id="ill-pre-d">{`Exemple fictif : ${eur(PRECAUTION_EXAMPLE.monthly)} de dépenses par mois. ${alt}. Plus la situation est incertaine, plus le repère est haut.`}</desc>
+        <text x="8" y="18" className="ill-sub">{`Dépenses : ${eur(PRECAUTION_EXAMPLE.monthly)} par mois × nombre de mois`}</text>
+        {rows.map((r, i) => {
+          const y = 32 + i * 50;
+          const w = (r.amount / max) * BW;
+          return (
+            <g key={r.months}>
+              <text x={X0} y={y + 10} className="ill-sub">{`${r.months} mois · ${r.label}`}</text>
+              <rect x={X0} y={y + 16} width={w} height="22" rx="6" fill="var(--primary)" />
+              <text x={X0 + w + 6} y={y + 33} className="ill-step">{eur(r.amount)}</text>
+            </g>
+          );
+        })}
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : réserve correspondant aux trois repères courants pour 2 000 € de dépenses par mois. Barres proportionnelles aux montants. Ce sont des repères pédagogiques, pas une règle officielle.
       </figcaption>
     </figure>
   );

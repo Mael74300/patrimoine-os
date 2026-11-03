@@ -219,6 +219,14 @@ export function capitalViseRows() {
   return rates.map((rate) => ({ rate, capital: fireTarget(expenses, 0, rate) }));
 }
 
+/** Schéma « combien de mois de dépenses » : 2 000 € de dépenses mensuelles et les trois repères pédagogiques du guide (3, 6, 9 mois). Exemple fictif. */
+export const PRECAUTION_EXAMPLE = { monthly: 2000, months: [3, 6, 9] as const, labels: ['Revenus stables', 'Revenus variables', 'Indépendant ou dirigeant'] as const };
+
+export function precautionRows() {
+  const { monthly, months, labels } = PRECAUTION_EXAMPLE;
+  return months.map((m, i) => ({ months: m, label: labels[i], amount: monthly * m }));
+}
+
 export type MoisPart = { key: 'existing' | 'added' | 'living' | 'rest'; label: string; value: number };
 
 /**
