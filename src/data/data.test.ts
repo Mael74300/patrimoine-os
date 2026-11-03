@@ -48,6 +48,10 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
   it('Crédit : 200 000 € à 3,6 % sur 20 ans → ≈ 80 850 € d’intérêts', () => {
     expect(loanPayment(200000, 0.036, 20) * 240 - 200000).toBeCloseTo(80850, -2);
   });
+  it('Objets d’art : 8 000 € revendus, taxe forfaitaire 6 % + 0,5 % de CRDS → 520 €', () => {
+    expect(8000 * (0.06 + 0.005)).toBeCloseTo(520, 6);
+    expect(investmentBySlug['objets-d-art-collection'].example).toContain('520 €');
+  });
   it('Compte à terme : 300 € bruts → 205,80 € nets au PFU de 31,4 %', () => {
     expect(300 * (1 - 0.314)).toBeCloseTo(205.8, 6);
   });
