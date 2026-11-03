@@ -3,6 +3,8 @@ import { Link, useParams } from 'react-router-dom';
 import { categories } from '../data/categories';
 import { guideBySlug, guideGroups, guides, otherGuides } from '../data/guides';
 import { investmentBySlug, investments } from '../data/investments';
+import { guideBlurb } from '../lib/guideBlurbs';
+import { simBlurb } from '../lib/simThemes';
 import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
 import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
 import { Crumbs, MobileFold, PageHead, SimFaq, Sources, usePersistentState } from '../components/ui';
@@ -29,7 +31,7 @@ export function GuideList() {
             {grp.slugs.map((slug) => guideBySlug[slug]).map((g) => (
               <li key={g.slug}>
                 <Link className="inv-row" to={`/guides/${g.slug}`}>
-                  <div><h3 style={{ margin: '0 0 4px', fontSize: '1.05rem', color: 'var(--primary)' }}>{g.title}</h3><p>{g.summary}</p></div>
+                  <div><h3 style={{ margin: '0 0 4px', fontSize: '1.05rem', color: 'var(--primary)' }}>{g.title}</h3><p>{guideBlurb(g.slug)}</p></div>
                   <span className="small muted">{g.readingMinutes} min</span>
                 </Link>
               </li>
@@ -168,7 +170,7 @@ export function GuidePage() {
           <h2>Simulateurs liés</h2>
           <ul className="next-list">
             {relatedSimulators(simsForGuide[g.slug]).map((sim) => (
-              <li key={sim.slug}><Link to={`/simulateurs/${sim.slug}`}>{sim.title}</Link><span>{sim.excerpt}</span></li>
+              <li key={sim.slug}><Link to={`/simulateurs/${sim.slug}`}>{sim.title}</Link><span>{simBlurb(sim.slug)}</span></li>
             ))}
           </ul>
         </>)}
