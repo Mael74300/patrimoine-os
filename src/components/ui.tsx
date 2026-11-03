@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type MouseEvent, type ReactNode } from 'react';
 import { simFaq, type FaqItem } from '../data/simFaq';
 import { Link } from 'react-router-dom';
 import { config } from '../config';
@@ -653,6 +653,23 @@ export function SimFaq({ slug, items = simFaq[slug] }: { slug: string; items?: F
         ))}
       </div>
     </section>
+  );
+}
+
+/** Lien « Voir les résultats », visible seulement sur mobile : sous le formulaire, les résultats sont loin plus bas. */
+export function JumpToResults() {
+  const go = (e: MouseEvent<HTMLAnchorElement>) => {
+    const el = document.getElementById('resultats');
+    if (!el) return;
+    e.preventDefault();
+    const calm = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    el.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
+    el.focus({ preventScroll: true });
+  };
+  return (
+    <a className="btn sim-jump" href="#resultats" onClick={go}>
+      Voir les résultats <span aria-hidden="true">↓</span>
+    </a>
   );
 }
 

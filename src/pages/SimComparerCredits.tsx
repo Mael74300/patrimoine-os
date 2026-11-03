@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { fmtEur, fmtEur2, fmtNum, fmtPct, inFine, loanDuration, renegotiation, taeg, taegByFees, taegByInsurance } from '../lib/finance';
 import { comparerCreditsFaq } from '../data/simFaq';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 // Exemples fictifs : toutes les valeurs par défaut sont des hypothèses à remplacer par les vôtres.
 
@@ -20,8 +20,9 @@ function Layout({ form, children, reset }: { form: ReactNode; children: ReactNod
       <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
         {form}
         <button type="button" className="btn small secondary" onClick={reset}>Réinitialiser</button>
+        <JumpToResults />
       </form>
-      <section aria-label="Résultats">{children}</section>
+      <section id="resultats" aria-label="Résultats" tabIndex={-1}>{children}</section>
     </div>
   );
 }

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { drawdown, fireTarget, fmtEur, fmtPct, fmtYears, realRate, yearsToTarget, type FireInput } from '../lib/finance';
 import { fireTakeaway } from '../lib/takeaways';
 import { SchemaCapitalVise } from '../components/Illustrations';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 const DEFAULTS: FireInput = {
   annualExpenses: 30000, currentWealth: 80000, recurringIncome: 0, annualSavings: 15000,
@@ -48,8 +48,9 @@ export default function SimIndependance() {
             <NumberField label="Taux de retrait" unit="%" percent value={s.withdrawalRate} onChange={up('withdrawalRate')} step={0.25} min={0.5} max={10} hint="Part du capital retirée la première année." />
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Capital visé" value={Number.isFinite(target) ? fmtEur(target) : '—'} sub={`dépenses non couvertes / ${fmtPct(s.withdrawalRate)}`} />
             <Kpi label="Délai estimé" value={fmtYears(yrs)} sub="en euros constants" />

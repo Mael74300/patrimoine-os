@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { capacityAtHcsf, debtRatio, fmtEur, fmtPct, HCSF } from '../lib/finance';
 import { debtRatioTakeaway } from '../lib/takeaways';
 import { SchemaMois } from '../components/Illustrations';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, Sources, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, Sources, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = { income: number; existingPayments: number; newPayment: number; livingCosts: number; householdSize: number; rate: number; years: number; insuranceRate: number };
 
@@ -42,8 +42,9 @@ export default function SimEndettement() {
             <NumberField label="Assurance emprunteur (sur capital initial)" unit="%" percent value={s.insuranceRate} onChange={up('insuranceRate')} min={0} max={2} step={0.05} />
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Taux d’endettement après le projet" value={fmtPct(r.ratioAfter)} sub={r.withinHcsf ? `sous le repère de ${pct}` : `au-dessus du repère de ${pct}`} tone={r.withinHcsf ? undefined : 'neg'} />
             <Kpi label="Reste à vivre par mois" value={fmtEur(r.remainingAfter)} sub={`soit ${fmtEur(r.remainingPerPerson)} par personne`} tone={r.remainingAfter < 0 ? 'neg' : undefined} />

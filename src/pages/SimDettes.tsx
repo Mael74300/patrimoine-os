@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { comparePayoff, fmtEur, type Debt } from '../lib/finance';
 import { debtsTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = {
   b1: number; r1: number; m1: number;
@@ -70,8 +70,9 @@ export default function SimDettes() {
             <NumberField label="Versement supplémentaire par mois" unit="€" value={s.extra} onChange={up('extra')} min={0} step={10} />
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Durée avec l’avalanche" value={fmtDuration(c.avalanche.months)} sub={`intérêts ${fmtEur(c.avalanche.totalInterest)}`} />
             <Kpi label="Durée avec la boule de neige" value={fmtDuration(c.snowball.months)} sub={`intérêts ${fmtEur(c.snowball.totalInterest)}`} />

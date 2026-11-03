@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, fmtEur, fmtNum, fmtPct } from '../lib/finance';
 import { delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway } from '../lib/takeaways';
 import { interetsComposesFaq } from '../data/simFaq';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, SelectField, Takeaway, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, SelectField, Takeaway, usePersistentState, JumpToResults } from '../components/ui';
 
 // Exemples fictifs : toutes les valeurs par défaut sont des hypothèses à remplacer par les vôtres.
 
@@ -34,8 +34,9 @@ function Layout({ form, children, reset }: { form: ReactNode; children: ReactNod
       <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
         {form}
         <button type="button" className="btn small secondary" onClick={reset}>Réinitialiser</button>
+        <JumpToResults />
       </form>
-      <section aria-label="Résultats">{children}</section>
+      <section id="resultats" aria-label="Résultats" tabIndex={-1}>{children}</section>
     </div>
   );
 }

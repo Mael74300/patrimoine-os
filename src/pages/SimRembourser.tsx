@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { fmtEur, fmtPct, prepayVsInvest } from '../lib/finance';
 import { prepayTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = { balance: number; annualRate: number; remainingYears: number; lump: number; annualReturn: number; annualFees: number; taxRate: number };
 
@@ -45,8 +45,9 @@ export default function SimRembourser() {
             <NumberField label="Imposition des gains" unit="%" percent value={s.taxRate} onChange={up('taxRate')} min={0} max={60} step={0.5} hint="Taux unique appliqué aux gains à l'horizon." />
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Option la plus favorable" value={r.lump === 0 ? 'Aucune' : investWins ? 'Investir' : 'Rembourser'} sub={`écart de ${fmtEur(Math.abs(r.advantageInvest))} à l'horizon`} tone={r.lump === 0 ? undefined : investWins ? 'pos' : undefined} />
             <Kpi label="Intérêts économisés en remboursant" value={fmtEur(r.interestSaved)} sub={`crédit raccourci de ${fmtMonths(r.monthsSaved)}`} />

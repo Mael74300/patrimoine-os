@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { fmtEur, fmtPct, monthlyByDuration, monthlyByRate, savingsGoal } from '../lib/finance';
 import { savingsGoalTakeaway } from '../lib/takeaways';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = { target: number; current: number; years: number; annualRate: number };
 
@@ -38,8 +38,9 @@ export default function SimObjectif() {
             <NumberField label="Rendement annuel net" unit="%" percent value={s.annualRate} onChange={up('annualRate')} min={-5} max={20} step={0.1} hint={`Hypothèse. Livret A : ${fmtPct(LIVRET_A.rate)} ${LIVRETS_PERIOD}.`} />
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
+          <JumpToResults />
         </form>
-        <section aria-label="Résultats">
+        <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Versement mensuel nécessaire" value={fmtEur(r.monthly)} sub={r.monthly === 0 ? 'objectif déjà couvert par l’épargne de départ' : `pendant ${r.months} mois, versements en fin de mois`} />
             <Kpi label="Total des versements" value={fmtEur(r.deposits)} sub={`en plus des ${fmtEur(s.current)} déjà épargnés`} />
