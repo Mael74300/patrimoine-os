@@ -22,6 +22,8 @@ const S = {
   cpf: { label: 'Mon Compte Formation', url: 'https://www.moncompteformation.gouv.fr', official: true },
   notaires: { label: 'Notaires de France', url: 'https://www.notaires.fr', official: true },
   donation: { label: 'Service-Public.fr — Donation', url: 'https://www.service-public.fr/particuliers/vosdroits/N31160', official: true },
+  bofipTfop: { label: 'BOFiP — Taxe forfaitaire sur les objets précieux (BOI-RPPM-PVBMC-20-10)', url: 'https://bofip.impots.gouv.fr/bofip/4151-PGP.html/identifiant=BOI-RPPM-PVBMC-20-10-20181231', official: true },
+  tfopForm: { label: 'Service-Public.fr — Taxe forfaitaire sur les métaux précieux, bijoux, objets d’art, de collection et antiquités', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/R17176', official: true },
 } satisfies Record<string, Source>;
 
 const PFU = "Prélèvement forfaitaire unique de 31,4 % (12,8 % d'impôt sur le revenu + 18,6 % de prélèvements sociaux) sur les revenus 2026, ou option globale pour le barème progressif. Hausse issue de la loi de financement de la Sécurité sociale pour 2026.";
@@ -508,6 +510,29 @@ const raw: Omit<Investment, 'review'>[] = [
     tags: ['tangible', 'diversification'],
   },
 
+  // ------------------------------------------------------------------ Collection
+  {
+    slug: 'objets-d-art-collection',
+    name: "Objets d'art et de collection",
+    category: 'collection',
+    summary: 'Tableaux, antiquités, objets de collection : aucun revenu régulier, un marché étroit, une revente incertaine.',
+    definition: "Œuvres d'art, antiquités, objets de collection : on les achète pour leur rareté ou leur beauté, dans l'espoir de les revendre plus cher.",
+    howItWorks: "Ces objets ne versent ni intérêts ni loyers. Le gain, s'il existe, ne vient que de la revente, à un prix que personne ne garantit : il dépend du goût du moment, de la rareté et de l'état de l'objet. Il faut aussi trouver un acheteur.",
+    howToInvest: ['Passer par des professionnels reconnus (galeries, maisons de ventes) et conserver les factures et certificats.', "Compter l'assurance et la conservation dans le coût de détention.", "Ne consacrer qu'une petite part de son épargne, jamais l'épargne de précaution."],
+    minCapital: { text: 'Selon l’objet : de quelques dizaines à plusieurs milliers d’euros.', verified: false },
+    horizon: 'Très long terme', horizonYears: 10,
+    liquidity: 1, risk: 5, effort: 4,
+    fees: { text: 'Frais d’achat et de vente (maisons de ventes, galeries), assurance, conservation : variables, à demander avant tout achat.', verified: false },
+    tax: { text: "À la vente, taxe forfaitaire due par le vendeur : 6 % du prix de cession, plus 0,5 % de CRDS, soit 6,5 % au total, pour les objets d'art, de collection et les antiquités. Aucune taxe forfaitaire si le prix de cession est inférieur ou égal à 5 000 €. Le vendeur peut opter, sous conditions, pour le régime d'imposition des plus-values sur biens meubles.", verified: true, asOf: '3 novembre 2026' },
+    pros: ['Plaisir de posséder un objet', 'Peu lié aux marchés financiers', 'Pas de taxe forfaitaire jusqu’à 5 000 € de prix de vente'],
+    cons: ['Aucun revenu régulier', 'Revente lente et incertaine', 'Prix difficile à estimer', 'Frais, assurance et conservation', 'Risque de contrefaçon'],
+    timeSkills: 'Élevé : connaissance du marché et de l’objet.',
+    example: 'Exemple fictif : un tableau revendu 8 000 € supporte 6,5 % de taxe forfaitaire, soit 520 €, quel que soit le gain réalisé.',
+    sources: [S.bofipTfop, S.tfopForm, S.amf],
+    alternatives: ['or', 'etf-monde'],
+    tags: ['tangible', 'peu liquide', 'risqué'],
+  },
+
   // ------------------------------------------------------------------ Crypto
   {
     slug: 'cryptomonnaies',
@@ -628,6 +653,7 @@ const REVIEW: Record<string, Partial<Review>> = {
   cryptomonnaies: { data: ['PFU 31,4 % sur les plus-values de cession 2026', 'Exonération si cessions annuelles ≤ 305 €'] },
   per: { data: ['Sortie en capital : versements au barème, gains au PFU'], assumptions: ['Tranche marginale de 30 % pour l’exemple'] },
   or: { data: ['Taxe forfaitaire 11,5 % du prix de cession'] },
+  'objets-d-art-collection': { verifiedOn: '2026-11-03', taxValidAsOf: '2026-11-03', data: ['Taxe forfaitaire 6 % + CRDS 0,5 % = 6,5 % du prix de cession', 'Exonération si prix de cession ≤ 5 000 €'] },
   donation: { data: ['Abattement 100 000 € par parent et par enfant, renouvelable tous les 15 ans'] },
   'capital-humain': { assumptions: ['Rendement de 5 % par an sur l’épargne supplémentaire, hypothèse d’illustration'] },
 };
