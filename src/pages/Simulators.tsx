@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { norm, simulators } from '../lib/search';
-import { simBySlug, simThemes, unthemedSims } from '../lib/simThemes';
+import { simBlurb, simBySlug, simThemes, unthemedSims } from '../lib/simThemes';
 import { PageHead } from '../components/ui';
 import { SimThemeIcon } from '../components/Illustrations';
 
@@ -39,7 +39,7 @@ export default function Simulators() {
           <ul className="inv-list inv-list--compact inv-list--grid">
             {t.slugs.map((slug) => {
               const s = simBySlug(slug);
-              return <li key={slug}><Link className="inv-row" to={`/simulateurs/${slug}`}><div><h3>{s.title}</h3><p>{s.excerpt}</p></div></Link></li>;
+              return <li key={slug}><Link className="inv-row" to={`/simulateurs/${slug}`}><div><h3>{s.title}</h3><p>{simBlurb(slug)}</p></div></Link></li>;
             })}
           </ul>
         </section>

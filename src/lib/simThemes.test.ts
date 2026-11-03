@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { simulators } from './search';
-import { featuredSims, simBySlug, simThemes, unthemedSims } from './simThemes';
+import { featuredSims, simBlurbs, simBySlug, simThemes, unthemedSims } from './simThemes';
 
 describe('classement des simulateurs par thème', () => {
   it('chaque simulateur appartient à exactement un thème', () => {
@@ -11,5 +11,12 @@ describe('classement des simulateurs par thème', () => {
   });
   it('les thèmes et la sélection ne citent que des simulateurs existants', () => {
     for (const slug of [...simThemes.flatMap((t) => t.slugs), ...featuredSims]) expect(simBySlug(slug), slug).toBeDefined();
+  });
+  it('chaque simulateur a une accroche courte, sans chiffre', () => {
+    expect(Object.keys(simBlurbs).sort()).toEqual(simulators.map((s) => s.slug).sort());
+    for (const [slug, b] of Object.entries(simBlurbs)) {
+      expect(b.length, slug).toBeLessThanOrEqual(70);
+      expect(/\d\s?(%|€)/.test(b), slug).toBe(false);
+    }
   });
 });
