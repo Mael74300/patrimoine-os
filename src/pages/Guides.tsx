@@ -9,7 +9,7 @@ import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
 import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
 import { Crumbs, MobileFold, PageHead, SimFaq, Sources, usePersistentState } from '../components/ui';
 import { EnvelopeCards } from '../components/EnvelopeCards';
-import { GuideGroupIcon, SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaPetitsVersements } from '../components/Illustrations';
+import { GuideGroupIcon, SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaPetitsVersements } from '../components/Illustrations';
 import NotFound from './NotFound';
 
 /** Guide « Par où commencer » : pour chaque étape, la page du site qui permet d'aller plus loin (aucun chiffre). */
@@ -147,6 +147,7 @@ export function GuidePage() {
             ))}
             {g.slug === 'taux-endettement-capacite-emprunt' && s.heading === 'Le repère de 35 %' && <SchemaEndettement />}
             {g.slug === 'rembourser-credit-par-anticipation-ou-investir' && s.heading === 'Un exemple fictif chiffré' && <SchemaRembourser />}
+            {g.slug === 'immobilier-ou-etf' && s.heading.startsWith('La méthode') && <SchemaImmoEtf />}
             {g.slug === 'regle-de-72-doubler-son-capital' && s.heading.startsWith('Jusqu’où') && <SchemaRegle72 />}
             {g.slug === 'combien-epargner-par-mois-objectif' && s.heading.startsWith('La durée') && <SchemaEpargneMois />}
             {g.slug === 'epargne-limitee' && s.heading.startsWith('Commencer petit') && <SchemaPetitsVersements />}

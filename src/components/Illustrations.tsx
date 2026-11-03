@@ -721,6 +721,42 @@ export function SchemaRembourser() {
   );
 }
 
+/** Schéma « immobilier ou ETF » : même effort d'épargne, deux chemins, comparaison du patrimoine à la même date. Aucun chiffre ; reprend la méthode décrite dans le guide. */
+export function SchemaImmoEtf() {
+  const cols = [
+    { x: 0, title: 'Scénario 1 : l’immobilier', fill: 'var(--accent-soft)', stroke: 'var(--accent)', lines: ['Apport + crédit : un bien', 'Les loyers paient une partie', 'Vous complétez la mensualité'], end: 'valeur du bien − capital restant dû' },
+    { x: 214, title: 'Scénario 2 : les ETF', fill: 'var(--surface-2, var(--surface))', stroke: 'var(--primary)', lines: ['L’apport est placé en ETF', 'puis la même somme chaque', 'année : rien à emprunter'], end: 'valeur des ETF' },
+  ];
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-ie-t ill-ie-d" className="ill-svg">
+        <title id="ill-ie-t">Comparer immobilier et ETF à effort égal</title>
+        <desc id="ill-ie-d">Même capital de départ et même effort d’épargne chaque année, placés soit dans un bien immobilier financé à crédit, soit en ETF. À la fin du même horizon, on compare le patrimoine obtenu dans chaque cas, après frais, impôts et frais de revente.</desc>
+        <rect x={40} y={2} width={340} height={44} rx={12} fill="var(--surface)" stroke="var(--ink-2)" strokeWidth={2} />
+        <text x={210} y={30} textAnchor="middle" className="ill-step">Même capital de départ, même effort par an</text>
+        {cols.map((c) => (
+          <g key={c.title}>
+            <path d={`M ${c.x + 103} 46 V 70 m -7 -8 l 7 8 l 7 -8`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+            <rect x={c.x} y={76} width={206} height={126} rx={12} fill={c.fill} stroke={c.stroke} strokeWidth={2} />
+            <text x={c.x + 103} y={102} textAnchor="middle" className="ill-step">{c.title}</text>
+            {c.lines.map((l, i) => (
+              <text key={l} x={c.x + 103} y={130 + i * 22} textAnchor="middle" className="ill-in">{l}</text>
+            ))}
+            <path d={`M ${c.x + 103} 202 V 226 m -7 -8 l 7 8 l 7 -8`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+            <text x={c.x + 103} y={246} textAnchor="middle" className="ill-sub">{c.end}</text>
+          </g>
+        ))}
+        <rect x={0} y={262} width={420} height={60} rx={12} fill="var(--surface)" stroke="var(--ink-2)" strokeWidth={2} />
+        <text x={210} y={288} textAnchor="middle" className="ill-step">Même horizon : on compare les deux patrimoines</text>
+        <text x={210} y={308} textAnchor="middle" className="ill-sub">après frais, impôts et frais de revente</text>
+      </svg>
+      <figcaption>
+        <strong>Schéma sans chiffres</strong> : ce qui est comparable, c’est le patrimoine final à effort égal, pas le rendement brut.
+      </figcaption>
+    </figure>
+  );
+}
+
 /** Schéma « règle de 72 » : années pour doubler un capital, calcul exact et règle de 72, à cinq taux fictifs. */
 export function SchemaRegle72() {
   const rows = regle72Rows();
