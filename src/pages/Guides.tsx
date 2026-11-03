@@ -12,6 +12,15 @@ import { EnvelopeCards } from '../components/EnvelopeCards';
 import { GuideGroupIcon, SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaPetitsVersements } from '../components/Illustrations';
 import NotFound from './NotFound';
 
+/** Guide « Par où commencer » : pour chaque étape, la page du site qui permet d'aller plus loin (aucun chiffre). */
+export const etapesSuite: { to: string; label: string }[] = [
+  { to: '/simulateurs/budget', label: 'Calculer mon budget et mon taux d’épargne' },
+  { to: '/guides/combien-epargne-de-precaution', label: 'Combien mettre de côté ?' },
+  { to: '/guides/rembourser-credit-par-anticipation-ou-investir', label: 'Rembourser un crédit ou investir ?' },
+  { to: '/guides/choisir-son-enveloppe', label: 'PEA, assurance-vie, PER : comment choisir ?' },
+  { to: '/guides/epargne-limitee', label: 'Investir quand on épargne peu' },
+];
+
 const fmtDate = (iso: string) => new Date(iso + 'T12:00:00Z').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 export { fmtDate };
 
@@ -150,6 +159,7 @@ export function GuidePage() {
             {g.slug === 'interets-composes' && i === 0 && <SchemaInterets />}
             {g.slug === 'inflation-pouvoir-d-achat-epargne' && s.heading === 'Un exemple fictif chiffré' && <SchemaInflation />}
             {g.slug === 'diversification-placements' && s.heading === 'Un exemple fictif chiffré' && <SchemaDiversification />}
+            {g.slug === 'par-ou-commencer' && etapesSuite[i] && <p className="step-more"><Link to={etapesSuite[i].to}>{etapesSuite[i].label}</Link></p>}
           </section>
         ))}
         <SimFaq slug={g.slug} items={g.faq} />
@@ -166,7 +176,7 @@ export function GuidePage() {
             ))}
           </ul>
         </>)}
-        {relatedSimulators(simsForGuide[g.slug]).length > 0 && (<>
+        {g.slug !== 'par-ou-commencer' && relatedSimulators(simsForGuide[g.slug]).length > 0 && (<>
           <h2>Simulateurs liés</h2>
           <ul className="next-list">
             {relatedSimulators(simsForGuide[g.slug]).map((sim) => (
@@ -176,8 +186,10 @@ export function GuidePage() {
         </>)}
         <h2>Sources</h2>
         <Sources list={g.sources} />
-        <h2>Autres guides</h2>
-        <ul className="next-list next-list-compact">{others.map((o) => <li key={o.slug}><Link to={`/guides/${o.slug}`}>{o.title}</Link></li>)}</ul>
+        {g.slug !== 'par-ou-commencer' && (<>
+          <h2>Autres guides</h2>
+          <ul className="next-list next-list-compact">{others.map((o) => <li key={o.slug}><Link to={`/guides/${o.slug}`}>{o.title}</Link></li>)}</ul>
+        </>)}
       </div>
     </article>
   );
