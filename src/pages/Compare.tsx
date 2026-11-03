@@ -4,7 +4,7 @@ import { categoryById } from '../data/categories';
 import { investmentBySlug, investments } from '../data/investments';
 import { fmtEur, projectGrowth } from '../lib/finance';
 import { projectionSplit, totalContributed } from '../lib/calc/compareSummary';
-import { Disclaimer, Dots, LineChart, NumberField, PageHead } from '../components/ui';
+import { Disclaimer, Dots, LineChart, MetersLegend, NumberField, PageHead } from '../components/ui';
 
 /** Critères longs : repliés par ligne sur mobile (le tableau y est empilé), toujours ouverts sans JavaScript et en écran large. */
 export const CMP_FOLDED_ON_MOBILE = ['Capital nécessaire', 'Frais', 'Fiscalité', 'Avantages', 'Inconvénients'];
@@ -56,9 +56,9 @@ export default function Compare() {
 
   const rows: [string, (i: (typeof items)[number]) => ReactNode][] = [
     ['Famille', (i) => categoryById[i.category].name],
-    ['Risque', (i) => <Dots level={i.risk} kind="risk" label="Risque" />],
-    ['Liquidité', (i) => <Dots level={i.liquidity} kind="liq" label="Liquidité" />],
-    ['Effort', (i) => <Dots level={i.effort} label="Effort" />],
+    ['Risque', (i) => <Dots level={i.risk} kind="risk" label="Risque" compact />],
+    ['Liquidité', (i) => <Dots level={i.liquidity} kind="liq" label="Liquidité" compact />],
+    ['Effort', (i) => <Dots level={i.effort} label="Effort" compact />],
     ['Horizon', (i) => i.horizon],
     ['Capital nécessaire', (i) => i.minCapital.text],
     ['Frais', (i) => i.fees.text],
@@ -110,6 +110,7 @@ export default function Compare() {
           </table>
         </div>
       )}
+      {items.length > 0 && <MetersLegend />}
 
       <h2>Projection selon vos hypothèses</h2>
       <p className="muted">Les rendements pré-remplis sont des hypothèses d'illustration, pas des prévisions. Modifiez-les librement.</p>
