@@ -54,9 +54,11 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-04 (audit de contenu, fiche LEP et simulateur Épargne de précaution ; visiteur épargnant) : la fiche LEP et le simulateur renvoyaient vers Service-Public pour le plafond de revenus sans donner de chiffre. Service-Public.fr (F2367) est de nouveau accessible : plafonds 2026 en métropole ajoutés (voir « Fait »). Le plafond de revenus du LEP n’est donc plus « à vérifier ».
+
 - 2026-11-04 (audit, accueil, guides et liste des simulateurs à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console hors script GoatCounter (réseau du bac à sable), aucun débordement horizontal (largeur de page = écran), hauteurs mesurées : accueil 3 260 px (375) / 1 856 px (1 280), guides 4 117 / 1 752, simulateurs 4 255 / 2 591. Pages équilibrées, pas de défaut visuel à corriger.
 
-- 2026-11-04 (limite d’exécution) : service-public.gouv.fr (hors quelques pages), entreprendre.service-public.gouv.fr, urssaf.fr sont inaccessibles depuis le bac à sable (403 ou hôte non résolu). Les mentions « à vérifier » restantes (frais d’acquisition immobiliers 7 à 8 %, plafonds micro-entreprise de la fiche Entrepreneuriat, réductions IR-PME du capital-investissement, plafond de revenus du LEP, minimum Financement participatif) restent donc à confirmer dès qu’une source officielle est consultable ; ne rien changer sans elle.
+- 2026-11-04 (limite d’exécution) : service-public.gouv.fr (hors quelques pages), entreprendre.service-public.gouv.fr, urssaf.fr sont inaccessibles depuis le bac à sable (403 ou hôte non résolu). Les mentions « à vérifier » restantes (frais d’acquisition immobiliers 7 à 8 %, plafonds micro-entreprise de la fiche Entrepreneuriat, réductions IR-PME du capital-investissement, minimum Financement participatif) restent donc à confirmer dès qu’une source officielle est consultable ; ne rien changer sans elle.
 
 - 2026-11-04 (audit, simulateur immobilier ; visiteur futur acheteur) : les options « micro-BIC (abattement à vérifier) » et « 18,6 % … à vérifier pour le meublé » laissaient un doute sur un simulateur très visité ; abattement de 50 % confirmé et libellé corrigé, taux de 18,6 % laissé « à confirmer » (voir « Fait »).
 
@@ -93,6 +95,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 11. [x] **Test de fumée dans l'intégration continue** : fait le 2026-10-30, voir « Fait ».
 
 ## Fait
+
+- 2026-11-04 : fiche LEP et simulateur Épargne de précaution : plafonds de revenu fiscal de référence 2026 en métropole (23 028 € pour 1 part, 35 326 € pour 2 parts) vérifiés sur Service-Public.fr (F2367) et affichés à la place du renvoi (PR à venir).
 
 - 2026-11-04 : **Simulateur Louer ou investir dans l’immobilier : libellés « à vérifier » levés** (l’abattement forfaitaire du micro-BIC pour la location meublée de longue durée, 50 %, est confirmé par Service-Public ; le taux de 18,6 % reste signalé « à confirmer pour le meublé », la source ne le précise pas explicitement ; frais de notaire 7 à 8 % toujours à vérifier, source officielle inaccessible).
 - 2026-11-04 : **Illustration : schéma « placement et enveloppe » sur le guide « Choisir son enveloppe »** (même schéma que le guide des types d’investissements, sans chiffre : un même ETF logé dans PEA, compte-titres, assurance-vie ou PER ; la section d’ouverture du guide énonce la même règle). Hauteur à 375 px : 3 467 → 3 719 px ; à 1 280 px : 2 139 → 2 476 px (guide sans schéma auparavant).
