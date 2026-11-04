@@ -54,7 +54,12 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-04 (audit, accueil, guides et liste des simulateurs à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console hors script GoatCounter (réseau du bac à sable), aucun débordement horizontal (largeur de page = écran), hauteurs mesurées : accueil 3 260 px (375) / 1 856 px (1 280), guides 4 117 / 1 752, simulateurs 4 255 / 2 591. Pages équilibrées, pas de défaut visuel à corriger.
+
+- 2026-11-04 (limite d’exécution) : service-public.gouv.fr (hors quelques pages), entreprendre.service-public.gouv.fr, urssaf.fr sont inaccessibles depuis le bac à sable (403 ou hôte non résolu). Les mentions « à vérifier » restantes (frais d’acquisition immobiliers 7 à 8 %, plafonds micro-entreprise de la fiche Entrepreneuriat, réductions IR-PME du capital-investissement, plafond de revenus du LEP, minimum Financement participatif) restent donc à confirmer dès qu’une source officielle est consultable ; ne rien changer sans elle.
+
 - 2026-11-04 (audit, simulateur immobilier ; visiteur futur acheteur) : les options « micro-BIC (abattement à vérifier) » et « 18,6 % … à vérifier pour le meublé » laissaient un doute sur un simulateur très visité ; abattement de 50 % confirmé et libellé corrigé, taux de 18,6 % laissé « à confirmer » (voir « Fait »).
+
 - 2026-11-04 (audit, guide « Choisir son enveloppe », fiches Financement participatif et Capital-investissement, simulateur Retraits réguliers à 375 et 1 280 px ; visiteur proche de la retraite) : aucune erreur de console ni débordement. Le guide « Choisir son enveloppe », guide d’entrée, ouvrait sur une phrase abstraite (support / enveloppe) sans image : schéma ajouté (voir « Fait »). Restent des mentions « à vérifier » sur la fiche Financement participatif (frais, capital nécessaire).
 
 - 2026-11-04 (audit, accueil, simulateurs Louer ou acheter, Rembourser ou investir, Épargne de précaution, guides à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement de page ; résultats, « Concrètement » et graphique lisibles. Seul défaut mesuré : le tableau du budget (50 / 30 / 20) dépassait de 3 px son cadre à 375 px, colonne « Écart » partiellement masquée : cartes étiquetées (voir « Fait »). Restent à défilement horizontal les tableaux annuels du crédit, de l’immobilier, du patrimoine et de l’entreprise.
@@ -62,17 +67,12 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-04 (audit, accueil et fiche Foncières cotées à 375 et 1 280 px ; visiteur épargnant) : aucune erreur de console ni débordement. La fiche Foncières cotées expliquait le principe en une phrase, sans image, comme l’avait fait la fiche SCPI avant son schéma : schéma de principe ajouté (voir « Fait »). Reste : les fiches Fonds euros, Unités de compte, crowdfunding et private equity n’ont pas de schéma.
 
 - 2026-11-04 (audit, accueil, encyclopédie, entrepreneuriat, guides, comparateur, fiches Fonds euros et Cryptomonnaies à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; pages équilibrées. Les fiches Fonds euros et Unités de compte affichaient « Capital : selon le contrat. à vérifier » alors que Service-Public confirme l’absence de minimum légal : vérifié (voir « Fait »). Restent des mentions « à vérifier » sur d’autres fiches.
+
 - 2026-11-04 (audit, fiche Assurance-vie à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement. La distinction fonds en euros / unités de compte, centrale de l’assurance-vie, n’était qu’une phrase : schéma ajouté (voir « Fait »). Reste : les fiches Fonds euros, Unités de compte, Foncières cotées, crowdfunding et private equity n’ont pas de schéma.
 
 - 2026-11-04 (audit, comparateur et page Méthode à 375 et 1 280 px ; visiteur arrivé par Google) : aucune erreur de console ni débordement. La page Méthode annonçait « Dernière vérification générale : 10 octobre 2026 », date périmée (fiches revérifiées depuis) : remplacée par la date de vérification la plus récente des fiches (voir « Fait »).
 
 - 2026-11-04 (audit, fiche Or ; visiteur épargnant) : aucune erreur de console ni débordement à 375 et 1 280 px. La fiche Or affichait une fiscalité « à vérifier » alors que le taux de 11,5 % est confirmable sur le BOFiP : vérifiée (voir « Fait »). Restent des mentions « à vérifier » (immobilier physique, capital-investissement, entrepreneuriat).
-
-- 2026-11-04 (audit, 21 simulateurs à 375 px, mesure des tableaux plus larges que l’écran ; visiteur emprunteur) : aucune erreur de console ni débordement de page. Les tableaux de comparaison à 5 colonnes (durées de crédit, effet des frais) étaient plus larges que l’écran (409 et 415 px pour 341 px) : cartes étiquetées sous 700 px (voir « Fait »). Restent à défilement horizontal, car longs : tableaux annuels du crédit (5 col.), de l’immobilier (10), du patrimoine (6) et de l’entreprise (12) ; le budget (344 px pour 341) déborde de 3 px.
-
-- 2026-11-04 (audit, calculateur entreprise à 375 px ; visiteur futur entrepreneur) : aucune erreur de console. Le tableau des trois scénarios avait six colonnes dans un cadre à défilement : « Trésorerie la plus basse » et « Valeur estimée » étaient hors écran sans indice visible. Chaque scénario devient une carte à 375 px (voir « Fait »). Reste : les autres tableaux de simulateurs (crédit, immobilier, patrimoine) restent à défilement horizontal à 375 px, à auditer un par un.
-
-
 
 ## À faire
 
