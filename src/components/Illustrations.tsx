@@ -545,6 +545,39 @@ export function SchemaScpi() {
   );
 }
 
+/** Schéma « Assurance-vie : un contrat, deux types de supports » : principe qualitatif (aucun chiffre), repris de Service-Public (F15274) : garantie du fonds en euros, risque de perte en capital des unités de compte. */
+export function SchemaAssuranceVie() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-av-t ill-av-d" className="ill-svg">
+        <title id="ill-av-t">Assurance-vie : un contrat, deux types de supports</title>
+        <desc id="ill-av-d">Vous versez de l'argent sur un contrat d'assurance-vie, puis vous choisissez la part placée sur chaque support. Le fonds en euros est garanti par l'assureur, avec un faible rendement. Les unités de compte peuvent rapporter davantage mais comportent un risque de perte en capital.</desc>
+        <rect x={110} y={2} width={200} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={210} y={24} textAnchor="middle" className="ill-step">Vous versez</text>
+        <text x={210} y={43} textAnchor="middle" className="ill-sub">sur un contrat d'assurance-vie</text>
+        <path d="M 210 52 V 84 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={60} y={84} width={300} height={46} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={210} y={104} textAnchor="middle" className="ill-step">Vous choisissez la répartition</text>
+        <text x={210} y={121} textAnchor="middle" className="ill-sub">entre deux types de supports</text>
+        <path d="M 130 130 V 164 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <path d="M 290 130 V 164 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={164} width={200} height={110} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={100} y={190} textAnchor="middle" className="ill-step">Fonds en euros</text>
+        <text x={100} y={214} textAnchor="middle" className="ill-in">Capital garanti</text>
+        <text x={100} y={232} textAnchor="middle" className="ill-in">par l'assureur</text>
+        <text x={100} y={256} textAnchor="middle" className="ill-sub">rendement plus faible</text>
+        <rect x={220} y={164} width={200} height={110} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={320} y={190} textAnchor="middle" className="ill-step">Unités de compte</text>
+        <text x={320} y={214} textAnchor="middle" className="ill-in">Valeur variable selon</text>
+        <text x={320} y={232} textAnchor="middle" className="ill-in">les marchés : perte possible</text>
+        <text x={320} y={256} textAnchor="middle" className="ill-sub">rendement possible plus élevé</text>
+        <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
+      </svg>
+    </figure>
+  );
+}
+
 /** Schéma « PEA : avant et après 5 ans » : frise du temps, la règle de retrait change à la cinquième année. Seul chiffre : « 5 ans » ; reprend le texte du guide. */
 export function SchemaPea() {
   return (

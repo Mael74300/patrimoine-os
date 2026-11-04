@@ -54,6 +54,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-04 (audit, fiche Assurance-vie à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement. La distinction fonds en euros / unités de compte, centrale de l’assurance-vie, n’était qu’une phrase : schéma ajouté (voir « Fait »). Reste : les fiches Fonds euros, Unités de compte, Foncières cotées, crowdfunding et private equity n’ont pas de schéma.
+
 - 2026-11-04 (audit, comparateur et page Méthode à 375 et 1 280 px ; visiteur arrivé par Google) : aucune erreur de console ni débordement. La page Méthode annonçait « Dernière vérification générale : 10 octobre 2026 », date périmée (fiches revérifiées depuis) : remplacée par la date de vérification la plus récente des fiches (voir « Fait »).
 
 - 2026-11-04 (audit, fiche Or ; visiteur épargnant) : aucune erreur de console ni débordement à 375 et 1 280 px. La fiche Or affichait une fiscalité « à vérifier » alors que le taux de 11,5 % est confirmable sur le BOFiP : vérifiée (voir « Fait »). Restent des mentions « à vérifier » (immobilier physique, capital-investissement, entrepreneuriat).
@@ -94,6 +96,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-04 : **Illustration : schéma « un contrat, deux types de supports » sur la fiche Assurance-vie** (fonds en euros garanti par l’assureur, rendement plus faible ; unités de compte à valeur variable avec risque de perte en capital ; qualitatif, sans chiffre, source Service-Public F15274). Fiche à 375 px : 4 966 px avec le schéma (environ 4 690 sans), 1 280 px : 3 288 px. Aucune erreur de console, aucun débordement.
 - 2026-11-04 : **Page Méthode : fin de la date globale de vérification** (la phrase « Dernière vérification générale : 10 octobre 2026 » devient « Chaque fiche affiche sa propre date de vérification (la plus récente : …) », calculée depuis les fiches ; test `methodologie.test.ts`). Hauteurs inchangées. Aucune information factuelle ajoutée ni modifiée.
 - 2026-11-04 : **Exactitude : fiche Or vérifiée** (taxe forfaitaire de 11 % + 0,5 % de CRDS = 11,5 % du prix de cession, due même sans gain, pas d’exonération à 5 000 € pour l’or ; source BOFiP BOI-RPPM-PVBMC-20-10, option pour le régime des plus-values conservée sans taux ni abattement non confirmés). Hauteur fiche : 375 px 3 619 → 3 810 px, 1 280 px 2 188 → 2 377 px (texte de fiscalité plus complet).
 - 2026-11-04 : **Tableaux de comparaison lisibles sur mobile : durées de crédit et frais** (réutilise `stack-table` : sous 700 px, une carte étiquetée par durée ou par niveau de frais ; tableau inchangé au-dessus). Hauteurs : comparer-des-credits à 375 px : 3 981 → 4 647 px (1 280 px : 2 249 px, inchangé) ; frais à 375 px : 4 714 → 5 146 px (1 280 px : 2 574 px, inchangé), la page s’allonge un peu car chaque ligne devient une carte mais plus rien n’est hors écran.
