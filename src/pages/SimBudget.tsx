@@ -63,17 +63,18 @@ export default function SimBudget() {
           <Takeaway>{budgetTakeaway({ income: b.income, shares: b.shares, unallocated: b.unallocated, targetRate: s.targetRate, missing: c.missing })}</Takeaway>
 
           <h2>Votre budget face au repère 50 / 30 / 20</h2>
-          <div className="table-wrap" tabIndex={0}>
-            <table>
+          <div className="table-wrap stack-wrap">
+            <table className="stack-table">
+              <caption className="sr-only">Chaque poste du budget comparé au repère 50 / 30 / 20</caption>
               <thead><tr><th>Poste</th><th className="r">Montant</th><th className="r">Part<span className="sr-only"> du revenu</span></th><th className="r">Repère</th><th className="r">Écart<span className="sr-only"> au repère</span></th></tr></thead>
               <tbody>
                 {rows.map((r) => (
                   <tr key={r.label}>
-                    <td>{r.label}</td>
-                    <td className="r">{fmtEur(r.amount)}</td>
-                    <td className="r">{fmtPct(r.share)}</td>
-                    <td className="r">{fmtPct(r.bench)}</td>
-                    <td className="r">{signed(r.gap)}</td>
+                    <td className="st-name">{r.label}</td>
+                    <td data-label="Montant" className="r">{fmtEur(r.amount)}</td>
+                    <td data-label="Part du revenu" className="r">{fmtPct(r.share)}</td>
+                    <td data-label="Repère" className="r">{fmtPct(r.bench)}</td>
+                    <td data-label="Écart au repère" className="r">{signed(r.gap)}</td>
                   </tr>
                 ))}
               </tbody>

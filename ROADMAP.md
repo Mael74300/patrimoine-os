@@ -54,6 +54,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-04 (audit, accueil, simulateurs Louer ou acheter, Rembourser ou investir, Épargne de précaution, guides à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement de page ; résultats, « Concrètement » et graphique lisibles. Seul défaut mesuré : le tableau du budget (50 / 30 / 20) dépassait de 3 px son cadre à 375 px, colonne « Écart » partiellement masquée : cartes étiquetées (voir « Fait »). Restent à défilement horizontal les tableaux annuels du crédit, de l’immobilier, du patrimoine et de l’entreprise.
+
 - 2026-11-04 (audit, accueil et fiche Foncières cotées à 375 et 1 280 px ; visiteur épargnant) : aucune erreur de console ni débordement. La fiche Foncières cotées expliquait le principe en une phrase, sans image, comme l’avait fait la fiche SCPI avant son schéma : schéma de principe ajouté (voir « Fait »). Reste : les fiches Fonds euros, Unités de compte, crowdfunding et private equity n’ont pas de schéma.
 
 - 2026-11-04 (audit, accueil, encyclopédie, entrepreneuriat, guides, comparateur, fiches Fonds euros et Cryptomonnaies à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; pages équilibrées. Les fiches Fonds euros et Unités de compte affichaient « Capital : selon le contrat. à vérifier » alors que Service-Public confirme l’absence de minimum légal : vérifié (voir « Fait »). Restent des mentions « à vérifier » sur d’autres fiches.
@@ -68,11 +70,6 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-04 (audit, calculateur entreprise à 375 px ; visiteur futur entrepreneur) : aucune erreur de console. Le tableau des trois scénarios avait six colonnes dans un cadre à défilement : « Trésorerie la plus basse » et « Valeur estimée » étaient hors écran sans indice visible. Chaque scénario devient une carte à 375 px (voir « Fait »). Reste : les autres tableaux de simulateurs (crédit, immobilier, patrimoine) restent à défilement horizontal à 375 px, à auditer un par un.
 
 - 2026-11-04 (audit, glossaire à 375 et 1 280 px, contrôle automatique des champs des 21 simulateurs à 375 px ; visiteur débutant) : aucune erreur de console ni débordement. Glossaire : 23 notions, 6 387 px à 375 px et 4 559 px à 1 280 px, avec navigation par lettre, déjà compact ; pas de changement utile sans retirer du contenu. Les 21 simulateurs ont tous leurs champs (zones de saisie, listes, boutons) nommés pour un lecteur d’écran : aucun défaut. Reste à auditer au vrai lecteur d’écran (annonces, ordre).
-
-- 2026-11-04 (audit, fiches SCPI et foncières cotées à 375 et 1 280 px ; visiteur épargnant) : aucune erreur de console ni débordement. La fiche SCPI expliquait le fonctionnement en deux phrases de texte, sans image, alors que la notion (qui achète quoi, d’où viennent les revenus) se comprend mieux dessinée : schéma de principe ajouté (voir « Fait »). Reste : les fiches des autres familles (foncières cotées, crowdfunding, private equity) n’ont pas non plus de schéma.
-
-- 2026-11-04 (audit, accueil, entrepreneuriat, fiche SCPI, encyclopédie à 375 et 1 280 px ; visiteur épargnant) : aucune erreur de console ni débordement. L’encyclopédie (27 fiches, 3 624 px) était une liste de texte sans aucun repère visuel, alors que les icônes de famille dessinées existaient sans être affichées : icône ajoutée devant chaque famille (voir « Fait »). Reste : la fiche SCPI n’a aucun schéma (exemple chiffré en simple encadré).
-
 
 
 ## À faire
@@ -94,6 +91,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 11. [x] **Test de fumée dans l'intégration continue** : fait le 2026-10-30, voir « Fait ».
 
 ## Fait
+
+- 2026-11-04 : **Tableau du budget (repère 50 / 30 / 20) en cartes sur mobile** (plus de débordement de 3 px à 375 px, valeurs étiquetées ; aucun chiffre modifié). Hauteur de la page Budget à 375 px : 4 833 → 5 221 px ; 1 280 px inchangé.
 
 - 2026-11-04 : **Illustration : schéma « Comment fonctionne une foncière cotée » sur la fiche Foncières cotées** (investisseurs, actions en Bourse, immeubles loués, loyers qui financent les dividendes ; qualitatif, sans chiffre, source La finance pour tous « Les sociétés foncières » ; test `foncieresCotees.test.ts`). Hauteur de la fiche : 3 592 → 3 889 px à 375 px, 2 162 → 2 562 px à 1 280 px.
 - 2026-11-04 : **Fiches Fonds euros et Unités de compte : capital minimum vérifié** (« Aucun minimum légal pour le premier versement ; chaque assureur fixe le sien », source Service-Public F15274, remplace « Selon le contrat. à vérifier »).
