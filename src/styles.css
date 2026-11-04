@@ -696,3 +696,15 @@ h2.gloss-letter::before { content: none; }
 /* Encyclopédie : icône décorative devant le nom de chaque famille */
 .inv-group-title .family-icon { flex: none; width: 30px; height: 30px; margin: -2px 0; }
 .inv-group-title { padding-left: 10px; }
+
+/* Tableaux de scénarios : sous 700 px, chaque ligne devient une carte (rien hors écran) */
+@media (max-width: 700px) {
+  .stack-wrap { overflow-x: visible; border: 0; background: none; box-shadow: none; }
+  .stack-table, .stack-table tbody, .stack-table tr { display: block; }
+  .stack-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .stack-table tr { padding: 10px 14px; margin-bottom: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+  .stack-table td { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border: 0; text-align: right; font-weight: 600; }
+  .stack-table td::before { content: attr(data-label); font-weight: 400; font-size: .9rem; color: var(--ink-2); text-align: left; }
+  .stack-table .st-name { display: block; text-align: left; font-weight: 700; padding-bottom: 8px; margin-bottom: 2px; border-bottom: 1px solid var(--line); }
+  .stack-table .st-name::before { display: none; }
+}
