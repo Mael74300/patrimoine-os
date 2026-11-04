@@ -54,6 +54,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-04 (audit, simulateur immobilier ; visiteur futur acheteur) : les options « micro-BIC (abattement à vérifier) » et « 18,6 % … à vérifier pour le meublé » laissaient un doute sur un simulateur très visité ; abattement de 50 % confirmé et libellé corrigé, taux de 18,6 % laissé « à confirmer » (voir « Fait »).
 - 2026-11-04 (audit, guide « Choisir son enveloppe », fiches Financement participatif et Capital-investissement, simulateur Retraits réguliers à 375 et 1 280 px ; visiteur proche de la retraite) : aucune erreur de console ni débordement. Le guide « Choisir son enveloppe », guide d’entrée, ouvrait sur une phrase abstraite (support / enveloppe) sans image : schéma ajouté (voir « Fait »). Restent des mentions « à vérifier » sur la fiche Financement participatif (frais, capital nécessaire).
 
 - 2026-11-04 (audit, accueil, simulateurs Louer ou acheter, Rembourser ou investir, Épargne de précaution, guides à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement de page ; résultats, « Concrètement » et graphique lisibles. Seul défaut mesuré : le tableau du budget (50 / 30 / 20) dépassait de 3 px son cadre à 375 px, colonne « Écart » partiellement masquée : cartes étiquetées (voir « Fait »). Restent à défilement horizontal les tableaux annuels du crédit, de l’immobilier, du patrimoine et de l’entreprise.
@@ -71,7 +72,6 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 - 2026-11-04 (audit, calculateur entreprise à 375 px ; visiteur futur entrepreneur) : aucune erreur de console. Le tableau des trois scénarios avait six colonnes dans un cadre à défilement : « Trésorerie la plus basse » et « Valeur estimée » étaient hors écran sans indice visible. Chaque scénario devient une carte à 375 px (voir « Fait »). Reste : les autres tableaux de simulateurs (crédit, immobilier, patrimoine) restent à défilement horizontal à 375 px, à auditer un par un.
 
-- 2026-11-04 (audit, glossaire à 375 et 1 280 px, contrôle automatique des champs des 21 simulateurs à 375 px ; visiteur débutant) : aucune erreur de console ni débordement. Glossaire : 23 notions, 6 387 px à 375 px et 4 559 px à 1 280 px, avec navigation par lettre, déjà compact ; pas de changement utile sans retirer du contenu. Les 21 simulateurs ont tous leurs champs (zones de saisie, listes, boutons) nommés pour un lecteur d’écran : aucun défaut. Reste à auditer au vrai lecteur d’écran (annonces, ordre).
 
 
 ## À faire
@@ -94,6 +94,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-04 : **Simulateur Louer ou investir dans l’immobilier : libellés « à vérifier » levés** (l’abattement forfaitaire du micro-BIC pour la location meublée de longue durée, 50 %, est confirmé par Service-Public ; le taux de 18,6 % reste signalé « à confirmer pour le meublé », la source ne le précise pas explicitement ; frais de notaire 7 à 8 % toujours à vérifier, source officielle inaccessible).
 - 2026-11-04 : **Illustration : schéma « placement et enveloppe » sur le guide « Choisir son enveloppe »** (même schéma que le guide des types d’investissements, sans chiffre : un même ETF logé dans PEA, compte-titres, assurance-vie ou PER ; la section d’ouverture du guide énonce la même règle). Hauteur à 375 px : 3 467 → 3 719 px ; à 1 280 px : 2 139 → 2 476 px (guide sans schéma auparavant).
 
 - 2026-11-04 : **Tableau du budget (repère 50 / 30 / 20) en cartes sur mobile** (plus de débordement de 3 px à 375 px, valeurs étiquetées ; aucun chiffre modifié). Hauteur de la page Budget à 375 px : 4 833 → 5 221 px ; 1 280 px inchangé.

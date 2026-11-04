@@ -17,14 +17,14 @@ export const REGIMES: { v: TaxRegime; label: string; allowance?: number }[] = [
   { v: 'aucune', label: 'Ne pas estimer l’impôt' },
   { v: 'micro-foncier', label: 'Location nue — micro-foncier (abattement 30 %)', allowance: 0.3 },
   { v: 'reel-foncier', label: 'Location nue — régime réel' },
-  { v: 'micro-bic', label: 'Location meublée — micro-BIC (abattement à vérifier)', allowance: 0.5 },
+  { v: 'micro-bic', label: 'Location meublée — micro-BIC (abattement 50 %)', allowance: 0.5 },
   { v: 'reel-bic', label: 'Location meublée — LMNP au réel' },
 ];
 
 export const TMI_OPTIONS = [0, 0.11, 0.3, 0.41, 0.45].map((v) => ({ v, label: `${Math.round(v * 100)} %` }));
 export const PS_OPTIONS = [
   { v: 0.172, label: '17,2 % (revenus fonciers)' },
-  { v: 0.186, label: '18,6 % (taux relevé 2026, à vérifier pour le meublé)' },
+  { v: 0.186, label: '18,6 % (taux général des revenus du patrimoine ; à confirmer pour le meublé)' },
 ];
 
 export default function SimImmobilier() {
