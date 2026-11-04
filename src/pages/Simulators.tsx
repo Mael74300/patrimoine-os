@@ -5,6 +5,13 @@ import { simBlurb, simBySlug, simThemes, unthemedSims } from '../lib/simThemes';
 import { PageHead } from '../components/ui';
 import { SimThemeIcon } from '../components/Illustrations';
 
+/** Trois simulateurs d'entrée, dans l'ordre où un débutant en a besoin (aucun chiffre : seulement des renvois). */
+export const startSims: { slug: string; label: string }[] = [
+  { slug: 'epargne-de-precaution', label: 'Je veux une réserve pour les imprévus' },
+  { slug: 'objectif-epargne', label: 'Je veux épargner pour un projet' },
+  { slug: 'endettement', label: 'Je prépare un emprunt' },
+];
+
 export default function Simulators() {
   const [q, setQ] = useState('');
   const terms = norm(q).split(/\s+/).filter(Boolean);
@@ -27,6 +34,16 @@ export default function Simulators() {
         <label htmlFor="sim-filter">Filtrer les simulateurs</label>
         <input id="sim-filter" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="crédit, inflation, retraite…" />
       </div>
+      {!q && (
+        <section aria-labelledby="sim-start">
+          <h2 id="sim-start" className="small" style={{ margin: '16px 0 8px' }}>Pas sûr du simulateur à ouvrir ? Partez de votre situation.</h2>
+          <ul className="search-ideas">
+            {startSims.map((x) => (
+              <li key={x.slug}><Link className="tag" to={`/simulateurs/${x.slug}`}>{x.label}</Link></li>
+            ))}
+          </ul>
+        </section>
+      )}
       {q && <p className="small muted" role="status">{shown} simulateur{shown > 1 ? 's' : ''} sur {simulators.length}</p>}
       <nav aria-label="Thèmes" className="theme-nav">
         {groups.map((t) => (
