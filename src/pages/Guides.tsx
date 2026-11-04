@@ -58,7 +58,7 @@ function Catalogue() {
   const pending = categories.filter((c) => !investments.some((i) => i.category === c.id));
   return (
     <>
-      <div className="grid cols-2" style={{ marginTop: 8 }}>
+      <div className="grid cols-3" style={{ marginTop: 8 }}>
         {withFiches.map((c) => {
           const list = investments.filter((i) => i.category === c.id);
           return (
