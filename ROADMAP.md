@@ -54,6 +54,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-04 (audit, 21 simulateurs à 375 px, mesure des tableaux plus larges que l’écran ; visiteur emprunteur) : aucune erreur de console ni débordement de page. Les tableaux de comparaison à 5 colonnes (durées de crédit, effet des frais) étaient plus larges que l’écran (409 et 415 px pour 341 px) : cartes étiquetées sous 700 px (voir « Fait »). Restent à défilement horizontal, car longs : tableaux annuels du crédit (5 col.), de l’immobilier (10), du patrimoine (6) et de l’entreprise (12) ; le budget (344 px pour 341) déborde de 3 px.
+
 - 2026-11-04 (audit, calculateur entreprise à 375 px ; visiteur futur entrepreneur) : aucune erreur de console. Le tableau des trois scénarios avait six colonnes dans un cadre à défilement : « Trésorerie la plus basse » et « Valeur estimée » étaient hors écran sans indice visible. Chaque scénario devient une carte à 375 px (voir « Fait »). Reste : les autres tableaux de simulateurs (crédit, immobilier, patrimoine) restent à défilement horizontal à 375 px, à auditer un par un.
 
 - 2026-11-04 (audit, glossaire à 375 et 1 280 px, contrôle automatique des champs des 21 simulateurs à 375 px ; visiteur débutant) : aucune erreur de console ni débordement. Glossaire : 23 notions, 6 387 px à 375 px et 4 559 px à 1 280 px, avec navigation par lettre, déjà compact ; pas de changement utile sans retirer du contenu. Les 21 simulateurs ont tous leurs champs (zones de saisie, listes, boutons) nommés pour un lecteur d’écran : aucun défaut. Reste à auditer au vrai lecteur d’écran (annonces, ordre).
@@ -71,8 +73,6 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-04 (audit, fiches Livret A et SCPI à 375 et 1 280 px ; visiteur épargnant) : aucune erreur de console ni débordement. Le pied de page affichait partout « Données réglementaires vérifiées au 10 octobre 2026 », date globale fausse pour les fiches revérifiées depuis et trompeuse pour celles encore « à vérifier » : remplacé par un renvoi vers la date propre à chaque fiche (voir « Fait »). Essai abandonné : aligner en haut les cartes « Frais » et « Fiscalité » laissait des cartes dépareillées, pire que les cartes de même hauteur.
 
 - 2026-11-04 (audit, accueil, guide rentabilité locative, fiche LEP, liste des simulateurs à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; accueil, guide et schémas lisibles à 375 px. La liste des 21 simulateurs, à plat, ne disait pas par lequel commencer : trois pastilles « Partez de votre situation » ajoutées (précaution, objectif d'épargne, emprunt ; voir « Fait »). Aucune information factuelle touchée.
-
-- 2026-11-03 (audit, simulateurs louer ou acheter, retraits réguliers, indépendance financière, guides, fiche SCPI, comparateur, accueil à 375 et 1 280 px ; visiteur arrivé par Google sur une page profonde) : aucune erreur de console ni débordement ; pages équilibrées. Les simulateurs étaient des impasses : après le résultat et la FAQ, le visiteur retombait sur le pied de page sans piste de lecture. Bloc « Pour aller plus loin » ajouté (voir « Fait »). Aucune information factuelle touchée. Reste : la date « vérifiées au 10 octobre 2026 » du pied de page est globale (livrets) et ne reflète pas les vérifications fiche par fiche ; à repenser.
 
 ## À faire
 
@@ -94,6 +94,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-04 : **Tableaux de comparaison lisibles sur mobile : durées de crédit et frais** (réutilise `stack-table` : sous 700 px, une carte étiquetée par durée ou par niveau de frais ; tableau inchangé au-dessus). Hauteurs : comparer-des-credits à 375 px : 3 981 → 4 647 px (1 280 px : 2 249 px, inchangé) ; frais à 375 px : 4 714 → 5 146 px (1 280 px : 2 574 px, inchangé), la page s’allonge un peu car chaque ligne devient une carte mais plus rien n’est hors écran.
 - 2026-11-04 : **Tableau des scénarios du calculateur entreprise lisible sur mobile** (classe réutilisable `stack-table` : sous 700 px chaque scénario est une carte étiquetée, les cinq résultats visibles ; au-dessus de 700 px, tableau inchangé ; légende pour lecteur d’écran). Hauteur de la page à 375 px : 4 917 → 5 445 px (les deux colonnes cachées sont maintenant visibles), 1 280 px inchangée. Aucune information factuelle touchée.
 - 2026-11-04 : **Illustrations maison, étape 19 : schéma « Comment fonctionne une SCPI »** (épargnants → SCPI gérée par une société de gestion → immeubles loués, loyers moins frais reviennent aux épargnants ; schéma de principe sans chiffre, test `src/scpi.test.ts`, principe confirmé sur La finance pour tous). Hauteur fiche : 375 px 4 095 → 4 392 px, 1 280 px 2 446 → 2 846 px. Aucune information factuelle ajoutée ni modifiée.
 - 2026-11-04 : **Encyclopédie : icône devant chaque famille** (les icônes `FamilyIcon`, dessinées mais jamais affichées, apparaissent à côté du titre des 15 familles ; décoratives, `aria-hidden`). Hauteur : 1 280 px 3 624 → 3 687 px, 375 px 4 169 → 4 227 px. Aucune information factuelle ajoutée ni modifiée.
