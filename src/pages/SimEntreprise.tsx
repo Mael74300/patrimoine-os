@@ -79,8 +79,9 @@ export default function SimEntreprise() {
 
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <h2 style={{ marginTop: 0 }}>Trois scénarios à {s.years} ans</h2>
-          <div className="table-wrap" tabIndex={0}>
-            <table>
+          <div className="table-wrap stack-wrap">
+            <table className="stack-table">
+              <caption className="sr-only">Résultats des trois scénarios à {s.years} ans</caption>
               <thead><tr><th>Scénario</th><th className="r">CA final</th><th className="r">Résultat net final</th><th className="r">Trésorerie finale</th><th className="r">Trésorerie la plus basse</th><th className="r">Valeur estimée</th></tr></thead>
               <tbody>
                 {runs.map((r, i) => {
@@ -88,12 +89,12 @@ export default function SimEntreprise() {
                   const low = lowestCash(r, start);
                   return (
                     <tr key={i}>
-                      <td style={{ whiteSpace: 'nowrap' }}><span style={{ color: COLORS[i] }}>●</span> {LABELS[i]}</td>
-                      <td className="r">{fmtEur(l?.revenue ?? 0)}</td>
-                      <td className={'r ' + ((l?.netResult ?? 0) < 0 ? 'neg' : '')}>{fmtEur(l?.netResult ?? 0)}</td>
-                      <td className={'r ' + ((l?.cash ?? 0) < 0 ? 'neg' : '')}>{fmtEur(l?.cash ?? 0)}</td>
-                      <td className={'r ' + (low < 0 ? 'neg' : '')}>{fmtEur(low)}</td>
-                      <td className="r">{fmtEur(l?.valuation ?? 0)}</td>
+                      <td className="st-name" style={{ whiteSpace: 'nowrap' }}><span aria-hidden="true" style={{ color: COLORS[i] }}>●</span> {LABELS[i]}</td>
+                      <td data-label="CA final" className="r">{fmtEur(l?.revenue ?? 0)}</td>
+                      <td data-label="Résultat net final" className={'r ' + ((l?.netResult ?? 0) < 0 ? 'neg' : '')}>{fmtEur(l?.netResult ?? 0)}</td>
+                      <td data-label="Trésorerie finale" className={'r ' + ((l?.cash ?? 0) < 0 ? 'neg' : '')}>{fmtEur(l?.cash ?? 0)}</td>
+                      <td data-label="Trésorerie la plus basse" className={'r ' + (low < 0 ? 'neg' : '')}>{fmtEur(low)}</td>
+                      <td data-label="Valeur estimée" className="r">{fmtEur(l?.valuation ?? 0)}</td>
                     </tr>
                   );
                 })}
