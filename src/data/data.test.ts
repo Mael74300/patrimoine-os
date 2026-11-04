@@ -217,3 +217,15 @@ describe('fiche donation : cohérence des montants', () => {
     expect(f.tax.text.replace(/\u00a0/g, ' ')).toContain('131 865');
   });
 });
+
+describe('fiche LMNP : chiffres identiques dans la fiche et le suivi de vérification', () => {
+  it('les montants du suivi figurent dans le texte fiscal vérifié', () => {
+    const f = investmentBySlug['lmnp']!;
+    const txt = f.tax.text.replace(/ | /g, ' ');
+    expect(f.tax.verified).toBe(true);
+    for (const v of ['83 600 €', '50 %', '15 000 €', '30 %', '23 000 €', '15 février 2025']) {
+      expect(txt).toContain(v);
+      expect(f.review.data.join(' ').replace(/ | /g, ' ')).toContain(v);
+    }
+  });
+});

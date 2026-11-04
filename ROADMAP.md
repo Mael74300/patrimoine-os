@@ -54,6 +54,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-04 (audit, fiche LMNP à 375 et 1 280 px ; visiteur futur acheteur) : aucune erreur de console ni débordement. La fiche « Location meublée (LMNP) » affichait une fiscalité « à vérifier » avec une rumeur de taux (18,6 %) tirée d’une question parlementaire : seuils micro-BIC 2026, seuil de 23 000 € et réintégration des amortissements confirmés sur sources officielles, rumeur retirée (voir « Fait »). Reste : 44 mentions « à vérifier » (taux de prélèvements sociaux des loyers meublés, plafonds de la micro-entreprise : Service-Public entreprendre injoignable depuis le bac à sable).
+
 - 2026-11-04 (audit, guide « Par où commencer », guide « Tous les types d’investissements », simulateur de retraits réguliers, budget, comparateur, accueil à 375 et 1 280 px ; visiteurs débutant et arrivé par Google) : aucune erreur de console ni débordement ; pages équilibrées. Le catalogue des familles du guide « Tous les types d’investissements » s’étirait en deux colonnes à 1 280 px (cartes aux hauteurs inégales, guide à 4 000 px) : passé à trois colonnes (voir « Fait »). Aucune information factuelle touchée.
 
 - 2026-11-04 (audit, fiches Livret A et SCPI à 375 et 1 280 px ; visiteur épargnant) : aucune erreur de console ni débordement. Le pied de page affichait partout « Données réglementaires vérifiées au 10 octobre 2026 », date globale fausse pour les fiches revérifiées depuis et trompeuse pour celles encore « à vérifier » : remplacé par un renvoi vers la date propre à chaque fiche (voir « Fait »). Essai abandonné : aligner en haut les cartes « Frais » et « Fiscalité » laissait des cartes dépareillées, pire que les cartes de même hauteur.
@@ -94,6 +96,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-04 : **Exactitude : fiche LMNP vérifiée** (micro-BIC 2026 : 83 600 € et abattement de 50 % ; meublé de tourisme non classé : 15 000 € et 30 % ; pas de cotisations sociales jusqu’à 23 000 € de recettes ; amortissements réintégrés dans la plus-value pour les cessions depuis le 15 février 2025 ; sources Service-Public F32744 et impots.gouv.fr). Phrase non confirmée sur le taux de 18,6 % retirée. Test de cohérence fiche/suivi. Hauteur fiche : 375 px 4 473 px, 1 280 px 2 785 px.
 - 2026-11-04 : **Guide des types d’investissements : catalogue des familles sur trois colonnes** (au lieu de deux, sur écran large ; deux colonnes en tablette, une sur mobile). Hauteur à 1 280 px : 4 000 → 3 768 px ; à 375 px inchangée (3 781 px). Aucune information factuelle touchée.
 - 2026-11-04 : **Pied de page : fin de la date globale de vérification** (« Chaque fiche indique la date de sa dernière vérification » au lieu de « vérifiées au 10 octobre 2026 »). Hauteurs de page inchangées à une ligne près. Aucune information factuelle ajoutée ni modifiée.
 - 2026-11-04 : **Liste des simulateurs : points de départ** (trois pastilles au-dessus de la liste, masquées pendant le filtre ; test sur l'existence des simulateurs liés). Hauteur à 375 px : 4 026 → 4 255 px. Aucune information factuelle touchée.
