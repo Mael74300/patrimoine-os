@@ -76,7 +76,7 @@ export default function SimPrecaution() {
                 value={s.lep}
                 onChange={up('lep')}
                 options={[{ v: 'non', label: 'Non ou je ne sais pas' }, { v: 'oui', label: 'Oui' }]}
-                hint="Selon le revenu fiscal de référence : vérifiez le plafond de l'année sur Service-Public.fr."
+                hint="Selon le revenu fiscal de référence : en métropole en 2026, 23 028 € pour 1 part, 35 326 € pour 2 parts (Service-Public.fr, révisé chaque année)."
               />
             </div>
           </details>
