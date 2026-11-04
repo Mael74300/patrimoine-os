@@ -229,3 +229,16 @@ describe('fiche LMNP : chiffres identiques dans la fiche et le suivi de vérific
     }
   });
 });
+
+describe('fiche PER : chiffres identiques dans la fiche et le suivi de vérification', () => {
+  it('les montants du suivi figurent dans le texte fiscal vérifié', () => {
+    const f = investmentBySlug['per']!;
+    const norm = (t: string) => t.replace(/[  ]/g, ' ');
+    const txt = norm(f.tax.text);
+    expect(f.tax.verified).toBe(true);
+    for (const v of ['10 %', '37 680 €', '4 710 €', '70 ans', '31,4 %']) {
+      expect(txt).toContain(v);
+      expect(norm(f.review.data.join(' '))).toContain(v);
+    }
+  });
+});
