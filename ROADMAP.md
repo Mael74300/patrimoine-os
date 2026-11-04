@@ -54,27 +54,12 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
-- 2026-11-04 (audit de contenu, fiche LEP et simulateur Épargne de précaution ; visiteur épargnant) : la fiche LEP et le simulateur renvoyaient vers Service-Public pour le plafond de revenus sans donner de chiffre. Service-Public.fr (F2367) est de nouveau accessible : plafonds 2026 en métropole ajoutés (voir « Fait »). Le plafond de revenus du LEP n’est donc plus « à vérifier ».
+- 2026-11-04 (audit, fiches ETF, PER, Crédit immobilier, Livret A et glossaire à 375 px ; visiteur épargnant) : aucune erreur de console ni débordement. La fiche ETF actions diversifiés, très visitée, affichait « souvent inférieurs à 0,5 % » et « quelques dizaines d’euros » avec le badge « à vérifier » : frais confirmés par l’AMF (0,33 % en 2025), mention du prix d’une part retirée faute de source (voir « Fait »).
 
-- 2026-11-04 (audit, accueil, guides et liste des simulateurs à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console hors script GoatCounter (réseau du bac à sable), aucun débordement horizontal (largeur de page = écran), hauteurs mesurées : accueil 3 260 px (375) / 1 856 px (1 280), guides 4 117 / 1 752, simulateurs 4 255 / 2 591. Pages équilibrées, pas de défaut visuel à corriger.
+- 2026-11-04 (limite d’exécution) : economie.gouv.fr, notaires.fr, entreprendre.service-public.gouv.fr et urssaf.fr sont inaccessibles depuis le bac à sable (403 ou refus du proxy) ; la page Service-Public F17701 (frais de notaire) donne le barème des émoluments mais pas la fourchette de 7 à 8 %. Restent « à vérifier » : frais d’acquisition immobiliers 7 à 8 %, plafonds micro-entreprise (fiche Entrepreneuriat), réductions IR-PME du capital-investissement, frais et capital du financement participatif ; ne rien changer sans source.
 
-- 2026-11-04 (limite d’exécution) : service-public.gouv.fr (hors quelques pages), entreprendre.service-public.gouv.fr, urssaf.fr sont inaccessibles depuis le bac à sable (403 ou hôte non résolu). Les mentions « à vérifier » restantes (frais d’acquisition immobiliers 7 à 8 %, plafonds micro-entreprise de la fiche Entrepreneuriat, réductions IR-PME du capital-investissement, minimum Financement participatif) restent donc à confirmer dès qu’une source officielle est consultable ; ne rien changer sans elle.
+- 2026-11-04 (audits précédents du jour : accueil, guides, simulateurs, encyclopédie, comparateur, Méthode) : pas d’erreur de console, pas de débordement ; schémas ajoutés sur les fiches SCPI, Assurance-vie, Foncières cotées et le guide « Choisir son enveloppe ». Restent sans schéma : Fonds euros, Unités de compte, crowdfunding, private equity ; restent à défilement horizontal les tableaux annuels du crédit, de l’immobilier, du patrimoine et de l’entreprise.
 
-- 2026-11-04 (audit, simulateur immobilier ; visiteur futur acheteur) : les options « micro-BIC (abattement à vérifier) » et « 18,6 % … à vérifier pour le meublé » laissaient un doute sur un simulateur très visité ; abattement de 50 % confirmé et libellé corrigé, taux de 18,6 % laissé « à confirmer » (voir « Fait »).
-
-- 2026-11-04 (audit, guide « Choisir son enveloppe », fiches Financement participatif et Capital-investissement, simulateur Retraits réguliers à 375 et 1 280 px ; visiteur proche de la retraite) : aucune erreur de console ni débordement. Le guide « Choisir son enveloppe », guide d’entrée, ouvrait sur une phrase abstraite (support / enveloppe) sans image : schéma ajouté (voir « Fait »). Restent des mentions « à vérifier » sur la fiche Financement participatif (frais, capital nécessaire).
-
-- 2026-11-04 (audit, accueil, simulateurs Louer ou acheter, Rembourser ou investir, Épargne de précaution, guides à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement de page ; résultats, « Concrètement » et graphique lisibles. Seul défaut mesuré : le tableau du budget (50 / 30 / 20) dépassait de 3 px son cadre à 375 px, colonne « Écart » partiellement masquée : cartes étiquetées (voir « Fait »). Restent à défilement horizontal les tableaux annuels du crédit, de l’immobilier, du patrimoine et de l’entreprise.
-
-- 2026-11-04 (audit, accueil et fiche Foncières cotées à 375 et 1 280 px ; visiteur épargnant) : aucune erreur de console ni débordement. La fiche Foncières cotées expliquait le principe en une phrase, sans image, comme l’avait fait la fiche SCPI avant son schéma : schéma de principe ajouté (voir « Fait »). Reste : les fiches Fonds euros, Unités de compte, crowdfunding et private equity n’ont pas de schéma.
-
-- 2026-11-04 (audit, accueil, encyclopédie, entrepreneuriat, guides, comparateur, fiches Fonds euros et Cryptomonnaies à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; pages équilibrées. Les fiches Fonds euros et Unités de compte affichaient « Capital : selon le contrat. à vérifier » alors que Service-Public confirme l’absence de minimum légal : vérifié (voir « Fait »). Restent des mentions « à vérifier » sur d’autres fiches.
-
-- 2026-11-04 (audit, fiche Assurance-vie à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement. La distinction fonds en euros / unités de compte, centrale de l’assurance-vie, n’était qu’une phrase : schéma ajouté (voir « Fait »). Reste : les fiches Fonds euros, Unités de compte, Foncières cotées, crowdfunding et private equity n’ont pas de schéma.
-
-- 2026-11-04 (audit, comparateur et page Méthode à 375 et 1 280 px ; visiteur arrivé par Google) : aucune erreur de console ni débordement. La page Méthode annonçait « Dernière vérification générale : 10 octobre 2026 », date périmée (fiches revérifiées depuis) : remplacée par la date de vérification la plus récente des fiches (voir « Fait »).
-
-- 2026-11-04 (audit, fiche Or ; visiteur épargnant) : aucune erreur de console ni débordement à 375 et 1 280 px. La fiche Or affichait une fiscalité « à vérifier » alors que le taux de 11,5 % est confirmable sur le BOFiP : vérifiée (voir « Fait »). Restent des mentions « à vérifier » (immobilier physique, capital-investissement, entrepreneuriat).
 
 ## À faire
 
@@ -96,6 +81,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-04 : **Fiche ETF actions diversifiés : frais vérifiés** (frais annuels moyens des ETF d’actions suivant un indice : 0,33 % en 2025, 0,75 % pour les fonds indiciels non cotés, lettre n° 65 de l’Observatoire de l’épargne de l’AMF ; mention « quelques dizaines d’euros » retirée, non confirmée ; source ajoutée) (PR à venir).
 - 2026-11-04 : fiche LEP et simulateur Épargne de précaution : plafonds de revenu fiscal de référence 2026 en métropole (23 028 € pour 1 part, 35 326 € pour 2 parts) vérifiés sur Service-Public.fr (F2367) et affichés à la place du renvoi (PR à venir).
 
 - 2026-11-04 : **Simulateur Louer ou investir dans l’immobilier : libellés « à vérifier » levés** (l’abattement forfaitaire du micro-BIC pour la location meublée de longue durée, 50 %, est confirmé par Service-Public ; le taux de 18,6 % reste signalé « à confirmer pour le meublé », la source ne le précise pas explicitement ; frais de notaire 7 à 8 % toujours à vérifier, source officielle inaccessible).
