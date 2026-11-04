@@ -54,6 +54,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-04 (audit, accueil, encyclopédie, entrepreneuriat, guides, comparateur, fiches Fonds euros et Cryptomonnaies à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; pages équilibrées. Les fiches Fonds euros et Unités de compte affichaient « Capital : selon le contrat. à vérifier » alors que Service-Public confirme l’absence de minimum légal : vérifié (voir « Fait »). Restent des mentions « à vérifier » sur d’autres fiches.
 - 2026-11-04 (audit, fiche Assurance-vie à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement. La distinction fonds en euros / unités de compte, centrale de l’assurance-vie, n’était qu’une phrase : schéma ajouté (voir « Fait »). Reste : les fiches Fonds euros, Unités de compte, Foncières cotées, crowdfunding et private equity n’ont pas de schéma.
 
 - 2026-11-04 (audit, comparateur et page Méthode à 375 et 1 280 px ; visiteur arrivé par Google) : aucune erreur de console ni débordement. La page Méthode annonçait « Dernière vérification générale : 10 octobre 2026 », date périmée (fiches revérifiées depuis) : remplacée par la date de vérification la plus récente des fiches (voir « Fait »).
@@ -72,9 +73,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 - 2026-11-04 (audit, fiche PER, calculateur de crédit, encyclopédie, liste des guides à 375 et 1 280 px ; visiteur épargnant de 45 ans) : aucune erreur de console ni débordement. La fiche PER restait vague (« plafond indiqué sur l’avis d’imposition », rien sur le plafond ni sur les 70 ans) : plafond de déduction, fin de la déduction après 70 ans depuis 2026, report des plafonds, fiscalité de la sortie et cas de déblocage confirmés sur Service-Public (voir « Fait »). Reste sur cette fiche : frais et capital minimum « à vérifier ». Constat esthétique mineur : les cartes « Frais » et « Fiscalité » de l’« En pratique » sont de hauteur inégale quand l’une est très courte.
 
-- 2026-11-04 (audit, fiche LMNP à 375 et 1 280 px ; visiteur futur acheteur) : aucune erreur de console ni débordement. La fiche « Location meublée (LMNP) » affichait une fiscalité « à vérifier » avec une rumeur de taux (18,6 %) tirée d’une question parlementaire : seuils micro-BIC 2026, seuil de 23 000 € et réintégration des amortissements confirmés sur sources officielles, rumeur retirée (voir « Fait »). Reste : 44 mentions « à vérifier » (taux de prélèvements sociaux des loyers meublés, plafonds de la micro-entreprise : Service-Public entreprendre injoignable depuis le bac à sable).
 
-- 2026-11-04 (audit, guide « Par où commencer », guide « Tous les types d’investissements », simulateur de retraits réguliers, budget, comparateur, accueil à 375 et 1 280 px ; visiteurs débutant et arrivé par Google) : aucune erreur de console ni débordement ; pages équilibrées. Le catalogue des familles du guide « Tous les types d’investissements » s’étirait en deux colonnes à 1 280 px (cartes aux hauteurs inégales, guide à 4 000 px) : passé à trois colonnes (voir « Fait »). Aucune information factuelle touchée.
 
 ## À faire
 
@@ -96,6 +95,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-04 : **Fiches Fonds euros et Unités de compte : capital minimum vérifié** (« Aucun minimum légal pour le premier versement ; chaque assureur fixe le sien », source Service-Public F15274, remplace « Selon le contrat. à vérifier »).
 - 2026-11-04 : **Illustration : schéma « un contrat, deux types de supports » sur la fiche Assurance-vie** (fonds en euros garanti par l’assureur, rendement plus faible ; unités de compte à valeur variable avec risque de perte en capital ; qualitatif, sans chiffre, source Service-Public F15274). Fiche à 375 px : 4 966 px avec le schéma (environ 4 690 sans), 1 280 px : 3 288 px. Aucune erreur de console, aucun débordement.
 - 2026-11-04 : **Page Méthode : fin de la date globale de vérification** (la phrase « Dernière vérification générale : 10 octobre 2026 » devient « Chaque fiche affiche sa propre date de vérification (la plus récente : …) », calculée depuis les fiches ; test `methodologie.test.ts`). Hauteurs inchangées. Aucune information factuelle ajoutée ni modifiée.
 - 2026-11-04 : **Exactitude : fiche Or vérifiée** (taxe forfaitaire de 11 % + 0,5 % de CRDS = 11,5 % du prix de cession, due même sans gain, pas d’exonération à 5 000 € pour l’or ; source BOFiP BOI-RPPM-PVBMC-20-10, option pour le régime des plus-values conservée sans taux ni abattement non confirmés). Hauteur fiche : 375 px 3 619 → 3 810 px, 1 280 px 2 188 → 2 377 px (texte de fiscalité plus complet).
