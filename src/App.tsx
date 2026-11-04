@@ -2,7 +2,6 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { config } from './config';
 import { trackPageview } from './lib/analytics';
-import { AS_OF } from './data/investments';
 import { ROUTES } from './routes';
 
 const NAV = [
@@ -138,7 +137,7 @@ function Footer() {
           <strong style={{ color: 'var(--ink)' }}>{config.siteName}</strong>
           <p className="small" style={{ marginTop: 8 }}>
             Informations générales et outils pédagogiques. Aucun conseil en investissement personnalisé.
-            Données réglementaires vérifiées au {AS_OF}. Aucun cookie, aucune inscription, mesure d'audience anonyme :
+            Chaque fiche indique la date de sa dernière vérification. Aucun cookie, aucune inscription, mesure d'audience anonyme :
             vos saisies et simulations restent dans votre navigateur. Aucun lien commercial.
           </p>
         </div>
