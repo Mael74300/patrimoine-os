@@ -25,9 +25,8 @@ export default function SimRembourser() {
         Vous disposez d'une somme : la verser en remboursement anticipé ou la placer ? Comparez le patrimoine net obtenu à la fin de la durée restante du crédit.
       </PageHead>
       <p className="notice" role="note">
-        Le rendement saisi est une hypothèse, jamais une prévision : un placement peut perdre de la valeur, alors que le remboursement d'un crédit économise des intérêts certains.
-        Le taux d'imposition proposé (31,4 %) correspond au prélèvement forfaitaire unique de 2026 décrit dans les <Link to="/encyclopedie/compte-titres">fiches de l'encyclopédie</Link> ;
-        remplacez-le selon l'enveloppe utilisée. Voir aussi <Link to="/simulateurs/credit">le calculateur de crédit</Link> et le <Link to="/guides/investir-a-credit">guide sur le crédit</Link>.
+        <strong>Le rendement est une hypothèse, pas une promesse.</strong> Un placement peut perdre de la valeur ; rembourser un crédit, lui, fait économiser des intérêts à coup sûr.
+        Le taux d'imposition de 31,4 % est celui du prélèvement forfaitaire unique de 2026 (<Link to="/encyclopedie/compte-titres">fiche Compte-titres</Link>) : changez-le si votre placement est dans une autre enveloppe.
       </p>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>

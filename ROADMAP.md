@@ -81,6 +81,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-04 : **Simulateur Rembourser ou investir : avertissement d’ouverture raccourci et simplifié** (phrase clé en gras, jargon réduit, un seul lien ; mêmes chiffres, 31,4 %). Hauteur à 375 px : 4 540 → 4 470 px, 1 280 px inchangé. Aucune information factuelle ajoutée ni modifiée.
 - 2026-11-04 : **Fiche ETF actions diversifiés : frais vérifiés** (frais annuels moyens des ETF d’actions suivant un indice : 0,33 % en 2025, 0,75 % pour les fonds indiciels non cotés, lettre n° 65 de l’Observatoire de l’épargne de l’AMF ; mention « quelques dizaines d’euros » retirée, non confirmée ; source ajoutée) (PR à venir).
 - 2026-11-04 : fiche LEP et simulateur Épargne de précaution : plafonds de revenu fiscal de référence 2026 en métropole (23 028 € pour 1 part, 35 326 € pour 2 parts) vérifiés sur Service-Public.fr (F2367) et affichés à la place du renvoi (PR à venir).
 
