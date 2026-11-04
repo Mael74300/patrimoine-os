@@ -63,14 +63,18 @@ export default function SimFrais() {
             series={res.map((r, i) => ({ name: `Frais ${fmtPct(r.fees)}`, color: COLORS[i], values: r.series }))}
           />
           <h2>Comparaison</h2>
-          <div className="table-wrap" tabIndex={0}>
-            <table>
+          <div className="table-wrap stack-wrap">
+            <table className="stack-table">
+              <caption className="sr-only">Effet de chaque niveau de frais annuels sur le capital final</caption>
               <thead><tr><th>Frais annuels</th><th className="r">Capital final</th><th className="r">En euros d'aujourd'hui</th><th className="r">Coût des frais</th><th className="r">Part des gains absorbée</th></tr></thead>
               <tbody>
                 {res.map((r, i) => (
                   <tr key={i}>
-                    <td>{fmtPct(r.fees)}</td><td className="r">{fmtEur(r.finalValue)}</td><td className="r">{fmtEur(r.realValue)}</td>
-                    <td className="r">{fmtEur(r.cost)}</td><td className="r">{fmtPct(r.shareOfGains)}</td>
+                    <td className="st-name">Frais de {fmtPct(r.fees)} par an</td>
+                    <td data-label="Capital final" className="r">{fmtEur(r.finalValue)}</td>
+                    <td data-label="En euros d'aujourd'hui" className="r">{fmtEur(r.realValue)}</td>
+                    <td data-label="Coût des frais" className="r">{fmtEur(r.cost)}</td>
+                    <td data-label="Part des gains absorbée" className="r">{fmtPct(r.shareOfGains)}</td>
                   </tr>
                 ))}
               </tbody>
