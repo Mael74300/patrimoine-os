@@ -54,6 +54,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-04 (audit, guide « Choisir son enveloppe », fiches Financement participatif et Capital-investissement, simulateur Retraits réguliers à 375 et 1 280 px ; visiteur proche de la retraite) : aucune erreur de console ni débordement. Le guide « Choisir son enveloppe », guide d’entrée, ouvrait sur une phrase abstraite (support / enveloppe) sans image : schéma ajouté (voir « Fait »). Restent des mentions « à vérifier » sur la fiche Financement participatif (frais, capital nécessaire).
+
 - 2026-11-04 (audit, accueil, simulateurs Louer ou acheter, Rembourser ou investir, Épargne de précaution, guides à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement de page ; résultats, « Concrètement » et graphique lisibles. Seul défaut mesuré : le tableau du budget (50 / 30 / 20) dépassait de 3 px son cadre à 375 px, colonne « Écart » partiellement masquée : cartes étiquetées (voir « Fait »). Restent à défilement horizontal les tableaux annuels du crédit, de l’immobilier, du patrimoine et de l’entreprise.
 
 - 2026-11-04 (audit, accueil et fiche Foncières cotées à 375 et 1 280 px ; visiteur épargnant) : aucune erreur de console ni débordement. La fiche Foncières cotées expliquait le principe en une phrase, sans image, comme l’avait fait la fiche SCPI avant son schéma : schéma de principe ajouté (voir « Fait »). Reste : les fiches Fonds euros, Unités de compte, crowdfunding et private equity n’ont pas de schéma.
@@ -91,6 +93,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 11. [x] **Test de fumée dans l'intégration continue** : fait le 2026-10-30, voir « Fait ».
 
 ## Fait
+
+- 2026-11-04 : **Illustration : schéma « placement et enveloppe » sur le guide « Choisir son enveloppe »** (même schéma que le guide des types d’investissements, sans chiffre : un même ETF logé dans PEA, compte-titres, assurance-vie ou PER ; la section d’ouverture du guide énonce la même règle). Hauteur à 375 px : 3 467 → 3 719 px ; à 1 280 px : 2 139 → 2 476 px (guide sans schéma auparavant).
 
 - 2026-11-04 : **Tableau du budget (repère 50 / 30 / 20) en cartes sur mobile** (plus de débordement de 3 px à 375 px, valeurs étiquetées ; aucun chiffre modifié). Hauteur de la page Budget à 375 px : 4 833 → 5 221 px ; 1 280 px inchangé.
 
