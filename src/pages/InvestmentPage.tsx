@@ -6,6 +6,7 @@ import { investmentBySlug } from '../data/investments';
 import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Dots, Fold, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
+import { SchemaScpi } from '../components/Illustrations';
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
 
@@ -54,6 +55,7 @@ export default function InvestmentPage() {
           <p>{inv.definition}</p>
           <h2>Fonctionnement</h2>
           <p>{inv.howItWorks}</p>
+          {inv.slug === 'scpi' && <SchemaScpi />}
           <h2>Comment investir</h2>
           <ul>{inv.howToInvest.map((s) => <li key={s}>{s}</li>)}</ul>
 
