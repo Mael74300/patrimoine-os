@@ -54,6 +54,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-04 (audit, guide « Par où commencer », guide « Tous les types d’investissements », simulateur de retraits réguliers, budget, comparateur, accueil à 375 et 1 280 px ; visiteurs débutant et arrivé par Google) : aucune erreur de console ni débordement ; pages équilibrées. Le catalogue des familles du guide « Tous les types d’investissements » s’étirait en deux colonnes à 1 280 px (cartes aux hauteurs inégales, guide à 4 000 px) : passé à trois colonnes (voir « Fait »). Aucune information factuelle touchée.
+
 - 2026-11-04 (audit, fiches Livret A et SCPI à 375 et 1 280 px ; visiteur épargnant) : aucune erreur de console ni débordement. Le pied de page affichait partout « Données réglementaires vérifiées au 10 octobre 2026 », date globale fausse pour les fiches revérifiées depuis et trompeuse pour celles encore « à vérifier » : remplacé par un renvoi vers la date propre à chaque fiche (voir « Fait »). Essai abandonné : aligner en haut les cartes « Frais » et « Fiscalité » laissait des cartes dépareillées, pire que les cartes de même hauteur.
 
 - 2026-11-04 (audit, accueil, guide rentabilité locative, fiche LEP, liste des simulateurs à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; accueil, guide et schémas lisibles à 375 px. La liste des 21 simulateurs, à plat, ne disait pas par lequel commencer : trois pastilles « Partez de votre situation » ajoutées (précaution, objectif d'épargne, emprunt ; voir « Fait »). Aucune information factuelle touchée.
@@ -71,14 +73,6 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-03 (audit, entrepreneuriat, glossaire, recherche, méthode à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; ces pages sont équilibrées. Sur la page Recherche sans mot saisi, une liste vide laissait un trait orphelin sous les points de départ (corrigé, voir « Fait »). Le taux de la taxe sur l'or (11,5 %) n'a pu être confirmé sur aucune source officielle ce jour (Service-Public R17176 sans les taux, adresses BOFiP introuvables) : la fiche « Or physique et papier » reste « à vérifier ». Reste : glossaire long sur mobile (5 499 px), à regrouper ou replier.
 
 - 2026-11-03 (audit, encyclopédie et simulateur de précaution à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; l'encyclopédie (4 169 px à 375 px) est équilibrée et tous les guides ont déjà leur schéma. Dans le tableau de répartition du simulateur de précaution, l'en-tête « Intérêts sur un an » se coupait en trois lignes (devenu « Intérêts par an », voir « Fait »). Reste : les listes déroulantes coupent leur libellé sur mobile et les 46 mentions « à vérifier » sont à confirmer une à une.
-
-- 2026-11-03 (audit, plan du site à 375 et 1 280 px, fiche assurance-vie ; visiteur débutant) : aucune erreur de console ni débordement ; le plan du site (5 092 px à 375 px) dispose déjà d'un menu de rubriques, acceptable pour sa fonction. Les frais de l'assurance-vie, marqués « à vérifier », sont confirmés par La finance pour tous (sur versements jusqu'à 5 % ; gestion de 0,4 % à plus de 1 % par an) et passés en « vérifié » (fiches assurance-vie et fonds en euros). Il reste 46 mentions « à vérifier » à confirmer une à une sur source officielle.
-
-- 2026-11-03 (audit, plan du site, guides, simulateur d'épargne de précaution à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; le guide « Combien mettre en épargne de précaution ? » était l'un des rares guides sans schéma alors que son idée (3, 6 ou 9 mois de dépenses) se comprend d'un coup d'œil (barres de l'exemple fictif ajoutées, voir « Fait »). Reste : le plan du site (5 092 px à 375 px) est une longue liste ; le menu déroulant « Situation professionnelle » coupe son libellé sur mobile (le libellé complet s'affiche dessous).
-
-- 2026-11-03 (audit, simulateur d'épargne de précaution, fiche assurance-vie à 375 et 1 280 px ; visiteurs débutant et épargnant) : aucune erreur de console ni débordement ; le résultat principal (« 1,2 mois couverts, il manque 4 500 € ») n'était qu'en chiffres et en phrase, sans image de l'avancement (jauge de couverture ajoutée, voir « Fait »). Dans le tableau de répartition, l'en-tête « Intérêts sur un an » se coupe en trois lignes à 375 px. Les 48 mentions « à vérifier » restent à confirmer une à une.
-
-
 
 ## À faire
 
@@ -100,6 +94,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-04 : **Guide des types d’investissements : catalogue des familles sur trois colonnes** (au lieu de deux, sur écran large ; deux colonnes en tablette, une sur mobile). Hauteur à 1 280 px : 4 000 → 3 768 px ; à 375 px inchangée (3 781 px). Aucune information factuelle touchée.
 - 2026-11-04 : **Pied de page : fin de la date globale de vérification** (« Chaque fiche indique la date de sa dernière vérification » au lieu de « vérifiées au 10 octobre 2026 »). Hauteurs de page inchangées à une ligne près. Aucune information factuelle ajoutée ni modifiée.
 - 2026-11-04 : **Liste des simulateurs : points de départ** (trois pastilles au-dessus de la liste, masquées pendant le filtre ; test sur l'existence des simulateurs liés). Hauteur à 375 px : 4 026 → 4 255 px. Aucune information factuelle touchée.
 - 2026-11-03 : **Simulateurs : « Pour aller plus loin »** (en bas de chacun des 21 simulateurs, jusqu'à deux guides et deux fiches qui y renvoient, déduits des tables de `relatedSims.ts` donc toujours cohérents ; test : chaque simulateur a au moins une piste). Hauteur à 375 px : retraits 3 788 → 3 947 px, louer ou acheter 4 969 → 5 180 px. Aucune information factuelle touchée.
