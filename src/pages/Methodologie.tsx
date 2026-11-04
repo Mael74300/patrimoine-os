@@ -1,6 +1,19 @@
 import { Link } from 'react-router-dom';
-import { AS_OF, investments } from '../data/investments';
+import { investments } from '../data/investments';
 import { Fold, PageHead } from '../components/ui';
+
+const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+
+/** Date ISO (AAAA-MM-JJ) écrite en toutes lettres : « 4 novembre 2026 ». */
+export function dateEnClair(iso: string): string {
+  const [a, m, j] = iso.split('-').map(Number);
+  return `${j === 1 ? '1er' : j} ${MOIS[m - 1]} ${a}`;
+}
+
+/** Date de vérification la plus récente parmi toutes les fiches. */
+export function derniereVerification(): string {
+  return investments.map((i) => i.review.verifiedOn).sort().at(-1)!;
+}
 
 export const FORMULAS: [string, string[]][] = [
   ['Conventions générales', [
@@ -165,8 +178,8 @@ export default function Methodologie() {
       <p>
         Les informations de référence proviennent en priorité de sources officielles : AMF, Banque de France, ACPR, INSEE, Service-Public.fr,
         impots.gouv.fr et textes publiés au Journal officiel. Chaque fiche conserve ses sources, la date de vérification, la date à laquelle la fiscalité
-        était considérée comme valable, les données chiffrées utilisées, les hypothèses et une date de prochaine révision. Dernière vérification
-        générale : {AS_OF}. À ce jour, {flagged} fiche{flagged > 1 ? 's comportent' : ' comporte'} au moins un élément signalé « à vérifier ».
+        était considérée comme valable, les données chiffrées utilisées, les hypothèses et une date de prochaine révision. Chaque fiche affiche sa propre date de
+        vérification (la plus récente : {dateEnClair(derniereVerification())}). À ce jour, {flagged} fiche{flagged > 1 ? 's comportent' : ' comporte'} au moins un élément signalé « à vérifier ».
       </p>
 
       <h2>Contrôles automatiques, décision humaine</h2>
