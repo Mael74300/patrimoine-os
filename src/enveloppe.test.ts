@@ -19,4 +19,9 @@ describe('schéma « placement et enveloppe »', () => {
     expect(svg).toContain('role="img"');
     expect(svg.length).toBeLessThan(15000);
   });
+  it('le guide « Choisir son enveloppe » a la même section d’ouverture, donc le même schéma est exact', () => {
+    const g = guideBySlug['choisir-son-enveloppe'];
+    expect(g.sections.some((s) => s.heading.startsWith('Placement et enveloppe'))).toBe(true);
+    expect(g.sections[0].body.join(' ')).toContain('l’enveloppe détermine la fiscalité, la disponibilité et la transmission');
+  });
 });

@@ -154,7 +154,7 @@ export function GuidePage() {
             {g.slug === 'combien-epargne-de-precaution' && s.heading.startsWith('Aucune règle') && <SchemaPrecaution />}
             {g.slug === 'comparer-les-frais' && s.heading.startsWith('L’effet') && <SchemaFrais />}
             {g.slug === 'patrimoine-net' && s.heading === 'La définition' && <SchemaPatrimoineNet />}
-            {g.slug === 'types-investissements' && s.heading.startsWith('Placement et enveloppe') && <SchemaEnveloppe />}
+            {(g.slug === 'types-investissements' || g.slug === 'choisir-son-enveloppe') && s.heading.startsWith('Placement et enveloppe') && <SchemaEnveloppe />}
             {g.slug === 'fonctionnement-pea' && s.heading === 'Retraits et fiscalité' && <SchemaPea />}
             {g.slug === 'livret-a-calcul-interets-quinzaines' && s.heading === 'Et un retrait ?' && <SchemaQuinzaines />}
             {g.slug === 'rentabilite-locative' && s.heading === 'Le rendement net de charges' && <SchemaRendement />}
