@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { categories, categoryById } from '../data/categories';
 import { investments } from '../data/investments';
 import { norm } from '../lib/search';
+import { FamilyIcon } from '../components/Illustrations';
 import { Dots, MetersLegend, MobileFold, PageHead } from '../components/ui';
 
 export default function Encyclopedia() {
@@ -111,6 +112,7 @@ export default function Encyclopedia() {
       {groups.map((g) => (
         <section key={g.cat.id} className="inv-group" aria-labelledby={`fam-${g.cat.id}`}>
           <h2 id={`fam-${g.cat.id}`} className="inv-group-title">
+            <FamilyIcon id={g.cat.id} size={30} />
             {g.cat.name} <span>{g.items.length}</span>
           </h2>
           {unfiltered && g.items.length > 1 ? <MobileFold quietOnDesktop label={`Voir les ${g.items.length} fiches`} hint={g.items.map((i) => i.name).join(' · ')}>{rows(g.items)}</MobileFold> : rows(g.items)}
