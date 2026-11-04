@@ -54,6 +54,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-04 (audit, fiches Livret A et SCPI à 375 et 1 280 px ; visiteur épargnant) : aucune erreur de console ni débordement. Le pied de page affichait partout « Données réglementaires vérifiées au 10 octobre 2026 », date globale fausse pour les fiches revérifiées depuis et trompeuse pour celles encore « à vérifier » : remplacé par un renvoi vers la date propre à chaque fiche (voir « Fait »). Essai abandonné : aligner en haut les cartes « Frais » et « Fiscalité » laissait des cartes dépareillées, pire que les cartes de même hauteur.
+
 - 2026-11-04 (audit, accueil, guide rentabilité locative, fiche LEP, liste des simulateurs à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; accueil, guide et schémas lisibles à 375 px. La liste des 21 simulateurs, à plat, ne disait pas par lequel commencer : trois pastilles « Partez de votre situation » ajoutées (précaution, objectif d'épargne, emprunt ; voir « Fait »). Aucune information factuelle touchée.
 
 - 2026-11-03 (audit, simulateurs louer ou acheter, retraits réguliers, indépendance financière, guides, fiche SCPI, comparateur, accueil à 375 et 1 280 px ; visiteur arrivé par Google sur une page profonde) : aucune erreur de console ni débordement ; pages équilibrées. Les simulateurs étaient des impasses : après le résultat et la FAQ, le visiteur retombait sur le pied de page sans piste de lecture. Bloc « Pour aller plus loin » ajouté (voir « Fait »). Aucune information factuelle touchée. Reste : la date « vérifiées au 10 octobre 2026 » du pied de page est globale (livrets) et ne reflète pas les vérifications fiche par fiche ; à repenser.
@@ -98,6 +100,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-04 : **Pied de page : fin de la date globale de vérification** (« Chaque fiche indique la date de sa dernière vérification » au lieu de « vérifiées au 10 octobre 2026 »). Hauteurs de page inchangées à une ligne près. Aucune information factuelle ajoutée ni modifiée.
 - 2026-11-04 : **Liste des simulateurs : points de départ** (trois pastilles au-dessus de la liste, masquées pendant le filtre ; test sur l'existence des simulateurs liés). Hauteur à 375 px : 4 026 → 4 255 px. Aucune information factuelle touchée.
 - 2026-11-03 : **Simulateurs : « Pour aller plus loin »** (en bas de chacun des 21 simulateurs, jusqu'à deux guides et deux fiches qui y renvoient, déduits des tables de `relatedSims.ts` donc toujours cohérents ; test : chaque simulateur a au moins une piste). Hauteur à 375 px : retraits 3 788 → 3 947 px, louer ou acheter 4 969 → 5 180 px. Aucune information factuelle touchée.
 - 2026-11-03 : **Exactitude : prélèvements sociaux du PEA confirmés** (18,6 % sur les gains en 2026, source impots.gouv.fr modifiée le 17/07/2026 et Service-Public F2329 vérifiée le 30 juin 2026 ; plafond de 150 000 € et clôture avant 5 ans confirmés par Service-Public F2385 vérifiée le 22 mai 2026). Fiche PEA et guide du PEA passés de « à vérifier » à vérifiés, libellé du simulateur ETF ou immobilier corrigé, source impots.gouv.fr ajoutée à la fiche.
