@@ -54,6 +54,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-04 (audit, comparateur et page Méthode à 375 et 1 280 px ; visiteur arrivé par Google) : aucune erreur de console ni débordement. La page Méthode annonçait « Dernière vérification générale : 10 octobre 2026 », date périmée (fiches revérifiées depuis) : remplacée par la date de vérification la plus récente des fiches (voir « Fait »).
+
 - 2026-11-04 (audit, fiche Or ; visiteur épargnant) : aucune erreur de console ni débordement à 375 et 1 280 px. La fiche Or affichait une fiscalité « à vérifier » alors que le taux de 11,5 % est confirmable sur le BOFiP : vérifiée (voir « Fait »). Restent des mentions « à vérifier » (immobilier physique, capital-investissement, entrepreneuriat).
 
 - 2026-11-04 (audit, 21 simulateurs à 375 px, mesure des tableaux plus larges que l’écran ; visiteur emprunteur) : aucune erreur de console ni débordement de page. Les tableaux de comparaison à 5 colonnes (durées de crédit, effet des frais) étaient plus larges que l’écran (409 et 415 px pour 341 px) : cartes étiquetées sous 700 px (voir « Fait »). Restent à défilement horizontal, car longs : tableaux annuels du crédit (5 col.), de l’immobilier (10), du patrimoine (6) et de l’entreprise (12) ; le budget (344 px pour 341) déborde de 3 px.
@@ -71,10 +73,6 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-04 (audit, fiche LMNP à 375 et 1 280 px ; visiteur futur acheteur) : aucune erreur de console ni débordement. La fiche « Location meublée (LMNP) » affichait une fiscalité « à vérifier » avec une rumeur de taux (18,6 %) tirée d’une question parlementaire : seuils micro-BIC 2026, seuil de 23 000 € et réintégration des amortissements confirmés sur sources officielles, rumeur retirée (voir « Fait »). Reste : 44 mentions « à vérifier » (taux de prélèvements sociaux des loyers meublés, plafonds de la micro-entreprise : Service-Public entreprendre injoignable depuis le bac à sable).
 
 - 2026-11-04 (audit, guide « Par où commencer », guide « Tous les types d’investissements », simulateur de retraits réguliers, budget, comparateur, accueil à 375 et 1 280 px ; visiteurs débutant et arrivé par Google) : aucune erreur de console ni débordement ; pages équilibrées. Le catalogue des familles du guide « Tous les types d’investissements » s’étirait en deux colonnes à 1 280 px (cartes aux hauteurs inégales, guide à 4 000 px) : passé à trois colonnes (voir « Fait »). Aucune information factuelle touchée.
-
-- 2026-11-04 (audit, fiches Livret A et SCPI à 375 et 1 280 px ; visiteur épargnant) : aucune erreur de console ni débordement. Le pied de page affichait partout « Données réglementaires vérifiées au 10 octobre 2026 », date globale fausse pour les fiches revérifiées depuis et trompeuse pour celles encore « à vérifier » : remplacé par un renvoi vers la date propre à chaque fiche (voir « Fait »). Essai abandonné : aligner en haut les cartes « Frais » et « Fiscalité » laissait des cartes dépareillées, pire que les cartes de même hauteur.
-
-- 2026-11-04 (audit, accueil, guide rentabilité locative, fiche LEP, liste des simulateurs à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; accueil, guide et schémas lisibles à 375 px. La liste des 21 simulateurs, à plat, ne disait pas par lequel commencer : trois pastilles « Partez de votre situation » ajoutées (précaution, objectif d'épargne, emprunt ; voir « Fait »). Aucune information factuelle touchée.
 
 ## À faire
 
@@ -96,6 +94,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-04 : **Page Méthode : fin de la date globale de vérification** (la phrase « Dernière vérification générale : 10 octobre 2026 » devient « Chaque fiche affiche sa propre date de vérification (la plus récente : …) », calculée depuis les fiches ; test `methodologie.test.ts`). Hauteurs inchangées. Aucune information factuelle ajoutée ni modifiée.
 - 2026-11-04 : **Exactitude : fiche Or vérifiée** (taxe forfaitaire de 11 % + 0,5 % de CRDS = 11,5 % du prix de cession, due même sans gain, pas d’exonération à 5 000 € pour l’or ; source BOFiP BOI-RPPM-PVBMC-20-10, option pour le régime des plus-values conservée sans taux ni abattement non confirmés). Hauteur fiche : 375 px 3 619 → 3 810 px, 1 280 px 2 188 → 2 377 px (texte de fiscalité plus complet).
 - 2026-11-04 : **Tableaux de comparaison lisibles sur mobile : durées de crédit et frais** (réutilise `stack-table` : sous 700 px, une carte étiquetée par durée ou par niveau de frais ; tableau inchangé au-dessus). Hauteurs : comparer-des-credits à 375 px : 3 981 → 4 647 px (1 280 px : 2 249 px, inchangé) ; frais à 375 px : 4 714 → 5 146 px (1 280 px : 2 574 px, inchangé), la page s’allonge un peu car chaque ligne devient une carte mais plus rien n’est hors écran.
 - 2026-11-04 : **Tableau des scénarios du calculateur entreprise lisible sur mobile** (classe réutilisable `stack-table` : sous 700 px chaque scénario est une carte étiquetée, les cinq résultats visibles ; au-dessus de 700 px, tableau inchangé ; légende pour lecteur d’écran). Hauteur de la page à 375 px : 4 917 → 5 445 px (les deux colonnes cachées sont maintenant visibles), 1 280 px inchangée. Aucune information factuelle touchée.
