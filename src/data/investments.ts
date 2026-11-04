@@ -468,7 +468,7 @@ const raw: Omit<Investment, 'review'>[] = [
     cons: ['Risque de perte en capital', 'Retards de remboursement', 'Argent bloqué'],
     timeSkills: 'Modéré : analyse de chaque projet.',
     example: 'Exemple fictif : 20 projets de 100 € à 9 % ; un seul défaut total réduit nettement le rendement global.',
-    sources: [S.amf, S.amfListes],
+    sources: [S.amf, S.amfListes, { label: 'La finance pour tous — Crowdfunding ou finance participative', url: 'https://www.lafinancepourtous.com/placements/placement-alternatif/crowdfunding/', official: true }],
     alternatives: ['obligations', 'private-equity'],
     tags: ['non coté', 'risqué'],
   },

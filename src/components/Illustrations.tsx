@@ -578,6 +578,43 @@ export function SchemaAssuranceVie() {
   );
 }
 
+/** Schéma « Trois façons de participer » : principe qualitatif (aucun chiffre), repris de La finance pour tous (page « Crowdfunding ou Finance participative », mise à jour du 13 décembre 2024). */
+export function SchemaCrowdfunding() {
+  const rows = [
+    { c: 'var(--accent)', soft: 'var(--accent-soft)', nom: 'Don', sous: ['avec ou sans', 'contrepartie'], recoit: ['Vous recevez : une contrepartie', '(un objet, une place…) ou rien'], risque: ['Risque : le projet échoue,', 'la contrepartie n’est pas livrée'] },
+    { c: 'var(--primary)', soft: 'var(--surface-2)', nom: 'Prêt', sous: ['avec intérêts'], recoit: ['Vous recevez : des intérêts', 'si le prêt est remboursé'], risque: ['Risque : l’emprunteur', 'ne rembourse pas (défaut)'] },
+    { c: 'var(--warn)', soft: 'var(--warn-soft)', nom: 'Titres', sous: ['actions ou', 'obligations'], recoit: ['Vous recevez : dividendes ou', 'intérêts, selon le titre'], risque: ['Risque : perte partielle ou totale,', 'titres difficiles à revendre'] },
+  ];
+  const H = 92;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 340" role="img" aria-labelledby="ill-cf-t ill-cf-d" className="ill-svg">
+        <title id="ill-cf-t">Financement participatif : trois façons de participer</title>
+        <desc id="ill-cf-d">Sur une plateforme, on peut financer un projet de trois façons. Le don, avec ou sans contrepartie : le risque est que le projet échoue et que la contrepartie ne soit pas livrée. Le prêt avec intérêts : le risque est le défaut de remboursement. La souscription de titres, actions ou obligations non cotées : les risques sont la perte partielle ou totale du capital et la difficulté à revendre les titres.</desc>
+        <text x={210} y={14} textAnchor="middle" className="ill-sub">Sur une plateforme, trois façons de financer un projet</text>
+        {rows.map((r, i) => {
+          const y = 26 + i * (H + 8);
+          return (
+            <g key={r.nom}>
+              <rect x={1} y={y} width={418} height={H} rx={12} fill="var(--surface)" stroke={r.c} strokeWidth={2} />
+              <rect x={1} y={y} width={104} height={H} rx={12} fill={r.soft} stroke={r.c} strokeWidth={2} />
+              <rect x={90} y={y + 2} width={16} height={H - 4} fill="var(--surface)" />
+              <path d={`M 105 ${y + 2} V ${y + H - 2}`} stroke={r.c} strokeWidth={2} />
+              <text x={53} y={y + 44 - (r.sous.length - 1) * 8} textAnchor="middle" className="ill-step">{r.nom}</text>
+              {r.sous.map((t, k) => <text key={t} x={53} y={y + 62 - (r.sous.length - 1) * 8 + k * 15} textAnchor="middle" className="ill-sub">{t}</text>)}
+              <text x={118} y={y + 24} className="ill-in">{r.recoit[0]}</text>
+              <text x={118} y={y + 40} className="ill-in">{r.recoit[1]}</text>
+              <text x={118} y={y + 62} className="ill-sub">{r.risque[0]}</text>
+              <text x={118} y={y + 78} className="ill-sub">{r.risque[1]}</text>
+            </g>
+          );
+        })}
+        <text x={210} y={332} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
+      </svg>
+    </figure>
+  );
+}
+
 /** Schéma « Comment fonctionne une foncière cotée » : principe qualitatif (aucun chiffre), repris de La finance pour tous (page « Les sociétés foncières »). */
 export function SchemaFonciereCotee() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
