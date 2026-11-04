@@ -54,6 +54,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-04 (audit, accueil et fiche Foncières cotées à 375 et 1 280 px ; visiteur épargnant) : aucune erreur de console ni débordement. La fiche Foncières cotées expliquait le principe en une phrase, sans image, comme l’avait fait la fiche SCPI avant son schéma : schéma de principe ajouté (voir « Fait »). Reste : les fiches Fonds euros, Unités de compte, crowdfunding et private equity n’ont pas de schéma.
+
 - 2026-11-04 (audit, accueil, encyclopédie, entrepreneuriat, guides, comparateur, fiches Fonds euros et Cryptomonnaies à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement ; pages équilibrées. Les fiches Fonds euros et Unités de compte affichaient « Capital : selon le contrat. à vérifier » alors que Service-Public confirme l’absence de minimum légal : vérifié (voir « Fait »). Restent des mentions « à vérifier » sur d’autres fiches.
 - 2026-11-04 (audit, fiche Assurance-vie à 375 et 1 280 px ; visiteur débutant) : aucune erreur de console ni débordement. La distinction fonds en euros / unités de compte, centrale de l’assurance-vie, n’était qu’une phrase : schéma ajouté (voir « Fait »). Reste : les fiches Fonds euros, Unités de compte, Foncières cotées, crowdfunding et private equity n’ont pas de schéma.
 
@@ -70,8 +72,6 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-04 (audit, fiches SCPI et foncières cotées à 375 et 1 280 px ; visiteur épargnant) : aucune erreur de console ni débordement. La fiche SCPI expliquait le fonctionnement en deux phrases de texte, sans image, alors que la notion (qui achète quoi, d’où viennent les revenus) se comprend mieux dessinée : schéma de principe ajouté (voir « Fait »). Reste : les fiches des autres familles (foncières cotées, crowdfunding, private equity) n’ont pas non plus de schéma.
 
 - 2026-11-04 (audit, accueil, entrepreneuriat, fiche SCPI, encyclopédie à 375 et 1 280 px ; visiteur épargnant) : aucune erreur de console ni débordement. L’encyclopédie (27 fiches, 3 624 px) était une liste de texte sans aucun repère visuel, alors que les icônes de famille dessinées existaient sans être affichées : icône ajoutée devant chaque famille (voir « Fait »). Reste : la fiche SCPI n’a aucun schéma (exemple chiffré en simple encadré).
-
-- 2026-11-04 (audit, fiche PER, calculateur de crédit, encyclopédie, liste des guides à 375 et 1 280 px ; visiteur épargnant de 45 ans) : aucune erreur de console ni débordement. La fiche PER restait vague (« plafond indiqué sur l’avis d’imposition », rien sur le plafond ni sur les 70 ans) : plafond de déduction, fin de la déduction après 70 ans depuis 2026, report des plafonds, fiscalité de la sortie et cas de déblocage confirmés sur Service-Public (voir « Fait »). Reste sur cette fiche : frais et capital minimum « à vérifier ». Constat esthétique mineur : les cartes « Frais » et « Fiscalité » de l’« En pratique » sont de hauteur inégale quand l’une est très courte.
 
 
 
@@ -95,6 +95,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-04 : **Illustration : schéma « Comment fonctionne une foncière cotée » sur la fiche Foncières cotées** (investisseurs, actions en Bourse, immeubles loués, loyers qui financent les dividendes ; qualitatif, sans chiffre, source La finance pour tous « Les sociétés foncières » ; test `foncieresCotees.test.ts`). Hauteur de la fiche : 3 592 → 3 889 px à 375 px, 2 162 → 2 562 px à 1 280 px.
 - 2026-11-04 : **Fiches Fonds euros et Unités de compte : capital minimum vérifié** (« Aucun minimum légal pour le premier versement ; chaque assureur fixe le sien », source Service-Public F15274, remplace « Selon le contrat. à vérifier »).
 - 2026-11-04 : **Illustration : schéma « un contrat, deux types de supports » sur la fiche Assurance-vie** (fonds en euros garanti par l’assureur, rendement plus faible ; unités de compte à valeur variable avec risque de perte en capital ; qualitatif, sans chiffre, source Service-Public F15274). Fiche à 375 px : 4 966 px avec le schéma (environ 4 690 sans), 1 280 px : 3 288 px. Aucune erreur de console, aucun débordement.
 - 2026-11-04 : **Page Méthode : fin de la date globale de vérification** (la phrase « Dernière vérification générale : 10 octobre 2026 » devient « Chaque fiche affiche sa propre date de vérification (la plus récente : …) », calculée depuis les fiches ; test `methodologie.test.ts`). Hauteurs inchangées. Aucune information factuelle ajoutée ni modifiée.

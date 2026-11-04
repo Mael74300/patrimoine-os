@@ -578,6 +578,38 @@ export function SchemaAssuranceVie() {
   );
 }
 
+/** Schéma « Comment fonctionne une foncière cotée » : principe qualitatif (aucun chiffre), repris de La finance pour tous (page « Les sociétés foncières »). */
+export function SchemaFonciereCotee() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-fc-t ill-fc-d" className="ill-svg">
+        <title id="ill-fc-t">Comment fonctionne une foncière cotée</title>
+        <desc id="ill-fc-d">Les investisseurs achètent et revendent des actions de la foncière en Bourse, au prix du marché. La foncière possède des immeubles de bureaux et de commerces qu’elle loue. Les loyers lui permettent de verser des dividendes aux actionnaires.</desc>
+        <rect x={0} y={2} width={220} height={58} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={110} y={28} textAnchor="middle" className="ill-step">Les investisseurs</text>
+        <text x={110} y={48} textAnchor="middle" className="ill-sub">achètent des actions en Bourse</text>
+        <path d="M 110 60 V 108 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={126} y={90} textAnchor="start" className="ill-in">revendables en Bourse</text>
+        <rect x={0} y={108} width={220} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={110} y={134} textAnchor="middle" className="ill-step">La foncière cotée</text>
+        <text x={110} y={156} textAnchor="middle" className="ill-sub">société dont le prix varie</text>
+        <path d="M 110 172 V 220 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={126} y={202} textAnchor="start" className="ill-in">possède et loue</text>
+        <rect x={0} y={220} width={220} height={58} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={110} y={246} textAnchor="middle" className="ill-step">Des immeubles loués</text>
+        <text x={110} y={266} textAnchor="middle" className="ill-sub">surtout bureaux et commerces</text>
+        <path d="M 220 249 H 290 V 31 H 228 m 8 -7 l -8 7 l 8 7" {...arrow} />
+        <text x={302} y={118} textAnchor="start" className="ill-in">les loyers</text>
+        <text x={302} y={136} textAnchor="start" className="ill-in">financent les</text>
+        <text x={302} y={154} textAnchor="start" className="ill-in">dividendes versés</text>
+        <text x={302} y={172} textAnchor="start" className="ill-in">aux actionnaires</text>
+        <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
+      </svg>
+    </figure>
+  );
+}
+
 /** Schéma « PEA : avant et après 5 ans » : frise du temps, la règle de retrait change à la cinquième année. Seul chiffre : « 5 ans » ; reprend le texte du guide. */
 export function SchemaPea() {
   return (
