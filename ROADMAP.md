@@ -54,6 +54,8 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-04 (audit, fiche Or ; visiteur épargnant) : aucune erreur de console ni débordement à 375 et 1 280 px. La fiche Or affichait une fiscalité « à vérifier » alors que le taux de 11,5 % est confirmable sur le BOFiP : vérifiée (voir « Fait »). Restent des mentions « à vérifier » (immobilier physique, capital-investissement, entrepreneuriat).
+
 - 2026-11-04 (audit, 21 simulateurs à 375 px, mesure des tableaux plus larges que l’écran ; visiteur emprunteur) : aucune erreur de console ni débordement de page. Les tableaux de comparaison à 5 colonnes (durées de crédit, effet des frais) étaient plus larges que l’écran (409 et 415 px pour 341 px) : cartes étiquetées sous 700 px (voir « Fait »). Restent à défilement horizontal, car longs : tableaux annuels du crédit (5 col.), de l’immobilier (10), du patrimoine (6) et de l’entreprise (12) ; le budget (344 px pour 341) déborde de 3 px.
 
 - 2026-11-04 (audit, calculateur entreprise à 375 px ; visiteur futur entrepreneur) : aucune erreur de console. Le tableau des trois scénarios avait six colonnes dans un cadre à défilement : « Trésorerie la plus basse » et « Valeur estimée » étaient hors écran sans indice visible. Chaque scénario devient une carte à 375 px (voir « Fait »). Reste : les autres tableaux de simulateurs (crédit, immobilier, patrimoine) restent à défilement horizontal à 375 px, à auditer un par un.
@@ -94,6 +96,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-04 : **Exactitude : fiche Or vérifiée** (taxe forfaitaire de 11 % + 0,5 % de CRDS = 11,5 % du prix de cession, due même sans gain, pas d’exonération à 5 000 € pour l’or ; source BOFiP BOI-RPPM-PVBMC-20-10, option pour le régime des plus-values conservée sans taux ni abattement non confirmés). Hauteur fiche : 375 px 3 619 → 3 810 px, 1 280 px 2 188 → 2 377 px (texte de fiscalité plus complet).
 - 2026-11-04 : **Tableaux de comparaison lisibles sur mobile : durées de crédit et frais** (réutilise `stack-table` : sous 700 px, une carte étiquetée par durée ou par niveau de frais ; tableau inchangé au-dessus). Hauteurs : comparer-des-credits à 375 px : 3 981 → 4 647 px (1 280 px : 2 249 px, inchangé) ; frais à 375 px : 4 714 → 5 146 px (1 280 px : 2 574 px, inchangé), la page s’allonge un peu car chaque ligne devient une carte mais plus rien n’est hors écran.
 - 2026-11-04 : **Tableau des scénarios du calculateur entreprise lisible sur mobile** (classe réutilisable `stack-table` : sous 700 px chaque scénario est une carte étiquetée, les cinq résultats visibles ; au-dessus de 700 px, tableau inchangé ; légende pour lecteur d’écran). Hauteur de la page à 375 px : 4 917 → 5 445 px (les deux colonnes cachées sont maintenant visibles), 1 280 px inchangée. Aucune information factuelle touchée.
 - 2026-11-04 : **Illustrations maison, étape 19 : schéma « Comment fonctionne une SCPI »** (épargnants → SCPI gérée par une société de gestion → immeubles loués, loyers moins frais reviennent aux épargnants ; schéma de principe sans chiffre, test `src/scpi.test.ts`, principe confirmé sur La finance pour tous). Hauteur fiche : 375 px 4 095 → 4 392 px, 1 280 px 2 446 → 2 846 px. Aucune information factuelle ajoutée ni modifiée.
