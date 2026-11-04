@@ -692,3 +692,7 @@ h2.gloss-letter::before { content: none; }
 .sim-next a::after { content: " →"; }
 .sim-next-kind { flex: none; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-3); }
 @media (min-width: 701px) { .sim-next ul { grid-template-columns: 1fr 1fr; } }
+
+/* Encyclopédie : icône décorative devant le nom de chaque famille */
+.inv-group-title .family-icon { flex: none; width: 30px; height: 30px; margin: -2px 0; }
+.inv-group-title { padding-left: 10px; }

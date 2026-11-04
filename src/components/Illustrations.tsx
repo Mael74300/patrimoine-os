@@ -305,7 +305,7 @@ export function SituationIcon({ name }: { name: SituationIconName }) {
 }
 
 /** Icônes décoratives des familles d'investissement : même grille 48 × 48 et même trait que `SituationIcon`. */
-export function FamilyIcon({ id }: { id: string }) {
+export function FamilyIcon({ id, size = 40 }: { id: string; size?: number }) {
   const line = { fill: 'none', stroke: 'var(--primary)', strokeWidth: 2.5, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   const soft = { fill: 'var(--accent-soft)', stroke: 'var(--accent)', strokeWidth: 2.5, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   let shape: JSX.Element;
@@ -370,7 +370,7 @@ export function FamilyIcon({ id }: { id: string }) {
     default: // étoile discrète
       shape = <path d="M24 7l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z" {...soft} />;
   }
-  return <svg viewBox="0 0 48 48" width={40} height={40} aria-hidden="true" focusable="false" className="family-icon">{shape}</svg>;
+  return <svg viewBox="0 0 48 48" width={size} height={size} aria-hidden="true" focusable="false" className="family-icon">{shape}</svg>;
 }
 
 /** Icônes décoratives des thèmes de simulateurs : même trait et mêmes couleurs que `FamilyIcon`, grille 48 × 48. */
