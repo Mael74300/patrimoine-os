@@ -48,6 +48,13 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
   it('Crédit : 200 000 € à 3,6 % sur 20 ans → ≈ 80 850 € d’intérêts', () => {
     expect(loanPayment(200000, 0.036, 20) * 240 - 200000).toBeCloseTo(80850, -2);
   });
+  it('Crédit immobilier : fiche renvoie à l’assurance emprunteur (Service-Public F1671)', () => {
+    const f = investmentBySlug['credit-immobilier'];
+    expect(f.sources.some((x) => x.url.endsWith('/F1671') && x.official)).toBe(true);
+    const txt = f.howToInvest.join(' ').replace(/\u00a0/g, ' ');
+    expect(txt).toContain('200 000 €');
+    expect(txt).toContain('60 ans');
+  });
   it('Objets d’art : 8 000 € revendus, taxe forfaitaire 6 % + 0,5 % de CRDS → 520 €', () => {
     expect(8000 * (0.06 + 0.005)).toBeCloseTo(520, 6);
     expect(investmentBySlug['objets-d-art-collection'].example.replace(/\u00a0/g, ' ')).toContain('520 €');
