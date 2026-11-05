@@ -54,11 +54,11 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
-- 2026-11-04 (audit, fiches ETF, PER, Crédit immobilier, Livret A et glossaire à 375 px ; visiteur épargnant) : aucune erreur de console ni débordement. La fiche ETF actions diversifiés, très visitée, affichait « souvent inférieurs à 0,5 % » et « quelques dizaines d’euros » avec le badge « à vérifier » : frais confirmés par l’AMF (0,33 % en 2025), mention du prix d’une part retirée faute de source (voir « Fait »).
+- 2026-11-05 (audit à 375 px, tous les simulateurs, visiteurs acheteur et épargnant) : aucune erreur de console ni débordement de page. Seuls quatre tableaux annuels (crédit, patrimoine, immobilier, entreprise) défilent horizontalement, et la colonne « Année » sortait de l'écran : corrigé (colonne figée, voir « Fait »).
 
-- 2026-11-04 (limite d’exécution) : economie.gouv.fr, notaires.fr, entreprendre.service-public.gouv.fr et urssaf.fr sont inaccessibles depuis le bac à sable (403 ou refus du proxy) ; la page Service-Public F17701 (frais de notaire) donne le barème des émoluments mais pas la fourchette de 7 à 8 %. Restent « à vérifier » : frais d’acquisition immobiliers 7 à 8 %, plafonds micro-entreprise (fiche Entrepreneuriat), réductions IR-PME du capital-investissement, frais et capital du financement participatif ; ne rien changer sans source.
+- 2026-11-04 (limite d'exécution) : economie.gouv.fr, notaires.fr, entreprendre.service-public.gouv.fr et urssaf.fr sont inaccessibles depuis le bac à sable (403 ou refus du proxy) ; restent « à vérifier » : frais d'acquisition immobiliers 7 à 8 %, plafonds micro-entreprise (fiche Entrepreneuriat), réductions IR-PME du capital-investissement, frais et capital du financement participatif ; ne rien changer sans source.
 
-- 2026-11-04 (audits précédents du jour : accueil, guides, simulateurs, encyclopédie, comparateur, Méthode) : pas d’erreur de console, pas de débordement ; schémas ajoutés sur les fiches SCPI, Assurance-vie, Foncières cotées et le guide « Choisir son enveloppe ». Restent sans schéma : private equity (Fonds euros et Unités de compte sont couverts par le schéma de l’Assurance-vie ; crowdfunding fait le 2026-11-04) ; restent à défilement horizontal les tableaux annuels du crédit, de l’immobilier, du patrimoine et de l’entreprise.
+- 2026-11-05 : restent sans schéma : private equity (les autres fiches de familles en ont un ou sont couvertes par un schéma voisin).
 
 
 ## À faire
@@ -81,6 +81,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-05 : **Tableaux annuels sur mobile : première colonne figée** (crédit, patrimoine, immobilier, entreprise et autres tableaux qui défilent : l'année ou le libellé reste visible quand on fait défiler vers la droite sous 700 px ; CSS seul, aucun chiffre modifié) (#232).
 - 2026-11-04 : **Illustrations maison, étape 20 : schéma « Trois façons de participer » sur la fiche Financement participatif** (don, prêt, titres : ce que l’on reçoit et risque principal de chacun ; principe sans chiffre, confirmé sur La finance pour tous, page mise à jour le 13 décembre 2024 ; source ajoutée à la fiche). Hauteur fiche : 375 px 3 898 → 4 202 px, 1 280 px +~300 px. Aucune information factuelle chiffrée ajoutée ni modifiée (PR à venir).
 - 2026-11-04 : **Exactitude : fiche Capital-investissement corrigée** (réduction d’impôt FCPI supprimée pour les souscriptions depuis le 21 février 2026 sauf FCPI investis en jeunes entreprises innovantes ; FIP supprimée depuis le 16 février 2025 sauf FIP Corse/outre-mer à 30 % ; source BOFiP BOI-IR-RICI-100 ; l’« avantage fiscal possible » retiré des points forts). Hauteur fiche : 375 px 3 629 → 3 804 px, 1 280 px 2 196 → 2 345 px (texte fiscal complété). Restent « à vérifier » : plafonds de la micro-entreprise (203 100 € / 83 600 € annoncés mais page officielle consultée affichant encore 188 700 € / 77 700 €), frais d’acquisition immobiliers.
 - 2026-11-04 : **Simulateur Rembourser ou investir : avertissement d’ouverture raccourci et simplifié** (phrase clé en gras, jargon réduit, un seul lien ; mêmes chiffres, 31,4 %). Hauteur à 375 px : 4 540 → 4 470 px, 1 280 px inchangé. Aucune information factuelle ajoutée ni modifiée.

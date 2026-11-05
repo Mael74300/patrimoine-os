@@ -173,6 +173,14 @@ th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--li
 th { background: var(--surface-2); font-weight: 600; color: var(--ink-2); }
 td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
 tr:last-child td { border-bottom: 0; }
+/* Tableaux qui défilent sur mobile : la première colonne (année, libellé) reste visible pendant le défilement */
+@media (max-width: 700px) {
+  .table-wrap:not(.stack-wrap):not(.cmp-wrap) :is(th, td):first-child {
+    position: sticky; left: 0; z-index: 1; background: var(--surface);
+    box-shadow: 1px 0 0 var(--line);
+  }
+  .table-wrap:not(.stack-wrap):not(.cmp-wrap) thead th:first-child { background: var(--surface-2); z-index: 2; }
+}
 @media (max-width: 520px) {
   th, td { padding: 8px 8px; }
   table { font-size: 0.86rem; }
