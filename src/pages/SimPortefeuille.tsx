@@ -35,7 +35,7 @@ export default function SimPortefeuille() {
     <>
       <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: 'Portefeuille' }]} />
       <PageHead eyebrow="Calculateur" title="Calculateur de portefeuille financier">
-        Saisissez vos lignes : le calculateur pondère rendements supposés, frais et risque, puis indique les mouvements pour revenir à votre allocation cible.
+        Saisissez ce que vous détenez : le calculateur en déduit le rendement moyen, les frais et le risque, puis indique quoi acheter ou vendre pour retrouver la répartition que vous visez (votre « allocation cible », par exemple 60 % / 40 %).
       </PageHead>
 
       <div className="kpis">
@@ -93,6 +93,9 @@ export default function SimPortefeuille() {
         </button>
         <button className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
       </div>
+      <p className="small muted" style={{ marginTop: 12 }}>
+        <strong>Cible (%)</strong> : la part que vous voulez donner à ce support (le total doit faire 100 %). <strong>Rééquilibrage</strong> : en vert, le montant à ajouter pour atteindre la cible ; en rouge, le montant à retirer.
+      </p>
       {Math.abs(targetTotal - 1) > 0.001 && (
         <p className="notice small" style={{ marginTop: 12 }}>
           Vos allocations cibles totalisent {fmtPct(targetTotal)} au lieu de 100 % : le rééquilibrage affiché n'est pas cohérent.
