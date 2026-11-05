@@ -5,7 +5,7 @@
  */
 export type Livret = { id: 'lep' | 'livretA' | 'ldds'; name: string; rate: number; cap: number; slug: string; source: { label: string; url: string } };
 
-export const LIVRETS_AS_OF = '10 octobre 2026';
+export const LIVRETS_AS_OF = '5 novembre 2026';
 export const LIVRETS_PERIOD = 'du 1er août 2026 au 31 janvier 2027';
 
 /** Ordre de remplissage : du mieux rémunéré au moins rémunéré (LEP réservé aux foyers éligibles). */

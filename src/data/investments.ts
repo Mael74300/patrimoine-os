@@ -51,7 +51,7 @@ const raw: Omit<Investment, 'review'>[] = [
     horizonYears: 0,
     liquidity: 5, risk: 1, effort: 1,
     fees: { text: "Aucuns frais d'ouverture ni de tenue de compte réglementaires.", verified: true, asOf: AS_OF },
-    tax: { text: "Taux de 1,70 % depuis le 1er août 2026 (arrêté du 28 juillet 2026), pour la période jusqu'à fin janvier 2027. Plafonds : 22 950 € (Livret A), 12 000 € (LDDS). Intérêts exonérés d'impôt sur le revenu et de prélèvements sociaux.", verified: true, asOf: AS_OF },
+    tax: { text: "Taux de 1,70 % depuis le 1er août 2026 (arrêté du 28 juillet 2026), pour la période jusqu'à fin janvier 2027. Plafonds : 22 950 € (Livret A), 12 000 € (LDDS). Intérêts exonérés d'impôt sur le revenu et de prélèvements sociaux.", verified: true, asOf: '5 novembre 2026' },
     pros: ['Capital garanti par l’État', 'Disponible immédiatement', 'Aucune fiscalité'],
     cons: ['Rendement souvent proche ou inférieur à l’inflation', 'Plafonds limités'],
     timeSkills: 'Quelques minutes pour l’ouvrir. Aucune compétence requise.',
@@ -668,7 +668,7 @@ function defaultNextReview(category: string): string {
 }
 
 const REVIEW: Record<string, Partial<Review>> = {
-  'livret-a': { verifiedOn: '2026-10-28', taxValidAsOf: '2026-10-28', data: ['Taux 1,70 % du 1er août 2026 au 31 janvier 2027 (arrêté du 28 juillet 2026)', 'Plafonds 22 950 € (Livret A) et 12 000 € (LDDS)'] },
+  'livret-a': { verifiedOn: '2026-10-28', taxValidAsOf: '2026-11-05', data: ['Taux 1,70 % du 1er août 2026 au 31 janvier 2027 (arrêté du 28 juillet 2026)', 'Plafonds 22 950 € (Livret A) et 12 000 € (LDDS)'] },
   lep: { verifiedOn: '2026-11-04', taxValidAsOf: '2026-11-04', data: ['Taux 2,50 % du 1er août 2026 au 31 janvier 2027', 'Plafond 10 000 €'] },
   'compte-a-terme': { data: ['PFU 31,4 % sur les revenus 2026', 'Garantie des dépôts 100 000 € par établissement et par déposant'], assumptions: ['Taux brut de 3 % choisi pour l’exemple'] },
   pel: { verifiedOn: '2026-11-05', taxValidAsOf: '2026-11-05', data: ['Taux 2,00 % pour les PEL ouverts à partir du 1er janvier 2026', 'Plafond de versements 61 200 €', 'Versement initial minimum 225 €, versements d’au moins 540 € par an', 'Durée de 4 à 10 ans', 'Pas de prime d’État pour les PEL ouverts depuis 2018'], assumptions: ['Taux de 2,00 % choisi pour l’exemple, intérêts sur une seule année'] },
