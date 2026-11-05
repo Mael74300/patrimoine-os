@@ -23,6 +23,6 @@ describe('guide « choisir son enveloppe » : cartes des enveloppes', () => {
   });
   it('le rendu contient chaque chiffre du texte', () => {
     const html = renderToStaticMarkup(createElement(MemoryRouter, null, createElement(EnvelopeCards))).replace(/\u00a0/g, ' ');
-    for (const k of ['150 000 €', '5 ans', '8 ans', '31,4 % en 2026']) expect(html).toContain(k);
+    for (const k of ['150 000 €', '5 ans', '8 ans', '4 600 €', '9 200 €', '31,4 % en 2026', '12,8 %', '18,6 %']) expect(html).toContain(k);
   });
 });

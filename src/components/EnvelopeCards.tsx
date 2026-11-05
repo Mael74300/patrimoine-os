@@ -7,22 +7,24 @@ export type EnvelopeCard = { name: string; to: string; paragraph: number; rows: 
 /** Les quatre enveloppes de la section « Les grandes différences » : chaque extrait est repris du paragraphe correspondant (testé). */
 export const ENVELOPE_CARDS: EnvelopeCard[] = [
   { name: 'PEA', to: '/encyclopedie/pea', paragraph: 0, rows: [
-    { label: 'Placements', text: 'actions européennes' },
-    { label: 'Plafond', text: 'plafond de 150 000 €' },
-    { label: 'Fiscalité', text: 'exonération d’impôt sur le revenu après 5 ans (prélèvements sociaux dus)' },
+    { label: 'Plafond', text: 'plafond de 150 000 €' },
+    { label: 'Disponibilité', text: 'un retrait avant 5 ans entraîne en principe la clôture du plan' },
+    { label: 'Fiscalité', text: 'après 5 ans, gains exonérés d’impôt sur le revenu (prélèvements sociaux dus)' },
   ] },
   { name: 'Assurance-vie', to: '/encyclopedie/assurance-vie', paragraph: 1, rows: [
-    { label: 'Placements', text: 'supports variés' },
-    { label: 'Fiscalité', text: 'fiscalité allégée après 8 ans' },
-    { label: 'Transmission', text: 'avantages successoraux' },
+    { label: 'Plafond', text: 'aucun plafond de versement' },
+    { label: 'Disponibilité', text: 'rachat possible, les gains retirés étant imposables' },
+    { label: 'Fiscalité', text: 'après 8 ans, abattement annuel de 4 600 € (9 200 € pour un couple) sur les gains' },
   ] },
   { name: 'PER', to: '/encyclopedie/per', paragraph: 2, rows: [
-    { label: 'Fiscalité', text: 'versements déductibles' },
-    { label: 'Disponibilité', text: 'argent bloqué jusqu’à la retraite, sauf exceptions' },
+    { label: 'Plafond', text: 'déduction limitée par un plafond personnel' },
+    { label: 'Disponibilité', text: 'épargne en principe bloquée jusqu’à la retraite, sauf cas de déblocage anticipé' },
+    { label: 'Fiscalité', text: 'versements déductibles du revenu imposable avant 70 ans' },
   ] },
   { name: 'Compte-titres', to: '/encyclopedie/compte-titres', paragraph: 3, rows: [
-    { label: 'Plafond', text: 'aucune limite' },
-    { label: 'Fiscalité', text: 'fiscalité standard (PFU de 31,4 % en 2026)' },
+    { label: 'Plafond', text: 'aucune limite de versement' },
+    { label: 'Disponibilité', text: 'pas de blocage de l’argent (à vérifier)' },
+    { label: 'Fiscalité', text: 'PFU de 31,4 % en 2026 (12,8 % d’impôt et 18,6 % de prélèvements sociaux)' },
   ] },
 ];
 
