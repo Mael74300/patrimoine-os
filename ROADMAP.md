@@ -54,6 +54,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-05 (audit simulateurs, retraits réguliers et indépendance financière, 375 et 1 280 px) : pas de défaut visuel ni de débordement ; seul le simulateur « Retraits réguliers » n'avait pas de schéma pour expliquer pourquoi le capital baisse (ajouté, replié, sans chiffre).
 - 2026-11-05 (audit accueil, guides, comparateur, entrepreneuriat, recherche, 375 et 1 280 px) : aucune erreur de console ni débordement ; la recherche était bonne partout sauf « PEL » (plan d'épargne logement) : aucun résultat, alors que c'est un produit très connu. Fiche PEL ajoutée (Service-Public F16140). Restent à couvrir si besoin : CEL, PEA-PME (sources à confirmer).
 - 2026-11-05 : le glossaire manque encore de « revenu fiscal de référence » (aucune page officielle de définition accessible : impots.gouv.fr renvoie 404 aux adresses essayées ; ne pas l'ajouter sans source). Autres sigles possibles : PEA, PFU, livret A (sources à confirmer).
 - 2026-11-05 : toutes les fiches à enjeu ont maintenant un schéma (PER ajouté le 2026-11-05) ou n'en demandent pas. Restent « à vérifier » : frais et capital minimum de la fiche Obligations, frais du PEL.
@@ -80,6 +81,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-05 : **Illustration : schéma « pourquoi le capital baisse » sur le simulateur Retraits réguliers** (trois trajectoires qualitatives, sans chiffre : gains supérieurs, égaux ou inférieurs aux retraits ; bloc replié, hauteur de page fermée inchangée à 1 280 px et 375 px à une ligne de titre près), test dédié.
 - 2026-11-05 : **Illustration : schéma « PER » sur la fiche** (versement déductible du revenu imposable, avec renonciation possible → épargne bloquée jusqu'à la retraite sauf accident de la vie et achat de la résidence principale → sortie en capital, rente viagère ou les deux, sortie imposée ; aucun chiffre ; source Service-Public F34982 consultée le 2026-11-05 ; test `per.test.ts` ; fiche de 4 813 à 5 140 px à 375 px).
 - 2026-11-05 : **Illustration : schéma « Capital-investissement » sur la fiche** (vous → fonds FCPR, FCPI ou FIP → sociétés non cotées, 50 % minimum pour un FCPR ; aucun rachat pendant la vie du fonds, qui peut atteindre 10 ans, voire plus ; argent récupéré à la revente des titres et à la dissolution ; risque de perte partielle ou totale ; source AMF, page « Capital-investissement : FCPR, FCPI, FIP », consultée le 2026-11-05 ; texte « Fonctionnement » de la fiche aligné ; test dédié).
 - 2026-11-05 : **Glossaire : 4 notions ajoutées (PER, SCPI, assurance-vie, fonds en euros)**, les sigles qui figurent sur l'accueil et dans la recherche sans être expliqués (27 → 31 ; définitions sans chiffre, confirmées sur Service-Public F34982 et F15274 et La finance pour tous ; liens vers fiches vérifiés par les tests).
