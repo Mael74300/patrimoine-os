@@ -647,6 +647,42 @@ export function SchemaFonciereCotee() {
   );
 }
 
+/** Schéma « Obligation : prêter, puis le prix selon les taux » : principe qualitatif (aucun chiffre), repris de La finance pour tous (page « Obligations », « effet balançoire »). */
+export function SchemaObligation() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 340" role="img" aria-labelledby="ill-ob-t ill-ob-d" className="ill-svg">
+        <title id="ill-ob-t">Une obligation : un prêt, et un prix qui varie avec les taux</title>
+        <desc id="ill-ob-d">En achetant une obligation, vous prêtez de l’argent à un État ou à une entreprise, qui vous verse des intérêts (coupons) puis vous rembourse à l’échéance. Si vous revendez avant l’échéance, le prix dépend des taux : quand les taux montent, le prix des obligations déjà émises baisse ; quand les taux baissent, il monte.</desc>
+        <rect x={0} y={2} width={150} height={64} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={75} y={30} textAnchor="middle" className="ill-step">Vous</text>
+        <text x={75} y={50} textAnchor="middle" className="ill-sub">le prêteur</text>
+        <rect x={270} y={2} width={150} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={345} y={30} textAnchor="middle" className="ill-step">L’émetteur</text>
+        <text x={345} y={50} textAnchor="middle" className="ill-sub">État, entreprise</text>
+        <path d="M 156 22 H 262 m -8 -7 l 8 7 l -8 7" {...arrow} />
+        <text x={209} y={14} textAnchor="middle" className="ill-in">vous prêtez</text>
+        <path d="M 264 48 H 158 m 8 -7 l -8 7 l 8 7" {...arrow} />
+        <text x={209} y={72} textAnchor="middle" className="ill-in">intérêts (coupons)</text>
+        <text x={209} y={88} textAnchor="middle" className="ill-in">puis remboursement</text>
+        <line x1={0} y1={112} x2={420} y2={112} stroke="var(--line)" strokeWidth={2} strokeDasharray="4 6" />
+        <text x={210} y={140} textAnchor="middle" className="ill-step">Si vous revendez avant l’échéance</text>
+        <text x={210} y={160} textAnchor="middle" className="ill-sub">le prix suit les taux, comme une balançoire</text>
+        <rect x={0} y={178} width={200} height={110} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={100} y={206} textAnchor="middle" className="ill-step">Les taux montent</text>
+        <path d="M 100 218 V 252 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={100} y={276} textAnchor="middle" className="ill-in">le prix de l’obligation baisse</text>
+        <rect x={220} y={178} width={200} height={110} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={320} y={206} textAnchor="middle" className="ill-step">Les taux baissent</text>
+        <path d="M 320 252 V 218 m -7 8 l 7 -8 l 7 8" {...arrow} />
+        <text x={320} y={276} textAnchor="middle" className="ill-in">le prix de l’obligation monte</text>
+        <text x={210} y={322} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
+      </svg>
+    </figure>
+  );
+}
+
 /** Schéma « PEA : avant et après 5 ans » : frise du temps, la règle de retrait change à la cinquième année. Seul chiffre : « 5 ans » ; reprend le texte du guide. */
 export function SchemaPea() {
   return (

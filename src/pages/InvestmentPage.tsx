@@ -6,7 +6,7 @@ import { investmentBySlug } from '../data/investments';
 import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Dots, Fold, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
-import { SchemaAssuranceVie, SchemaCrowdfunding, SchemaFonciereCotee, SchemaScpi } from '../components/Illustrations';
+import { SchemaAssuranceVie, SchemaCrowdfunding, SchemaFonciereCotee, SchemaObligation, SchemaScpi } from '../components/Illustrations';
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
 
@@ -57,6 +57,7 @@ export default function InvestmentPage() {
           <p>{inv.howItWorks}</p>
           {inv.slug === 'scpi' && <SchemaScpi />}
           {inv.slug === 'foncieres-cotees' && <SchemaFonciereCotee />}
+          {inv.slug === 'obligations' && <SchemaObligation />}
           {inv.slug === 'assurance-vie' && <SchemaAssuranceVie />}
           {inv.slug === 'crowdfunding' && <SchemaCrowdfunding />}
           <h2>Comment investir</h2>
