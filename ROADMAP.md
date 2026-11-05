@@ -54,6 +54,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-05 (audit comparateur, méthodologie, étalement de revenus, budget, fiche Assurance-vie, investir d'un coup ou progressivement, 375 et 1 280 px) : aucune erreur de console ni débordement ; seul défaut : la fiche Assurance-vie, la plus visitée des enveloppes, affichait un minimum « à vérifier » (100 à 1 000 €) alors que les fiches Fonds en euros et Unités de compte disaient, source à l'appui, qu'il n'existe aucun minimum légal ; harmonisé (Service-Public F15274).
 - 2026-11-05 (audit crédit, taux d'endettement, investir à crédit, fiche crédit immobilier, accueil, 375 et 1 280 px) : aucun débordement ni erreur de console ; la fiche « Investir à crédit dans l'immobilier » ne disait rien de l'assurance emprunteur (libre choix, changement à tout moment, questionnaire de santé), question centrale du futur acheteur ; ajouté (Service-Public F1671). Restent « à vérifier » : apport et frais de dossier et de garantie de cette fiche (aucune source officielle accessible).
 - 2026-11-05 (audit portefeuille, entrepreneuriat, accueil, encyclopédie, guides, plan du site, 375 et 1 280 px) : le bouton « × » (retirer une ligne) du simulateur Portefeuille était recouvert par la colonne figée ajoutée en #232 et donc coupé et inutilisable sur mobile ; corrigé. Pas d'autre défaut ni d'erreur de console. L'introduction du simulateur Portefeuille employait « allocation cible » sans l'expliquer : traité (voir « Fait »).
 - 2026-11-05 (audit mobile 375 px, glossaire, guides, accueil) : sur le glossaire, la lettre occupait une colonne à gauche et rétrécissait chaque définition (9 122 px de haut) ; la lettre passe au-dessus, en pleine largeur (8 949 px). Accueil et guides : rien à signaler.
@@ -63,7 +64,6 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-05 : le glossaire manque encore de « revenu fiscal de référence » (aucune page officielle de définition accessible : impots.gouv.fr renvoie 404 aux adresses essayées ; ne pas l'ajouter sans source). Autres sigles possibles : PEA, PFU, livret A (sources à confirmer).
 - 2026-11-05 : toutes les fiches à enjeu ont maintenant un schéma (PER ajouté le 2026-11-05) ou n'en demandent pas. Restent « à vérifier » : frais et capital minimum de la fiche Obligations, frais du PEL.
 - 2026-11-05 (tranché) : pour le PEL ouvert depuis 2018, Service-Public (F16140, vérifiée le 9 octobre 2026) indique le PFU à 30 % au total, soit 17,2 % de prélèvements sociaux : la fiche PEL le dit désormais ; le 18,6 % de 2026 ne s'applique pas au PEL. Coquille de ponctuation corrigée sur la fiche.
-- 2026-11-04 (limite d'exécution) : economie.gouv.fr, notaires.fr, entreprendre.service-public.gouv.fr et urssaf.fr sont inaccessibles depuis le bac à sable (403 ou refus du proxy) ; restent « à vérifier » : frais d'acquisition immobiliers 7 à 8 %, plafonds micro-entreprise (fiche Entrepreneuriat), réductions IR-PME du capital-investissement, frais et capital du financement participatif ; ne rien changer sans source.
 
 ## À faire
 
@@ -85,6 +85,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-05 : **Fiche Assurance-vie : minimum du premier versement vérifié** (« aucun minimum légal pour le premier versement ; chaque assureur fixe le sien », au lieu de « souvent dès 100 € à 1 000 € » non sourcé ; source Service-Public F15274 consultée le 2026-11-05, ajoutée aux sources de la fiche ; test dans `data.test.ts`).
 - 2026-11-05 : **Fiche Investir à crédit dans l'immobilier : assurance emprunteur** (la banque peut l'exiger mais le choix de l'assureur est libre ; changement possible à tout moment après la signature, la banque vérifiant l'équivalence des garanties ; pas de questionnaire de santé pour 200 000 € ou moins par assuré et prêt à rembourser avant 60 ans ; source Service-Public F1671 vérifiée le 20 mai 2025, consultée le 2026-11-05 ; test dans `data.test.ts`).
 - 2026-11-05 : **Simulateur Portefeuille : « allocation cible » expliquée** (introduction réécrite en mots simples avec un exemple fictif 60 % / 40 %, courte note sous le tableau sur les colonnes « Cible » et « Rééquilibrage » ; aucun chiffre ni règle modifié ; page de 4 688 à 4 848 px à 375 px, 2 909 à 2 995 px à 1 280 px).
 - 2026-11-05 : **Simulateur Portefeuille sur mobile : le bouton « × » de chaque ligne redevient visible et cliquable** (la colonne figée des tableaux annuels, #232, s'appliquait aussi à ces cartes et recouvrait le bouton ; exclue pour `line-wrap`, test de garde dans `accessibility.test.ts`). Hauteurs inchangées (4 688 px à 375 px, 2 909 px à 1 280 px). Aucune information factuelle ajoutée ni modifiée.

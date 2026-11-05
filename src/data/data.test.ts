@@ -265,3 +265,13 @@ describe('fiche PEL', () => {
     expect(f.sources.some((x) => x.url.includes('F16140'))).toBe(true);
   });
 });
+
+describe('fiche Assurance-vie : minimum du premier versement', () => {
+  it('même formulation vérifiée que les fiches Fonds en euros et Unités de compte (Service-Public F15274)', async () => {
+    const { investmentBySlug } = await import('./investments');
+    const av = investmentBySlug['assurance-vie'];
+    expect(av.minCapital.verified).toBe(true);
+    expect(av.minCapital.text).toBe(investmentBySlug['fonds-euros'].minCapital.text);
+    expect(av.sources.some((x) => x.url.includes('F15274'))).toBe(true);
+  });
+});
