@@ -23,3 +23,15 @@ describe('schéma « Livret A : le jour de l’opération décide »', () => {
     expect(svg.length).toBeLessThan(15000);
   });
 });
+
+describe('fiche Livret A : règle des quinzaines cohérente avec le guide', () => {
+  it('la fiche et le guide donnent les mêmes dates (16, 1er du mois suivant, 31 décembre)', async () => {
+    const { investmentBySlug } = await import('./data/investments');
+    const f = investmentBySlug['livret-a'].howItWorks;
+    expect(f).toContain("jusqu'au 15 du mois rapporte à partir du 16");
+    expect(f).toContain('à partir du 16 rapporte à partir du 1er du mois suivant');
+    expect(f).toContain('31 décembre');
+    const g = JSON.stringify(guideBySlug['livret-a-calcul-interets-quinzaines']);
+    expect(g).toContain('prise en compte à partir du 16 du même mois'.replace('prise','pris'));
+  });
+});
