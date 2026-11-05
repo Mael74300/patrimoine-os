@@ -501,7 +501,7 @@ const raw: Omit<Investment, 'review'>[] = [
     category: 'private',
     summary: 'Investir dans des entreprises non cotées via des fonds ou en direct.',
     definition: "Prises de participation dans des sociétés non cotées, souvent via des FCPR, FCPI, FIP ou des fonds accessibles en assurance-vie.",
-    howItWorks: 'Les fonds bloquent généralement l’argent 8 à 10 ans. La performance est très dispersée selon les gérants.',
+    howItWorks: 'Les parts d’un fonds ne peuvent pas être rachetées pendant sa vie, qui peut atteindre 10 ans, voire plus : l’argent est bloqué jusqu’à la revente des titres et la dissolution du fonds. La performance est très dispersée selon les gérants.',
     howToInvest: ['Via des fonds agréés par l’AMF, en direct ou dans certains contrats d’assurance-vie ou PER.', 'Lire le document d’informations clés (frais, durée de blocage).'],
     minCapital: { text: 'Variable, souvent plusieurs milliers d’euros.', verified: false },
     horizon: '8 à 10 ans', horizonYears: 8,
