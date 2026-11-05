@@ -747,6 +747,32 @@ export function SchemaLmnp() {
   );
 }
 
+/** Schéma « ETF : un fonds qui suit un indice, acheté en Bourse comme une action » : principe qualitatif (aucun chiffre), repris de l’AMF (communiqué « ETF et risques associés », 14 février 2017, consulté le 2026-11-05) : un fonds indiciel coté vise à répliquer la performance d’un indice de référence, en achetant les titres qui le composent ou par réplication synthétique ; il est négociable en Bourse comme une simple action. */
+export function SchemaEtf() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 300" role="img" aria-labelledby="ill-etf-t ill-etf-d" className="ill-svg">
+        <title id="ill-etf-t">ETF : un fonds qui suit un indice, acheté en Bourse</title>
+        <desc id="ill-etf-d">Un indice de référence mesure l’évolution d’un ensemble d’entreprises. Le fonds ETF cherche à en répliquer la performance, en achetant les titres de l’indice ou par des produits dérivés. Vous achetez des parts du fonds en Bourse, comme une action : vous suivez l’indice, à la hausse comme à la baisse.</desc>
+        <rect x={0} y={2} width={420} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={210} y={33} textAnchor="middle" className="ill-step">Un indice de référence</text>
+        <path d="M 210 52 V 78 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={80} width={420} height={104} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={210} y={106} textAnchor="middle" className="ill-step">Le fonds (ETF)</text>
+        <text x={210} y={134} textAnchor="middle" className="ill-in">Il cherche à répliquer la performance de l’indice</text>
+        <text x={210} y={160} textAnchor="middle" className="ill-sub">en achetant les titres de l’indice</text>
+        <text x={210} y={176} textAnchor="middle" className="ill-sub">ou par des produits dérivés (réplication synthétique)</text>
+        <path d="M 210 184 V 206 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={208} width={420} height={50} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={210} y={229} textAnchor="middle" className="ill-step">Vous : achat de parts en Bourse</text>
+        <text x={210} y={247} textAnchor="middle" className="ill-sub">comme une action : vous suivez l’indice</text>
+        <text x={210} y={290} textAnchor="middle" className="ill-sub">Schéma de principe d’après l’AMF</text>
+      </svg>
+    </figure>
+  );
+}
+
 /** Schéma « Obligation : prêter, puis le prix selon les taux » : principe qualitatif (aucun chiffre), repris de La finance pour tous (page « Obligations », « effet balançoire »). */
 export function SchemaObligation() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
