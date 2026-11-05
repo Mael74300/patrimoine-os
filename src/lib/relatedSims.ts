@@ -7,6 +7,7 @@ export const simsForInvestment: Record<string, string[]> = {
   'livret-a': ['epargne-de-precaution', 'objectif-epargne', 'inflation'],
   lep: ['epargne-de-precaution', 'inflation'],
   'compte-a-terme': ['inflation', 'patrimoine'],
+  pel: ['inflation', 'objectif-epargne'],
   'etf-monde': ['frais', 'portefeuille', 'patrimoine', 'investir-d-un-coup-ou-progressivement', 'rendement-reel-de-mon-placement'],
   'actions-individuelles': ['portefeuille', 'frais'],
   obligations: ['portefeuille', 'inflation'],
