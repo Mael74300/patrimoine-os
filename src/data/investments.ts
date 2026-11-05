@@ -70,11 +70,11 @@ const raw: Omit<Investment, 'review'>[] = [
     definition: "Livret réglementé accessible aux personnes dont le revenu fiscal de référence ne dépasse pas un plafond fixé chaque année.",
     howItWorks: "Même logique que le Livret A, avec une rémunération supérieure. La banque vérifie l'éligibilité chaque année, généralement automatiquement.",
     howToInvest: ["Vérifier son éligibilité avec son dernier avis d'imposition.", 'Ouvrir le livret auprès de sa banque.', "Le remplir en priorité avant le Livret A si l'on est éligible."],
-    minCapital: { text: 'Dès 30 €.', verified: true, asOf: AS_OF },
+    minCapital: { text: 'Dès 30 €.', verified: true, asOf: '5 novembre 2026' },
     horizon: 'Court terme', horizonYears: 0,
     liquidity: 5, risk: 1, effort: 1,
-    fees: { text: 'Aucuns frais.', verified: true, asOf: AS_OF },
-    tax: { text: "Taux maintenu à 2,50 % au 1er août 2026 jusqu'à fin janvier 2027. Plafond de 10 000 €. Intérêts exonérés d'impôt et de prélèvements sociaux. Condition de revenus en métropole (revenu fiscal de référence à ne pas dépasser, barème 2026, révisé chaque année) : 23 028 € pour 1 part, 35 326 € pour 2 parts ; les plafonds sont plus élevés en outre-mer.", verified: true, asOf: AS_OF },
+    fees: { text: 'Aucuns frais.', verified: true, asOf: '5 novembre 2026' },
+    tax: { text: "Taux maintenu à 2,50 % au 1er août 2026 jusqu'à fin janvier 2027. Plafond de 10 000 €. Intérêts exonérés d'impôt et de prélèvements sociaux. Condition de revenus en métropole (revenu fiscal de référence à ne pas dépasser, barème 2026, révisé chaque année) : 23 028 € pour 1 part, 35 326 € pour 2 parts ; les plafonds sont plus élevés en outre-mer.", verified: true, asOf: '5 novembre 2026' },
     pros: ['Meilleur taux réglementé', 'Sans risque ni fiscalité'],
     cons: ['Sous conditions de revenus', 'Plafond de 10 000 €'],
     timeSkills: 'Très faible.',
@@ -671,7 +671,7 @@ function defaultNextReview(category: string): string {
 
 const REVIEW: Record<string, Partial<Review>> = {
   'livret-a': { verifiedOn: '2026-10-28', taxValidAsOf: '2026-11-05', data: ['Taux 1,70 % du 1er août 2026 au 31 janvier 2027 (arrêté du 28 juillet 2026)', 'Plafonds 22 950 € (Livret A) et 12 000 € (LDDS)'] },
-  lep: { verifiedOn: '2026-11-04', taxValidAsOf: '2026-11-04', data: ['Taux 2,50 % du 1er août 2026 au 31 janvier 2027', 'Plafond 10 000 €'] },
+  lep: { verifiedOn: '2026-11-05', taxValidAsOf: '2026-11-05', data: ['Taux 2,50 % du 1er août 2026 au 31 janvier 2027', 'Plafond 10 000 €'] },
   'compte-a-terme': { data: ['PFU 31,4 % sur les revenus 2026', 'Garantie des dépôts 100 000 € par établissement et par déposant'], assumptions: ['Taux brut de 3 % choisi pour l’exemple'] },
   pel: { verifiedOn: '2026-11-05', taxValidAsOf: '2026-11-05', data: ['Taux 2,00 % pour les PEL ouverts à partir du 1er janvier 2026', 'Plafond de versements 61 200 €', 'Versement initial minimum 225 €, versements d’au moins 540 € par an', 'Durée de 4 à 10 ans', 'Pas de prime d’État pour les PEL ouverts depuis 2018'], assumptions: ['Taux de 2,00 % choisi pour l’exemple, intérêts sur une seule année'] },
   'etf-monde': { verifiedOn: '2026-11-04', data: ['Frais annuels moyens des ETF d’actions suivant un indice : 0,33 % en 2025 (0,75 % pour les fonds indiciels non cotés)'], assumptions: ['Rendement de 6 % par an net de frais, hypothèse d’illustration et non prévision', 'Versements en début de mois'] },
