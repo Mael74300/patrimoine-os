@@ -54,14 +54,10 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
-- 2026-11-05 (audit accueil, encyclopédie, fiche Obligations à 375 et 1 280 px) : accueil et listes propres, aucune erreur de console ni débordement. La fiche Obligations, notion difficile (pourquoi le prix baisse quand les taux montent), n'avait aucun schéma : ajouté (voir « Fait »). Restent « à vérifier » sur cette fiche : frais et capital minimum.
-
-- 2026-11-05 (audit à 375 px, tous les simulateurs, visiteurs acheteur et épargnant) : aucune erreur de console ni débordement de page. Seuls quatre tableaux annuels (crédit, patrimoine, immobilier, entreprise) défilent horizontalement, et la colonne « Année » sortait de l'écran : corrigé (colonne figée, voir « Fait »).
-
+- 2026-11-05 (audit glossaire, accueil, simulateurs à 375 et 1 280 px) : aucune erreur de console ni débordement ; le glossaire (page la plus longue sur mobile, 6 387 px) manquait de notions de base pour un débutant : action, dividende, TAEG, taux d'usure ajoutés. Restent à ajouter si besoin : PER, SCPI, fonds en euros, revenu fiscal de référence (sources à confirmer).
+- 2026-11-05 : la fiche Obligations a désormais son schéma ; reste sans schéma : capital-investissement. Restent « à vérifier » sur la fiche Obligations : frais et capital minimum.
+- 2026-11-05 : seuls quatre tableaux annuels défilent horizontalement sur mobile ; colonne « Année » figée (#232).
 - 2026-11-04 (limite d'exécution) : economie.gouv.fr, notaires.fr, entreprendre.service-public.gouv.fr et urssaf.fr sont inaccessibles depuis le bac à sable (403 ou refus du proxy) ; restent « à vérifier » : frais d'acquisition immobiliers 7 à 8 %, plafonds micro-entreprise (fiche Entrepreneuriat), réductions IR-PME du capital-investissement, frais et capital du financement participatif ; ne rien changer sans source.
-
-- 2026-11-05 : restent sans schéma : private equity (les autres fiches de familles en ont un ou sont couvertes par un schéma voisin ; obligations fait le 2026-11-05).
-
 
 ## À faire
 
@@ -83,6 +79,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-05 : **Glossaire : 4 notions de base ajoutées** (action, dividende, TAEG, taux d'usure ; 23 → 27 ; définitions sans chiffre, confirmées sur La finance pour tous ; liens vérifiés par les tests).
 - 2026-11-05 : **Illustration : schéma « Obligation : prêter, puis le prix selon les taux » sur la fiche Obligations** (prêt, intérêts et remboursement ; « effet balançoire » : taux en hausse, prix des obligations déjà émises en baisse, et inversement ; qualitatif, sans chiffre ; source La finance pour tous ajoutée ; test `obligations.test.ts`). Hauteur fiche : 375 px 4 050 → 4 407 px, 1 280 px 2 492 → 2 930 px (PR à venir).
 - 2026-11-05 : **Tableaux annuels sur mobile : première colonne figée** (crédit, patrimoine, immobilier, entreprise et autres tableaux qui défilent : l'année ou le libellé reste visible quand on fait défiler vers la droite sous 700 px ; CSS seul, aucun chiffre modifié) (#232).
 - 2026-11-04 : **Illustrations maison, étape 20 : schéma « Trois façons de participer » sur la fiche Financement participatif** (don, prêt, titres : ce que l’on reçoit et risque principal de chacun ; principe sans chiffre, confirmé sur La finance pour tous, page mise à jour le 13 décembre 2024 ; source ajoutée à la fiche). Hauteur fiche : 375 px 3 898 → 4 202 px, 1 280 px +~300 px. Aucune information factuelle chiffrée ajoutée ni modifiée (PR à venir).
