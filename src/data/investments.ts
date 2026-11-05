@@ -164,7 +164,7 @@ const raw: Omit<Investment, 'review'>[] = [
     cons: ['Sensibles aux variations de taux', 'Risque de défaut des émetteurs'],
     timeSkills: 'Modéré : comprendre la duration et la qualité de crédit.',
     example: "Exemple fictif : un fonds dont la duration est de 5 ans perdrait environ 5 % de valeur si les taux montaient de 1 point.",
-    sources: [S.amf, S.ifp],
+    sources: [S.amf, S.ifp, { label: 'La finance pour tous — Obligations', url: 'https://www.lafinancepourtous.com/pratique/placements/obligation/', official: true }],
     alternatives: ['fonds-euros', 'compte-a-terme'],
     tags: ['revenus', 'taux'],
   },
