@@ -351,7 +351,7 @@ export const guides: Guide[] = [
       {
         heading: 'Où placer cette réserve',
         body: [
-          'La réserve doit rester disponible immédiatement et ne pas fluctuer : les livrets réglementés sont les supports naturels. Plafonds de dépôt : LEP 10 000 € (sous conditions de revenus), Livret A 22 950 € et LDDS 12 000 €. Taux au 10 octobre 2026 : 2,5 % pour le LEP et 1,7 % pour le Livret A et le LDDS, fixés pour la période du 1er août 2026 au 31 janvier 2027.',
+          'La réserve doit rester disponible immédiatement et ne pas fluctuer : les livrets réglementés sont les supports naturels. Plafonds de dépôt : LEP 10 000 € (sous conditions de revenus), Livret A 22 950 € et LDDS 12 000 €. Taux au 5 novembre 2026 : 2,5 % pour le LEP et 1,7 % pour le Livret A et le LDDS, fixés pour la période du 1er août 2026 au 31 janvier 2027.',
           'On remplit en général d’abord le mieux rémunéré (LEP si vous y avez droit), puis le Livret A, puis le LDDS. Ces taux changent à chaque révision : vérifiez-les sur les fiches Livret A et LEP.',
         ],
       },
@@ -423,7 +423,7 @@ export const guides: Guide[] = [
         heading: 'Le calcul de base',
         body: [
           'Sans intérêts, le versement mensuel est simplement l’objectif divisé par le nombre de mois. Exemple fictif : 20 000 € en 5 ans, soit 60 mois, demandent 20 000 / 60 ≈ 333 € par mois.',
-          'Avec un taux de 1,7 % par an (celui du Livret A au 10 octobre 2026), le même objectif demande environ 320 € par mois : les intérêts, avant impôt, apportent environ 820 € sur 5 ans, soit à peine 4 % de l’objectif.',
+          'Avec un taux de 1,7 % par an (celui du Livret A au 5 novembre 2026), le même objectif demande environ 320 € par mois : les intérêts, avant impôt, apportent environ 820 € sur 5 ans, soit à peine 4 % de l’objectif.',
         ],
       },
       {
