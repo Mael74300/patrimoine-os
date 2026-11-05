@@ -54,6 +54,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-05 (audit portefeuille, entrepreneuriat, accueil, encyclopédie, guides, plan du site, 375 et 1 280 px) : le bouton « × » (retirer une ligne) du simulateur Portefeuille était recouvert par la colonne figée ajoutée en #232 et donc coupé et inutilisable sur mobile ; corrigé. Pas d'autre défaut ni d'erreur de console. Piste : l'introduction du simulateur Portefeuille emploie « allocation cible » sans l'expliquer.
 - 2026-11-05 (audit mobile 375 px, glossaire, guides, accueil) : sur le glossaire, la lettre occupait une colonne à gauche et rétrécissait chaque définition (9 122 px de haut) ; la lettre passe au-dessus, en pleine largeur (8 949 px). Accueil et guides : rien à signaler.
 - 2026-11-05 (audit accueil, guides, fiche Livret A, fiche PEL, simulateur Louer ou acheter, 375 et 1 280 px) : aucun débordement ni erreur de console ; seul défaut : la date « vérifié au 10 octobre 2026 » des taux de livrets (simulateurs, guide précaution, fiche Livret A) était plus ancienne que la vérification du 28 octobre de la fiche. Taux Livret A, LDDS (1,7 %) et LEP (2,5 %) reconfirmés sur Service-Public (actualité A15818, F2365, F2368) : dates alignées.
 - 2026-11-05 (audit simulateurs, retraits réguliers et indépendance financière, 375 et 1 280 px) : pas de défaut visuel ni de débordement ; seul le simulateur « Retraits réguliers » n'avait pas de schéma pour expliquer pourquoi le capital baisse (ajouté, replié, sans chiffre).
@@ -83,6 +84,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-05 : **Simulateur Portefeuille sur mobile : le bouton « × » de chaque ligne redevient visible et cliquable** (la colonne figée des tableaux annuels, #232, s'appliquait aussi à ces cartes et recouvrait le bouton ; exclue pour `line-wrap`, test de garde dans `accessibility.test.ts`). Hauteurs inchangées (4 688 px à 375 px, 2 909 px à 1 280 px). Aucune information factuelle ajoutée ni modifiée.
 - 2026-11-05 : **Glossaire sur mobile : lettre au-dessus des définitions** (texte en pleine largeur, page de 9 122 à 8 949 px à 375 px ; aucun changement à 1 280 px).
 - 2026-11-05 : **Exactitude : taux des livrets reconfirmés et datés du 5 novembre 2026** (Livret A et LDDS 1,7 %, LEP 2,5 %, du 1er août 2026 au 31 janvier 2027 ; plafonds 22 950 €, 12 000 € et 10 000 € ; sources Service-Public). Aucun chiffre modifié, seules les dates de vérification affichées (simulateurs précaution et objectif, guide précaution, fiche Livret A).
 - 2026-11-05 : **Glossaire : PEA et Livret A ajoutés** (31 → 33 ; définitions sans chiffre confirmées sur Service-Public F2385 et F2365 ; liens vers fiches vérifiés par les tests). Audit accueil, crédit et endettement à 375 et 1 280 px : aucun défaut visuel ni débordement.
