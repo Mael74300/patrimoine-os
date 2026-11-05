@@ -46,7 +46,7 @@ const raw: Omit<Investment, 'review'>[] = [
     category: 'epargne',
     summary: "Livrets réglementés, sans risque, disponibles à tout moment et non imposés.",
     definition: "Le Livret A et le Livret de développement durable et solidaire (LDDS) sont des comptes d'épargne réglementés dont le taux est fixé par les pouvoirs publics.",
-    howItWorks: "Le taux est révisé deux fois par an (1er février et 1er août) selon une formule fondée sur l'inflation et les taux monétaires. Les intérêts sont calculés par quinzaine et versés en fin d'année.",
+    howItWorks: "Le taux est révisé deux fois par an (1er février et 1er août) selon une formule fondée sur l'inflation et les taux monétaires. Les intérêts sont calculés par quinzaine : un dépôt fait jusqu'au 15 du mois rapporte à partir du 16, un dépôt fait à partir du 16 rapporte à partir du 1er du mois suivant. Les intérêts de l'année s'ajoutent au capital le 31 décembre.",
     howToInvest: ['Ouvrir un livret dans une banque (un seul Livret A et un seul LDDS par personne).', 'Programmer un virement automatique mensuel.', "S'en servir comme épargne de précaution avant tout placement risqué."],
     minCapital: { text: 'Dès 10 € pour le Livret A.', verified: true, asOf: AS_OF },
     horizon: 'Court terme, épargne de précaution',

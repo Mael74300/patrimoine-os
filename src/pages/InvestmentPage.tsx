@@ -9,6 +9,13 @@ import { simBlurb } from '../lib/simThemes';
 import { SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaObligation, SchemaPer, SchemaScpi } from '../components/Illustrations';
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
+import { guideBySlug } from '../data/guides';
+
+/** Guide qui détaille une notion de la fiche (lien « Pour aller plus loin »). */
+const FICHE_GUIDE: Record<string, string> = {
+  'livret-a': 'livret-a-calcul-interets-quinzaines',
+  pea: 'fonctionnement-pea',
+};
 
 export default function InvestmentPage() {
   const { slug = '' } = useParams();
@@ -55,6 +62,12 @@ export default function InvestmentPage() {
           <p>{inv.definition}</p>
           <h2>Fonctionnement</h2>
           <p>{inv.howItWorks}</p>
+          {FICHE_GUIDE[inv.slug] && guideBySlug[FICHE_GUIDE[inv.slug]] && (
+            <p className="small">
+              <strong>Pour aller plus loin :</strong>{' '}
+              <Link to={`/guides/${FICHE_GUIDE[inv.slug]}`}>{guideBySlug[FICHE_GUIDE[inv.slug]].title}</Link>
+            </p>
+          )}
           {inv.slug === 'scpi' && <SchemaScpi />}
           {inv.slug === 'foncieres-cotees' && <SchemaFonciereCotee />}
           {inv.slug === 'obligations' && <SchemaObligation />}
