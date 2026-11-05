@@ -319,14 +319,14 @@ export const guides: Guide[] = [
     title: 'PEA, assurance-vie, PER, compte-titres : choisir son enveloppe',
     summary: 'Ce qui distingue les principales enveloppes et comment les combiner.',
     readingMinutes: 7,
-    updatedOn: '2026-10-10',
+    updatedOn: '2026-11-05',
     sections: [
       { heading: 'Placement et enveloppe', body: ['Le support détermine le risque ; l’enveloppe détermine la fiscalité, la disponibilité et la transmission.'] },
-      { heading: 'Les grandes différences', body: ['PEA : actions européennes, plafond de 150 000 €, exonération d’impôt sur le revenu après 5 ans (prélèvements sociaux dus).', 'Assurance-vie : supports variés, fiscalité allégée après 8 ans, avantages successoraux.', 'PER : versements déductibles mais argent bloqué jusqu’à la retraite, sauf exceptions.', 'Compte-titres : aucune limite, fiscalité standard (PFU de 31,4 % en 2026).'] },
+      { heading: 'Les grandes différences', body: ['PEA : plafond de 150 000 € ; un retrait avant 5 ans entraîne en principe la clôture du plan ; après 5 ans, gains exonérés d’impôt sur le revenu (prélèvements sociaux dus).', 'Assurance-vie : aucun plafond de versement ; rachat possible, les gains retirés étant imposables ; après 8 ans, abattement annuel de 4 600 € (9 200 € pour un couple) sur les gains.', 'PER : déduction limitée par un plafond personnel ; épargne en principe bloquée jusqu’à la retraite, sauf cas de déblocage anticipé ; versements déductibles du revenu imposable avant 70 ans.', 'Compte-titres : aucune limite de versement ; pas de blocage de l’argent (à vérifier) ; PFU de 31,4 % en 2026 (12,8 % d’impôt et 18,6 % de prélèvements sociaux).'] },
       { heading: 'Une combinaison fréquente', body: ['Épargne de précaution sur livrets, actions de long terme en PEA, assurance-vie pour la diversification et la transmission, PER si la tranche marginale d’imposition est élevée. Votre situation peut justifier d’autres choix.'] },
     ],
     related: ['pea', 'assurance-vie', 'per', 'compte-titres'],
-    sources: [SP('PEA', 'F2385'), SP('Assurance-vie', 'F22414'), SP('PER', 'F34982')],
+    sources: [SP('PEA', 'F2385'), SP('Assurance-vie', 'F22414'), SP('Assurance-vie : versements et disponibilité', 'F15274'), SP('PER', 'F34982'), SP('Plus-values sur valeurs mobilières (PFU)', 'F21618')],
   },
   {
     slug: 'combien-epargne-de-precaution',
