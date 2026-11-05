@@ -6,7 +6,7 @@ import { investmentBySlug } from '../data/investments';
 import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Dots, Fold, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
-import { SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaFonciereCotee, SchemaObligation, SchemaScpi } from '../components/Illustrations';
+import { SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaFonciereCotee, SchemaObligation, SchemaPer, SchemaScpi } from '../components/Illustrations';
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
 
@@ -61,6 +61,7 @@ export default function InvestmentPage() {
           {inv.slug === 'assurance-vie' && <SchemaAssuranceVie />}
           {inv.slug === 'crowdfunding' && <SchemaCrowdfunding />}
           {inv.slug === 'private-equity' && <SchemaCapitalInvestissement />}
+          {inv.slug === 'per' && <SchemaPer />}
           <h2>Comment investir</h2>
           <ul>{inv.howToInvest.map((s) => <li key={s}>{s}</li>)}</ul>
 
