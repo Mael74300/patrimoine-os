@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { withdrawal, withdrawalSeries, fmtEur } from '../lib/finance';
 import { withdrawalTakeaway } from '../lib/takeaways';
+import { SchemaRetraits } from '../components/Illustrations';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = { capital: number; monthly: number; ret: number; idx: number; years: number };
@@ -52,6 +53,10 @@ export default function SimRetraits() {
             <Kpi label="Retrait mensuel tenable" value={fmtEur(r.sustainable)} sub="premier retrait maximal jusqu’à l’horizon" />
           </div>
           <Takeaway>{withdrawalTakeaway({ capital: s.capital, monthly: s.monthly, years: s.years, monthsUntilEmpty: r.monthsUntilEmpty, remaining: r.remaining, totalWithdrawn: r.totalWithdrawn, sustainable: r.sustainable })}</Takeaway>
+          <details className="fold">
+            <summary>Comprendre pourquoi le capital baisse (schéma)</summary>
+            <SchemaRetraits />
+          </details>
           <h2>Capital restant année après année</h2>
           <LineChart
             title="Capital restant à la fin de chaque année de retraits"
