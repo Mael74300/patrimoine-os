@@ -6,7 +6,7 @@ Plateforme française et gratuite consacrée à la construction du patrimoine : 
 
 | Rubrique | Détail |
 |---|---|
-| Encyclopédie | 27 fiches générées depuis `src/data/investments.ts`, filtres et recherche. Chaque fiche affiche ses sources, sa date de vérification, la date de validité fiscale, les données utilisées, les hypothèses et la prochaine révision. |
+| Encyclopédie | 28 fiches générées depuis `src/data/investments.ts`, filtres et recherche. Chaque fiche affiche ses sources, sa date de vérification, la date de validité fiscale, les données utilisées, les hypothèses et la prochaine révision. |
 | Simulateur de patrimoine | Capital initial, épargne variable par phases, retraits ponctuels, frais, inflation, fiscalité de sortie, objectif, jusqu'à 3 scénarios comparés |
 | Calculateur immobilier | Mensualité, coût du crédit, rendements, flux avant impôt, fiscalité paramétrable (micro-foncier, réel, micro-BIC, LMNP réel), capital restant dû, patrimoine net, scénario défavorable |
 | Comparateur ETF / immobilier | Même capital, même effort d'épargne annuel, patrimoine net après frais et impôts de sortie ; base de calcul expliquée sur la page |

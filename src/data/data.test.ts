@@ -242,3 +242,19 @@ describe('fiche PER : chiffres identiques dans la fiche et le suivi de vérifica
     }
   });
 });
+
+describe('fiche PEL', () => {
+  it('reprend les chiffres de Service-Public (vérifiés le 2026-11-05) et son exemple fictif est exact', async () => {
+    const { investmentBySlug } = await import('./investments');
+    const f = investmentBySlug.pel;
+    expect(f).toBeDefined();
+    for (const s of ['2,00 %', '61 200 €', '4 ans minimum', '10 ans maximum']) expect(f.tax.text, s).toContain(s);
+    expect(f.minCapital.text).toContain('225 €');
+    expect(f.minCapital.text).toContain('540 €');
+    expect(f.review.data.join(' ')).toContain('61 200 €');
+    expect(10000 * 0.02).toBe(200);
+    expect(f.example).toContain('fictif');
+    expect(f.example).toContain('200 €');
+    expect(f.sources.some((x) => x.url.includes('F16140'))).toBe(true);
+  });
+});

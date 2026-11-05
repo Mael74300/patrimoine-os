@@ -54,9 +54,10 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
-- 2026-11-05 (audit glossaire, accueil, simulateurs à 375 et 1 280 px) : aucune erreur de console ni débordement ; le glossaire (page la plus longue sur mobile, 6 387 px) manquait de notions de base pour un débutant : action, dividende, TAEG, taux d'usure ajoutés. Restent à ajouter si besoin : PER, SCPI, fonds en euros, revenu fiscal de référence (sources à confirmer).
-- 2026-11-05 : la fiche Obligations a désormais son schéma ; reste sans schéma : capital-investissement. Restent « à vérifier » sur la fiche Obligations : frais et capital minimum.
-- 2026-11-05 : seuls quatre tableaux annuels défilent horizontalement sur mobile ; colonne « Année » figée (#232).
+- 2026-11-05 (audit accueil, guides, comparateur, entrepreneuriat, recherche, 375 et 1 280 px) : aucune erreur de console ni débordement ; la recherche était bonne partout sauf « PEL » (plan d'épargne logement) : aucun résultat, alors que c'est un produit très connu. Fiche PEL ajoutée (Service-Public F16140). Restent à couvrir si besoin : CEL, PEA-PME (sources à confirmer).
+- 2026-11-05 : le glossaire manque encore de PER, SCPI, fonds en euros, revenu fiscal de référence (sources à confirmer).
+- 2026-11-05 : reste sans schéma : capital-investissement. Restent « à vérifier » : frais et capital minimum de la fiche Obligations, frais du PEL.
+- 2026-11-05 : la fiche PEL ne donne pas le taux des prélèvements sociaux : la page Service-Public parle de 17,2 % alors que le site retient 18,6 % pour 2026 ; à trancher avec une source qui traite explicitement le PEL.
 - 2026-11-04 (limite d'exécution) : economie.gouv.fr, notaires.fr, entreprendre.service-public.gouv.fr et urssaf.fr sont inaccessibles depuis le bac à sable (403 ou refus du proxy) ; restent « à vérifier » : frais d'acquisition immobiliers 7 à 8 %, plafonds micro-entreprise (fiche Entrepreneuriat), réductions IR-PME du capital-investissement, frais et capital du financement participatif ; ne rien changer sans source.
 
 ## À faire
@@ -79,6 +80,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-05 : **Fiche Plan d'épargne logement (PEL)** (la recherche « PEL » ne renvoyait rien ; taux de 2,00 % pour les PEL ouverts depuis le 1er janvier 2026, plafond 61 200 €, 4 à 10 ans, 225 € à l'ouverture puis 540 € par an, pas de prime d'État depuis 2018 ; source Service-Public F16140 ; test dans `data.test.ts` ; 27 → 28 fiches).
 - 2026-11-05 : **Glossaire : 4 notions de base ajoutées** (action, dividende, TAEG, taux d'usure ; 23 → 27 ; définitions sans chiffre, confirmées sur La finance pour tous ; liens vérifiés par les tests).
 - 2026-11-05 : **Illustration : schéma « Obligation : prêter, puis le prix selon les taux » sur la fiche Obligations** (prêt, intérêts et remboursement ; « effet balançoire » : taux en hausse, prix des obligations déjà émises en baisse, et inversement ; qualitatif, sans chiffre ; source La finance pour tous ajoutée ; test `obligations.test.ts`). Hauteur fiche : 375 px 4 050 → 4 407 px, 1 280 px 2 492 → 2 930 px (PR à venir).
 - 2026-11-05 : **Tableaux annuels sur mobile : première colonne figée** (crédit, patrimoine, immobilier, entreprise et autres tableaux qui défilent : l'année ou le libellé reste visible quand on fait défiler vers la droite sous 700 px ; CSS seul, aucun chiffre modifié) (#232).

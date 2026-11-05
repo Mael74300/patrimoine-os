@@ -5,6 +5,7 @@ export const AS_OF = '10 octobre 2026';
 
 const S = {
   livretA: { label: 'Service-Public.fr — Livret A', url: 'https://www.service-public.fr/particuliers/vosdroits/F2365', official: true },
+  pel: { label: "Service-Public.fr — Plan d'épargne logement (PEL)", url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F16140', official: true },
   lep: { label: "Service-Public.fr — Livret d'épargne populaire", url: 'https://www.service-public.fr/particuliers/vosdroits/F2367', official: true },
   ldds: { label: 'Service-Public.fr — LDDS', url: 'https://www.service-public.fr/particuliers/vosdroits/F2368', official: true },
   pea: { label: "Service-Public.fr — Plan d'épargne en actions", url: 'https://www.service-public.fr/particuliers/vosdroits/F2385', official: true },
@@ -100,6 +101,28 @@ const raw: Omit<Investment, 'review'>[] = [
     sources: [S.impots, S.ifp],
     alternatives: ['livret-a', 'fonds-euros'],
     tags: ['fiscalisé', 'précaution'],
+  },
+
+  {
+    slug: 'pel',
+    name: "Plan d'épargne logement (PEL)",
+    category: 'epargne',
+    summary: "Épargne bloquée au taux fixé à l'ouverture, pensée pour préparer l'achat d'un logement.",
+    definition: "Le plan d'épargne logement (PEL) est un produit d'épargne réglementé : on y verse régulièrement de l'argent, à un taux garanti pour toute la durée du plan. Il sert à préparer le financement d'un logement.",
+    howItWorks: "Le taux est fixé le jour de l'ouverture et ne change plus jusqu'à la fin du plan. Il faut verser chaque année un minimum, et on ne peut retirer l'argent qu'après l'échéance du plan, sinon le plan est clôturé. Les intérêts sont imposés chaque année.",
+    howToInvest: ["Comparer le taux du jour (celui des PEL ouverts en 2026) avec celui du Livret A, qui reste disponible à tout moment.", "Ouvrir le PEL dans une banque qui propose ce produit : un seul PEL par personne.", "Prévoir les versements minimums de chaque année avant de signer."],
+    minCapital: { text: "225 € au moment de l'ouverture, puis au moins 540 € par an (par exemple 45 € par mois).", verified: true, asOf: '5 novembre 2026' },
+    horizon: 'Au moins 4 ans', horizonYears: 4,
+    liquidity: 2, risk: 1, effort: 1,
+    fees: { text: "Variables selon la banque : se renseigner avant d'ouvrir.", verified: false },
+    tax: { text: "Taux de 2,00 % pour les PEL ouverts à partir du 1er janvier 2026, fixé pour toute la durée du plan. Plafond de versements : 61 200 € (le solde peut le dépasser grâce aux intérêts). Durée : 4 ans minimum, 10 ans maximum. Les intérêts sont soumis chaque année au prélèvement forfaitaire unique,, sans prime d'État pour les plans ouverts depuis 2018.", verified: true, asOf: '5 novembre 2026' },
+    pros: ['Taux garanti pour toute la durée du plan', 'Capital garanti, sans risque de perte', 'Peut ouvrir droit à un prêt pour financer un logement'],
+    cons: ["Argent bloqué : retrait avant l'échéance = clôture du plan", 'Versements minimums à respecter chaque année', 'Intérêts imposés, contrairement au Livret A'],
+    timeSkills: 'Quelques minutes pour l’ouvrir, puis un virement programmé.',
+    example: "Exemple fictif : 10 000 € placés un an à 2,00 % rapportent environ 200 € d'intérêts bruts, avant impôt.",
+    sources: [S.pel, S.ifp],
+    alternatives: ['livret-a', 'lep', 'compte-a-terme'],
+    tags: ['sans risque', 'logement', 'fiscalisé'],
   },
 
   // ------------------------------------------------------------------ Actions
@@ -648,6 +671,7 @@ const REVIEW: Record<string, Partial<Review>> = {
   'livret-a': { verifiedOn: '2026-10-28', taxValidAsOf: '2026-10-28', data: ['Taux 1,70 % du 1er août 2026 au 31 janvier 2027 (arrêté du 28 juillet 2026)', 'Plafonds 22 950 € (Livret A) et 12 000 € (LDDS)'] },
   lep: { verifiedOn: '2026-11-04', taxValidAsOf: '2026-11-04', data: ['Taux 2,50 % du 1er août 2026 au 31 janvier 2027', 'Plafond 10 000 €'] },
   'compte-a-terme': { data: ['PFU 31,4 % sur les revenus 2026', 'Garantie des dépôts 100 000 € par établissement et par déposant'], assumptions: ['Taux brut de 3 % choisi pour l’exemple'] },
+  pel: { verifiedOn: '2026-11-05', taxValidAsOf: '2026-11-05', data: ['Taux 2,00 % pour les PEL ouverts à partir du 1er janvier 2026', 'Plafond de versements 61 200 €', 'Versement initial minimum 225 €, versements d’au moins 540 € par an', 'Durée de 4 à 10 ans', 'Pas de prime d’État pour les PEL ouverts depuis 2018'], assumptions: ['Taux de 2,00 % choisi pour l’exemple, intérêts sur une seule année'] },
   'etf-monde': { verifiedOn: '2026-11-04', data: ['Frais annuels moyens des ETF d’actions suivant un indice : 0,33 % en 2025 (0,75 % pour les fonds indiciels non cotés)'], assumptions: ['Rendement de 6 % par an net de frais, hypothèse d’illustration et non prévision', 'Versements en début de mois'] },
   pea: { data: ['Plafond de versements 150 000 €', 'PFU 31,4 % en cas de retrait avant 5 ans'] },
   'compte-titres': { data: ['PFU 31,4 % (12,8 % + 18,6 %) sur les revenus 2026'] },
