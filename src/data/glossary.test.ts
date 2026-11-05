@@ -42,3 +42,13 @@ describe('sigles de l’accueil', () => {
     }
   });
 });
+
+describe('PEA et Livret A', () => {
+  it('sont définis, avec un lien vers leur fiche', () => {
+    for (const [debut, fiche] of [['PEA', 'pea'], ['Livret A', 'livret-a']]) {
+      const t = glossary.find((g) => g.term.startsWith(debut));
+      expect(t, debut).toBeDefined();
+      expect(t!.links.some((l) => l.to === `/encyclopedie/${fiche}`), debut).toBe(true);
+    }
+  });
+});
