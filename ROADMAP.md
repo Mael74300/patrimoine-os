@@ -54,6 +54,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-05 (audit fiche LEP, guide Types d'investissements, fiche Fonds en euros, index des simulateurs, 375 et 1 280 px) : aucune erreur de console ni débordement ; seul défaut : sur les fiches, la carte « Frais », courte, était étirée à la hauteur de la carte « Fiscalité » voisine et laissait un grand cadre vide ; cartes alignées en haut. Dates de la fiche LEP (minimum 30 €, frais nuls, plafond 10 000 €, taux 2,5 %, barème de revenus 2026) alignées sur la vérification du 5 novembre (Service-Public F2367, A15818).
 - 2026-11-05 (audit accueil, guides, encyclopédie, comparateur, simulateurs, recherche, 375 et 1 280 px) : aucune erreur de console ni débordement ; seul défaut : la ligne « frais » de la fiche PEA, produit très visité, restait « à vérifier » (« selon l'établissement ») alors que la réglementation plafonne ces frais ; plafonds sourcés (La finance pour tous) et affichés. Restent 38 rubriques « à vérifier » dans l'encyclopédie, surtout les frais.
 - 2026-11-05 (audit guides Par où commencer, Choisir son enveloppe, Rentabilité locative, fiches Location nue et ETF, simulateurs Objectif d'épargne et Épargne de précaution, 375 et 1 280 px) : aucune erreur de console ni débordement ; seul défaut : les quatre cartes du guide « Choisir son enveloppe » n'avaient pas les mêmes rubriques (impossible de comparer ; la disponibilité manquait pour le PEA, l'assurance-vie et le compte-titres) ; trois rubriques communes ajoutées (plafond, disponibilité, fiscalité), sourcées (Service-Public F2385, F22414, F15274, F34982, F21618). Reste « à vérifier » : disponibilité du compte-titres (aucune source officielle trouvée).
 - 2026-11-05 (audit guide PEA, fiches SCPI et LMNP, simulateurs Rembourser ou investir, ETF ou immobilier, TAEG, 375 et 1 280 px) : aucune erreur de console ni débordement ; seule la fiche LMNP, dont la notion centrale (micro-BIC ou réel, amortissement) est abstraite, n'avait pas de schéma ; ajouté. Restent « à vérifier » : frais et capital minimum de cette fiche.
@@ -63,7 +64,6 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 - 2026-11-05 (audit mobile 375 px, glossaire, guides, accueil) : sur le glossaire, la lettre occupait une colonne à gauche et rétrécissait chaque définition (9 122 px de haut) ; la lettre passe au-dessus, en pleine largeur (8 949 px). Accueil et guides : rien à signaler.
 - 2026-11-05 (audit accueil, guides, fiche Livret A, fiche PEL, simulateur Louer ou acheter, 375 et 1 280 px) : aucun débordement ni erreur de console ; seul défaut : la date « vérifié au 10 octobre 2026 » des taux de livrets (simulateurs, guide précaution, fiche Livret A) était plus ancienne que la vérification du 28 octobre de la fiche. Taux Livret A, LDDS (1,7 %) et LEP (2,5 %) reconfirmés sur Service-Public (actualité A15818, F2365, F2368) : dates alignées.
 - 2026-11-05 (audit simulateurs, retraits réguliers et indépendance financière, 375 et 1 280 px) : pas de défaut visuel ni de débordement ; seul le simulateur « Retraits réguliers » n'avait pas de schéma pour expliquer pourquoi le capital baisse (ajouté, replié, sans chiffre).
-- 2026-11-05 (audit accueil, guides, comparateur, entrepreneuriat, recherche, 375 et 1 280 px) : aucune erreur de console ni débordement ; la recherche était bonne partout sauf « PEL » (plan d'épargne logement) : aucun résultat, alors que c'est un produit très connu. Fiche PEL ajoutée (Service-Public F16140). Restent à couvrir si besoin : CEL, PEA-PME (sources à confirmer).
 
 ## À faire
 
@@ -85,6 +85,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-05 : **Fiches : cartes « Frais » et « Fiscalité » alignées en haut** (fin du grand cadre vide sous la carte courte ; hauteurs de page inchangées) et **fiche LEP : dates de vérification alignées au 5 novembre 2026** (aucun chiffre modifié ; Service-Public F2367 et A15818).
 - 2026-11-05 : fiche PEA, frais plafonnés par la réglementation (ouverture, tenue de compte, transaction, transfert) sourcés et affichés (PR #250).
 
 - 2026-11-05 : **Guide « Choisir son enveloppe » : cartes comparables** (mêmes trois rubriques pour PEA, assurance-vie, PER et compte-titres : plafond, disponibilité, fiscalité ; sources Service-Public F2385, F22414, F15274, F34982, F21618 consultées le 2026-11-05 ; compte-titres : disponibilité marquée « à vérifier »). Hauteur à 375 px : 3 719 → 4 344 px, à 1 280 px : 2 476 → 2 765 px (contenu ajouté : la disponibilité manquait).
