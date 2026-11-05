@@ -647,6 +647,45 @@ export function SchemaFonciereCotee() {
   );
 }
 
+/** Schéma « Capital-investissement : de l’épargne à la revente » : repris de l’AMF (page « Capital-investissement : FCPR, FCPI, FIP », consultée le 2026-11-05) : 50 % minimum de titres non cotés pour un FCPR, pas de rachat en cours de vie du fonds, durée de vie pouvant atteindre 10 ans, voire plus. */
+export function SchemaCapitalInvestissement() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 372" role="img" aria-labelledby="ill-ci-t ill-ci-d" className="ill-svg">
+        <title id="ill-ci-t">Capital-investissement : l’argent est bloqué pendant la vie du fonds</title>
+        <desc id="ill-ci-d">Vous achetez des parts d’un fonds de capital-investissement. Le fonds investit dans des sociétés non cotées : au moins la moitié de son actif pour un FCPR. Pendant la vie du fonds, qui peut atteindre 10 ans, voire plus, vous ne pouvez pas obtenir le rachat de vos parts. Vous récupérez votre argent à la fin, quand le fonds a revendu ses titres et est dissous. Vous pouvez perdre une partie ou la totalité de votre mise.</desc>
+        <rect x={0} y={2} width={220} height={58} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={110} y={28} textAnchor="middle" className="ill-step">Vous</text>
+        <text x={110} y={48} textAnchor="middle" className="ill-sub">achetez des parts du fonds</text>
+        <path d="M 110 60 V 100 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={126} y={86} textAnchor="start" className="ill-in">votre argent</text>
+        <rect x={0} y={100} width={220} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={110} y={126} textAnchor="middle" className="ill-step">Le fonds</text>
+        <text x={110} y={148} textAnchor="middle" className="ill-sub">FCPR, FCPI ou FIP</text>
+        <path d="M 110 164 V 204 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={126} y={190} textAnchor="start" className="ill-in">il investit</text>
+        <rect x={0} y={204} width={220} height={64} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={110} y={230} textAnchor="middle" className="ill-step">Des sociétés non cotées</text>
+        <text x={110} y={252} textAnchor="middle" className="ill-sub">50 % minimum pour un FCPR</text>
+        <rect x={244} y={2} width={176} height={266} rx={12} fill="var(--surface-2)" stroke="var(--line)" strokeWidth={2} />
+        <text x={332} y={32} textAnchor="middle" className="ill-step">Pendant la vie</text>
+        <text x={332} y={52} textAnchor="middle" className="ill-step">du fonds</text>
+        <text x={332} y={84} textAnchor="middle" className="ill-in">aucun rachat possible</text>
+        <text x={332} y={106} textAnchor="middle" className="ill-sub">durée : jusqu’à 10 ans,</text>
+        <text x={332} y={124} textAnchor="middle" className="ill-sub">voire plus</text>
+        <path d="M 332 142 V 182 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={332} y={206} textAnchor="middle" className="ill-in">À la fin : le fonds</text>
+        <text x={332} y={224} textAnchor="middle" className="ill-in">revend ses titres,</text>
+        <text x={332} y={242} textAnchor="middle" className="ill-in">puis il est dissous</text>
+        <rect x={0} y={288} width={420} height={44} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={210} y={315} textAnchor="middle" className="ill-in">Risque : perdre une partie ou la totalité de la mise</text>
+        <text x={210} y={358} textAnchor="middle" className="ill-sub">Schéma de principe d’après l’AMF</text>
+      </svg>
+    </figure>
+  );
+}
+
 /** Schéma « Obligation : prêter, puis le prix selon les taux » : principe qualitatif (aucun chiffre), repris de La finance pour tous (page « Obligations », « effet balançoire »). */
 export function SchemaObligation() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
