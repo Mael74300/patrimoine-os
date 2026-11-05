@@ -115,7 +115,7 @@ const raw: Omit<Investment, 'review'>[] = [
     horizon: 'Au moins 4 ans', horizonYears: 4,
     liquidity: 2, risk: 1, effort: 1,
     fees: { text: "Variables selon la banque : se renseigner avant d'ouvrir.", verified: false },
-    tax: { text: "Taux de 2,00 % pour les PEL ouverts à partir du 1er janvier 2026, fixé pour toute la durée du plan. Plafond de versements : 61 200 € (le solde peut le dépasser grâce aux intérêts). Durée : 4 ans minimum, 10 ans maximum. Les intérêts sont soumis chaque année au prélèvement forfaitaire unique,, sans prime d'État pour les plans ouverts depuis 2018.", verified: true, asOf: '5 novembre 2026' },
+    tax: { text: "Taux de 2,00 % pour les PEL ouverts à partir du 1er janvier 2026, fixé pour toute la durée du plan. Plafond de versements : 61 200 € (le solde peut le dépasser grâce aux intérêts). Durée : 4 ans minimum, 10 ans maximum. Les intérêts sont soumis chaque année au prélèvement forfaitaire unique (30 % au total pour les plans ouverts depuis 2018 : 12,8 % d'impôt et 17,2 % de prélèvements sociaux), sans prime d'État pour les plans ouverts depuis 2018.", verified: true, asOf: '5 novembre 2026' },
     pros: ['Taux garanti pour toute la durée du plan', 'Capital garanti, sans risque de perte', 'Peut ouvrir droit à un prêt pour financer un logement'],
     cons: ["Argent bloqué : retrait avant l'échéance = clôture du plan", 'Versements minimums à respecter chaque année', 'Intérêts imposés, contrairement au Livret A'],
     timeSkills: 'Quelques minutes pour l’ouvrir, puis un virement programmé.',
