@@ -32,3 +32,13 @@ describe('données structurées du glossaire', () => {
     for (const t of set.hasDefinedTerm!) expect(glossary.find((g) => g.term === t.name)!.definition).toBe(t.description);
   });
 });
+
+describe('sigles de l’accueil', () => {
+  it('PER, SCPI, assurance-vie et fonds en euros sont définis, avec un lien vers leur fiche', () => {
+    for (const [debut, fiche] of [['PER', 'per'], ['SCPI', 'scpi'], ['Assurance-vie', 'assurance-vie'], ['Fonds en euros', 'fonds-euros']]) {
+      const t = glossary.find((g) => g.term.startsWith(debut));
+      expect(t, debut).toBeDefined();
+      expect(t!.links.some((l) => l.to === `/encyclopedie/${fiche}`), debut).toBe(true);
+    }
+  });
+});
