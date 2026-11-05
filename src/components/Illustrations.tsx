@@ -1151,7 +1151,11 @@ export function SchemaPetitsVersements() {
               <rect x={X0} y={y} width={wp} height="28" rx="7" fill="var(--primary)" />
               <rect x={X0 + wp} y={y} width={wg} height="28" rx="7" fill="var(--accent)" />
               <text x={X0 + 8} y={y + 19} className="ill-in ill-on-dark">{fmtEur(r.paid)}</text>
-              {wg > 90 && <text x={X0 + wp + 8} y={y + 19} className="ill-in ill-on-dark">{`+ ${fmtEur(r.gains)}`}</text>}
+              {wg > 90 ? (
+                <text x={X0 + wp + 8} y={y + 19} className="ill-in ill-on-dark">{`+ ${fmtEur(r.gains)}`}</text>
+              ) : (
+                <text x={X0 + wp + wg + 6} y={y + 19} className="ill-in">{`+ ${fmtEur(r.gains)}`}</text>
+              )}
               <text x={X0} y={y + 46} className="ill-sub">{`Total : environ ${fmtEur(r.total)}, dont ${fmtEur(r.gains)} de gains`}</text>
             </g>
           );
