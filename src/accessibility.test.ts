@@ -108,3 +108,12 @@ describe('bouton « Haut de page »', () => {
     expect(css).toMatch(/@media print\s*\{\s*\.back-top\s*\{\s*display:\s*none/);
   });
 });
+
+describe('tableaux en cartes sur mobile', () => {
+  it('la colonne figée ne s’applique pas aux tableaux transformés en cartes (le bouton « × » du portefeuille restait masqué)', () => {
+    const sticky = css.match(/\.table-wrap:not\([^{]*:first-child\s*\{[^}]*position: sticky/);
+    expect(sticky?.[0]).toContain(':not(.line-wrap)');
+    expect(sticky?.[0]).toContain(':not(.stack-wrap)');
+    expect(css).toMatch(/\.line-table \.lt-del \{[^}]*z-index: 1/);
+  });
+});
