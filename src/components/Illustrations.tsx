@@ -716,6 +716,37 @@ export function SchemaPer() {
   );
 }
 
+/** Schéma « LMNP : deux façons de calculer le revenu imposable » : principe qualitatif (aucun chiffre), repris de Service-Public.fr (fiche F32744, consultée le 2026-11-05) : régime micro-BIC = recettes diminuées d’un abattement forfaitaire pour frais ; régime réel = déduction des charges réelles, dont l’amortissement du logement et des meubles, à justifier. */
+export function SchemaLmnp() {
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 300" role="img" aria-labelledby="ill-lmnp-t ill-lmnp-d" className="ill-svg">
+        <title id="ill-lmnp-t">LMNP : deux façons de calculer le revenu imposable</title>
+        <desc id="ill-lmnp-d">Dans les deux cas, on part des loyers encaissés. Au régime micro-BIC, on retire un abattement forfaitaire pour frais : aucun justificatif à fournir. Au régime réel, on retire les charges réelles, dont l’amortissement du logement et des meubles : il faut pouvoir les justifier. Ce qui reste est le revenu imposable.</desc>
+        <rect x={0} y={2} width={420} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={210} y={33} textAnchor="middle" className="ill-step">Loyers encaissés dans l’année</text>
+        <path d="M 105 52 V 80 m -7 -8 l 7 8 l 7 -8 M 315 52 V 80 m -7 -8 l 7 8 l 7 -8" fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+        <rect x={0} y={80} width={204} height={130} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={102} y={106} textAnchor="middle" className="ill-step">Micro-BIC</text>
+        <text x={102} y={134} textAnchor="middle" className="ill-in">On retire un</text>
+        <text x={102} y={152} textAnchor="middle" className="ill-in">abattement forfaitaire</text>
+        <text x={102} y={178} textAnchor="middle" className="ill-sub">Simple : pas de</text>
+        <text x={102} y={194} textAnchor="middle" className="ill-sub">frais à justifier</text>
+        <rect x={216} y={80} width={204} height={130} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={318} y={106} textAnchor="middle" className="ill-step">Régime réel</text>
+        <text x={318} y={134} textAnchor="middle" className="ill-in">On retire les charges</text>
+        <text x={318} y={152} textAnchor="middle" className="ill-in">réelles et l’amortissement</text>
+        <text x={318} y={178} textAnchor="middle" className="ill-sub">Du logement et des meubles ;</text>
+        <text x={318} y={194} textAnchor="middle" className="ill-sub">à justifier</text>
+        <path d="M 210 210 V 228 m -7 -8 l 7 8 l 7 -8" fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+        <rect x={0} y={230} width={420} height={36} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={210} y={254} textAnchor="middle" className="ill-step">= revenu imposable (BIC)</text>
+        <text x={210} y={290} textAnchor="middle" className="ill-sub">Schéma de principe d’après Service-Public.fr</text>
+      </svg>
+    </figure>
+  );
+}
+
 /** Schéma « Obligation : prêter, puis le prix selon les taux » : principe qualitatif (aucun chiffre), repris de La finance pour tous (page « Obligations », « effet balançoire »). */
 export function SchemaObligation() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
