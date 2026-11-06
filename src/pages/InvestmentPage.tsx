@@ -17,6 +17,9 @@ const FICHE_GUIDE: Record<string, string> = {
   pea: 'fonctionnement-pea',
 };
 
+/** Une carte longue (plus de 280 caractères) à côté d'une carte au moins deux fois plus courte laisserait un grand vide : on les empile. */
+const unbalanced = (a: string, b: string) => Math.max(a.length, b.length) > 280 && Math.min(a.length, b.length) * 2 < Math.max(a.length, b.length);
+
 export default function InvestmentPage() {
   const { slug = '' } = useParams();
   const inv = investmentBySlug[slug];
@@ -82,7 +85,7 @@ export default function InvestmentPage() {
           <ul>{inv.howToInvest.map((s) => <li key={s}>{s}</li>)}</ul>
 
           <h2>En pratique</h2>
-          <div className="facts-grid">
+          <div className={`facts-grid${unbalanced(inv.fees.text, inv.tax.text) ? ' facts-stack' : ''}`}>
             <div className="panel"><h3>Frais</h3><CheckedText c={inv.fees} split /></div>
             <div className="panel"><h3>Fiscalité française</h3><CheckedText c={inv.tax} split /></div>
             <p className="facts-wide"><strong>Temps et compétences :</strong> {inv.timeSkills}</p>
