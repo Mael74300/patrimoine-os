@@ -733,3 +733,8 @@ h2.gloss-letter::before { content: none; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
   .btn:hover, .situations a:hover, .cat-grid a:hover, .tiles a:hover { transform: none; }
 }
+
+/* Glossaire : la barre des lettres reste visible sous l'en-tête pour rebondir d'une lettre à l'autre sans remonter */
+.gloss-nav { position: sticky; top: 66px; z-index: 4; flex-wrap: nowrap; overflow-x: auto; margin: 4px -4px 8px; padding: 6px 4px; background: var(--bg); border-bottom: 1px solid var(--line); scrollbar-width: thin; }
+.gloss-nav a { flex: 0 0 auto; }
+.gloss-group, .gloss-item { scroll-margin-top: 136px; }
