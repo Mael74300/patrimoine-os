@@ -1523,3 +1523,27 @@ export function SchemaCto() {
     </figure>
   );
 }
+
+/** Schéma « Actions en direct : répartir sur 15 lignes limite l’effet d’une défaillance » : reprend l’exemple fictif de la fiche (15 lignes de 1 000 €, perte maximale 1 000 €, soit 6,7 % de 15 000 €), recalculé par test. Aucune information factuelle nouvelle. */
+export function SchemaActions() {
+  const cells = Array.from({ length: 15 }, (_, i) => ({ x: 40 + (i % 5) * 70, y: 54 + Math.floor(i / 5) * 46, bad: i === 7 }));
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 300" role="img" aria-labelledby="ill-act-t ill-act-d" className="ill-svg">
+        <title id="ill-act-t">Actions : une seule entreprise défaillante sur quinze</title>
+        <desc id="ill-act-d">Exemple fictif : un portefeuille de quinze actions de 1 000 € chacune, soit 15 000 €. Si une seule entreprise fait défaillance, la perte est au plus de 1 000 €, soit 6,7 % du total.</desc>
+        <text x={210} y={24} textAnchor="middle" className="ill-step">15 entreprises × 1 000 € = 15 000 €</text>
+        {cells.map((c, i) => (
+          <g key={i}>
+            <rect x={c.x} y={c.y} width={60} height={36} rx={8} fill={c.bad ? 'var(--warn-soft)' : 'var(--accent-soft)'} stroke={c.bad ? 'var(--warn)' : 'var(--accent)'} strokeWidth={2} />
+            <text x={c.x + 30} y={c.y + 23} textAnchor="middle" className="ill-in">{c.bad ? '0 €' : '1 000 €'}</text>
+          </g>
+        ))}
+        <rect x={0} y={198} width={420} height={62} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={210} y={222} textAnchor="middle" className="ill-step">Une entreprise défaillante : − 1 000 € au plus</text>
+        <text x={210} y={244} textAnchor="middle" className="ill-sub">soit 6,7 % du total (1 000 € sur 15 000 €)</text>
+        <text x={210} y={288} textAnchor="middle" className="ill-sub">Exemple fictif, schéma d’illustration</text>
+      </svg>
+    </figure>
+  );
+}
