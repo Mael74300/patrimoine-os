@@ -1586,3 +1586,43 @@ export function SchemaDonation() {
     </figure>
   );
 }
+
+/** Exemple fictif de la fiche Or : prix de cession et taxe forfaitaire (11 % + 0,5 % de CRDS). */
+export const OR_EXAMPLE_PRICE = 2000;
+export function orTaxe(prix: number): number {
+  return Math.round(prix * 0.115 * 100) / 100;
+}
+
+export function SchemaOr() {
+  const taxe = orTaxe(OR_EXAMPLE_PRICE);
+  const reste = OR_EXAMPLE_PRICE - taxe;
+  const X0 = 14;
+  const W = 392;
+  const wTaxe = (taxe / OR_EXAMPLE_PRICE) * W;
+  const cas = [
+    { y: 34, titre: 'Cas A : pièce payée 1 900 €, gain de 100 €' },
+    { y: 126, titre: 'Cas B : pièce payée 1 000 €, gain de 1 000 €' },
+  ];
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 218" role="img" aria-labelledby="ill-or-t ill-or-d" className="ill-svg">
+        <title id="ill-or-t">{`Or physique : la taxe forfaitaire est de ${fmtEur(taxe)} sur une vente à ${fmtEur(OR_EXAMPLE_PRICE)}, quel que soit le gain`}</title>
+        <desc id="ill-or-d">{`Exemple fictif : une pièce d’or revendue ${fmtEur(OR_EXAMPLE_PRICE)} sous le régime forfaitaire. La taxe est de 11 % du prix de vente plus 0,5 % de CRDS, soit ${fmtEur(taxe)}, que le gain soit de 100 € ou de 1 000 €. Il reste ${fmtEur(reste)} au vendeur.`}</desc>
+        {cas.map((c) => (
+          <g key={c.y}>
+            <text x={X0} y={c.y - 8} className="ill-step">{c.titre}</text>
+            <rect x={X0} y={c.y} width={W} height={36} fill="var(--accent)" />
+            <rect x={X0} y={c.y} width={wTaxe} height={36} fill="var(--warn)" />
+            <rect x={X0} y={c.y} width={W} height={36} rx={8} fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
+            <text x={X0 + wTaxe + (W - wTaxe) / 2} y={c.y + 23} textAnchor="middle" className="ill-on-dark ill-total">{fmtEur(reste)} pour vous</text>
+            <text x={X0} y={c.y + 54} className="ill-sub">Taxe : {fmtEur(taxe)} (à gauche, en orange)</text>
+          </g>
+        ))}
+        <text x={210} y={208} textAnchor="middle" className="ill-sub">Même taxe dans les deux cas : 11,5 % du prix de vente de {fmtEur(OR_EXAMPLE_PRICE)}</text>
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : régime forfaitaire (11 % + 0,5 % de CRDS) calculé sur le prix de vente, pas sur le gain. Barres proportionnelles aux montants.
+      </figcaption>
+    </figure>
+  );
+}
