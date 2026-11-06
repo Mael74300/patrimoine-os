@@ -1,4 +1,5 @@
 import { fmtEur, HCSF } from '../lib/finance';
+import { pfuSplit } from '../lib/calc/pfu';
 import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, petitsVersementsRows, capitalViseRows, CAPITAL_VISE_EXAMPLE, precautionRows, PRECAUTION_EXAMPLE, moisParts, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../lib/illustrationData';
 
 const W = 420;
@@ -1480,6 +1481,44 @@ export function SchemaRetraits() {
       </svg>
       <figcaption>
         <strong>Illustration, sans chiffres</strong> : l’allure du capital dépend de l’écart entre ce que le placement rapporte et ce que vous retirez. Les courbes sont indicatives.
+      </figcaption>
+    </figure>
+  );
+}
+
+export const CTO_EXAMPLE_GAIN = 1000;
+
+/** Schéma « Compte-titres : sur un gain, ce qui reste après le PFU » : exemple fictif de 1 000 € de plus-value réalisée, taux de 2026 (12,8 % + 18,6 % = 31,4 %, Service-Public F21618, consulté le 2026-11-06). Chiffres recalculés par src/cto.test.ts. */
+export function SchemaCto() {
+  const r = pfuSplit(CTO_EXAMPLE_GAIN);
+  const X0 = 14;
+  const W = 392;
+  const wIr = (r.ir / CTO_EXAMPLE_GAIN) * W;
+  const wPs = (r.ps / CTO_EXAMPLE_GAIN) * W;
+  const wNet = W - wIr - wPs;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 214" role="img" aria-labelledby="ill-cto-t ill-cto-d" className="ill-svg">
+        <title id="ill-cto-t">{`Compte-titres : sur un gain de ${fmtEur(CTO_EXAMPLE_GAIN)}, il vous reste ${fmtEur(r.net)}`}</title>
+        <desc id="ill-cto-d">{`Exemple fictif : vous vendez des titres avec ${fmtEur(CTO_EXAMPLE_GAIN)} de plus-value. Le prélèvement forfaitaire unique de 31,4 % retire ${fmtEur(r.ir)} d’impôt sur le revenu (12,8 %) et ${fmtEur(r.ps)} de prélèvements sociaux (18,6 %), soit ${fmtEur(r.total)}. Il vous reste ${fmtEur(r.net)}.`}</desc>
+        <text x={X0} y={20} className="ill-step">Un gain de {fmtEur(CTO_EXAMPLE_GAIN)} (exemple fictif)</text>
+        <rect x={X0} y={32} width={wIr} height={40} fill="var(--warn)" />
+        <rect x={X0 + wIr} y={32} width={wPs} height={40} fill="var(--primary)" />
+        <rect x={X0 + wIr + wPs} y={32} width={wNet} height={40} fill="var(--accent)" />
+        <rect x={X0} y={32} width={W} height={40} rx={8} fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
+        <text x={X0 + wIr + wPs + wNet / 2} y={58} textAnchor="middle" className="ill-on-dark ill-total">{fmtEur(r.net)} pour vous</text>
+        <path d={`M ${X0 + wIr / 2} 76 V 98 H ${X0 + 12} V 108`} fill="none" stroke="var(--warn)" strokeWidth={2} strokeLinejoin="round" />
+        <path d={`M ${X0 + wIr + wPs / 2} 76 V 98 H ${X0 + 214} V 108`} fill="none" stroke="var(--primary)" strokeWidth={2} strokeLinejoin="round" />
+        <text x={X0} y={128} className="ill-step">{fmtEur(r.ir)}</text>
+        <text x={X0} y={146} className="ill-sub">impôt sur le revenu</text>
+        <text x={X0} y={162} className="ill-sub">(12,8 %)</text>
+        <text x={X0 + 202} y={128} className="ill-step">{fmtEur(r.ps)}</text>
+        <text x={X0 + 202} y={146} className="ill-sub">prélèvements sociaux</text>
+        <text x={X0 + 202} y={162} className="ill-sub">(18,6 %)</text>
+        <text x={210} y={200} textAnchor="middle" className="ill-sub">Total retiré : {fmtEur(r.total)}, soit 31,4 % du gain</text>
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : taux de 2026 sur une plus-value réalisée, sans option pour le barème progressif. Barre proportionnelle aux montants.
       </figcaption>
     </figure>
   );
