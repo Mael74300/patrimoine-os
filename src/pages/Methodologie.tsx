@@ -110,7 +110,7 @@ export const FORMULAS: [string, string[]][] = [
   ]],
   ['Inflation et pouvoir d’achat', [
     'Valeur d’une somme S en euros d’aujourd’hui après T années : S / (1 + i)^T. Montant nécessaire pour garder le même pouvoir d’achat : S × (1 + i)^T. Perte de pouvoir d’achat = 1 − valeur réelle / S.',
-    'Rendement réel = (1 + r) / (1 + i) − 1. Durée pour perdre la moitié du pouvoir d’achat = ln 2 / ln(1 + i) ; durée pour doubler un capital placé = ln 2 / ln(1 + r) (valeur exacte de la « règle des 72 »). Sans versement, avant impôt.',
+    'Rendement réel = (1 + r) / (1 + i) − 1. Durée pour perdre la moitié du pouvoir d’achat = ln 2 / ln(1 + i) ; durée pour doubler un capital placé = ln 2 / ln(1 + r) (valeur exacte de la « règle de 72 »). Sans versement, avant impôt.',
   ]],
   ['Objectif d’épargne', [
     'Versement mensuel = (objectif − épargne de départ × (1 + r)^n) × r / ((1 + r)^n − 1), avec r le taux mensuel équivalent au taux annuel saisi et n le nombre de mois ; versements en fin de mois. Taux nul : (objectif − épargne de départ) / n.',
