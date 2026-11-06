@@ -1,7 +1,38 @@
 import { Link } from 'react-router-dom';
-import { analyzeBudget, BUDGET_BENCHMARK, catchUp, fmtEur, fmtNum, fmtPct, monthsOfIncomeSavedPerYear, projectBudgetSaving } from '../lib/finance';
+import { analyzeBudget, BUDGET_BENCHMARK, budgetBarSegments, catchUp, fmtEur, fmtNum, fmtPct, monthsOfIncomeSavedPerYear, projectBudgetSaving } from '../lib/finance';
 import { budgetTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+
+function BudgetBars({ b }: { b: ReturnType<typeof analyzeBudget> }) {
+  const mine = budgetBarSegments(b);
+  if (mine.length === 0) return null;
+  const bench = budgetBarSegments({ income: 1, needs: BUDGET_BENCHMARK.needs, wants: BUDGET_BENCHMARK.wants, saving: BUDGET_BENCHMARK.saving });
+  const desc = mine.map((x) => `${x.label} ${fmtPct(x.width / 100)}`).join(', ');
+  const Bar = ({ segs, label, aria }: { segs: typeof mine; label: string; aria: string }) => (
+    <div className="bb-row">
+      <div className="bb-label">{label}</div>
+      <div className="bb-bar" role="img" aria-label={aria}>
+        {segs.map((x) => (
+          <span key={x.key} className={'bb-seg bb-' + x.key} style={{ width: `${x.width}%` }}>
+            {x.width >= 12 ? fmtPct(x.width / 100) : ''}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+  return (
+    <figure className="bb">
+      <Bar segs={mine} label="Votre budget" aria={`Votre budget : ${desc}`} />
+      <Bar segs={bench} label="Repère" aria="Repère : besoins 50 %, envies 30 %, épargne 20 %" />
+      <figcaption className="bb-legend">
+        <span><i className="bb-dot bb-needs" />Besoins</span>
+        <span><i className="bb-dot bb-wants" />Envies</span>
+        <span><i className="bb-dot bb-saving" />Épargne</span>
+        {mine.some((x) => x.key === 'free') && <span><i className="bb-dot bb-free" />Non affecté</span>}
+      </figcaption>
+    </figure>
+  );
+}
 
 type State = { netIncome: number; needs: number; wants: number; saving: number; targetRate: number; projReturn: number; projYears: number };
 
@@ -63,6 +94,7 @@ export default function SimBudget() {
           <Takeaway>{budgetTakeaway({ income: b.income, shares: b.shares, unallocated: b.unallocated, targetRate: s.targetRate, missing: c.missing })}</Takeaway>
 
           <h2>Votre budget face au repère 50 / 30 / 20</h2>
+          <BudgetBars b={b} />
           <div className="table-wrap stack-wrap">
             <table className="stack-table">
               <caption className="sr-only">Chaque poste du budget comparé au repère 50 / 30 / 20</caption>

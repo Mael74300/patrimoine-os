@@ -739,3 +739,18 @@ h2.gloss-letter::before { content: none; }
 .gloss-nav { position: sticky; top: 66px; z-index: 4; flex-wrap: nowrap; overflow-x: auto; margin: 4px -4px 8px; padding: 6px 4px; background: var(--bg); border-bottom: 1px solid var(--line); scrollbar-width: thin; }
 .gloss-nav a { flex: 0 0 auto; }
 .gloss-group, .gloss-item { scroll-margin-top: 136px; }
+
+/* Barres du budget : votre répartition face au repère 50 / 30 / 20 */
+.bb { margin: 8px 0 16px; }
+.bb-row { display: grid; grid-template-columns: 5.2rem 1fr; align-items: center; gap: 10px; margin-bottom: 8px; }
+.bb-label { font-size: .9rem; font-weight: 600; color: var(--ink-2); }
+.bb-bar { display: flex; height: 34px; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: var(--surface-2); }
+.bb-seg { display: flex; align-items: center; justify-content: center; font-size: .85rem; font-weight: 700; white-space: nowrap; overflow: hidden; color: #fff; min-width: 0; }
+.bb-needs { background: var(--primary); }
+.bb-wants { background: var(--gold); color: var(--ink); }
+.bb-saving { background: var(--accent); }
+.bb-free { background: repeating-linear-gradient(45deg, var(--surface-2) 0 6px, var(--line) 6px 12px); color: var(--ink-2); }
+.bb-seg + .bb-seg { border-left: 2px solid var(--surface); }
+.bb-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 4px 0 0 calc(5.2rem + 10px); font-size: .85rem; color: var(--ink-2); }
+.bb-dot { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin-right: 6px; vertical-align: -1px; border: 1px solid var(--line); }
+@media (max-width: 480px) { .bb-row { grid-template-columns: 4.2rem 1fr; gap: 8px; } .bb-legend { margin-left: calc(4.2rem + 8px); } }

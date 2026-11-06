@@ -84,3 +84,24 @@ export function projectBudgetSaving(monthlySaving: number, annualNetReturn: numb
   const last = pts[pts.length - 1];
   return { contributed: last ? last.contributed : 0, finalValue: last ? last.value : 0, gains: last ? last.gains : 0 };
 }
+
+export type BudgetSegment = { key: 'needs' | 'wants' | 'saving' | 'free'; label: string; amount: number; width: number };
+
+/**
+ * Segments d'une barre de budget. La barre représente le plus grand des deux : revenu ou total des postes
+ * (en cas de dépassement, la barre reste entière et chaque part se réduit). `width` est en % de la barre.
+ * Le revenu non affecté (positif) forme un dernier segment.
+ */
+export function budgetBarSegments(b: Pick<BudgetResult, 'income' | 'needs' | 'wants' | 'saving'>): BudgetSegment[] {
+  const used = b.needs + b.wants + b.saving;
+  const base = Math.max(b.income, used);
+  if (!(base > 0)) return [];
+  const free = Math.max(0, b.income - used);
+  const raw: BudgetSegment[] = [
+    { key: 'needs', label: 'Besoins', amount: b.needs, width: 0 },
+    { key: 'wants', label: 'Envies', amount: b.wants, width: 0 },
+    { key: 'saving', label: 'Épargne', amount: b.saving, width: 0 },
+    { key: 'free', label: 'Non affecté', amount: free, width: 0 },
+  ];
+  return raw.filter((s) => s.amount > 0).map((s) => ({ ...s, width: (s.amount / base) * 100 }));
+}
