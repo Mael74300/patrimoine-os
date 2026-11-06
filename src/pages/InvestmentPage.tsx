@@ -6,7 +6,7 @@ import { investmentBySlug } from '../data/investments';
 import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Dots, Fold, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
-import { SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaObligation, SchemaPer, SchemaScpi } from '../components/Illustrations';
+import { SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaObligation, SchemaPer, SchemaScpi } from '../components/Illustrations';
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
 import { guideBySlug } from '../data/guides';
@@ -77,6 +77,7 @@ export default function InvestmentPage() {
           {inv.slug === 'per' && <SchemaPer />}
           {inv.slug === 'lmnp' && <SchemaLmnp />}
           {inv.slug === 'etf-monde' && <SchemaEtf />}
+          {inv.slug === 'cryptomonnaies' && <SchemaCrypto />}
           <h2>Comment investir</h2>
           <ul>{inv.howToInvest.map((s) => <li key={s}>{s}</li>)}</ul>
 

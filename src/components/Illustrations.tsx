@@ -773,6 +773,32 @@ export function SchemaEtf() {
   );
 }
 
+/** Schéma « Cryptos : passer par un prestataire agréé, sans garantie des dépôts » : principe qualitatif (aucun chiffre), repris de l’AMF (« Investir en crypto-actifs : quel professionnel choisir ? », 27 juillet 2026, consulté le 2026-11-06) : depuis le 1er juillet 2026, il faut le statut PSCA (agrément AMF en France) pour proposer des services sur crypto-actifs ; le FGDR ne couvre pas les crypto-actifs en cas de faillite de la plateforme. */
+export function SchemaCrypto() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 300" role="img" aria-labelledby="ill-cr-t ill-cr-d" className="ill-svg">
+        <title id="ill-cr-t">Cryptos : passer par un prestataire agréé, sans garantie des dépôts</title>
+        <desc id="ill-cr-d">Pour acheter des crypto-actifs, vous passez par un prestataire de services sur crypto-actifs (PSCA), agréé par l’AMF en France. Depuis le 1er juillet 2026, l’ancien statut PSAN ne suffit plus. Attention : si la plateforme fait faillite, le fonds de garantie des dépôts (FGDR) ne couvre pas les crypto-actifs.</desc>
+        <rect x={0} y={2} width={420} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={210} y={33} textAnchor="middle" className="ill-step">Vous</text>
+        <path d="M 210 52 V 78 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={80} width={420} height={104} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={210} y={106} textAnchor="middle" className="ill-step">Un prestataire agréé (PSCA)</text>
+        <text x={210} y={134} textAnchor="middle" className="ill-in">Agrément de l’AMF en France</text>
+        <text x={210} y={160} textAnchor="middle" className="ill-sub">Depuis le 1er juillet 2026, l’ancien statut PSAN</text>
+        <text x={210} y={176} textAnchor="middle" className="ill-sub">ne suffit plus : à vérifier sur la liste blanche de l’AMF</text>
+        <path d="M 210 184 V 206 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={208} width={420} height={50} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={210} y={229} textAnchor="middle" className="ill-step">Vos crypto-actifs : aucune garantie des dépôts</text>
+        <text x={210} y={247} textAnchor="middle" className="ill-sub">le FGDR ne les couvre pas si la plateforme fait faillite</text>
+        <text x={210} y={290} textAnchor="middle" className="ill-sub">Schéma de principe d’après l’AMF</text>
+      </svg>
+    </figure>
+  );
+}
+
 /** Schéma « Obligation : prêter, puis le prix selon les taux » : principe qualitatif (aucun chiffre), repris de La finance pour tous (page « Obligations », « effet balançoire »). */
 export function SchemaObligation() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
