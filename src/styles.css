@@ -642,9 +642,8 @@ h2.gloss-letter::before { content: none; }
 /* Guides : accès rapide aux rubriques (mobile) */
 .guide-group { margin-top: 28px; scroll-margin-top: 72px; }
 .guide-group .theme-title { scroll-margin-top: 72px; }
-.guide-jump { display: flex; gap: 8px; margin: 14px -16px 0; padding: 2px 16px; overflow-x: auto; scrollbar-width: none; }
-.guide-jump::-webkit-scrollbar { display: none; }
-.guide-jump a { display: inline-flex; align-items: center; flex: none; min-height: 44px; padding: 0 14px; white-space: nowrap; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--primary); font-size: 0.92rem; font-weight: 600; text-decoration: none; }
+.guide-jump { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0 0; }
+.guide-jump a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 6px 12px; text-align: center; line-height: 1.25; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--primary); font-size: 0.92rem; font-weight: 600; text-decoration: none; }
 .guide-jump a:hover { background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--accent); }
 @media (min-width: 900px) { .guide-jump { display: none; } }
 @media (max-width: 600px) { .guide-group { margin-top: 18px; } .guide-group .inv-list--compact .inv-row { padding: 7px 4px; } }
