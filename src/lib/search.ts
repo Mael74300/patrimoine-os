@@ -46,6 +46,32 @@ export const searchSuggestions: { label: string; to: string }[] = [
   { label: 'PER', to: '/encyclopedie/per' },
 ];
 
+/**
+ * Mots que les visiteurs tapent sans qu'ils figurent tels quels dans nos pages :
+ * ils renvoient vers le vocabulaire du site (simple aiguillage de recherche, sans information factuelle).
+ */
+export const searchAliases: Record<string, string[]> = {
+  bitcoin: ['crypto'],
+  btc: ['crypto'],
+  ethereum: ['crypto'],
+  stablecoin: ['crypto'],
+  heritage: ['donation', 'transmission'],
+  heritier: ['donation', 'transmission'],
+  succession: ['donation', 'transmission'],
+  defiscaliser: ['deductible'],
+  defiscalisation: ['deductible'],
+  pierre: ['immobilier'],
+  papier: ['scpi'],
+  hypotheque: ['credit', 'pret'],
+  emprunter: ['emprunt'],
+  bourse: ['action', 'etf'],
+};
+
+const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/** Un mot de la recherche doit commencer un mot du texte (« bourse » ne trouve plus « rembourser »). */
+const wordStart = (text: string, term: string) => new RegExp(`(^|[^a-z0-9])${escapeRe(term)}`).test(text);
+
 export function search(query: string): SearchHit[] {
   const terms = norm(query).split(/\s+/).filter((t) => t.length > 1).map(stem);
   if (!terms.length) return [];
@@ -55,8 +81,9 @@ export function search(query: string): SearchHit[] {
     const b = norm(body);
     let s = 0;
     for (const term of terms) {
-      if (t.includes(term)) s += 5;
-      else if (b.includes(term)) s += 1;
+      const variants = [term, ...(searchAliases[term] ?? [])];
+      if (variants.some((v) => wordStart(t, v))) s += 5;
+      else if (variants.some((v) => wordStart(b, v))) s += 1;
       else return 0; // tous les termes doivent être présents
     }
     return s;
