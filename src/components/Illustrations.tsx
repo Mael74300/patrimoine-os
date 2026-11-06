@@ -1713,3 +1713,50 @@ export function SchemaLep() {
     </figure>
   );
 }
+
+/** Fiche Unités de compte : exemple fictif. Chiffres calculés ici et recalculés par test. */
+export const UC_NOMBRE = 100;
+export const UC_PRIX_ACHAT = 10;
+export function ucValeur(nombre: number, prixUnite: number): number {
+  return Math.round(nombre * prixUnite * 100) / 100;
+}
+
+/** Fiche Unités de compte : le nombre d'unités est garanti, pas leur valeur (Service-Public F15274). */
+export function SchemaUniteDeCompte() {
+  const cas = [
+    { prix: 8, label: 'Les marchés baissent', fill: 'var(--warn)' },
+    { prix: 10, label: 'Valeur inchangée', fill: 'var(--primary)' },
+    { prix: 12, label: 'Les marchés montent', fill: 'var(--accent)' },
+  ];
+  const X0 = 14;
+  const W = 392;
+  const max = ucValeur(UC_NOMBRE, 12);
+  const base = ucValeur(UC_NOMBRE, UC_PRIX_ACHAT);
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 262" role="img" aria-labelledby="ill-uc-t ill-uc-d" className="ill-svg">
+        <title id="ill-uc-t">Unités de compte : le nombre d’unités reste le même, c’est leur valeur qui varie</title>
+        <desc id="ill-uc-d">{`Exemple fictif : vous achetez ${UC_NOMBRE} unités de compte à ${fmtEur(UC_PRIX_ACHAT)} l’unité, soit ${fmtEur(base)}. Vous gardez ${UC_NOMBRE} unités quoi qu’il arrive. Si l’unité vaut ${fmtEur(8)}, votre épargne vaut ${fmtEur(ucValeur(UC_NOMBRE, 8))} ; si elle vaut ${fmtEur(10)}, ${fmtEur(base)} ; si elle vaut ${fmtEur(12)}, ${fmtEur(ucValeur(UC_NOMBRE, 12))}. L’assureur garantit le nombre d’unités, pas leur valeur.`}</desc>
+        <text x={X0} y={18} className="ill-step" fontWeight="700">{`Vous achetez ${UC_NOMBRE} unités à ${fmtEur(UC_PRIX_ACHAT)} = ${fmtEur(base)}`}</text>
+        <text x={X0} y={36} className="ill-sub">Plus tard, vous avez toujours {UC_NOMBRE} unités. Leur valeur, non :</text>
+        {cas.map((c, i) => {
+          const y = 52 + i * 52;
+          const w = (ucValeur(UC_NOMBRE, c.prix) / max) * W;
+          return (
+            <g key={c.prix}>
+              <text x={X0} y={y + 10} className="ill-sub">{`${c.label} : l’unité vaut ${fmtEur(c.prix)}`}</text>
+              <rect x={X0} y={y + 16} width={w} height={26} rx={7} fill={c.fill} />
+              <text x={X0 + 10} y={y + 34} className="ill-on-dark ill-total" fontSize={13}>{`${UC_NOMBRE} unités = ${fmtEur(ucValeur(UC_NOMBRE, c.prix))}`}</text>
+            </g>
+          );
+        })}
+        <rect x={14} y={212} width={392} height={40} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
+        <text x={210} y={229} textAnchor="middle" className="ill-sub">L’assureur garantit le nombre d’unités,</text>
+        <text x={210} y={245} textAnchor="middle" className="ill-sub">pas leur valeur : perte possible en capital.</text>
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : les valeurs de l’unité sont inventées pour montrer le principe, ce n’est pas une prévision. Barres proportionnelles aux montants.
+      </figcaption>
+    </figure>
+  );
+}
