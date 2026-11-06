@@ -272,7 +272,7 @@ const raw: Omit<Investment, 'review'>[] = [
     liquidity: 3, risk: 1, effort: 1,
     fees: { text: 'Frais de gestion annuels du contrat : de 0,4 % à plus de 1 % du capital (source : La finance pour tous).', verified: true, asOf: '3 novembre 2026' },
     tax: { text: 'Celle de l’assurance-vie.', verified: true, asOf: AS_OF },
-    pros: ['Capital garanti par l’assureur', 'Rendement généralement supérieur aux livrets sur longue période'],
+    pros: ['Capital garanti par l’assureur', 'Les intérêts versés chaque année s’ajoutent au capital et produisent à leur tour des intérêts'],
     cons: ['Rendement non garanti à l’avance', 'Garantie dépendante de la solidité de l’assureur'],
     timeSkills: 'Très faible.',
     example: 'Exemple fictif : 20 000 € à 2,5 % net de frais pendant 5 ans deviennent environ 22 630 €.',
