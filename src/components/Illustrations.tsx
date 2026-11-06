@@ -1678,3 +1678,38 @@ export function SchemaPel() {
     </figure>
   );
 }
+
+/** Fiche LEP : la condition de revenus à l'ouverture et pour garder le livret (Service-Public F2367). Aucun chiffre : les plafonds sont dans la fiche. */
+export function SchemaLep() {
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 300" role="img" aria-labelledby="ill-lep-t ill-lep-d" className="ill-svg">
+        <title id="ill-lep-t">LEP : le revenu fiscal de référence décide de l’ouverture, et deux années de suite au-dessus du plafond entraînent la clôture</title>
+        <desc id="ill-lep-d">Pour ouvrir un LEP, la banque regarde le revenu fiscal de référence de l’avis d’imposition. En dessous du plafond (ou égal), le livret peut être ouvert ; au-dessus, il ne peut pas l’être. Une fois le livret ouvert, un dépassement du plafond une seule année n’oblige pas à le fermer, tant que l’année suivante repasse sous le plafond. Deux années consécutives au-dessus du plafond entraînent la clôture obligatoire.</desc>
+        <text x={14} y={20} className="ill-step" fontWeight="700">1. Pour ouvrir le livret</text>
+        <rect x={110} y={30} width={200} height={44} rx={10} fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
+        <text x={210} y={49} textAnchor="middle" className="ill-sub">Revenu fiscal de référence</text>
+        <text x={210} y={65} textAnchor="middle" className="ill-sub">(avis d’imposition)</text>
+        <path d="M160 74 L90 100 M260 74 L330 100" stroke="var(--ink-2)" strokeWidth={1.5} fill="none" />
+        <rect x={14} y={100} width={190} height={50} rx={10} fill="var(--accent)" />
+        <text x={109} y={121} textAnchor="middle" className="ill-on-dark ill-total">≤ plafond</text>
+        <text x={109} y={140} textAnchor="middle" className="ill-on-dark" fontSize={13}>LEP possible</text>
+        <rect x={216} y={100} width={190} height={50} rx={10} fill="var(--warn)" />
+        <text x={311} y={121} textAnchor="middle" className="ill-on-dark ill-total">&gt; plafond</text>
+        <text x={311} y={140} textAnchor="middle" className="ill-on-dark" fontSize={13}>pas d’ouverture</text>
+        <text x={14} y={186} className="ill-step" fontWeight="700">2. Une fois le livret ouvert</text>
+        <rect x={14} y={198} width={190} height={46} rx={10} fill="var(--primary)" />
+        <text x={109} y={217} textAnchor="middle" className="ill-on-dark ill-total">1 année au-dessus</text>
+        <text x={109} y={235} textAnchor="middle" className="ill-on-dark" fontSize={13}>conservé si retour en dessous</text>
+        <rect x={216} y={198} width={190} height={46} rx={10} fill="var(--warn)" />
+        <text x={311} y={217} textAnchor="middle" className="ill-on-dark ill-total">2 années de suite</text>
+        <text x={311} y={235} textAnchor="middle" className="ill-on-dark" fontSize={13}>clôture obligatoire</text>
+        <text x={14} y={272} className="ill-sub" textAnchor="start">Un seul LEP par personne : chaque époux ou</text>
+        <text x={14} y={288} className="ill-sub" textAnchor="start">partenaire de Pacs peut avoir le sien.</text>
+      </svg>
+      <figcaption>
+        <strong>Illustration</strong> : le plafond dépend du nombre de parts et du lieu de résidence ; il est révisé chaque année (valeurs 2026 dans la fiche). La banque vérifie sur l’année N-2 ou N-1.
+      </figcaption>
+    </figure>
+  );
+}
