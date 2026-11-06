@@ -123,3 +123,9 @@ describe('mouvement réduit', () => {
     expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\)\s*\{[^}]*transition-duration:\s*0\.01ms/);
   });
 });
+
+describe('en-têtes de ligne des tableaux', () => {
+  it('gardent un fond neutre : seule la ligne d’en-tête est teintée', () => {
+    expect(css).toMatch(/tbody th\[scope="row"\]\s*\{[^}]*background:\s*transparent/);
+  });
+});
