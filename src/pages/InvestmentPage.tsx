@@ -6,7 +6,7 @@ import { investmentBySlug } from '../data/investments';
 import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Dots, Fold, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
-import { SchemaActions, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaObligation, SchemaPer, SchemaScpi } from '../components/Illustrations';
+import { SchemaActions, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaObligation, SchemaOr, SchemaPer, SchemaScpi } from '../components/Illustrations';
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
 import { guideBySlug } from '../data/guides';
@@ -84,6 +84,7 @@ export default function InvestmentPage() {
           {inv.slug === 'compte-titres' && <SchemaCto />}
           {inv.slug === 'actions-individuelles' && <SchemaActions />}
           {inv.slug === 'donation' && <SchemaDonation />}
+          {inv.slug === 'or' && <SchemaOr />}
           <h2>Comment investir</h2>
           <ul>{inv.howToInvest.map((s) => <li key={s}>{s}</li>)}</ul>
 
