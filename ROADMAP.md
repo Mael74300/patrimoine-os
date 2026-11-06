@@ -54,6 +54,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-06 (audit accueil, 375 px, et fiche Donation, 375 et 1 280 px) : aucune erreur de console ni débordement ; l'accueil est clair ; la fiche Donation, au sujet très chiffré (abattements, don d'argent, 15 ans), n'avait aucun schéma ; schéma de l'exemple fictif déjà présent (2 × (100 000 € + 31 865 €) = 263 730 €) ajouté (Service-Public F14203 et F36656 consultés ce jour). Restent sans schéma : Livret A, LEP, PEL, Fonds en euros, Or.
 - 2026-11-06 (audit fiches PEL, SCPI, Location nue, simulateur Épargne de précaution, 375 px : aucune erreur de console ni débordement ; pages de 4 200 à 5 600 px) : pages claires. Seul défaut corrigé : la page Méthodologie écrivait « règle des 72 » alors que tout le site dit « règle de 72 ». Non traité faute de source : les « 7 % à 8 % » de frais d'acquisition de la fiche Location nue (« à vérifier ») ; la page Service-Public consultée ne donne aucun pourcentage (outil de calcul seulement) et les pages ANIL et economie.gouv.fr étaient inaccessibles depuis le bac à sable.
 - 2026-11-06 (audit accueil, glossaire, guide Par où commencer, simulateur Retraits réguliers, balayage automatique des 79 pages à 375 px : aucune erreur de console, aucun débordement, aucun lien ou bouton sans nom, un seul h1 par page) : seul défaut, le glossaire (33 notions, 8 949 px à 375 px) perdait la barre des lettres dès qu'on avait défilé ; barre rendue collante sous l'en-tête. Page la plus longue ensuite : simulateur Immobilier (6 085 px).
 - 2026-11-06 (audit guide Investir à crédit, simulateurs Comparer des crédits et Louer ou acheter, 375 px) : aucune erreur de console ni débordement, pages claires ; seul manque technique : aucune règle `prefers-reduced-motion` pour les transitions CSS (le défilement JS la respectait déjà) ; ajoutée.
@@ -86,6 +87,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- 2026-11-06 : **fiche Donation : schéma « deux parents, un enfant »** (exemple fictif de la fiche, montants recalculés par test `donation.test.ts` ; hauteur de la fiche 4 131 → 4 467 px à 375 px, 2 545 → 2 914 px à 1 280 px) (PR « fiche Donation : schéma »).
 - 2026-11-06 : **glossaire : barre des lettres collante** (reste visible sous l'en-tête, défilement horizontal, ancres décalées ; ergonomie, aucun contenu modifié ; hauteur du glossaire inchangée : 8 949 → 8 917 px à 375 px, 5 931 → 5 944 px à 1 280 px) (#260).
 - 2026-11-06 : **accessibilité : mouvement réduit respecté** (règle CSS `prefers-reduced-motion` : transitions, animations et décalages au survol neutralisés pour qui le demande dans son système ; test dans `accessibility.test.ts` ; aucun contenu modifié, hauteurs de page inchangées).
 - 2026-11-06 : **fiche Actions en direct : schéma de l'exemple fictif de diversification** (15 lignes de 1 000 € = 15 000 € ; une seule défaillance coûte au plus 1 000 €, soit 6,7 % ; chiffres recalculés par test, aucune information factuelle ajoutée). Fiche : 3 741 → 4 016 px à 375 px.

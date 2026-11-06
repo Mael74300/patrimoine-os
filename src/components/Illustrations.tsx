@@ -1547,3 +1547,42 @@ export function SchemaActions() {
     </figure>
   );
 }
+
+/** Montants de l'exemple fictif de la fiche Donation (Service-Public F14203 et F36656, consultés le 2026-11-06) : abattement parent → enfant 100 000 €, don familial d'argent 31 865 €. */
+export const DONATION_ABATTEMENT = 100_000;
+export const DONATION_DON_ARGENT = 31_865;
+export const DONATION_PAR_PARENT = DONATION_ABATTEMENT + DONATION_DON_ARGENT;
+export const DONATION_TOTAL_DEUX_PARENTS = 2 * DONATION_PAR_PARENT;
+
+/** Schéma « Donation : deux parents, un enfant » : reprend l'exemple fictif de la fiche (2 × (100 000 € + 31 865 €) = 263 730 € sans droits), recalculé par test. */
+export function SchemaDonation() {
+  const parent = (y: number, n: number) => (
+    <g key={n}>
+      <rect x={14} y={y} width={176} height={78} rx={10} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+      <text x={102} y={y + 22} textAnchor="middle" className="ill-step">Parent {n}</text>
+      <text x={102} y={y + 42} textAnchor="middle" className="ill-sub">{fmtEur(DONATION_ABATTEMENT)} d’abattement</text>
+      <text x={102} y={y + 58} textAnchor="middle" className="ill-sub">+ {fmtEur(DONATION_DON_ARGENT)} don d’argent</text>
+      <text x={102} y={y + 72} textAnchor="middle" className="ill-step">= {fmtEur(DONATION_PAR_PARENT)}</text>
+      <path d={`M 190 ${y + 39} H 232 V 111 H 246`} fill="none" stroke="var(--primary)" strokeWidth={2} strokeLinejoin="round" />
+    </g>
+  );
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 250" role="img" aria-labelledby="ill-don-t ill-don-d" className="ill-svg">
+        <title id="ill-don-t">{`Donation : deux parents peuvent donner ${fmtEur(DONATION_TOTAL_DEUX_PARENTS)} à un enfant sans droits`}</title>
+        <desc id="ill-don-d">{`Exemple fictif : chaque parent de moins de 80 ans peut donner à son enfant majeur ${fmtEur(DONATION_ABATTEMENT)} (abattement) plus ${fmtEur(DONATION_DON_ARGENT)} (don familial d’argent), soit ${fmtEur(DONATION_PAR_PARENT)}. Pour deux parents, l’enfant reçoit ${fmtEur(DONATION_TOTAL_DEUX_PARENTS)} sans droits. Les abattements se renouvellent tous les 15 ans.`}</desc>
+        {parent(10, 1)}
+        {parent(100, 2)}
+        <rect x={246} y={74} width={160} height={74} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={326} y={98} textAnchor="middle" className="ill-step">Enfant majeur</text>
+        <text x={326} y={120} textAnchor="middle" className="ill-step">{fmtEur(DONATION_TOTAL_DEUX_PARENTS)}</text>
+        <text x={326} y={138} textAnchor="middle" className="ill-sub">sans droits</text>
+        <text x={210} y={212} textAnchor="middle" className="ill-sub">Les abattements se renouvellent tous les 15 ans.</text>
+        <text x={210} y={232} textAnchor="middle" className="ill-sub">Parents de moins de 80 ans, enfant majeur.</text>
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : montants en vigueur à la date de vérification de la fiche. Au-delà, des droits s’appliquent selon un barème progressif.
+      </figcaption>
+    </figure>
+  );
+}
