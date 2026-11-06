@@ -1626,3 +1626,54 @@ export function SchemaOr() {
     </figure>
   );
 }
+
+/** Étapes de la vie d'un PEL (Service-Public F16140, consulté le 2026-11-06) : bornes en années depuis l'ouverture. */
+export const PEL_PHASES = [
+  { from: 0, to: 4, label: 'Durée minimale', detail: 'versements d’au moins 540 € par an' },
+  { from: 4, to: 10, label: 'Prolongation possible', detail: 'année par année, jusqu’à 10 ans' },
+  { from: 10, to: 15, label: 'Sans versement', detail: 'intérêts au taux du contrat' },
+] as const;
+export const PEL_LIVRET_AGE = 15;
+
+/** Frise « vie d'un PEL » : durées proportionnelles aux années, règles seulement (aucun montant fictif). */
+export function SchemaPel() {
+  const X0 = 14;
+  const W = 392;
+  const x = (y: number) => X0 + (y / PEL_LIVRET_AGE) * W;
+  const fills = ['var(--primary)', 'var(--accent)', 'var(--warn)'];
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 258" role="img" aria-labelledby="ill-pel-t ill-pel-d" className="ill-svg">
+        <title id="ill-pel-t">Vie d’un PEL : taux figé à l’ouverture, 4 ans minimum, 10 ans maximum de versements, livret ordinaire à 15 ans</title>
+        <desc id="ill-pel-d">Le taux est fixé à l’ouverture du plan et ne change pas. De 0 à 4 ans : durée minimale, avec au moins 540 € versés par an. De 4 à 10 ans : le plan peut être prolongé d’année en année. De 10 à 15 ans : plus de versements, mais les intérêts continuent au taux du contrat. À 15 ans, le PEL devient un livret ordinaire au taux fixé par la banque.</desc>
+        <text x={X0} y={18} className="ill-step">Taux fixé à l’ouverture (2,00 % en 2026),</text>
+        <text x={X0} y={36} className="ill-step">le même pendant tout le plan</text>
+        <line x1={X0} x2={X0 + W} y1={42} y2={42} stroke="var(--ink-2)" strokeWidth={1.5} strokeDasharray="5 4" />
+        {PEL_PHASES.map((p, i) => (
+          <g key={p.label}>
+            <rect x={x(p.from)} y={52} width={x(p.to) - x(p.from)} height={40} fill={fills[i]} />
+            <text x={(x(p.from) + x(p.to)) / 2} y={77} textAnchor="middle" className="ill-on-dark ill-total">{i === 0 ? '4 ans' : i === 1 ? '6 ans' : '5 ans'}</text>
+          </g>
+        ))}
+        <rect x={X0} y={52} width={W} height={40} rx={8} fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
+        {[0, 4, 10, 15].map((y) => (
+          <g key={y}>
+            <line x1={x(y)} x2={x(y)} y1={92} y2={102} stroke="var(--ink-2)" strokeWidth={1.5} />
+            <text x={x(y)} y={118} textAnchor={y === 0 ? 'start' : y === PEL_LIVRET_AGE ? 'end' : 'middle'} className="ill-sub">{y === 0 ? 'Ouverture' : `${y} ans`}</text>
+          </g>
+        ))}
+        {PEL_PHASES.map((p, i) => (
+          <g key={p.label}>
+            <rect x={X0} y={136 + i * 32} width={14} height={14} rx={3} fill={fills[i]} />
+            <text x={X0 + 22} y={148 + i * 32} className="ill-sub" textAnchor="start"><tspan fontWeight="700">{p.label}</tspan> : {p.detail}</text>
+          </g>
+        ))}
+        <text x={X0} y={236} className="ill-sub" textAnchor="start">À 15 ans : le PEL devient un livret ordinaire,</text>
+        <text x={X0} y={252} className="ill-sub" textAnchor="start">au taux fixé par la banque.</text>
+      </svg>
+      <figcaption>
+        <strong>Illustration</strong> : règles des PEL ouverts à partir de 2018, durées proportionnelles. Retirer de l’argent avant l’échéance entraîne la clôture du plan.
+      </figcaption>
+    </figure>
+  );
+}
