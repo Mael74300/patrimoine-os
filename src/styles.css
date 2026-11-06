@@ -754,3 +754,10 @@ h2.gloss-letter::before { content: none; }
 .bb-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 4px 0 0 calc(5.2rem + 10px); font-size: .85rem; color: var(--ink-2); }
 .bb-dot { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin-right: 6px; vertical-align: -1px; border: 1px solid var(--line); }
 @media (max-width: 480px) { .bb-row { grid-template-columns: 4.2rem 1fr; gap: 8px; } .bb-legend { margin-left: calc(4.2rem + 8px); } }
+
+/* Glossaire sur mobile : toutes les lettres visibles d'un coup (la rangée défilante cachait les lettres de P à V sans aucun indice) */
+@media (max-width: 599px) {
+  .gloss-nav { position: static; flex-wrap: wrap; overflow-x: visible; margin: 4px 0 8px; padding: 0 0 8px; border-bottom: 0; gap: 6px; }
+  .gloss-nav a { flex: 0 0 auto; min-width: 40px; min-height: 40px; }
+  .gloss-group, .gloss-item { scroll-margin-top: 80px; }
+}
