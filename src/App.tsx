@@ -2,6 +2,7 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { config } from './config';
 import { trackPageview } from './lib/analytics';
+import { surveillerTextes } from './lib/typo';
 import { ROUTES } from './routes';
 
 const NAV = [
@@ -28,6 +29,14 @@ function ScrollTop() {
     }
     document.getElementById('contenu')?.focus({ preventScroll: true });
   }, [pathname]);
+  return null;
+}
+
+/** Espaces insécables avant « ? ! ; : » (voir lib/typo.ts) : appliquées après l'hydratation, sur la page et sur tout texte qui apparaît ensuite. */
+function FrenchSpaces() {
+  useEffect(() => {
+    return surveillerTextes(document.body);
+  }, []);
   return null;
 }
 
@@ -182,6 +191,8 @@ export default function App() {
             <Routes>
               {ROUTES.map(({ path, Component }) => <Route key={path} path={path} element={<Component />} />)}
             </Routes>
+            {/* Dans la zone Suspense : l'effet ne démarre qu'une fois la page hydratée (sinon erreurs d'hydratation). */}
+            <FrenchSpaces />
           </Suspense>
         </div>
       </main>
