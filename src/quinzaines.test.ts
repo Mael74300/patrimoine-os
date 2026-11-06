@@ -35,3 +35,10 @@ describe('fiche Livret A : règle des quinzaines cohérente avec le guide', () =
     expect(g).toContain('prise en compte à partir du 16 du même mois'.replace('prise','pris'));
   });
 });
+
+describe('fiche Livret A : le schéma des quinzaines est affiché', () => {
+  it('InvestmentPage place SchemaQuinzaines sur la fiche livret-a', async () => {
+    const src = (await import('./pages/InvestmentPage.tsx?raw')).default;
+    expect(src).toContain("inv.slug === 'livret-a' && <SchemaQuinzaines />");
+  });
+});
