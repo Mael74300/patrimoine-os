@@ -727,3 +727,9 @@ h2.gloss-letter::before { content: none; }
   .gloss-nav { gap: 5px; }
   .gloss-nav a { min-width: 40px; }
 }
+
+/* Mouvement réduit : pas de transitions ni de défilement animé pour qui l'a demandé dans son système */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+  .btn:hover, .situations a:hover, .cat-grid a:hover, .tiles a:hover { transform: none; }
+}

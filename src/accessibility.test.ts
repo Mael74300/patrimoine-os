@@ -117,3 +117,9 @@ describe('tableaux en cartes sur mobile', () => {
     expect(css).toMatch(/\.line-table \.lt-del \{[^}]*z-index: 1/);
   });
 });
+
+describe('mouvement réduit', () => {
+  it('neutralise transitions et animations quand le système le demande', () => {
+    expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\)\s*\{[^}]*transition-duration:\s*0\.01ms/);
+  });
+});
