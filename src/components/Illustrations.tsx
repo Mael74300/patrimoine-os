@@ -840,9 +840,9 @@ export function SchemaObligation() {
 export function SchemaPea() {
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 262" role="img" aria-labelledby="ill-pea-t ill-pea-d" className="ill-svg">
+      <svg viewBox="0 0 420 280" role="img" aria-labelledby="ill-pea-t ill-pea-d" className="ill-svg">
         <title id="ill-pea-t">PEA : ce qui change avant et après 5 ans</title>
-        <desc id="ill-pea-d">Avant 5 ans, un retrait entraîne en principe la clôture du plan, sauf exceptions prévues par la loi. Après 5 ans, on peut retirer sans clôturer le plan ; les gains sont exonérés d’impôt sur le revenu, mais les prélèvements sociaux restent dus.</desc>
+        <desc id="ill-pea-d">Avant 5 ans, un retrait entraîne en principe la clôture du plan, sauf exceptions prévues par la loi. Après 5 ans, un retrait partiel ne clôture pas le plan et les versements restent possibles (un retrait total le clôt) ; les gains sont exonérés d’impôt sur le revenu, mais les prélèvements sociaux restent dus.</desc>
         <rect x={0} y={34} width={206} height={30} rx={15} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
         <rect x={214} y={34} width={206} height={30} rx={15} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
         <text x={103} y={54} textAnchor="middle" className="ill-step">Avant 5 ans</text>
@@ -857,12 +857,13 @@ export function SchemaPea() {
         <text x={103} y={178} textAnchor="middle" className="ill-sub">en principe, sauf</text>
         <text x={103} y={196} textAnchor="middle" className="ill-sub">exceptions prévues par la loi</text>
         <rect x={214} y={100} width={206} height={118} rx={12} fill="var(--surface)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={317} y={128} textAnchor="middle" className="ill-step">Retrait possible</text>
+        <text x={317} y={128} textAnchor="middle" className="ill-step">Retrait partiel possible</text>
         <text x={317} y={148} textAnchor="middle" className="ill-step">sans clôturer le plan</text>
         <text x={317} y={172} textAnchor="middle" className="ill-sub">gains exonérés d’impôt</text>
         <text x={317} y={188} textAnchor="middle" className="ill-sub">sur le revenu ;</text>
         <text x={317} y={204} textAnchor="middle" className="ill-sub">prélèvements sociaux dus</text>
-        <text x={210} y={246} textAnchor="middle" className="ill-sub">Ouvrir tôt fait courir le délai de 5 ans</text>
+        <text x={210} y={244} textAnchor="middle" className="ill-sub">Un retrait total clôture toujours le plan</text>
+        <text x={210} y={264} textAnchor="middle" className="ill-sub">Ouvrir tôt fait courir le délai de 5 ans</text>
       </svg>
     </figure>
   );

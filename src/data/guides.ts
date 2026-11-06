@@ -191,7 +191,7 @@ export const guides: Guide[] = [
         heading: 'Retraits et fiscalité',
         body: [
           'Avant 5 ans, un retrait entraîne en principe la clôture du plan et l’imposition des gains au prélèvement forfaitaire unique (31,4 % en 2026), sauf exceptions prévues par la loi.',
-          'Après 5 ans, les retraits sont possibles sans clôturer le plan et sans bloquer les versements futurs. Les gains sont exonérés d’impôt sur le revenu ; seuls les prélèvements sociaux restent dus. Leur taux est de 18,6 % en 2026.',
+          'Après 5 ans, un retrait partiel est possible sans clôturer le plan et sans bloquer les versements futurs ; seul un retrait total clôture le plan. Les gains sont exonérés d’impôt sur le revenu ; seuls les prélèvements sociaux restent dus. Leur taux est de 18,6 % en 2026.',
         ],
       },
       {
@@ -206,7 +206,7 @@ export const guides: Guide[] = [
     faq: [
       { q: 'Quel est le plafond de versement du PEA ?', a: 'Les versements, uniquement en euros, sont plafonnés à 150 000 €. Le PEA-PME partage avec lui un plafond global de 225 000 €.' },
       { q: 'Que se passe-t-il en cas de retrait avant 5 ans ?', a: 'En principe, le plan est clôturé et les gains sont imposés au prélèvement forfaitaire unique (31,4 % en 2026), sauf exceptions prévues par la loi.' },
-      { q: 'Peut-on retirer de l’argent après 5 ans sans clôturer le PEA ?', a: 'Oui : après 5 ans, les retraits sont possibles sans clôturer le plan et sans bloquer les versements futurs. Les gains sont exonérés d’impôt sur le revenu ; seuls les prélèvements sociaux restent dus.' },
+      { q: 'Peut-on retirer de l’argent après 5 ans sans clôturer le PEA ?', a: 'Oui : après 5 ans, un retrait partiel est possible sans clôturer le plan et sans bloquer les versements futurs ; seul un retrait total clôture le plan. Les gains sont exonérés d’impôt sur le revenu ; seuls les prélèvements sociaux restent dus.' },
       { q: 'Combien de PEA peut-on détenir ?', a: 'Un seul par personne, à condition d’être fiscalement domicilié en France.' },
     ],
     cta: { to: '/simulateurs/patrimoine', label: 'Simuler une épargne en PEA' },
