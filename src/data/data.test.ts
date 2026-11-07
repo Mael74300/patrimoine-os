@@ -55,6 +55,10 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
     expect(txt).toContain('200 000 €');
     expect(txt).toContain('60 ans');
   });
+  it('Crédit immobilier : schéma du levier sur la fiche, source La finance pour tous', () => {
+    const f = investmentBySlug['credit-immobilier'];
+    expect(f.sources.some((x) => x.url.includes('lafinancepourtous.com') && x.url.endsWith('/effet-de-levier/'))).toBe(true);
+  });
   it('Objets d’art : 8 000 € revendus, taxe forfaitaire 6 % + 0,5 % de CRDS → 520 €', () => {
     expect(8000 * (0.06 + 0.005)).toBeCloseTo(520, 6);
     expect(investmentBySlug['objets-d-art-collection'].example.replace(/\u00a0/g, ' ')).toContain('520 €');
