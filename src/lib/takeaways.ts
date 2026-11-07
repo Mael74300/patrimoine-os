@@ -301,3 +301,14 @@ export function portfolioTakeaway(p: { total: number; netReturn: number; annualF
     : '';
   return `Votre portefeuille de ${fmtEur(p.total)} ${annuel}.${frais}${poids}${proj}`;
 }
+
+/** Investir d'un coup ou progressivement : ce que l'on obtient dans chaque cas, et l'écart, en mots simples. */
+export function lumpGradualTakeaway(p: { amount: number; spreadMonths: number; months: number; lump: number; gradual: number; advantageGradual: number }): string {
+  if (!(p.amount > 0)) return '';
+  const mois = `${p.spreadMonths} mois`;
+  const base = `Avec ${fmtEur(p.amount)} à placer, investir la totalité tout de suite donne ${fmtEur(p.lump)} après ${dureeEnMois(p.months)}, contre ${fmtEur(p.gradual)} en investissant par tranches égales sur ${mois}.`;
+  const ecart = Math.abs(p.advantageGradual);
+  if (ecart < 0.005) return `${base} Les deux méthodes donnent le même résultat avec ces hypothèses.`;
+  if (p.advantageGradual < 0) return `${base} Ici, investir tout de suite finit ${fmtEur(ecart)} au-dessus : l'argent resté en attente a rapporté moins que le placement. L'étalement sert surtout à limiter le regret d'un achat juste avant une baisse.`;
+  return `${base} Ici, l'étalement finit ${fmtEur(ecart)} au-dessus : c'est le cas quand le prix baisse pendant l'étalement. Si le prix avait monté, investir tout de suite aurait été préférable.`;
+}
