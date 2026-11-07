@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { investments } from '../data/investments';
 import { fmtEur, projectGrowth } from '../lib/finance';
 import { guides } from '../data/guides';
+import { glossary } from '../data/glossary';
 import { simulators } from '../lib/search';
 import { config } from '../config';
 import { LineChart } from '../components/ui';
@@ -20,6 +21,8 @@ const tiles = [
   { to: '/simulateurs', title: 'Simulateurs', text: 'Testez vos chiffres : épargne, crédit, retraite, budget.', icon: 'calc' },
   { to: '/comparateur', title: 'Comparateur', text: 'Mettez trois placements côte à côte, avec vos propres hypothèses.', icon: 'scale' },
   { to: '/guides', title: 'Guides', text: 'Les bases expliquées simplement, étape par étape.', icon: 'map' },
+  { to: '/entrepreneuriat', title: 'Entrepreneuriat', text: 'Créer ou reprendre une activité : les voies, les risques, les fiches liées.', icon: 'bulb' },
+  { to: '/glossaire', title: 'Glossaire', text: 'Un mot de jargon vous arrête ? Chaque terme est défini simplement.', icon: 'abc' },
 ] as const;
 
 function TileIcon({ name }: { name: (typeof tiles)[number]['icon'] }) {
@@ -29,6 +32,8 @@ function TileIcon({ name }: { name: (typeof tiles)[number]['icon'] }) {
       {name === 'book' && (<><path d="M6 6h8a3 3 0 0 1 3 3v17a2.5 2.5 0 0 0-2.5-2.5H6z" /><path d="M26 6h-8a3 3 0 0 0-3 3v17a2.5 2.5 0 0 1 2.5-2.5H26z" /></>)}
       {name === 'calc' && (<><rect x="7" y="4" width="18" height="24" rx="3" /><path d="M11 9h10M11 15h2M16 15h2M21 15h0M11 20h2M16 20h2M21 20h0" /></>)}
       {name === 'scale' && (<><path d="M16 5v21M10 26h12M6 10h20" /><path d="M6 10l-3.5 8a3.5 3.5 0 0 0 7 0zM26 10l-3.5 8a3.5 3.5 0 0 0 7 0z" /></>)}
+      {name === 'bulb' && (<><path d="M16 4a8 8 0 0 0-4.5 14.6c.9.7 1.5 1.7 1.5 2.9V23h6v-1.5c0-1.2.6-2.2 1.5-2.9A8 8 0 0 0 16 4z" /><path d="M13 27h6M14 30h4" /></>)}
+      {name === 'abc' && (<><path d="M4 22l5-14 5 14M6 17h6" /><path d="M18 8v14h5a3.5 3.5 0 0 0 0-7h-5M18 15h4.5a3.5 3.5 0 0 0 0-7H18" transform="translate(2 1)" /></>)}
       {name === 'map' && (<><path d="M5 8l7-3 8 3 7-3v19l-7 3-8-3-7 3z" /><path d="M12 5v19M20 8v19" /></>)}
     </svg>
   );
@@ -45,7 +50,7 @@ export default function Home() {
     [],
   );
   const last = example[example.length - 1];
-  const counts = [`${investments.length} fiches`, `${simulators.length} simulateurs`, '3 placements à comparer', `${guides.length} guides`];
+  const counts = [`${investments.length} fiches`, `${simulators.length} simulateurs`, '3 placements à comparer', `${guides.length} guides`, '3 façons d’entreprendre', `${glossary.length} termes`];
 
   return (
     <>
