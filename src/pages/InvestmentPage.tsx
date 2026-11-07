@@ -6,7 +6,7 @@ import { investmentBySlug } from '../data/investments';
 import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Dots, Fold, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
-import { SchemaActions, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaPea, SchemaLep, SchemaPel, SchemaPer, SchemaQuinzaines, SchemaScpi, SchemaUniteDeCompte, SchemaFondsEuros, SchemaLevier } from '../components/Illustrations';
+import { SchemaActions, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaPea, SchemaLep, SchemaPel, SchemaPer, SchemaQuinzaines, SchemaScpi, SchemaUniteDeCompte, SchemaFondsEuros, SchemaLevier, SchemaCompteATerme } from '../components/Illustrations';
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
 import { guideBySlug } from '../data/guides';
@@ -92,6 +92,7 @@ export default function InvestmentPage() {
           {inv.slug === 'lep' && <SchemaLep />}
           {inv.slug === 'unites-de-compte' && <SchemaUniteDeCompte />}
           {inv.slug === 'fonds-euros' && <SchemaFondsEuros />}
+          {inv.slug === 'compte-a-terme' && <SchemaCompteATerme />}
           {inv.slug === 'credit-immobilier' && <SchemaLevier />}
           <h2>Comment investir</h2>
           <ul>{inv.howToInvest.map((s) => <li key={s}>{s}</li>)}</ul>
