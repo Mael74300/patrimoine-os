@@ -4,7 +4,7 @@ import { simulators } from './search';
 
 /** Simulateurs liés à chaque fiche (clé : slug de fiche) et à chaque guide (clé : slug de guide). Cohérence vérifiée par les tests. */
 export const simsForInvestment: Record<string, string[]> = {
-  'livret-a': ['epargne-de-precaution', 'objectif-epargne', 'inflation'],
+  'livret-a': ['budget', 'epargne-de-precaution', 'objectif-epargne', 'inflation'],
   lep: ['epargne-de-precaution', 'inflation'],
   'compte-a-terme': ['inflation', 'patrimoine'],
   pel: ['inflation', 'objectif-epargne'],
@@ -23,9 +23,9 @@ export const simsForInvestment: Record<string, string[]> = {
   'credit-immobilier': ['credit', 'comparer-des-credits', 'louer-ou-acheter', 'endettement', 'rembourser-ou-investir', 'immobilier'],
   'creation-entreprise': ['entreprise'],
   'reprise-entreprise': ['entreprise', 'credit'],
-  'activite-numerique': ['entreprise', 'budget'],
+  'activite-numerique': ['entreprise'],
   per: ['patrimoine', 'independance-financiere', 'retraits-reguliers-duree-du-capital'],
-  'capital-humain': ['budget', 'independance-financiere'],
+  'capital-humain': ['independance-financiere'],
 };
 
 export const simsForGuide: Record<string, string[]> = {

@@ -38,3 +38,12 @@ describe('pistes de lecture en bas des simulateurs', () => {
     expect(readingForSimulator('inconnu')).toEqual([]);
   });
 });
+
+describe('pistes de lecture du simulateur Budget', () => {
+  it('renvoie vers des fiches liées au budget (Livret A), pas vers des fiches sans rapport', () => {
+    const fiches = readingForSimulator('budget').filter((l) => l.kind === 'Fiche').map((l) => l.to);
+    expect(fiches).toContain('/encyclopedie/livret-a');
+    expect(fiches).not.toContain('/encyclopedie/activite-numerique');
+    expect(fiches).not.toContain('/encyclopedie/capital-humain');
+  });
+});
