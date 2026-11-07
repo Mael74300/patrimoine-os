@@ -1820,3 +1820,36 @@ export function SchemaFondsEuros() {
     </figure>
   );
 }
+
+/** Fiche Compte à terme : principe qualitatif (aucun chiffre), repris de La finance pour tous, « Comptes à terme » (mise à jour le 2 mars 2026, consultée le 2026-11-07) : prêt à la banque pour une durée choisie, taux ou formule connu au départ, trois formes (fixe, progressif, révisable), pénalité sur les intérêts en cas de retrait anticipé. */
+export function SchemaCompteATerme() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const rows = [
+    { y: 100, t: 'Taux fixe', a: 'Somme versée en une fois', b: 'Capital et intérêts rendus à l’échéance' },
+    { y: 166, t: 'Taux progressif', a: 'Somme versée en une fois', b: 'Taux plus haut si l’argent reste longtemps' },
+    { y: 232, t: 'Taux révisable', a: 'Taux lié à un indice de référence', b: 'Renouvelé à chaque période' },
+  ];
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 354" role="img" aria-labelledby="ill-cat-t ill-cat-d" className="ill-svg">
+        <title id="ill-cat-t">Compte à terme : un prêt à la banque pour une durée choisie</title>
+        <desc id="ill-cat-d">Vous prêtez une somme à la banque pour une durée choisie avec elle. Le taux ou la formule de calcul est connu dès le départ. Il existe trois formes : à taux fixe, à taux progressif par paliers, ou à taux révisable indexé sur un indice. Retirer l’argent avant l’échéance entraîne une pénalité sur les intérêts.</desc>
+        <rect x={0} y={2} width={420} height={56} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={210} y={27} textAnchor="middle" className="ill-step">Vous prêtez à la banque pour une durée choisie</text>
+        <text x={210} y={46} textAnchor="middle" className="ill-sub">Le taux, ou sa formule, est connu dès le départ</text>
+        <path d="M 210 58 V 80 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        {rows.map((r) => (
+          <g key={r.t}>
+            <rect x={0} y={r.y - 18} width={420} height={60} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+            <text x={14} y={r.y} className="ill-step">{r.t}</text>
+            <text x={14} y={r.y + 15} className="ill-sub">{r.a}</text>
+            <text x={14} y={r.y + 29} className="ill-sub">{r.b}</text>
+          </g>
+        ))}
+        <path d="M 210 292 V 306 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={310} width={420} height={40} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={210} y={335} textAnchor="middle" className="ill-step">Retrait avant l’échéance : pénalité sur les intérêts</text>
+      </svg>
+    </figure>
+  );
+}
