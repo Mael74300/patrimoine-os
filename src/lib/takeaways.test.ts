@@ -341,3 +341,30 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(portfolioTakeaway({ total: 0, netReturn: 0, annualFeesEuro: 0, topLabel: '', topWeight: 0, years: 5, monthly: 0, contributed: 0, value: 0 })).toBe('');
   });
 });
+
+describe('phrase « Concrètement » : investir d’un coup ou progressivement', () => {
+  const digits = (t: string) => t.replace(/\s/g, '');
+  const eur = (n: number) => digits(Math.round(n).toLocaleString('fr-FR'));
+  const base = { amount: 12000, spreadMonths: 12, years: 5, annualReturn: 0.05, cashRate: 0, move: 0.2 };
+  it('rendement régulier : les montants viennent de lumpVsGradual et investir tout de suite gagne', async () => {
+    const { lumpVsGradual, lumpGradualTakeaway } = await import('./finance').then(async (f) => ({ lumpVsGradual: f.lumpVsGradual, lumpGradualTakeaway: (await import('./takeaways')).lumpGradualTakeaway }));
+    const r = lumpVsGradual({ ...base, path: 'steady' });
+    const t = digits(lumpGradualTakeaway({ amount: 12000, spreadMonths: r.spreadMonths, months: r.months, lump: r.lump, gradual: r.gradual, advantageGradual: r.advantageGradual }));
+    expect(t).toContain(eur(r.lump));
+    expect(t).toContain(eur(r.gradual));
+    expect(t).toContain(eur(Math.abs(r.advantageGradual)));
+    expect(r.advantageGradual).toBeLessThan(0);
+    expect(t).toContain('toutdesuitefinit');
+  });
+  it('baisse pendant l’étalement : l’étalement gagne', async () => {
+    const f = await import('./finance');
+    const { lumpGradualTakeaway } = await import('./takeaways');
+    const r = f.lumpVsGradual({ ...base, path: 'dip' });
+    expect(r.advantageGradual).toBeGreaterThan(0);
+    expect(lumpGradualTakeaway({ amount: 12000, spreadMonths: r.spreadMonths, months: r.months, lump: r.lump, gradual: r.gradual, advantageGradual: r.advantageGradual })).toContain('l\'étalement finit');
+  });
+  it('vide sans capital', async () => {
+    const { lumpGradualTakeaway } = await import('./takeaways');
+    expect(lumpGradualTakeaway({ amount: 0, spreadMonths: 12, months: 60, lump: 0, gradual: 0, advantageGradual: 0 })).toBe('');
+  });
+});

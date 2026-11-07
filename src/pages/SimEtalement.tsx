@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { lumpVsGradual, fmtEur, fmtPct, type PricePath } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, SelectField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+import { lumpGradualTakeaway } from '../lib/takeaways';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, SelectField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = { amount: number; spread: number; years: number; ret: number; cash: number; path: PricePath; move: number };
 
@@ -53,10 +54,10 @@ export default function SimEtalement() {
             <Kpi label="En tranches égales" value={fmtEur(r.gradual)} sub={`${r.spreadMonths} mois d’étalement`} />
             <Kpi label="Écart (étalement − une fois)" value={fmtEur(r.advantageGradual)} sub={`${better} finit au-dessus (${fmtPct(Math.abs(gap))})`} />
           </div>
+          <Takeaway>{lumpGradualTakeaway({ amount: s.amount, spreadMonths: r.spreadMonths, months: r.months, lump: r.lump, gradual: r.gradual, advantageGradual: r.advantageGradual })}</Takeaway>
           <p className="muted small">
             Chaque tranche est investie en début de mois ; la part non encore investie rapporte le rendement saisi. Les deux méthodes sont évaluées au même horizon.
-            Avec un rendement régulier supérieur à celui de la part non investie, investir tout de suite finit au-dessus : l’étalement réduit surtout le regret d’un achat juste avant une baisse.
-            Les exemples ci-dessus sont fictifs.
+            Les valeurs de départ du formulaire sont fictives : remplacez-les par les vôtres.
           </p>
           <SavedSims simKey="etalement" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
