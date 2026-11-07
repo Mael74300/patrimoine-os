@@ -18,6 +18,7 @@ const situations: { icon: SituationIconName; title: string; text: string; cta: s
 const tiles = [
   { to: '/encyclopedie', title: 'Encyclopédie', text: 'Une fiche claire par placement : fonctionnement, risques, fiscalité.', icon: 'book' },
   { to: '/simulateurs', title: 'Simulateurs', text: 'Testez vos chiffres : épargne, crédit, retraite, budget.', icon: 'calc' },
+  { to: '/comparateur', title: 'Comparateur', text: 'Mettez trois placements côte à côte, avec vos propres hypothèses.', icon: 'scale' },
   { to: '/guides', title: 'Guides', text: 'Les bases expliquées simplement, étape par étape.', icon: 'map' },
 ] as const;
 
@@ -27,6 +28,7 @@ function TileIcon({ name }: { name: (typeof tiles)[number]['icon'] }) {
     <svg className="tile-icon" width="40" height="40" viewBox="0 0 32 32" aria-hidden="true" {...common}>
       {name === 'book' && (<><path d="M6 6h8a3 3 0 0 1 3 3v17a2.5 2.5 0 0 0-2.5-2.5H6z" /><path d="M26 6h-8a3 3 0 0 0-3 3v17a2.5 2.5 0 0 1 2.5-2.5H26z" /></>)}
       {name === 'calc' && (<><rect x="7" y="4" width="18" height="24" rx="3" /><path d="M11 9h10M11 15h2M16 15h2M21 15h0M11 20h2M16 20h2M21 20h0" /></>)}
+      {name === 'scale' && (<><path d="M16 5v21M10 26h12M6 10h20" /><path d="M6 10l-3.5 8a3.5 3.5 0 0 0 7 0zM26 10l-3.5 8a3.5 3.5 0 0 0 7 0z" /></>)}
       {name === 'map' && (<><path d="M5 8l7-3 8 3 7-3v19l-7 3-8-3-7 3z" /><path d="M12 5v19M20 8v19" /></>)}
     </svg>
   );
@@ -43,7 +45,7 @@ export default function Home() {
     [],
   );
   const last = example[example.length - 1];
-  const counts = [investments.length, simulators.length, guides.length];
+  const counts = [`${investments.length} fiches`, `${simulators.length} simulateurs`, '3 placements à comparer', `${guides.length} guides`];
 
   return (
     <>
@@ -87,7 +89,7 @@ export default function Home() {
               <TileIcon name={t.icon} />
               <strong>{t.title}</strong>
               <span>{t.text}</span>
-              <em>{counts[i]} {i === 0 ? 'fiches' : i === 1 ? 'simulateurs' : 'guides'}</em>
+              <em>{counts[i]}</em>
             </Link>
           </li>
         ))}

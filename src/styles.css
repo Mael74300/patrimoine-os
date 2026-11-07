@@ -526,7 +526,7 @@ th { background: var(--surface-2); color: var(--primary-deep); }
 .home-hero .btn:hover { background: var(--gold); }
 @media (max-width: 600px) { .home-hero { padding: 26px 20px 24px; border-radius: 20px; } .home-hero .btn { padding: 14px 16px; } }
 
-.tiles { list-style: none; padding: 0; margin: 8px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.tiles { list-style: none; padding: 0; margin: 8px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
 .tiles a { display: block; height: 100%; padding: 22px; border-radius: 18px; text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow-sm); transition: transform .15s, box-shadow .15s, border-color .15s; }
 .tiles a:hover, .tiles a:focus-visible { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--primary); }
 .tile-icon { display: block; width: 52px; height: 52px; padding: 10px; border-radius: 14px; margin-bottom: 14px; color: #fff; background: var(--grad); box-sizing: border-box; }
