@@ -638,10 +638,10 @@ export function SchemaFonciereCotee() {
         <text x={110} y={246} textAnchor="middle" className="ill-step">Des immeubles loués</text>
         <text x={110} y={266} textAnchor="middle" className="ill-sub">surtout bureaux et commerces</text>
         <path d="M 220 249 H 290 V 31 H 228 m 8 -7 l -8 7 l 8 7" {...arrow} />
-        <text x={302} y={118} textAnchor="start" className="ill-in">les loyers</text>
-        <text x={302} y={136} textAnchor="start" className="ill-in">financent les</text>
-        <text x={302} y={154} textAnchor="start" className="ill-in">dividendes versés</text>
-        <text x={302} y={172} textAnchor="start" className="ill-in">aux actionnaires</text>
+        <text x={296} y={118} textAnchor="start" className="ill-in">les loyers</text>
+        <text x={296} y={136} textAnchor="start" className="ill-in">financent les</text>
+        <text x={296} y={154} textAnchor="start" className="ill-in">dividendes versés</text>
+        <text x={296} y={172} textAnchor="start" className="ill-in">aux actionnaires</text>
         <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
       </svg>
     </figure>

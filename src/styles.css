@@ -321,6 +321,10 @@ td.neg { color: var(--danger); }
 .ill-svg text.ill-on-dark { fill: var(--primary-ink); }
 .ill-svg text.ill-loss { fill: var(--danger); font-size: 13px; font-weight: 700; }
 .ill-year { font-size: 14px; font-weight: 700; }
+/* Mobile : moins de marge autour du schéma pour qu'il soit moins réduit (textes plus lisibles) */
+@media (max-width: 480px) {
+  .illustration { padding: 10px 6px; }
+}
 
 /* Blocs repliables : FAQ des simulateurs et tableaux détaillés */
 .faq details, details.fold { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); margin: 8px 0; }
