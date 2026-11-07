@@ -748,6 +748,40 @@ export function SchemaLmnp() {
   );
 }
 
+/** Schéma « Location nue : micro-foncier ou régime réel » : repris de Service-Public.fr (fiche F1991 « Revenus locatifs (location non meublée) », vérifiée le 15 avril 2026, consultée le 2026-11-07) : micro-foncier jusqu’à 15 000 € de revenus fonciers, abattement forfaitaire de 30 %, travaux et charges non déductibles ; régime réel au-delà de 15 000 €, option possible en dessous (irrévocable pendant 3 ans), recettes diminuées des frais et charges réels et justifiés. */
+export function SchemaLocationNue() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 320" role="img" aria-labelledby="ill-ln-t ill-ln-d" className="ill-svg">
+        <title id="ill-ln-t">Location nue : micro-foncier ou régime réel</title>
+        <desc id="ill-ln-d">On part des loyers encaissés. Jusqu’à 15 000 euros de revenus fonciers bruts par an, le micro-foncier s’applique : un abattement forfaitaire de 30 pour cent est retiré et les travaux et charges ne sont pas déductibles. Au-delà de 15 000 euros, le régime réel s’applique, et on peut aussi le choisir en dessous, pour trois ans minimum : on retire les frais et charges réels et justifiés. Ce qui reste est le revenu foncier imposable.</desc>
+        <rect x={0} y={2} width={420} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={210} y={33} textAnchor="middle" className="ill-step">Loyers encaissés dans l’année</text>
+        <path d="M 105 52 V 80 m -7 -8 l 7 8 l 7 -8 M 315 52 V 80 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={80} width={204} height={150} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={102} y={106} textAnchor="middle" className="ill-step">Micro-foncier</text>
+        <text x={102} y={124} textAnchor="middle" className="ill-sub">jusqu’à 15 000 € par an</text>
+        <text x={102} y={152} textAnchor="middle" className="ill-in">On retire un</text>
+        <text x={102} y={170} textAnchor="middle" className="ill-in">abattement de 30 %</text>
+        <text x={102} y={198} textAnchor="middle" className="ill-sub">Travaux et charges</text>
+        <text x={102} y={214} textAnchor="middle" className="ill-sub">non déductibles en plus</text>
+        <rect x={216} y={80} width={204} height={150} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={318} y={106} textAnchor="middle" className="ill-step">Régime réel</text>
+        <text x={318} y={124} textAnchor="middle" className="ill-sub">au-delà de 15 000 € par an</text>
+        <text x={318} y={152} textAnchor="middle" className="ill-in">On retire les frais</text>
+        <text x={318} y={170} textAnchor="middle" className="ill-in">et charges réels</text>
+        <text x={318} y={198} textAnchor="middle" className="ill-sub">À justifier ; choix possible</text>
+        <text x={318} y={214} textAnchor="middle" className="ill-sub">en dessous, pour 3 ans</text>
+        <path d="M 210 230 V 248 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={250} width={420} height={36} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={210} y={274} textAnchor="middle" className="ill-step">= revenu foncier imposable</text>
+        <text x={210} y={312} textAnchor="middle" className="ill-sub">Schéma de principe d’après Service-Public.fr</text>
+      </svg>
+    </figure>
+  );
+}
+
 /** Schéma « ETF : un fonds qui suit un indice, acheté en Bourse comme une action » : principe qualitatif (aucun chiffre), repris de l’AMF (communiqué « ETF et risques associés », 14 février 2017, consulté le 2026-11-05) : un fonds indiciel coté vise à répliquer la performance d’un indice de référence, en achetant les titres qui le composent ou par réplication synthétique ; il est négociable en Bourse comme une simple action. */
 export function SchemaEtf() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;

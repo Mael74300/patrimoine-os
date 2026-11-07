@@ -6,7 +6,7 @@ import { investmentBySlug } from '../data/investments';
 import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Dots, Fold, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
-import { SchemaActions, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaObligation, SchemaOr, SchemaPea, SchemaLep, SchemaPel, SchemaPer, SchemaQuinzaines, SchemaScpi, SchemaUniteDeCompte, SchemaFondsEuros } from '../components/Illustrations';
+import { SchemaActions, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaPea, SchemaLep, SchemaPel, SchemaPer, SchemaQuinzaines, SchemaScpi, SchemaUniteDeCompte, SchemaFondsEuros } from '../components/Illustrations';
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
 import { guideBySlug } from '../data/guides';
@@ -79,6 +79,7 @@ export default function InvestmentPage() {
           {inv.slug === 'private-equity' && <SchemaCapitalInvestissement />}
           {inv.slug === 'per' && <SchemaPer />}
           {inv.slug === 'lmnp' && <SchemaLmnp />}
+          {inv.slug === 'location-nue' && <SchemaLocationNue />}
           {inv.slug === 'etf-monde' && <SchemaEtf />}
           {inv.slug === 'cryptomonnaies' && <SchemaCrypto />}
           {inv.slug === 'compte-titres' && <SchemaCto />}
