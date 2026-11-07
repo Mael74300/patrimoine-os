@@ -1760,3 +1760,29 @@ export function SchemaUniteDeCompte() {
     </figure>
   );
 }
+
+/** Fiche Fonds en euros : principe qualitatif (aucun chiffre), repris de Service-Public F15274 (consulté le 2026-11-07) : sommes valorisées en euros, placées par l’assureur sur des actifs peu risqués, valeur des fonds investis garantie par l’assureur, garantie en capital en contrepartie d’un faible rendement, intérêts annuels ajoutés au capital. */
+export function SchemaFondsEuros() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 300" role="img" aria-labelledby="ill-fe-t ill-fe-d" className="ill-svg">
+        <title id="ill-fe-t">Fonds en euros : capital garanti par l’assureur, intérêts ajoutés chaque année</title>
+        <desc id="ill-fe-d">Vous versez de l’argent sur un contrat d’assurance-vie en fonds en euros. L’assureur le place sur des actifs peu risqués et garantit la valeur des fonds investis. Chaque année, il verse des intérêts qui s’ajoutent au capital et produisent à leur tour des intérêts. La contrepartie de cette garantie en capital est un faible rendement.</desc>
+        <rect x={0} y={2} width={420} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={210} y={33} textAnchor="middle" className="ill-step">Vous versez sur un contrat d’assurance-vie</text>
+        <path d="M 210 52 V 78 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={80} width={420} height={104} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={210} y={106} textAnchor="middle" className="ill-step">L’assureur place votre argent</text>
+        <text x={210} y={134} textAnchor="middle" className="ill-in">Sur des actifs peu risqués</text>
+        <text x={210} y={160} textAnchor="middle" className="ill-sub">La valeur des fonds investis est garantie</text>
+        <text x={210} y={176} textAnchor="middle" className="ill-sub">par l’assureur : c’est la garantie en capital</text>
+        <path d="M 210 184 V 206 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={208} width={420} height={50} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={210} y={229} textAnchor="middle" className="ill-step">Chaque année : des intérêts s’ajoutent au capital</text>
+        <text x={210} y={247} textAnchor="middle" className="ill-sub">contrepartie de la garantie : un faible rendement</text>
+        <text x={210} y={290} textAnchor="middle" className="ill-sub">Schéma de principe d’après Service-Public</text>
+      </svg>
+    </figure>
+  );
+}
