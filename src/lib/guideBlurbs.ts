@@ -20,6 +20,7 @@ export const guideBlurbs: Record<string, string> = {
   'taux-endettement-capacite-emprunt': 'Quelle part de mes revenus puis-je consacrer à un crédit ?',
   'combien-epargner-par-mois-objectif': 'Quel versement mensuel pour réussir un projet à une date ?',
   'rembourser-credit-par-anticipation-ou-investir': 'Rembourser plus vite ou placer : comment trancher ?',
+  'pret-a-taux-zero-ptz': 'Le prêt sans intérêts pour devenir propriétaire : qui y a droit ?',
   'diversification-placements': 'Pourquoi ne pas tout mettre au même endroit ?',
   'inflation-pouvoir-d-achat-epargne': 'Mon épargne perd-elle de la valeur quand les prix montent ?',
   'regle-de-72-doubler-son-capital': 'Comment estimer de tête quand un capital double ?',

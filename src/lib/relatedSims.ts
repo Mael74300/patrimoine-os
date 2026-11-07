@@ -42,6 +42,7 @@ export const simsForGuide: Record<string, string[]> = {
   'choisir-son-enveloppe': ['frais', 'patrimoine'],
   'combien-epargne-de-precaution': ['epargne-de-precaution', 'inflation', 'budget'],
   'taux-endettement-capacite-emprunt': ['endettement', 'credit', 'dettes'],
+  'pret-a-taux-zero-ptz': ['endettement', 'credit', 'louer-ou-acheter'],
   'combien-epargner-par-mois-objectif': ['interets-composes', 'objectif-epargne', 'budget', 'inflation'],
   'rembourser-credit-par-anticipation-ou-investir': ['rembourser-ou-investir', 'credit', 'comparer-des-credits', 'dettes', 'epargne-de-precaution'],
   'diversification-placements': ['patrimoine', 'frais', 'epargne-de-precaution'],
