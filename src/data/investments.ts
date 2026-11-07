@@ -36,6 +36,8 @@ const S = {
   donationArgent: { label: 'Service-Public.fr — Don familial d’une somme d’argent', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F36656', official: true },
   bofipTfop: { label: 'BOFiP — Taxe forfaitaire sur les objets précieux (BOI-RPPM-PVBMC-20-10)', url: 'https://bofip.impots.gouv.fr/bofip/4151-PGP.html/identifiant=BOI-RPPM-PVBMC-20-10-20181231', official: true },
   tfopForm: { label: 'Service-Public.fr — Taxe forfaitaire sur les métaux précieux, bijoux, objets d’art, de collection et antiquités', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/R17176', official: true },
+  bofipForet: { label: 'BOFiP — Crédit d’impôt au titre d’investissements forestiers : modalités de calcul (BOI-IR-RICI-60-20-20)', url: 'https://bofip.impots.gouv.fr/bofip/5537-PGP.html/identifiant=BOI-IR-RICI-60-20-20-20240612', official: true },
+  forme2041gk: { label: 'impots.gouv.fr — Notice 2041-GK : investissements forestiers (revenus 2024)', url: 'https://www.impots.gouv.fr/sites/default/files/formulaires/2041-gk/2025/2041-gk_5115.pdf', official: true },
 } satisfies Record<string, Source>;
 
 const PFU = "Prélèvement forfaitaire unique de 31,4 % (12,8 % d'impôt sur le revenu + 18,6 % de prélèvements sociaux) sur les revenus 2026, ou option globale pour le barème progressif. Hausse issue de la loi de financement de la Sécurité sociale pour 2026.";
@@ -567,6 +569,29 @@ const raw: Omit<Investment, 'review'>[] = [
     tags: ['tangible', 'peu liquide', 'risqué'],
   },
 
+  // ------------------------------------------------------------------ Terres et forêts
+  {
+    slug: 'groupements-forestiers',
+    name: 'Forêt : parts de groupement forestier',
+    category: 'terres',
+    summary: 'Détenir une part de forêt avec d’autres épargnants : un crédit d’impôt à l’entrée, mais des parts à conserver au moins huit ans.',
+    definition: 'Un groupement forestier est une société qui possède des forêts. En achetant ou en souscrivant des parts, on devient copropriétaire de ces bois sans les gérer soi-même.',
+    howItWorks: 'Le groupement gère ses forêts selon un plan simple de gestion agréé par le centre régional de la propriété forestière. L’épargnant achète des parts en argent, et l’État accorde un crédit d’impôt sur les sommes versées, à condition de garder les parts jusqu’au 31 décembre de la huitième année qui suit l’achat. Les parts d’un groupement forestier ne se revendent pas comme une action cotée : il faut trouver un acheteur.',
+    howToInvest: ['Vérifier que le groupement s’engage à appliquer un plan simple de gestion agréé pendant quinze ans.', 'Souscrire ou acheter les parts avec de l’argent, à titre personnel (pas par une société).', 'Conserver la totalité des parts jusqu’au 31 décembre de la huitième année suivant l’achat, faute de quoi le crédit d’impôt peut être remis en cause.'],
+    minCapital: { text: 'Variable selon le groupement.', verified: false },
+    horizon: 'Très long terme', horizonYears: 8,
+    liquidity: 1, risk: 3, effort: 2,
+    fees: { text: 'Frais d’entrée, de gestion et de revente : variables, à demander au groupement avant de souscrire.', verified: false },
+    tax: { text: 'Crédit d’impôt de 25 % des sommes versées pour souscrire ou acheter en argent des parts de groupement forestier (ou de société d’épargne forestière), pour des investissements réalisés jusqu’au 31 décembre 2027. Les sommes retenues sont plafonnées à 6 250 € pour une personne seule et 12 500 € pour un couple marié ou pacsé soumis à imposition commune, soit un crédit maximal de 1 562,50 € ou 3 125 €. Conditions : parts acquises à titre onéreux et à titre personnel, conservées jusqu’au 31 décembre de la huitième année suivant l’achat ; le groupement applique un plan simple de gestion agréé pendant quinze ans. Les revenus des parts et leur revente ont leurs propres règles, non traitées ici.', verified: true, asOf: '7 novembre 2026' },
+    pros: ['Crédit d’impôt de 25 % à l’entrée, dans la limite du plafond', 'Peu lié aux marchés financiers', 'Forêt gérée selon un plan agréé'],
+    cons: ['Parts à conserver au moins huit ans pour garder le crédit d’impôt', 'Revente lente : il faut trouver un acheteur', 'Une forêt peut subir tempêtes et incendies', 'Aucun revenu garanti'],
+    timeSkills: 'Faible à modéré : le groupement gère la forêt.',
+    example: 'Exemple fictif : une personne seule verse 10 000 € pour acheter des parts. Seuls 6 250 € sont retenus, d’où un crédit d’impôt de 25 %, soit 1 562,50 €.',
+    sources: [S.bofipForet, S.forme2041gk, S.amf],
+    alternatives: ['scpi', 'etf-monde'],
+    tags: ['tangible', 'peu liquide', 'avantage fiscal'],
+  },
+
   // ------------------------------------------------------------------ Crypto
   {
     slug: 'cryptomonnaies',
@@ -688,6 +713,7 @@ const REVIEW: Record<string, Partial<Review>> = {
   per: { verifiedOn: '2026-11-04', taxValidAsOf: '2026-11-04', data: ['Plafond de déduction : 10 % des revenus d’activité de 2025, maximum 37 680 €, ou 4 710 € si plus élevé', 'Versements après 70 ans non déductibles depuis le 1er janvier 2026', 'Sortie en capital : versements déduits au barème sans abattement de 10 %, gains au PFU de 31,4 % en 2026'], assumptions: ['Tranche marginale de 30 % pour l’exemple'] },
   or: { data: ['Taxe forfaitaire 11,5 % du prix de cession'] },
   'objets-d-art-collection': { verifiedOn: '2026-11-03', taxValidAsOf: '2026-11-03', data: ['Taxe forfaitaire 6 % + CRDS 0,5 % = 6,5 % du prix de cession', 'Exonération si prix de cession ≤ 5 000 €'] },
+  'groupements-forestiers': { verifiedOn: '2026-11-07', taxValidAsOf: '2026-11-07', data: ['Crédit d’impôt de 25 % sur les parts de groupement forestier, investissements réalisés jusqu’au 31 décembre 2027', 'Sommes retenues plafonnées à 6 250 € (personne seule) et 12 500 € (couple soumis à imposition commune)', 'Conservation des parts jusqu’au 31 décembre de la huitième année suivant l’achat ; plan simple de gestion agréé pendant quinze ans'] },
   lmnp: { verifiedOn: '2026-11-04', taxValidAsOf: '2026-11-04', data: ['Micro-BIC : 83 600 € de recettes et abattement de 50 % en 2026 (meublé de tourisme non classé : 15 000 € et 30 %)', 'Cotisations sociales exclues jusqu’à 23 000 € de recettes par an', 'Amortissements réintégrés dans la plus-value (cessions depuis le 15 février 2025)'] },
   donation: { verifiedOn: '2026-11-03', taxValidAsOf: '2026-11-03', data: ['Abattement 100 000 € par parent et par enfant, renouvelable tous les 15 ans', 'Don familial d’argent : 31 865 € (donateur de moins de 80 ans, bénéficiaire majeur), cumulable avec l’abattement'] },
   'capital-humain': { assumptions: ['Rendement de 5 % par an sur l’épargne supplémentaire, hypothèse d’illustration'] },

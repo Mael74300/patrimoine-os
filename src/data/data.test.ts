@@ -59,6 +59,11 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
     expect(8000 * (0.06 + 0.005)).toBeCloseTo(520, 6);
     expect(investmentBySlug['objets-d-art-collection'].example.replace(/\u00a0/g, ' ')).toContain('520 €');
   });
+  it('Groupement forestier : 10 000 € versés, base plafonnée à 6 250 €, crédit de 25 % → 1 562,50 €', () => {
+    expect(Math.min(10000, 6250) * 0.25).toBeCloseTo(1562.5, 6);
+    expect(12500 * 0.25).toBeCloseTo(3125, 6);
+    expect(investmentBySlug['groupements-forestiers'].example.replace(/\u00a0/g, ' ')).toContain('1 562,50 €');
+  });
   it('Compte à terme : 300 € bruts → 205,80 € nets au PFU de 31,4 %', () => {
     expect(300 * (1 - 0.314)).toBeCloseTo(205.8, 6);
   });
