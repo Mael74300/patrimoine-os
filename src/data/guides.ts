@@ -413,6 +413,60 @@ export const guides: Guide[] = [
     cta: { to: '/simulateurs/endettement', label: 'Calculer mon taux d’endettement' },
   },
   {
+    slug: 'pret-a-taux-zero-ptz',
+    title: 'Le prêt à taux zéro (PTZ) : pour qui, pour quel logement ?',
+    summary: 'Un prêt aidé par l’État pour acheter ou construire sa première résidence principale : à quoi il sert, qui peut l’obtenir, comment il se rembourse et où le demander.',
+    readingMinutes: 4,
+    updatedOn: '2026-11-07',
+    sections: [
+      {
+        heading: 'Ce que c’est, en deux phrases',
+        body: [
+          'Le prêt à taux zéro (PTZ) est un prêt aidé par l’État. Vous remboursez la somme prêtée, sans payer d’intérêts, ni d’intérêts intercalaires, ni de frais de dossier ou d’expertise.',
+          'Il ne finance qu’une partie de l’achat ou de la construction de votre future résidence principale : il s’ajoute toujours à un autre prêt immobilier (prêt bancaire classique, prêt d’accession sociale, prêt épargne logement…).',
+        ],
+      },
+      {
+        heading: 'Qui peut l’obtenir',
+        body: [
+          'Il s’adresse à ceux qui deviennent propriétaires de leur résidence principale : en principe, vous ne devez pas avoir été propriétaire de votre résidence principale pendant les 2 années qui précèdent le prêt. Quelques exceptions existent (usufruit ou nue-propriété, handicap, catastrophe naturelle).',
+          'Vos revenus doivent aussi rester sous un plafond. Ce plafond dépend du nombre de personnes qui vivront dans le logement et de la commune. On part du revenu fiscal de référence de l’année N-2 (celui de 2024 pour une demande en 2026) ; pour une offre de prêt émise à partir d’avril 2025, on retient le plus élevé de ce revenu et du coût de l’opération divisé par 9.',
+          'Ces plafonds dépendent notamment de la date de l’offre de prêt : ils ne sont donc pas recopiés ici. Consultez le tableau à jour sur Service-Public, ou son simulateur.',
+        ],
+      },
+      {
+        heading: 'Quel logement peut-on financer',
+        body: [
+          'Le logement doit devenir votre résidence principale, c’est-à-dire que vous l’habitez au moins 8 mois par an. Cela doit se faire au plus tard 1 an après l’achat ou la fin des travaux (ou au départ à la retraite, dans des conditions précises).',
+          'Dans le neuf : un logement achevé depuis moins de 5 ans et jamais occupé, ou une construction. Dans l’ancien, les règles sont plus strictes : le logement doit se situer en zone B2 ou C, et des travaux d’amélioration ou d’économie d’énergie doivent représenter au moins 25 % du coût total de l’opération.',
+          'Pour savoir dans quelle zone se trouve une commune, utilisez le simulateur officiel de Service-Public. Les conditions varient aussi selon la date de l’offre de prêt : lisez la page à jour avant de vous décider.',
+        ],
+      },
+      {
+        heading: 'Comment il se rembourse',
+        body: [
+          'La durée de remboursement ne peut pas dépasser 25 ans, et elle est plus courte quand les revenus sont plus élevés.',
+          'Selon les cas, on rembourse en une seule période, ou en deux périodes avec un différé : pendant la première, d’au moins 2 ans, on ne rembourse pas le PTZ. Pendant le différé, les autres prêts, eux, continuent de se rembourser.',
+        ],
+      },
+      {
+        heading: 'Où le demander, et par où commencer',
+        body: [
+          'Seuls les établissements financiers qui ont signé une convention avec l’État (par exemple, une banque) peuvent accorder un PTZ. Chacun apprécie librement votre capacité à rembourser et vos garanties : l’accord n’est donc jamais automatique.',
+          'Commencez par mesurer ce que vous pouvez emprunter (taux d’endettement et reste à vivre), puis demandez à votre banque ou à un courtier si le PTZ peut compléter votre plan de financement. Un prêt sans intérêts allège le coût total du crédit, mais il ne dispense pas d’un apport raisonnable ni d’une mensualité supportable.',
+        ],
+      },
+    ],
+    related: ['credit-immobilier'],
+    sources: [{ label: 'Service-Public.fr — Prêt à taux zéro (PTZ ou PTZ+), page vérifiée le 15 septembre 2026, consultée le 7 novembre 2026', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F10871', official: true }, ANIL],
+    faq: [
+      { q: 'Le prêt à taux zéro est-il vraiment sans aucun frais ?', a: 'Le PTZ lui-même ne porte ni intérêts, ni frais de dossier ni frais d’expertise. Mais il s’ajoute à un autre prêt, qui, lui, a un coût : intérêts, assurance, garantie.' },
+      { q: 'Peut-on financer tout son achat avec un PTZ ?', a: 'Non. Le PTZ finance une partie de l’opération et doit être demandé en complément d’au moins un autre prêt immobilier.' },
+      { q: 'Peut-on obtenir un PTZ si l’on a déjà été propriétaire ?', a: 'En principe, il ne faut pas avoir été propriétaire de sa résidence principale pendant les 2 années qui précèdent le prêt, avec quelques exceptions (usufruit, nue-propriété, handicap, catastrophe naturelle).' },
+    ],
+    cta: { to: '/simulateurs/endettement', label: 'Calculer mon taux d’endettement' },
+  },
+  {
     slug: 'combien-epargner-par-mois-objectif',
     title: 'Combien épargner par mois pour atteindre un objectif ?',
     summary: 'Apport, voyage, travaux : comment calculer le versement mensuel selon le montant visé, la durée et le taux, et ce que changent les intérêts.',
@@ -689,7 +743,7 @@ export const guideGroups: { title: string; intro: string; slugs: string[] }[] = 
   { title: 'Pour démarrer', intro: 'Les bases, dans l’ordre : priorités, réserve, effort d’épargne.', slugs: ['par-ou-commencer', 'combien-epargne-de-precaution', 'epargne-limitee', 'combien-epargner-par-mois-objectif', 'patrimoine-net'] },
   { title: 'Comprendre les mécanismes', intro: 'Le temps, l’inflation, les frais, la diversification : ce qui joue sur vos résultats.', slugs: ['interets-composes', 'regle-de-72-doubler-son-capital', 'inflation-pouvoir-d-achat-epargne', 'diversification-placements', 'comparer-les-frais', 'livret-a-calcul-interets-quinzaines'] },
   { title: 'Choisir ses placements', intro: 'Les familles de placements et les enveloppes qui les contiennent.', slugs: ['types-investissements', 'choisir-son-enveloppe', 'fonctionnement-pea', 'immobilier-ou-etf'] },
-  { title: 'Immobilier et crédit', intro: 'Emprunter, louer, rembourser : les repères avant de s’engager.', slugs: ['taux-endettement-capacite-emprunt', 'investir-a-credit', 'rentabilite-locative', 'rembourser-credit-par-anticipation-ou-investir'] },
+  { title: 'Immobilier et crédit', intro: 'Emprunter, louer, rembourser : les repères avant de s’engager.', slugs: ['taux-endettement-capacite-emprunt', 'pret-a-taux-zero-ptz', 'investir-a-credit', 'rentabilite-locative', 'rembourser-credit-par-anticipation-ou-investir'] },
 ];
 
 /** Autres guides proposés en bas d’un guide : ceux du même groupe d’abord, puis le reste. */
