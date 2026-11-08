@@ -755,3 +755,21 @@ export function MobileFold({ label, hint, quietOnDesktop, children }: { label: s
   );
 }
 
+
+/**
+ * Avertissement en tête de simulateur. Sur grand écran il reste affiché tel quel ; sous 700 px
+ * il est replié derrière « À savoir avant de simuler » pour que le formulaire apparaisse plus vite.
+ * Le texte reste dans le HTML pré-rendu (bloc ouvert) et accessible d'un geste.
+ */
+export function SimNotice({ children }: { children?: ReactNode }) {
+  const ref = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    if (window.matchMedia('(max-width: 700px)').matches && ref.current) ref.current.open = false;
+  }, []);
+  return (
+    <details ref={ref} open className="notice sim-notice" role="note">
+      <summary>À savoir avant de simuler</summary>
+      <p>{children}</p>
+    </details>
+  );
+}

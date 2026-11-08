@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { fmtEur, fmtPct, purchasingPower } from '../lib/finance';
 import { inflationTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = { amount: number; years: number; inflation: number; annualReturn: number };
 
@@ -20,11 +20,11 @@ export default function SimInflation() {
       <PageHead eyebrow="Simulateur" title="Inflation et pouvoir d’achat">
         Que vaut une somme dans le temps ? Comparez la somme laissée telle quelle et la même somme placée, en euros d’aujourd’hui.
       </PageHead>
-      <p className="notice" role="note">
+      <SimNotice>
         L’inflation (hausse générale des prix) réduit ce qu’une somme permet d’acheter. Le taux d’inflation et le rendement saisis sont des hypothèses
         modifiables, pas des prévisions : les valeurs réellement constatées sont publiées par l’Insee. Voir la <Link to="/glossaire">définition des termes</Link>
         {' '}et le <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link>, qui intègre l’inflation à un plan d’épargne complet.
-      </p>
+      </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>

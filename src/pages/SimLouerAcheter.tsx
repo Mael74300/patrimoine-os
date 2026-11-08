@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { advantageByHorizon, advantageByPriceGrowth, fmtEur, fmtPct, rentVsBuy } from '../lib/finance';
 import { rentVsBuyTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = {
   price: number; downPayment: number; acquisitionRate: number; loanRate: number; loanYears: number; ownerCostRate: number;
@@ -32,11 +32,11 @@ export default function SimLouerAcheter() {
       <PageHead eyebrow="Simulateur" title="Louer ou acheter sa résidence principale : comparer les patrimoines">
         Compare, à l’horizon choisi, le patrimoine d’un propriétaire (bien revendu, dette remboursée) et celui d’un locataire qui place l’apport, les frais et l’écart de budget mensuel.
       </PageHead>
-      <p className="notice" role="note">
+      <SimNotice>
         Résultat entièrement fondé sur vos hypothèses (prix, loyer, hausses, rendement, frais) : modifiez-les, l’issue peut s’inverser. Le plus souvent, ce sont la durée de détention
         et l’évolution du prix qui décident. Pour le détail du prêt, voir le <Link to="/simulateurs/credit">calculateur de crédit</Link> et le <Link to="/simulateurs/comparer-des-credits#taeg">TAEG</Link>
         {' '}; pour la mensualité supportable, le <Link to="/simulateurs/endettement">taux d’endettement</Link>.
-      </p>
+      </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>

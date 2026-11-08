@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { lumpVsGradual, fmtEur, fmtPct, type PricePath } from '../lib/finance';
 import { lumpGradualTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, SelectField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, SelectField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = { amount: number; spread: number; years: number; ret: number; cash: number; path: PricePath; move: number };
 
@@ -26,10 +26,10 @@ export default function SimEtalement() {
       <PageHead eyebrow="Simulateur" title="Investir d’un coup ou progressivement">
         Compare un capital placé en une seule fois et le même capital placé en tranches égales sur plusieurs mois, selon le parcours de prix que vous supposez.
       </PageHead>
-      <p className="notice" role="note">
+      <SimNotice>
         Résultat entièrement fondé sur vos hypothèses, sans aucun chiffre réglementaire et sans prévision : l’étalement ne gagne que si le prix baisse pendant la période,
         et perd si le prix monte. Avant frais et impôts. Voir aussi les <Link to="/simulateurs/patrimoine">projections de patrimoine</Link> et l’<Link to="/simulateurs/frais">impact des frais</Link>.
-      </p>
+      </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>

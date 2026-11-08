@@ -772,3 +772,19 @@ h2.gloss-letter::before { content: none; }
 .gloss-top:hover { background: var(--accent-soft); }
 @media (min-width: 900px), print { .gloss-top { display: none; } }
 #lettres { scroll-margin-top: 80px; }
+
+/* Avertissement de simulateur : replié sous 700 px (voir SimNotice), affiché tel quel au-delà */
+.sim-notice { padding-top: 0; padding-bottom: 0; }
+.sim-notice > summary { font-weight: 700; cursor: pointer; min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 12px; list-style: none; }
+.sim-notice > summary::-webkit-details-marker { display: none; }
+.sim-notice > summary::after { content: '+'; font-size: 1.25rem; line-height: 1; flex: none; }
+.sim-notice[open] > summary::after { content: '−'; }
+.sim-notice > summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.sim-notice[open] > p { padding-bottom: 12px; }
+.sim-notice > p { margin: 8px 0 0; }
+@media (min-width: 701px) {
+  .sim-notice > summary { display: none; }
+  .sim-notice > p { margin: 0; }
+  .sim-notice { padding-top: 12px; padding-bottom: 12px; }
+  .sim-notice[open] > p { padding-bottom: 0; }
+}

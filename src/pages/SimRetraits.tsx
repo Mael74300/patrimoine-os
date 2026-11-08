@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { withdrawal, withdrawalSeries, fmtEur } from '../lib/finance';
 import { withdrawalTakeaway } from '../lib/takeaways';
 import { SchemaRetraits } from '../components/Illustrations';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = { capital: number; monthly: number; ret: number; idx: number; years: number };
 
@@ -23,10 +23,10 @@ export default function SimRetraits() {
       <PageHead eyebrow="Simulateur" title="Retraits réguliers : combien de temps le capital tient-il ?">
         Calcule la durée avant épuisement d’un capital dont vous retirez une somme chaque mois, le capital restant à l’horizon choisi et le retrait mensuel tenable.
       </PageHead>
-      <p className="notice" role="note">
+      <SimNotice>
         Résultat entièrement fondé sur vos hypothèses (rendement et revalorisation supposés constants), sans chiffre réglementaire ni prévision, avant frais et impôts.
         Voir aussi l’<Link to="/simulateurs/independance-financiere">indépendance financière</Link> et les <Link to="/simulateurs/inflation">effets de l’inflation</Link>.
-      </p>
+      </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>

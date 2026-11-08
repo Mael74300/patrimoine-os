@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { feeImpact, fmtEur, fmtPct } from '../lib/finance';
 import { feesTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = { initial: number; monthly: number; annualReturn: number; years: number; inflation: number; feesA: number; feesB: number; feesC: number };
 
@@ -24,11 +24,11 @@ export default function SimFrais() {
       <PageHead eyebrow="Simulateur" title="Impact des frais sur votre capital">
         Même rendement brut, mêmes versements, trois niveaux de frais annuels : mesurez ce que les frais coûtent réellement sur la durée.
       </PageHead>
-      <p className="notice" role="note">
+      <SimNotice>
         Les frais sont ici prélevés chaque année en proportion du capital (frais de gestion, frais courants d'un fonds, frais d'enveloppe cumulés).
         Les niveaux proposés sont des hypothèses modifiables, pas des tarifs constatés ; comparez-les aux frais réels du document d'information de votre placement.
         Voir le guide <Link to="/guides/comparer-les-frais">sur les frais</Link> et la <Link to="/glossaire">définition des termes</Link>.
-      </p>
+      </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>

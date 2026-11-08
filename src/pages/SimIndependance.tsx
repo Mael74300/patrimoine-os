@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { drawdown, fireTarget, fmtEur, fmtPct, fmtYears, realRate, yearsToTarget, type FireInput } from '../lib/finance';
 import { fireTakeaway } from '../lib/takeaways';
 import { SchemaCapitalVise } from '../components/Illustrations';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 const DEFAULTS: FireInput = {
   annualExpenses: 30000, currentWealth: 80000, recurringIncome: 0, annualSavings: 15000,
@@ -28,10 +28,10 @@ export default function SimIndependance() {
       <PageHead eyebrow="Simulateur" title="Simulateur d'indépendance financière">
         Estimez le capital qui couvrirait vos dépenses par des retraits réguliers, le temps pour l'atteindre et sa résistance à plusieurs hypothèses de rendement.
       </PageHead>
-      <p className="notice" role="note">
+      <SimNotice>
         Aucun taux de retrait ne garantit une indépendance financière durable. Les rendements réels varient d'une année à l'autre, et une succession
         de mauvaises années au début des retraits peut épuiser un capital plus vite que prévu.
-      </p>
+      </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>

@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, fmtEur, fmtNum, fmtPct } from '../lib/finance';
 import { delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway } from '../lib/takeaways';
 import { interetsComposesFaq } from '../data/simFaq';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, SelectField, Takeaway, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, SelectField, Takeaway, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 // Exemples fictifs : toutes les valeurs par défaut sont des hypothèses à remplacer par les vôtres.
 
@@ -395,10 +395,10 @@ export default function SimInteretsComposes() {
       <PageHead eyebrow="Simulateur" title="Intérêts composés : combien placer, en quel temps, à quel rendement ?">
         Huit calculs autour d’une même idée : l’argent placé rapporte des intérêts, qui rapportent eux-mêmes des intérêts. Choisissez votre question dans les onglets.
       </PageHead>
-      <p className="notice" role="note">
+      <SimNotice>
         Calcul fondé uniquement sur les hypothèses que vous saisissez, sans chiffre réglementaire ni prévision. Le rendement est supposé constant, avant frais, impôts et inflation, et n’est jamais garanti.
         Voir aussi les <Link to="/simulateurs/patrimoine">projections de patrimoine</Link>, l’<Link to="/simulateurs/inflation">effet de l’inflation</Link> et le <Link to="/simulateurs/objectif-epargne">versement à prévoir pour un objectif</Link>.
-      </p>
+      </SimNotice>
       <div className="tabs" role="tablist" aria-label="Calcul à choisir" style={{ marginTop: 24 }}>
         {TABS.map((t) => (
           <button

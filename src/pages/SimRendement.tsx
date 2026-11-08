@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { performance, fmtEur, fmtPct } from '../lib/finance';
 import { performanceTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = { initial: number; monthly: number; years: number; finalValue: number };
 
@@ -18,10 +18,10 @@ export default function SimRendement() {
       <PageHead eyebrow="Simulateur" title="Rendement réel de mon placement : quel taux annuel ai-je obtenu ?">
         À partir de ce que vous avez versé et de la valeur actuelle, calcule le rendement annuel équivalent (taux de rendement interne), en tenant compte de la date de chaque versement.
       </PageHead>
-      <p className="notice" role="note">
+      <SimNotice>
         Calcul fondé uniquement sur les montants que vous saisissez, sans chiffre réglementaire ni prévision. Le résultat est un rendement passé, avant impôt sauf si la valeur saisie est déjà nette.
         Voir aussi les <Link to="/simulateurs/patrimoine">projections de patrimoine</Link> et l’<Link to="/simulateurs/inflation">inflation</Link>.
-      </p>
+      </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
