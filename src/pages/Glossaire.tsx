@@ -32,7 +32,7 @@ export default function Glossaire() {
         {filtering && <p className="small muted gloss-status">{terms.length ? `${terms.length} notion${terms.length > 1 ? 's' : ''} pour « ${q.trim()} »` : `Aucune notion pour « ${q.trim()} ». Essayez un mot plus simple.`}</p>}
       </div>
       {!filtering && (
-        <nav className="gloss-nav" aria-label="Aller à une lettre">
+        <nav id="lettres" className="gloss-nav" aria-label="Aller à une lettre">
           {groups.map((g) => <a key={g.letter} href={`#lettre-${g.letter}`}>{g.letter}</a>)}
         </nav>
       )}
@@ -40,6 +40,7 @@ export default function Glossaire() {
       {groups.map((g) => (
         <section key={g.letter} id={`lettre-${g.letter}`} className="gloss-group" aria-labelledby={`h-${g.letter}`}>
           <h2 id={`h-${g.letter}`} className="gloss-letter" aria-label={`Notions commençant par ${g.letter}`}>{g.letter}</h2>
+          {!filtering && <a className="gloss-top" href="#lettres" aria-label="Retour à la liste des lettres">↑ Lettres</a>}
           <dl className="gloss-list">
             {g.items.map((t) => (
               <div key={t.term} id={idOf(t.term)} className="gloss-item">
