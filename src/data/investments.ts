@@ -32,6 +32,7 @@ const S = {
   taeg: { label: 'Service-Public.fr — Qu’est-ce que le TAEG ? (vérifiée le 16 avril 2025)', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F2456', official: true },
   lfptLevier: { label: 'La finance pour tous — L’effet de levier du crédit immobilier (consulté le 7 novembre 2026)', url: 'https://www.lafinancepourtous.com/pratique/immobilier/credit-immobilier/effet-de-levier/', official: true },
   anil: { label: "ANIL — Agence nationale pour l'information sur le logement", url: 'https://www.anil.org', official: true },
+  cpfSp: { label: 'Service-Public.fr — Compte personnel de formation (CPF) d’un salarié du secteur privé (vérifiée le 27 juin 2026)', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F10705', official: true },
   cpf: { label: 'Mon Compte Formation', url: 'https://www.moncompteformation.gouv.fr', official: true },
   notaires: { label: 'Notaires de France', url: 'https://www.notaires.fr', official: true },
   donation: { label: 'Service-Public.fr — Donation', url: 'https://www.service-public.fr/particuliers/vosdroits/N31160', official: true },
@@ -650,7 +651,7 @@ const raw: Omit<Investment, 'review'>[] = [
     definition: 'Dépenses de temps et d’argent consacrées à la formation, aux certifications et au réseau professionnel.',
     howItWorks: 'Une hausse durable du revenu augmente la capacité d’épargne pendant des décennies.',
     howToInvest: ['Utiliser les droits du Compte personnel de formation.', 'Viser des compétences recherchées dans son secteur.', 'Mesurer le gain de revenu attendu.'],
-    minCapital: { text: 'Souvent financé par le CPF ou l’employeur.', verified: false },
+    minCapital: { text: 'Le CPF vous suit toute la vie : vous gardez vos droits si vous changez d’employeur ou perdez votre emploi. Si la formation coûte plus que le montant disponible sur votre CPF, vous pouvez demander un complément à votre employeur ou à des organismes comme l’Agefiph ou la région.', verified: true, asOf: '2026-11-08' },
     horizon: 'Toute la carrière', horizonYears: 1,
     liquidity: 1, risk: 2, effort: 4,
     fees: { text: 'Coût des formations, temps.', verified: true, asOf: AS_OF },
@@ -659,7 +660,7 @@ const raw: Omit<Investment, 'review'>[] = [
     cons: ['Résultat incertain', 'Demande du temps'],
     timeSkills: 'Élevé.',
     example: "Exemple fictif : une hausse de salaire de 200 € nets par mois, épargnée pendant 20 ans à 5 %, représente environ 82 000 €.",
-    sources: [S.cpf],
+    sources: [S.cpf, S.cpfSp],
     alternatives: ['creation-entreprise'],
     tags: ['revenus', 'compétences'],
   },
@@ -719,7 +720,7 @@ const REVIEW: Record<string, Partial<Review>> = {
   'groupements-forestiers': { verifiedOn: '2026-11-07', taxValidAsOf: '2026-11-07', data: ['Crédit d’impôt de 25 % sur les parts de groupement forestier, investissements réalisés jusqu’au 31 décembre 2027', 'Sommes retenues plafonnées à 6 250 € (personne seule) et 12 500 € (couple soumis à imposition commune)', 'Conservation des parts jusqu’au 31 décembre de la huitième année suivant l’achat ; plan simple de gestion agréé pendant quinze ans'] },
   lmnp: { verifiedOn: '2026-11-04', taxValidAsOf: '2026-11-04', data: ['Micro-BIC : 83 600 € de recettes et abattement de 50 % en 2026 (meublé de tourisme non classé : 15 000 € et 30 %)', 'Cotisations sociales exclues jusqu’à 23 000 € de recettes par an', 'Amortissements réintégrés dans la plus-value (cessions depuis le 15 février 2025)'] },
   donation: { verifiedOn: '2026-11-03', taxValidAsOf: '2026-11-03', data: ['Abattement 100 000 € par parent et par enfant, renouvelable tous les 15 ans', 'Don familial d’argent : 31 865 € (donateur de moins de 80 ans, bénéficiaire majeur), cumulable avec l’abattement'] },
-  'capital-humain': { assumptions: ['Rendement de 5 % par an sur l’épargne supplémentaire, hypothèse d’illustration'] },
+  'capital-humain': { verifiedOn: '2026-11-08', data: ['Le CPF est conservé en cas de changement d’employeur ou de perte d’emploi ; un complément de financement peut être demandé à l’employeur, à l’Agefiph ou à la région'], assumptions: ['Rendement de 5 % par an sur l’épargne supplémentaire, hypothèse d’illustration'] },
 };
 
 export const investments: Investment[] = raw.map((i) => ({
