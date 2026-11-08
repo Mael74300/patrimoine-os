@@ -324,3 +324,22 @@ export function etfImmoTakeaway(p: { horizon: number; etfNet: number; immoNet: n
     : ` L'écart est de ${fmtEur(ecart)} en faveur ${p.etfNet > p.immoNet ? 'des ETF' : 'de l\'immobilier'}.`;
   return `${base}${fin} Ce n'est pas une prévision : changez le rendement ou l'évolution du prix du bien, et l'écart peut s'inverser.`;
 }
+
+/** Comparer des durées de crédit : la mensualité baisse, le coût total monte. */
+export function loanDurationTakeaway(p: { principal: number; shortYears: number; longYears: number; shortMonthly: number; longMonthly: number; shortCost: number; longCost: number }): string {
+  if (!(p.principal > 0) || !(p.shortYears > 0) || !(p.longYears > p.shortYears)) return '';
+  const moins = p.shortMonthly - p.longMonthly;
+  const plus = p.longCost - p.shortCost;
+  if (moins <= 0.5 || plus <= 0.5) return `Pour emprunter ${fmtEur(p.principal)}, la mensualité (assurance comprise) est de ${fmtEur(p.shortMonthly)} sur ${p.shortYears} ans et de ${fmtEur(p.longMonthly)} sur ${p.longYears} ans ; le coût total est de ${fmtEur(p.shortCost)} contre ${fmtEur(p.longCost)}.`;
+  return `Pour emprunter ${fmtEur(p.principal)}, passer de ${p.shortYears} à ${p.longYears} ans allège la mensualité de ${fmtEur(moins)} par mois (assurance comprise), mais le crédit coûte ${fmtEur(plus)} de plus au total : vous payez moins chaque mois, plus longtemps.`;
+}
+
+/** TAEG : ce que coûte réellement le crédit par rapport au taux affiché. */
+export function taegTakeaway(p: { principal: number; nominal: number; taeg: number; totalCost: number }): string {
+  if (!(p.principal > 0) || !(p.taeg > 0)) return '';
+  const par100 = Math.round((p.totalCost / p.principal) * 100);
+  const ecart = p.taeg - p.nominal;
+  const base = `Le taux affiché est de ${fmtPct(p.nominal)}, mais une fois l'assurance et les frais comptés, le crédit revient à ${fmtPct(p.taeg)} par an.`;
+  const fin = ` Au total, il vous coûte environ ${par100} € pour 100 € empruntés.`;
+  return ecart > 0.00005 ? `${base}${fin}` : `Avec ces hypothèses, le taux affiché de ${fmtPct(p.nominal)} et le coût réel du crédit sont identiques.${fin}`;
+}
