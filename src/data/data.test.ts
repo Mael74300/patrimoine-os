@@ -325,3 +325,13 @@ describe('fiche Compte-titres : frais et retraits', () => {
     expect(f.review.data.join(' ')).toContain('Aucune limite de retrait');
   });
 });
+
+describe('fiche Donation : intervention du notaire', () => {
+  it('la rubrique Frais est sourcée (Service-Public F36656) et reprise dans le suivi', () => {
+    const f = investmentBySlug['donation']!;
+    expect(f.fees.verified).toBe(true);
+    expect(f.fees.text).toContain('pas obligatoire');
+    expect(f.sources.some((x) => x.url.includes('F36656'))).toBe(true);
+    expect(f.review.data.join(' ')).toContain('F36656');
+  });
+});

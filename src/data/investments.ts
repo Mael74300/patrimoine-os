@@ -678,7 +678,7 @@ const raw: Omit<Investment, 'review'>[] = [
     minCapital: { text: 'Sans objet.', verified: true, asOf: AS_OF },
     horizon: 'Long terme', horizonYears: 15,
     liquidity: 1, risk: 1, effort: 3,
-    fees: { text: 'Frais de notaire pour les donations de biens immobiliers ou par acte authentique.', verified: false },
+    fees: { text: 'Un notaire n’est pas obligatoire pour un don de somme d’argent. Son intervention est en revanche obligatoire dans certaines situations, notamment pour la donation d’un bien immobilier : renseignez-vous auprès du notaire sur ses frais avant de vous engager.', verified: true, asOf: '2026-11-08' },
     tax: { text: "Abattements sans droits, par donateur et par bénéficiaire, renouvelables tous les 15 ans : enfant 100 000 € ; petit-enfant 31 865 € ; arrière-petit-enfant 5 310 € ; époux ou partenaire de Pacs 80 724 € ; frère ou sœur 15 932 € ; neveu ou nièce 7 967 €. Une personne en situation de handicap bénéficie en plus de 159 325 €. Un don d’argent à un majeur, par un donateur de moins de 80 ans, ajoute 31 865 € exonérés, cumulables avec l’abattement (soit 131 865 € d’un parent à un enfant). Au-delà, des droits s’appliquent selon un barème progressif. Montants vérifiés le 2026-11-03 sur Service-Public.fr.", verified: true, asOf: '2026-11-03' },
     pros: ['Réduction des droits de succession', 'Aide aux proches au bon moment'],
     cons: ['Dessaisissement définitif', 'Règles civiles complexes'],
@@ -720,7 +720,7 @@ const REVIEW: Record<string, Partial<Review>> = {
   'objets-d-art-collection': { verifiedOn: '2026-11-03', taxValidAsOf: '2026-11-03', data: ['Taxe forfaitaire 6 % + CRDS 0,5 % = 6,5 % du prix de cession', 'Exonération si prix de cession ≤ 5 000 €'] },
   'groupements-forestiers': { verifiedOn: '2026-11-07', taxValidAsOf: '2026-11-07', data: ['Crédit d’impôt de 25 % sur les parts de groupement forestier, investissements réalisés jusqu’au 31 décembre 2027', 'Sommes retenues plafonnées à 6 250 € (personne seule) et 12 500 € (couple soumis à imposition commune)', 'Conservation des parts jusqu’au 31 décembre de la huitième année suivant l’achat ; plan simple de gestion agréé pendant quinze ans'] },
   lmnp: { verifiedOn: '2026-11-04', taxValidAsOf: '2026-11-04', data: ['Micro-BIC : 83 600 € de recettes et abattement de 50 % en 2026 (meublé de tourisme non classé : 15 000 € et 30 %)', 'Cotisations sociales exclues jusqu’à 23 000 € de recettes par an', 'Amortissements réintégrés dans la plus-value (cessions depuis le 15 février 2025)'] },
-  donation: { verifiedOn: '2026-11-03', taxValidAsOf: '2026-11-03', data: ['Abattement 100 000 € par parent et par enfant, renouvelable tous les 15 ans', 'Don familial d’argent : 31 865 € (donateur de moins de 80 ans, bénéficiaire majeur), cumulable avec l’abattement'] },
+  donation: { verifiedOn: '2026-11-03', taxValidAsOf: '2026-11-03', data: ['Notaire non obligatoire pour un don de somme d’argent, obligatoire notamment pour un bien immobilier (Service-Public F36656, 2026-11-08)', 'Abattement 100 000 € par parent et par enfant, renouvelable tous les 15 ans', 'Don familial d’argent : 31 865 € (donateur de moins de 80 ans, bénéficiaire majeur), cumulable avec l’abattement'] },
   'capital-humain': { verifiedOn: '2026-11-08', data: ['Le CPF est conservé en cas de changement d’employeur ou de perte d’emploi ; un complément de financement peut être demandé à l’employeur, à l’Agefiph ou à la région'], assumptions: ['Rendement de 5 % par an sur l’épargne supplémentaire, hypothèse d’illustration'] },
 };
 
