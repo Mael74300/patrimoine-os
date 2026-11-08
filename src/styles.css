@@ -791,3 +791,10 @@ h2.gloss-letter::before { content: none; }
   .sim-notice { padding-top: 12px; padding-bottom: 12px; }
   .sim-notice[open] > p { padding-bottom: 0; }
 }
+
+/* Lignes du mini-calculateur de patrimoine net (guide) : libellé lisible en entier sur mobile */
+.nw-row { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) auto; gap: 6px; margin-bottom: 6px; }
+@media (max-width: 479px) {
+  .nw-row { grid-template-columns: minmax(0, 1fr) auto; margin-bottom: 12px; }
+  .nw-row > input[type="text"] { grid-column: 1 / -1; }
+}

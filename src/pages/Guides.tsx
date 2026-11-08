@@ -99,7 +99,7 @@ function NetWorthCalculator() {
     <div>
       <h3 style={{ marginTop: 0 }}>{title}</h3>
       {st.items.filter((i) => i.kind === kind).map((i) => (
-        <div key={i.id} style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.6fr) minmax(0, 1fr) auto', gap: 6, marginBottom: 6 }}>
+        <div key={i.id} className="nw-row">
           <input type="text" aria-label="Libellé" value={i.label} onChange={(e) => setItem(i.id, { label: e.target.value })} />
           <input type="number" aria-label={`Montant ${i.label}`} min={0} value={i.amount} onChange={(e) => setItem(i.id, { amount: Math.max(0, +e.target.value || 0) })} />
           <button type="button" className="btn small secondary" aria-label={`Supprimer ${i.label}`} onClick={() => setSt((x) => ({ items: x.items.filter((y) => y.id !== i.id) }))}>×</button>
