@@ -391,3 +391,34 @@ describe('etfImmoTakeaway', () => {
     expect(etfImmoTakeaway({ horizon: 0, etfNet: 0, immoNet: 0, startCapital: 0 })).toBe('');
   });
 });
+
+describe('phrases « Concrètement » : comparer des crédits', () => {
+  const digits = (t: string) => t.replace(/\s/g, '');
+  const eur = (n: number) => digits(Math.round(n).toLocaleString('fr-FR'));
+  it('durée : écarts de mensualité et de coût recalculés par loanDuration', async () => {
+    const f = await import('./finance');
+    const { loanDurationTakeaway } = await import('./takeaways');
+    const rows = f.loanDuration({ principal: 200000, annualRate: 0.03, insuranceRate: 0.003, durations: [10, 30] });
+    const [a, b] = rows;
+    const t = digits(loanDurationTakeaway({ principal: 200000, shortYears: 10, longYears: 30, shortMonthly: a.monthlyTotal, longMonthly: b.monthlyTotal, shortCost: a.totalCost, longCost: b.totalCost }));
+    expect(t).toContain(eur(a.monthlyTotal - b.monthlyTotal));
+    expect(t).toContain(eur(b.totalCost - a.totalCost));
+    expect(t).toContain('de10à30ans');
+  });
+  it('durée : vide sans capital', async () => {
+    const { loanDurationTakeaway } = await import('./takeaways');
+    expect(loanDurationTakeaway({ principal: 0, shortYears: 10, longYears: 30, shortMonthly: 0, longMonthly: 0, shortCost: 0, longCost: 0 })).toBe('');
+  });
+  it('TAEG : taux affiché, TAEG et coût pour 100 € recalculés par taeg', async () => {
+    const f = await import('./finance');
+    const { taegTakeaway } = await import('./takeaways');
+    const r = f.taeg({ principal: 200000, annualRate: 0.036, years: 20, insuranceRate: 0.003, fees: 2500 });
+    const t = taegTakeaway({ principal: 200000, nominal: 0.036, taeg: r.taeg, totalCost: r.totalCost });
+    expect(t).toContain(f.fmtPct(r.taeg));
+    expect(t).toContain(`${Math.round((r.totalCost / 200000) * 100)} € pour 100 €`);
+  });
+  it('TAEG : vide sans emprunt', async () => {
+    const { taegTakeaway } = await import('./takeaways');
+    expect(taegTakeaway({ principal: 0, nominal: 0.03, taeg: 0, totalCost: 0 })).toBe('');
+  });
+});

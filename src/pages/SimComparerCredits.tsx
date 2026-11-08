@@ -1,8 +1,9 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { fmtEur, fmtEur2, fmtNum, fmtPct, inFine, loanDuration, renegotiation, taeg, taegByFees, taegByInsurance } from '../lib/finance';
+import { loanDurationTakeaway, taegTakeaway } from '../lib/takeaways';
 import { comparerCreditsFaq } from '../data/simFaq';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 // Exemples fictifs : toutes les valeurs par défaut sont des hypothèses à remplacer par les vôtres.
 
@@ -60,6 +61,7 @@ function Duree() {
           <Kpi label={`Coût total sur ${shortest.years} ans`} value={fmtEur(shortest.totalCost)} sub="intérêts + assurance" />
           <Kpi label={`Coût total sur ${longest.years} ans`} value={fmtEur(longest.totalCost)} sub={`${fmtEur(longest.totalCost - shortest.totalCost)} de plus`} />
         </div>
+        <Takeaway>{loanDurationTakeaway({ principal: s.principal, shortYears: shortest.years, longYears: longest.years, shortMonthly: shortest.monthlyTotal, longMonthly: longest.monthlyTotal, shortCost: shortest.totalCost, longCost: longest.totalCost })}</Takeaway>
         <h2>Comparaison par durée</h2>
         <div className="table-wrap stack-wrap">
           <table className="stack-table">
@@ -122,6 +124,7 @@ function Taeg() {
           <Kpi label="Mensualité assurance comprise" value={fmtEur(r.monthlyTotal)} sub={`dont ${fmtEur(r.monthlyInsurance)} d’assurance, sur ${r.months} mois`} />
           <Kpi label="Coût total du crédit" value={fmtEur(r.totalCost)} sub={`intérêts ${fmtEur(r.totalInterest)} + assurance ${fmtEur(r.totalInsurance)} + frais ${fmtEur(Math.min(s.fees, s.principal))}`} />
         </div>
+        <Takeaway>{taegTakeaway({ principal: s.principal, nominal: s.annualRate, taeg: r.taeg, totalCost: r.totalCost })}</Takeaway>
         <h2>Effet des frais payés au départ</h2>
         <div className="table-wrap" tabIndex={0}>
           <table>
