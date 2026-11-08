@@ -322,8 +322,11 @@ td.neg { color: var(--danger); }
 .ill-svg text.ill-loss { fill: var(--danger); font-size: 13px; font-weight: 700; }
 .ill-year { font-size: 14px; font-weight: 700; }
 /* Mobile : moins de marge autour du schéma pour qu'il soit moins réduit (textes plus lisibles) */
+/* Mobile : le schéma déborde de la marge de page (16 px de chaque côté) et occupe toute la largeur de l'écran :
+   le dessin passe de ~78 % à ~87 % de sa taille, donc les textes gagnent environ 1 px (12 px → 10,5 px). */
 @media (max-width: 480px) {
-  .illustration { padding: 10px 6px; }
+  .illustration { padding: 10px 4px; margin-left: -16px; margin-right: -16px; border-left: 0; border-right: 0; border-radius: 0; }
+  .illustration figcaption { padding: 0 12px; }
 }
 
 /* Blocs repliables : FAQ des simulateurs et tableaux détaillés */
