@@ -296,3 +296,12 @@ describe('fiche Assurance-vie : minimum du premier versement', () => {
     expect(av.sources.some((x) => x.url.includes('F15274'))).toBe(true);
   });
 });
+
+describe('fiche PEL : frais de transfert', () => {
+  it('les frais de transfert sont sourcés et repris dans le suivi de vérification', () => {
+    const f = investmentBySlug['pel']!;
+    expect(f.fees.verified).toBe(true);
+    expect(f.fees.text).toContain('frais de transfert');
+    expect(f.review.data.join(' ')).toContain('frais de transfert');
+  });
+});
