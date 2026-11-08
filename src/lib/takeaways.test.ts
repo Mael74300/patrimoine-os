@@ -368,3 +368,26 @@ describe('phrase « Concrètement » : investir d’un coup ou progressivement',
     expect(lumpGradualTakeaway({ amount: 0, spreadMonths: 12, months: 60, lump: 0, gradual: 0, advantageGradual: 0 })).toBe('');
   });
 });
+
+describe('etfImmoTakeaway', () => {
+  const digits = (t: string) => t.replace(/\s/g, '');
+  const eur = (n: number) => digits(Math.round(n).toLocaleString('fr-FR'));
+  it('reprend les montants de compareEtfImmo et nomme le gagnant', async () => {
+    const f = await import('./finance');
+    const { etfImmoTakeaway } = await import('./takeaways');
+    const r = f.compareEtfImmo({
+      rental: { ...(await import('../pages/SimImmobilier')).RENTAL_DEFAULTS },
+      etf: { annualReturn: 0.06, annualFees: 0.003, exitTaxRate: 0.314 },
+      horizon: 20, inflation: 0.02, cashRate: 0.017, saleCostRate: 0.05,
+    });
+    const t = digits(etfImmoTakeaway({ horizon: 20, etfNet: r.etf.netWealth, immoNet: r.immo.netWealth, startCapital: r.startCapital }));
+    expect(t).toContain(eur(r.etf.netWealth));
+    expect(t).toContain(eur(r.immo.netWealth));
+    expect(t).toContain(eur(Math.abs(r.etf.netWealth - r.immo.netWealth)));
+    expect(t).toContain(r.etf.netWealth > r.immo.netWealth ? 'faveurdesETF' : 'faveurdel\'immobilier');
+  });
+  it('vide sans horizon', async () => {
+    const { etfImmoTakeaway } = await import('./takeaways');
+    expect(etfImmoTakeaway({ horizon: 0, etfNet: 0, immoNet: 0, startCapital: 0 })).toBe('');
+  });
+});

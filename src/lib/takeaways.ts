@@ -312,3 +312,15 @@ export function lumpGradualTakeaway(p: { amount: number; spreadMonths: number; m
   if (p.advantageGradual < 0) return `${base} Ici, investir tout de suite finit ${fmtEur(ecart)} au-dessus : l'argent resté en attente a rapporté moins que le placement. L'étalement sert surtout à limiter le regret d'un achat juste avant une baisse.`;
   return `${base} Ici, l'étalement finit ${fmtEur(ecart)} au-dessus : c'est le cas quand le prix baisse pendant l'étalement. Si le prix avait monté, investir tout de suite aurait été préférable.`;
 }
+
+/** ETF ou immobilier locatif : le patrimoine net de chaque côté, l'écart, et le rappel que tout dépend des hypothèses. */
+export function etfImmoTakeaway(p: { horizon: number; etfNet: number; immoNet: number; startCapital: number }): string {
+  if (!(p.horizon > 0)) return '';
+  const ans = `${p.horizon} an${p.horizon > 1 ? 's' : ''}`;
+  const base = `Avec ces hypothèses, après ${ans}, un même apport de ${fmtEur(p.startCapital)} et un même effort d'épargne donneraient ${fmtEur(p.etfNet)} placé en ETF et ${fmtEur(p.immoNet)} dans l'immobilier locatif, impôts et frais de sortie déduits.`;
+  const ecart = Math.abs(p.etfNet - p.immoNet);
+  const fin = ecart < 0.5
+    ? ' Les deux stratégies finissent à égalité.'
+    : ` L'écart est de ${fmtEur(ecart)} en faveur ${p.etfNet > p.immoNet ? 'des ETF' : 'de l\'immobilier'}.`;
+  return `${base}${fin} Ce n'est pas une prévision : changez le rendement ou l'évolution du prix du bien, et l'écart peut s'inverser.`;
+}

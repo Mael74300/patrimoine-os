@@ -2,7 +2,8 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { compareEtfImmo, fmtEur, fmtPct, netOfFees, rentalAnalysis, type RentalInput } from '../lib/finance';
 import { load } from '../lib/storage';
-import { Crumbs, Disclaimer, MobileFold, SimFaq, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState, JumpToResults } from '../components/ui';
+import { etfImmoTakeaway } from '../lib/takeaways';
+import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState, JumpToResults } from '../components/ui';
 import { PS_OPTIONS, REGIMES, RENTAL_DEFAULTS, TMI_OPTIONS } from './SimImmobilier';
 
 type State = {
@@ -144,6 +145,7 @@ export default function SimEtfImmobilier() {
             <Kpi label="Sommes investies (chaque côté)" value={fmtEur(res.etf.invested)} sub={`dont ${fmtEur(res.startCapital)} au départ`} />
             <Kpi label="Écart selon ces hypothèses" value={fmtEur(Math.abs(diff))} sub={diff >= 0 ? 'en faveur des ETF' : "en faveur de l'immobilier"} />
           </div>
+          <Takeaway>{etfImmoTakeaway({ horizon: st.horizon, etfNet: res.etf.netWealth, immoNet: res.immo.netWealth, startCapital: res.startCapital })}</Takeaway>
           <div className="panel">
             <LineChart
               title="Patrimoine avant frais de sortie"
