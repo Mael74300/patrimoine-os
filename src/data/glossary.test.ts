@@ -52,3 +52,17 @@ describe('PEA et Livret A', () => {
     }
   });
 });
+
+describe('notions fiscales les plus citées', () => {
+  it('PFU, prélèvements sociaux et TMI sont définis sans chiffre réglementaire (renvoi vers les fiches datées)', () => {
+    for (const debut of ['PFU', 'Prélèvements sociaux', 'TMI']) {
+      const t = glossary.find((g) => g.term.startsWith(debut));
+      expect(t, debut).toBeDefined();
+      expect(t!.definition).not.toMatch(/\d\s?%/);
+    }
+  });
+  it('la recherche trouve « pfu », « flat tax » et « tmi » dans le glossaire', async () => {
+    const { search } = await import('../lib/search');
+    for (const q of ['pfu', 'flat tax', 'tmi', 'prélèvements sociaux']) expect(search(q).some((r) => r.kind === 'Glossaire'), q).toBe(true);
+  });
+});
