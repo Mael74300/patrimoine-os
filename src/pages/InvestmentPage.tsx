@@ -6,7 +6,7 @@ import { investmentBySlug } from '../data/investments';
 import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Dots, Fold, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
-import { SchemaActions, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaPea, SchemaLep, SchemaPel, SchemaPer, SchemaQuinzaines, SchemaScpi, SchemaUniteDeCompte, SchemaFondsEuros, SchemaLevier, SchemaCompteATerme } from '../components/Illustrations';
+import { SchemaActions, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaPea, SchemaLep, SchemaPel, SchemaPer, SchemaQuinzaines, SchemaScpi, SchemaUniteDeCompte, SchemaFondsEuros, SchemaLevier, SchemaCompteATerme, SchemaAssuranceVieDeces } from '../components/Illustrations';
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
 import { guideBySlug } from '../data/guides';
@@ -75,6 +75,7 @@ export default function InvestmentPage() {
           {inv.slug === 'foncieres-cotees' && <SchemaFonciereCotee />}
           {inv.slug === 'obligations' && <SchemaObligation />}
           {inv.slug === 'assurance-vie' && <SchemaAssuranceVie />}
+          {inv.slug === 'assurance-vie' && <SchemaAssuranceVieDeces />}
           {inv.slug === 'crowdfunding' && <SchemaCrowdfunding />}
           {inv.slug === 'private-equity' && <SchemaCapitalInvestissement />}
           {inv.slug === 'per' && <SchemaPer />}

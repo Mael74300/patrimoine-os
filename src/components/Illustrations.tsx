@@ -1853,3 +1853,36 @@ export function SchemaCompteATerme() {
     </figure>
   );
 }
+
+/** Fiche Assurance-vie : transmission au décès, repris de impots.gouv.fr (« Je suis bénéficiaire d’une assurance-vie, comment la déclarer ? », consulté le 2026-11-08), contrats souscrits depuis le 13 octobre 1998 : primes versées avant 70 ans, 152 500 € exonérés par bénéficiaire puis 20 % jusqu’à 700 000 € et 31,25 % au-delà ; primes versées après 70 ans, droits de succession après un abattement global de 30 500 €. */
+export function SchemaAssuranceVieDeces() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 300" role="img" aria-labelledby="ill-avd-t ill-avd-d" className="ill-svg">
+        <title id="ill-avd-t">Assurance-vie : ce qui se passe au décès de l’assuré</title>
+        <desc id="ill-avd-d">Au décès de l’assuré, l’assureur verse le capital aux bénéficiaires désignés dans le contrat. Le traitement dépend de l’âge de l’assuré au moment du versement des primes. Primes versées avant 70 ans : 152 500 euros sont exonérés par bénéficiaire, puis 20 pour cent jusqu’à 700 000 euros et 31,25 pour cent au-delà. Primes versées après 70 ans : droits de succession, après un abattement global de 30 500 euros. Règles pour les contrats souscrits depuis le 13 octobre 1998.</desc>
+        <rect x={20} y={2} width={380} height={56} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={210} y={27} textAnchor="middle" className="ill-step">Décès de l’assuré</text>
+        <text x={210} y={46} textAnchor="middle" className="ill-sub">L’assureur verse le capital aux bénéficiaires désignés</text>
+        <path d="M 110 58 V 82 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <path d="M 310 58 V 82 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={82} width={204} height={170} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={102} y={106} textAnchor="middle" className="ill-step">Primes versées</text>
+        <text x={102} y={124} textAnchor="middle" className="ill-step">avant 70 ans</text>
+        <text x={102} y={152} textAnchor="middle" className="ill-sub">Par bénéficiaire :</text>
+        <text x={102} y={174} textAnchor="middle" className="ill-in">152 500 € sans impôt</text>
+        <text x={102} y={196} textAnchor="middle" className="ill-in">puis 20 % jusqu’à 700 000 €</text>
+        <text x={102} y={218} textAnchor="middle" className="ill-in">puis 31,25 % au-delà</text>
+        <rect x={216} y={82} width={204} height={170} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={318} y={106} textAnchor="middle" className="ill-step">Primes versées</text>
+        <text x={318} y={124} textAnchor="middle" className="ill-step">après 70 ans</text>
+        <text x={318} y={152} textAnchor="middle" className="ill-sub">Droits de succession</text>
+        <text x={318} y={174} textAnchor="middle" className="ill-in">après un abattement</text>
+        <text x={318} y={196} textAnchor="middle" className="ill-in">de 30 500 €, global</text>
+        <text x={318} y={218} textAnchor="middle" className="ill-in">pour tous les contrats</text>
+        <text x={210} y={282} textAnchor="middle" className="ill-sub">Contrats souscrits depuis le 13 octobre 1998</text>
+      </svg>
+    </figure>
+  );
+}
