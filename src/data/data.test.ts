@@ -259,6 +259,18 @@ describe('fiche PER : chiffres identiques dans la fiche et le suivi de vérifica
   });
 });
 
+describe('fiche PER : frais de transfert', () => {
+  it('les frais de transfert sont sourcés et identiques dans le suivi de vérification', () => {
+    const f = investmentBySlug['per']!;
+    const norm = (t: string) => t.replace(/[  ]/g, ' ');
+    expect(f.fees.verified).toBe(true);
+    for (const v of ['5 ans', '1 %']) {
+      expect(norm(f.fees.text)).toContain(v);
+      expect(norm(f.review.data.join(' '))).toContain(v);
+    }
+  });
+});
+
 describe('fiche PEL', () => {
   it('reprend les chiffres de Service-Public (vérifiés le 2026-11-05) et son exemple fictif est exact', async () => {
     const { investmentBySlug } = await import('./investments');
