@@ -315,3 +315,13 @@ describe('fiche Formation et compétences : financement par le CPF', () => {
     expect(f.review.data.join(' ')).toContain('Agefiph');
   });
 });
+
+describe('fiche Compte-titres : frais et retraits', () => {
+  it('les frais sont sourcés (AMF) et repris dans le suivi de vérification', () => {
+    const f = investmentBySlug['compte-titres']!;
+    expect(f.fees.verified).toBe(true);
+    expect(f.fees.text).toContain('droits de garde');
+    expect(f.sources.some((x) => x.url.includes('amf-france.org') && x.url.includes('compte-titres'))).toBe(true);
+    expect(f.review.data.join(' ')).toContain('Aucune limite de retrait');
+  });
+});

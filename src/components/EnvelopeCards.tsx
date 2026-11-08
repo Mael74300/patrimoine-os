@@ -23,7 +23,7 @@ export const ENVELOPE_CARDS: EnvelopeCard[] = [
   ] },
   { name: 'Compte-titres', to: '/encyclopedie/compte-titres', paragraph: 3, rows: [
     { label: 'Plafond', text: 'aucune limite de versement' },
-    { label: 'Disponibilité', text: 'pas de blocage de l’argent (à vérifier)' },
+    { label: 'Disponibilité', text: 'aucune limite de retrait' },
     { label: 'Fiscalité', text: 'PFU de 31,4 % en 2026 (12,8 % d’impôt et 18,6 % de prélèvements sociaux)' },
   ] },
 ];
