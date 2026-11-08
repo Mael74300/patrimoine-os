@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
+import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, fmtEur, rentalAnalysis, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
 import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio } from './finance';
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
@@ -420,5 +420,35 @@ describe('phrases « Concrètement » : comparer des crédits', () => {
   it('TAEG : vide sans emprunt', async () => {
     const { taegTakeaway } = await import('./takeaways');
     expect(taegTakeaway({ principal: 0, nominal: 0.03, taeg: 0, totalCost: 0 })).toBe('');
+  });
+  it('in fine : mensualités et écart de coût net recalculés par inFine', async () => {
+    const { inFine } = await import('./calc/inFine');
+    const { inFineTakeaway } = await import('./takeaways');
+    const input = { principal: 200000, annualRate: 0.03, years: 20, insuranceRate: 0.003, savingsReturn: 0.02 };
+    const r = inFine(input);
+    const t = inFineTakeaway({ principal: 200000, years: 20, savingsReturn: 0.02, annualRate: 0.03, amortizingMonthly: r.amortizingMonthlyTotal, inFineMonthly: r.inFineMonthlyTotal, monthlySaving: r.monthlySaving, netCostGap: r.netCostGap });
+    const d = (n: string) => n.replace(/\s/g, '');
+    expect(d(t)).toContain(d(fmtEur(r.inFineMonthlyTotal)));
+    expect(d(t)).toContain(d(fmtEur(r.amortizingMonthlyTotal)));
+    expect(d(t)).toContain(d(fmtEur(Math.abs(r.netCostGap))));
+    expect(d(t)).toContain(r.netCostGap > 0 ? 'deplus' : 'demoins');
+  });
+  it('in fine : vide sans capital', async () => {
+    const { inFineTakeaway } = await import('./takeaways');
+    expect(inFineTakeaway({ principal: 0, years: 20, savingsReturn: 0.02, annualRate: 0.03, amortizingMonthly: 0, inFineMonthly: 0, monthlySaving: 0, netCostGap: 0 })).toBe('');
+  });
+  it('renégociation : baisse de mensualité, point mort et gain net recalculés par renegotiation', async () => {
+    const { renegotiation } = await import('./calc/renegotiation');
+    const { renegoTakeaway } = await import('./takeaways');
+    const r = renegotiation({ remaining: 150000, currentRate: 0.045, currentYearsLeft: 20, newRate: 0.035, newYears: 20, fees: 3000 });
+    const t = renegoTakeaway({ monthlyGain: r.monthlyGain, netGain: r.netGain, breakEvenMonths: r.breakEvenMonths, longer: r.longer, fees: 3000 });
+    const d = (n: string) => n.replace(/\s/g, '');
+    expect(d(t)).toContain(d(fmtEur(r.monthlyGain)));
+    expect(t).toContain(`environ ${Math.ceil(r.breakEvenMonths as number)} mois`);
+    expect(d(t)).toContain(d(fmtEur(Math.abs(r.netGain))));
+  });
+  it('renégociation : mensualité qui ne baisse pas', async () => {
+    const { renegoTakeaway } = await import('./takeaways');
+    expect(renegoTakeaway({ monthlyGain: 0, netGain: -3000, breakEvenMonths: null, longer: false, fees: 3000 })).toContain('ne baisse pas');
   });
 });
