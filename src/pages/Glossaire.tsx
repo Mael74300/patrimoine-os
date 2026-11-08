@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { filterGlossary } from '../lib/glossaryFilter';
-import { glossary } from '../data/glossary';
+import { glossary, glossaryId } from '../data/glossary';
 import { Crumbs, PageHead } from '../components/ui';
 
-const idOf = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const idOf = glossaryId;
 
 export default function Glossaire() {
   const [q, setQ] = useState('');

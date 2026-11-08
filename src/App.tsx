@@ -15,7 +15,7 @@ const NAV = [
 ];
 
 function ScrollTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   // Accolades obligatoires : dans les navigateurs récents, scrollTo renvoie une promesse,
   // que React prendrait pour une fonction de nettoyage et appellerait au changement de page.
   const premiere = useRef(true);
@@ -29,6 +29,20 @@ function ScrollTop() {
     }
     document.getElementById('contenu')?.focus({ preventScroll: true });
   }, [pathname]);
+  // Lien vers une ancre d'une autre page (ex. une notion du glossaire depuis la recherche) :
+  // la page est chargée à la demande, on attend que l'élément existe (au plus ~1 s).
+  useEffect(() => {
+    if (hash.length < 2) return;
+    let essais = 0;
+    let timer = 0;
+    const versAncre = () => {
+      const cible = document.getElementById(decodeURIComponent(hash.slice(1)));
+      if (cible) cible.scrollIntoView();
+      else if (essais++ < 20) timer = window.setTimeout(versAncre, 50);
+    };
+    versAncre();
+    return () => window.clearTimeout(timer);
+  }, [pathname, hash]);
   return null;
 }
 

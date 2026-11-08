@@ -1,8 +1,9 @@
 import { categoryById } from '../data/categories';
+import { glossary, glossaryId } from '../data/glossary';
 import { guides } from '../data/guides';
 import { investments } from '../data/investments';
 
-export type SearchHit = { kind: 'Fiche' | 'Guide' | 'Simulateur'; title: string; to: string; excerpt: string; score: number };
+export type SearchHit = { kind: 'Fiche' | 'Guide' | 'Simulateur' | 'Glossaire'; title: string; to: string; excerpt: string; score: number };
 
 export const simulators = [
   { slug: 'patrimoine', title: 'Simulateur de patrimoine à long terme', excerpt: 'Épargne variable, retraits ponctuels, frais, inflation, fiscalité, jusqu’à trois scénarios.', keywords: 'interets composes epargne mensuelle objectif inflation frais scenarios retrait' },
@@ -65,6 +66,8 @@ export const searchAliases: Record<string, string[]> = {
   hypotheque: ['credit', 'pret'],
   emprunter: ['emprunt'],
   bourse: ['action', 'etf'],
+  tmi: ['tranche'],
+  crowdfunding: ['participatif'],
 };
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -89,7 +92,7 @@ export function search(query: string): SearchHit[] {
     return s;
   };
   for (const i of investments) {
-    const body = [i.summary, i.definition, i.tags.join(' '), categoryById[i.category]?.name, i.howItWorks].join(' ');
+    const body = [i.summary, i.definition, i.tags.join(' '), categoryById[i.category]?.name, i.howItWorks, i.howToInvest.join(' '), i.minCapital.text, i.fees.text, i.tax.text, i.pros.join(' '), i.cons.join(' '), i.timeSkills].join(' ');
     const s = score(i.name, body);
     if (s) hits.push({ kind: 'Fiche', title: i.name, to: `/encyclopedie/${i.slug}`, excerpt: i.summary, score: s + 1 });
   }
@@ -101,6 +104,10 @@ export function search(query: string): SearchHit[] {
   for (const sim of simulators) {
     const s = score(sim.title, sim.excerpt + ' ' + sim.keywords);
     if (s) hits.push({ kind: 'Simulateur', title: sim.title, to: `/simulateurs/${sim.slug}`, excerpt: sim.excerpt, score: s });
+  }
+  for (const t of glossary) {
+    const s = score(t.term, t.definition);
+    if (s) hits.push({ kind: 'Glossaire', title: t.term, to: `/glossaire#${glossaryId(t.term)}`, excerpt: t.definition, score: s - 0.5 });
   }
   return hits.sort((a, b) => b.score - a.score);
 }

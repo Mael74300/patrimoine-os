@@ -20,6 +20,17 @@ describe('recherche', () => {
     expect(search('pierre papier').some((h) => h.to === '/encyclopedie/scpi')).toBe(true);
     expect(search('défiscaliser').some((h) => h.to === '/encyclopedie/per')).toBe(true);
   });
+  it('les sigles courants trouvent la bonne fiche', () => {
+    expect(search('cpf').some((h) => h.to === '/encyclopedie/capital-humain')).toBe(true);
+    expect(search('crowdfunding').length).toBeGreaterThan(0);
+    expect(search('tmi').length).toBeGreaterThan(0);
+  });
+  it('le glossaire est cherchable, avec une ancre existante', () => {
+    const hits = search('volatilité');
+    const g = hits.find((h) => h.kind === 'Glossaire');
+    expect(g?.to).toBe('/glossaire#volatilite');
+    expect(search('livret a')[0].kind).toBe('Fiche');
+  });
   it('les suggestions pointent vers des pages existantes', () => {
     const ok = new Set([
       ...guides.map((g) => `/guides/${g.slug}`),
