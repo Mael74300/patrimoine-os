@@ -343,3 +343,27 @@ export function taegTakeaway(p: { principal: number; nominal: number; taeg: numb
   const fin = ` Au total, il vous coûte environ ${par100} € pour 100 € empruntés.`;
   return ecart > 0.00005 ? `${base}${fin}` : `Avec ces hypothèses, le taux affiché de ${fmtPct(p.nominal)} et le coût réel du crédit sont identiques.${fin}`;
 }
+
+/** Crédit in fine ou amortissable : ce qui change chaque mois et sur le coût net. */
+export function inFineTakeaway(p: { principal: number; years: number; savingsReturn: number; annualRate: number; amortizingMonthly: number; inFineMonthly: number; monthlySaving: number; netCostGap: number }): string {
+  if (!(p.principal > 0) || !(p.years > 0)) return '';
+  const base = `Pour emprunter ${fmtEur(p.principal)} sur ${p.years} ans, vous sortez ${fmtEur(p.inFineMonthly)} par mois en in fine (dont ${fmtEur(p.monthlySaving)} d’épargne) contre ${fmtEur(p.amortizingMonthly)} en amortissable.`;
+  if (Math.abs(p.netCostGap) <= 0.5) return `${base} Le coût net est le même dans les deux cas.`;
+  const fin = p.netCostGap > 0
+    ? `L’in fine coûte ${fmtEur(p.netCostGap)} de plus au final : votre épargne (${fmtPct(p.savingsReturn)} supposé) rapporte moins que le crédit ne coûte (${fmtPct(p.annualRate)}).`
+    : `L’in fine coûte ${fmtEur(-p.netCostGap)} de moins au final, mais seulement si votre épargne rapporte bien ${fmtPct(p.savingsReturn)} par an, ce que personne ne peut garantir.`;
+  return `${base} ${fin}`;
+}
+
+/** Renégociation : gain net, point mort et prudence si la durée s’allonge. */
+export function renegoTakeaway(p: { monthlyGain: number; netGain: number; breakEvenMonths: number | null; longer: boolean; fees: number }): string {
+  if (p.breakEvenMonths === null || p.monthlyGain <= 0.5) return 'Avec ces hypothèses, la mensualité ne baisse pas : l’opération ne vous fait pas économiser de mensualité.';
+  const mois = Math.ceil(p.breakEvenMonths);
+  const base = p.fees > 0.5
+    ? `La mensualité baisse de ${fmtEur(p.monthlyGain)} par mois : il faut environ ${mois} mois pour couvrir ${fmtEur(p.fees)} de frais.`
+    : `La mensualité baisse de ${fmtEur(p.monthlyGain)} par mois, sans frais à rattraper.`;
+  const fin = p.netGain > 0.5
+    ? ` Si vous gardez le prêt jusqu’au bout, vous gagnez ${fmtEur(p.netGain)} net.`
+    : ` Si vous gardez le prêt jusqu’au bout, vous perdez ${fmtEur(-p.netGain)} net : la baisse de mensualité ne compense pas l’allongement ou les frais.`;
+  return `${base}${fin}${p.longer ? ' Attention : le nouveau prêt dure plus longtemps.' : ''}`;
+}

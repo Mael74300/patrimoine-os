@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { fmtEur, fmtEur2, fmtNum, fmtPct, inFine, loanDuration, renegotiation, taeg, taegByFees, taegByInsurance } from '../lib/finance';
-import { loanDurationTakeaway, taegTakeaway } from '../lib/takeaways';
+import { loanDurationTakeaway, taegTakeaway, inFineTakeaway, renegoTakeaway } from '../lib/takeaways';
 import { comparerCreditsFaq } from '../data/simFaq';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
@@ -195,6 +195,7 @@ function InFine() {
           <Kpi label="Coût net, amortissable" value={fmtEur(r.amortizingCost)} sub="intérêts + assurance" />
           <Kpi label="Coût net, in fine" value={fmtEur(r.inFineNetCost)} sub={r.netCostGap >= 0 ? `${fmtEur(r.netCostGap)} de plus` : `${fmtEur(-r.netCostGap)} de moins`} />
         </div>
+        <Takeaway>{inFineTakeaway({ principal: s.principal, years: s.years, savingsReturn: s.savingsReturn, annualRate: s.annualRate, amortizingMonthly: r.amortizingMonthlyTotal, inFineMonthly: r.inFineMonthlyTotal, monthlySaving: r.monthlySaving, netCostGap: r.netCostGap })}</Takeaway>
         <h2>Comparaison sur {r.months / 12} ans</h2>
         <div className="table-wrap" tabIndex={0}>
           <table>
@@ -254,6 +255,7 @@ function Renegocier() {
           <Kpi label="Gain net sur le coût total" value={fmtEur(r.netGain)} sub="intérêts évités moins frais" />
           <Kpi label="Point mort" value={r.breakEvenMonths === null ? 'aucun' : `${fmtNum(r.breakEvenMonths)} mois`} sub={r.breakEvenMonths === null ? 'la mensualité ne baisse pas' : 'd’économie de mensualité pour couvrir les frais'} />
         </div>
+        <Takeaway>{renegoTakeaway({ monthlyGain: r.monthlyGain, netGain: r.netGain, breakEvenMonths: r.breakEvenMonths, longer: r.longer, fees: s.fees })}</Takeaway>
         {r.longer && (
           <p className="notice" role="note">Le nouveau prêt dure plus longtemps que le prêt actuel : la mensualité peut baisser tout en augmentant le coût total. Lisez le gain net, pas seulement la mensualité.</p>
         )}
