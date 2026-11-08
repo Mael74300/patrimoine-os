@@ -5,6 +5,9 @@
 export type GlossaryLink = { label: string; to: string };
 export type GlossaryTerm = { term: string; definition: string; links: GlossaryLink[] };
 
+/** Ancre d'une notion dans la page Glossaire (utilisée aussi par la recherche). */
+export const glossaryId = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
 const sim = (slug: string, label: string): GlossaryLink => ({ label, to: `/simulateurs/${slug}` });
 const fiche = (slug: string, label: string): GlossaryLink => ({ label, to: `/encyclopedie/${slug}` });
 const guide = (slug: string, label: string): GlossaryLink => ({ label, to: `/guides/${slug}` });
