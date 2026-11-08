@@ -765,3 +765,10 @@ h2.gloss-letter::before { content: none; }
   .gloss-nav a { flex: 0 0 auto; min-width: 40px; min-height: 40px; }
   .gloss-group, .gloss-item { scroll-margin-top: 80px; }
 }
+
+/* Glossaire : retour à la liste des lettres depuis chaque groupe */
+.gloss-group { position: relative; }
+.gloss-top { position: absolute; top: 0; right: 0; display: inline-flex; align-items: center; min-height: 28px; padding: 0 8px; font-size: 0.8rem; color: var(--primary); text-decoration: none; border-radius: 999px; background: var(--surface-2); }
+.gloss-top:hover { background: var(--accent-soft); }
+@media (min-width: 900px), print { .gloss-top { display: none; } }
+#lettres { scroll-margin-top: 80px; }
