@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { analyzeBudget, BUDGET_BENCHMARK, budgetBarSegments, catchUp, fmtEur, fmtNum, fmtPct, monthsOfIncomeSavedPerYear, projectBudgetSaving } from '../lib/finance';
 import { budgetTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 function BudgetBars({ b }: { b: ReturnType<typeof analyzeBudget> }) {
   const mine = budgetBarSegments(b);
@@ -56,10 +56,10 @@ export default function SimBudget() {
       <PageHead eyebrow="Simulateur" title="Budget mensuel et taux d'épargne">
         Calculez la part de votre revenu consacrée aux besoins, aux envies et à l'épargne, puis l'effort nécessaire pour atteindre un taux d'épargne visé.
       </PageHead>
-      <p className="notice" role="note">
+      <SimNotice>
         La répartition 50 / 30 / 20 (besoins, envies, épargne) est un repère pédagogique courant, pas une règle officielle. Selon le logement, la région
         et la composition du foyer, les besoins peuvent dépasser 50 % du revenu : le repère sert à situer votre budget, pas à le juger.
-      </p>
+      </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>

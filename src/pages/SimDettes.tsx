@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { comparePayoff, fmtEur, type Debt } from '../lib/finance';
 import { debtsTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = {
   b1: number; r1: number; m1: number;
@@ -40,11 +40,11 @@ export default function SimDettes() {
       <PageHead eyebrow="Simulateur" title="Rembourser plusieurs dettes : avalanche ou boule de neige">
         Compare deux ordres de remboursement pour un même budget : le taux le plus élevé d’abord (avalanche) ou le plus petit solde d’abord (boule de neige).
       </PageHead>
-      <p className="notice" role="note">
+      <SimNotice>
         Résultat entièrement fondé sur les soldes, taux et mensualités que vous saisissez ; aucun chiffre réglementaire. Vérifiez sur vos contrats les éventuelles indemnités de
         remboursement anticipé. Pour le détail d’un prêt, voir le <Link to="/simulateurs/credit">calculateur de crédit</Link> ; pour votre capacité de remboursement,
         le <Link to="/simulateurs/budget">budget</Link> et le <Link to="/simulateurs/endettement">taux d’endettement</Link>.
-      </p>
+      </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>

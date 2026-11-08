@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { fmtEur, fmtPct, prepayVsInvest } from '../lib/finance';
 import { prepayTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = { balance: number; annualRate: number; remainingYears: number; lump: number; annualReturn: number; annualFees: number; taxRate: number };
 
@@ -24,10 +24,10 @@ export default function SimRembourser() {
       <PageHead eyebrow="Simulateur" title="Rembourser son crédit ou investir ?">
         Vous disposez d'une somme : la verser en remboursement anticipé ou la placer ? Comparez le patrimoine net obtenu à la fin de la durée restante du crédit.
       </PageHead>
-      <p className="notice" role="note">
+      <SimNotice>
         <strong>Le rendement est une hypothèse, pas une promesse.</strong> Un placement peut perdre de la valeur ; rembourser un crédit, lui, fait économiser des intérêts à coup sûr.
         Le taux d'imposition de 31,4 % est celui du prélèvement forfaitaire unique de 2026 (<Link to="/encyclopedie/compte-titres">fiche Compte-titres</Link>) : changez-le si votre placement est dans une autre enveloppe.
-      </p>
+      </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>

@@ -6,7 +6,7 @@ import {
 } from '../lib/finance';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
 import { precautionTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, Sources, usePersistentState, JumpToResults, CoverageGauge } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, Sources, usePersistentState, JumpToResults, CoverageGauge, SimNotice } from '../components/ui';
 
 type State = PrecautionInput & { profile: PrecautionProfile; lep: 'oui' | 'non'; deadline: number };
 
@@ -44,10 +44,10 @@ export default function SimPrecaution() {
       <PageHead eyebrow="Simulateur" title="Simulateur d'épargne de précaution">
         Estimez la réserve à garder disponible pour un imprévu, le temps pour la constituer et sa répartition possible sur les livrets réglementés.
       </PageHead>
-      <p className="notice" role="note">
+      <SimNotice>
         Aucune règle officielle ne fixe le montant d'une épargne de précaution. Les durées proposées (3, 6 ou 9 mois de dépenses) sont des repères
         pédagogiques courants, à adapter à votre situation : stabilité des revenus, personnes à charge, état du logement et de la voiture, couverture santé.
-      </p>
+      </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>

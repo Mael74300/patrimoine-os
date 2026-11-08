@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { fmtEur, fmtPct, monthlyByDuration, monthlyByRate, savingsGoal } from '../lib/finance';
 import { savingsGoalTakeaway } from '../lib/takeaways';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = { target: number; current: number; years: number; annualRate: number };
 
@@ -23,11 +23,11 @@ export default function SimObjectif() {
       <PageHead eyebrow="Simulateur" title="Objectif d’épargne : combien verser par mois">
         Apport, voyage, travaux, véhicule : indiquez le montant et l’échéance, le simulateur calcule le versement mensuel à prévoir.
       </PageHead>
-      <p className="notice" role="note">
+      <SimNotice>
         Le taux saisi est une hypothèse, pas une garantie. Pour un projet à échéance courte, l’épargne reste disponible sur un livret ; sur plusieurs années,
         un placement plus risqué peut rapporter plus mais aussi moins. Gardez d’abord une <Link to="/simulateurs/epargne-de-precaution">épargne de précaution</Link>
         {' '}et vérifiez votre capacité d’épargne avec le <Link to="/simulateurs/budget">budget mensuel</Link>.
-      </p>
+      </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { capacityAtHcsf, debtRatio, fmtEur, fmtPct, HCSF } from '../lib/finance';
 import { debtRatioTakeaway } from '../lib/takeaways';
 import { SchemaMois } from '../components/Illustrations';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, Sources, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, Sources, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = { income: number; existingPayments: number; newPayment: number; livingCosts: number; householdSize: number; rate: number; years: number; insuranceRate: number };
 
@@ -20,11 +20,11 @@ export default function SimEndettement() {
       <PageHead eyebrow="Simulateur" title="Taux d’endettement et reste à vivre">
         Quelle part de vos revenus part dans les crédits, que reste-t-il pour vivre, et jusqu’à quel montant le repère de {pct} est-il respecté ?
       </PageHead>
-      <p className="notice" role="note">
+      <SimNotice>
         Le repère de {pct} (assurance comprise, {HCSF.maxYears} ans au plus) est une recommandation du HCSF appliquée par les banques avec une marge de
         dérogation, pas une garantie d’accord ni une capacité d’emprunt personnalisée. Pour la mensualité d’un projet précis, voir le
         {' '}<Link to="/simulateurs/credit">calculateur de crédit</Link>.
-      </p>
+      </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
