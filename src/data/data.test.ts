@@ -305,3 +305,13 @@ describe('fiche PEL : frais de transfert', () => {
     expect(f.review.data.join(' ')).toContain('frais de transfert');
   });
 });
+
+describe('fiche Formation et compétences : financement par le CPF', () => {
+  it('le financement est sourcé sur Service-Public et repris dans le suivi', () => {
+    const f = investmentBySlug['capital-humain']!;
+    expect(f.minCapital.verified).toBe(true);
+    expect(f.minCapital.text).toContain('Agefiph');
+    expect(f.sources.some((x) => x.url.includes('F10705'))).toBe(true);
+    expect(f.review.data.join(' ')).toContain('Agefiph');
+  });
+});
