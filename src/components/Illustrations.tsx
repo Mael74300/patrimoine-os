@@ -262,6 +262,47 @@ export function SchemaDiversification() {
   );
 }
 
+/** Schéma « diversifier : principe » : un seul placement ou plusieurs, quand l’un d’eux baisse. Aucun chiffre ; reprend le texte du guide et La finance pour tous (les placements n’évoluent pas tous de la même manière). */
+export function SchemaDiversificationPrincipe() {
+  const arrow = { fill: 'none', stroke: 'var(--warn)', strokeWidth: 2.5, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const placements = ['Livret', 'Actions', 'Immobilier', 'Fonds en euros'];
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 262" role="img" aria-labelledby="ill-divp-t ill-divp-d" className="ill-svg">
+        <title id="ill-divp-t">Un seul placement ou plusieurs : ce qui se passe quand l’un baisse</title>
+        <desc id="ill-divp-d">À gauche, toute l’épargne est dans un seul placement : s’il baisse, tout le patrimoine baisse avec lui. À droite, l’épargne est répartie entre un livret, des actions, de l’immobilier et un fonds en euros : si les actions baissent, les autres placements n’évoluent pas de la même manière, donc le patrimoine ne dépend plus d’un seul d’entre eux.</desc>
+        <text x={100} y={18} textAnchor="middle" className="ill-step">Tout au même endroit</text>
+        <rect x={0} y={34} width={200} height={84} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={100} y={82} textAnchor="middle" className="ill-step">Un seul placement</text>
+        <path d="M 100 118 V 152 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={100} y={178} textAnchor="middle" className="ill-in">Il baisse :</text>
+        <text x={100} y={198} textAnchor="middle" className="ill-in">tout votre patrimoine</text>
+        <text x={100} y={218} textAnchor="middle" className="ill-in">baisse avec lui</text>
+        <text x={320} y={18} textAnchor="middle" className="ill-step">Plusieurs placements</text>
+        {placements.map((n, i) => {
+          const x = 220 + (i % 2) * 104;
+          const y = 34 + Math.floor(i / 2) * 46;
+          const down = n === 'Actions';
+          return (
+            <g key={n}>
+              <rect x={x} y={y} width={96} height={38} rx={10} fill={down ? 'var(--warn-soft)' : 'var(--accent-soft)'} stroke={down ? 'var(--warn)' : 'var(--accent)'} strokeWidth={2} />
+              <text x={x + 48} y={y + 24} textAnchor="middle" className="ill-in">{n}</text>
+            </g>
+          );
+        })}
+        <path d="M 320 126 V 152 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={320} y={178} textAnchor="middle" className="ill-in">Un placement baisse :</text>
+        <text x={320} y={198} textAnchor="middle" className="ill-in">les autres n’évoluent pas</text>
+        <text x={320} y={218} textAnchor="middle" className="ill-in">de la même manière</text>
+        <text x={210} y={252} textAnchor="middle" className="ill-sub">Mais si tout baisse en même temps, rien n’amortit</text>
+      </svg>
+      <figcaption>
+        <strong>Illustration, sans chiffre</strong> : le principe de la diversification. Répartir son épargne évite qu’un seul placement décide de tout ; cela ne garantit ni un gain ni l’absence de perte.
+      </figcaption>
+    </figure>
+  );
+}
+
 export type SituationIconName = 'pousse' | 'pieces' | 'maison' | 'soleil';
 
 /** Icônes décoratives des parcours d'accueil : même trait (2,5), même grille 48 × 48, couleurs du thème. */
