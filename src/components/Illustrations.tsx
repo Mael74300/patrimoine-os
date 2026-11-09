@@ -2032,6 +2032,41 @@ export function SchemaForet() {
   );
 }
 
+/** Schéma « Objets d’art : la taxe dépend du prix de vente » : seuil 5 000 €, taux 6 % + CRDS 0,5 % = 6,5 % du prix de cession (BOFiP BOI-RPPM-PVBMC-20-10, consulté le 2026-11-09). */
+export function SchemaObjetsArt() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-art-t ill-art-d" className="ill-svg">
+        <title id="ill-art-t">À la vente d’un objet d’art, la taxe dépend du prix de vente</title>
+        <desc id="ill-art-d">Vous vendez un objet d’art, de collection ou une antiquité. Si le prix de vente est inférieur ou égal à 5 000 euros, il n’y a aucune taxe forfaitaire. Au-delà de 5 000 euros, la taxe forfaitaire est de 6 % du prix, plus 0,5 % de CRDS, soit 6,5 % du prix de vente et non du gain. En pratique, le seuil s’apprécie objet par objet.</desc>
+        <rect x={60} y={2} width={300} height={52} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={210} y={26} textAnchor="middle" className="ill-step">Vous vendez un objet d’art</text>
+        <text x={210} y={44} textAnchor="middle" className="ill-sub">ou de collection, ou une antiquité</text>
+        <path d="M 100 54 V 96 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <path d="M 320 54 V 96 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={96} width={200} height={58} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={100} y={122} textAnchor="middle" className="ill-in">Prix de vente</text>
+        <text x={100} y={144} textAnchor="middle" className="ill-step">5 000 € ou moins</text>
+        <rect x={220} y={96} width={200} height={58} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={320} y={122} textAnchor="middle" className="ill-in">Prix de vente</text>
+        <text x={320} y={144} textAnchor="middle" className="ill-step">plus de 5 000 €</text>
+        <path d="M 100 154 V 192 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <path d="M 320 154 V 192 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={192} width={200} height={76} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={100} y={224} textAnchor="middle" className="ill-step">Aucune taxe</text>
+        <text x={100} y={246} textAnchor="middle" className="ill-sub">forfaitaire</text>
+        <rect x={220} y={192} width={200} height={76} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={320} y={216} textAnchor="middle" className="ill-step">6,5 % du prix</text>
+        <text x={320} y={238} textAnchor="middle" className="ill-in">6 % + 0,5 % de CRDS</text>
+        <text x={320} y={257} textAnchor="middle" className="ill-sub">sur le prix, pas sur le gain</text>
+        <text x={210} y={292} textAnchor="middle" className="ill-in">En pratique, le seuil s’apprécie objet par objet.</text>
+        <text x={210} y={316} textAnchor="middle" className="ill-sub">Schéma de principe</text>
+      </svg>
+    </figure>
+  );
+}
+
 /** Schéma « Formation : votre CPF vous suit » : principe qualitatif, sans chiffre (Service-Public F10705, vérifiée le 27 juin 2026, consultée le 2026-11-09). */
 export function SchemaCpf() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
