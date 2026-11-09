@@ -348,7 +348,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Loyers généralement plus élevés qu’en location nue', 'Fiscalité au réel souvent favorable'],
     cons: ['Plus-value de revente plus lourde au régime réel (amortissements réintégrés)', 'Gestion plus lourde'],
     timeSkills: 'Élevé.',
-    example: 'Exemple fictif : studio meublé de 120 000 € loué 600 € par mois, avec un mois de vacance par an : 6 600 € de loyers encaissés.',
+    example: 'Exemple fictif : studio meublé de 120 000 € loué 600 € par mois, avec un mois de vacance par an : 6 600 € de loyers encaissés. Au micro-BIC, l’abattement de 50 % retire 3 300 € : seuls 3 300 € s’ajoutent à vos autres revenus pour le calcul de l’impôt (hors prélèvements sociaux).',
     sources: [S.lmnpSp, S.pvMeuble, S.anil],
     alternatives: ['location-nue', 'scpi'],
     tags: ['immobilier', 'revenus'],

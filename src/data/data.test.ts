@@ -59,6 +59,18 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
     const f = investmentBySlug['credit-immobilier'];
     expect(f.sources.some((x) => x.url.includes('lafinancepourtous.com') && x.url.endsWith('/effet-de-levier/'))).toBe(true);
   });
+  it('lmnp : l’exemple micro-BIC est recalculé (6 600 € de loyers, abattement de 50 %)', () => {
+    const loyers = 600 * 11;
+    const abattement = loyers * 0.5;
+    const ex = investmentBySlug['lmnp'].example.replace(/\u00a0/g, ' ');
+    expect(ex).toContain('6 600 €');
+    expect(ex).toContain('abattement de 50 %');
+    expect(loyers).toBe(6600);
+    expect(abattement).toBe(3300);
+    expect(ex).toContain('retire 3 300 €');
+    expect(ex).toContain('seuls 3 300 €');
+  });
+
   it('Objets d’art : 8 000 € revendus, taxe forfaitaire 6 % + 0,5 % de CRDS → 520 €', () => {
     expect(8000 * (0.06 + 0.005)).toBeCloseTo(520, 6);
     expect(investmentBySlug['objets-d-art-collection'].example.replace(/\u00a0/g, ' ')).toContain('520 €');
