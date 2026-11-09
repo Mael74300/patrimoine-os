@@ -361,7 +361,7 @@ const raw: Omit<Investment, 'review'>[] = [
     definition: "Société civile de placement immobilier, agréée par l'AMF, collectant l'épargne pour acheter des bureaux, commerces, logements ou locaux de santé.",
     howItWorks: "Les loyers perçus sont redistribués aux associés après frais. La valeur de la part peut baisser, comme l'ont montré les révisions de prix de 2023-2024.",
     howToInvest: ['En direct, à crédit, ou via une assurance-vie (unités de compte).', 'Examiner le taux d’occupation, la diversification et l’historique du prix de part.', 'Prévoir une durée de détention longue pour amortir les frais d’entrée.'],
-    minCapital: { text: "Prix d'une part, souvent quelques centaines d'euros.", verified: false },
+    minCapital: { text: "Prix d'une part : de l'ordre d'une centaine à quelques milliers d'euros selon la SCPI (source : La finance pour tous, mise à jour le 2 janvier 2024).", verified: true, asOf: '9 novembre 2026' },
     horizon: '8 à 10 ans et plus', horizonYears: 8,
     liquidity: 2, risk: 3, effort: 1,
     fees: { text: 'Frais de souscription et d’enregistrement compris entre 6 % et 12 % du montant souscrit (source : La finance pour tous, mise à jour le 2 janvier 2024), plus des frais de gestion annuels.', verified: true, asOf: AS_OF },

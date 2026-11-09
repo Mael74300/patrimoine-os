@@ -607,7 +607,7 @@ export function SchemaScpi() {
         <text x={126} y={202} textAnchor="start" className="ill-in">achète et met en location</text>
         <rect x={0} y={220} width={220} height={58} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
         <text x={110} y={246} textAnchor="middle" className="ill-step">Des immeubles loués</text>
-        <text x={110} y={266} textAnchor="middle" className="ill-sub">bureaux, commerces, logements…</text>
+        <text x={110} y={266} textAnchor="middle" className="ill-sub">bureaux, commerces, santé…</text>
         <path d="M 220 249 H 290 V 31 H 228 m 8 -7 l -8 7 l 8 7" {...arrow} />
         <text x={302} y={118} textAnchor="start" className="ill-in">les loyers,</text>
         <text x={302} y={136} textAnchor="start" className="ill-in">moins les frais,</text>
