@@ -1050,11 +1050,11 @@ export function SchemaRendement() {
   const alt = steps.map((s) => `${s.label} : ${pctFr(s.value)}`).join(' ; ');
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 272" role="img" aria-labelledby="ill-rend-t ill-rend-d" className="ill-svg">
+      <svg viewBox="0 0 420 316" role="img" aria-labelledby="ill-rend-t ill-rend-d" className="ill-svg">
         <title id="ill-rend-t">Le rendement locatif baisse à mesure qu’on compte les vrais coûts</title>
         <desc id="ill-rend-d">{`Exemple fictif d’un bien à ${fmtEur(RENDEMENT_EXAMPLE.price)} loué ${fmtEur(RENDEMENT_EXAMPLE.monthlyRent)} par mois. ${alt}.`}</desc>
         {steps.map((s, i) => {
-          const y = 4 + i * 66;
+          const y = 4 + i * 80;
           const w = (s.value / max) * BW;
           const last = i === steps.length - 1;
           return (
