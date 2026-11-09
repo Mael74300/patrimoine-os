@@ -1,6 +1,5 @@
-import { guideBySlug } from '../data/guides';
-import { investmentBySlug } from '../data/investments';
-import { simulators } from './search';
+import { guideTitles, investmentNames } from './readingTitles';
+import { simulators } from './simulatorsList';
 
 /** Simulateurs liés à chaque fiche (clé : slug de fiche) et à chaque guide (clé : slug de guide). Cohérence vérifiée par les tests. */
 export const simsForInvestment: Record<string, string[]> = {
@@ -66,15 +65,15 @@ export type ReadingLink = { to: string; title: string; kind: 'Guide' | 'Fiche' }
 export function readingForSimulator(slug: string): ReadingLink[] {
   const guidesOut = Object.entries(simsForGuide)
     .filter(([, sims]) => sims.includes(slug))
-    .map(([g]) => guideBySlug[g])
-    .filter(Boolean)
+    .map(([g]) => g)
+    .filter((g) => guideTitles[g])
     .slice(0, 2)
-    .map((g) => ({ to: `/guides/${g.slug}`, title: g.title, kind: 'Guide' as const }));
+    .map((g) => ({ to: `/guides/${g}`, title: guideTitles[g], kind: 'Guide' as const }));
   const fichesOut = Object.entries(simsForInvestment)
     .filter(([, sims]) => sims.includes(slug))
-    .map(([i]) => investmentBySlug[i])
-    .filter(Boolean)
+    .map(([i]) => i)
+    .filter((i) => investmentNames[i])
     .slice(0, 2)
-    .map((i) => ({ to: `/encyclopedie/${i.slug}`, title: i.name, kind: 'Fiche' as const }));
+    .map((i) => ({ to: `/encyclopedie/${i}`, title: investmentNames[i], kind: 'Fiche' as const }));
   return [...guidesOut, ...fichesOut];
 }

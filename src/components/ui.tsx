@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { config } from '../config';
 import type { Checked, Level, Source } from '../data/types';
 import { load, save, type SavedSim } from '../lib/storage';
-import { HeaderArt, type HeaderArtName } from './Illustrations';
+import { HeaderArt, type HeaderArtName } from './HeaderArt';
 import { summarizeSeries } from '../lib/chartSummary';
 import { coveragePercent } from '../lib/coverage';
 import { fmtEur } from '../lib/finance';
