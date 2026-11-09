@@ -49,7 +49,7 @@ export default function Glossaire() {
                   {t.definition}
                   <div className="gloss-links">
                     <span>Voir aussi</span>
-                    {t.links.map((l) => <Link key={l.to} to={l.to}>{l.label}</Link>)}
+                    <div className="gloss-links-list">{t.links.map((l) => <Link key={l.to} to={l.to}>{l.label}</Link>)}</div>
                   </div>
                 </dd>
               </div>
