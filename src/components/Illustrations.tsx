@@ -1011,7 +1011,7 @@ export function SchemaPea() {
 /** Schéma « Livret A : le jour de l’opération décide » : un mois coupé au 15, ce que devient un dépôt ou un retrait de chaque côté. Seuls chiffres : 1er, 15, 16 ; reprend le texte du guide (Service-Public.fr). */
 export function SchemaQuinzaines() {
   const cols = [
-    { x: 0, c: 'var(--accent)', soft: 'var(--accent-soft)', jour: 'Du 1er au 15 du mois', dep: ['Dépôt : il rapporte', 'dès le 16 du même mois'], ret: ['Retrait : calcul sur le solde', 'du dernier jour du mois précédent'] },
+    { x: 0, c: 'var(--accent)', soft: 'var(--accent-soft)', jour: 'Du 1er au 15 du mois', dep: ['Dépôt : il rapporte', 'dès le 16 du même mois'], ret: ['Retrait : calcul sur', 'le solde du dernier jour', 'du mois précédent'] },
     { x: 214, c: 'var(--warn)', soft: 'var(--warn-soft)', jour: 'À partir du 16', dep: ['Dépôt : il rapporte', 'dès le 1er du mois suivant'], ret: ['Retrait : calcul sur', 'le solde du 15 du mois'] },
   ];
   return (
@@ -1029,8 +1029,9 @@ export function SchemaQuinzaines() {
             <text x={k.x + 103} y={112} textAnchor="middle" className="ill-sub">{k.dep[0]}</text>
             <text x={k.x + 103} y={130} textAnchor="middle" className="ill-sub">{k.dep[1]}</text>
             <rect x={k.x} y={156} width={206} height={62} rx={12} fill="var(--surface)" stroke={k.c} strokeWidth={2} />
-            <text x={k.x + 103} y={182} textAnchor="middle" className="ill-sub">{k.ret[0]}</text>
-            <text x={k.x + 103} y={200} textAnchor="middle" className="ill-sub">{k.ret[1]}</text>
+            {k.ret.map((ligne, i) => (
+              <text key={ligne} x={k.x + 103} y={(k.ret.length === 3 ? 173 : 182) + i * 18} textAnchor="middle" className="ill-sub">{ligne}</text>
+            ))}
           </g>
         ))}
         <text x={210} y={246} textAnchor="middle" className="ill-sub">Le jour de l’opération compte autant que le montant</text>
