@@ -435,6 +435,8 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 .gloss-letter { margin: 0; font-size: 1.3rem; line-height: 1.1; color: var(--primary-deep); }
 @media (min-width: 900px) { .gloss-groups { column-count: 2; column-gap: 24px; } .gloss-group { grid-template-columns: 40px minmax(0, 1fr); gap: 0 10px; margin-top: 0; margin-bottom: 14px; break-inside: avoid; } .gloss-group .gloss-list { grid-template-columns: 1fr; gap: 10px; } .gloss-letter { font-size: 1.6rem; } }
 .gloss-group + p { margin-top: 18px; }
+/* Glossaire : les deux colonnes utilisent toute la largeur du conteneur (et non les 44 rem de lecture) */
+@media (min-width: 900px) { .prose.gloss-page { max-width: none; } .gloss-page .gloss-groups { column-gap: 32px; } }
 .fiche aside .meters-legend li { flex-direction: column; align-items: flex-start; gap: 4px; }
 
 /* Résumé en tête de la page Méthode */
