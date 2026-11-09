@@ -124,6 +124,11 @@ function NetWorthCalculator() {
   );
 }
 
+/** Identifiant d’ancre stable d’une rubrique de guide (sans accents). */
+export function sectionId(heading: string): string {
+  return 'rub-' + heading.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
 export function GuidePage() {
   const { slug = '' } = useParams();
   const g = guideBySlug[slug];
@@ -132,13 +137,14 @@ export function GuidePage() {
   return (
     <article>
       <Crumbs items={[{ to: '/', label: 'Accueil' }, { to: '/guides', label: 'Guides' }, { label: g.title }]} />
+      <div className="guide-layout">
       <div className="prose">
         <PageHead eyebrow={`Guide · ${g.readingMinutes} min de lecture`} title={g.title}>{g.summary}</PageHead>
         <p className="small muted">Mis à jour le {fmtDate(g.updatedOn)}</p>
         {g.slug === 'par-ou-commencer' && <SchemaEscalier steps={g.sections.map((s) => s.heading)} title="Les cinq étapes pour construire son patrimoine, dans l’ordre" />}
         {g.sections.map((s, i) => (
           <section key={s.heading}>
-            <h2>{g.slug === 'par-ou-commencer' ? `${i + 1}. ${s.heading}` : s.heading}</h2>
+            <h2 id={sectionId(s.heading)}>{g.slug === 'par-ou-commencer' ? `${i + 1}. ${s.heading}` : s.heading}</h2>
             {g.slug === 'choisir-son-enveloppe' && s.heading === 'Les grandes différences' ? <EnvelopeCards /> : s.body.map((p, k) => (
               <Fragment key={p}>
                 <p>{p}</p>
@@ -167,6 +173,13 @@ export function GuidePage() {
           </section>
         ))}
         <SimFaq slug={g.slug} items={g.faq} />
+      </div>
+      {g.sections.length > 2 && (
+        <nav className="guide-toc" aria-label="Sur cette page">
+          <p className="guide-toc-title">Sur cette page</p>
+          <ol>{g.sections.map((s) => <li key={s.heading}><a href={`#${sectionId(s.heading)}`}>{s.heading}</a></li>)}</ol>
+        </nav>
+      )}
       </div>
       {g.widget === 'catalogue' && <MobileFold label={`Voir les familles et leurs fiches`}><Catalogue /></MobileFold>}
       {g.widget === 'patrimoine-net' && (<><h2>Calculer votre patrimoine net</h2><NetWorthCalculator /></>)}
