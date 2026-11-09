@@ -1998,3 +1998,39 @@ export function SchemaForet() {
     </figure>
   );
 }
+
+/** Schéma « Formation : votre CPF vous suit » : principe qualitatif, sans chiffre (Service-Public F10705, vérifiée le 27 juin 2026, consultée le 2026-11-09). */
+export function SchemaCpf() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const cols = [
+    { x: 0, a: 'Vous travaillez', b: 'chez un employeur' },
+    { x: 145, a: 'Vous changez', b: 'd’employeur' },
+    { x: 290, a: 'Vous perdez', b: 'votre emploi' },
+  ];
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-cpf-t ill-cpf-d" className="ill-svg">
+        <title id="ill-cpf-t">Votre compte personnel de formation vous suit</title>
+        <desc id="ill-cpf-d">Quelle que soit votre situation (en poste, changement d’employeur, perte d’emploi), vous gardez vos droits sur votre compte personnel de formation. Si une formation coûte plus que le montant disponible, vous pouvez demander un complément à votre employeur, à l’Agefiph ou à la région.</desc>
+        {cols.map((c) => (
+          <g key={c.x}>
+            <rect x={c.x} y={2} width={130} height={58} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+            <text x={c.x + 65} y={28} textAnchor="middle" className="ill-in">{c.a}</text>
+            <text x={c.x + 65} y={48} textAnchor="middle" className="ill-in">{c.b}</text>
+            <path d={`M ${c.x + 65} 60 V 98 m -7 -8 l 7 8 l 7 -8`} {...arrow} />
+          </g>
+        ))}
+        <rect x={0} y={98} width={420} height={64} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={210} y={124} textAnchor="middle" className="ill-step">Votre CPF vous suit</text>
+        <text x={210} y={146} textAnchor="middle" className="ill-sub">vous gardez vos droits</text>
+        <path d="M 210 162 V 200 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={226} y={186} textAnchor="start" className="ill-in">si la formation coûte plus</text>
+        <rect x={0} y={200} width={420} height={78} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={210} y={226} textAnchor="middle" className="ill-step">Un complément est possible</text>
+        <text x={210} y={250} textAnchor="middle" className="ill-in">demandé à votre employeur,</text>
+        <text x={210} y={268} textAnchor="middle" className="ill-in">à l’Agefiph ou à la région</text>
+        <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe</text>
+      </svg>
+    </figure>
+  );
+}
