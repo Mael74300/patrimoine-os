@@ -6,6 +6,7 @@ import { investmentBySlug } from '../data/investments';
 import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Dots, Fold, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
+import { DONATION_ABATTEMENTS, fmtEuros } from '../data/donationAbattements';
 import { SchemaActions, SchemaForet, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaPea, SchemaLep, SchemaPel, SchemaPer, SchemaQuinzaines, SchemaScpi, SchemaUniteDeCompte, SchemaFondsEuros, SchemaLevier, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf } from '../components/Illustrations';
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
@@ -101,6 +102,17 @@ export default function InvestmentPage() {
           <ul>{inv.howToInvest.map((s) => <li key={s}>{s}</li>)}</ul>
 
           <h2>En pratique</h2>
+          {inv.slug === 'donation' && (
+            <div className="table-wrap donation-abatt">
+              <table>
+                <caption>Montant donné sans impôt, par donateur et par bénéficiaire (renouvelable tous les 15 ans)</caption>
+                <thead><tr><th scope="col">Lien avec le donateur</th><th scope="col">Abattement</th></tr></thead>
+                <tbody>
+                  {DONATION_ABATTEMENTS.map((a) => <tr key={a.lien}><th scope="row">{a.lien}</th><td>{fmtEuros(a.montant)}</td></tr>)}
+                </tbody>
+              </table>
+            </div>
+          )}
           <div className={`facts-grid${unbalanced(inv.fees.text, inv.tax.text) ? ' facts-stack' : ''}`}>
             <div className="panel"><h3>Frais</h3><CheckedText c={inv.fees} split /></div>
             <div className="panel"><h3>Fiscalité française</h3><CheckedText c={inv.tax} split /></div>
