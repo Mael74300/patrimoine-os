@@ -321,6 +321,12 @@ td.neg { color: var(--danger); }
 .ill-svg text.ill-on-dark { fill: var(--primary-ink); }
 .ill-svg text.ill-loss { fill: var(--danger); font-size: 13px; font-weight: 700; }
 .ill-year { font-size: 14px; font-weight: 700; }
+/* Sur grand écran, les schémas à viewBox étroit (340 ou 260) ne sont pas agrandis au-delà de ~1,06× : leurs textes gardent
+   la même taille que ceux des schémas à viewBox 420 (sinon ils s'affichaient à 1,3× et paraissaient disproportionnés). */
+@media (min-width: 481px) {
+  .ill-svg[viewBox^="0 0 340 "] { max-width: 360px; }
+  .ill-svg[viewBox^="0 0 260 "] { max-width: 276px; }
+}
 /* Mobile : moins de marge autour du schéma pour qu'il soit moins réduit (textes plus lisibles) */
 /* Mobile : le schéma déborde de la marge de page (16 px de chaque côté) et occupe toute la largeur de l'écran :
    le dessin passe de ~78 % à ~87 % de sa taille, donc les textes gagnent environ 1 px (12 px → 10,5 px). */
