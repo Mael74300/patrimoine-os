@@ -64,9 +64,10 @@ export default function SimIndependance() {
           </details>
 
           <h2>Selon le taux de retrait</h2>
+          <p className="muted">Capital à réunir, délai pour l’atteindre, puis durée de tenue du capital en retrait.</p>
           <div className="table-wrap" tabIndex={0}>
             <table>
-              <thead><tr><th>Taux de retrait</th><th className="r">Capital visé</th><th className="r">Délai estimé</th><th className="r">Capital épuisé après (rendement central)</th></tr></thead>
+              <thead><tr><th>Retrait</th><th className="r">Capital visé</th><th className="r">Pour y arriver</th><th className="r">Capital tient</th></tr></thead>
               <tbody>
                 {rates.map((w) => {
                   const t = fireTarget(s.annualExpenses, s.recurringIncome, w);
