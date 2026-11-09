@@ -2102,3 +2102,34 @@ export function SchemaCpf() {
     </figure>
   );
 }
+
+/** Schéma « Créer son entreprise : deux sources de valeur » : principe qualitatif, sans chiffre (reprend le texte « Fonctionnement » de la fiche). */
+export function SchemaCreationEntreprise() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-ce-t ill-ce-d" className="ill-svg">
+        <title id="ill-ce-t">Créer son entreprise : deux sources de valeur, un risque réel</title>
+        <desc id="ill-ce-d">Le patrimoine se construit de deux façons : les bénéfices accumulés année après année, et la valeur de l’entreprise lors d’une cession. Le risque de perdre toute la mise est réel.</desc>
+        <rect x={0} y={2} width={200} height={72} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={100} y={30} textAnchor="middle" className="ill-step">Les bénéfices</text>
+        <text x={100} y={52} textAnchor="middle" className="ill-in">accumulés au fil</text>
+        <text x={100} y={67} textAnchor="middle" className="ill-in">des années</text>
+        <rect x={220} y={2} width={200} height={72} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={320} y={30} textAnchor="middle" className="ill-step">La revente</text>
+        <text x={320} y={52} textAnchor="middle" className="ill-in">valeur de l’entreprise</text>
+        <text x={320} y={67} textAnchor="middle" className="ill-in">lors d’une cession</text>
+        <path d="M 100 74 V 112 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <path d="M 320 74 V 112 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={112} width={420} height={64} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={210} y={138} textAnchor="middle" className="ill-step">Votre patrimoine</text>
+        <text x={210} y={160} textAnchor="middle" className="ill-sub">si l’activité trouve ses clients</text>
+        <rect x={0} y={198} width={420} height={78} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={210} y={226} textAnchor="middle" className="ill-step">Sinon, la mise peut être perdue</text>
+        <text x={210} y={250} textAnchor="middle" className="ill-in">le risque de perte totale</text>
+        <text x={210} y={268} textAnchor="middle" className="ill-in">est réel</text>
+        <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe</text>
+      </svg>
+    </figure>
+  );
+}

@@ -7,7 +7,7 @@ import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Dots, Fold, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
 import { DONATION_ABATTEMENTS, fmtEuros } from '../data/donationAbattements';
-import { SchemaActions, SchemaForet, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaPea, SchemaLep, SchemaPel, SchemaPer, SchemaQuinzaines, SchemaScpi, SchemaUniteDeCompte, SchemaFondsEuros, SchemaLevier, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt } from '../components/Illustrations';
+import { SchemaActions, SchemaForet, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaPea, SchemaLep, SchemaPel, SchemaPer, SchemaQuinzaines, SchemaScpi, SchemaUniteDeCompte, SchemaFondsEuros, SchemaLevier, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise } from '../components/Illustrations';
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
 import { guideBySlug } from '../data/guides';
@@ -97,6 +97,7 @@ export default function InvestmentPage() {
           {inv.slug === 'unites-de-compte' && <SchemaUniteDeCompte />}
           {inv.slug === 'fonds-euros' && <SchemaFondsEuros />}
           {inv.slug === 'capital-humain' && <SchemaCpf />}
+          {inv.slug === 'creation-entreprise' && <SchemaCreationEntreprise />}
           {inv.slug === 'compte-a-terme' && <SchemaCompteATerme />}
           {inv.slug === 'credit-immobilier' && <SchemaLevier />}
           <h2>Comment investir</h2>
