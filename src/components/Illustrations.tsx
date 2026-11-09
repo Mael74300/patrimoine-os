@@ -2042,3 +2042,34 @@ export function SchemaCreationEntreprise() {
     </figure>
   );
 }
+
+/** Schéma « Racheter une entreprise : les bénéfices remboursent la dette » : principe qualitatif, sans chiffre (reprend le texte « Fonctionnement » de la fiche). */
+export function SchemaRepriseEntreprise() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-re-t ill-re-d" className="ill-svg">
+        <title id="ill-re-t">Racheter une entreprise : les bénéfices remboursent la dette</title>
+        <desc id="ill-re-d">On rachète une entreprise en s’endettant. Ses bénéfices servent à rembourser la dette d’acquisition. Le risque porte sur le prix payé (la valorisation) et sur la continuité de l’activité.</desc>
+        <rect x={0} y={2} width={200} height={72} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={100} y={30} textAnchor="middle" className="ill-step">1. Le rachat</text>
+        <text x={100} y={52} textAnchor="middle" className="ill-in">financé en partie</text>
+        <text x={100} y={67} textAnchor="middle" className="ill-in">par un emprunt</text>
+        <rect x={220} y={2} width={200} height={72} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={320} y={30} textAnchor="middle" className="ill-step">2. L’activité</text>
+        <text x={320} y={52} textAnchor="middle" className="ill-in">dégage des bénéfices</text>
+        <text x={320} y={67} textAnchor="middle" className="ill-in">qui remboursent la dette</text>
+        <path d="M 200 38 H 214 m -6 -6 l 6 6 l -6 6" {...arrow} />
+        <path d="M 320 74 V 112 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={112} width={420} height={64} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={210} y={138} textAnchor="middle" className="ill-step">Une fois la dette remboursée</text>
+        <text x={210} y={160} textAnchor="middle" className="ill-sub">l’entreprise est à vous</text>
+        <rect x={0} y={198} width={420} height={78} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={210} y={226} textAnchor="middle" className="ill-step">Deux risques</text>
+        <text x={210} y={250} textAnchor="middle" className="ill-in">le prix payé était trop élevé (valorisation)</text>
+        <text x={210} y={268} textAnchor="middle" className="ill-in">ou l’activité ne continue pas (continuité)</text>
+        <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe</text>
+      </svg>
+    </figure>
+  );
+}
