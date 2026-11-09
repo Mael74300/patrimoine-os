@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { investments } from '../data/investments';
 import { Fold, PageHead } from '../components/ui';
+import { SchemaVerification } from '../components/Illustrations';
 
 const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
 
@@ -183,6 +184,7 @@ export default function Methodologie() {
       </p>
 
       <h2>Contrôles automatiques, décision humaine</h2>
+      <SchemaVerification />
       <p>Chaque semaine, des contrôles gratuits et automatiques :</p>
       <ul>
         <li>vérifient que les liens vers les sources fonctionnent ;</li>
