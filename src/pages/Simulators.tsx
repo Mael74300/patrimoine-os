@@ -5,11 +5,14 @@ import { simBlurb, simBySlug, simThemes, unthemedSims } from '../lib/simThemes';
 import { PageHead } from '../components/ui';
 import { SimThemeIcon } from '../components/Illustrations';
 
-/** Trois simulateurs d'entrée, dans l'ordre où un débutant en a besoin (aucun chiffre : seulement des renvois). */
+/** Simulateurs d'entrée, dans l'ordre où un débutant en a besoin (aucun chiffre : seulement des renvois). */
 export const startSims: { slug: string; label: string }[] = [
   { slug: 'epargne-de-precaution', label: 'Je veux une réserve pour les imprévus' },
   { slug: 'objectif-epargne', label: 'Je veux épargner pour un projet' },
   { slug: 'endettement', label: 'Je prépare un emprunt' },
+  { slug: 'budget', label: 'Je veux savoir où part mon argent' },
+  { slug: 'inflation', label: 'Je crains que les prix grignotent mon épargne' },
+  { slug: 'retraits-reguliers-duree-du-capital', label: 'Je prépare ma retraite' },
 ];
 
 export default function Simulators() {
@@ -37,14 +40,15 @@ export default function Simulators() {
       {!q && (
         <section aria-labelledby="sim-start">
           <h2 id="sim-start" className="small" style={{ margin: '16px 0 8px' }}>Pas sûr du simulateur à ouvrir ? Partez de votre situation.</h2>
-          <ul className="search-ideas">
+          <ul className="search-ideas search-ideas--start">
             {startSims.map((x) => (
-              <li key={x.slug}><Link className="tag" to={`/simulateurs/${x.slug}`}>{x.label}</Link></li>
+              <li key={x.slug}><Link className="tag" to={`/simulateurs/${x.slug}`}>{x.label} <span aria-hidden="true">→</span></Link></li>
             ))}
           </ul>
         </section>
       )}
       {q && <p className="small muted" role="status">{shown} simulateur{shown > 1 ? 's' : ''} sur {simulators.length}</p>}
+      {!q && <p className="small sim-themes-label">Ou parcourez les simulateurs par thème :</p>}
       <nav aria-label="Thèmes" className="theme-nav">
         {groups.map((t) => (
           <a key={t.id} href={`#${t.id}`}><SimThemeIcon id={t.id} size={24} />{t.title} <span aria-hidden="true">{t.slugs.length}</span></a>
