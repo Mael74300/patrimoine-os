@@ -629,6 +629,7 @@ h2.gloss-letter::before { content: none; }
 @media (min-width: 701px) { .prose:has(.sitemap-jump) { max-width: 60rem; } .prose ul.sitemap-list:not(section ul) { columns: 2; column-gap: 2rem; } .prose ul.sitemap-list li { break-inside: avoid; } }
 
 /* Cartes « enveloppes » du guide « choisir son enveloppe » */
+.prose ul.env-cards { padding-left: 0; }
 .env-cards { list-style: none; padding: 0; margin: 12px 0 20px; display: grid; gap: 12px; grid-template-columns: 1fr; }
 .env-card { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--accent); border-radius: var(--radius); padding: 12px 16px 6px; }
 .env-card h3 { margin: 0 0 6px; font-size: 1.1rem; color: var(--primary); }
@@ -640,6 +641,8 @@ h2.gloss-letter::before { content: none; }
 .env-card dt { color: var(--ink-3); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; padding-top: 2px; }
 .env-card dd { margin: 0; }
 @media (min-width: 700px) { .env-cards { grid-template-columns: 1fr 1fr; } }
+/* Mobile : le libellé passe au-dessus de la valeur, qui occupe toute la largeur de la carte. */
+@media (max-width: 500px) { .env-card dl > div { grid-template-columns: 1fr; gap: 2px; } .env-card dt { padding-top: 0; font-size: 0.75rem; } }
 
 /* Mobile : une dernière carte seule sur sa ligne occupe toute la largeur (pas de trou à droite). */
 @media (max-width: 500px) {
