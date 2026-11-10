@@ -2,8 +2,16 @@ export type Level = 1 | 2 | 3 | 4 | 5;
 
 export type Source = { label: string; url: string; official?: boolean };
 
-/** Une information datée et dont le statut de vérification est explicite. */
-export type Checked = { text: string; verified: boolean; asOf?: string };
+/**
+ * Une information datée et dont le statut de vérification est explicite.
+ * `advice` : simple conseil pratique, sans affirmation vérifiable (ni chiffre ni règle) ; il n'affiche aucun badge.
+ */
+export type Checked = { text: string; verified: boolean; asOf?: string; advice?: boolean };
+
+/** Vrai si l'information affirme quelque chose qui n'a pas encore été confirmé sur une source officielle. */
+export function needsCheck(c: Checked): boolean {
+  return !c.verified && !c.advice;
+}
 
 export type Category = {
   id: string;

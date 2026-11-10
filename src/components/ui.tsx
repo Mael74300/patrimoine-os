@@ -200,7 +200,7 @@ export function splitSentences(text: string): string[] {
 export function CheckedText({ c, split = false }: { c: Checked; split?: boolean }) {
   const badge = c.verified ? (
     <span className="badge-verified">✓ vérifié{c.asOf ? ` au ${c.asOf}` : ''}</span>
-  ) : (
+  ) : c.advice ? null : (
     <span className="badge-unverified">à vérifier</span>
   );
   const parts = split ? splitSentences(c.text) : [c.text];
@@ -216,7 +216,7 @@ export function CheckedText({ c, split = false }: { c: Checked; split?: boolean 
       <ul className="sentence-list">
         {parts.map((t) => <li key={t}>{t}</li>)}
       </ul>
-      <p className="sentence-badge">{badge}</p>
+      {badge && <p className="sentence-badge">{badge}</p>}
     </>
   );
 }
