@@ -3,6 +3,7 @@ import { categoryById } from './categories';
 import { guideGroups, guides, otherGuides } from './guides';
 import { simFaq } from './simFaq';
 import { investmentBySlug, investments } from './investments';
+import { splitSentences } from '../components/ui';
 import { loanPayment, projectGrowth } from '../lib/finance';
 
 describe('intégrité des données éditoriales', () => {
@@ -345,5 +346,19 @@ describe('fiche Donation : intervention du notaire', () => {
     expect(f.fees.text).toContain('pas obligatoire');
     expect(f.sources.some((x) => x.url.includes('F36656'))).toBe(true);
     expect(f.review.data.join(' ')).toContain('F36656');
+  });
+});
+
+describe('fiche PEA : frais présentés poste par poste', () => {
+  it('garde les plafonds de La finance pour tous et se découpe en une ligne par poste', () => {
+    const f = investmentBySlug['pea']!;
+    const norm = (t: string) => t.replace(/[  ]/g, ' ');
+    const txt = norm(f.fees.text);
+    for (const v of ['10 €', '0,40 %', '5 €', '25 €', '0,5 %', '1,20 %', '15 €', '50 €', '150 €']) {
+      expect(txt).toContain(v);
+    }
+    const lignes = splitSentences(f.fees.text);
+    expect(lignes.length).toBeGreaterThanOrEqual(5);
+    for (const l of lignes) expect(l.length).toBeLessThan(230);
   });
 });
