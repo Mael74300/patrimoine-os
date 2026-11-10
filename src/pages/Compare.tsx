@@ -123,6 +123,7 @@ export default function Compare() {
         <div className="panel" style={{ marginBottom: 16 }}>
           <LineChart
             title="Comparaison des projections"
+            showTitle
             xLabels={proj[0].map((p) => `An ${p.year}`)}
             format={fmtEur}
             series={items.map((i, k) => ({ name: i.name, color: COLORS[k], values: proj[k].map((p) => p.value) }))}

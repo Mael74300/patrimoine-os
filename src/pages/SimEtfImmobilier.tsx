@@ -149,6 +149,7 @@ export default function SimEtfImmobilier() {
           <div className="panel">
             <LineChart
               title="Patrimoine avant frais de sortie"
+            showTitle
               xLabels={res.years.map((y) => `An ${y.year}`)}
               format={fmtEur}
               series={[
