@@ -7,16 +7,19 @@ const PATHS = [
   {
     title: 'Créer à partir de ses compétences',
     body: "Prestations de services, conseil, artisanat. Peu de capital, revenu rapide si la demande existe, mais le revenu dépend de votre temps.",
+    fiche: { slug: 'creation-entreprise', label: 'la fiche Créer son entreprise' },
     steps: ['Tester la demande avec quelques clients avant de se déclarer à grande échelle.', 'Choisir un statut simple pour démarrer.', 'Fixer un prix qui couvre cotisations, impôts et périodes creuses.'],
   },
   {
     title: 'Construire un produit',
     body: "Logiciel, e-commerce, contenu. Le revenu peut se détacher de votre temps, mais l'échec est fréquent et la mise en route longue.",
+    fiche: { slug: 'activite-numerique', label: 'la fiche SaaS, e-commerce et produits numériques' },
     steps: ['Résoudre un problème précis pour une cible précise.', 'Mesurer le revenu récurrent et le taux de désabonnement.', 'Limiter la dépendance à une seule plateforme.'],
   },
   {
     title: 'Racheter une activité existante',
     body: "Plus coûteux, mais l'activité dégage déjà des résultats. Le principal risque est de surpayer ou de mal évaluer la dépendance au cédant.",
+    fiche: { slug: 'reprise-entreprise', label: 'la fiche Racheter une entreprise' },
     steps: ['Faire auditer comptes, contrats et salariés.', 'Valoriser à partir des résultats récurrents, pas des promesses.', 'Négocier une période d’accompagnement.'],
   },
 ];
@@ -32,10 +35,11 @@ export default function Entrepreneuriat() {
       <h2>Trois façons d'entreprendre</h2>
       <div className="grid cols-3">
         {PATHS.map((p) => (
-          <div className="panel" key={p.title}>
+          <div className="panel path-card" key={p.title}>
             <h3 style={{ marginTop: 0 }}>{p.title}</h3>
             <p className="muted">{p.body}</p>
             <ul className="small" style={{ paddingLeft: 18, marginBottom: 0 }}>{p.steps.map((s) => <li key={s}>{s}</li>)}</ul>
+            <p className="path-more"><Link to={`/encyclopedie/${p.fiche.slug}`} aria-label={`Lire ${p.fiche.label}`}>Voir la fiche →</Link></p>
           </div>
         ))}
       </div>

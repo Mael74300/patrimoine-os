@@ -832,3 +832,7 @@ h2.gloss-letter::before { content: none; }
 .search-ideas--start .tag span { margin-left: 6px; }
 .sim-themes-label { margin: 20px 0 0; color: var(--ink-2); font-weight: 600; }
 .sim-themes-label + .theme-nav { margin-top: 8px; }
+
+/* Cartes « façons d'entreprendre » : le lien vers la fiche reste en bas de carte. */
+.path-card { display: flex; flex-direction: column; }
+.path-card .path-more { margin: auto 0 0; padding-top: 14px; font-weight: 600; }
