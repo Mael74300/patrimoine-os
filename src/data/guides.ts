@@ -476,20 +476,20 @@ export const guides: Guide[] = [
       {
         heading: 'Le calcul de base',
         body: [
-          'Sans intérêts, le versement mensuel est simplement l’objectif divisé par le nombre de mois. Exemple fictif : 20 000 € en 5 ans, soit 60 mois, demandent 20 000 / 60 ≈ 333 € par mois.',
-          'Avec un taux de 1,7 % par an (celui du Livret A au 5 novembre 2026), le même objectif demande environ 320 € par mois : les intérêts, avant impôt, apportent environ 820 € sur 5 ans, soit à peine 4 % de l’objectif.',
+          'Sans intérêts, c’est simple : on divise l’objectif par le nombre de mois. Exemple fictif : 20 000 € en 5 ans, soit 60 mois, demandent 20 000 / 60 ≈ 333 € par mois.',
+          'Avec des intérêts, l’effort baisse un peu. Au taux de 1,7 % par an (celui du Livret A au 5 novembre 2026), le même objectif demande environ 320 € par mois. Sur 5 ans, les intérêts, avant impôt, apportent environ 820 € : à peine 4 % de l’objectif.',
         ],
       },
       {
         heading: 'La durée pèse plus que le taux',
         body: [
-          'Sur des durées courtes et des placements sans risque, ce sont surtout vos versements qui construisent la somme. Pour le même objectif fictif de 20 000 € à 1,7 % : environ 542 € par mois sur 3 ans, 320 € sur 5 ans et 153 € sur 10 ans. Allonger l’échéance est le levier le plus efficace, s’il est compatible avec votre projet.',
+          'Sur quelques années, avec un placement sans risque, ce sont surtout vos versements qui construisent la somme, pas les intérêts. Pour le même objectif fictif de 20 000 € à 1,7 % : environ 542 € par mois sur 3 ans, 320 € sur 5 ans et 153 € sur 10 ans. Le levier le plus efficace est donc d’allonger l’échéance, si votre projet le permet.',
         ],
       },
       {
         heading: 'Où placer l’argent selon l’échéance',
         body: [
-          'Pour un objectif à moins de 3 à 5 ans, privilégiez des supports sans risque de perte en capital et disponibles : livrets réglementés dans la limite de leurs plafonds (voir la fiche Livret A). Un support investi en actions peut perdre de la valeur au moment où vous avez besoin de la somme. Au-delà d’une dizaine d’années, les autres enveloppes présentées dans les guides deviennent envisageables, avec un risque à accepter.',
+          'Pour un objectif à moins de 3 à 5 ans, privilégiez des supports sans risque de perte en capital (vous ne pouvez pas y perdre ce que vous avez versé) et disponibles : les livrets réglementés, dans la limite de leurs plafonds (voir la fiche Livret A). Un support investi en actions peut perdre de la valeur au moment où vous avez besoin de la somme. Au-delà d’une dizaine d’années, les autres enveloppes présentées dans les guides deviennent envisageables, avec un risque à accepter.',
         ],
       },
       {
