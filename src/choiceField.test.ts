@@ -1,8 +1,10 @@
 import { createElement } from 'react';
-import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ChoiceField } from './components/ui';
+import creditSrc from './pages/SimCredit.tsx?raw';
+import etalementSrc from './pages/SimEtalement.tsx?raw';
+import interetsSrc from './pages/SimInteretsComposes.tsx?raw';
 
 describe('ChoiceField : choix en boutons au lieu d’un menu déroulant', () => {
   const html = renderToStaticMarkup(createElement(ChoiceField<string>, {
@@ -31,10 +33,10 @@ describe('ChoiceField : choix en boutons au lieu d’un menu déroulant', () => 
   });
 
   it('les choix courts des simulateurs n’utilisent plus de menu déroulant', () => {
-    const credit = readFileSync('src/pages/SimCredit.tsx', 'utf8').replace(/\u00a0/g, ' ');
+    const credit = creditSrc.replace(/\u00a0/g, ' ');
     expect(credit).not.toContain('<SelectField');
-    expect(readFileSync('src/pages/SimEtalement.tsx', 'utf8')).not.toContain('<SelectField');
-    expect(readFileSync('src/pages/SimInteretsComposes.tsx', 'utf8')).not.toContain('<SelectField');
+    expect(etalementSrc).not.toContain('<SelectField');
+    expect(interetsSrc).not.toContain('<SelectField');
     // Le plafond légal reste expliqué sous le choix (mêmes règles qu’avant).
     expect(credit).toContain('au plus 6 mois d\'intérêts sur la somme remboursée, dans la limite de 3 % du capital restant dû');
   });
