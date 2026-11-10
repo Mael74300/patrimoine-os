@@ -196,7 +196,7 @@ tr:last-child td { border-bottom: 0; }
 .inv-list li { border-bottom: 1px solid var(--line); }
 .inv-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; padding: 16px 4px; text-decoration: none; color: inherit; }
 .filters-more { margin: -8px 0 16px; }
-.filters-more summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; color: var(--primary); font-weight: 600; font-size: 0.93rem; }
+.filters-more summary { color: var(--primary); font-weight: 600; font-size: 0.93rem; }
 .filters-more .filters { margin: 4px 0 0; grid-template-columns: 1fr 1fr; max-width: 520px; }
 .inv-group { margin-top: 22px; }
 .inv-group .inv-row { padding: 11px 4px; }
@@ -214,7 +214,7 @@ tr:last-child td { border-bottom: 0; }
 .dots.risk i.on { background: #c2452f; }
 .dots.liq i.on { background: var(--accent); }
 .meters-legend { margin: 0 0 12px; font-size: 0.93rem; }
-.meters-legend summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; color: var(--primary); font-weight: 600; }
+.meters-legend summary { color: var(--primary); font-weight: 600; }
 .meters-legend ul { list-style: none; margin: 0 0 8px; padding: 12px 14px; display: grid; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
 .meters-legend li { display: flex; align-items: center; gap: 12px; color: var(--ink-2); }
 .meters-legend li .dots { flex: none; }
@@ -340,13 +340,18 @@ td.neg { color: var(--danger); }
   .ill-svg[viewBox^="0 0 420 "] .ill-sub { font-size: 13.6px; }
 }
 
-/* Blocs repliables : FAQ des simulateurs et tableaux détaillés */
+/* Blocs repliables : un seul repère sur tout le site, « + » fermé, « − » ouvert, après le titre
+   (à droite dans les blocs encadrés). Les marqueurs natifs ▶ / ▼ sont masqués partout. */
+summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 10px; min-height: 44px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: '+'; font-size: 1.25rem; font-weight: 600; line-height: 1; color: var(--primary); flex: none; }
+details[open] > summary::after { content: '\2212'; }
+summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 6px; }
+.faq summary, details.fold > summary, .mob-fold > summary, .saved-sims > summary, .sim-notice > summary { justify-content: space-between; gap: 12px; }
+
+/* FAQ des simulateurs et tableaux détaillés */
 .faq details, details.fold { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); margin: 8px 0; }
-.faq summary, details.fold > summary { cursor: pointer; font-weight: 600; padding: 12px 14px; list-style: none; display: flex; justify-content: space-between; gap: 12px; align-items: center; }
-.faq summary::-webkit-details-marker, details.fold > summary::-webkit-details-marker { display: none; }
-.faq summary::after, details.fold > summary::after { content: '+'; font-size: 1.25rem; line-height: 1; color: var(--primary); flex: none; }
-.faq details[open] > summary::after, details.fold[open] > summary::after { content: '−'; }
-.faq summary:focus-visible, details.fold > summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.faq summary, details.fold > summary { font-weight: 600; padding: 12px 14px; }
 .faq details > p { margin: 0; padding: 0 14px 14px; }
 details.fold > .table-wrap { margin: 0 8px 8px; }
 .fold-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); column-gap: 16px; align-items: start; }
@@ -381,13 +386,14 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 .ill-step { font-size: 14.5px; font-weight: 600; }
 
 /* Blocs repliés sous 700 px seulement (comparateur, familles de l'accueil) */
-.mob-fold > summary { font-weight: 600; border: 1px solid var(--line); border-radius: 8px; padding: 0 12px; background: var(--surface); }
+.mob-fold > summary { font-weight: 600; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; background: var(--surface); }
 @media (max-width: 700px) { .mob-fold { margin-bottom: 12px; } }
 .mob-fold .fold-hint { display: none; }
 /* Sur grand écran, le bloc est toujours ouvert : sa barre de titre n'apporte rien (encyclopédie) */
 @media (min-width: 701px) { .mob-fold--quiet > summary { display: none; } }
 @media (max-width: 700px) {
-  .mob-fold:not([open]) > summary { display: block; line-height: 1.35; padding-top: 8px; padding-bottom: 8px; }
+  .mob-fold:not([open]) > summary { line-height: 1.35; align-items: flex-start; }
+  .mob-fold:not([open]) > summary::after { margin-top: 1px; }
   .mob-fold:not([open]) .fold-hint { display: block; font-weight: 400; font-size: .85rem; color: var(--ink-3); margin-top: 2px; }
 }
 .cmp-list { margin: 0; padding-left: 16px; }
@@ -515,6 +521,8 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px 
 .inv-group-title span, .theme-nav a span { background: var(--surface-2); color: var(--primary); }
 .faq details, details.fold { box-shadow: var(--shadow-sm); border-radius: 12px; }
 .faq details[open], details.fold[open] { border-color: #b8c9e4; }
+.saved-sims { margin-top: 16px; }
+.saved-sims > summary { font-weight: 600; }
 .bar > div { background: var(--grad); }
 th { background: var(--surface-2); color: var(--primary-deep); }
 .table-wrap { border-radius: 12px; box-shadow: var(--shadow-sm); }
@@ -807,11 +815,7 @@ h2.gloss-letter::before { content: none; }
 
 /* Avertissement de simulateur : replié sous 700 px (voir SimNotice), affiché tel quel au-delà */
 .sim-notice { padding-top: 0; padding-bottom: 0; }
-.sim-notice > summary { font-weight: 700; cursor: pointer; min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 12px; list-style: none; }
-.sim-notice > summary::-webkit-details-marker { display: none; }
-.sim-notice > summary::after { content: '+'; font-size: 1.25rem; line-height: 1; flex: none; }
-.sim-notice[open] > summary::after { content: '−'; }
-.sim-notice > summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.sim-notice > summary { font-weight: 700; }
 .sim-notice[open] > p { padding-bottom: 12px; }
 .sim-notice > p { margin: 8px 0 0; }
 @media (min-width: 701px) {
