@@ -417,48 +417,51 @@ export const guides: Guide[] = [
     title: 'Le prêt à taux zéro (PTZ) : pour qui, pour quel logement ?',
     summary: 'Un prêt aidé par l’État pour acheter ou construire sa première résidence principale : à quoi il sert, qui peut l’obtenir, comment il se rembourse et où le demander.',
     readingMinutes: 4,
-    updatedOn: '2026-11-07',
+    updatedOn: '2026-11-10',
     sections: [
       {
         heading: 'Ce que c’est, en deux phrases',
         body: [
-          'Le prêt à taux zéro (PTZ) est un prêt aidé par l’État. Vous remboursez la somme prêtée, sans payer d’intérêts, ni d’intérêts intercalaires, ni de frais de dossier ou d’expertise.',
-          'Il ne finance qu’une partie de l’achat ou de la construction de votre future résidence principale : il s’ajoute toujours à un autre prêt immobilier (prêt bancaire classique, prêt d’accession sociale, prêt épargne logement…).',
+          'Le prêt à taux zéro (PTZ) est un prêt aidé par l’État. Vous remboursez uniquement la somme prêtée. Vous ne payez ni intérêts, ni intérêts intercalaires, ni frais de dossier, ni frais d’expertise.',
+          'Il ne finance qu’une partie de l’achat ou de la construction de votre future résidence principale. Il s’ajoute toujours à un autre prêt immobilier (prêt bancaire classique, prêt d’accession sociale, prêt épargne logement…).',
         ],
       },
       {
         heading: 'Qui peut l’obtenir',
         body: [
-          'Il s’adresse à ceux qui deviennent propriétaires de leur résidence principale : en principe, vous ne devez pas avoir été propriétaire de votre résidence principale pendant les 2 années qui précèdent le prêt. Quelques exceptions existent (usufruit ou nue-propriété, handicap, catastrophe naturelle).',
-          'Vos revenus doivent aussi rester sous un plafond. Ce plafond dépend du nombre de personnes qui vivront dans le logement et de la commune. On part du revenu fiscal de référence de l’année N-2 (celui de 2024 pour une demande en 2026) ; pour une offre de prêt émise à partir d’avril 2025, on retient le plus élevé de ce revenu et du coût de l’opération divisé par 9.',
-          'Ces plafonds dépendent notamment de la date de l’offre de prêt : ils ne sont donc pas recopiés ici. Consultez le tableau à jour sur Service-Public, ou son simulateur.',
+          'Le PTZ s’adresse à ceux qui deviennent propriétaires de leur résidence principale. En principe, vous ne devez pas l’avoir été pendant les 2 années qui précèdent le prêt. Quelques exceptions existent (usufruit ou nue-propriété, handicap, catastrophe naturelle).',
+          'Vos revenus doivent aussi rester sous un plafond. Il dépend du nombre de personnes qui vivront dans le logement et de la commune.',
+          'Pour les mesurer, on part du revenu fiscal de référence de l’année N-2 (celui de 2024 pour une demande en 2026). Pour une offre de prêt émise à partir d’avril 2025, on retient le plus élevé de deux montants : ce revenu, ou le coût de l’opération divisé par 9.',
+          'Les plafonds changent selon la date de l’offre de prêt : ils ne sont donc pas recopiés ici. Consultez le tableau à jour sur Service-Public, ou son simulateur.',
         ],
       },
       {
         heading: 'Quel logement peut-on financer',
         body: [
-          'Le logement doit devenir votre résidence principale, c’est-à-dire que vous l’habitez au moins 8 mois par an. Cela doit se faire au plus tard 1 an après l’achat ou la fin des travaux (ou au départ à la retraite, dans des conditions précises).',
-          'Dans le neuf : un logement achevé depuis moins de 5 ans et jamais occupé, ou une construction. Dans l’ancien, les règles sont plus strictes : le logement doit se situer en zone B2 ou C, et des travaux d’amélioration ou d’économie d’énergie doivent représenter au moins 25 % du coût total de l’opération.',
-          'Pour savoir dans quelle zone se trouve une commune, utilisez le simulateur officiel de Service-Public. Les conditions varient aussi selon la date de l’offre de prêt : lisez la page à jour avant de vous décider.',
+          'Le logement doit devenir votre résidence principale : vous l’habitez au moins 8 mois par an. Il doit le devenir au plus tard 1 an après l’achat ou la fin des travaux (ou au départ à la retraite, dans des conditions précises).',
+          'Dans le neuf : un logement achevé depuis moins de 5 ans et jamais occupé, ou une construction.',
+          'Dans l’ancien, les règles sont plus strictes. Le logement doit se situer en zone B2 ou C. Et des travaux d’amélioration ou d’économie d’énergie doivent représenter au moins 25 % du coût total de l’opération.',
+          'Pour connaître la zone d’une commune, utilisez le simulateur officiel de Service-Public. Les conditions varient aussi selon la date de l’offre de prêt : lisez la page à jour avant de vous décider.',
         ],
       },
       {
         heading: 'Comment il se rembourse',
         body: [
           'La durée de remboursement ne peut pas dépasser 25 ans, et elle est plus courte quand les revenus sont plus élevés.',
-          'Selon les cas, on rembourse en une seule période, ou en deux périodes avec un différé : pendant la première, d’au moins 2 ans, on ne rembourse pas le PTZ. Pendant le différé, les autres prêts, eux, continuent de se rembourser.',
+          'Selon les cas, on rembourse en une seule période, ou en deux périodes avec un différé. Pendant le différé, qui dure au moins 2 ans, on ne rembourse pas le PTZ.',
         ],
       },
       {
         heading: 'Où le demander, et par où commencer',
         body: [
           'Seuls les établissements financiers qui ont signé une convention avec l’État (par exemple, une banque) peuvent accorder un PTZ. Chacun apprécie librement votre capacité à rembourser et vos garanties : l’accord n’est donc jamais automatique.',
-          'Commencez par mesurer ce que vous pouvez emprunter (taux d’endettement et reste à vivre), puis demandez à votre banque ou à un courtier si le PTZ peut compléter votre plan de financement. Un prêt sans intérêts allège le coût total du crédit, mais il ne dispense pas d’un apport raisonnable ni d’une mensualité supportable.',
+          'Commencez par mesurer ce que vous pouvez emprunter (taux d’endettement et reste à vivre). Demandez ensuite à votre banque ou à un courtier si le PTZ peut compléter votre plan de financement.',
+          'Un prêt sans intérêts allège le coût total du crédit. Mais il ne dispense ni d’un apport raisonnable, ni d’une mensualité supportable.',
         ],
       },
     ],
     related: ['credit-immobilier'],
-    sources: [{ label: 'Service-Public.fr — Prêt à taux zéro (PTZ ou PTZ+), page vérifiée le 15 septembre 2026, consultée le 7 novembre 2026', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F10871', official: true }, ANIL],
+    sources: [{ label: 'Service-Public.fr — Prêt à taux zéro (PTZ ou PTZ+), page vérifiée le 15 septembre 2026, consultée le 10 novembre 2026', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F10871', official: true }, ANIL],
     faq: [
       { q: 'Le prêt à taux zéro est-il vraiment sans aucun frais ?', a: 'Le PTZ lui-même ne porte ni intérêts, ni frais de dossier ni frais d’expertise. Mais il s’ajoute à un autre prêt, qui, lui, a un coût : intérêts, assurance, garantie.' },
       { q: 'Peut-on financer tout son achat avec un PTZ ?', a: 'Non. Le PTZ finance une partie de l’opération et doit être demandé en complément d’au moins un autre prêt immobilier.' },
