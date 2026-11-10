@@ -186,7 +186,8 @@ export function GuidePage() {
       <div className="prose">
         {g.cta && <p style={{ marginTop: 24 }}><Link className="btn" to={g.cta.to}>{g.cta.label}</Link></p>}
         {g.slug !== 'choisir-son-enveloppe' && (<>
-          <h2>Fiches liées</h2>
+          <h2>Pour aller plus loin</h2>
+          <h3 className="next-sub">Fiches liées</h3>
           <ul className="next-list">
             {g.related.filter((r) => investmentBySlug[r]).map((r) => (
               <li key={r}><Link to={`/encyclopedie/${r}`}>{investmentBySlug[r].name}</Link><span>{investmentBySlug[r].summary}</span></li>
@@ -194,7 +195,7 @@ export function GuidePage() {
           </ul>
         </>)}
         {g.slug !== 'par-ou-commencer' && relatedSimulators(simsForGuide[g.slug]).length > 0 && (<>
-          <h2>Simulateurs liés</h2>
+          <h3 className="next-sub">Simulateurs liés</h3>
           <ul className="next-list">
             {relatedSimulators(simsForGuide[g.slug]).map((sim) => (
               <li key={sim.slug}><Link to={`/simulateurs/${sim.slug}`}>{sim.title}</Link><span>{simBlurb(sim.slug)}</span></li>
@@ -204,8 +205,9 @@ export function GuidePage() {
         <h2>Sources</h2>
         <Sources list={g.sources} />
         {g.slug !== 'par-ou-commencer' && (<>
-          <h2>Autres guides</h2>
-          <ul className="next-list next-list-compact">{others.map((o) => <li key={o.slug}><Link to={`/guides/${o.slug}`}>{o.title}</Link></li>)}</ul>
+          <MobileFold label="Autres guides" hint={others.map((o) => o.title).join(' · ')}>
+            <ul className="next-list next-list-compact">{others.map((o) => <li key={o.slug}><Link to={`/guides/${o.slug}`}>{o.title}</Link></li>)}</ul>
+          </MobileFold>
         </>)}
       </div>
     </article>
