@@ -2073,3 +2073,28 @@ export function SchemaRepriseEntreprise() {
     </figure>
   );
 }
+
+/** Schéma « Activité numérique : un revenu récurrent, mais fragile » : principe qualitatif, sans chiffre (reprend le texte « Fonctionnement » de la fiche). */
+export function SchemaActiviteNumerique() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-an-t ill-an-d" className="ill-svg">
+        <title id="ill-an-t">Activité numérique : un revenu récurrent, mais fragile</title>
+        <desc id="ill-an-d">La valeur d’une activité en ligne repose sur son revenu récurrent et sa croissance, et l’activité peut se revendre. Mais ce revenu peut s’effondrer : concurrence, dépendance à une plateforme.</desc>
+        <rect x={0} y={2} width={420} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={210} y={30} textAnchor="middle" className="ill-step">Un revenu récurrent</text>
+        <text x={210} y={52} textAnchor="middle" className="ill-in">abonnements, ventes, contenus</text>
+        <path d="M 210 66 V 100 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={100} width={420} height={64} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={210} y={128} textAnchor="middle" className="ill-step">La valeur de l’activité</text>
+        <text x={210} y={150} textAnchor="middle" className="ill-sub">elle peut se revendre</text>
+        <rect x={0} y={186} width={420} height={90} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={210} y={214} textAnchor="middle" className="ill-step">Mais le revenu peut s’effondrer</text>
+        <text x={210} y={238} textAnchor="middle" className="ill-in">concurrence,</text>
+        <text x={210} y={256} textAnchor="middle" className="ill-in">dépendance à une plateforme</text>
+        <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe</text>
+      </svg>
+    </figure>
+  );
+}
