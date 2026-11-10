@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { investments } from '../data/investments';
+import { needsCheck } from '../data/types';
 import { Fold, PageHead } from '../components/ui';
 import { SchemaVerification } from '../components/Illustrations';
 
@@ -161,7 +162,7 @@ export const GROUPS: [string, string[]][] = [
 ];
 
 export default function Methodologie() {
-  const flagged = investments.filter((i) => !i.tax.verified || !i.fees.verified || !i.minCapital.verified).length;
+  const flagged = investments.filter((i) => needsCheck(i.tax) || needsCheck(i.fees) || needsCheck(i.minCapital)).length;
   return (
     <div className="prose">
       <PageHead eyebrow="Transparence" title="Méthode et sources">

@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { config } from '../config';
 import { categoryById } from '../data/categories';
 import { investmentBySlug } from '../data/investments';
+import { needsCheck } from '../data/types';
 import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Dots, Fold, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
@@ -53,7 +54,7 @@ export default function InvestmentPage() {
             <p className="small fiche-facts" style={{ margin: '10px 0 0' }}>
               <span><strong>Horizon :</strong> {inv.horizon}.</span>{' '}
               <span><strong>Capital :</strong> {inv.minCapital.text}{' '}
-              {!inv.minCapital.verified && <span className="badge-unverified">à vérifier</span>}</span>
+              {needsCheck(inv.minCapital) && <span className="badge-unverified">à vérifier</span>}</span>
             </p>
             <div className="btn-row" style={{ marginTop: 12 }}>
               <Link className="btn small" to={`/comparateur?ids=${[inv.slug, ...inv.alternatives.slice(0, 2)].join(',')}`}>Comparer</Link>
@@ -182,7 +183,7 @@ export default function InvestmentPage() {
             <dl className="facts">
               <dt>Horizon</dt><dd>{inv.horizon}</dd>
               <dt>Capital nécessaire</dt>
-              <dd>{inv.minCapital.text} {!inv.minCapital.verified && <span className="badge-unverified">à vérifier</span>}</dd>
+              <dd>{inv.minCapital.text} {needsCheck(inv.minCapital) && <span className="badge-unverified">à vérifier</span>}</dd>
               <dt>Mots-clés</dt>
               <dd>{inv.tags.map((t) => <span className="tag" key={t}>{t}</span>)}</dd>
             </dl>
