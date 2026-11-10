@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { compareEtfImmo, fmtEur, fmtPct, netOfFees, rentalAnalysis, type RentalInput } from '../lib/finance';
 import { load } from '../lib/storage';
 import { etfImmoTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, ChoiceField, usePersistentState, JumpToResults } from '../components/ui';
 import { PS_OPTIONS, REGIMES, RENTAL_DEFAULTS, TMI_OPTIONS } from './SimImmobilier';
 
 type State = {
@@ -126,7 +126,7 @@ export default function SimEtfImmobilier() {
             <NumberField label="Taxe foncière" unit="€/an" value={R.propertyTax} onChange={setR('propertyTax')} min={0} step={50} />
             <NumberField label="Autres charges" unit="€/an" value={R.coOwnership} onChange={setR('coOwnership')} min={0} step={50} />
             <SelectField label="Régime fiscal" value={R.regime} options={REGIMES} onChange={(v) => setSt((x) => ({ ...x, rental: { ...x.rental, regime: v, microAllowance: REGIMES.find((g) => g.v === v)?.allowance ?? x.rental.microAllowance } }))} />
-            <SelectField label="Tranche marginale" value={R.marginalRate} options={TMI_OPTIONS} onChange={setR('marginalRate')} />
+            <ChoiceField label="Tranche marginale" value={R.marginalRate} options={TMI_OPTIONS} onChange={setR('marginalRate')} compact />
             <SelectField label="Prélèvements sociaux" value={R.socialRate} options={PS_OPTIONS} onChange={setR('socialRate')} />
             <NumberField label="Évolution du prix du bien" unit="%/an" percent value={R.appreciation} onChange={setR('appreciation')} step={0.25} min={-10} max={10} />
             <NumberField label="Indexation loyers et charges" unit="%/an" percent value={R.indexation} onChange={setR('indexation')} step={0.25} min={-5} max={10} />

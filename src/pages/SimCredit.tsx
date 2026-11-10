@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { amortize, borrowingCapacity, fmtEur, fmtEur2, prepayment } from '../lib/finance';
 import { creditTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, ChoiceField, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = {
   principal: number; annualRate: number; years: number; insuranceRate: number;
@@ -69,10 +69,10 @@ export default function SimCredit() {
           <div className="panel fold-form">
             <NumberField label="À la fin de l'année" unit="an" value={s.prepayYear} onChange={up('prepayYear')} min={0} max={30} />
             <NumberField label="Montant remboursé" unit="€" value={s.prepayAmount} onChange={up('prepayAmount')} min={0} step={1000} />
-            <SelectField label="Effet" value={s.prepayMode} onChange={up('prepayMode')}
-              options={[{ v: 'duree', label: 'Réduire la durée (mensualité inchangée)' }, { v: 'mensualite', label: 'Réduire la mensualité (durée inchangée)' }]} />
-            <SelectField label="Indemnités de remboursement anticipé" value={s.withPenalty ? 1 : 0} onChange={(v) => up('withPenalty')(v === 1)}
-              options={[{ v: 1, label: 'Appliquer le plafond légal' }, { v: 0, label: 'Aucune (contrat sans indemnités)' }]}
+            <ChoiceField label="Effet" value={s.prepayMode} onChange={up('prepayMode')}
+              options={[{ v: 'duree', label: 'Réduire la durée', detail: 'même mensualité' }, { v: 'mensualite', label: 'Réduire la mensualité', detail: 'même durée' }]} />
+            <ChoiceField label="Indemnités de remboursement anticipé" value={s.withPenalty ? 1 : 0} onChange={(v) => up('withPenalty')(v === 1)}
+              options={[{ v: 1, label: 'Plafond légal' }, { v: 0, label: 'Contrat sans indemnités' }]}
               hint="Crédit immobilier : au plus 6 mois d'intérêts sur la somme remboursée, dans la limite de 3 % du capital restant dû." />
           </div>
           <div className="kpis">

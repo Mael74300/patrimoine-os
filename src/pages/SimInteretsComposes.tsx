@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, fmtEur, fmtNum, fmtPct } from '../lib/finance';
 import { delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway } from '../lib/takeaways';
 import { interetsComposesFaq } from '../data/simFaq';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, SelectField, Takeaway, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, ChoiceField, Takeaway, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 // Exemples fictifs : toutes les valeurs par défaut sont des hypothèses à remplacer par les vôtres.
 
@@ -198,9 +198,9 @@ function Doubler() {
 }
 
 const PERIODS = [
-  { v: 12, label: 'Mensuelle (12 par an)' },
-  { v: 4, label: 'Trimestrielle (4 par an)' },
-  { v: 2, label: 'Semestrielle (2 par an)' },
+  { v: 12, label: 'Mensuelle', detail: '12 par an' },
+  { v: 4, label: 'Trimestrielle', detail: '4 par an' },
+  { v: 2, label: 'Semestrielle', detail: '2 par an' },
 ];
 
 const p4 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 4, maximumFractionDigits: 4 });
@@ -351,7 +351,7 @@ function Taux() {
       <fieldset>
         <legend>Votre taux</legend>
         <NumberField label="Taux annuel effectif" unit="%" value={s.annualRate} onChange={up('annualRate')} min={-50} max={100} step={0.1} sliderMax={15} />
-        <SelectField label="Période visée" value={s.periods} options={PERIODS} onChange={up('periods')} />
+        <ChoiceField label="Période visée" value={s.periods} options={PERIODS} onChange={up('periods')} />
       </fieldset>
         </>
       )}
