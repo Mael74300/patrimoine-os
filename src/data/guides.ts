@@ -1,4 +1,5 @@
 import type { Guide, Source } from './types';
+import { deepKeepNumbers } from '../lib/nbsp';
 
 const SP = (label: string, id: string): Source => ({ label: `Service-Public.fr — ${label}`, url: `https://www.service-public.fr/particuliers/vosdroits/${id}`, official: true });
 const IFP: Source = { label: 'La finance pour tous (IEFP)', url: 'https://www.lafinancepourtous.com', official: true };
@@ -11,7 +12,7 @@ const BDF: Source = { label: 'Banque de France', url: 'https://www.banque-france
  * Guides pédagogiques. Chacun répond à une intention de recherche précise,
  * avec un contenu original, des exemples fictifs vérifiés par les tests et des liens internes.
  */
-export const guides: Guide[] = [
+export const guides: Guide[] = deepKeepNumbers<Guide[]>([
   {
     slug: 'types-investissements',
     title: 'Tous les types d’investissements accessibles aux particuliers',
@@ -744,7 +745,7 @@ export const guides: Guide[] = [
     ],
     cta: { to: '/simulateurs/epargne-de-precaution', label: 'Simuler son épargne de précaution' },
   },
-];
+]);
 
 export const guideBySlug = Object.fromEntries(guides.map((g) => [g.slug, g]));
 

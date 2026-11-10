@@ -262,7 +262,7 @@ describe('fiche LMNP : chiffres identiques dans la fiche et le suivi de vérific
 describe('fiche PER : chiffres identiques dans la fiche et le suivi de vérification', () => {
   it('les montants du suivi figurent dans le texte fiscal vérifié', () => {
     const f = investmentBySlug['per']!;
-    const norm = (t: string) => t.replace(/[  ]/g, ' ');
+    const norm = (t: string) => t.replace(/[\u00a0\u202f]/g, ' ');
     const txt = norm(f.tax.text);
     expect(f.tax.verified).toBe(true);
     for (const v of ['10 %', '37 680 €', '4 710 €', '70 ans', '31,4 %']) {
@@ -275,7 +275,7 @@ describe('fiche PER : chiffres identiques dans la fiche et le suivi de vérifica
 describe('fiche PER : frais de transfert', () => {
   it('les frais de transfert sont sourcés et identiques dans le suivi de vérification', () => {
     const f = investmentBySlug['per']!;
-    const norm = (t: string) => t.replace(/[  ]/g, ' ');
+    const norm = (t: string) => t.replace(/[\u00a0\u202f]/g, ' ');
     expect(f.fees.verified).toBe(true);
     for (const v of ['5 ans', '1 %']) {
       expect(norm(f.fees.text)).toContain(v);
@@ -289,13 +289,14 @@ describe('fiche PEL', () => {
     const { investmentBySlug } = await import('./investments');
     const f = investmentBySlug.pel;
     expect(f).toBeDefined();
-    for (const s of ['2,00 %', '61 200 €', '4 ans minimum', '10 ans maximum']) expect(f.tax.text, s).toContain(s);
-    expect(f.minCapital.text).toContain('225 €');
-    expect(f.minCapital.text).toContain('540 €');
-    expect(f.review.data.join(' ')).toContain('61 200 €');
+    const plain = (t: string) => t.replace(/[\u00a0\u202f]/g, ' ');
+    for (const s of ['2,00 %', '61 200 €', '4 ans minimum', '10 ans maximum']) expect(plain(f.tax.text), s).toContain(s);
+    expect(plain(f.minCapital.text)).toContain('225 €');
+    expect(plain(f.minCapital.text)).toContain('540 €');
+    expect(plain(f.review.data.join(' '))).toContain('61 200 €');
     expect(10000 * 0.02).toBe(200);
     expect(f.example).toContain('fictif');
-    expect(f.example).toContain('200 €');
+    expect(plain(f.example)).toContain('200 €');
     expect(f.sources.some((x) => x.url.includes('F16140'))).toBe(true);
   });
 });
@@ -352,7 +353,7 @@ describe('fiche Donation : intervention du notaire', () => {
 describe('fiche PEA : frais présentés poste par poste', () => {
   it('garde les plafonds de La finance pour tous et se découpe en une ligne par poste', () => {
     const f = investmentBySlug['pea']!;
-    const norm = (t: string) => t.replace(/[  ]/g, ' ');
+    const norm = (t: string) => t.replace(/[\u00a0\u202f]/g, ' ');
     const txt = norm(f.fees.text);
     for (const v of ['10 €', '0,40 %', '5 €', '25 €', '0,5 %', '1,20 %', '15 €', '50 €', '150 €']) {
       expect(txt).toContain(v);

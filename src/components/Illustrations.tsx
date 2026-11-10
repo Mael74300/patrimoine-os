@@ -56,7 +56,7 @@ export function SchemaInterets() {
         </g>
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : {fmtEur(initial)} placés à {annualRate * 100} % par an, sans nouveau versement, avant frais et impôts.
+        <strong>Illustration, exemple fictif</strong> : {fmtEur(initial)} placés à {annualRate * 100} % par an, sans nouveau versement, avant frais et impôts.
         Avec des intérêts simples, on touche chaque année la même somme. Avec des intérêts composés, les intérêts déjà gagnés rapportent à leur tour : l’écart s’agrandit avec la durée.
       </figcaption>
     </figure>
@@ -105,7 +105,7 @@ export function SchemaMensualite() {
         </g>
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : {fmtEur(principal)} empruntés à {ratePct} % sur {years} ans, hors assurance, soit {fmtEur(monthly)} par mois.
+        <strong>Illustration, exemple fictif</strong> : {fmtEur(principal)} empruntés à {ratePct} % sur {years} ans, hors assurance, soit {fmtEur(monthly)} par mois.
         Chaque année, on rembourse la même somme ({fmtEur(monthly * 12)}), mais au début elle sert surtout à payer les intérêts. Le capital emprunté diminue peu au départ, puis de plus en plus vite.
       </figcaption>
     </figure>
@@ -155,14 +155,14 @@ export function SchemaInflation() {
         </g>
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : {fmtEur(initial)} sur {years} ans, avec une inflation constante de {inflation * 100} % par an et un placement à {rate * 100} % par an, avant frais et impôts.
+        <strong>Illustration, exemple fictif</strong> : {fmtEur(initial)} sur {years} ans, avec une inflation constante de {inflation * 100} % par an et un placement à {rate * 100} % par an, avant frais et impôts.
         Le montant affiché peut grossir sans que la somme permette d’acheter plus : ce qui compte, c’est l’écart avec l’inflation. Ces taux ne sont ni observés ni prévus.
       </figcaption>
     </figure>
   );
 }
 
-const pct = (v: number) => `${v < 0 ? '−' : ''}${(Math.abs(v) * 100).toLocaleString('fr-FR', { maximumFractionDigits: 1 })} %`;
+const pct = (v: number) => `${v < 0 ? '−' : ''}${(Math.abs(v) * 100).toLocaleString('fr-FR', { maximumFractionDigits: 1 })} %`;
 
 /** Schéma « effet de levier » : première année du bien acheté à crédit, avec un bien qui rapporte 5 % ou 3 % de son prix net de charges. */
 export function SchemaLevier() {
@@ -176,8 +176,8 @@ export function SchemaLevier() {
   const pct = (v: number) => String(Math.round(v * 10) / 10).replace('.', ',');
   const alt = bars
     .map((b) => (b.shortfall > 0
-      ? `Bien à ${pct(b.yieldPct)} % : ${fmtEur(b.income)} de loyers nets, tous absorbés par les intérêts, et il manque ${fmtEur(b.shortfall)}.`
-      : `Bien à ${pct(b.yieldPct)} % : ${fmtEur(b.income)} de loyers nets, dont ${fmtEur(b.interestPaid)} d’intérêts, il reste ${fmtEur(b.left)} avant impôt, soit ${Math.round((b.left / down) * 100)} % de l’apport.`))
+      ? `Bien à ${pct(b.yieldPct)} % : ${fmtEur(b.income)} de loyers nets, tous absorbés par les intérêts, et il manque ${fmtEur(b.shortfall)}.`
+      : `Bien à ${pct(b.yieldPct)} % : ${fmtEur(b.income)} de loyers nets, dont ${fmtEur(b.interestPaid)} d’intérêts, il reste ${fmtEur(b.left)} avant impôt, soit ${Math.round((b.left / down) * 100)} % de l’apport.`))
     .join(' ');
   return (
     <figure className="illustration">
@@ -880,7 +880,7 @@ export function SchemaQuinzaines() {
 /** Schéma « De 6 % à 3,6 % » : le rendement brut d’une annonce fond quand on compte les frais, la vacance et les charges. Exemple fictif calculé (illustrationData). */
 export function SchemaRendement() {
   const steps = rendementSteps();
-  const pctFr = (v: number) => `${(Math.round(v * 1000) / 10).toLocaleString('fr-FR', { minimumFractionDigits: 1 })} %`;
+  const pctFr = (v: number) => `${(Math.round(v * 1000) / 10).toLocaleString('fr-FR', { minimumFractionDigits: 1 })} %`;
   const max = steps[0].value;
   const X0 = 14;
   const BW = 300;
@@ -992,7 +992,7 @@ export function SchemaPatrimoineNet() {
 /** Schéma « Rembourser ou investir » : patrimoine net final des deux options sur l’exemple fictif du guide. */
 export function SchemaRembourser() {
   const p = rembourserParts();
-  const pctFr = (v: number) => `${(Math.round(v * 1000) / 10).toLocaleString('fr-FR')} %`;
+  const pctFr = (v: number) => `${(Math.round(v * 1000) / 10).toLocaleString('fr-FR')} %`;
   const X0 = 14;
   const BW = 250;
   const w = (v: number) => (v / Math.max(p.wealthPrepay, p.wealthInvest)) * BW;
@@ -1127,7 +1127,7 @@ export function SchemaEpargneMois() {
         <text x="202" y="209" className="ill-sub">{`à ${(EPARGNE_MOIS_EXAMPLE.rate * 100).toLocaleString('fr-FR')} % par an`}</text>
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : versement mensuel pour atteindre 20 000 € en 3, 5 ou 10 ans, sans intérêts puis à 1,7 % par an, avant impôt. Barres proportionnelles aux montants.
+        <strong>Illustration, exemple fictif</strong> : versement mensuel pour atteindre 20 000 € en 3, 5 ou 10 ans, sans intérêts puis à 1,7 % par an, avant impôt. Barres proportionnelles aux montants.
       </figcaption>
     </figure>
   );
@@ -1171,7 +1171,7 @@ export function SchemaPetitsVersements() {
         <text x={X0 + 96} y="203" className="ill-sub">gains supposés</text>
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : {years} ans à {(annualReturn * 100).toLocaleString('fr-FR')} % par an supposé, avant impôt, versements en début de mois. Les hausses interviennent après 5 ans (100 €) puis 10 ans (150 €). Barres proportionnelles aux montants.
+        <strong>Illustration, exemple fictif</strong> : {years} ans à {(annualReturn * 100).toLocaleString('fr-FR')} % par an supposé, avant impôt, versements en début de mois. Les hausses interviennent après 5 ans (100 €) puis 10 ans (150 €). Barres proportionnelles aux montants.
       </figcaption>
     </figure>
   );
@@ -1184,7 +1184,7 @@ export function SchemaFrais() {
   const X0 = 14;
   const BW = 236;
   const max = rows[0].final;
-  const pct = (v: number) => `${(v * 100).toLocaleString('fr-FR')} %`;
+  const pct = (v: number) => `${(v * 100).toLocaleString('fr-FR')} %`;
   const label = (f: number) => (f === 0 ? 'Sans frais (référence)' : `${pct(f)} de frais par an`);
   const alt = rows.map((r) => `${r.fees === 0 ? 'sans frais' : `avec ${pct(r.fees)} de frais par an`}, environ ${fmtEur(r.final)}${r.cost ? ` (${fmtEur(r.cost)} de moins)` : ''}`).join(' ; ');
   return (
@@ -1246,7 +1246,7 @@ export function SchemaCapitalVise() {
         })}
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : capital à réunir pour couvrir 30 000 € de dépenses par an, à trois taux de retrait supposés. Barres proportionnelles aux montants ; aucune garantie de rendement.
+        <strong>Illustration, exemple fictif</strong> : capital à réunir pour couvrir 30 000 € de dépenses par an, à trois taux de retrait supposés. Barres proportionnelles aux montants ; aucune garantie de rendement.
       </figcaption>
     </figure>
   );
@@ -1279,7 +1279,7 @@ export function SchemaPrecaution() {
         })}
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : réserve correspondant aux trois repères courants pour 2 000 € de dépenses par mois. Barres proportionnelles aux montants. Ce sont des repères pédagogiques, pas une règle officielle.
+        <strong>Illustration, exemple fictif</strong> : réserve correspondant aux trois repères courants pour 2 000 € de dépenses par mois. Barres proportionnelles aux montants. Ce sont des repères pédagogiques, pas une règle officielle.
       </figcaption>
     </figure>
   );
@@ -1333,7 +1333,7 @@ export function SchemaMois(props: { income: number; existingPayments: number; ne
       <figcaption>
         {m.shortfall > 0
           ? `Vos dépenses dépassent vos revenus de ${fmtEur(m.shortfall)} par mois.`
-          : 'Seuls les crédits (en cours et nouveau) sont comparés au repère de 35 %.'}
+          : 'Seuls les crédits (en cours et nouveau) sont comparés au repère de 35 %.'}
       </figcaption>
     </figure>
   );
@@ -1510,7 +1510,7 @@ export function SchemaOr() {
         <text x={210} y={222} textAnchor="middle" className="ill-sub">11,5 % du prix de vente de {fmtEur(OR_EXAMPLE_PRICE)}</text>
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : régime forfaitaire (11 % + 0,5 % de CRDS) calculé sur le prix de vente, pas sur le gain. Barres proportionnelles aux montants.
+        <strong>Illustration, exemple fictif</strong> : régime forfaitaire (11 % + 0,5 % de CRDS) calculé sur le prix de vente, pas sur le gain. Barres proportionnelles aux montants.
       </figcaption>
     </figure>
   );

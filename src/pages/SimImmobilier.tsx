@@ -17,11 +17,11 @@ export const REGIMES: { v: TaxRegime; label: string; allowance?: number }[] = [
   { v: 'aucune', label: 'Ne pas estimer l’impôt' },
   { v: 'micro-foncier', label: 'Location nue — micro-foncier (abattement 30 %)', allowance: 0.3 },
   { v: 'reel-foncier', label: 'Location nue — régime réel' },
-  { v: 'micro-bic', label: 'Location meublée — micro-BIC (abattement 50 %)', allowance: 0.5 },
+  { v: 'micro-bic', label: 'Location meublée — micro-BIC (abattement 50 %)', allowance: 0.5 },
   { v: 'reel-bic', label: 'Location meublée — LMNP au réel' },
 ];
 
-export const TMI_OPTIONS = [0, 0.11, 0.3, 0.41, 0.45].map((v) => ({ v, label: `${Math.round(v * 100)} %` }));
+export const TMI_OPTIONS = [0, 0.11, 0.3, 0.41, 0.45].map((v) => ({ v, label: `${Math.round(v * 100)} %` }));
 export const PS_OPTIONS = [
   { v: 0.172, label: '17,2 % (revenus fonciers)' },
   { v: 0.186, label: '18,6 % (taux général des revenus du patrimoine ; à confirmer pour le meublé)' },
@@ -139,8 +139,8 @@ export default function SimImmobilier() {
 
           <h2>Scénario défavorable</h2>
           <p className="muted">
-            Appliqué à votre saisie : {ADVERSE.extraVacancyMonths} mois de vacance en plus par an, loyer réduit de {Math.round((1 - ADVERSE.rentFactor) * 100)} %,
-            taxe foncière et charges majorées de {Math.round((ADVERSE.chargesFactor - 1) * 100)} %, évolution du prix du bien diminuée de {Math.abs(ADVERSE.appreciationDelta * 100)} points par an.
+            Appliqué à votre saisie : {ADVERSE.extraVacancyMonths} mois de vacance en plus par an, loyer réduit de {Math.round((1 - ADVERSE.rentFactor) * 100)} %,
+            taxe foncière et charges majorées de {Math.round((ADVERSE.chargesFactor - 1) * 100)} %, évolution du prix du bien diminuée de {Math.abs(ADVERSE.appreciationDelta * 100)} points par an.
           </p>
           <div className="table-wrap" tabIndex={0}>
             <table>

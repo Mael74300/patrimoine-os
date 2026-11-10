@@ -18,7 +18,7 @@ describe('phrases « Concrètement »', () => {
   });
   it('endettement : signale un reste à vivre négatif et un dépassement', () => {
     const t = debtRatioTakeaway({ income: 2000, ratioAfter: 0.5, remainingAfter: -100, withinRef: false, refLabel: '35 %' });
-    expect(t).toContain('50 €');
+    expect(t.replace(/\u00a0/g, ' ')).toContain('50 €');
     expect(t).toContain('il manque');
     expect(t).toContain('dépassez');
   });
@@ -415,7 +415,7 @@ describe('phrases « Concrètement » : comparer des crédits', () => {
     const r = f.taeg({ principal: 200000, annualRate: 0.036, years: 20, insuranceRate: 0.003, fees: 2500 });
     const t = taegTakeaway({ principal: 200000, nominal: 0.036, taeg: r.taeg, totalCost: r.totalCost });
     expect(t).toContain(f.fmtPct(r.taeg));
-    expect(t).toContain(`${Math.round((r.totalCost / 200000) * 100)} € pour 100 €`);
+    expect(t.replace(/\u00a0/g, ' ')).toContain(`${Math.round((r.totalCost / 200000) * 100)} € pour 100 €`);
   });
   it('TAEG : vide sans emprunt', async () => {
     const { taegTakeaway } = await import('./takeaways');

@@ -12,7 +12,7 @@ export default function SimEndettement() {
   const [s, setS, up] = usePersistentState<State>('endettement', DEFAULTS);
   const r = debtRatio(s);
   const cap = capacityAtHcsf(s.income, s.existingPayments, s.rate, s.years, s.insuranceRate);
-  const pct = `${HCSF.maxRatio * 100} %`;
+  const pct = `${HCSF.maxRatio * 100} %`;
 
   return (
     <>
