@@ -381,25 +381,29 @@ export const guides: Guide[] = [
       {
         heading: 'Le calcul',
         body: [
-          'Le taux d’endettement est la part de vos revenus consacrée au remboursement de vos crédits : mensualités divisées par revenus nets mensuels. Exemple fictif : 200 € de crédit en cours et 850 € de nouvelle mensualité pour 3 000 € de revenus donnent (200 + 850) / 3 000 = 35 %.',
+          'Le taux d’endettement est la part de vos revenus qui part chaque mois dans le remboursement de vos crédits. On divise vos mensualités par vos revenus nets mensuels (ce que vous touchez après cotisations).',
+          'Exemple fictif : 200 € de crédit en cours et 850 € de nouvelle mensualité pour 3 000 € de revenus donnent (200 + 850) / 3 000 = 35 %.',
         ],
       },
       {
         heading: 'Le repère de 35 %',
         body: [
-          'Le Haut Conseil de stabilité financière (décision D-HCSF-2021-7, applicable depuis le 1er janvier 2022) recommande aux banques de limiter les charges d’emprunt à 35 % des revenus, assurance comprise, et la durée à 25 ans (27 ans avec différé pour un bien neuf ou des travaux). Les banques disposent d’une marge de dérogation, qui reste limitée : c’est un repère, pas un droit à emprunter.',
+          'Le Haut Conseil de stabilité financière (HCSF) recommande aux banques de limiter vos charges d’emprunt à 35 % de vos revenus, assurance comprise. Il recommande aussi de limiter la durée du prêt à 25 ans, ou 27 ans avec différé pour un bien neuf ou des travaux. C’est la décision D-HCSF-2021-7, applicable depuis le 1er janvier 2022.',
+          'Les banques peuvent y déroger, mais dans une marge limitée. C’est donc un repère, pas un droit à emprunter.',
         ],
       },
       {
         heading: 'Le reste à vivre',
         body: [
-          'Le taux ne dit pas ce qu’il vous reste. Deux foyers au même taux n’ont pas la même marge si leurs charges ou le nombre de personnes diffèrent. Le reste à vivre (revenus moins crédits et charges courantes, rapporté au nombre de personnes) complète le taux et aide à vérifier qu’une mensualité reste supportable.',
+          'Le taux ne dit pas ce qu’il vous reste pour vivre. Deux foyers au même taux n’ont pas la même marge si leurs charges ou le nombre de personnes diffèrent.',
+          'Le reste à vivre complète le taux. C’est ce qu’il reste de vos revenus après les crédits et les charges courantes, rapporté au nombre de personnes du foyer. Il aide à vérifier qu’une mensualité reste supportable.',
         ],
       },
       {
         heading: 'Que faire si le taux dépasse 35 %',
         body: [
-          'Allonger la durée dans la limite du repère, augmenter l’apport, réduire le prix visé, solder un petit crédit ou emprunter à deux. Le simulateur calcule la mensualité maximale, le revenu minimal et le capital empruntable.',
+          'Plusieurs leviers existent : allonger la durée (dans la limite du repère), augmenter l’apport, viser un bien moins cher, solder un petit crédit ou emprunter à deux.',
+          'Le simulateur calcule la mensualité maximale, le revenu minimal et le capital empruntable.',
         ],
       },
     ],
