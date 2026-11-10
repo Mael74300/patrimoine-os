@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { investments } from '../data/investments';
+import { FICHES_COUNT, GUIDES_COUNT, GLOSSARY_COUNT } from '../data/counts';
 import { fmtEur, projectGrowth } from '../lib/finance';
-import { guides } from '../data/guides';
-import { glossary } from '../data/glossary';
-import { simulators } from '../lib/search';
+import { simulators } from '../lib/simulatorsList';
 import { config } from '../config';
 import { LineChart } from '../components/ui';
 import { HomeArt } from '../components/HeaderArt';
@@ -51,7 +49,7 @@ export default function Home() {
     [],
   );
   const last = example[example.length - 1];
-  const counts = [`${investments.length} fiches`, `${simulators.length} simulateurs`, '3 placements à comparer', `${guides.length} guides`, '3 façons d’entreprendre', `${glossary.length} termes`];
+  const counts = [`${FICHES_COUNT} fiches`, `${simulators.length} simulateurs`, '3 placements à comparer', `${GUIDES_COUNT} guides`, '3 façons d’entreprendre', `${GLOSSARY_COUNT} termes`];
 
   return (
     <>
