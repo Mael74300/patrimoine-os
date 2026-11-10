@@ -23,7 +23,7 @@ function BudgetBars({ b }: { b: ReturnType<typeof analyzeBudget> }) {
   return (
     <figure className="bb">
       <Bar segs={mine} label="Votre budget" aria={`Votre budget : ${desc}`} />
-      <Bar segs={bench} label="Repère" aria="Repère : besoins 50 %, envies 30 %, épargne 20 %" />
+      <Bar segs={bench} label="Repère" aria="Repère : besoins 50 %, envies 30 %, épargne 20 %" />
       <figcaption className="bb-legend">
         <span><i className="bb-dot bb-needs" />Besoins</span>
         <span><i className="bb-dot bb-wants" />Envies</span>

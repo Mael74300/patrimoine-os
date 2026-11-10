@@ -18,7 +18,7 @@ describe('schéma « rendement locatif : du brut au net »', () => {
   });
   it('est placé sous une section existante, accessible et léger', () => {
     expect(guide.sections.some((s) => s.heading === 'Le rendement net de charges')).toBe(true);
-    const svg = renderToStaticMarkup(createElement(SchemaRendement));
+    const svg = renderToStaticMarkup(createElement(SchemaRendement)).replace(/\u00a0/g, ' ');
     expect(svg).toContain('role="img"');
     expect(svg).toContain('6,0 %');
     expect(svg).toContain('3,6 %');

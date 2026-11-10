@@ -10,13 +10,13 @@ export function creditTakeaway(p: { principal: number; years: number; monthlyTot
   if (!(p.principal > 0) || !(p.years > 0)) return '';
   const rendu = p.principal + p.totalCost;
   const par100 = Math.round((p.totalCost / p.principal) * 100);
-  return `Vous recevez ${fmtEur(p.principal)} et vous rendez ${fmtEur(rendu)} en tout, soit ${fmtEur(p.monthlyTotal)} par mois pendant ${p.years} an${p.years > 1 ? 's' : ''}. Le crédit vous coûte donc ${fmtEur(p.totalCost)} de plus que la somme reçue (environ ${par100} € pour 100 € empruntés).`;
+  return `Vous recevez ${fmtEur(p.principal)} et vous rendez ${fmtEur(rendu)} en tout, soit ${fmtEur(p.monthlyTotal)} par mois pendant ${p.years} an${p.years > 1 ? 's' : ''}. Le crédit vous coûte donc ${fmtEur(p.totalCost)} de plus que la somme reçue (environ ${par100} € pour 100 € empruntés).`;
 }
 
 /** Taux d'endettement : la part des revenus prise par les crédits, et ce qui reste. */
 export function debtRatioTakeaway(p: { income: number; ratioAfter: number; remainingAfter: number; withinRef: boolean; refLabel: string }): string {
   if (!(p.income > 0)) return '';
-  const part = `Sur 100 € de revenus, ${Math.round(p.ratioAfter * 100)} € partent dans les crédits.`;
+  const part = `Sur 100 € de revenus, ${Math.round(p.ratioAfter * 100)} € partent dans les crédits.`;
   const reste = p.remainingAfter < 0
     ? ` Après vos autres charges, il manque ${fmtEur(-p.remainingAfter)} par mois : ce projet n'est pas tenable avec ces chiffres.`
     : ` Une fois les autres charges payées, il vous reste ${fmtEur(p.remainingAfter)} par mois pour vivre.`;
@@ -193,7 +193,7 @@ export function stepUpTakeaway(p: { monthly: number; years: number; flatCapital:
 export function rateConversionTakeaway(p: { annualRate: number; periods: number; equivalentRate: number; proportionalRate: number; gap: number }): string {
   if (![2, 4, 12].includes(p.periods) || !Number.isFinite(p.equivalentRate)) return '';
   const nom = p.periods === 12 ? 'mensuel' : p.periods === 4 ? 'trimestriel' : 'semestriel';
-  const pct = (x: number) => `${(x * 100).toFixed(4).replace('.', ',')} %`;
+  const pct = (x: number) => `${(x * 100).toFixed(4).replace('.', ',')} %`;
   return `Pour obtenir ${fmtPct(p.annualRate)} sur l'année, appliquez un taux ${nom} de ${pct(p.equivalentRate)} à chaque période, pas ${pct(p.proportionalRate)} (le taux annuel divisé par ${p.periods}), qui donnerait un peu trop.`;
 }
 
@@ -201,7 +201,7 @@ export function rateConversionTakeaway(p: { annualRate: number; periods: number;
 export function budgetTakeaway(p: { income: number; shares: { needs: number; wants: number; saving: number }; unallocated: number; targetRate: number; missing: number }): string {
   if (!(p.income > 0)) return '';
   const cent = (x: number) => Math.round(x * 100);
-  const repartition = `Sur 100 € de revenu, ${cent(p.shares.needs)} € vont aux besoins, ${cent(p.shares.wants)} € aux envies et ${cent(p.shares.saving)} € à l'épargne.`;
+  const repartition = `Sur 100 € de revenu, ${cent(p.shares.needs)} € vont aux besoins, ${cent(p.shares.wants)} € aux envies et ${cent(p.shares.saving)} € à l'épargne.`;
   const reste = p.unallocated < 0
     ? ` Vos postes dépassent le revenu de ${fmtEur(-p.unallocated)} par mois : le budget n'est pas équilibré.`
     : Math.round(p.unallocated) > 0
@@ -340,7 +340,7 @@ export function taegTakeaway(p: { principal: number; nominal: number; taeg: numb
   const par100 = Math.round((p.totalCost / p.principal) * 100);
   const ecart = p.taeg - p.nominal;
   const base = `Le taux affiché est de ${fmtPct(p.nominal)}, mais une fois l'assurance et les frais comptés, le crédit revient à ${fmtPct(p.taeg)} par an.`;
-  const fin = ` Au total, il vous coûte environ ${par100} € pour 100 € empruntés.`;
+  const fin = ` Au total, il vous coûte environ ${par100} € pour 100 € empruntés.`;
   return ecart > 0.00005 ? `${base}${fin}` : `Avec ces hypothèses, le taux affiché de ${fmtPct(p.nominal)} et le coût réel du crédit sont identiques.${fin}`;
 }
 

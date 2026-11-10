@@ -26,7 +26,7 @@ export default function SimRembourser() {
       </PageHead>
       <SimNotice>
         <strong>Le rendement est une hypothèse, pas une promesse.</strong> Un placement peut perdre de la valeur ; rembourser un crédit, lui, fait économiser des intérêts à coup sûr.
-        Le taux d'imposition de 31,4 % est celui du prélèvement forfaitaire unique de 2026 (<Link to="/encyclopedie/compte-titres">fiche Compte-titres</Link>) : changez-le si votre placement est dans une autre enveloppe.
+        Le taux d'imposition de 31,4 % est celui du prélèvement forfaitaire unique de 2026 (<Link to="/encyclopedie/compte-titres">fiche Compte-titres</Link>) : changez-le si votre placement est dans une autre enveloppe.
       </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>

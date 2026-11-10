@@ -1,4 +1,5 @@
 import type { Investment, Review, Source } from './types';
+import { deepKeepNumbers } from '../lib/nbsp';
 
 /** Date de référence des informations réglementaires et fiscales de ce fichier. */
 export const AS_OF = '10 octobre 2026';
@@ -724,14 +725,14 @@ const REVIEW: Record<string, Partial<Review>> = {
   'capital-humain': { verifiedOn: '2026-11-08', data: ['Le CPF est conservé en cas de changement d’employeur ou de perte d’emploi ; un complément de financement peut être demandé à l’employeur, à l’Agefiph ou à la région'], assumptions: ['Rendement de 5 % par an sur l’épargne supplémentaire, hypothèse d’illustration'] },
 };
 
-export const investments: Investment[] = raw.map((i) => ({
+export const investments: Investment[] = deepKeepNumbers(raw).map((i) => ({
   ...i,
   review: {
     verifiedOn: REVIEW[i.slug]?.verifiedOn ?? VERIFIED_ON,
     taxValidAsOf: REVIEW[i.slug]?.taxValidAsOf ?? VERIFIED_ON,
     nextReview: defaultNextReview(i.category),
-    data: REVIEW[i.slug]?.data ?? [],
-    assumptions: ['Échelles de risque, liquidité et effort attribuées par la rédaction', 'Exemple chiffré fictif', ...(REVIEW[i.slug]?.assumptions ?? [])],
+    data: deepKeepNumbers(REVIEW[i.slug]?.data ?? []),
+    assumptions: deepKeepNumbers(['Échelles de risque, liquidité et effort attribuées par la rédaction', 'Exemple chiffré fictif', ...(REVIEW[i.slug]?.assumptions ?? [])]),
     ...(REVIEW[i.slug]?.nextReview ? { nextReview: REVIEW[i.slug]!.nextReview! } : {}),
   },
 }));

@@ -9,7 +9,7 @@ import { simulators } from './simulatorsList';
 export { simulators };
 
 /** Minuscule, sans accents, pour une recherche tolérante. */
-export const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+export const norm = (s: string) => s.replace(/[\u00a0\u202f]/g, ' ').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 
 /** « livrets » trouve « livret » : on retire le pluriel d'un mot de plus de trois lettres. */
 export const stem = (t: string) => (t.length > 3 ? t.replace(/[sx]$/, '') : t);

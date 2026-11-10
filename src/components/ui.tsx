@@ -139,12 +139,12 @@ export function CoverageGauge({ savings, target, label }: { savings: number; tar
   const done = pct >= 100;
   return (
     <div className="gauge">
-      <div className="gauge-bar" role="img" aria-label={`${label} : ${pct} % du montant visé`}>
+      <div className="gauge-bar" role="img" aria-label={`${label} : ${pct} % du montant visé`}>
         <span className={'gauge-fill' + (done ? ' done' : '')} style={{ width: `${pct}%` }} />
       </div>
       <div className="gauge-scale" aria-hidden="true">
-        <span>0 €</span>
-        <strong>{done ? 'Objectif atteint' : `${pct} % couvert`}</strong>
+        <span>0 €</span>
+        <strong>{done ? 'Objectif atteint' : `${pct} % couvert`}</strong>
         <span>{fmtEur(target)}</span>
       </div>
     </div>
