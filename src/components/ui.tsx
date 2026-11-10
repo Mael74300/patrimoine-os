@@ -490,8 +490,8 @@ export function SavedSims<T>({ simKey, current, onLoad }: { simKey: string; curr
     if (!save(storeKey, l)) setMsg("Le stockage local est indisponible dans ce navigateur (navigation privée ?).");
   };
   return (
-    <details className="panel" style={{ marginTop: 16 }}>
-      <summary style={{ cursor: 'pointer', fontWeight: 600 }}>Mes simulations enregistrées ({list.length})</summary>
+    <details className="panel saved-sims">
+      <summary>Mes simulations enregistrées ({list.length})</summary>
       <p className="small muted" style={{ marginTop: 10 }}>
         Enregistrées uniquement dans ce navigateur, sur cet appareil. Elles ne sont ni envoyées ni synchronisées entre vos appareils.
       </p>
@@ -788,7 +788,7 @@ export function MobileFold({ label, hint, quietOnDesktop, children }: { label: s
   }, []);
   return (
     <details ref={ref} open className={`cmp-fold mob-fold${quietOnDesktop ? ' mob-fold--quiet' : ''}`}>
-      <summary>{label}{hint && <span className="fold-hint">{hint}</span>}</summary>
+      <summary><span>{label}{hint && <span className="fold-hint">{hint}</span>}</span></summary>
       {children}
     </details>
   );
