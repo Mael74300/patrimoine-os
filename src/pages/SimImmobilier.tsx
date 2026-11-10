@@ -125,6 +125,7 @@ export default function SimImmobilier() {
           <div className="panel">
             <LineChart
               title="Patrimoine net immobilier et capital restant dû"
+            showTitle
               xLabels={[0, ...proj.map((p) => p.year)].map((y) => `An ${y}`)}
               format={fmtEur}
               series={[

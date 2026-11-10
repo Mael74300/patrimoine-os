@@ -276,6 +276,8 @@ type ChartProps = {
   xLabels: (string | number)[];
   format: (n: number) => string;
   title: string;
+  /** Affiche le titre au-dessus du graphique (utile quand aucun intertitre ne précède). */
+  showTitle?: boolean;
   height?: number;
 };
 
@@ -313,7 +315,7 @@ export function placeXLabels(
 }
 
 /** Graphique en lignes SVG, sans dépendance, utilisable à la souris, au doigt et au clavier. */
-export function LineChart({ series, xLabels, format, title, height = 300 }: ChartProps) {
+export function LineChart({ series, xLabels, format, title, showTitle, height = 300 }: ChartProps) {
   // Largeur du dessin = largeur affichée : les textes gardent leur taille réelle (lisibles sur mobile).
   const [W, setW] = useState(720);
   const narrow = W < 480;
@@ -373,6 +375,7 @@ export function LineChart({ series, xLabels, format, title, height = 300 }: Char
 
   return (
     <figure style={{ margin: 0 }}>
+      {showTitle && <div className="chart-title" aria-hidden="true">{title}</div>}
       <svg
         ref={svgRef}
         className="chart"

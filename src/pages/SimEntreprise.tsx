@@ -109,6 +109,7 @@ export default function SimEntreprise() {
           <div className="panel">
             <LineChart
               title="Trésorerie selon les scénarios"
+            showTitle
               xLabels={Array.from({ length: s.years + 1 }, (_, y) => `An ${y}`)}
               format={fmtEur}
               series={runs.map((r, i) => ({ name: LABELS[i], color: COLORS[i], values: [start, ...r.map((y) => y.cash)] }))}
