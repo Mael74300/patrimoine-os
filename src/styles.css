@@ -889,3 +889,26 @@ h2.gloss-letter::before { content: none; }
 .choice-opt input:checked + .choice-body .choice-label, .choice-opt input:checked + .choice-body .choice-detail { color: #fff; }
 .choice-opt input:focus-visible + .choice-body { outline: 3px solid var(--accent); outline-offset: 2px; }
 @media print { .choice-opt input:not(:checked) + .choice-body { display: none; } }
+
+/* ---------- Jargon expliqué sur place (fiches et guides) : mot souligné en pointillé, définition du glossaire en bulle */
+a.term { color: inherit; text-decoration: underline dotted; text-decoration-color: var(--primary); text-decoration-thickness: 2px; text-underline-offset: 4px; cursor: help; }
+a.term:hover { color: var(--primary); text-decoration-style: solid; }
+.term-pop { display: none; }
+.term-pop:popover-open {
+  display: block; position: absolute; inset: auto; margin: 0;
+  width: max-content; max-width: min(360px, calc(100vw - 32px));
+  padding: 14px 16px 12px; border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: 12px;
+  background: var(--surface); color: var(--ink); box-shadow: var(--shadow);
+  font-size: 0.95rem; line-height: 1.5; text-align: left; font-weight: 400;
+}
+.term-pop:focus { outline: none; }
+.term-pop:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.term-pop-name { display: block; margin-right: 36px; color: var(--primary-deep); font-size: 1rem; }
+.term-pop-def { display: block; margin-top: 4px; color: var(--ink-2); }
+.term-pop-more { display: inline-block; margin-top: 8px; padding: 4px 0; font-size: 0.9rem; font-weight: 600; }
+.term-pop-close {
+  position: absolute; top: 2px; right: 2px; width: 44px; height: 44px; padding: 0;
+  border: 0; background: none; color: var(--ink-3); font-size: 1.5rem; line-height: 1; cursor: pointer; border-radius: 10px;
+}
+.term-pop-close:hover { color: var(--primary); background: var(--surface-2); }
+@media print { a.term { text-decoration: none; } .term-pop { display: none !important; } }

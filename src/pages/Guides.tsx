@@ -11,6 +11,8 @@ import { Crumbs, MobileFold, PageHead, SimFaq, Sources, usePersistentState } fro
 import { EnvelopeCards } from '../components/EnvelopeCards';
 import { GuideGroupIcon } from '../components/Icons';
 import { SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz } from '../components/Illustrations';
+import { annotateJargon } from '../lib/jargon';
+import { JargonText } from '../components/Jargon';
 import NotFound from './NotFound';
 
 /** Guide « Par où commencer » : pour chaque étape, la page du site qui permet d'aller plus loin (aucun chiffre). */
@@ -135,6 +137,11 @@ export function GuidePage() {
   const g = guideBySlug[slug];
   if (!g) return <NotFound />;
   const others = otherGuides(g.slug);
+  // Jargon expliqué sur place : première apparition de chaque notion du glossaire dans le guide.
+  // Une rubrique remplacée par des cartes (enveloppes) n'affiche pas ses paragraphes : ils ne comptent pas.
+  const cardsInstead = (s: { heading: string }) => g.slug === 'choisir-son-enveloppe' && s.heading === 'Les grandes différences';
+  const jargon = annotateJargon(g.sections.flatMap((s) => (cardsInstead(s) ? s.body.map(() => '') : s.body)), { path: `/guides/${g.slug}`, title: g.title });
+  const jargonStart = g.sections.map((_, i) => g.sections.slice(0, i).reduce((n, s) => n + s.body.length, 0));
   return (
     <article>
       <Crumbs items={[{ to: '/', label: 'Accueil' }, { to: '/guides', label: 'Guides' }, { label: g.title }]} />
@@ -146,9 +153,9 @@ export function GuidePage() {
         {g.sections.map((s, i) => (
           <section key={s.heading}>
             <h2 id={sectionId(s.heading)}>{g.slug === 'par-ou-commencer' ? `${i + 1}. ${s.heading}` : s.heading}</h2>
-            {g.slug === 'choisir-son-enveloppe' && s.heading === 'Les grandes différences' ? <EnvelopeCards /> : s.body.map((p, k) => (
+            {cardsInstead(s) ? <EnvelopeCards /> : s.body.map((p, k) => (
               <Fragment key={p}>
-                <p>{p}</p>
+                <p><JargonText segs={jargon[jargonStart[i] + k]} /></p>
                 {g.slug === 'investir-a-credit' && s.heading === 'Un exemple fictif' && (k === 0 ? <SchemaMensualite /> : <SchemaLevier />)}
               </Fragment>
             ))}

@@ -12,6 +12,8 @@ import { SchemaActions, SchemaForet, SchemaDonation, SchemaAssuranceVie, SchemaC
 import NotFound from './NotFound';
 import { fmtDate } from './Guides';
 import { guideBySlug } from '../data/guides';
+import { annotateJargon } from '../lib/jargon';
+import { JargonText } from '../components/Jargon';
 
 /** Guide qui détaille une notion de la fiche (lien « Pour aller plus loin »). */
 const FICHE_GUIDE: Record<string, string> = {
@@ -32,6 +34,8 @@ export default function InvestmentPage() {
   useEffect(() => {
     setStale(new Date().toISOString().slice(0, 10) >= inv.review.nextReview);
   }, [inv.review.nextReview]);
+  // Jargon expliqué sur place : première apparition de chaque notion du glossaire, dans l'ordre de lecture.
+  const [jDef, jHow, ...jSteps] = annotateJargon([inv.definition, inv.howItWorks, ...inv.howToInvest], { path: `/encyclopedie/${inv.slug}`, title: inv.name });
 
   return (
     <>
@@ -64,9 +68,9 @@ export default function InvestmentPage() {
           </div>
 
           <h2>Définition</h2>
-          <p>{inv.definition}</p>
+          <p><JargonText segs={jDef} /></p>
           <h2>Fonctionnement</h2>
-          <p>{inv.howItWorks}</p>
+          <p><JargonText segs={jHow} /></p>
           {FICHE_GUIDE[inv.slug] && guideBySlug[FICHE_GUIDE[inv.slug]] && (
             <p className="small">
               <strong>Pour aller plus loin :</strong>{' '}
@@ -104,7 +108,7 @@ export default function InvestmentPage() {
           {inv.slug === 'compte-a-terme' && <SchemaCompteATerme />}
           {inv.slug === 'credit-immobilier' && <SchemaLevier />}
           <h2>Comment investir</h2>
-          <ul>{inv.howToInvest.map((s) => <li key={s}>{s}</li>)}</ul>
+          <ul>{inv.howToInvest.map((s, i) => <li key={s}><JargonText segs={jSteps[i]} /></li>)}</ul>
 
           <h2>En pratique</h2>
           {inv.slug === 'donation' && (
