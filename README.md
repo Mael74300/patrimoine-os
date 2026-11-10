@@ -37,7 +37,7 @@ Plateforme française et gratuite consacrée à la construction du patrimoine : 
 | Capital à placer aujourd’hui | Somme à placer dès maintenant pour atteindre un capital visé, selon un rendement supposé et un versement mensuel (hypothèses saisies uniquement, aucun chiffre réglementaire) |
 | Renégocier son crédit | Mensualités, intérêts évités, gain net après frais et point mort d’un nouveau prêt sur le capital restant dû (hypothèses saisies uniquement, aucun chiffre réglementaire) |
 | Portefeuille, comparateur de fiches | Allocation, frais pondérés, rééquilibrage ; jusqu'à 3 fiches côte à côte |
-| Guides | 19 guides, dont 16 pages répondant à une intention de recherche précise (patrimoine net, rentabilité locative, PEA, frais…) |
+| Guides | 20 guides, chacun répondant à une intention de recherche précise (patrimoine net, rentabilité locative, PEA, frais…) |
 | Liens internes | Chaque fiche et chaque guide renvoie vers ses simulateurs liés (table `src/lib/relatedSims.ts`, cohérence testée : cibles existantes, aucun simulateur sans lien entrant) |
 | Glossaire | 38 notions expliquées, avec liens vers simulateurs, fiches et guides (liens vérifiés par les tests) |
 | Simulations locales | Chaque simulateur permet d'enregistrer, d'exporter et d'importer ses simulations en fichier JSON (local, rien n'est envoyé) |
