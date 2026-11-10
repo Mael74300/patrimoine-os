@@ -3,7 +3,7 @@ import { categories } from '../data/categories';
 import { guides } from '../data/guides';
 import { investments } from '../data/investments';
 import { simulators } from '../lib/search';
-import { Crumbs, PageHead } from '../components/ui';
+import { Crumbs, MobileFold, PageHead } from '../components/ui';
 
 export default function PlanDuSite() {
   const fiches = [...investments].sort((a, b) => a.name.localeCompare(b.name, 'fr'));
@@ -33,16 +33,21 @@ export default function PlanDuSite() {
       </ul>
 
       <h2 id="plan-simulateurs">Simulateurs</h2>
-      <ul className="sitemap-list">
-        {simulators.map((s) => <li key={s.slug}><Link to={`/simulateurs/${s.slug}`}>{s.title}</Link></li>)}
-      </ul>
+      <MobileFold label={`Voir les ${simulators.length} simulateurs`} quietOnDesktop>
+        <ul className="sitemap-list">
+          {simulators.map((s) => <li key={s.slug}><Link to={`/simulateurs/${s.slug}`}>{s.title}</Link></li>)}
+        </ul>
+      </MobileFold>
 
       <h2 id="plan-guides">Guides</h2>
-      <ul className="sitemap-list">
-        {guides.map((g) => <li key={g.slug}><Link to={`/guides/${g.slug}`}>{g.title}</Link></li>)}
-      </ul>
+      <MobileFold label={`Voir les ${guides.length} guides`} quietOnDesktop>
+        <ul className="sitemap-list">
+          {guides.map((g) => <li key={g.slug}><Link to={`/guides/${g.slug}`}>{g.title}</Link></li>)}
+        </ul>
+      </MobileFold>
 
       <h2 id="plan-fiches">Fiches de l’encyclopédie</h2>
+      <MobileFold label={`Voir les ${fiches.length} fiches`} quietOnDesktop>
       {categories.map((c) => {
         const list = fiches.filter((i) => i.category === c.id);
         if (!list.length) return null;
@@ -53,6 +58,7 @@ export default function PlanDuSite() {
           </section>
         );
       })}
+      </MobileFold>
 
       <h2 id="plan-legal">Informations légales</h2>
       <ul className="sitemap-list">
