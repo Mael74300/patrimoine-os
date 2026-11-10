@@ -1025,7 +1025,7 @@ export function SchemaRembourser() {
 /** Schéma « immobilier ou ETF » : même effort d'épargne, deux chemins, comparaison du patrimoine à la même date. Aucun chiffre ; reprend la méthode décrite dans le guide. */
 export function SchemaImmoEtf() {
   const cols = [
-    { x: 0, title: 'Scénario 1 : l’immobilier', fill: 'var(--accent-soft)', stroke: 'var(--accent)', lines: ['Apport + crédit : un bien', 'Les loyers paient une partie', 'Vous complétez la mensualité'], end: 'valeur du bien − capital restant dû' },
+    { x: 0, title: 'Scénario 1 : l’immobilier', fill: 'var(--accent-soft)', stroke: 'var(--accent)', lines: ['Apport + crédit : un bien', 'Les loyers paient une partie', 'Vous complétez la mensualité'], end: 'valeur du bien − dette restante' },
     { x: 214, title: 'Scénario 2 : les ETF', fill: 'var(--surface-2, var(--surface))', stroke: 'var(--primary)', lines: ['L’apport est placé en ETF', 'puis la même somme chaque', 'année : rien à emprunter'], end: 'valeur des ETF' },
   ];
   return (
