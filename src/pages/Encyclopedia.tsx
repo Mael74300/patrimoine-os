@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { categories, categoryById } from '../data/categories';
 import { investments } from '../data/investments';
 import { norm } from '../lib/search';
-import { FamilyIcon } from '../components/Illustrations';
+import { FamilyIcon } from '../components/Icons';
 import { Dots, MetersLegend, MobileFold, PageHead } from '../components/ui';
 
 export default function Encyclopedia() {

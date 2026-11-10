@@ -7,7 +7,8 @@ import { glossary } from '../data/glossary';
 import { simulators } from '../lib/search';
 import { config } from '../config';
 import { LineChart } from '../components/ui';
-import { HomeArt, SituationIcon, type SituationIconName } from '../components/Illustrations';
+import { HomeArt } from '../components/HeaderArt';
+import { SituationIcon, type SituationIconName } from '../components/Icons';
 
 const situations: { icon: SituationIconName; title: string; text: string; cta: string; to: string }[] = [
   { icon: 'pousse', title: 'Je débute', text: 'Un premier salaire, par où commencer ?', cta: 'Le guide pour démarrer', to: '/guides/par-ou-commencer' },

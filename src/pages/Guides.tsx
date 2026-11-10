@@ -9,7 +9,8 @@ import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
 import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
 import { Crumbs, MobileFold, PageHead, SimFaq, Sources, usePersistentState } from '../components/ui';
 import { EnvelopeCards } from '../components/EnvelopeCards';
-import { GuideGroupIcon, SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz } from '../components/Illustrations';
+import { GuideGroupIcon } from '../components/Icons';
+import { SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz } from '../components/Illustrations';
 import NotFound from './NotFound';
 
 /** Guide « Par où commencer » : pour chaque étape, la page du site qui permet d'aller plus loin (aucun chiffre). */
