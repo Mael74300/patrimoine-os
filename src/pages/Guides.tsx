@@ -40,8 +40,8 @@ export function GuideList() {
             {grp.slugs.map((slug) => guideBySlug[slug]).map((g) => (
               <li key={g.slug}>
                 <Link className="inv-row" to={`/guides/${g.slug}`}>
-                  <div><h3 style={{ margin: '0 0 4px', fontSize: '1.05rem', color: 'var(--primary)' }}>{g.title}</h3><p>{guideBlurb(g.slug)}</p></div>
-                  <span className="small muted">{g.readingMinutes} min</span>
+                  <div><h3 style={{ margin: '0 0 4px', fontSize: '1.05rem', color: 'var(--primary)' }}>{g.title}</h3><p>{guideBlurb(g.slug)}<span className="guide-min-inline"> · {g.readingMinutes} min</span></p></div>
+                  <span className="small muted guide-min">{g.readingMinutes} min</span>
                 </Link>
               </li>
             ))}
