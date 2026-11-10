@@ -619,21 +619,24 @@ export const guides: Guide[] = [
       {
         heading: 'Rendement nominal et rendement réel',
         body: [
-          'Le rendement nominal est celui que vous voyez affiché. Le rendement réel le corrige de l’inflation : on le calcule par (1 + rendement nominal) ÷ (1 + inflation) − 1. La finance pour tous résume l’idée en parlant d’un taux d’intérêt diminué de l’inflation ; la formule exacte divise au lieu de soustraire, l’écart étant faible quand les taux sont bas.',
-          'Si le rendement réel est positif, votre pouvoir d’achat augmente ; s’il est négatif, il baisse, même si le montant affiché grossit.',
+          'Le rendement nominal est celui qui est affiché : 3 % par an, par exemple. Le rendement réel est ce qu’il reste une fois l’inflation retirée. C’est lui qui dit si votre pouvoir d’achat progresse.',
+          'La finance pour tous résume l’idée ainsi : un taux d’intérêt diminué de l’inflation. Pour un calcul exact, on divise au lieu de soustraire : (1 + rendement nominal) ÷ (1 + inflation) − 1. L’écart entre les deux méthodes est faible quand les taux sont bas.',
+          'Si le rendement réel est positif, votre pouvoir d’achat augmente. S’il est négatif, il baisse, même si le montant affiché grossit.',
         ],
       },
       {
         heading: 'Un exemple fictif chiffré',
         body: [
-          'Supposons une inflation de 2 % par an, constante pendant 10 ans. Une somme de 10 000 € laissée telle quelle ne permet plus d’acheter que l’équivalent de 10 000 ÷ 1,02^10 ≈ 8 203 € d’aujourd’hui.',
-          'Placée à 3 % par an, la même somme atteint 10 000 × 1,03^10 ≈ 13 439 €, soit en euros d’aujourd’hui ≈ 11 025 € : le rendement réel est (1,03 ÷ 1,02) − 1 ≈ 0,98 % par an. Exemple fictif, à but pédagogique : ces taux ne sont ni observés ni prévus.',
+          'Supposons une inflation de 2 % par an, constante pendant 10 ans. Une somme de 10 000 € laissée telle quelle ne permet plus d’acheter que l’équivalent de 10 000 ÷ 1,02^10 ≈ 8 203 € d’aujourd’hui.',
+          'Placée à 3 % par an, la même somme atteint 10 000 × 1,03^10 ≈ 13 439 €. En euros d’aujourd’hui, cela vaut ≈ 11 025 €.',
+          'Le rendement réel est donc (1,03 ÷ 1,02) − 1 ≈ 0,98 % par an. Exemple fictif, à but pédagogique : ces taux ne sont ni observés ni prévus.',
         ],
       },
       {
         heading: 'Ce qu’il faut en retenir',
         body: [
-          'L’inflation varie d’une année à l’autre : une hypothèse constante est une simplification. Comparez toujours un rendement à l’inflation de la même période, et gardez en tête que la sécurité d’un placement et sa disponibilité ont aussi une valeur, notamment pour l’épargne de précaution.',
+          'L’inflation varie d’une année à l’autre : une hypothèse constante est une simplification. Comparez toujours un rendement à l’inflation de la même période.',
+          'Gardez aussi en tête que la sécurité d’un placement et sa disponibilité ont une valeur, notamment pour l’épargne de précaution.',
           'Les simulateurs « Inflation et pouvoir d’achat » et « Rendement réel de mon placement » calculent ces effets à partir de vos propres hypothèses.',
         ],
       },
