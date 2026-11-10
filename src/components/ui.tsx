@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState, type MouseEvent, type ReactNode } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
 import { simFaq, type FaqItem } from '../data/simFaq';
 import { Link } from 'react-router-dom';
 import { config } from '../config';
@@ -644,6 +644,42 @@ export function SelectField<V extends string | number>({ label, value, options, 
       {cut && <div className="select-full" aria-hidden="true">{current}</div>}
       {hint && <div className="hint">{hint}</div>}
     </div>
+  );
+}
+
+/**
+ * Choix parmi quelques options (2 à 5), affichées toutes à la fois sous forme de boutons.
+ * Contrairement à un menu déroulant, rien n'est coupé sur mobile, les autres possibilités
+ * restent visibles et un seul geste suffit. Boutons radio natifs : flèches du clavier,
+ * lecteurs d'écran et formulaires fonctionnent sans code supplémentaire.
+ */
+export function ChoiceField<V extends string | number>({ label, value, options, onChange, hint, compact }: {
+  label: string;
+  value: V;
+  options: { v: V; label: string; detail?: string }[];
+  onChange: (v: V) => void;
+  hint?: string;
+  /** Options très courtes (« 11 % ») : toutes sur une ligne. */
+  compact?: boolean;
+}) {
+  const name = useId();
+  const hintId = `${name}-hint`;
+  return (
+    <fieldset className="field choice-field" aria-describedby={hint ? hintId : undefined}>
+      <legend>{label}</legend>
+      <div className={`choice-opts${compact ? ' choice-opts--compact' : ''}`} style={{ '--n': options.length } as CSSProperties}>
+        {options.map((o) => (
+          <label key={String(o.v)} className="choice-opt">
+            <input type="radio" name={name} value={String(o.v)} checked={String(o.v) === String(value)} onChange={() => onChange(o.v)} />
+            <span className="choice-body">
+              <span className="choice-label">{o.label}</span>
+              {o.detail && <span className="choice-detail">{o.detail}</span>}
+            </span>
+          </label>
+        ))}
+      </div>
+      {hint && <div className="hint" id={hintId}>{hint}</div>}
+    </fieldset>
   );
 }
 

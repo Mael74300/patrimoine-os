@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { lumpVsGradual, fmtEur, fmtPct, type PricePath } from '../lib/finance';
 import { lumpGradualTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, SelectField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, ChoiceField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = { amount: number; spread: number; years: number; ret: number; cash: number; path: PricePath; move: number };
 
@@ -9,9 +9,9 @@ type State = { amount: number; spread: number; years: number; ret: number; cash:
 const DEFAULTS: State = { amount: 12000, spread: 12, years: 5, ret: 0.05, cash: 0, path: 'steady', move: 0.2 };
 
 const PATHS: { v: PricePath; label: string }[] = [
-  { v: 'steady', label: 'Évolution régulière au rendement saisi' },
-  { v: 'dip', label: 'Baisse pendant l’étalement, puis rendement saisi' },
-  { v: 'rise', label: 'Hausse pendant l’étalement, puis rendement saisi' },
+  { v: 'steady', label: 'Régulière' },
+  { v: 'dip', label: 'Baisse d’abord' },
+  { v: 'rise', label: 'Hausse d’abord' },
 ];
 
 export default function SimEtalement() {
@@ -42,7 +42,8 @@ export default function SimEtalement() {
             <legend>Hypothèses de marché</legend>
             <NumberField label="Rendement annuel du placement" unit="%" percent value={s.ret} onChange={up('ret')} min={-50} max={100} step={0.5} />
             <NumberField label="Rendement annuel de la part non investie" unit="%" percent value={s.cash} onChange={up('cash')} min={-50} max={100} step={0.5} />
-            <SelectField label="Parcours de prix" value={s.path} options={PATHS} onChange={up('path')} />
+            <ChoiceField label="Parcours de prix" value={s.path} options={PATHS} onChange={up('path')} compact
+              hint="Baisse ou hausse pendant l’étalement, puis rendement saisi." />
             {s.path !== 'steady' && <NumberField label="Ampleur de la variation pendant l’étalement" unit="%" percent value={s.move} onChange={up('move')} min={0} max={90} step={5} />}
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>

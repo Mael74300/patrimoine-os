@@ -855,3 +855,24 @@ h2.gloss-letter::before { content: none; }
   .inv-group .inv-row { padding: 8px 4px; gap: 6px; }
   .inv-group .inv-row h3 { margin-bottom: 2px; }
 }
+
+/* Choix en boutons (ChoiceField) : remplace un menu déroulant quand il y a peu d'options.
+   Même apparence que les boutons .choice du simulateur de patrimoine. */
+.choice-field { margin: 0 0 14px; min-width: 0; }
+.choice-field legend { display: block; padding: 0; font-size: 0.88rem; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
+.choice-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+/* Toutes les options sur une ligne si la place suffit (7,5 rem chacune), sinon toutes empilées :
+   jamais d'option orpheline sur sa ligne. */
+.choice-opt { position: relative; display: flex; margin: 0; font-weight: 400; cursor: pointer; flex-grow: 1; flex-basis: calc((var(--n, 2) * 7.5rem - 100%) * 999); }
+.choice-opts--compact { flex-wrap: nowrap; gap: 6px; }
+.choice-opts--compact .choice-opt { flex: 1 1 0; min-width: 0; }
+.choice-opt input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.choice-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; min-height: 48px; padding: 7px 8px; text-align: center; line-height: 1.25; border: 1.5px solid #c5d2e4; border-radius: 12px; background: var(--surface); transition: border-color .15s, background .15s, box-shadow .15s; }
+.choice-label { font-size: 0.92rem; font-weight: 600; color: var(--primary-deep); }
+.choice-detail { font-size: 0.8rem; color: var(--ink-2); }
+.choice-opts--compact .choice-body { min-height: 44px; padding: 6px 4px; }
+.choice-opt:hover .choice-body { border-color: var(--primary); }
+.choice-opt input:checked + .choice-body { background: var(--grad); border-color: transparent; box-shadow: 0 4px 12px rgba(23, 53, 138, 0.25); }
+.choice-opt input:checked + .choice-body .choice-label, .choice-opt input:checked + .choice-body .choice-detail { color: #fff; }
+.choice-opt input:focus-visible + .choice-body { outline: 3px solid var(--accent); outline-offset: 2px; }
+@media print { .choice-opt input:not(:checked) + .choice-body { display: none; } }
