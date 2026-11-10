@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { norm, simulators } from '../lib/search';
 import { simBlurb, simBySlug, simThemes, unthemedSims } from '../lib/simThemes';
 import { PageHead } from '../components/ui';
-import { SimThemeIcon } from '../components/Illustrations';
+import { SimThemeIcon } from '../components/Icons';
 
 /** Simulateurs d'entrée, dans l'ordre où un débutant en a besoin (aucun chiffre : seulement des renvois). */
 export const startSims: { slug: string; label: string }[] = [
