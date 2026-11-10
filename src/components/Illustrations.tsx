@@ -5,7 +5,7 @@ import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAM
 const W = 420;
 const BASE = 262;
 const TOP = 40;
-const BAR_W = 64;
+const BAR_W = 84;
 
 /** Schéma « boule de neige » : même capital, mêmes 5 %, intérêts simples ou réinvestis. Les hauteurs sont proportionnelles aux montants. */
 export function SchemaInterets() {
@@ -271,29 +271,29 @@ export function SchemaDiversificationPrincipe() {
       <svg viewBox="0 0 420 262" role="img" aria-labelledby="ill-divp-t ill-divp-d" className="ill-svg">
         <title id="ill-divp-t">Un seul placement ou plusieurs : ce qui se passe quand l’un baisse</title>
         <desc id="ill-divp-d">À gauche, toute l’épargne est dans un seul placement : s’il baisse, tout le patrimoine baisse avec lui. À droite, l’épargne est répartie entre un livret, des actions, de l’immobilier et un fonds en euros : si les actions baissent, les autres placements n’évoluent pas de la même manière, donc le patrimoine ne dépend plus d’un seul d’entre eux.</desc>
-        <text x={100} y={18} textAnchor="middle" className="ill-step">Tout au même endroit</text>
-        <rect x={0} y={34} width={200} height={84} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={100} y={82} textAnchor="middle" className="ill-step">Un seul placement</text>
-        <path d="M 100 118 V 152 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={100} y={178} textAnchor="middle" className="ill-in">Il baisse :</text>
-        <text x={100} y={198} textAnchor="middle" className="ill-in">tout votre patrimoine</text>
-        <text x={100} y={218} textAnchor="middle" className="ill-in">baisse avec lui</text>
-        <text x={320} y={18} textAnchor="middle" className="ill-step">Plusieurs placements</text>
+        <text x={90} y={18} textAnchor="middle" className="ill-step">Tout au même endroit</text>
+        <rect x={0} y={34} width={180} height={84} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={90} y={82} textAnchor="middle" className="ill-step">Un seul placement</text>
+        <path d="M 90 118 V 152 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={90} y={178} textAnchor="middle" className="ill-in">Il baisse :</text>
+        <text x={90} y={198} textAnchor="middle" className="ill-in">tout votre patrimoine</text>
+        <text x={90} y={218} textAnchor="middle" className="ill-in">baisse avec lui</text>
+        <text x={307} y={18} textAnchor="middle" className="ill-step">Plusieurs placements</text>
         {placements.map((n, i) => {
-          const x = 220 + (i % 2) * 104;
+          const x = 194 + (i % 2) * 116;
           const y = 34 + Math.floor(i / 2) * 46;
           const down = n === 'Actions';
           return (
             <g key={n}>
-              <rect x={x} y={y} width={96} height={38} rx={10} fill={down ? 'var(--warn-soft)' : 'var(--accent-soft)'} stroke={down ? 'var(--warn)' : 'var(--accent)'} strokeWidth={2} />
-              <text x={x + 48} y={y + 24} textAnchor="middle" className="ill-in">{n}</text>
+              <rect x={x} y={y} width={110} height={38} rx={10} fill={down ? 'var(--warn-soft)' : 'var(--accent-soft)'} stroke={down ? 'var(--warn)' : 'var(--accent)'} strokeWidth={2} />
+              <text x={x + 55} y={y + 24} textAnchor="middle" className="ill-in">{n}</text>
             </g>
           );
         })}
-        <path d="M 320 126 V 152 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={320} y={178} textAnchor="middle" className="ill-in">Un placement baisse :</text>
-        <text x={320} y={198} textAnchor="middle" className="ill-in">les autres n’évoluent pas</text>
-        <text x={320} y={218} textAnchor="middle" className="ill-in">de la même manière</text>
+        <path d="M 307 126 V 152 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={307} y={178} textAnchor="middle" className="ill-in">Un placement baisse :</text>
+        <text x={307} y={198} textAnchor="middle" className="ill-in">les autres n’évoluent pas</text>
+        <text x={307} y={218} textAnchor="middle" className="ill-in">de la même manière</text>
         <text x={210} y={252} textAnchor="middle" className="ill-sub">Mais si tout baisse en même temps, rien n’amortit</text>
       </svg>
       <figcaption>
@@ -323,8 +323,8 @@ export function SchemaPtz() {
         <rect x={116} y={176} width={204} height={32} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
         <text x={218} y={197} textAnchor="middle" className="ill-in">On rembourse, sans intérêts</text>
         <path d="M 320 92 V 214" fill="none" stroke="var(--ink-3)" strokeWidth={1.5} strokeDasharray="4 4" />
-        <text x={326} y={150} className="ill-sub">Au plus</text>
-        <text x={326} y={163} className="ill-sub">25 ans</text>
+        <text x={326} y={146} className="ill-sub">Au plus</text>
+        <text x={326} y={164} className="ill-sub">25 ans</text>
         <text x={0} y={236} className="ill-sub">Différé : 2 ans au minimum. Plus les revenus sont élevés,</text>
         <text x={0} y={250} className="ill-sub">plus la durée est courte. Durées non à l’échelle.</text>
       </svg>
@@ -496,7 +496,7 @@ export function SchemaAssuranceVie() {
       <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-av-t ill-av-d" className="ill-svg">
         <title id="ill-av-t">Assurance-vie : un contrat, deux types de supports</title>
         <desc id="ill-av-d">Vous versez de l'argent sur un contrat d'assurance-vie, puis vous choisissez la part placée sur chaque support. Le fonds en euros est garanti par l'assureur, avec un faible rendement. Les unités de compte peuvent rapporter davantage mais comportent un risque de perte en capital.</desc>
-        <rect x={110} y={2} width={200} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <rect x={90} y={2} width={240} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
         <text x={210} y={24} textAnchor="middle" className="ill-step">Vous versez</text>
         <text x={210} y={43} textAnchor="middle" className="ill-sub">sur un contrat d'assurance-vie</text>
         <path d="M 210 52 V 84 m -7 -8 l 7 8 l 7 -8" {...arrow} />
@@ -1446,27 +1446,27 @@ export const DONATION_TOTAL_DEUX_PARENTS = 2 * DONATION_PAR_PARENT;
 export function SchemaDonation() {
   const parent = (y: number, n: number) => (
     <g key={n}>
-      <rect x={14} y={y} width={176} height={78} rx={10} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+      <rect x={14} y={y} width={176} height={90} rx={10} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
       <text x={102} y={y + 22} textAnchor="middle" className="ill-step">Parent {n}</text>
-      <text x={102} y={y + 42} textAnchor="middle" className="ill-sub">{fmtEur(DONATION_ABATTEMENT)} d’abattement</text>
-      <text x={102} y={y + 58} textAnchor="middle" className="ill-sub">+ {fmtEur(DONATION_DON_ARGENT)} don d’argent</text>
-      <text x={102} y={y + 72} textAnchor="middle" className="ill-step">= {fmtEur(DONATION_PAR_PARENT)}</text>
-      <path d={`M 190 ${y + 39} H 232 V 111 H 246`} fill="none" stroke="var(--primary)" strokeWidth={2} strokeLinejoin="round" />
+      <text x={102} y={y + 44} textAnchor="middle" className="ill-sub">{fmtEur(DONATION_ABATTEMENT)} d’abattement</text>
+      <text x={102} y={y + 62} textAnchor="middle" className="ill-sub">+ {fmtEur(DONATION_DON_ARGENT)} don d’argent</text>
+      <text x={102} y={y + 81} textAnchor="middle" className="ill-step">= {fmtEur(DONATION_PAR_PARENT)}</text>
+      <path d={`M 190 ${y + 45} H 232 V 117 H 246`} fill="none" stroke="var(--primary)" strokeWidth={2} strokeLinejoin="round" />
     </g>
   );
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 250" role="img" aria-labelledby="ill-don-t ill-don-d" className="ill-svg">
+      <svg viewBox="0 0 420 262" role="img" aria-labelledby="ill-don-t ill-don-d" className="ill-svg">
         <title id="ill-don-t">{`Donation : deux parents peuvent donner ${fmtEur(DONATION_TOTAL_DEUX_PARENTS)} à un enfant sans droits`}</title>
         <desc id="ill-don-d">{`Exemple fictif : chaque parent de moins de 80 ans peut donner à son enfant majeur ${fmtEur(DONATION_ABATTEMENT)} (abattement) plus ${fmtEur(DONATION_DON_ARGENT)} (don familial d’argent), soit ${fmtEur(DONATION_PAR_PARENT)}. Pour deux parents, l’enfant reçoit ${fmtEur(DONATION_TOTAL_DEUX_PARENTS)} sans droits. Les abattements se renouvellent tous les 15 ans.`}</desc>
         {parent(10, 1)}
-        {parent(100, 2)}
-        <rect x={246} y={74} width={160} height={74} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={326} y={98} textAnchor="middle" className="ill-step">Enfant majeur</text>
-        <text x={326} y={120} textAnchor="middle" className="ill-step">{fmtEur(DONATION_TOTAL_DEUX_PARENTS)}</text>
-        <text x={326} y={138} textAnchor="middle" className="ill-sub">sans droits</text>
-        <text x={210} y={212} textAnchor="middle" className="ill-sub">Les abattements se renouvellent tous les 15 ans.</text>
-        <text x={210} y={232} textAnchor="middle" className="ill-sub">Parents de moins de 80 ans, enfant majeur.</text>
+        {parent(112, 2)}
+        <rect x={246} y={80} width={160} height={74} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={326} y={104} textAnchor="middle" className="ill-step">Enfant majeur</text>
+        <text x={326} y={126} textAnchor="middle" className="ill-step">{fmtEur(DONATION_TOTAL_DEUX_PARENTS)}</text>
+        <text x={326} y={144} textAnchor="middle" className="ill-sub">sans droits</text>
+        <text x={210} y={230} textAnchor="middle" className="ill-sub">Les abattements se renouvellent tous les 15 ans.</text>
+        <text x={210} y={250} textAnchor="middle" className="ill-sub">Parents de moins de 80 ans, enfant majeur.</text>
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : montants en vigueur à la date de vérification de la fiche. Au-delà, des droits s’appliquent selon un barème progressif.
@@ -1493,7 +1493,7 @@ export function SchemaOr() {
   ];
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 218" role="img" aria-labelledby="ill-or-t ill-or-d" className="ill-svg">
+      <svg viewBox="0 0 420 228" role="img" aria-labelledby="ill-or-t ill-or-d" className="ill-svg">
         <title id="ill-or-t">{`Or physique : la taxe forfaitaire est de ${fmtEur(taxe)} sur une vente à ${fmtEur(OR_EXAMPLE_PRICE)}, quel que soit le gain`}</title>
         <desc id="ill-or-d">{`Exemple fictif : une pièce d’or revendue ${fmtEur(OR_EXAMPLE_PRICE)} sous le régime forfaitaire. La taxe est de 11 % du prix de vente plus 0,5 % de CRDS, soit ${fmtEur(taxe)}, que le gain soit de 100 € ou de 1 000 €. Il reste ${fmtEur(reste)} au vendeur.`}</desc>
         {cas.map((c) => (
@@ -1506,7 +1506,8 @@ export function SchemaOr() {
             <text x={X0} y={c.y + 54} className="ill-sub">Taxe : {fmtEur(taxe)} (à gauche, en orange)</text>
           </g>
         ))}
-        <text x={210} y={208} textAnchor="middle" className="ill-sub">Même taxe dans les deux cas : 11,5 % du prix de vente de {fmtEur(OR_EXAMPLE_PRICE)}</text>
+        <text x={210} y={204} textAnchor="middle" className="ill-sub">Même taxe dans les deux cas :</text>
+        <text x={210} y={222} textAnchor="middle" className="ill-sub">11,5 % du prix de vente de {fmtEur(OR_EXAMPLE_PRICE)}</text>
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : régime forfaitaire (11 % + 0,5 % de CRDS) calculé sur le prix de vente, pas sur le gain. Barres proportionnelles aux montants.
