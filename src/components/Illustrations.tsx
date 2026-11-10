@@ -309,10 +309,10 @@ export function SchemaPtz() {
     <figure className="illustration">
       <svg viewBox="0 0 420 270" role="img" aria-labelledby="ill-ptz-t ill-ptz-d" className="ill-svg">
         <title id="ill-ptz-t">Comment se rembourse un prêt à taux zéro</title>
-        <desc id="ill-ptz-d">Trois frises alignées sur le même calendrier. Le prêt immobilier demandé en complément se rembourse pendant toute la durée. Le PTZ se rembourse soit en une seule période, soit en deux périodes : d’abord un différé d’au moins 2 ans sans remboursement du PTZ, puis le remboursement. La durée du PTZ ne dépasse pas 25 ans.</desc>
+        <desc id="ill-ptz-d">Trois frises alignées sur le même calendrier. Le PTZ s’ajoute toujours à un autre prêt immobilier. Le PTZ se rembourse soit en une seule période, soit en deux périodes : d’abord un différé d’au moins 2 ans sans remboursement du PTZ, puis le remboursement. La durée du PTZ ne dépasse pas 25 ans.</desc>
         <text x={0} y={16} className="ill-step">Autre prêt immobilier (au moins un)</text>
         <rect x={0} y={24} width={420} height={32} rx={10} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={210} y={45} textAnchor="middle" className="ill-in">Se rembourse aussi pendant le différé du PTZ</text>
+        <text x={210} y={45} textAnchor="middle" className="ill-in">Le PTZ s’ajoute toujours à ce prêt</text>
         <text x={0} y={92} className="ill-step">PTZ, en une seule période</text>
         <rect x={0} y={100} width={320} height={32} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
         <text x={160} y={121} textAnchor="middle" className="ill-in">On rembourse, sans intérêts</text>
@@ -329,7 +329,7 @@ export function SchemaPtz() {
         <text x={0} y={250} className="ill-sub">plus la durée est courte. Durées non à l’échelle.</text>
       </svg>
       <figcaption>
-        <strong>Illustration, sans montant</strong> : pendant le différé, le PTZ ne se rembourse pas, mais l’autre prêt continue de se rembourser. Les durées réelles dépendent de votre situation ; voir Service-Public.
+        <strong>Illustration, sans montant</strong> : pendant le différé, le PTZ ne se rembourse pas. Les durées réelles dépendent de votre situation ; voir Service-Public.
       </figcaption>
     </figure>
   );
