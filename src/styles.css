@@ -837,3 +837,6 @@ h2.gloss-letter::before { content: none; }
 .path-card { display: flex; flex-direction: column; }
 .path-card .path-more { margin: auto 0 0; padding-top: 14px; font-weight: 600; }
 .prose h3.next-sub { font-size: 1rem; margin: 1.1rem 0 0; color: var(--ink-2, inherit); }
+
+.guide-min-inline { display: none; }
+@media (max-width: 600px) { .guide-min { display: none; } .guide-min-inline { display: inline; color: var(--ink-2); white-space: nowrap; } }

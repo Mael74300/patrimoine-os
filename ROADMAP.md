@@ -54,6 +54,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
+- 2026-11-10 (audit visiteurs débutant et arrivé par Google : accueil, Simulateurs, Encyclopédie, Guides, 375 px et 1 280 px : aucune erreur de console ni débordement ; Guides 4 316 px à 375 px avant) : captures relues. Gêne (ergonomie) : sur mobile, la durée de lecture de chaque guide occupait une ligne seule. Corrigé : durée en fin de résumé, 3 756 px après. Reste : Encyclopédie mobile longue (4 433 px, 17 familles).
 - 2026-11-10 (audit visiteur débutant, guide Combien épargner par mois, 375 px et 1 280 px : aucune erreur de console ni débordement ; 4 749 px à 375 px et 3 119 px à 1 280 px avant) : capture relue. Gêne (ergonomie) : fin de guide chargée de quatre titres de même niveau (Fiches liées, Simulateurs liés, Sources, Autres guides). Corrigé : fiches et simulateurs regroupés sous « Pour aller plus loin », « Autres guides » replié sur mobile (4 578 px à 375 px, 3 094 px à 1 280 px après). Reste : Glossaire long sur mobile ; données chargées sur toutes les pages (accueil, guides, fiches).
 - 2026-11-10 (audit visiteurs débutant, futur acheteur, retraité et arrivé par Google : accueil, Comparateur, Plan du site, simulateur Retraits réguliers, guide Combien épargner par mois, 375 px et 1 280 px : aucune erreur de console ni débordement ; accueil 3 800 px, Comparateur 4 727 px, Plan du site 5 254 px, guide 4 723 px à 375 px) : captures relues, pages équilibrées. Gêne (vulgarisation) : dans le guide Combien épargner par mois, les deux premiers paragraphes enchaînaient phrases longues et chiffres ; réécrits en phrases courtes, mêmes chiffres (voir « Fait »). Reste : fin de guide chargée de trois blocs de liens (Fiches liées, Simulateurs liés, Autres guides) à regrouper.
 - 2026-11-10 (audit visiteur curieux d’une activité en ligne : fiche Activité numérique, 375 px et 1 280 px : aucune erreur de console ni débordement ; 3 755 px à 375 px et 2 350 px à 1 280 px avant) : capture relue. Gêne (vulgarisation) : fiche sans schéma pour une notion abstraite (revenu récurrent, mais fragile). Schéma qualitatif sans chiffre ajouté (4 086 px à 375 px, 2 750 px à 1 280 px après). Reste : rubriques Frais et Fiscalité « à vérifier » (sources officielles inaccessibles) ; « Capital » sur Or, Location nue, Financement participatif.
@@ -87,6 +88,7 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Fait
 
+- [x] **Page Guides : durée de lecture sur la ligne du résumé (mobile)** (2026-11-10) : 4 316 → 3 756 px à 375 px, inchangé à 1 280 px (1 816 px).
 - 2026-11-10 : guides, fin de page regroupée sous « Pour aller plus loin » (fiches et simulateurs liés), « Autres guides » replié sur mobile (−171 px à 375 px) (pull request à venir).
 
 - [x] **Guide Combien épargner par mois : phrases plus courtes** (2026-11-10) : vulgarisation, mêmes chiffres et mêmes règles (tests existants inchangés), « sans risque de perte en capital » expliqué.
