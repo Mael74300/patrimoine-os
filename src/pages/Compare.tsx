@@ -4,7 +4,7 @@ import { categoryById } from '../data/categories';
 import { investmentBySlug, investments } from '../data/investments';
 import { fmtEur, projectGrowth } from '../lib/finance';
 import { projectionSplit, totalContributed } from '../lib/calc/compareSummary';
-import { Disclaimer, Dots, LineChart, MetersLegend, NumberField, PageHead } from '../components/ui';
+import { CheckedText, Disclaimer, Dots, LineChart, MetersLegend, NumberField, PageHead } from '../components/ui';
 
 /** Critères longs : repliés par ligne sur mobile (le tableau y est empilé), toujours ouverts sans JavaScript et en écran large. */
 export const CMP_FOLDED_ON_MOBILE = ['Capital nécessaire', 'Frais', 'Fiscalité', 'Avantages', 'Inconvénients'];
@@ -60,9 +60,9 @@ export default function Compare() {
     ['Liquidité', (i) => <Dots level={i.liquidity} kind="liq" label="Liquidité" compact />],
     ['Effort', (i) => <Dots level={i.effort} label="Effort" compact />],
     ['Horizon', (i) => i.horizon],
-    ['Capital nécessaire', (i) => i.minCapital.text],
-    ['Frais', (i) => i.fees.text],
-    ['Fiscalité', (i) => i.tax.text],
+    ['Capital nécessaire', (i) => <CheckedText c={i.minCapital} split />],
+    ['Frais', (i) => <CheckedText c={i.fees} split />],
+    ['Fiscalité', (i) => <CheckedText c={i.tax} split />],
     ['Avantages', (i) => <ul className="cmp-list">{i.pros.map((x) => <li key={x}>{x}</li>)}</ul>],
     ['Inconvénients', (i) => <ul className="cmp-list">{i.cons.map((x) => <li key={x}>{x}</li>)}</ul>],
   ];
