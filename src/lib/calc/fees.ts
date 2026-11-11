@@ -23,6 +23,8 @@ export type FeeLevelResult = {
   shareOfGains: number;
   /** Valeur finale par année (0 = départ), pour le graphique. */
   series: number[];
+  /** Total versé (capital initial et versements), identique pour tous les niveaux de frais. */
+  contributed: number;
 };
 
 export function feeImpact(input: FeeImpactInput, levels: number[]): FeeLevelResult[] {
@@ -45,6 +47,30 @@ export function feeImpact(input: FeeImpactInput, levels: number[]): FeeLevelResu
       cost,
       shareOfGains: Math.min(1, safeDiv(cost, grossGains)),
       series: pts.map((p) => p.value),
+      contributed,
     };
   });
+}
+
+export type FeeSplit = {
+  /** Parts de la barre, en % de la plus grande valeur affichée (capital sans frais, ou total versé s'il est plus grand). */
+  paid: number;
+  kept: number;
+  lost: number;
+};
+
+/**
+ * Découpe d'une barre « ce que deviennent vos versements » : versements conservés, gains conservés, part prise par les frais.
+ * `scale` est la plus grande valeur à représenter (capital sans frais ou total versé) ; la somme des parts ne dépasse jamais 100.
+ */
+export function feeSplit(r: Pick<FeeLevelResult, 'finalValue' | 'cost' | 'contributed'>, scale: number): FeeSplit {
+  const s = num(scale);
+  if (!(s > 0)) return { paid: 0, kept: 0, lost: 0 };
+  const final = Math.max(0, num(r.finalValue));
+  const contributed = Math.max(0, num(r.contributed));
+  const pct = (v: number) => clamp((100 * v) / s, 0, 100, 0);
+  const paid = pct(Math.min(contributed, final));
+  const kept = Math.min(pct(Math.max(0, final - contributed)), 100 - paid);
+  const lost = Math.min(pct(Math.max(0, num(r.cost))), 100 - paid - kept);
+  return { paid, kept, lost };
 }

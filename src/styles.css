@@ -840,6 +840,25 @@ h2.gloss-letter::before { content: none; }
 .pt-3 { background: var(--chart-3); }
 .pt-open { background: repeating-linear-gradient(45deg, var(--surface-2) 0 6px, var(--danger) 6px 8px); }
 @media (max-width: 720px) { .pt { grid-template-columns: 1fr; gap: 10px; } }
+/* Barres « ce que les frais prennent sur vos gains » (simulateur Impact des frais) */
+.fb-intro { margin: 0 0 10px; color: var(--ink-2); font-size: .95rem; }
+.fb { margin: 0 0 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px 6px; box-shadow: var(--shadow-sm); }
+.fb-legend { list-style: none; margin: 0 0 12px; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: .85rem; color: var(--ink-2); }
+.fb-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.fb-list { list-style: none; margin: 0; padding: 0; }
+.fb-row { margin: 0 0 12px; }
+.fb-ref .fb-name { color: var(--ink-2); }
+.fb-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: .9rem; margin-bottom: 4px; }
+.fb-name { font-weight: 600; color: var(--ink); }
+.fb-value { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink); white-space: nowrap; }
+.fb-track { display: flex; height: 16px; border-radius: 6px; background: var(--surface-2); overflow: hidden; }
+.fb-track span { display: block; height: 100%; }
+.fb-paid { background: color-mix(in srgb, var(--chart-1) 35%, var(--surface)); }
+.fb-kept { background: var(--chart-2); }
+.fb-lost { background: repeating-linear-gradient(45deg, var(--danger) 0 4px, color-mix(in srgb, var(--danger) 45%, var(--surface)) 4px 7px); }
+.fb-track .fb-kept + .fb-lost { border-left: 2px solid var(--surface); }
+.fb-sub { margin: 4px 0 0; font-size: .84rem; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.fb-sub strong { color: var(--danger); font-weight: 600; }
 
 /* Glossaire sur mobile : toutes les lettres visibles d'un coup (la rangée défilante cachait les lettres de P à V sans aucun indice) */
 @media (max-width: 599px) {
