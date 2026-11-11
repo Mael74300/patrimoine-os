@@ -401,6 +401,9 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
   .mob-fold:not([open]) .fold-hint { display: block; font-weight: 400; font-size: .85rem; color: var(--ink-3); margin-top: 2px; }
 }
 .cmp-list { margin: 0; padding-left: 16px; }
+.cmp-table td > p { margin: 0; }
+.cmp-table .sentence-list { font-size: inherit; padding-left: 16px; }
+.cmp-table .sentence-list li { margin-bottom: 2px; }
 /* Comparateur : sous 700 px, chaque critère devient un bloc et chaque placement une ligne étiquetée */
 @media (max-width: 700px) {
   .cmp-wrap { overflow-x: visible; }
@@ -692,7 +695,6 @@ h2.gloss-letter::before { content: none; }
 
 .sentence-list { margin: 0; padding-left: 1.1rem; font-size: .95rem; }
 .sentence-list li { margin: 0 0 5px; }
-.sentence-badge { margin: 6px 0 0; }
 
 /* Fiches : « Horizon » et « Capital » chacun sur sa ligne sur mobile (pas d'étiquette orpheline en fin de ligne) */
 .fiche-facts span { white-space: normal; }

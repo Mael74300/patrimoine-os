@@ -11,6 +11,7 @@ import { fmtEur } from '../lib/finance';
 import { readingForSimulator } from '../lib/relatedSims';
 import { readableNumber } from '../lib/readableNumber';
 import { fmtDate } from '../lib/dates';
+import { sentenceLead } from '../lib/sentenceLead';
 import { buildExport, mergeSims, parseExport } from '../lib/simExport';
 
 // ------------------------------------------------------------ Champs
@@ -215,9 +216,16 @@ export function CheckedText({ c, split = false }: { c: Checked; split?: boolean 
   return (
     <>
       <ul className="sentence-list">
-        {parts.map((t) => <li key={t}>{t}</li>)}
+        {parts.map((t, k) => {
+          const l = sentenceLead(t);
+          return (
+            <li key={t}>
+              {l ? <><strong>{l.lead}</strong>{l.rest}</> : t}
+              {badge && k === parts.length - 1 && <> {badge}</>}
+            </li>
+          );
+        })}
       </ul>
-      {badge && <p className="sentence-badge">{badge}</p>}
     </>
   );
 }
