@@ -10,6 +10,7 @@ import { coveragePercent } from '../lib/coverage';
 import { fmtEur } from '../lib/finance';
 import { readingForSimulator } from '../lib/relatedSims';
 import { readableNumber } from '../lib/readableNumber';
+import { fmtDate } from '../lib/dates';
 import { buildExport, mergeSims, parseExport } from '../lib/simExport';
 
 // ------------------------------------------------------------ Champs
@@ -199,7 +200,7 @@ export function splitSentences(text: string): string[] {
 
 export function CheckedText({ c, split = false }: { c: Checked; split?: boolean }) {
   const badge = c.verified ? (
-    <span className="badge-verified">✓ vérifié{c.asOf ? ` au ${c.asOf}` : ''}</span>
+    <span className="badge-verified">✓ vérifié{c.asOf ? ` au ${fmtDate(c.asOf)}` : ''}</span>
   ) : c.advice ? null : (
     <span className="badge-unverified">à vérifier</span>
   );

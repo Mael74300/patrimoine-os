@@ -15,6 +15,7 @@ import { SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEs
 import { annotateJargon, splitLead, type JargonSegment } from '../lib/jargon';
 import { JargonText } from '../components/Jargon';
 import NotFound from './NotFound';
+import { fmtDate } from '../lib/dates';
 
 /** Guide « Par où commencer » : pour chaque étape, la page du site qui permet d'aller plus loin (aucun chiffre). */
 export const etapesSuite: { to: string; label: string }[] = [
@@ -25,8 +26,7 @@ export const etapesSuite: { to: string; label: string }[] = [
   { to: '/guides/epargne-limitee', label: 'Investir quand on épargne peu' },
 ];
 
-const fmtDate = (iso: string) => new Date(iso + 'T12:00:00Z').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
-export { fmtDate };
+export { fmtDate } from '../lib/dates';
 
 export function GuideList() {
   return (

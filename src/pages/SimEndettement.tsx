@@ -3,6 +3,7 @@ import { capacityAtHcsf, debtRatio, fmtEur, fmtPct, HCSF } from '../lib/finance'
 import { debtRatioTakeaway } from '../lib/takeaways';
 import { SchemaMois } from '../components/Illustrations';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, Sources, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
+import { fmtDate } from '../lib/dates';
 
 type State = { income: number; existingPayments: number; newPayment: number; livingCosts: number; householdSize: number; rate: number; years: number; insuranceRate: number };
 
@@ -65,7 +66,7 @@ export default function SimEndettement() {
             Taux d’endettement = (crédits en cours + nouvelle mensualité) / revenus nets. Le reste à vivre dépend de vos charges réelles ; il n’existe pas de seuil
             officiel unique, et les banques apprécient aussi l’apport, la stabilité des revenus et l’épargne. Pour constituer une réserve avant d’emprunter, voir le
             {' '}<Link to="/simulateurs/epargne-de-precaution">simulateur d’épargne de précaution</Link> ; pour répartir votre budget, le <Link to="/simulateurs/budget">simulateur de budget</Link>.
-            Repère vérifié le {HCSF.verifiedOn}.
+            Repère vérifié le {fmtDate(HCSF.verifiedOn)}.
           </p>
           <h2>Source</h2>
           <Sources list={[{ ...HCSF.source, official: true }]} />
