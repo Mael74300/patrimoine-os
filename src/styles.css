@@ -147,7 +147,14 @@ legend { font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; }
 .sim-jump { display: none; }
 @media (max-width: 900px) { .sim-jump { display: flex; justify-content: center; width: 100%; min-height: 48px; margin-top: 14px; font-size: 1rem; font-weight: 600; } }
 @media (max-width: 900px) { .sim-form { position: static; } }
-.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.kpis { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+.kpis > * { flex: 1 1 160px; min-width: 0; }
+/* Rangées équilibrées : jamais une carte seule sous une rangée pleine.
+   La base « (seuil − 100 %) × 999 » vaut le minimum si la rangée entière tient, le maximum sinon.
+   4 cartes : 4 ou 2 + 2. 5 cartes : 5, 3 + 2 ou 2 + 2 + 1. 6 cartes : 3 + 3 ou 2 + 2 + 2. */
+.kpis:has(> :nth-child(4):last-child) > * { flex-basis: clamp(calc(25% - 9.1px), (676px - 100%) * 999, calc(50% - 6.1px)); }
+.kpis:has(> :nth-child(5):last-child) > * { flex-basis: clamp(calc(20% - 9.7px), (848px - 100%) * 999, clamp(calc(33.333% - 8.1px), (504px - 100%) * 999, calc(50% - 6.1px))); }
+.kpis:has(> :nth-child(6):last-child) > * { flex-basis: clamp(calc(33.333% - 8.1px), (504px - 100%) * 999, calc(50% - 6.1px)); }
 .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
 .kpi .k-label { font-size: 0.8rem; color: var(--ink-3); }
 .kpi .k-value { text-wrap: balance; font-size: 1.45rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); }
@@ -676,11 +683,6 @@ h2.gloss-letter::before { content: none; }
 @media (min-width: 700px) { .env-cards { grid-template-columns: 1fr 1fr; } }
 /* Mobile : le libellé passe au-dessus de la valeur, qui occupe toute la largeur de la carte. */
 @media (max-width: 500px) { .env-card dl > div { grid-template-columns: 1fr; gap: 2px; } .env-card dt { padding-top: 0; font-size: 0.75rem; } }
-
-/* Mobile : une dernière carte seule sur sa ligne occupe toute la largeur (pas de trou à droite). */
-@media (max-width: 500px) {
-  .kpis > .kpi:last-child:nth-child(odd) { grid-column: 1 / -1; }
-}
 
 .takeaway-line { display: block; }
 .takeaway-line + .takeaway-line { margin-top: 6px; }
