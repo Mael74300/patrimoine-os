@@ -491,7 +491,7 @@ export function SavedSims<T>({ simKey, current, onLoad }: { simKey: string; curr
   };
   return (
     <details className="panel saved-sims">
-      <summary>Mes simulations enregistrées ({list.length})</summary>
+      <summary>{list.length === 0 ? 'Enregistrer cette simulation' : `Mes simulations enregistrées (${list.length})`}</summary>
       <p className="small muted" style={{ marginTop: 10 }}>
         Enregistrées uniquement dans ce navigateur, sur cet appareil. Elles ne sont ni envoyées ni synchronisées entre vos appareils.
       </p>

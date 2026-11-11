@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { fmtEur, fmtEur2, fmtNum, fmtPct, inFine, loanDuration, renegotiation, taeg, taegByFees, taegByInsurance } from '../lib/finance';
+import { fmtEur, fmtEur2, fmtNum, fmtPct, fmtPts, inFine, loanDuration, renegotiation, taeg, taegByFees, taegByInsurance } from '../lib/finance';
 import { loanDurationTakeaway, taegTakeaway, inFineTakeaway, renegoTakeaway } from '../lib/takeaways';
 import { comparerCreditsFaq } from '../data/simFaq';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
@@ -120,7 +120,7 @@ function Taeg() {
         )}
       >
         <div className="kpis">
-          <Kpi label="TAEG estimé" value={fmtPct(r.taeg)} sub={`contre ${fmtPct(s.annualRate)} de taux nominal (écart ${fmtPct(r.gap)})`} />
+          <Kpi label="TAEG estimé" value={fmtPct(r.taeg)} sub={`contre ${fmtPct(s.annualRate)} de taux nominal (écart de ${fmtPts(r.gap)})`} />
           <Kpi label="Mensualité assurance comprise" value={fmtEur(r.monthlyTotal)} sub={`dont ${fmtEur(r.monthlyInsurance)} d’assurance, sur ${r.months} mois`} />
           <Kpi label="Coût total du crédit" value={fmtEur(r.totalCost)} sub={`intérêts ${fmtEur(r.totalInterest)} + assurance ${fmtEur(r.totalInsurance)} + frais ${fmtEur(Math.min(s.fees, s.principal))}`} />
         </div>
