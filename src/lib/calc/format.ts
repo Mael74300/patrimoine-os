@@ -28,4 +28,20 @@ export const fmtPts = (diff: number, maximumFractionDigits = 2) => {
   const s = typo(v.toLocaleString('fr-FR', { maximumFractionDigits }));
   return `${s}\u00a0${Math.abs(v) >= 2 ? 'points' : 'point'}`;
 };
-export const fmtYears = (n: number | null) => (n === null ? 'non atteint en 100 ans' : n === 0 ? 'déjà atteint' : `${n} an${n > 1 ? 's' : ''}`);
+/** « 1 an », « 12 ans », « 2,5 ans » : espace insécable entre le nombre et l'unité (pas de « 18 » seul en fin de ligne). */
+export const fmtAns = (n: number) => `${typo(n1.format(n))}\u00a0an${Math.abs(n) >= 2 ? 's' : ''}`;
+export const fmtYears = (n: number | null) => (n === null ? 'non atteint en 100\u00a0ans' : n === 0 ? 'déjà atteint' : fmtAns(n));
+/**
+ * Une durée en mois, dite comme on la dit à l'oral : 145 → « 12 ans et 1 mois », 18 → « 1 an et 6 mois »,
+ * 8 → « 8 mois », 24 → « 2 ans ». Arrondie au mois entier supérieur (une durée commencée compte).
+ * Un seul format pour tous les simulateurs, au lieu de « mois 145 » ou « 1 an 6 mois ».
+ */
+export const fmtMonths = (months: number) => {
+  if (!Number.isFinite(months)) return '—';
+  const total = Math.max(0, Math.ceil(months - 1e-9));
+  const y = Math.floor(total / 12);
+  const m = total % 12;
+  const ans = y ? `${y}\u00a0an${y > 1 ? 's' : ''}` : '';
+  const mois = m || !y ? `${m}\u00a0mois` : '';
+  return [ans, mois].filter(Boolean).join(' et ');
+};

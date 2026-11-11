@@ -51,8 +51,8 @@ export default function SimEtalement() {
         </form>
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
-            <Kpi label="En une seule fois" value={fmtEur(r.lump)} sub={`valeur après ${r.months} mois`} />
-            <Kpi label="En tranches égales" value={fmtEur(r.gradual)} sub={`${r.spreadMonths} mois d’étalement`} />
+            <Kpi label="En une seule fois" value={fmtEur(r.lump)} sub={`valeur après ${r.months}\u00a0mois`} />
+            <Kpi label="En tranches égales" value={fmtEur(r.gradual)} sub={`${r.spreadMonths}\u00a0mois d’étalement`} />
             <Kpi label="Écart (étalement − une fois)" value={fmtEur(r.advantageGradual)} sub={`${better} finit au-dessus (${fmtPct(Math.abs(gap))})`} />
           </div>
           <Takeaway>{lumpGradualTakeaway({ amount: s.amount, spreadMonths: r.spreadMonths, months: r.months, lump: r.lump, gradual: r.gradual, advantageGradual: r.advantageGradual })}</Takeaway>

@@ -1,4 +1,4 @@
-import { fmtEur, fmtNum, fmtPct } from './finance';
+import { fmtAns, fmtEur, fmtMonths, fmtNum, fmtPct } from './finance';
 
 /**
  * Phrases « Concrètement » affichées sous les résultats des simulateurs.
@@ -10,7 +10,7 @@ export function creditTakeaway(p: { principal: number; years: number; monthlyTot
   if (!(p.principal > 0) || !(p.years > 0)) return '';
   const rendu = p.principal + p.totalCost;
   const par100 = Math.round((p.totalCost / p.principal) * 100);
-  return `Vous recevez ${fmtEur(p.principal)} et vous rendez ${fmtEur(rendu)} en tout, soit ${fmtEur(p.monthlyTotal)} par mois pendant ${p.years} an${p.years > 1 ? 's' : ''}. Le crédit vous coûte donc ${fmtEur(p.totalCost)} de plus que la somme reçue (environ ${par100} € pour 100 € empruntés).`;
+  return `Vous recevez ${fmtEur(p.principal)} et vous rendez ${fmtEur(rendu)} en tout, soit ${fmtEur(p.monthlyTotal)} par mois pendant ${fmtAns(p.years)}. Le crédit vous coûte donc ${fmtEur(p.totalCost)} de plus que la somme reçue (environ ${par100} € pour 100 € empruntés).`;
 }
 
 /** Taux d'endettement : la part des revenus prise par les crédits, et ce qui reste. */
@@ -36,7 +36,7 @@ export function performanceTakeaway(p: { invested: number; gain: number; annuali
 /** Objectif d'épargne : ce que l'on verse soi-même et ce que les intérêts apportent. */
 export function savingsGoalTakeaway(p: { target: number; current: number; years: number; monthly: number; deposits: number; interest: number }): string {
   if (!(p.target > 0) || !(p.years >= 1)) return '';
-  const ans = `${p.years} an${p.years > 1 ? 's' : ''}`;
+  const ans = fmtAns(p.years);
   if (p.monthly === 0) return `Avec ${fmtEur(p.current)} déjà épargnés, vous atteignez ${fmtEur(p.target)} en ${ans} sans rien verser de plus, grâce au taux choisi.`;
   const interets = p.interest > 0
     ? ` Les intérêts apportent ${fmtEur(p.interest)} : le reste, soit ${fmtEur(p.deposits)}, vient de vos versements.`
@@ -47,8 +47,8 @@ export function savingsGoalTakeaway(p: { target: number; current: number; years:
 /** Louer ou acheter : qui est le plus riche à l'horizon, avec la mise en garde sur les hypothèses. */
 export function rentVsBuyTakeaway(p: { horizonYears: number; advantage: number; breakEvenMonth: number | null }): string {
   if (!(p.horizonYears >= 1)) return '';
-  const ans = `${p.horizonYears} an${p.horizonYears > 1 ? 's' : ''}`;
-  const quand = p.breakEvenMonth !== null ? ` L'achat prend l'avantage durablement à partir du mois ${p.breakEvenMonth}.` : '';
+  const ans = fmtAns(p.horizonYears);
+  const quand = p.breakEvenMonth !== null ? ` L'achat prend l'avantage pour de bon au bout de ${fmtMonths(p.breakEvenMonth)}.` : '';
   const fin = ' Ce résultat vient uniquement des hypothèses saisies : changez le prix, le loyer ou le rendement et il peut s’inverser.';
   if (Math.round(p.advantage) === 0) return `Au bout de ${ans}, acheter et louer vous laissent à peu près le même patrimoine avec ces hypothèses.${fin}`;
   return p.advantage > 0
@@ -63,21 +63,15 @@ export function fireTakeaway(p: { gap: number; withdrawalRate: number; target: n
   const base = `Pour financer ${fmtEur(p.gap)} de dépenses par an que vos revenus ne couvrent pas, en retirant ${fmtPct(p.withdrawalRate)} du capital la première année, il faut environ ${fmtEur(p.target)}.`;
   if (p.years === 0) return `${base} Votre patrimoine de ${fmtEur(p.currentWealth)} atteint déjà ce capital.`;
   if (p.years === null) return `${base} Avec ces hypothèses, vous ne l’atteignez pas en 100 ans.`;
-  return `${base} Avec ${fmtEur(p.currentWealth)} déjà réunis et ${fmtEur(p.annualSavings)} mis de côté chaque année, vous y arrivez dans environ ${p.years} an${p.years > 1 ? 's' : ''}, en euros constants.`;
+  return `${base} Avec ${fmtEur(p.currentWealth)} déjà réunis et ${fmtEur(p.annualSavings)} mis de côté chaque année, vous y arrivez dans environ ${fmtAns(p.years)}, en euros constants.`;
 }
-
-const dureeEnMois = (m: number): string => {
-  const y = Math.floor(m / 12);
-  const r = m % 12;
-  return [y ? `${y} an${y > 1 ? 's' : ''}` : '', r ? `${r} mois` : ''].filter(Boolean).join(' et ');
-};
 
 /** Retraits réguliers : combien de temps le capital tient, et le retrait qui tiendrait tout l'horizon. */
 export function withdrawalTakeaway(p: { capital: number; monthly: number; years: number; monthsUntilEmpty: number | null; remaining: number; totalWithdrawn: number; sustainable: number }): string {
   if (!(p.capital > 0) || !(p.monthly > 0) || !(p.years >= 1)) return '';
-  const ans = `${p.years} an${p.years > 1 ? 's' : ''}`;
+  const ans = fmtAns(p.years);
   if (p.monthsUntilEmpty !== null) {
-    return `En retirant ${fmtEur(p.monthly)} le premier mois sur un capital de ${fmtEur(p.capital)}, il n'y a plus rien au bout de ${dureeEnMois(p.monthsUntilEmpty)}, après ${fmtEur(p.totalWithdrawn)} retirés en tout. Pour tenir ${ans}, le premier retrait devrait rester sous ${fmtEur(p.sustainable)} par mois.`;
+    return `En retirant ${fmtEur(p.monthly)} le premier mois sur un capital de ${fmtEur(p.capital)}, il n'y a plus rien au bout de ${fmtMonths(p.monthsUntilEmpty)}, après ${fmtEur(p.totalWithdrawn)} retirés en tout. Pour tenir ${ans}, le premier retrait devrait rester sous ${fmtEur(p.sustainable)} par mois.`;
   }
   return `En retirant ${fmtEur(p.monthly)} le premier mois sur un capital de ${fmtEur(p.capital)}, vous avez encore ${fmtEur(p.remaining)} au bout de ${ans}, après ${fmtEur(p.totalWithdrawn)} retirés en tout. Le premier retrait pourrait aller jusqu'à ${fmtEur(p.sustainable)} par mois sans épuiser le capital avant ${ans}. Tout repose sur le rendement supposé : s'il est plus faible, le capital dure moins longtemps.`;
 }
@@ -90,7 +84,7 @@ export function precautionTakeaway(p: { target: number; savings: number; monthly
   const base = `Pour être à l'abri d'un imprévu, il faut mettre ${fmtEur(p.target)} de côté, disponibles à tout moment. Vous en avez ${fmtEur(p.savings)} : il manque ${fmtEur(gap)}.`;
   if (!(p.monthlySaving > 0)) return `${base} Sans versement mensuel, ce manque ne se comble pas.`;
   if (p.reachedAt === null) return `${base} Avec ${fmtEur(p.monthlySaving)} par mois, ce montant n'est pas atteint en 50 ans : il faut verser davantage.`;
-  return `${base} Avec ${fmtEur(p.monthlySaving)} par mois, vous y arrivez en ${dureeEnMois(p.reachedAt)}.`;
+  return `${base} Avec ${fmtEur(p.monthlySaving)} par mois, vous y arrivez en ${fmtMonths(p.reachedAt)}.`;
 }
 
 /** Rembourser ou investir : l'option qui laisse le plus à l'horizon, avec le compromis certain / incertain. */
@@ -119,38 +113,38 @@ export function rentalTakeaway(p: { totalCost: number; netYield: number; monthly
       ? `\nAprès l'impôt estimé de la première année, il reste environ ${fmtEur(a)} par mois.`
       : `\nAprès l'impôt estimé de la première année, l'effort mensuel est d'environ ${fmtEur(-a)}.`;
   }
-  const fin = `\nÀ ${p.horizon} an${p.horizon > 1 ? 's' : ''}, crédit déduit, le bien représenterait environ ${fmtEur(p.netEquity)} de patrimoine (estimation, si prix et loyers évoluent comme saisi).`;
+  const fin = `\nÀ ${fmtAns(p.horizon)}, crédit déduit, le bien représenterait environ ${fmtEur(p.netEquity)} de patrimoine (estimation, si prix et loyers évoluent comme saisi).`;
   return rendement + tresorerie + apres + fin;
 }
 
-const ansTxt = (n: number) => `${n} an${n > 1 ? 's' : ''}`;
+const ansTxt = (n: number) => fmtAns(n);
 
 /** Intérêts composés, « combien placer » : somme à mettre de côté aujourd'hui et part des intérêts. */
 export function presentValueTakeaway(p: { target: number; years: number; monthly: number; initial: number; contributed: number; gain: number; noInitialNeeded: boolean }): string {
   if (!(p.target > 0) || !(p.years >= 1)) return '';
-  if (p.noInitialNeeded) return `Avec ${fmtEur(p.monthly)} versés chaque mois pendant ${ansTxt(p.years)}, vous atteignez ${fmtEur(p.target)} sans placer de somme de départ.`;
+  if (p.noInitialNeeded) return `Avec ${fmtEur(p.monthly)} versés chaque mois pendant ${fmtAns(p.years)}, vous atteignez ${fmtEur(p.target)} sans placer de somme de départ.`;
   const gain = p.gain > 0
     ? ` Sur ces ${fmtEur(p.target)}, ${fmtEur(p.gain)} viennent des intérêts : vous n'avez à sortir de votre poche que ${fmtEur(p.contributed)}.`
     : ` Avec ce rendement, les intérêts n'apportent rien : tout vient de ce que vous versez (${fmtEur(p.contributed)}).`;
-  return `Pour disposer de ${fmtEur(p.target)} dans ${ansTxt(p.years)}, il faut placer ${fmtEur(p.initial)} dès aujourd'hui, en plus de ${fmtEur(p.monthly)} par mois.${gain}`;
+  return `Pour disposer de ${fmtEur(p.target)} dans ${fmtAns(p.years)}, il faut placer ${fmtEur(p.initial)} dès aujourd'hui, en plus de ${fmtEur(p.monthly)} par mois.${gain}`;
 }
 
 /** Intérêts composés, « en combien de temps » : durée, intérêts et temps gagné grâce au rendement. */
 export function timeToTargetTakeaway(p: { target: number; months: number | null; interest: number; contributed: number; monthsWithoutReturn: number | null }): string {
   if (!(p.target > 0) || p.months === null) return '';
   const sans = p.monthsWithoutReturn !== null && p.monthsWithoutReturn > p.months
-    ? ` Sans rendement, il faudrait ${dureeEnMois(p.monthsWithoutReturn)} : le rendement fait gagner ${dureeEnMois(p.monthsWithoutReturn - p.months)}.`
+    ? ` Sans rendement, il faudrait ${fmtMonths(p.monthsWithoutReturn)} : le rendement fait gagner ${fmtMonths(p.monthsWithoutReturn - p.months)}.`
     : '';
   const interets = p.interest > 0 ? `, dont ${fmtEur(p.interest)} d'intérêts et ${fmtEur(p.contributed)} venant de vous` : '';
-  return `Avec ces hypothèses, vous atteignez ${fmtEur(p.target)} en ${dureeEnMois(p.months)}${interets}.${sans}`;
+  return `Avec ces hypothèses, vous atteignez ${fmtEur(p.target)} en ${fmtMonths(p.months)}${interets}.${sans}`;
 }
 
 /** Intérêts composés, « quel rendement » : rendement à viser et part qu'il doit fournir. */
 export function requiredReturnTakeaway(p: { target: number; years: number; annualRate: number | null; contributed: number; withoutReturn: number; alreadyReached: boolean }): string {
   if (!(p.target > 0) || !(p.years >= 1) || p.annualRate === null) return '';
-  if (p.alreadyReached) return `Vos versements suffisent à atteindre ${fmtEur(p.target)} en ${ansTxt(p.years)} : aucun rendement n'est nécessaire.`;
+  if (p.alreadyReached) return `Vos versements suffisent à atteindre ${fmtEur(p.target)} en ${fmtAns(p.years)} : aucun rendement n'est nécessaire.`;
   const part = Math.max(0, p.target - p.withoutReturn);
-  return `Pour passer de ${fmtEur(p.contributed)} versés à ${fmtEur(p.target)} en ${ansTxt(p.years)}, il faut que l'argent rapporte environ ${fmtPct(p.annualRate)} par an en moyenne, sans interruption. Le rendement doit fournir ${fmtEur(part)} : plus ce taux est élevé, plus il suppose de prendre des risques, et aucun taux n'est garanti.`;
+  return `Pour passer de ${fmtEur(p.contributed)} versés à ${fmtEur(p.target)} en ${fmtAns(p.years)}, il faut que l'argent rapporte environ ${fmtPct(p.annualRate)} par an en moyenne, sans interruption. Le rendement doit fournir ${fmtEur(part)} : plus ce taux est élevé, plus il suppose de prendre des risques, et aucun taux n'est garanti.`;
 }
 
 /** Intérêts composés, « doubler son capital » : durée exacte, règle de 72 et durée en pouvoir d'achat. */
@@ -158,35 +152,35 @@ export function doublingTakeaway(p: { multiple: number; exactYears: number | nul
   if (!(p.multiple > 1)) return '';
   const quoi = p.multiple === 2 ? 'doubler' : `multiplier par ${fmtNum(p.multiple)}`;
   if (p.exactYears === null) return `Avec ce rendement, le capital ne peut pas être multiplié par ${fmtNum(p.multiple)} : il ne progresse pas.`;
-  const exact = `Avec ces hypothèses, il faut environ ${fmtNum(p.exactYears)} ans pour ${quoi} le nombre d'euros du compte.`;
+  const exact = `Avec ces hypothèses, il faut environ ${fmtAns(p.exactYears)} pour ${quoi} le nombre d'euros du compte.`;
   const reel = p.realYears === null
     ? ` Mais une fois l'inflation retirée, le pouvoir d'achat n'augmente pas : vous avez plus d'euros, pas plus de choses à acheter.`
-    : ` En tenant compte de l'inflation, il faut environ ${fmtNum(p.realYears)} ans pour ${quoi} ce que l'on peut réellement acheter.`;
+    : ` En tenant compte de l'inflation, il faut environ ${fmtAns(p.realYears)} pour ${quoi} ce que l'on peut réellement acheter.`;
   return exact + reel;
 }
 
 /** Intérêts simples ou composés : écart au bout de la durée. */
 export function simpleVsCompoundTakeaway(p: { initial: number; years: number; simpleFinal: number; compoundFinal: number; gap: number }): string {
   if (!(p.initial > 0) || !(p.years >= 1)) return '';
-  if (Math.round(p.gap) === 0) return `Avec ces hypothèses, les deux méthodes donnent le même résultat : ${fmtEur(p.compoundFinal)} après ${ansTxt(p.years)}.`;
+  if (Math.round(p.gap) === 0) return `Avec ces hypothèses, les deux méthodes donnent le même résultat : ${fmtEur(p.compoundFinal)} après ${fmtAns(p.years)}.`;
   const sens = p.gap > 0 ? `${fmtEur(p.gap)} de plus avec les intérêts composés` : `${fmtEur(-p.gap)} de moins avec les intérêts composés`;
-  return `Avec ${fmtEur(p.initial)} placés pendant ${ansTxt(p.years)}, vous obtenez ${fmtEur(p.simpleFinal)} si seuls les ${fmtEur(p.initial)} de départ rapportent, et ${fmtEur(p.compoundFinal)} si les intérêts rapportent aussi : ${sens}.`;
+  return `Avec ${fmtEur(p.initial)} placés pendant ${fmtAns(p.years)}, vous obtenez ${fmtEur(p.simpleFinal)} si seuls les ${fmtEur(p.initial)} de départ rapportent, et ${fmtEur(p.compoundFinal)} si les intérêts rapportent aussi : ${sens}.`;
 }
 
 /** Coût d'attendre : capital perdu et effort de rattrapage. */
 export function delayCostTakeaway(p: { monthly: number; years: number; delayYears: number; startNow: number; startLater: number; cost: number; catchUpMonthly: number | null }): string {
   if (!(p.monthly > 0) || !(p.years >= 1) || !(p.delayYears > 0) || p.delayYears >= p.years) return '';
-  const attente = `${fmtNum(p.delayYears)} an${p.delayYears > 1 ? 's' : ''}`;
+  const attente = fmtAns(p.delayYears);
   const rattrape = p.catchUpMonthly === null ? '' : ` Pour arriver au même capital en commençant plus tard, il faudrait verser ${fmtEur(p.catchUpMonthly)} par mois au lieu de ${fmtEur(p.monthly)}.`;
   if (Math.round(p.cost) <= 0) return `Avec ces hypothèses, attendre ${attente} ne change pas le capital final (${fmtEur(p.startNow)}).`;
-  return `Commencer maintenant donne ${fmtEur(p.startNow)} dans ${ansTxt(p.years)}, contre ${fmtEur(p.startLater)} en attendant ${attente} : l'attente coûte ${fmtEur(p.cost)}.${rattrape}`;
+  return `Commencer maintenant donne ${fmtEur(p.startNow)} dans ${fmtAns(p.years)}, contre ${fmtEur(p.startLater)} en attendant ${attente} : l'attente coûte ${fmtEur(p.cost)}.${rattrape}`;
 }
 
 /** Épargne qui augmente : capital supplémentaire obtenu en relevant le versement chaque année. */
 export function stepUpTakeaway(p: { monthly: number; years: number; flatCapital: number; steppedCapital: number; extraCapital: number; lastMonthly: number }): string {
   if (!(p.monthly > 0) || !(p.years >= 1)) return '';
   if (Math.round(p.extraCapital) === 0) return `Avec ces hypothèses, relever le versement chaque année ne change pas le capital final (${fmtEur(p.flatCapital)}).`;
-  return `En partant de ${fmtEur(p.monthly)} par mois et en relevant le versement chaque année, vous arrivez à ${fmtEur(p.steppedCapital)} après ${ansTxt(p.years)}, contre ${fmtEur(p.flatCapital)} avec un versement constant : ${fmtEur(p.extraCapital)} d'écart. La dernière année, le versement atteint ${fmtEur(p.lastMonthly)} par mois.`;
+  return `En partant de ${fmtEur(p.monthly)} par mois et en relevant le versement chaque année, vous arrivez à ${fmtEur(p.steppedCapital)} après ${fmtAns(p.years)}, contre ${fmtEur(p.flatCapital)} avec un versement constant : ${fmtEur(p.extraCapital)} d'écart. La dernière année, le versement atteint ${fmtEur(p.lastMonthly)} par mois.`;
 }
 
 /** Conversion de taux : pourquoi ne pas simplement diviser le taux annuel. */
@@ -216,7 +210,7 @@ export function budgetTakeaway(p: { income: number; shares: { needs: number; wan
 /** Inflation : ce que la somme permet d'acheter à l'horizon, laissée telle quelle ou placée. */
 export function inflationTakeaway(p: { amount: number; years: number; inflation: number; annualReturn: number; idleRealValue: number; nominalToKeepPower: number; investedRealValue: number }): string {
   if (!(p.amount > 0) || !(p.years > 0)) return '';
-  const duree = `${p.years} an${p.years > 1 ? 's' : ''}`;
+  const duree = fmtAns(p.years);
   const rien = p.inflation > 0
     ? `Avec ${fmtPct(p.inflation)} d'inflation par an, ${fmtEur(p.amount)} laissés tels quels pendant ${duree} ne permettront d'acheter que ce que ${fmtEur(p.idleRealValue)} achètent aujourd'hui. Pour garder le même pouvoir d'achat, il faudrait alors détenir ${fmtEur(p.nominalToKeepPower)}.`
     : `Avec ${fmtPct(p.inflation)} d'inflation par an, ${fmtEur(p.amount)} laissés tels quels pendant ${duree} permettent d'acheter, en euros d'aujourd'hui, ${fmtEur(p.idleRealValue)}.`;
@@ -225,25 +219,19 @@ export function inflationTakeaway(p: { amount: number; years: number; inflation:
   return rien + place;
 }
 
-const durationFr = (months: number): string => {
-  const y = Math.floor(months / 12);
-  const m = months % 12;
-  return [y ? `${y} an${y > 1 ? 's' : ''}` : '', m || !y ? `${m} mois` : ''].filter(Boolean).join(' ');
-};
-
 /** Plusieurs dettes : durée et intérêts avec l'avalanche, comparés aux seules mensualités minimales. */
 export function debtsTakeaway(p: { extra: number; minimum: { months: number | null; totalInterest: number }; avalanche: { months: number | null; totalInterest: number }; snowball: { months: number | null; totalInterest: number }; interestSavedByAvalanche: number | null }): string {
   const { minimum: min, avalanche: av, snowball: sn } = p;
   if (av.months === null) return 'Avec ce budget, les dettes ne sont pas soldées en 50 ans : les mensualités ne couvrent pas les intérêts. Augmentez les mensualités ou le versement supplémentaire.';
   if (av.months === 0) return '';
   const ajout = p.extra > 0 ? `En ajoutant ${fmtEur(p.extra)} par mois à vos mensualités minimales, ` : 'Avec vos mensualités minimales, ';
-  const duree = `vous êtes libéré de toutes vos dettes en ${durationFr(av.months)} avec l'avalanche (${fmtEur(av.totalInterest)} d'intérêts)`;
+  const duree = `vous êtes libéré de toutes vos dettes en ${fmtMonths(av.months)} avec l'avalanche (${fmtEur(av.totalInterest)} d'intérêts)`;
   const vs = p.extra > 0 && min.months !== null
-    ? `, contre ${durationFr(min.months)} et ${fmtEur(min.totalInterest)} d'intérêts sans versement supplémentaire`
+    ? `, contre ${fmtMonths(min.months)} et ${fmtEur(min.totalInterest)} d'intérêts sans versement supplémentaire`
     : '';
   const boule = sn.months !== null && p.interestSavedByAvalanche !== null
     ? p.interestSavedByAvalanche > 0.5
-      ? ` La boule de neige coûterait ${fmtEur(p.interestSavedByAvalanche)} d'intérêts de plus pour une durée de ${durationFr(sn.months)}.`
+      ? ` La boule de neige coûterait ${fmtEur(p.interestSavedByAvalanche)} d'intérêts de plus pour une durée de ${fmtMonths(sn.months)}.`
       : ' La boule de neige donne ici le même résultat.'
     : '';
   return `${ajout}${duree}${vs}.${boule}`;
@@ -255,13 +243,13 @@ export function feesTakeaway(p: { years: number; lowest: { fees: number; finalVa
   const ecart = lo.finalValue - hi.finalValue;
   if (!(p.years > 0) || !(ecart > 0.5) || !(p.noFees > 0)) return '';
   const part = hi.shareOfGains > 0 ? ` soit ${fmtPct(hi.shareOfGains)} des gains que vous auriez eus sans frais` : '';
-  return `Sur ${p.years} an${p.years > 1 ? 's' : ''}, avec ${fmtPct(lo.fees)} de frais par an, votre capital atteint ${fmtEur(lo.finalValue)} ; avec ${fmtPct(hi.fees)}, il n'atteint que ${fmtEur(hi.finalValue)}. Cet écart de ${fmtEur(ecart)} vient uniquement des frais : à ${fmtPct(hi.fees)}, ils vous coûtent ${fmtEur(hi.cost)} au total,${part}.`;
+  return `Sur ${fmtAns(p.years)}, avec ${fmtPct(lo.fees)} de frais par an, votre capital atteint ${fmtEur(lo.finalValue)} ; avec ${fmtPct(hi.fees)}, il n'atteint que ${fmtEur(hi.finalValue)}. Cet écart de ${fmtEur(ecart)} vient uniquement des frais : à ${fmtPct(hi.fees)}, ils vous coûtent ${fmtEur(hi.cost)} au total,${part}.`;
 }
 
 /** Patrimoine à long terme : versements, capital simulé, puis valeur après impôt en euros d'aujourd'hui. */
 export function wealthTakeaway(p: { years: number; contributed: number; withdrawn: number; value: number; gains: number; netValue: number; netRealValue: number; taxRate: number; inflation: number }): string {
   if (!(p.years > 0) || !(p.contributed > 0) || !(p.value > 0)) return '';
-  const duree = `${p.years} an${p.years > 1 ? 's' : ''}`;
+  const duree = fmtAns(p.years);
   const retraits = p.withdrawn > 0.5 ? ` et en retirez ${fmtEur(p.withdrawn)} en chemin` : '';
   const gain = p.gains >= 0 ? `, dont ${fmtEur(p.gains)} de gains simulés` : `, avec une perte simulée de ${fmtEur(-p.gains)}`;
   const impot = p.value - p.netValue > 0.5
@@ -276,7 +264,7 @@ export function wealthTakeaway(p: { years: number; contributed: number; withdraw
 /** Entreprise : le chiffre d'affaires n'est pas un gain ; ce qui reste, la trésorerie et le besoin de financement du scénario pessimiste. */
 export function businessTakeaway(p: { years: number; revenueFirst: number; revenueLast: number; netResultLast: number; cashLast: number; pessimisticLowestCash: number }): string {
   if (!(p.years > 0) || !(p.revenueLast > 0)) return '';
-  const duree = `${p.years} an${p.years > 1 ? 's' : ''}`;
+  const duree = fmtAns(p.years);
   const reste = p.netResultLast >= 0
     ? `il vous reste ${fmtEur(p.netResultLast)} de résultat net la dernière année`
     : `l'entreprise perd ${fmtEur(-p.netResultLast)} la dernière année`;
@@ -297,7 +285,7 @@ export function portfolioTakeaway(p: { total: number; netReturn: number; annualF
   const frais = p.annualFeesEuro > 0.5 ? ` Les frais vous coûtent ${fmtEur(p.annualFeesEuro)} par an.` : '';
   const poids = p.topWeight >= 0.5 ? ` « ${p.topLabel} » pèse ${fmtPct(p.topWeight)} du total : si ce support chute, tout le portefeuille en souffre.` : '';
   const proj = p.years > 0 && p.value > 0
-    ? ` En ${p.years} an${p.years > 1 ? 's' : ''}, avec ${fmtEur(p.monthly)} versés en plus chaque mois, il atteindrait environ ${fmtEur(p.value)} (dont ${fmtEur(p.contributed)} de versements, capital de départ compris), sans tenir compte des hausses et baisses des marchés.`
+    ? ` En ${fmtAns(p.years)}, avec ${fmtEur(p.monthly)} versés en plus chaque mois, il atteindrait environ ${fmtEur(p.value)} (dont ${fmtEur(p.contributed)} de versements, capital de départ compris), sans tenir compte des hausses et baisses des marchés.`
     : '';
   return `Votre portefeuille de ${fmtEur(p.total)} ${annuel}.${frais}${poids}${proj}`;
 }
@@ -305,8 +293,8 @@ export function portfolioTakeaway(p: { total: number; netReturn: number; annualF
 /** Investir d'un coup ou progressivement : ce que l'on obtient dans chaque cas, et l'écart, en mots simples. */
 export function lumpGradualTakeaway(p: { amount: number; spreadMonths: number; months: number; lump: number; gradual: number; advantageGradual: number }): string {
   if (!(p.amount > 0)) return '';
-  const mois = `${p.spreadMonths} mois`;
-  const base = `Avec ${fmtEur(p.amount)} à placer, investir la totalité tout de suite donne ${fmtEur(p.lump)} après ${dureeEnMois(p.months)}, contre ${fmtEur(p.gradual)} en investissant par tranches égales sur ${mois}.`;
+  const mois = `${p.spreadMonths}\u00a0mois`;
+  const base = `Avec ${fmtEur(p.amount)} à placer, investir la totalité tout de suite donne ${fmtEur(p.lump)} après ${fmtMonths(p.months)}, contre ${fmtEur(p.gradual)} en investissant par tranches égales sur ${mois}.`;
   const ecart = Math.abs(p.advantageGradual);
   if (ecart < 0.005) return `${base} Les deux méthodes donnent le même résultat avec ces hypothèses.`;
   if (p.advantageGradual < 0) return `${base} Ici, investir tout de suite finit ${fmtEur(ecart)} au-dessus : l'argent resté en attente a rapporté moins que le placement. L'étalement sert surtout à limiter le regret d'un achat juste avant une baisse.`;
@@ -316,7 +304,7 @@ export function lumpGradualTakeaway(p: { amount: number; spreadMonths: number; m
 /** ETF ou immobilier locatif : le patrimoine net de chaque côté, l'écart, et le rappel que tout dépend des hypothèses. */
 export function etfImmoTakeaway(p: { horizon: number; etfNet: number; immoNet: number; startCapital: number }): string {
   if (!(p.horizon > 0)) return '';
-  const ans = `${p.horizon} an${p.horizon > 1 ? 's' : ''}`;
+  const ans = fmtAns(p.horizon);
   const base = `Avec ces hypothèses, après ${ans}, un même apport de ${fmtEur(p.startCapital)} et un même effort d'épargne donneraient ${fmtEur(p.etfNet)} placé en ETF et ${fmtEur(p.immoNet)} dans l'immobilier locatif, impôts et frais de sortie déduits.`;
   const ecart = Math.abs(p.etfNet - p.immoNet);
   const fin = ecart < 0.5
@@ -330,8 +318,8 @@ export function loanDurationTakeaway(p: { principal: number; shortYears: number;
   if (!(p.principal > 0) || !(p.shortYears > 0) || !(p.longYears > p.shortYears)) return '';
   const moins = p.shortMonthly - p.longMonthly;
   const plus = p.longCost - p.shortCost;
-  if (moins <= 0.5 || plus <= 0.5) return `Pour emprunter ${fmtEur(p.principal)}, la mensualité (assurance comprise) est de ${fmtEur(p.shortMonthly)} sur ${p.shortYears} ans et de ${fmtEur(p.longMonthly)} sur ${p.longYears} ans ; le coût total est de ${fmtEur(p.shortCost)} contre ${fmtEur(p.longCost)}.`;
-  return `Pour emprunter ${fmtEur(p.principal)}, passer de ${p.shortYears} à ${p.longYears} ans allège la mensualité de ${fmtEur(moins)} par mois (assurance comprise), mais le crédit coûte ${fmtEur(plus)} de plus au total : vous payez moins chaque mois, plus longtemps.`;
+  if (moins <= 0.5 || plus <= 0.5) return `Pour emprunter ${fmtEur(p.principal)}, la mensualité (assurance comprise) est de ${fmtEur(p.shortMonthly)} sur ${p.shortYears}\u00a0ans et de ${fmtEur(p.longMonthly)} sur ${p.longYears}\u00a0ans ; le coût total est de ${fmtEur(p.shortCost)} contre ${fmtEur(p.longCost)}.`;
+  return `Pour emprunter ${fmtEur(p.principal)}, passer de ${p.shortYears} à ${p.longYears}\u00a0ans allège la mensualité de ${fmtEur(moins)} par mois (assurance comprise), mais le crédit coûte ${fmtEur(plus)} de plus au total : vous payez moins chaque mois, plus longtemps.`;
 }
 
 /** TAEG : ce que coûte réellement le crédit par rapport au taux affiché. */
@@ -347,7 +335,7 @@ export function taegTakeaway(p: { principal: number; nominal: number; taeg: numb
 /** Crédit in fine ou amortissable : ce qui change chaque mois et sur le coût net. */
 export function inFineTakeaway(p: { principal: number; years: number; savingsReturn: number; annualRate: number; amortizingMonthly: number; inFineMonthly: number; monthlySaving: number; netCostGap: number }): string {
   if (!(p.principal > 0) || !(p.years > 0)) return '';
-  const base = `Pour emprunter ${fmtEur(p.principal)} sur ${p.years} ans, vous sortez ${fmtEur(p.inFineMonthly)} par mois en in fine (dont ${fmtEur(p.monthlySaving)} d’épargne) contre ${fmtEur(p.amortizingMonthly)} en amortissable.`;
+  const base = `Pour emprunter ${fmtEur(p.principal)} sur ${p.years}\u00a0ans, vous sortez ${fmtEur(p.inFineMonthly)} par mois en in fine (dont ${fmtEur(p.monthlySaving)} d’épargne) contre ${fmtEur(p.amortizingMonthly)} en amortissable.`;
   if (Math.abs(p.netCostGap) <= 0.5) return `${base} Le coût net est le même dans les deux cas.`;
   const fin = p.netCostGap > 0
     ? `L’in fine coûte ${fmtEur(p.netCostGap)} de plus au final : votre épargne (${fmtPct(p.savingsReturn)} supposé) rapporte moins que le crédit ne coûte (${fmtPct(p.annualRate)}).`
@@ -360,7 +348,7 @@ export function renegoTakeaway(p: { monthlyGain: number; netGain: number; breakE
   if (p.breakEvenMonths === null || p.monthlyGain <= 0.5) return 'Avec ces hypothèses, la mensualité ne baisse pas : l’opération ne vous fait pas économiser de mensualité.';
   const mois = Math.ceil(p.breakEvenMonths);
   const base = p.fees > 0.5
-    ? `La mensualité baisse de ${fmtEur(p.monthlyGain)} par mois : il faut environ ${mois} mois pour couvrir ${fmtEur(p.fees)} de frais.`
+    ? `La mensualité baisse de ${fmtEur(p.monthlyGain)} par mois : il faut environ ${fmtMonths(mois)} pour couvrir ${fmtEur(p.fees)} de frais.`
     : `La mensualité baisse de ${fmtEur(p.monthlyGain)} par mois, sans frais à rattraper.`;
   const fin = p.netGain > 0.5
     ? ` Si vous gardez le prêt jusqu’au bout, vous gagnez ${fmtEur(p.netGain)} net.`

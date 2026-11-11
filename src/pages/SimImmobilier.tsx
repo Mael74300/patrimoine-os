@@ -115,8 +115,8 @@ export default function SimImmobilier() {
           <div className="kpis">
             <Kpi label="Impôt estimé, année 1" value={fmtEur(y1?.tax ?? 0)} sub={REGIMES.find((g) => g.v === s.regime)?.label} />
             <Kpi label="Flux mensuel après impôt, année 1" value={fmtEur((y1?.cashflowAfterTax ?? 0) / 12)} tone={(y1?.cashflowAfterTax ?? 0) >= 0 ? 'pos' : 'neg'} />
-            <Kpi label={`Capital restant dû à ${s.horizon} ans`} value={fmtEur(end?.remaining ?? 0)} />
-            <Kpi label={`Patrimoine net immobilier estimé à ${s.horizon} ans`} value={fmtEur(end?.netEquity ?? 0)} sub="valeur estimée − capital restant dû" />
+            <Kpi label={`Capital restant dû à ${s.horizon}\u00a0ans`} value={fmtEur(end?.remaining ?? 0)} />
+            <Kpi label={`Patrimoine net immobilier estimé à ${s.horizon}\u00a0ans`} value={fmtEur(end?.netEquity ?? 0)} sub="valeur estimée − capital restant dû" />
           </div>
           <Takeaway>{rentalTakeaway({ totalCost: r.totalCost, netYield: r.netYield, monthlyCashflow: r.monthlyCashflow, monthlyCashflowAfterTax: s.regime === 'aucune' || !y1 ? null : y1.cashflowAfterTax / 12, horizon: s.horizon, netEquity: end?.netEquity ?? 0 })}</Takeaway>
           {s.regime === 'micro-foncier' && r.annualRentCollected > 15000 && (
@@ -140,7 +140,7 @@ export default function SimImmobilier() {
 
           <h2>Scénario défavorable</h2>
           <p className="muted">
-            Appliqué à votre saisie : {ADVERSE.extraVacancyMonths} mois de vacance en plus par an, loyer réduit de {Math.round((1 - ADVERSE.rentFactor) * 100)} %,
+            Appliqué à votre saisie : {ADVERSE.extraVacancyMonths}&nbsp;mois de vacance en plus par an, loyer réduit de {Math.round((1 - ADVERSE.rentFactor) * 100)} %,
             taxe foncière et charges majorées de {Math.round((ADVERSE.chargesFactor - 1) * 100)} %, évolution du prix du bien diminuée de {Math.abs(ADVERSE.appreciationDelta * 100)} points par an.
           </p>
           <div className="table-wrap" tabIndex={0}>
@@ -150,8 +150,8 @@ export default function SimImmobilier() {
                 <tr><td>Rendement net de charges</td><td className="r">{fmtPct(r.netYield)}</td><td className="r">{fmtPct(badSnap.netYield)}</td></tr>
                 <tr><td>Flux mensuel avant impôt</td><td className="r">{fmtEur(r.monthlyCashflow)}</td><td className="r">{fmtEur(badSnap.monthlyCashflow)}</td></tr>
                 <tr><td>Flux mensuel après impôt (estimation, année 1)</td><td className="r">{fmtEur((y1?.cashflowAfterTax ?? 0) / 12)}</td><td className="r">{fmtEur((badProj[0]?.cashflowAfterTax ?? 0) / 12)}</td></tr>
-                <tr><td>Effort cumulé après impôt sur {s.horizon} ans</td><td className="r">{fmtEur(end?.cumulativeCashflowAfterTax ?? 0)}</td><td className="r">{fmtEur(badEnd?.cumulativeCashflowAfterTax ?? 0)}</td></tr>
-                <tr><td>Patrimoine net immobilier estimé à {s.horizon} ans</td><td className="r">{fmtEur(end?.netEquity ?? 0)}</td><td className="r">{fmtEur(badEnd?.netEquity ?? 0)}</td></tr>
+                <tr><td>Effort cumulé après impôt sur {s.horizon}&nbsp;ans</td><td className="r">{fmtEur(end?.cumulativeCashflowAfterTax ?? 0)}</td><td className="r">{fmtEur(badEnd?.cumulativeCashflowAfterTax ?? 0)}</td></tr>
+                <tr><td>Patrimoine net immobilier estimé à {s.horizon}&nbsp;ans</td><td className="r">{fmtEur(end?.netEquity ?? 0)}</td><td className="r">{fmtEur(badEnd?.netEquity ?? 0)}</td></tr>
               </tbody>
             </table>
           </div>

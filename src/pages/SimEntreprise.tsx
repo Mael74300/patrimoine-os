@@ -78,10 +78,10 @@ export default function SimEntreprise() {
         </form>
 
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
-          <h2 style={{ marginTop: 0 }}>Trois scénarios à {s.years} ans</h2>
+          <h2 style={{ marginTop: 0 }}>Trois scénarios à {s.years}&nbsp;ans</h2>
           <div className="table-wrap stack-wrap">
             <table className="stack-table">
-              <caption className="sr-only">Résultats des trois scénarios à {s.years} ans</caption>
+              <caption className="sr-only">Résultats des trois scénarios à {s.years}&nbsp;ans</caption>
               <thead><tr><th>Scénario</th><th className="r">CA final</th><th className="r">Résultat net final</th><th className="r">Trésorerie finale</th><th className="r">Trésorerie la plus basse</th><th className="r">Valeur estimée</th></tr></thead>
               <tbody>
                 {runs.map((r, i) => {

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { withdrawal, withdrawalSeries, fmtEur } from '../lib/finance';
+import { withdrawal, withdrawalSeries, fmtEur, fmtMonths } from '../lib/finance';
 import { withdrawalTakeaway } from '../lib/takeaways';
 import { SchemaRetraits } from '../components/Illustrations';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
@@ -13,7 +13,7 @@ export default function SimRetraits() {
   const [s, setS, up] = usePersistentState<State>('retraits', DEFAULTS);
   const r = withdrawal({ capital: s.capital, monthly: s.monthly, annualReturn: s.ret, indexation: s.idx, years: s.years });
   const dur = r.monthsUntilEmpty;
-  const durLabel = dur === null ? `Au-delà de ${s.years} ans` : `${Math.floor(dur / 12)} ans et ${dur % 12} mois`;
+  const durLabel = dur === null ? `Au-delà de ${s.years}\u00a0ans` : fmtMonths(dur);
 
   const series = withdrawalSeries({ capital: s.capital, monthly: s.monthly, annualReturn: s.ret, indexation: s.idx, years: s.years });
 
@@ -49,7 +49,7 @@ export default function SimRetraits() {
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Durée du capital" value={durLabel} sub={dur === null ? 'le capital n’est pas épuisé à l’horizon' : 'avant épuisement'} />
-            <Kpi label="Capital restant à l’horizon" value={fmtEur(r.remaining)} sub={`après ${s.years} ans`} />
+            <Kpi label="Capital restant à l’horizon" value={fmtEur(r.remaining)} sub={`après ${s.years}\u00a0ans`} />
             <Kpi label="Retrait mensuel tenable" value={fmtEur(r.sustainable)} sub="premier retrait maximal jusqu’à l’horizon" />
           </div>
           <Takeaway>{withdrawalTakeaway({ capital: s.capital, monthly: s.monthly, years: s.years, monthsUntilEmpty: r.monthsUntilEmpty, remaining: r.remaining, totalWithdrawn: r.totalWithdrawn, sustainable: r.sustainable })}</Takeaway>

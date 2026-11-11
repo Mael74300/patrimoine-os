@@ -66,7 +66,7 @@ export default function SimEtfImmobilier() {
     ['Frais', `${fmtPct(st.etfFees)} par an (net : ${fmtPct(netOfFees(st.etfReturn, st.etfFees))})`, `frais d'acquisition ${fmtPct(R.notaryRate)}, charges, crédit, revente ${fmtPct(st.saleCostRate)}`],
     ['Fiscalité', `gains imposés à ${fmtPct(st.etfTax)} à la sortie`, `${REGIMES.find((g) => g.v === R.regime)?.label} ; plus-value immobilière avec abattements`],
     ['Inflation', fmtPct(st.inflation), fmtPct(st.inflation)],
-    ['Endettement', 'aucun', `${fmtEur(snap.loanAmount)} au départ, ${fmtEur(res.immo.debtAtHorizon)} à ${st.horizon} ans`],
+    ['Endettement', 'aucun', `${fmtEur(snap.loanAmount)} au départ, ${fmtEur(res.immo.debtAtHorizon)} à ${st.horizon}\u00a0ans`],
     ['Patrimoine net estimé', fmtEur(res.etf.netWealth), fmtEur(res.immo.netWealth)],
     ["En euros d'aujourd'hui", fmtEur(res.etf.netWealthReal), fmtEur(res.immo.netWealthReal)],
     ['Liquidité', 'revente en quelques jours ouvrés', 'revente en plusieurs mois, frais élevés'],
@@ -140,8 +140,8 @@ export default function SimEtfImmobilier() {
 
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
-            <Kpi label={`ETF : patrimoine net à ${st.horizon} ans`} value={fmtEur(res.etf.netWealth)} sub={`${fmtEur(res.etf.netWealthReal)} en euros d'aujourd'hui`} />
-            <Kpi label={`Immobilier : patrimoine net à ${st.horizon} ans`} value={fmtEur(res.immo.netWealth)} sub={`${fmtEur(res.immo.netWealthReal)} en euros d'aujourd'hui`} />
+            <Kpi label={`ETF : patrimoine net à ${st.horizon}\u00a0ans`} value={fmtEur(res.etf.netWealth)} sub={`${fmtEur(res.etf.netWealthReal)} en euros d'aujourd'hui`} />
+            <Kpi label={`Immobilier : patrimoine net à ${st.horizon}\u00a0ans`} value={fmtEur(res.immo.netWealth)} sub={`${fmtEur(res.immo.netWealthReal)} en euros d'aujourd'hui`} />
             <Kpi label="Sommes investies (chaque côté)" value={fmtEur(res.etf.invested)} sub={`dont ${fmtEur(res.startCapital)} au départ`} />
             <Kpi label="Écart selon ces hypothèses" value={fmtEur(Math.abs(diff))} sub={diff >= 0 ? 'en faveur des ETF' : "en faveur de l'immobilier"} />
           </div>

@@ -21,7 +21,7 @@ export default function SimEndettement() {
         Quelle part de vos revenus part dans les crédits, que reste-t-il pour vivre, et jusqu’à quel montant le repère de {pct} est-il respecté ?
       </PageHead>
       <SimNotice>
-        Le repère de {pct} (assurance comprise, {HCSF.maxYears} ans au plus) est une recommandation du HCSF appliquée par les banques avec une marge de
+        Le repère de {pct} (assurance comprise, {HCSF.maxYears}&nbsp;ans au plus) est une recommandation du HCSF appliquée par les banques avec une marge de
         dérogation, pas une garantie d’accord ni une capacité d’emprunt personnalisée. Pour la mensualité d’un projet précis, voir le
         {' '}<Link to="/simulateurs/credit">calculateur de crédit</Link>.
       </SimNotice>

@@ -82,7 +82,7 @@ export default function SimBudget() {
         </form>
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
-            <Kpi label="Taux d'épargne actuel" value={fmtPct(b.savingRate)} sub={`${fmtNum(monthsOfIncomeSavedPerYear(b.savingRate))} mois de revenu épargnés par an`} />
+            <Kpi label="Taux d'épargne actuel" value={fmtPct(b.savingRate)} sub={`${fmtNum(monthsOfIncomeSavedPerYear(b.savingRate))}\u00a0mois de revenu épargnés par an`} />
             <Kpi
               label="Revenu non affecté"
               value={fmtEur(b.unallocated)}
@@ -125,7 +125,7 @@ export default function SimBudget() {
               {c.uncovered > 0 && <li>Reste non couvert : <strong>{fmtEur(c.uncovered)}</strong> — il faudrait agir sur les besoins ou sur le revenu, ou viser un taux plus réaliste.</li>}
             </ul>
           )}
-          <h2>Que devient cette épargne en {s.projYears} ans ?</h2>
+          <h2>Que devient cette épargne en {s.projYears}&nbsp;ans ?</h2>
           <p>
             En épargnant {fmtEur(b.saving)} par mois à {fmtPct(s.projReturn)} net par an : <strong>{fmtEur(proj.finalValue)}</strong>, dont {fmtEur(proj.contributed)} versés
             et {fmtEur(proj.gains)} de gains supposés. Pour affiner (inflation, frais, paliers), utilisez le <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link> ;

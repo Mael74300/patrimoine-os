@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { advantageByHorizon, advantageByPriceGrowth, fmtEur, fmtPct, rentVsBuy } from '../lib/finance';
+import { advantageByHorizon, advantageByPriceGrowth, fmtEur, fmtMonths, fmtPct, rentVsBuy } from '../lib/finance';
 import { rentVsBuyTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
@@ -70,7 +70,7 @@ export default function SimLouerAcheter() {
           <div className="kpis">
             <Kpi label="Patrimoine du propriétaire" value={fmtEur(r.buyerWealth)} sub={`bien ${fmtEur(r.finalValue)} après frais de revente, dette restante ${fmtEur(r.remainingDebt)}`} />
             <Kpi label="Patrimoine du locataire" value={fmtEur(r.renterWealth)} sub="apport, frais et écarts mensuels placés" />
-            <Kpi label={buyWins ? 'Avantage à l’achat' : 'Avantage à la location'} value={fmtEur(Math.abs(r.advantage))} sub={r.breakEvenMonth !== null ? `l’achat l’emporte durablement dès le mois ${r.breakEvenMonth}` : 'l’achat ne l’emporte pas à cet horizon'} />
+            <Kpi label={buyWins ? 'Avantage à l’achat' : 'Avantage à la location'} value={fmtEur(Math.abs(r.advantage))} sub={r.breakEvenMonth !== null ? `l’achat l’emporte pour de bon au bout de ${fmtMonths(r.breakEvenMonth)}` : 'l’achat ne l’emporte pas à cet horizon'} />
           </div>
           <Takeaway>{rentVsBuyTakeaway({ horizonYears: Math.floor(s.horizonYears), advantage: r.advantage, breakEvenMonth: r.breakEvenMonth })}</Takeaway>
           {r.series.length > 1 && (
@@ -109,7 +109,7 @@ export default function SimLouerAcheter() {
               <thead><tr><th scope="col">Horizon</th><th scope="col" className="r">Acheter − louer</th><th scope="col">Le plus avantageux</th></tr></thead>
               <tbody>
                 {byHorizon.map((d) => (
-                  <tr key={d.years}><th scope="row">{d.years} ans</th><td className="r">{fmtEur(d.advantage)}</td><td>{verdict(d.advantage)}</td></tr>
+                  <tr key={d.years}><th scope="row">{d.years}&nbsp;ans</th><td className="r">{fmtEur(d.advantage)}</td><td>{verdict(d.advantage)}</td></tr>
                 ))}
               </tbody>
             </table>

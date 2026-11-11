@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { fmtEur, fmtPct, purchasingPower } from '../lib/finance';
+import { fmtAns, fmtEur, fmtPct, purchasingPower } from '../lib/finance';
 import { inflationTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
@@ -7,7 +7,7 @@ type State = { amount: number; years: number; inflation: number; annualReturn: n
 
 const DEFAULTS: State = { amount: 10000, years: 20, inflation: 0.02, annualReturn: 0.03 };
 
-const fmtYears = (y: number | null) => (y === null ? 'jamais' : `${y.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} ans`);
+const fmtYears = (y: number | null) => (y === null ? 'jamais' : fmtAns(y));
 
 export default function SimInflation() {
   const [s, setS, up] = usePersistentState<State>('inflation', DEFAULTS);
@@ -40,7 +40,7 @@ export default function SimInflation() {
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Somme inchangée après la durée" value={fmtEur(r.idleRealValue)} sub={`en euros d'aujourd'hui, soit ${fmtPct(r.idleLoss)} de pouvoir d'achat perdu`} tone={r.idleLoss > 0 ? 'neg' : undefined} />
-            <Kpi label="Montant pour garder le même pouvoir d'achat" value={fmtEur(r.nominalToKeepPower)} sub={`dans ${n} an${n > 1 ? 's' : ''}, en euros courants`} />
+            <Kpi label="Montant pour garder le même pouvoir d'achat" value={fmtEur(r.nominalToKeepPower)} sub={`dans ${fmtAns(n)}, en euros courants`} />
             <Kpi label="Somme placée, en euros d'aujourd'hui" value={fmtEur(r.investedRealValue)} sub={`${fmtEur(r.investedValue)} en euros courants · rendement réel ${fmtPct(r.realReturn)}`} tone={r.realReturn < 0 ? 'neg' : undefined} />
           </div>
           <Takeaway>{inflationTakeaway({ amount: s.amount, years: n, inflation: s.inflation, annualReturn: s.annualReturn, idleRealValue: r.idleRealValue, nominalToKeepPower: r.nominalToKeepPower, investedRealValue: r.investedRealValue })}</Takeaway>

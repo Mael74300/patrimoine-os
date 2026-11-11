@@ -139,7 +139,7 @@ export default function SimPatrimoine() {
           <div className="kpis">
             <Kpi label="Total des versements" value={fmtEur(last.contributed)} sub={last.withdrawn ? `${fmtEur(last.withdrawn)} retirés` : undefined} />
             <Kpi label="Gains ou pertes simulés" value={fmtEur(last.gains)} tone={last.gains >= 0 ? 'pos' : 'neg'} />
-            <Kpi label={`Capital final nominal (${s.years} ans)`} value={fmtEur(last.value)} sub={`${fmtEur(net)} après fiscalité`} />
+            <Kpi label={`Capital final nominal (${s.years}\u00a0ans)`} value={fmtEur(last.value)} sub={`${fmtEur(net)} après fiscalité`} />
             <Kpi label="Corrigé de l'inflation" value={fmtEur(last.realValue)} sub={`${fmtEur(netReal)} après fiscalité`} />
           </div>
           <Takeaway>{wealthTakeaway({ years: s.years, contributed: last.contributed, withdrawn: last.withdrawn, value: last.value, gains: last.gains, netValue: net, netRealValue: netReal, taxRate: s.taxRate, inflation: s.inflation })}</Takeaway>
@@ -159,7 +159,7 @@ export default function SimPatrimoine() {
                       return (
                         <tr key={i}>
                           <td><span style={{ color: COLORS[i] }}>●</span> {sc.name}</td>
-                          <td className="r">{sc.years} ans</td>
+                          <td className="r">{sc.years}&nbsp;ans</td>
                           <td className="r">{fmtEur(l.contributed)}</td>
                           <td className="r">{fmtEur(l.gains)}</td>
                           <td className="r">{fmtEur(l.value)}</td>

@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, fmtEur, fmtNum, fmtPct, fmtPts } from '../lib/finance';
+import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, fmtAns, fmtEur, fmtMonths, fmtNum, fmtPct, fmtPts } from '../lib/finance';
 import { delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway } from '../lib/takeaways';
 import { interetsComposesFaq } from '../data/simFaq';
 import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, ChoiceField, Takeaway, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
@@ -19,14 +19,7 @@ const TABS = [
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 
-const years = (n: number | null) => (n === null ? 'jamais' : `${fmtNum(n)} ans`);
-
-function fmtDuration(months: number): string {
-  const y = Math.floor(months / 12);
-  const m = months % 12;
-  if (y === 0) return `${m} mois`;
-  return m === 0 ? `${y} an${y > 1 ? 's' : ''}` : `${y} an${y > 1 ? 's' : ''} et ${m} mois`;
-}
+const years = (n: number | null) => (n === null ? 'jamais' : fmtAns(n));
 
 function Layout({ form, children, reset }: { form: ReactNode; children: ReactNode; reset: () => void }) {
   return (
@@ -99,10 +92,10 @@ function Duree() {
     >
       {r.reached ? (
         <div className="kpis">
-          <Kpi label="Durée nécessaire" value={fmtDuration(r.months ?? 0)} sub={`soit ${(r.years ?? 0).toFixed(1).replace('.', ',')} an(s)`} />
+          <Kpi label="Durée nécessaire" value={fmtMonths(r.months ?? 0)} sub={`soit ${fmtAns(r.years ?? 0)}`} />
           <Kpi label="Total versé" value={fmtEur(r.contributed)} sub="capital de départ compris" />
           <Kpi label="Intérêts" value={fmtEur(r.interest)} sub={`${fmtPct(r.interestShare)} du capital à l’arrivée`} />
-          <Kpi label="Gain de temps grâce au rendement" value={saved === null ? '—' : fmtDuration(saved)} sub={r.monthsWithoutReturn === null ? '' : `contre ${fmtDuration(r.monthsWithoutReturn)} sans rendement`} />
+          <Kpi label="Gain de temps grâce au rendement" value={saved === null ? '—' : fmtMonths(saved)} sub={r.monthsWithoutReturn === null ? '' : `contre ${fmtMonths(r.monthsWithoutReturn)} sans rendement`} />
         </div>
       ) : (
         <p className="notice" role="status">Avec ces hypothèses, le capital visé n’est pas atteint en 100 ans : augmentez le versement mensuel, le rendement supposé ou baissez l’objectif.</p>
@@ -183,7 +176,7 @@ function Doubler() {
     >
       <div className="kpis">
         <Kpi label="Durée exacte" value={years(r.exactYears)} sub={`pour passer à ${fmtEur(r.target)}`} />
-        <Kpi label="Règle de 72" value={years(r.rule72Years)} sub={r.rule72Gap === null ? 'rendement positif requis' : `écart de ${fmtNum(Math.abs(r.rule72Gap))} an${Math.abs(r.rule72Gap) >= 2 ? 's' : ''} avec le calcul exact`} />
+        <Kpi label="Règle de 72" value={years(r.rule72Years)} sub={r.rule72Gap === null ? 'rendement positif requis' : `écart de ${fmtAns(Math.abs(r.rule72Gap))} avec le calcul exact`} />
         <Kpi label="Rendement réel" value={fmtPct(r.realReturn)} sub="par an, après inflation supposée" />
         <Kpi label="Durée en pouvoir d’achat" value={years(r.realYears)} sub="pour multiplier la valeur réelle du capital" />
       </div>
