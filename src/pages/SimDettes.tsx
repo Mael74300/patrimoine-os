@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { comparePayoff, fmtEur, fmtMonths, type Debt } from '../lib/finance';
+import { comparePayoff, fmtEur, fmtMonths, fmtPct, payoffTimeline, type Debt, type PayoffBar } from '../lib/finance';
 import { debtsTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
@@ -15,6 +15,34 @@ const DEFAULTS: State = { b1: 2000, r1: 0.2, m1: 60, b2: 6000, r2: 0.05, m2: 150
 
 const fmtDuration = (months: number | null) => (months === null ? 'plus de 50\u00a0ans' : fmtMonths(months));
 
+const DEBT_TONES = ['pt-1', 'pt-2', 'pt-3'];
+
+/** Frise : une barre par dette, du mois 1 au mois où elle est soldée, dans l’ordre de remboursement. */
+function PayoffTrack({ title, hint, bars, debts }: { title: string; hint: string; bars: PayoffBar[]; debts: Debt[] }) {
+  return (
+    <div className="pt-group">
+      <h3 className="pt-title">{title} <span>· {hint}</span></h3>
+      <ol className="pt-list">
+        {bars.map((b) => {
+          const d = debts[b.index];
+          const when = b.months === null ? 'pas soldée en 50\u00a0ans' : fmtMonths(b.months);
+          return (
+            <li key={b.index} className="pt-row">
+              <div className="pt-head">
+                <span className="pt-name"><i className={'pt-dot ' + DEBT_TONES[b.index]} aria-hidden="true" />{d.name}<span className="pt-meta"> · {fmtEur(d.balance)} à {fmtPct(d.rate)}</span></span>
+                <span className="pt-when">{when}</span>
+              </div>
+              <div className="pt-track" aria-hidden="true">
+                <span className={'pt-bar ' + (b.months === null ? 'pt-open' : DEBT_TONES[b.index])} style={{ width: `${Math.max(b.width, 2)}%` }} />
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
+}
+
 export default function SimDettes() {
   const [s, setS, up] = usePersistentState<State>('dettes', DEFAULTS);
   const debts: Debt[] = [
@@ -23,10 +51,11 @@ export default function SimDettes() {
     { name: 'Dette 3', balance: s.b3, rate: s.r3, minPayment: s.m3 },
   ];
   const c = comparePayoff(debts, s.extra);
+  const t = payoffTimeline(debts, c);
   const rows = [
-    { label: 'Mensualités minimales seules', r: c.minimum },
-    { label: 'Avalanche (taux le plus élevé d’abord)', r: c.avalanche },
-    { label: 'Boule de neige (plus petit solde d’abord)', r: c.snowball },
+    { label: 'Sans versement en plus', r: c.minimum },
+    { label: 'Avalanche', r: c.avalanche },
+    { label: 'Boule de neige', r: c.snowball },
   ];
 
   return (
@@ -90,24 +119,14 @@ export default function SimDettes() {
             </table>
           </div>
           <h2>Quand chaque dette est soldée</h2>
-          <div className="table-wrap" tabIndex={0}>
-            <table>
-              <thead><tr><th scope="col">Dette</th><th scope="col" className="r">Avalanche</th><th scope="col" className="r">Boule de neige</th></tr></thead>
-              <tbody>
-                {debts.map((d, i) => (
-                  <tr key={d.name}>
-                    <th scope="row">{d.name}</th>
-                    <td className="r">{c.avalanche.payoffMonths[i] === null ? 'non soldée' : fmtMonths(c.avalanche.payoffMonths[i] as number)}</td>
-                    <td className="r">{c.snowball.payoffMonths[i] === null ? 'non soldée' : fmtMonths(c.snowball.payoffMonths[i] as number)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <p className="pt-intro">Chaque barre s’arrête le mois où la dette est entièrement remboursée.</p>
+          <figure className="pt">
+            <PayoffTrack title="Avalanche" hint="taux le plus élevé d’abord" bars={t.avalanche} debts={debts} />
+            <PayoffTrack title="Boule de neige" hint="plus petit solde d’abord" bars={t.snowball} debts={debts} />
+          </figure>
           <p className="muted small">
-            Le budget total est constant : somme des mensualités minimales plus le versement supplémentaire ; les mensualités libérées par une dette soldée sont reportées sur la suivante.
-            L’avalanche minimise les intérêts ; la boule de neige solde plus vite la première dette, ce qui peut aider à tenir dans la durée. Les exemples ci-dessus sont fictifs.
-            Une mensualité inférieure aux intérêts du mois ne solde jamais la dette. Voir aussi <Link to="/simulateurs/rembourser-ou-investir">rembourser ou investir</Link>.
+            Même budget pour les deux méthodes (détails dans les questions fréquentes). Une mensualité inférieure aux intérêts du mois ne solde jamais la dette.
+            Les exemples ci-dessus sont fictifs. Voir aussi <Link to="/simulateurs/rembourser-ou-investir">rembourser ou investir</Link>.
           </p>
           <SavedSims simKey="dettes" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>

@@ -76,3 +76,30 @@ export function comparePayoff(debts: Debt[], extraMonthly: number): PayoffCompar
   const both = avalanche.months !== null && snowball.months !== null;
   return { avalanche, snowball, minimum, interestSavedByAvalanche: both ? snowball.totalInterest - avalanche.totalInterest : null };
 }
+
+export type PayoffBar = {
+  /** Position de la dette dans la saisie (0, 1, 2…). */
+  index: number;
+  /** Mois de solde, ou null si la dette n'est pas soldée dans 50 ans. */
+  months: number | null;
+  /** Longueur de la barre en % de la plus longue durée des deux méthodes (100 % si non soldée). */
+  width: number;
+};
+
+/**
+ * Frise « quand chaque dette est soldée » : pour chaque méthode, les dettes à rembourser (solde > 0) dans l'ordre où elles sont soldées
+ * (non soldées en dernier). Les deux méthodes partagent la même échelle pour être comparables d'un coup d'œil.
+ */
+export function payoffTimeline(debts: Debt[], c: Pick<PayoffComparison, 'avalanche' | 'snowball'>): { avalanche: PayoffBar[]; snowball: PayoffBar[] } {
+  const owed = debts.map((d, i) => ({ d, i })).filter((x) => x.d.balance > EPS).map((x) => x.i);
+  const all = [...c.avalanche.payoffMonths, ...c.snowball.payoffMonths].filter((m, k) => owed.includes(k % debts.length) && m !== null) as number[];
+  const scale = Math.max(1, ...all);
+  const bars = (r: PayoffResult): PayoffBar[] =>
+    owed
+      .map((i) => {
+        const m = r.payoffMonths[i] ?? null;
+        return { index: i, months: m, width: m === null ? 100 : (m / scale) * 100 };
+      })
+      .sort((a, b) => (a.months ?? Infinity) - (b.months ?? Infinity) || a.index - b.index);
+  return { avalanche: bars(c.avalanche), snowball: bars(c.snowball) };
+}
