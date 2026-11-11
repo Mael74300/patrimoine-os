@@ -122,12 +122,13 @@ describe('les exemples chiffrés des guides sont exacts', () => {
     expect(PROFILE_MONTHS.variable.months).toBe(6);
     expect(PROFILE_MONTHS.independant.months).toBe(9);
   });
-  it('plafonds et taux des livrets cités dans le guide précaution = LIVRETS', () => {
-    const t = guides.find((x) => x.slug === 'combien-epargne-de-precaution')!.sections.flatMap((s) => s.body).join(' ').replace(/\u00a0/g, ' ');
+  it('guide précaution : taux et plafonds des livrets = LIVRETS (tableau, aucun chiffre recopié dans le texte)', () => {
+    const t = guides.find((x) => x.slug === 'combien-epargne-de-precaution')!.sections.find((s) => s.heading === 'Où placer cette réserve')!.body.join(' ').replace(/\u00a0/g, ' ');
     const by = Object.fromEntries(LIVRETS.map((l) => [l.id, l]));
     expect(by.lep.cap).toBe(10000); expect(by.livretA.cap).toBe(22950); expect(by.ldds.cap).toBe(12000);
-    expect(by.lep.rate).toBe(0.025); expect(by.livretA.rate).toBe(0.017);
-    for (const s of ['10 000 €', '22 950 €', '12 000 €', '2,5 %', '1,7 %', LIVRETS_AS_OF, 'du 1er août 2026 au 31 janvier 2027']) expect(t, s).toContain(s);
+    expect(by.lep.rate).toBe(0.025); expect(by.livretA.rate).toBe(0.017); expect(by.ldds.rate).toBe(0.017);
+    for (const s of ['10 000 €', '22 950 €', '12 000 €', '2,5 %', '1,7 %']) expect(t, s).not.toContain(s);
+    expect(LIVRETS_AS_OF).toBe('5 novembre 2026');
   });
   it('endettement : (200 + 850) / 3 000 = 35 %, mensualité maximale 850 €, repère HCSF cité', () => {
     const r = debtRatio({ income: 3000, existingPayments: 200, newPayment: 850, livingCosts: 0, householdSize: 1 });
