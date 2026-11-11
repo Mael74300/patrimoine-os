@@ -486,3 +486,17 @@ describe('phrases « Concrètement » : comparer des crédits', () => {
     expect(renegoTakeaway({ monthlyGain: 0, netGain: -3000, breakEvenMonths: null, longer: false, fees: 3000 })).toContain('ne baisse pas');
   });
 });
+
+describe('etfImmoAdvancedHint', () => {
+  it('rappelle régime, tranche et évolution du prix', async () => {
+    const { etfImmoAdvancedHint } = await import('./takeaways');
+    const t = etfImmoAdvancedHint({ regimeLabel: 'Micro-foncier', taxed: true, marginalRate: 0.3, appreciation: 0.01 });
+    expect(t).toBe(`Micro-foncier, tranche ${fmtPct(0.3)}, prix du bien +${fmtPct(0.01)}/an`);
+  });
+  it('sans impôt estimé, ne cite pas de tranche ; une baisse garde son signe', async () => {
+    const { etfImmoAdvancedHint } = await import('./takeaways');
+    const t = etfImmoAdvancedHint({ regimeLabel: 'Ne pas estimer l’impôt', taxed: false, marginalRate: 0.3, appreciation: -0.01 });
+    expect(t).toBe(`Impôt non estimé, prix du bien ${fmtPct(-0.01)}/an`);
+    expect(t).not.toContain('tranche');
+  });
+});

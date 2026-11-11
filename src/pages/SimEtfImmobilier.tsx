@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { compareEtfImmo, fmtEur, fmtPct, netOfFees, rentalAnalysis, type RentalInput } from '../lib/finance';
 import { load } from '../lib/storage';
-import { etfImmoTakeaway } from '../lib/takeaways';
+import { etfImmoAdvancedHint, etfImmoTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, ChoiceField, usePersistentState, JumpToResults } from '../components/ui';
 import { PS_OPTIONS, REGIMES, RENTAL_DEFAULTS, TMI_OPTIONS } from './SimImmobilier';
 
@@ -117,7 +117,14 @@ export default function SimEtfImmobilier() {
             <NumberField label="Taux du crédit" unit="%" percent value={R.loanRate} onChange={setR('loanRate')} step={0.05} min={0} max={15} />
             <NumberField label="Durée du crédit" unit="ans" value={R.loanYears} onChange={setR('loanYears')} min={0} max={30} />
           </fieldset>
-          <MobileFold label="Immobilier : charges, fiscalité et hypothèses (réglages avancés)">
+          <details className="fold advanced">
+            <summary>
+              <span>Immobilier : réglages avancés
+                <span className="fold-hint">Frais, impôts, revente. Réglés sur : {etfImmoAdvancedHint({ regimeLabel: REGIMES.find((g) => g.v === R.regime)?.label ?? '', taxed: R.regime !== 'aucune', marginalRate: R.marginalRate, appreciation: R.appreciation })}</span>
+              </span>
+            </summary>
+            <div className="advanced-body">
+          <p className="small muted">Déjà remplis avec des valeurs d'exemple. Si vous ne savez pas, laissez-les telles quelles.</p>
           <fieldset>
             <legend>Immobilier : détails</legend>
             <NumberField label="Frais d'acquisition" unit="%" percent value={R.notaryRate} onChange={setR('notaryRate')} step={0.5} min={0} max={20} />
@@ -133,7 +140,8 @@ export default function SimEtfImmobilier() {
             <NumberField label="Frais de revente" unit="%" percent value={st.saleCostRate} onChange={set('saleCostRate')} step={0.5} min={0} max={15} />
             <NumberField label="Placement des excédents" unit="%/an" percent value={st.cashRate} onChange={set('cashRate')} step={0.1} min={0} max={10} />
           </fieldset>
-          </MobileFold>
+            </div>
+          </details>
           <button type="button" className="btn small secondary" onClick={() => setSt(DEFAULTS)}>Réinitialiser</button>
           <JumpToResults />
         </form>
