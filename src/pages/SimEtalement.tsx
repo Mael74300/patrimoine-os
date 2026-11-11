@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { lumpVsGradual, fmtEur, fmtPct, type PricePath } from '../lib/finance';
+import { lumpVsGradual, fmtEur, fmtPct, fmtMonths, type PricePath } from '../lib/finance';
 import { lumpGradualTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, ChoiceField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, ChoiceField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = { amount: number; spread: number; years: number; ret: number; cash: number; path: PricePath; move: number };
 
@@ -13,6 +13,13 @@ const PATHS: { v: PricePath; label: string }[] = [
   { v: 'dip', label: 'Baisse d’abord' },
   { v: 'rise', label: 'Hausse d’abord' },
 ];
+
+/** Graduation de l'axe : tous les 3 mois sur un horizon court, sinon chaque année ; toujours l'horizon en dernier. */
+function axisLabel(t: number, months: number): string {
+  if (t === months) return t % 12 === 0 ? `An ${t / 12}` : fmtMonths(t);
+  if (months <= 24) return t % 3 === 0 ? (t === 0 ? '0' : fmtMonths(t)) : '';
+  return t % 12 === 0 ? `An ${t / 12}` : '';
+}
 
 export default function SimEtalement() {
   const [s, setS, up] = usePersistentState<State>('etalement', DEFAULTS);
@@ -51,14 +58,28 @@ export default function SimEtalement() {
         </form>
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
-            <Kpi label="En une seule fois" value={fmtEur(r.lump)} sub={`valeur après ${r.months}\u00a0mois`} />
+            <Kpi label="En une seule fois" value={fmtEur(r.lump)} sub={`valeur après ${fmtMonths(r.months)}`} />
             <Kpi label="En tranches égales" value={fmtEur(r.gradual)} sub={`${r.spreadMonths}\u00a0mois d’étalement`} />
             <Kpi label="Écart (étalement − une fois)" value={fmtEur(r.advantageGradual)} sub={`${better} finit au-dessus (${fmtPct(Math.abs(gap))})`} />
           </div>
           <Takeaway>{lumpGradualTakeaway({ amount: s.amount, spreadMonths: r.spreadMonths, months: r.months, lump: r.lump, gradual: r.gradual, advantageGradual: r.advantageGradual })}</Takeaway>
+          {r.series.length > 1 && (
+            <LineChart
+              showTitle
+              title="Valeur des deux méthodes, mois après mois"
+              xLabels={r.series.map((p) => (p.month === 0 ? 'Au départ' : `Après ${fmtMonths(p.month)}`))}
+              axisLabels={r.series.map((p) => axisLabel(p.month, r.months))}
+              band={r.spreadMonths > 1 ? { from: 0, to: r.spreadMonths, label: 'Étalement' } : undefined}
+              format={fmtEur}
+              series={[
+                { name: 'En une seule fois', color: 'var(--chart-1)', values: r.series.map((p) => p.lump) },
+                { name: 'En tranches égales', color: 'var(--chart-2)', values: r.series.map((p) => p.gradual) },
+              ]}
+            />
+          )}
           <p className="muted small">
-            Chaque tranche est investie en début de mois ; la part non encore investie rapporte le rendement saisi. Les deux méthodes sont évaluées au même horizon.
-            Les valeurs de départ du formulaire sont fictives : remplacez-les par les vôtres.
+            La courbe « En une seule fois » suit le prix que vous supposez. Pendant la zone grisée, une tranche est investie au début de chaque mois ;
+            la part qui attend rapporte le rendement saisi pour elle. Valeurs de départ fictives : remplacez-les par les vôtres.
           </p>
           <SavedSims simKey="etalement" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>

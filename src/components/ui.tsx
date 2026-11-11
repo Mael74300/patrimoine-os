@@ -279,6 +279,10 @@ type ChartProps = {
   /** Affiche le titre au-dessus du graphique (utile quand aucun intertitre ne précède). */
   showTitle?: boolean;
   height?: number;
+  /** Graduations de l'axe horizontal, si elles diffèrent des libellés de lecture (`xLabels`) ; une chaîne vide = pas de graduation. */
+  axisLabels?: string[];
+  /** Zone grisée entre deux index (par exemple la période d'étalement), avec un court libellé. */
+  band?: { from: number; to: number; label: string };
 };
 
 const CHAR_W = 6.6; // largeur moyenne d'un caractère de la police des graduations (px)
@@ -307,7 +311,7 @@ export function placeXLabels(
     const w = labels[i].length * CHAR_W;
     const left = x(i) - w / 2;
     const right = x(i) + w / 2;
-    if (left < prevRight + gap || right + gap > lastLeft) continue;
+    if (!labels[i] || left < prevRight + gap || right + gap > lastLeft) continue;
     out[i] = { x: x(i), anchor: 'middle' };
     prevRight = right;
   }
@@ -315,7 +319,7 @@ export function placeXLabels(
 }
 
 /** Graphique en lignes SVG, sans dépendance, utilisable à la souris, au doigt et au clavier. */
-export function LineChart({ series, xLabels, format, title, showTitle, height = 300 }: ChartProps) {
+export function LineChart({ series, xLabels, format, title, showTitle, height = 300, axisLabels, band }: ChartProps) {
   // Largeur du dessin = largeur affichée : les textes gardent leur taille réelle (lisibles sur mobile).
   const [W, setW] = useState(720);
   const narrow = W < 480;
@@ -353,11 +357,12 @@ export function LineChart({ series, xLabels, format, title, showTitle, height = 
 
   const x = (i: number) => pad.l + (n <= 1 ? 0 : (i / (n - 1)) * (W - pad.l - pad.r));
   const y = (v: number) => pad.t + (1 - (v - min) / (max - min || 1)) * (H - pad.t - pad.b);
-  const labelEvery = Math.max(1, Math.ceil(n / Math.max(3, Math.floor((W - pad.l - pad.r) / 56))));
+  const labelEvery = axisLabels ? 1 : Math.max(1, Math.ceil(n / Math.max(3, Math.floor((W - pad.l - pad.r) / 56))));
+  const tickLabels = axisLabels ?? xLabels.map(String);
   const xLabelBoxes = useMemo(
-    () => placeXLabels(xLabels.map(String), labelEvery, (i) => x(i), W),
+    () => placeXLabels(tickLabels, labelEvery, (i) => x(i), W),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [xLabels, labelEvery, W, pad.l, pad.r],
+    [axisLabels, xLabels, labelEvery, W, pad.l, pad.r],
   );
 
   const onMove = (clientX: number) => {
@@ -391,13 +396,19 @@ export function LineChart({ series, xLabels, format, title, showTitle, height = 
           if (e.key === 'ArrowLeft') setHover(Math.max(0, (hover ?? n - 1) - 1));
         }}
       >
+        {band && band.to > band.from && (
+          <g className="chart-band">
+            <rect x={x(band.from)} y={pad.t} width={x(band.to) - x(band.from)} height={H - pad.t - pad.b} />
+            <text x={x(band.from) + 6} y={pad.t + 14}>{band.label}</text>
+          </g>
+        )}
         {ticks.map((t) => (
           <g key={t}>
             <line className="grid-line" x1={pad.l} x2={W - pad.r} y1={y(t)} y2={y(t)} />
             <text x={pad.l - 8} y={y(t) + 4} textAnchor="end">{compact(t)}</text>
           </g>
         ))}
-        {xLabels.map((l, i) => {
+        {tickLabels.map((l, i) => {
           const box = xLabelBoxes[i];
           return box ? (
             <text key={i} x={box.x} y={H - 10} textAnchor={box.anchor}>{l}</text>
