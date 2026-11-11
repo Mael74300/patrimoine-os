@@ -1,12 +1,35 @@
 import { Link } from 'react-router-dom';
-import { feeImpact, fmtEur, fmtPct } from '../lib/finance';
+import { feeImpact, feeSplit, fmtEur, fmtPct, type FeeLevelResult } from '../lib/finance';
 import { feesTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice, Fold } from '../components/ui';
 
 type State = { initial: number; monthly: number; annualReturn: number; years: number; inflation: number; feesA: number; feesB: number; feesC: number };
 
 const DEFAULTS: State = { initial: 10000, monthly: 300, annualReturn: 0.06, years: 25, inflation: 0.02, feesA: 0.002, feesB: 0.01, feesC: 0.02 };
 const COLORS = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)'];
+
+/** Une barre par niveau de frais : vos versements, les gains que vous gardez, la part prise par les frais (même échelle pour toutes). */
+function FeeBar({ label, r, scale, reference }: { label: string; r: FeeLevelResult; scale: number; reference?: boolean }) {
+  const b = feeSplit(r, scale);
+  return (
+    <li className={'fb-row' + (reference ? ' fb-ref' : '')}>
+      <div className="fb-head">
+        <span className="fb-name">{label}</span>
+        <span className="fb-value">{fmtEur(r.finalValue)}</span>
+      </div>
+      <div className="fb-track" aria-hidden="true">
+        <span className="fb-paid" style={{ width: `${b.paid}%` }} />
+        <span className="fb-kept" style={{ width: `${b.kept}%` }} />
+        <span className="fb-lost" style={{ width: `${b.lost}%` }} />
+      </div>
+      <p className="fb-sub">
+        {reference
+          ? `soit ${fmtEur(r.realValue)} d'aujourd'hui`
+          : <>soit {fmtEur(r.realValue)} d'aujourd'hui · <strong>frais : {fmtEur(r.cost)}</strong>, {fmtPct(r.shareOfGains)} des gains absorbés</>}
+      </p>
+    </li>
+  );
+}
 
 export default function SimFrais() {
   const [s, setS, up] = usePersistentState<State>('frais', DEFAULTS);
@@ -17,6 +40,7 @@ export default function SimFrais() {
   const byFees = [...res].sort((a, b) => a.fees - b.fees);
   const lowest = byFees[0];
   const highest = byFees[byFees.length - 1];
+  const scale = Math.max(base.finalValue, base.contributed);
 
   return (
     <>
@@ -55,31 +79,29 @@ export default function SimFrais() {
             <Kpi label={`Capital avec ${fmtPct(res[0].fees)} de frais`} value={fmtEur(res[0].finalValue)} sub={`soit ${fmtEur(res[0].realValue)} d'aujourd'hui`} />
           </div>
           <Takeaway>{feesTakeaway({ years: s.years, lowest: lowest, highest: highest, noFees: base.finalValue })}</Takeaway>
-          <h2>Évolution du capital selon les frais</h2>
-          <LineChart
-            title="Capital selon le niveau de frais annuels"
-            xLabels={base.series.map((_, i) => `An ${i}`)}
-            format={fmtEur}
-            series={res.map((r, i) => ({ name: `Frais ${fmtPct(r.fees)}`, color: COLORS[i], values: r.series }))}
-          />
-          <h2>Comparaison</h2>
-          <div className="table-wrap stack-wrap">
-            <table className="stack-table">
-              <caption className="sr-only">Effet de chaque niveau de frais annuels sur le capital final</caption>
-              <thead><tr><th>Frais annuels</th><th className="r">Capital final</th><th className="r">En euros d'aujourd'hui</th><th className="r">Coût des frais</th><th className="r">Part des gains absorbée</th></tr></thead>
-              <tbody>
-                {res.map((r, i) => (
-                  <tr key={i}>
-                    <td className="st-name">Frais de {fmtPct(r.fees)} par an</td>
-                    <td data-label="Capital final" className="r">{fmtEur(r.finalValue)}</td>
-                    <td data-label="En euros d'aujourd'hui" className="r">{fmtEur(r.realValue)}</td>
-                    <td data-label="Coût des frais" className="r">{fmtEur(r.cost)}</td>
-                    <td data-label="Part des gains absorbée" className="r">{fmtPct(r.shareOfGains)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <h2>Ce que les frais prennent sur vos gains</h2>
+          <p className="fb-intro">
+            Capital au bout de {`${s.years}\u00a0ans`}. Chaque barre a la même longueur totale : le capital que vous auriez sans frais.
+          </p>
+          <figure className="fb">
+            <ul className="fb-legend" aria-hidden="true">
+              <li><i className="fb-paid" />Vos versements ({fmtEur(base.contributed)})</li>
+              <li><i className="fb-kept" />Gains que vous gardez</li>
+              <li><i className="fb-lost" />Pris par les frais</li>
+            </ul>
+            <ul className="fb-list">
+              <FeeBar label="Sans aucun frais (référence)" r={base} scale={scale} reference />
+              {res.map((r, i) => <FeeBar key={i} label={`Frais de ${fmtPct(r.fees)} par an`} r={r} scale={scale} />)}
+            </ul>
+          </figure>
+          <Fold title="Voir l'évolution année par année">
+            <LineChart
+              title="Capital selon le niveau de frais annuels"
+              xLabels={base.series.map((_, i) => `An ${i}`)}
+              format={fmtEur}
+              series={res.map((r, i) => ({ name: `Frais ${fmtPct(r.fees)}`, color: COLORS[i], values: r.series }))}
+            />
+          </Fold>
           <p className="muted small">
             Le coût des frais est la différence avec le capital obtenu sans frais, à versements et rendement brut identiques. Il ne tient compte
             ni de la fiscalité ni des écarts de performance entre produits. Pour aller plus loin : <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link>, <Link to="/simulateurs/portefeuille">calculateur de portefeuille</Link>.

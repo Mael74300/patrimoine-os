@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { feeImpact } from './fees';
+import { feeImpact, feeSplit } from './fees';
 
 const I = { initial: 10000, monthly: 300, annualReturn: 0.06, years: 25, inflation: 0.02 };
 
@@ -34,5 +34,28 @@ describe('impact des frais', () => {
   it('entrées invalides ou durée nulle : pas de NaN', () => {
     const r = feeImpact({ initial: NaN, monthly: -5, annualReturn: NaN, years: 0, inflation: NaN }, [NaN, -1, 5]);
     for (const x of r) expect(Object.values(x).every((v) => Array.isArray(v) || Number.isFinite(v))).toBe(true);
+  });
+
+  it('barres : versements + gains conservés + frais = capital sans frais (exemple fictif par défaut du simulateur)', () => {
+    const [zero, a, c] = feeImpact(I, [0, 0.002, 0.02]);
+    expect(a.contributed).toBe(10000 + 300 * 12 * 25);
+    for (const r of [zero, a, c]) {
+      expect(r.finalValue + r.cost).toBeCloseTo(zero.finalValue, 6);
+      const b = feeSplit(r, zero.finalValue);
+      expect(b.paid + b.kept + b.lost).toBeCloseTo(100, 6);
+      expect(b.paid).toBeCloseTo((100 * 100000) / zero.finalValue, 6);
+    }
+    expect(feeSplit(zero, zero.finalValue).lost).toBe(0);
+    expect(feeSplit(c, zero.finalValue).lost).toBeGreaterThan(feeSplit(a, zero.finalValue).lost);
+  });
+
+  it('barres : perte ou échelle nulle, jamais plus de 100 % ni de NaN', () => {
+    const [r] = feeImpact({ ...I, annualReturn: -0.05 }, [0.02]);
+    const b = feeSplit(r, Math.max(r.contributed, r.finalValue + r.cost));
+    expect(b.kept).toBe(0);
+    expect(b.paid + b.kept + b.lost).toBeLessThanOrEqual(100);
+    expect(feeSplit(r, 0)).toEqual({ paid: 0, kept: 0, lost: 0 });
+    const n = feeSplit({ finalValue: NaN, cost: NaN, contributed: NaN }, 1000);
+    expect(Object.values(n).every(Number.isFinite)).toBe(true);
   });
 });

@@ -20,13 +20,19 @@ describe('Tableaux de scénarios compacts (stack-table)', () => {
     expect(mobile).toMatch(/@media \(min-width: 701px\) \{\s*\.stack-table \.st-name \{ white-space: nowrap; \}/);
   });
 
-  it('chaque ligne des quatre tableaux commence par un nom puis des valeurs étiquetées', () => {
-    for (const src of [credits, budget, frais, entreprise]) {
+  it('chaque ligne des trois tableaux commence par un nom puis des valeurs étiquetées', () => {
+    for (const src of [credits, budget, entreprise]) {
       const start = src.indexOf('className="stack-table"');
       const table = src.slice(start, src.indexOf('</table>', start));
       const tds = [...table.matchAll(/<td ([^>]*)>/g)].map((m) => m[1]);
       expect(tds[0]).toContain('st-name');
       for (const td of tds.slice(1).filter((t) => !t.includes('st-name'))) expect(td).toContain('data-label=');
     }
+  });
+
+  it('simulateur Frais : le tableau répétant les cartes est remplacé par des barres (versements, gains gardés, frais)', () => {
+    expect(frais).not.toContain('stack-table');
+    expect(frais).toContain('feeSplit(');
+    expect(frais).toMatch(/<Fold title="Voir l'évolution année par année">\s*<LineChart/);
   });
 });
