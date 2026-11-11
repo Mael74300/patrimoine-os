@@ -9,6 +9,7 @@ import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
 import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
 import { Crumbs, MobileFold, PageHead, SimFaq, Sources, usePersistentState } from '../components/ui';
 import { EnvelopeCards } from '../components/EnvelopeCards';
+import { LivretsTable } from '../components/LivretsTable';
 import { GuideGroupIcon } from '../components/Icons';
 import { SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz } from '../components/Illustrations';
 import { annotateJargon } from '../lib/jargon';
@@ -157,6 +158,7 @@ export function GuidePage() {
               <Fragment key={p}>
                 <p><JargonText segs={jargon[jargonStart[i] + k]} /></p>
                 {g.slug === 'investir-a-credit' && s.heading === 'Un exemple fictif' && (k === 0 ? <SchemaMensualite /> : <SchemaLevier />)}
+                {g.slug === 'combien-epargne-de-precaution' && s.heading === 'Où placer cette réserve' && k === 0 && <LivretsTable />}
               </Fragment>
             ))}
             {g.slug === 'taux-endettement-capacite-emprunt' && s.heading === 'Le repère de 35 %' && <SchemaEndettement />}

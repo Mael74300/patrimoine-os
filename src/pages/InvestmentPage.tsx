@@ -112,7 +112,7 @@ export default function InvestmentPage() {
 
           <h2>En pratique</h2>
           {inv.slug === 'donation' && (
-            <div className="table-wrap donation-abatt">
+            <div className="table-wrap facts-table">
               <table>
                 <caption>Montant donné sans impôt, par donateur et par bénéficiaire (renouvelable tous les 15 ans)</caption>
                 <thead><tr><th scope="col">Lien avec le donateur</th><th scope="col">Abattement</th></tr></thead>

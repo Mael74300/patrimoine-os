@@ -846,11 +846,15 @@ h2.gloss-letter::before { content: none; }
   .prose h2[id^="rub-"] { scroll-margin-top: 80px; }
 }
 
-/* Fiche Donation : tableau des abattements par lien de parenté */
-.donation-abatt { margin: 12px 0 16px; }
-.donation-abatt caption { caption-side: top; text-align: left; padding: 10px 12px; font-weight: 600; color: var(--ink); }
-.donation-abatt tbody th { font-weight: 500; text-align: left; }
-.donation-abatt td { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* Petits tableaux de chiffres dans les fiches et les guides (abattements de donation, livrets) */
+.facts-table { margin: 12px 0 16px; }
+.facts-table caption { caption-side: top; text-align: left; padding: 8px 12px; font-weight: 600; color: var(--ink); }
+.facts-table tbody th { font-weight: 500; text-align: left; }
+.facts-table tr:last-child th { border-bottom: 0; }
+.facts-table :is(th, td) { padding-top: 7px; padding-bottom: 7px; }
+.facts-table td { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.facts-table-note { display: block; font-size: 0.82rem; font-weight: 400; color: var(--ink-2); }
+.facts-table-foot { margin: 0; padding: 8px 12px 10px; border-top: 1px solid var(--line); font-size: 0.82rem; color: var(--ink-2); }
 .search-ideas--start .tag { border-color: var(--accent, var(--line)); border-left-width: 4px; }
 .search-ideas--start .tag span { margin-left: 6px; }
 .sim-themes-label { margin: 20px 0 0; color: var(--ink-2); font-weight: 600; }

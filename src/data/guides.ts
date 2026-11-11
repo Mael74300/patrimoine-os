@@ -334,7 +334,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Combien mettre en épargne de précaution ?',
     summary: 'Trois, six ou neuf mois de dépenses : comment choisir son repère, où placer cette réserve et dans quel ordre remplir les livrets.',
     readingMinutes: 5,
-    updatedOn: '2026-10-27',
+    updatedOn: '2026-11-11',
     sections: [
       {
         heading: 'Aucune règle officielle, des repères',
@@ -352,8 +352,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       {
         heading: 'Où placer cette réserve',
         body: [
-          'La réserve doit rester disponible immédiatement et ne pas fluctuer : les livrets réglementés sont les supports naturels. Plafonds de dépôt : LEP 10 000 € (sous conditions de revenus), Livret A 22 950 € et LDDS 12 000 €. Taux au 5 novembre 2026 : 2,5 % pour le LEP et 1,7 % pour le Livret A et le LDDS, fixés pour la période du 1er août 2026 au 31 janvier 2027.',
-          'On remplit en général d’abord le mieux rémunéré (LEP si vous y avez droit), puis le Livret A, puis le LDDS. Ces taux changent à chaque révision : vérifiez-les sur les fiches Livret A et LEP.',
+          'La réserve doit rester disponible tout de suite et ne jamais baisser : les livrets réglementés sont faits pour cela. On remplit d’abord le mieux rémunéré (le LEP, si vous y avez droit), puis le suivant quand le plafond est atteint.',
         ],
       },
       {
