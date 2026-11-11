@@ -1,4 +1,5 @@
 import { prepayVsInvest } from './calc/prepayVsInvest';
+import { PFU_TOTAL_PCT } from './calc/pfu';
 import { amortize } from './calc/loan';
 import { debtRatio, HCSF } from './calc/debtRatio';
 import { simpleVsCompound } from './calc/simpleVsCompound';
@@ -135,20 +136,21 @@ export function patrimoineParts() {
   return { home, savings, debt, assets, net: assets - debt };
 }
 
-/** Exemple fictif du guide « Rembourser son crédit par anticipation ou investir ? » (mêmes chiffres que le texte). */
-export const REMBOURSER_EXAMPLE = { balance: 150000, annualRate: 0.04, remainingYears: 20, lump: 20000, annualReturn: 0.05, annualFees: 0.002, taxRate: 0.3 };
+/** Exemple fictif du guide « Rembourser son crédit par anticipation ou investir ? » (mêmes chiffres que le texte). Gains imposés au PFU 2026 (31,4 %, valeur partagée avec le simulateur et la fiche Compte-titres). */
+export const REMBOURSER_EXAMPLE = { balance: 150000, annualRate: 0.04, remainingYears: 20, lump: 20000, annualReturn: 0.05, annualFees: 0.002, taxRate: PFU_TOTAL_PCT / 100 };
 
-/** Résultat de l'exemple, calculé avec le simulateur « rembourser ou investir » ; montants arrondis à 100 € (le guide dit « environ »). */
+/** Résultat de l'exemple, calculé avec le simulateur « rembourser ou investir » ; montants arrondis à 50 € (le guide dit « environ »), l'écart arrondi de la même façon tombe juste sur la différence des deux montants affichés. */
 export function rembourserParts() {
   const r = prepayVsInvest(REMBOURSER_EXAMPLE);
-  const round100 = (v: number) => Math.round(v / 100) * 100;
+  const round50 = (v: number) => Math.round(v / 50) * 50;
   return {
     ...REMBOURSER_EXAMPLE,
-    wealthPrepay: round100(r.wealthPrepay),
-    wealthInvest: round100(r.wealthInvest),
-    gap: round100(r.wealthPrepay - r.wealthInvest),
+    wealthPrepay: round50(r.wealthPrepay),
+    wealthInvest: round50(r.wealthInvest),
+    gap: round50(r.wealthPrepay - r.wealthInvest),
     monthsSaved: r.monthsSaved,
-    interestSaved: Math.round(r.interestSaved / 50) * 50,
+    interestSaved: round50(r.interestSaved),
+    breakEvenReturn: r.breakEvenReturn,
   };
 }
 

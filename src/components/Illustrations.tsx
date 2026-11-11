@@ -1016,7 +1016,7 @@ export function SchemaRembourser() {
         ))}
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : avec {fmtEur(p.lump)} à placer, rembourser l’emporte d’environ {fmtEur(p.gap)} (intérêts économisés : environ {fmtEur(p.interestSaved)}). Si le placement rapportait davantage que le rendement d’équilibre, investir gagnerait. Barres proportionnelles aux montants.
+        <strong>Illustration, exemple fictif</strong> : avec {fmtEur(p.lump)} à placer, rembourser l’emporte d’environ {fmtEur(p.gap)}. Si le placement rapportait plus que le rendement d’équilibre (ici environ {p.breakEvenReturn === null ? '—' : pctFr(p.breakEvenReturn)} brut par an), investir gagnerait. Barres proportionnelles aux montants.
       </figcaption>
     </figure>
   );
