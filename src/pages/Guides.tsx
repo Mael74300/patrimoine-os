@@ -1,8 +1,7 @@
 import { Fragment } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { categories } from '../data/categories';
 import { guideBySlug, guideGroups, guides, otherGuides } from '../data/guides';
-import { investmentBySlug, investments } from '../data/investments';
+import { investmentBySlug } from '../data/investments';
 import { guideBlurb } from '../lib/guideBlurbs';
 import { simBlurb } from '../lib/simThemes';
 import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
@@ -10,6 +9,7 @@ import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
 import { Crumbs, MobileFold, PageHead, SimFaq, Sources, usePersistentState } from '../components/ui';
 import { EnvelopeCards } from '../components/EnvelopeCards';
 import { LivretsTable } from '../components/LivretsTable';
+import { RiskMap } from '../components/RiskMap';
 import { GuideGroupIcon } from '../components/Icons';
 import { SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz } from '../components/Illustrations';
 import { annotateJargon } from '../lib/jargon';
@@ -53,34 +53,6 @@ export function GuideList() {
         </section>
       ))}
       </div>
-    </>
-  );
-}
-
-function Catalogue() {
-  const withFiches = categories.filter((c) => investments.some((i) => i.category === c.id));
-  const pending = categories.filter((c) => !investments.some((i) => i.category === c.id));
-  return (
-    <>
-      <div className="grid cols-3" style={{ marginTop: 8 }}>
-        {withFiches.map((c) => {
-          const list = investments.filter((i) => i.category === c.id);
-          return (
-            <div key={c.id} className="panel">
-              <h3 style={{ margin: 0 }}><Link to={`/encyclopedie?cat=${c.id}`}>{c.name}</Link></h3>
-              <p className="small muted" style={{ margin: '4px 0 6px' }}>{c.short}</p>
-              <ul className="small" style={{ margin: 0, paddingLeft: 18 }}>
-                {list.map((i) => <li key={i.slug}><Link to={`/encyclopedie/${i.slug}`}>{i.name}</Link></li>)}
-              </ul>
-            </div>
-          );
-        })}
-      </div>
-      {pending.length > 0 && (
-        <p className="small muted" style={{ marginTop: 12 }}>
-          Familles dont les fiches sont en préparation : {pending.map((c) => c.name).join(', ')}.
-        </p>
-      )}
     </>
   );
 }
@@ -170,6 +142,7 @@ export function GuidePage() {
             {g.slug === 'combien-epargne-de-precaution' && s.heading.startsWith('Aucune règle') && <SchemaPrecaution />}
             {g.slug === 'comparer-les-frais' && s.heading.startsWith('L’effet') && <SchemaFrais />}
             {g.slug === 'patrimoine-net' && s.heading === 'La définition' && <SchemaPatrimoineNet />}
+            {g.slug === 'types-investissements' && s.heading === 'Le classement' && <RiskMap />}
             {(g.slug === 'types-investissements' || g.slug === 'choisir-son-enveloppe') && s.heading.startsWith('Placement et enveloppe') && <SchemaEnveloppe />}
             {g.slug === 'fonctionnement-pea' && s.heading === 'Retraits et fiscalité' && <SchemaPea />}
             {g.slug === 'livret-a-calcul-interets-quinzaines' && s.heading === 'Et un retrait ?' && <SchemaQuinzaines />}
@@ -191,18 +164,20 @@ export function GuidePage() {
         </nav>
       )}
       </div>
-      {g.widget === 'catalogue' && <MobileFold label={`Voir les familles et leurs fiches`}><Catalogue /></MobileFold>}
       {g.widget === 'patrimoine-net' && (<><h2>Calculer votre patrimoine net</h2><NetWorthCalculator /></>)}
       <div className="prose">
         {g.cta && <p style={{ marginTop: 24 }}><Link className="btn" to={g.cta.to}>{g.cta.label}</Link></p>}
         {g.slug !== 'choisir-son-enveloppe' && (<>
           <h2>Pour aller plus loin</h2>
+          {/* Le classement du guide Types d’investissements renvoie déjà vers chaque fiche. */}
+          {g.slug !== 'types-investissements' && (<>
           <h3 className="next-sub">Fiches liées</h3>
           <ul className="next-list">
             {g.related.filter((r) => investmentBySlug[r]).map((r) => (
               <li key={r}><Link to={`/encyclopedie/${r}`}>{investmentBySlug[r].name}</Link><span>{investmentBySlug[r].summary}</span></li>
             ))}
           </ul>
+          </>)}
         </>)}
         {g.slug !== 'par-ou-commencer' && relatedSimulators(simsForGuide[g.slug]).length > 0 && (<>
           <h3 className="next-sub">Simulateurs liés</h3>

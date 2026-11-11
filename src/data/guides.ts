@@ -19,7 +19,6 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     summary: 'Panorama des familles de placements ouvertes à un particulier en France, classées par risque, horizon et effort.',
     readingMinutes: 6,
     updatedOn: '2026-10-10',
-    widget: 'catalogue',
     sections: [
       {
         heading: 'Trois questions pour s’y retrouver',
@@ -31,12 +30,12 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       {
         heading: 'Placement et enveloppe : ne pas confondre',
         body: [
-          'Un même ETF peut être logé dans un PEA, un compte-titres, une assurance-vie ou un PER. Le placement détermine le risque ; l’enveloppe détermine la fiscalité, la disponibilité et la transmission. Les enveloppes ont leur propre famille dans le catalogue ci-dessous.',
+          'Un même ETF peut être logé dans un PEA, un compte-titres, une assurance-vie ou un PER. Le placement détermine le risque ; l’enveloppe détermine la fiscalité, la disponibilité et la transmission. Dans le classement ci-dessous, les enveloppes sont donc à part.',
         ],
       },
       {
-        heading: 'Le catalogue',
-        body: ['Chaque famille regroupe des fiches détaillées, avec fiscalité datée et sources. Les familles sans fiche sont en cours de rédaction : nous préférons attendre qu’une information soit vérifiée plutôt que de publier une page approximative.'],
+        heading: 'Le classement',
+        body: ['Choisissez d’abord la durée de votre projet, puis le niveau de risque que vous acceptez. Chaque nom mène à sa fiche, avec fiscalité datée et sources.'],
       },
     ],
     related: ['livret-a', 'etf-monde', 'assurance-vie', 'scpi'],
