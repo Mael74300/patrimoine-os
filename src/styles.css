@@ -522,6 +522,9 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px 
 .faq details, details.fold { box-shadow: var(--shadow-sm); border-radius: 12px; }
 .faq details[open], details.fold[open] { border-color: #b8c9e4; }
 .saved-sims { margin-top: 16px; }
+/* Fermé, le bloc n'est qu'une ligne de 44 px (plus 90 px de cadre vide) ; ouvert, il retrouve sa marge basse. */
+.panel.saved-sims { padding: 0 16px; }
+.panel.saved-sims[open] { padding-bottom: 16px; }
 .saved-sims > summary { font-weight: 600; }
 .bar > div { background: var(--grad); }
 th { background: var(--surface-2); color: var(--primary-deep); }

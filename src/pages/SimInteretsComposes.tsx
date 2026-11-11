@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, fmtEur, fmtNum, fmtPct } from '../lib/finance';
+import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, fmtEur, fmtNum, fmtPct, fmtPts } from '../lib/finance';
 import { delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway } from '../lib/takeaways';
 import { interetsComposesFaq } from '../data/simFaq';
 import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, ChoiceField, Takeaway, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
@@ -360,7 +360,7 @@ function Taux() {
         <Kpi label={`Taux ${label} équivalent`} value={fmtRate(r.equivalentRate)} sub="capitalisé sur l’année, redonne exactement le taux annuel" />
         <Kpi label={`Taux ${label} proportionnel`} value={fmtRate(r.proportionalRate)} sub="taux annuel divisé par le nombre de périodes" />
         <Kpi label="Taux annuel nominal équivalent" value={fmtRate(r.nominalRate)} sub="taux équivalent × nombre de périodes" />
-        <Kpi label="Taux annuel réel du taux proportionnel" value={fmtRate(r.effectiveFromProportional)} sub={`écart de ${fmtRate(r.gap)} avec le taux saisi`} />
+        <Kpi label="Taux annuel réel du taux proportionnel" value={fmtRate(r.effectiveFromProportional)} sub={`écart de ${fmtPts(r.gap, 4)} avec le taux saisi`} />
       </div>
       <Takeaway>{rateConversionTakeaway({ annualRate: s.annualRate / 100, periods: s.periods, equivalentRate: r.equivalentRate, proportionalRate: r.proportionalRate, gap: r.gap })}</Takeaway>
       <p className="muted small">
