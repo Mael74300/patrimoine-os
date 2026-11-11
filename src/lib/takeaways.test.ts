@@ -3,7 +3,7 @@ import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, cat
 import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio } from './finance';
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
-import { businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -146,11 +146,10 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     const proj = rentalProjection(i);
     return { totalCost: r.totalCost, netYield: r.netYield, monthlyCashflow: r.monthlyCashflow, monthlyCashflowAfterTax: proj[0].cashflowAfterTax / 12, horizon: i.horizon, netEquity: proj[proj.length - 1].netEquity };
   };
-  it('reprend rendement net, flux mensuels et patrimoine calculés', () => {
+  it('reprend soldes mensuels et patrimoine calculés', () => {
     const a = args(base);
     expect(a.monthlyCashflow).toBeLessThan(0);
     const t = digits(rentalTakeaway(a));
-    expect(t).toContain(digits(fmtPct(a.netYield)));
     expect(t).toContain(eur(-a.monthlyCashflow));
     expect(t).toContain('devotrepoche');
     expect(t).toContain(eur(a.netEquity));
@@ -161,6 +160,12 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     const t = digits(rentalTakeaway(a));
     expect(t).toContain('leloyercouvre');
     expect(t).toContain(eur(a.monthlyCashflow));
+  });
+  it('carte « Solde mensuel » : le sous-titre suit le signe du montant affiché', () => {
+    expect(rentalCashflowSub(args(base).monthlyCashflow, false)).toBe('à ajouter de votre poche, avant impôt');
+    expect(rentalCashflowSub(args({ ...base, monthlyRent: 1500 }).monthlyCashflow, true)).toBe('en plus dans votre poche, après impôt');
+    expect(rentalCashflowSub(-0.4, false)).toBe("loyer et dépenses s'équilibrent, avant impôt");
+    expect(rentalCashflowSub(Number.NaN, true)).toBe("loyer et dépenses s'équilibrent, après impôt");
   });
   it('sans estimation d’impôt, aucune phrase sur l’impôt ; entrées vides : texte vide', () => {
     expect(rentalTakeaway({ ...args(base), monthlyCashflowAfterTax: null })).not.toContain('impôt estimé');

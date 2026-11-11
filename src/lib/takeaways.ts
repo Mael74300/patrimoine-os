@@ -101,11 +101,10 @@ export function prepayTakeaway(p: { lump: number; advantageInvest: number; inter
 /** Immobilier locatif : ce que rapporte le bien, ce que le propriétaire paie de sa poche, et le patrimoine à l'horizon. */
 export function rentalTakeaway(p: { totalCost: number; netYield: number; monthlyCashflow: number; monthlyCashflowAfterTax: number | null; horizon: number; netEquity: number }): string {
   if (!(p.totalCost > 0) || !Number.isFinite(p.netYield)) return '';
-  const rendement = `Par an, les loyers moins les charges représentent environ ${fmtPct(p.netYield)} du coût total (achat, frais, travaux), avant crédit et impôt.`;
   const mois = Math.round(p.monthlyCashflow);
   const tresorerie = mois >= 0
-    ? `\nChaque mois, le loyer couvre la mensualité du crédit et les charges : il reste environ ${fmtEur(mois)} avant impôt.`
-    : `\nChaque mois, le loyer ne couvre pas la mensualité du crédit et les charges : il faut sortir environ ${fmtEur(-mois)} de votre poche avant impôt.`;
+    ? `Chaque mois, le loyer couvre la mensualité du crédit et les charges : il reste environ ${fmtEur(mois)} avant impôt.`
+    : `Chaque mois, le loyer ne couvre pas la mensualité du crédit et les charges : il faut sortir environ ${fmtEur(-mois)} de votre poche avant impôt.`;
   let apres = '';
   if (p.monthlyCashflowAfterTax !== null) {
     const a = Math.round(p.monthlyCashflowAfterTax);
@@ -114,7 +113,18 @@ export function rentalTakeaway(p: { totalCost: number; netYield: number; monthly
       : `\nAprès l'impôt estimé de la première année, l'effort mensuel est d'environ ${fmtEur(-a)}.`;
   }
   const fin = `\nÀ ${fmtAns(p.horizon)}, crédit déduit, le bien représenterait environ ${fmtEur(p.netEquity)} de patrimoine (estimation, si prix et loyers évoluent comme saisi).`;
-  return rendement + tresorerie + apres + fin;
+  return tresorerie + apres + fin;
+}
+
+/**
+ * Immobilier locatif : sous-titre de la carte « Solde mensuel » (loyer − mensualité − charges),
+ * qui dit en mots simples ce que signifie le signe du montant (arrondi à l'euro, comme l'affichage).
+ */
+export function rentalCashflowSub(monthly: number, afterTax: boolean): string {
+  const when = afterTax ? 'après impôt' : 'avant impôt';
+  const v = Math.round(monthly);
+  if (!Number.isFinite(v) || v === 0) return `loyer et dépenses s'équilibrent, ${when}`;
+  return v < 0 ? `à ajouter de votre poche, ${when}` : `en plus dans votre poche, ${when}`;
 }
 
 const ansTxt = (n: number) => fmtAns(n);
