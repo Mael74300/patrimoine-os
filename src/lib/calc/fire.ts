@@ -41,7 +41,8 @@ export function yearsToTarget(input: FireInput, target = fireTarget(input.annual
   return null;
 }
 
-export type DrawdownYear = { year: number; capital: number; withdrawal: number };
+/** capital : montant de l'année (euros courants) ; realCapital : même montant en euros d'aujourd'hui (inflation retirée). */
+export type DrawdownYear = { year: number; capital: number; realCapital: number; withdrawal: number };
 
 /**
  * Phase de retrait : chaque début d'année, on retire les dépenses non couvertes revalorisées de l'inflation,
@@ -51,14 +52,15 @@ export function drawdown(capital0: number, input: FireInput, maxYears = 60) {
   let capital = Math.max(0, num(capital0));
   const inf = clamp(input.inflation, -0.05, 0.3, 0);
   const r = clamp(input.nominalReturn, -0.5, 0.5, 0);
-  const series: DrawdownYear[] = [{ year: 0, capital, withdrawal: 0 }];
+  const series: DrawdownYear[] = [{ year: 0, capital, realCapital: capital, withdrawal: 0 }];
   let depletedAt: number | null = null;
   for (let y = 1; y <= maxYears; y++) {
     const need = Math.max(0, num(input.annualExpenses) - num(input.recurringIncome)) * Math.pow(1 + inf, y - 1);
     const withdrawal = Math.min(need, capital);
     capital = (capital - withdrawal) * (1 + r);
     if (withdrawal < need && depletedAt === null) depletedAt = y;
-    series.push({ year: y, capital: Math.max(0, capital), withdrawal });
+    const nominal = Math.max(0, capital);
+    series.push({ year: y, capital: nominal, realCapital: nominal / Math.pow(1 + inf, y), withdrawal });
   }
   return { series, depletedAt };
 }

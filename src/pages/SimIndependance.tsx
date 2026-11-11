@@ -87,17 +87,18 @@ export default function SimIndependance() {
 
           <h2>Phase de retrait : trois hypothèses de rendement</h2>
           <p className="muted small">
-            Départ avec {fmtEur(startCapital)} ; retraits annuels revalorisés de l'inflation en début d'année ; rendement constant chaque année.
+            Départ avec {fmtEur(startCapital)} ; retraits revalorisés de l’inflation chaque début d’année ; rendement constant.
+            Montants en euros d’aujourd’hui (inflation de {fmtPct(s.inflation)} retirée).
           </p>
           <div className="panel">
             <LineChart
-              title="Capital restant pendant les retraits"
+              title="Capital restant pendant les retraits, en euros d’aujourd’hui"
               xLabels={scenarios[0].series.map((p) => `An ${p.year}`)}
               format={fmtEur}
               series={scenarios.map((sc, i) => ({
                 name: `Rendement ${fmtPct(s.nominalReturn + [-0.02, 0, 0.02][i])}${sc.depletedAt ? ` — épuisé en ${sc.depletedAt} ans` : ''}`,
                 color: COLORS[i],
-                values: sc.series.map((p) => p.capital),
+                values: sc.series.map((p) => p.realCapital),
               }))}
             />
           </div>
