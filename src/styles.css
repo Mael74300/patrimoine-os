@@ -275,6 +275,8 @@ details.fold > p { margin-left: 14px; margin-right: 14px; }
 
 /* ---------- Chart */
 .chart { width: 100%; height: auto; display: block; }
+/* Graphique en courbes : un espace sous la légende pour que la note qui suit ne s'y colle pas */
+.line-chart { margin: 0 0 14px; }
 .chart text { font-family: var(--font); fill: var(--ink-3); font-size: 12px; }
 .chart .grid-line { stroke: var(--line); stroke-width: 1; }
 .chart-legend { display: flex; gap: 6px 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--ink-2); margin-top: 8px; padding: 8px 10px; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; }
@@ -328,14 +330,14 @@ td.neg { color: var(--danger); }
   .ill-svg[viewBox^="0 0 340 "] { max-width: 360px; }
   .ill-svg[viewBox^="0 0 260 "] { max-width: 276px; }
 }
-/* Mobile : moins de marge autour du schéma pour qu'il soit moins réduit (textes plus lisibles) */
-/* Mobile : le schéma déborde de la marge de page (16 px de chaque côté) et occupe toute la largeur de l'écran :
-   le dessin passe de ~78 % à ~87 % de sa taille, donc les textes gagnent environ 1 px (12 px → 10,5 px). */
+/* Mobile : le cadre du schéma déborde de la marge de page (16 px de chaque côté) et occupe toute la largeur de l'écran,
+   ce qui garde le dessin grand (~85 % de sa taille). Une marge intérieure de 10 px empêche le dessin de toucher
+   les bords de l'écran (avant : 4 px, cadres coupés visuellement) ; la légende reste alignée sur le texte (16 px). */
 @media (max-width: 480px) {
-  .illustration { padding: 10px 4px; margin-left: -16px; margin-right: -16px; border-left: 0; border-right: 0; border-radius: 0; }
-  .illustration figcaption { padding: 0 12px; }
-  /* Les schémas larges (viewBox 420) sont réduits à ~87 % : leurs petits textes passent de 12 et 13 unités
-     à 13,2 et 13,6 pour s'afficher à ~11,5 px au lieu de 10,5 px. Géométrie vérifiée sans débordement (schemaMobileText.test.ts). */
+  .illustration { padding: 12px 10px; margin-left: -16px; margin-right: -16px; border-left: 0; border-right: 0; border-radius: 0; }
+  .illustration figcaption { padding: 0 6px; }
+  /* Les schémas larges (viewBox 420) sont réduits à ~85 % : leurs petits textes passent de 12 et 13 unités
+     à 13,2 et 13,6 pour s'afficher à ~11,2 px au lieu de 10,2 px. Géométrie vérifiée sans débordement (schemaMobileText.test.ts). */
   .ill-svg[viewBox^="0 0 420 "] .ill-in { font-size: 13.2px; }
   .ill-svg[viewBox^="0 0 420 "] .ill-sub { font-size: 13.6px; }
 }

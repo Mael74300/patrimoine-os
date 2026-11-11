@@ -374,7 +374,7 @@ export function LineChart({ series, xLabels, format, title, showTitle, height = 
   const summary = useMemo(() => summarizeSeries(series, xLabels, format), [series, xLabels, format]);
 
   return (
-    <figure style={{ margin: 0 }}>
+    <figure className="line-chart">
       {showTitle && <div className="chart-title" aria-hidden="true">{title}</div>}
       <svg
         ref={svgRef}
