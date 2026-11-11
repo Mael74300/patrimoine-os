@@ -31,6 +31,7 @@ export const JARGON_PATTERNS: Record<string, string[]> = {
   'Taux d’épargne': ['taux d[’\']épargne'],
   'Taux de retrait': ['taux de retrait'],
   'Volatilité': ['volatilité'],
+  'Sensibilité (fonds obligataire)': ['sensibilité'],
   'Dividende': ['dividendes?'],
   'TAEG (taux annuel effectif global)': ['TAEG'],
   'Taux d’usure': ['taux d[’\']usure'],
