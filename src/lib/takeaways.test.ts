@@ -3,7 +3,7 @@ import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, cat
 import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio } from './finance';
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
-import { businessTakeaway, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -325,6 +325,33 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(perte).toContain('perd');
     expect(perte).toContain('négative');
     expect(businessTakeaway({ years: 0, revenueFirst: 0, revenueLast: 0, netResultLast: 0, cashLast: 0, pessimisticLowestCash: 0 })).toBe('');
+  });
+  it('entreprise : la note « valeur estimée à 0 € » suit exactement les valeurs nulles de projectBusiness', () => {
+    const inp = { revenueY1: 120000, revenueGrowth: 0.1, grossMarginRate: 0.6, fixedCosts: 30000, fixedCostsGrowth: 0.02, founderPay: 24000, socialRate: 0.45, corporateTaxRate: 0.25, receivableDays: 30, initialCash: 15000, initialInvestment: 10000, valuationMultiple: 5, years: 5 };
+    const labels = ['Pessimiste', 'Central', 'Optimiste'];
+    const note = (i: typeof inp) => {
+      const runs = (['pessimiste', 'central', 'optimiste'] as const).map((k) => projectBusiness(i, BUSINESS_SCENARIOS[k]));
+      const lasts = runs.map((r) => r[r.length - 1]);
+      return { lasts, t: businessZeroValueNote({ multiple: i.valuationMultiple, scenarios: lasts.map((l, j) => ({ label: labels[j], netResultLast: l.netResult })) }) };
+    };
+    // Valeurs par défaut (fictives) : seul le scénario pessimiste finit en perte, sa valeur est nulle.
+    const d = note(inp);
+    expect(d.lasts.map((l) => l.valuation === 0)).toEqual([true, false, false]);
+    expect(d.t).toContain('le scénario pessimiste finit sans bénéfice');
+    expect(d.t).toContain('5\u00a0fois');
+    // Aucune perte : aucune note.
+    const ok = note({ ...inp, fixedCosts: 0 });
+    expect(ok.lasts.every((l) => l.valuation > 0)).toBe(true);
+    expect(ok.t).toBe('');
+    // Deux scénarios en perte.
+    const deux = note({ ...inp, fixedCosts: 75000 });
+    expect(deux.lasts.map((l) => l.valuation === 0)).toEqual([true, true, false]);
+    expect(deux.t).toContain('les scénarios pessimiste et central finissent');
+    // Multiple nul : toutes les valeurs sont nulles, la note le dit.
+    const zero = note({ ...inp, valuationMultiple: 0 });
+    expect(zero.lasts.every((l) => l.valuation === 0)).toBe(true);
+    expect(zero.t).toContain('multiple de valorisation est réglé à 0');
+    expect(businessZeroValueNote({ multiple: 2.5, scenarios: [{ label: 'Central', netResultLast: -1 }] })).toContain('2,5\u00a0fois');
   });
 
   it('portefeuille : gain annuel, frais, support dominant et projection viennent de summarizePortfolio et projectGrowth', () => {

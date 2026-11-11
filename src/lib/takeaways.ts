@@ -275,6 +275,23 @@ export function businessTakeaway(p: { years: number; revenueFirst: number; reven
   return `Dans le scénario central, le chiffre d'affaires passe de ${fmtEur(p.revenueFirst)} à ${fmtEur(p.revenueLast)} en ${duree}, mais ce n'est pas ce que vous gagnez : après charges, rémunération et impôt, ${reste}, et ${treso}.${risque}`;
 }
 
+/**
+ * Entreprise : explique une « valeur estimée » nulle. La valeur vaut le multiple choisi × le résultat net
+ * de la dernière année, s'il est positif ; une perte ou un multiple nul donnent donc 0 €.
+ */
+export function businessZeroValueNote(p: { multiple: number; scenarios: { label: string; netResultLast: number }[] }): string {
+  if (!(p.multiple > 0)) {
+    return 'Valeur estimée à 0\u00a0€ : le multiple de valorisation est réglé à 0 (réglages avancés).';
+  }
+  const enPerte = p.scenarios.filter((s) => s.netResultLast <= 0).map((s) => s.label.toLowerCase());
+  if (!enPerte.length) return '';
+  const fois = String(p.multiple).replace('.', ',');
+  const qui = enPerte.length === 1
+    ? `le scénario ${enPerte[0]} finit sans bénéfice`
+    : `les scénarios ${enPerte.slice(0, -1).join(', ')} et ${enPerte[enPerte.length - 1]} finissent sans bénéfice`;
+  return `Valeur estimée à 0\u00a0€ : ${qui} la dernière année, or la valeur vaut ${fois}\u00a0fois ce bénéfice.`;
+}
+
 /** Portefeuille : gain annuel supposé, frais, support dominant et projection. */
 export function portfolioTakeaway(p: { total: number; netReturn: number; annualFeesEuro: number; topLabel: string; topWeight: number; years: number; monthly: number; contributed: number; value: number }): string {
   if (!(p.total > 0)) return '';
