@@ -32,6 +32,11 @@ export type LumpVsGradualResult = {
   gradual: number;
   /** gradual − lump : positif si l'étalement a fini mieux placé. */
   advantageGradual: number;
+  /**
+   * Valeur des deux méthodes au début de chaque mois, de 0 (départ) à `months` (horizon), avant l'achat de la tranche du mois.
+   * La dernière valeur est égale à `lump` et `gradual`.
+   */
+  series: { month: number; lump: number; gradual: number }[];
 };
 
 export function lumpVsGradual(input: LumpVsGradualInput): LumpVsGradualResult {
@@ -52,15 +57,20 @@ export function lumpVsGradual(input: LumpVsGradualInput): LumpVsGradualResult {
 
   const lump = (amount / price(0)) * price(months);
 
+  const series: LumpVsGradualResult['series'] = [];
   let cash = amount;
   let units = 0;
   for (let t = 0; t < spread; t++) {
+    series.push({ month: t, lump: (amount / price(0)) * price(t), gradual: units * price(t) + cash });
     const tranche = cash / (spread - t);
     units += tranche / price(t);
     cash -= tranche;
     cash *= 1 + mc;
   }
-  const gradual = units * price(months) + cash * Math.pow(1 + mc, months - spread);
+  for (let t = spread; t <= months; t++) {
+    series.push({ month: t, lump: (amount / price(0)) * price(t), gradual: units * price(t) + cash * Math.pow(1 + mc, t - spread) });
+  }
+  const gradual = series[series.length - 1].gradual;
 
-  return { months, spreadMonths: spread, lump, gradual, advantageGradual: gradual - lump };
+  return { months, spreadMonths: spread, lump, gradual, advantageGradual: gradual - lump, series };
 }

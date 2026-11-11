@@ -279,6 +279,8 @@ details.fold > p { margin-left: 14px; margin-right: 14px; }
 .line-chart { margin: 0 0 14px; }
 .chart text { font-family: var(--font); fill: var(--ink-3); font-size: 12px; }
 .chart .grid-line { stroke: var(--line); stroke-width: 1; }
+.chart .chart-band rect { fill: var(--surface-2); }
+.chart .chart-band text { fill: var(--ink-2); font-weight: 600; }
 .chart-legend { display: flex; gap: 6px 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--ink-2); margin-top: 8px; padding: 8px 10px; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; }
 .chart-title { font-weight: 700; color: var(--ink); font-size: 0.95rem; line-height: 1.3; margin: 0 0 8px; }
 .chart-legend-x { flex: 0 0 100%; color: var(--ink); }
