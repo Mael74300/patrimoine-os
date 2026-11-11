@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { businessTakeaway } from '../lib/takeaways';
+import { businessTakeaway, businessZeroValueNote } from '../lib/takeaways';
 import { BUSINESS_SCENARIOS, fmtEur, fmtPct, lowestCash, projectBusiness, type BusinessInput } from '../lib/finance';
 import { Crumbs, Disclaimer, Fold, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, Tabs, usePersistentState, JumpToResults } from '../components/ui';
 
@@ -20,6 +20,7 @@ export default function SimEntreprise() {
   const rows = runs[tab];
   const start = s.initialCash - s.initialInvestment;
   const last = rows[rows.length - 1];
+  const zeroValue = businessZeroValueNote({ multiple: s.valuationMultiple, scenarios: runs.map((r, i) => ({ label: LABELS[i], netResultLast: r[r.length - 1]?.netResult ?? 0 })) });
 
   return (
     <>
@@ -48,8 +49,8 @@ export default function SimEntreprise() {
           <fieldset>
             <legend>Votre activité</legend>
             <NumberField label="Chiffre d'affaires, année 1" unit="€" value={s.revenueY1} onChange={up('revenueY1')} min={0} step={5000} sliderMax={1000000} hint="Le total des ventes prévues la première année." />
-            <NumberField label="Croissance annuelle du CA" unit="%" percent value={s.revenueGrowth} onChange={up('revenueGrowth')} step={1} min={-50} max={300} sliderMax={50} hint="De combien les ventes augmentent chaque année." />
-            <NumberField label="Marge brute" unit="% du CA" percent value={s.grossMarginRate} onChange={up('grossMarginRate')} step={1} min={0} max={100} sliderMax={100} hint="CA moins achats et coûts directs." />
+            <NumberField label="Croissance annuelle des ventes" unit="%" percent value={s.revenueGrowth} onChange={up('revenueGrowth')} step={1} min={-50} max={300} sliderMax={50} hint="De combien les ventes augmentent chaque année." />
+            <NumberField label="Marge brute" unit="% des ventes" percent value={s.grossMarginRate} onChange={up('grossMarginRate')} step={1} min={0} max={100} sliderMax={100} hint="Ventes moins achats et coûts directs." />
             <NumberField label="Charges fixes annuelles" unit="€" value={s.fixedCosts} onChange={up('fixedCosts')} min={0} step={1000} sliderMax={300000} hint="Loyer, abonnements, assurances… ce que vous payez même sans vente." />
             <NumberField label="Rémunération nette du dirigeant" unit="€/an" value={s.founderPay} onChange={up('founderPay')} min={0} step={1000} sliderMax={120000} />
             <NumberField label="Trésorerie de départ" unit="€" value={s.initialCash} onChange={up('initialCash')} step={1000} sliderMax={200000} hint="L'argent disponible au lancement." />
@@ -82,7 +83,7 @@ export default function SimEntreprise() {
           <div className="table-wrap stack-wrap">
             <table className="stack-table">
               <caption className="sr-only">Résultats des trois scénarios à {s.years}&nbsp;ans</caption>
-              <thead><tr><th>Scénario</th><th className="r">CA final</th><th className="r">Résultat net final</th><th className="r">Trésorerie finale</th><th className="r">Trésorerie la plus basse</th><th className="r">Valeur estimée</th></tr></thead>
+              <thead><tr><th>Scénario</th><th className="r">Chiffre d’affaires final</th><th className="r">Résultat net final</th><th className="r">Trésorerie finale</th><th className="r">Trésorerie la plus basse</th><th className="r">Valeur estimée</th></tr></thead>
               <tbody>
                 {runs.map((r, i) => {
                   const l = r[r.length - 1];
@@ -90,7 +91,7 @@ export default function SimEntreprise() {
                   return (
                     <tr key={i}>
                       <td className="st-name" style={{ whiteSpace: 'nowrap' }}><span aria-hidden="true" style={{ color: COLORS[i] }}>●</span> {LABELS[i]}</td>
-                      <td data-label="CA final" className="r">{fmtEur(l?.revenue ?? 0)}</td>
+                      <td data-label="Chiffre d’affaires final" className="r">{fmtEur(l?.revenue ?? 0)}</td>
                       <td data-label="Résultat net final" className={'r ' + ((l?.netResult ?? 0) < 0 ? 'neg' : '')}>{fmtEur(l?.netResult ?? 0)}</td>
                       <td data-label="Trésorerie finale" className={'r ' + ((l?.cash ?? 0) < 0 ? 'neg' : '')}>{fmtEur(l?.cash ?? 0)}</td>
                       <td data-label="Trésorerie la plus basse" className={'r ' + (low < 0 ? 'neg' : '')}>{fmtEur(low)}</td>
@@ -103,8 +104,8 @@ export default function SimEntreprise() {
           </div>
           <Takeaway>{businessTakeaway({ years: s.years, revenueFirst: runs[1][0]?.revenue ?? 0, revenueLast: runs[1][runs[1].length - 1]?.revenue ?? 0, netResultLast: runs[1][runs[1].length - 1]?.netResult ?? 0, cashLast: runs[1][runs[1].length - 1]?.cash ?? 0, pessimisticLowestCash: lowestCash(runs[0], start) })}</Takeaway>
           <p className="small muted">
-            Pessimiste : CA de départ −20 %, croissance −5 points, marge −5 points. Optimiste : CA +15 %, croissance +5 points, marge +3 points.
-            Une trésorerie négative signale un besoin de financement.
+            Pessimiste : ventes de départ −20 %, croissance −5 points, marge −5 points. Optimiste : ventes +15 %, croissance +5 points, marge +3 points.
+            Une trésorerie négative signale un besoin de financement.{zeroValue && <> {zeroValue}</>}
           </p>
           <div className="panel">
             <LineChart
@@ -120,7 +121,7 @@ export default function SimEntreprise() {
           <Tabs label="Scénario détaillé" items={LABELS} active={tab} onSelect={setTab} />
           {last && (
             <div className="kpis">
-              <Kpi label="Marge brute finale" value={fmtEur(last.grossMargin)} sub={fmtPct(last.revenue ? last.grossMargin / last.revenue : 0) + ' du CA'} />
+              <Kpi label="Marge brute finale" value={fmtEur(last.grossMargin)} sub={fmtPct(last.revenue ? last.grossMargin / last.revenue : 0) + ' du chiffre d’affaires'} />
               <Kpi label="Coût de la rémunération" value={fmtEur(last.payrollCost)} sub="net + charges sociales" />
               <Kpi label="Impôt sur les sociétés" value={fmtEur(last.corporateTax)} />
             </div>
@@ -129,7 +130,7 @@ export default function SimEntreprise() {
           <div className="table-wrap" tabIndex={0}>
             <table>
               <thead>
-                <tr><th>Année</th><th className="r">CA</th><th className="r">Marge brute</th><th className="r">Charges fixes</th><th className="r">Rémunération chargée</th><th className="r">Résultat avant IS</th><th className="r">IS</th><th className="r">Résultat net</th><th className="r">Besoin en fonds de roulement</th><th className="r">Flux de trésorerie</th><th className="r">Trésorerie</th><th className="r">Valeur estimée</th></tr>
+                <tr><th>Année</th><th className="r">Chiffre d’affaires</th><th className="r">Marge brute</th><th className="r">Charges fixes</th><th className="r">Rémunération et charges sociales</th><th className="r">Résultat avant impôt</th><th className="r">Impôt sur les sociétés</th><th className="r">Résultat net</th><th className="r">Besoin en fonds de roulement</th><th className="r">Flux de trésorerie</th><th className="r">Trésorerie</th><th className="r">Valeur estimée</th></tr>
               </thead>
               <tbody>
                 {rows.map((y) => (
