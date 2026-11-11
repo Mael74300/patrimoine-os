@@ -372,3 +372,14 @@ export function renegoTakeaway(p: { monthlyGain: number; netGain: number; breakE
     : ` Si vous gardez le prêt jusqu’au bout, vous perdez ${fmtEur(-p.netGain)} net : la baisse de mensualité ne compense pas l’allongement ou les frais.`;
   return `${base}${fin}${p.longer ? ' Attention : le nouveau prêt dure plus longtemps.' : ''}`;
 }
+
+/**
+ * Comparateur ETF ou immobilier : rappel, sur le bloc replié des réglages avancés, des hypothèses
+ * qui pèsent le plus sur le résultat (régime fiscal, tranche, évolution du prix du bien).
+ * Simple reformulation de la saisie : aucun chiffre réglementaire ici.
+ */
+export function etfImmoAdvancedHint(p: { regimeLabel: string; taxed: boolean; marginalRate: number; appreciation: number }): string {
+  const prix = `prix du bien ${p.appreciation > 0 ? '+' : ''}${fmtPct(p.appreciation)}/an`;
+  if (!p.taxed) return `Impôt non estimé, ${prix}`;
+  return `${p.regimeLabel}, tranche ${fmtPct(p.marginalRate)}, ${prix}`;
+}

@@ -628,6 +628,11 @@ main { padding-top: 28px; }
 .choice.on { background: var(--grad); border-color: transparent; box-shadow: 0 4px 12px rgba(23, 53, 138, 0.25); }
 .choice.on strong, .choice.on span { color: #fff; }
 details.advanced { margin: 4px 0 14px; }
+/* Rappel des hypothèses en cours sous le titre d'un bloc de réglages replié (comparateur ETF ou immobilier) */
+details.advanced:not([open]) > summary:has(.fold-hint) { line-height: 1.35; align-items: flex-start; }
+details.advanced:not([open]) > summary:has(.fold-hint)::after { margin-top: 1px; }
+details.advanced .fold-hint { display: block; font-weight: 400; font-size: .85rem; color: var(--ink-3); margin-top: 4px; }
+details.advanced[open] .fold-hint { display: none; }
 .advanced-body { padding: 0 14px 12px; }
 
 /* Portefeuille : sous 700 px, chaque ligne devient une carte (champs étiquetés, résultats en bas) */
