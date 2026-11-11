@@ -10,7 +10,7 @@ import { simBlurb } from '../lib/simThemes';
 import { DONATION_ABATTEMENTS, fmtEuros } from '../data/donationAbattements';
 import { SchemaActions, SchemaForet, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaPea, SchemaLep, SchemaPel, SchemaPer, SchemaQuinzaines, SchemaScpi, SchemaUniteDeCompte, SchemaFondsEuros, SchemaLevier, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaActiviteNumerique } from '../components/Illustrations';
 import NotFound from './NotFound';
-import { fmtDate } from './Guides';
+import { fmtDate } from '../lib/dates';
 import { guideBySlug } from '../data/guides';
 import { annotateJargon } from '../lib/jargon';
 import { JargonText } from '../components/Jargon';

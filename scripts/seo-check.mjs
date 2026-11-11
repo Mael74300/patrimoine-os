@@ -90,6 +90,18 @@ export function breakableNumbers(html) {
   return [...text.matchAll(/[^\n]{0,20}\d (?:\d{3}(?!\d)|€|%|k€)[^\n]{0,10}/g)].map((m) => m[0].trim());
 }
 
+/**
+ * Dates au format machine (« 2026-11-08 ») dans le texte visible : le lecteur doit lire « 8 novembre 2026 »
+ * (voir `fmtDate` dans src/lib/dates.ts). Les données structurées et les métadonnées ne sont pas concernées.
+ */
+export function isoDatesInText(html) {
+  const text = html
+    .replace(/<head>[\s\S]*?<\/head>/, '')
+    .replace(/<(script|style|svg)\b[\s\S]*?<\/\1>/g, '')
+    .replace(/<[^>]+>/g, '\n');
+  return [...text.matchAll(/[^\n]{0,20}\b\d{4}-\d{2}-\d{2}\b[^\n]{0,10}/g)].map((m) => m[0].trim());
+}
+
 /** Lit dist/ d’après le sitemap et la liste des pages (noindex incluses via les chemins fournis). */
 export async function checkDist(dist, siteUrl, base) {
   const sitemap = await readFile(join(dist, 'sitemap.xml'), 'utf8');
@@ -99,6 +111,7 @@ export async function checkDist(dist, siteUrl, base) {
   pages.push({ path: '/404/', html: await readFile(join(dist, '404.html'), 'utf8') });
   const errors = checkSeo(pages.filter((p) => p.path !== '/404/'), { siteUrl, base });
   for (const p of pages) for (const t of breakableNumbers(p.html)) errors.push(`${p.path} : nombre sécable « ${t} » (espace insécable attendue, voir src/lib/nbsp.ts)`);
+  for (const p of pages) for (const t of isoDatesInText(p.html)) errors.push(`${p.path} : date au format machine « ${t} » (date en toutes lettres attendue, voir src/lib/dates.ts)`);
   // Chaque image Open Graph du site doit exister dans dist/.
   for (const p of pages) {
     const m = p.html.match(/<meta property="og:image" content="([^"]+)"/);

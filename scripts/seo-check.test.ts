@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 // @ts-expect-error module JavaScript du build, sans déclaration de types
-import { checkSeo } from './seo-check.mjs';
+import { checkSeo, isoDatesInText } from './seo-check.mjs';
 
 const site = 'https://exemple.github.io/patrimoine-os';
 const page = (path: string, { title = 'Un titre de page tout à fait correct', desc = 'Une description suffisamment longue pour être utile aux moteurs de recherche.', links = [] as string[], ld = '', canonical = site + path } = {}) => ({
@@ -34,5 +34,12 @@ describe('contrôle SEO', () => {
   it('signale un JSON-LD invalide', () => {
     const errs = run([page('/', { ld: '<script type="application/ld+json">{oups</script>' })]);
     expect(errs.some((e) => e.includes('JSON-LD invalide'))).toBe(true);
+  });
+});
+
+describe('dates au format machine dans le texte visible', () => {
+  it('signale « 2026-11-08 » dans le texte, pas dans les métadonnées ni les données structurées', () => {
+    const html = '<html><head><meta name="date" content="2026-11-08"></head><body><p>vérifié au <b>2026-11-08</b></p><script type="application/ld+json">{"dateModified":"2026-11-08"}</script><p>vérifié au 8 novembre 2026</p></body></html>';
+    expect(isoDatesInText(html)).toEqual(['2026-11-08']);
   });
 });
