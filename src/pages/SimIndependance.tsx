@@ -77,7 +77,7 @@ export default function SimIndependance() {
                       <td>{fmtPct(w)}</td>
                       <td className="r">{Number.isFinite(t) ? fmtEur(t) : '—'}</td>
                       <td className="r">{fmtYears(yearsToTarget({ ...s, withdrawalRate: w }))}</td>
-                      <td className="r">{d === null ? 'plus de 60 ans' : `${d} ans`}</td>
+                      <td className="r">{d === null ? 'plus de 60 ans' : `${d}\u00a0ans`}</td>
                     </tr>
                   );
                 })}
@@ -96,7 +96,7 @@ export default function SimIndependance() {
               xLabels={scenarios[0].series.map((p) => `An ${p.year}`)}
               format={fmtEur}
               series={scenarios.map((sc, i) => ({
-                name: `Rendement ${fmtPct(s.nominalReturn + [-0.02, 0, 0.02][i])}${sc.depletedAt ? ` — épuisé en ${sc.depletedAt} ans` : ''}`,
+                name: `Rendement ${fmtPct(s.nominalReturn + [-0.02, 0, 0.02][i])}${sc.depletedAt ? ` — épuisé en ${sc.depletedAt}\u00a0ans` : ''}`,
                 color: COLORS[i],
                 values: sc.series.map((p) => p.realCapital),
               }))}

@@ -11,7 +11,7 @@ describe('phrases « Concrètement »', () => {
     const t = creditTakeaway({ principal: 200000, years: 20, monthlyTotal: res.monthlyPayment + res.monthlyInsurance, totalCost: res.totalCost });
     const rendu = Math.round(200000 + res.totalCost).toLocaleString('fr-FR');
     expect(t.replace(/\s/g, '')).toContain(rendu.replace(/\s/g, ''));
-    expect(t).toContain('20 ans');
+    expect(t).toContain('20\u00a0ans');
   });
   it('crédit : vide si aucun emprunt', () => {
     expect(creditTakeaway({ principal: 0, years: 20, monthlyTotal: 0, totalCost: 0 })).toBe('');
@@ -60,6 +60,11 @@ describe('phrases « Concrètement »', () => {
     const tb = rentVsBuyTakeaway({ horizonYears: 15, advantage: buy.advantage, breakEvenMonth: buy.breakEvenMonth });
     expect(digits(tb)).toContain(eur(buy.advantage));
     expect(tb).toContain('en achetant');
+    // durée en années et mois, plus de « à partir du mois 145 »
+    const be = buy.breakEvenMonth as number;
+    expect(be).toBeGreaterThan(12);
+    expect(tb).toContain(`au bout de ${Math.floor(be / 12)}\u00a0an`);
+    expect(tb).not.toMatch(/du mois \d/);
     expect(tb).toContain('hypothèses');
     const rent = rentVsBuy({ ...base, priceGrowth: -0.03, horizonYears: 5 });
     expect(rent.advantage).toBeLessThan(0);
@@ -92,7 +97,7 @@ describe('phrases « Concrètement »', () => {
     expect(out.monthsUntilEmpty).not.toBeNull();
     const m = out.monthsUntilEmpty as number;
     const t2 = withdrawalTakeaway({ capital: 200000, monthly: 2500, years: 25, ...out });
-    expect(t2).toContain(`${Math.floor(m / 12)} an`);
+    expect(t2).toContain(`${Math.floor(m / 12)}\u00a0an`);
     expect(digits(t2)).toContain(eur(out.sustainable));
     expect(withdrawalTakeaway({ capital: 0, monthly: 100, years: 5, ...ok })).toBe('');
   });
@@ -193,7 +198,7 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
   it('intérêts composés : doubler son capital, en euros puis en pouvoir d’achat', () => {
     const r = doubling({ initial: 10000, annualReturn: 0.06, inflation: 0.02, multiple: 2 });
     const t = doublingTakeaway({ multiple: 2, exactYears: r.exactYears, realYears: r.realYears, realReturn: r.realReturn });
-    expect(t).toContain(`${(Math.round((r.exactYears as number) * 10) / 10).toString().replace('.', ',')} ans`);
+    expect(t).toContain(`${(Math.round((r.exactYears as number) * 10) / 10).toString().replace('.', ',')}\u00a0ans`);
     expect(t).toContain('inflation');
     const flat = doubling({ initial: 10000, annualReturn: 0.02, inflation: 0.03, multiple: 2 });
     expect(doublingTakeaway({ multiple: 2, exactYears: flat.exactYears, realYears: flat.realYears, realReturn: flat.realReturn })).toContain('pouvoir d\'achat n\'augmente pas');
@@ -444,7 +449,9 @@ describe('phrases « Concrètement » : comparer des crédits', () => {
     const t = renegoTakeaway({ monthlyGain: r.monthlyGain, netGain: r.netGain, breakEvenMonths: r.breakEvenMonths, longer: r.longer, fees: 3000 });
     const d = (n: string) => n.replace(/\s/g, '');
     expect(d(t)).toContain(d(fmtEur(r.monthlyGain)));
-    expect(t).toContain(`environ ${Math.ceil(r.breakEvenMonths as number)} mois`);
+    const m = Math.ceil(r.breakEvenMonths as number);
+    // point mort dit en années et mois (38 mois → « 3 ans et 2 mois »)
+    expect(t).toContain(`environ ${Math.floor(m / 12)}\u00a0ans et ${m % 12}\u00a0mois`);
     expect(d(t)).toContain(d(fmtEur(Math.abs(r.netGain))));
   });
   it('renégociation : mensualité qui ne baisse pas', async () => {

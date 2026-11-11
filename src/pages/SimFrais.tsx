@@ -50,7 +50,7 @@ export default function SimFrais() {
         </form>
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
-            <Kpi label="Capital sans aucun frais" value={fmtEur(base.finalValue)} sub={`après ${s.years} ans (référence)`} />
+            <Kpi label="Capital sans aucun frais" value={fmtEur(base.finalValue)} sub={`après ${s.years}\u00a0ans (référence)`} />
             <Kpi label={`Coût des frais à ${fmtPct(worst.fees)}`} value={fmtEur(worst.cost)} sub={`${fmtPct(worst.shareOfGains)} des gains absorbés`} tone={worst.cost > 0 ? 'neg' : undefined} />
             <Kpi label={`Capital avec ${fmtPct(res[0].fees)} de frais`} value={fmtEur(res[0].finalValue)} sub={`soit ${fmtEur(res[0].realValue)} d'aujourd'hui`} />
           </div>

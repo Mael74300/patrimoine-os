@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  allocateEnvelopes, fmtEur, fmtNum, fmtPct, monthlySavingNeeded, monthsCovered, precautionPath,
+  allocateEnvelopes, fmtEur, fmtMonths, fmtNum, fmtPct, monthlySavingNeeded, monthsCovered, precautionPath,
   PROFILE_MONTHS, type PrecautionInput, type PrecautionProfile,
 } from '../lib/finance';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
@@ -15,13 +15,7 @@ const DEFAULTS: State = {
   currentSavings: 2500, monthlySaving: 250, annualRate: 0.017, lep: 'non', deadline: 24,
 };
 
-const fmtMonths = (m: number | null) => {
-  if (m === null) return 'non atteint en 50 ans';
-  if (m === 0) return 'déjà atteint';
-  const y = Math.floor(m / 12);
-  const r = m % 12;
-  return [y ? `${y} an${y > 1 ? 's' : ''}` : '', r ? `${r} mois` : ''].filter(Boolean).join(' et ');
-};
+const fmtDelay = (m: number | null) => (m === null ? 'non atteint en 50\u00a0ans' : m === 0 ? 'déjà atteint' : fmtMonths(m));
 
 export default function SimPrecaution() {
   const [s, setS, up] = usePersistentState<State>('precaution', DEFAULTS);
@@ -87,15 +81,15 @@ export default function SimPrecaution() {
         </form>
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
-            <Kpi label="Montant visé" value={fmtEur(target)} sub={`${fmtNum(s.months)} mois × ${fmtEur(s.monthlyExpenses)} + ${fmtEur(s.extraReserve)}`} />
+            <Kpi label="Montant visé" value={fmtEur(target)} sub={`${fmtNum(s.months)}\u00a0mois × ${fmtEur(s.monthlyExpenses)} + ${fmtEur(s.extraReserve)}`} />
             <Kpi
               label="Couverture actuelle"
-              value={Number.isFinite(covered) ? `${fmtNum(Math.floor(covered * 10) / 10)} mois` : '—'}
+              value={Number.isFinite(covered) ? `${fmtNum(Math.floor(covered * 10) / 10)}\u00a0mois` : '—'}
               sub={gap > 0 ? `il manque ${fmtEur(gap)}` : 'objectif atteint'}
               tone={gap > 0 ? undefined : 'pos'}
             />
-            <Kpi label="Délai avec votre versement" value={fmtMonths(path.reachedAt)} sub={`${fmtEur(s.monthlySaving)} par mois`} />
-            <Kpi label={`Versement pour y arriver en ${fmtNum(s.deadline)} mois`} value={fmtEur(Math.ceil(need))} sub="par mois, intérêts compris" />
+            <Kpi label="Délai avec votre versement" value={fmtDelay(path.reachedAt)} sub={`${fmtEur(s.monthlySaving)} par mois`} />
+            <Kpi label={`Versement pour y arriver en ${fmtNum(s.deadline)}\u00a0mois`} value={fmtEur(Math.ceil(need))} sub="par mois, intérêts compris" />
           </div>
           <CoverageGauge savings={s.currentSavings} target={target} label="Épargne actuelle" />
           <Takeaway>{precautionTakeaway({ target, savings: s.currentSavings, monthlySaving: s.monthlySaving, reachedAt: path.reachedAt })}</Takeaway>

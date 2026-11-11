@@ -132,7 +132,7 @@ export default function Compare() {
       )}
       {items.length > 0 && (
         <p className="small" style={{ marginBottom: 12 }}>
-          <strong>Concrètement :</strong> vous versez <strong className="num">{fmtEur(totalContributed(amount, monthly, years))}</strong> de votre poche en {years} ans.
+          <strong>Concrètement :</strong> vous versez <strong className="num">{fmtEur(totalContributed(amount, monthly, years))}</strong> de votre poche en {years}&nbsp;ans.
           Le reste de la valeur finale vient du rendement supposé (moins les frais), pas de vous.
         </p>
       )}
@@ -146,7 +146,7 @@ export default function Compare() {
               <NumberField label="Frais annuels" unit="%" percent value={getH(i.slug).f} step={0.1} min={0} max={5}
                 onChange={(v) => setHyp((h) => ({ ...h, [i.slug]: { ...getH(i.slug), f: v } }))} />
             </div>
-            <div className="small">Valeur à {years} ans : <strong className="num">{fmtEur(proj[k][years].value)}</strong></div>
+            <div className="small">Valeur à {years}&nbsp;ans : <strong className="num">{fmtEur(proj[k][years].value)}</strong></div>
             <div className="small muted" style={{ marginTop: 4 }}>{splitText(proj[k][years].value, amount, monthly, years)}</div>
           </div>
         ))}

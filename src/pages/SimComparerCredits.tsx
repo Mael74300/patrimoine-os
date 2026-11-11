@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { fmtEur, fmtEur2, fmtNum, fmtPct, fmtPts, inFine, loanDuration, renegotiation, taeg, taegByFees, taegByInsurance } from '../lib/finance';
+import { fmtEur, fmtEur2, fmtMonths, fmtNum, fmtPct, fmtPts, inFine, loanDuration, renegotiation, taeg, taegByFees, taegByInsurance } from '../lib/finance';
 import { loanDurationTakeaway, taegTakeaway, inFineTakeaway, renegoTakeaway } from '../lib/takeaways';
 import { comparerCreditsFaq } from '../data/simFaq';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
@@ -56,10 +56,10 @@ function Duree() {
         )}
       >
         <div className="kpis">
-          <Kpi label={`Mensualité sur ${shortest.years} ans`} value={fmtEur2(shortest.monthlyTotal)} sub="assurance comprise" />
-          <Kpi label={`Mensualité sur ${longest.years} ans`} value={fmtEur2(longest.monthlyTotal)} sub="assurance comprise" />
-          <Kpi label={`Coût total sur ${shortest.years} ans`} value={fmtEur(shortest.totalCost)} sub="intérêts + assurance" />
-          <Kpi label={`Coût total sur ${longest.years} ans`} value={fmtEur(longest.totalCost)} sub={`${fmtEur(longest.totalCost - shortest.totalCost)} de plus`} />
+          <Kpi label={`Mensualité sur ${shortest.years}\u00a0ans`} value={fmtEur2(shortest.monthlyTotal)} sub="assurance comprise" />
+          <Kpi label={`Mensualité sur ${longest.years}\u00a0ans`} value={fmtEur2(longest.monthlyTotal)} sub="assurance comprise" />
+          <Kpi label={`Coût total sur ${shortest.years}\u00a0ans`} value={fmtEur(shortest.totalCost)} sub="intérêts + assurance" />
+          <Kpi label={`Coût total sur ${longest.years}\u00a0ans`} value={fmtEur(longest.totalCost)} sub={`${fmtEur(longest.totalCost - shortest.totalCost)} de plus`} />
         </div>
         <Takeaway>{loanDurationTakeaway({ principal: s.principal, shortYears: shortest.years, longYears: longest.years, shortMonthly: shortest.monthlyTotal, longMonthly: longest.monthlyTotal, shortCost: shortest.totalCost, longCost: longest.totalCost })}</Takeaway>
         <h2>Comparaison par durée</h2>
@@ -70,7 +70,7 @@ function Duree() {
             <tbody>
               {rows.map((r) => (
                 <tr key={r.years}>
-                  <td className="st-name">{r.years} ans</td>
+                  <td className="st-name">{r.years}&nbsp;ans</td>
                   <td data-label="Mensualité (hors assurance)" className="r">{fmtEur2(r.monthlyPayment)}</td>
                   <td data-label="Mensualité (assurance comprise)" className="r">{fmtEur2(r.monthlyTotal)}</td>
                   <td data-label="Intérêts" className="r">{fmtEur(r.totalInterest)}</td>
@@ -121,7 +121,7 @@ function Taeg() {
       >
         <div className="kpis">
           <Kpi label="TAEG estimé" value={fmtPct(r.taeg)} sub={`contre ${fmtPct(s.annualRate)} de taux nominal (écart de ${fmtPts(r.gap)})`} />
-          <Kpi label="Mensualité assurance comprise" value={fmtEur(r.monthlyTotal)} sub={`dont ${fmtEur(r.monthlyInsurance)} d’assurance, sur ${r.months} mois`} />
+          <Kpi label="Mensualité assurance comprise" value={fmtEur(r.monthlyTotal)} sub={`dont ${fmtEur(r.monthlyInsurance)} d’assurance, sur ${r.months}\u00a0mois`} />
           <Kpi label="Coût total du crédit" value={fmtEur(r.totalCost)} sub={`intérêts ${fmtEur(r.totalInterest)} + assurance ${fmtEur(r.totalInsurance)} + frais ${fmtEur(Math.min(s.fees, s.principal))}`} />
         </div>
         <Takeaway>{taegTakeaway({ principal: s.principal, nominal: s.annualRate, taeg: r.taeg, totalCost: r.totalCost })}</Takeaway>
@@ -196,7 +196,7 @@ function InFine() {
           <Kpi label="Coût net, in fine" value={fmtEur(r.inFineNetCost)} sub={r.netCostGap >= 0 ? `${fmtEur(r.netCostGap)} de plus` : `${fmtEur(-r.netCostGap)} de moins`} />
         </div>
         <Takeaway>{inFineTakeaway({ principal: s.principal, years: s.years, savingsReturn: s.savingsReturn, annualRate: s.annualRate, amortizingMonthly: r.amortizingMonthlyTotal, inFineMonthly: r.inFineMonthlyTotal, monthlySaving: r.monthlySaving, netCostGap: r.netCostGap })}</Takeaway>
-        <h2>Comparaison sur {r.months / 12} ans</h2>
+        <h2>Comparaison sur {r.months / 12}&nbsp;ans</h2>
         <div className="table-wrap" tabIndex={0}>
           <table>
             <thead><tr><th>Poste</th><th className="r">Amortissable</th><th className="r">In fine</th></tr></thead>
@@ -253,7 +253,7 @@ function Renegocier() {
           <Kpi label="Mensualité actuelle" value={fmtEur(r.currentMonthly)} sub="hors assurance" />
           <Kpi label="Nouvelle mensualité" value={fmtEur(r.newMonthly)} sub={`${r.monthlyGain >= 0 ? 'économie' : 'surcoût'} de ${fmtEur(Math.abs(r.monthlyGain))} par mois`} />
           <Kpi label="Gain net sur le coût total" value={fmtEur(r.netGain)} sub="intérêts évités moins frais" />
-          <Kpi label="Point mort" value={r.breakEvenMonths === null ? 'aucun' : `${fmtNum(r.breakEvenMonths)} mois`} sub={r.breakEvenMonths === null ? 'la mensualité ne baisse pas' : 'd’économie de mensualité pour couvrir les frais'} />
+          <Kpi label="Point mort" value={r.breakEvenMonths === null ? 'aucun' : fmtMonths(r.breakEvenMonths)} sub={r.breakEvenMonths === null ? 'la mensualité ne baisse pas' : 'd’économie de mensualité pour couvrir les frais'} />
         </div>
         <Takeaway>{renegoTakeaway({ monthlyGain: r.monthlyGain, netGain: r.netGain, breakEvenMonths: r.breakEvenMonths, longer: r.longer, fees: s.fees })}</Takeaway>
         {r.longer && (

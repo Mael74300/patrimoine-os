@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { comparePayoff, fmtEur, type Debt } from '../lib/finance';
+import { comparePayoff, fmtEur, fmtMonths, type Debt } from '../lib/finance';
 import { debtsTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
@@ -13,12 +13,7 @@ type State = {
 // Exemple fictif : toutes les valeurs sont des hypothèses à remplacer par les vôtres.
 const DEFAULTS: State = { b1: 2000, r1: 0.2, m1: 60, b2: 6000, r2: 0.05, m2: 150, b3: 1000, r3: 0.03, m3: 50, extra: 100 };
 
-const fmtDuration = (months: number | null) => {
-  if (months === null) return 'plus de 50 ans';
-  const y = Math.floor(months / 12);
-  const m = months % 12;
-  return [y ? `${y} an${y > 1 ? 's' : ''}` : '', m || !y ? `${m} mois` : ''].filter(Boolean).join(' ');
-};
+const fmtDuration = (months: number | null) => (months === null ? 'plus de 50\u00a0ans' : fmtMonths(months));
 
 export default function SimDettes() {
   const [s, setS, up] = usePersistentState<State>('dettes', DEFAULTS);
@@ -94,7 +89,7 @@ export default function SimDettes() {
               </tbody>
             </table>
           </div>
-          <h2>Mois de solde de chaque dette</h2>
+          <h2>Quand chaque dette est soldée</h2>
           <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th scope="col">Dette</th><th scope="col" className="r">Avalanche</th><th scope="col" className="r">Boule de neige</th></tr></thead>
@@ -102,8 +97,8 @@ export default function SimDettes() {
                 {debts.map((d, i) => (
                   <tr key={d.name}>
                     <th scope="row">{d.name}</th>
-                    <td className="r">{c.avalanche.payoffMonths[i] === null ? 'non soldée' : `mois ${c.avalanche.payoffMonths[i]}`}</td>
-                    <td className="r">{c.snowball.payoffMonths[i] === null ? 'non soldée' : `mois ${c.snowball.payoffMonths[i]}`}</td>
+                    <td className="r">{c.avalanche.payoffMonths[i] === null ? 'non soldée' : fmtMonths(c.avalanche.payoffMonths[i] as number)}</td>
+                    <td className="r">{c.snowball.payoffMonths[i] === null ? 'non soldée' : fmtMonths(c.snowball.payoffMonths[i] as number)}</td>
                   </tr>
                 ))}
               </tbody>

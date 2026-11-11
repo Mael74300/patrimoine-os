@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { amortize, borrowingCapacity, fmtEur, fmtEur2, prepayment } from '../lib/finance';
+import { amortize, borrowingCapacity, fmtEur, fmtEur2, fmtMonths, prepayment } from '../lib/finance';
 import { creditTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, ChoiceField, usePersistentState, JumpToResults } from '../components/ui';
 
@@ -11,12 +11,6 @@ type State = {
 const DEFAULTS: State = {
   principal: 200000, annualRate: 0.036, years: 20, insuranceRate: 0.003, income: 4000, debtRatio: 0.35,
   prepayYear: 5, prepayAmount: 30000, prepayMode: 'duree', withPenalty: true,
-};
-
-const duration = (months: number) => {
-  const y = Math.floor(months / 12);
-  const m = months % 12;
-  return `${y} an${y > 1 ? 's' : ''}${m ? ` ${m} mois` : ''}`;
 };
 
 export default function SimCredit() {
@@ -81,7 +75,7 @@ export default function SimCredit() {
             <Kpi label="Indemnités" value={fmtEur(pre.penalty)} tone={pre.penalty > 0 ? 'neg' : undefined} />
             <Kpi label="Gain net" value={fmtEur(pre.netSaving)} tone={pre.netSaving >= 0 ? 'pos' : 'neg'} sub="intérêts et assurance économisés − indemnités" />
             {s.prepayMode === 'duree'
-              ? <Kpi label="Nouvelle durée totale" value={duration(pre.newTotalMonths)} sub={`${pre.monthsSaved} mois gagnés`} />
+              ? <Kpi label="Nouvelle durée totale" value={fmtMonths(pre.newTotalMonths)} sub={`${pre.monthsSaved}\u00a0mois gagnés`} />
               : <Kpi label="Nouvelle mensualité" value={fmtEur2(pre.newMonthlyPayment)} sub="hors assurance" />}
           </div>
           <div className="panel">

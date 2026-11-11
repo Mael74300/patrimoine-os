@@ -1,5 +1,5 @@
 /**
- * Typographie française : une espace avant « ? ! ; : » et « » ou entre un chiffre et « % » ou « € » ne doit pas
+ * Typographie française : une espace avant « ? ! ; : » et « » ou entre un chiffre et « % », « € », « an(s) » ou « mois » ne doit pas
  * se couper en fin de ligne (sinon le signe se retrouve seul au début de la ligne suivante, surtout sur mobile).
  * On remplace l'espace ordinaire par une espace insécable (U+00A0). Seul le texte affiché est touché.
  * Une apostrophe droite entre deux lettres (« l'entreprise ») devient l'apostrophe typographique « ’ », comme
@@ -9,6 +9,8 @@ const NBSP = ' ';
 const AVANT = / ([?!;:»])/g;
 const APRES = /(«) /g;
 const UNITE = /(\d) ([%€])/g;
+/** « 18 ans », « 1 an », « 6 mois » : le nombre ne se sépare pas de sa durée (pas de « 18 » seul en fin de ligne). */
+const DUREE = /(\d) (ans?|mois)(?![\p{L}\d])/gu;
 const APOSTROPHE = /(\p{L})'(?=\p{L})/gu;
 
 export function espacesInsecables(s: string): string {
@@ -16,7 +18,8 @@ export function espacesInsecables(s: string): string {
     .replace(APOSTROPHE, '$1’')
     .replace(AVANT, `${NBSP}$1`)
     .replace(APRES, `$1${NBSP}`)
-    .replace(UNITE, `$1${NBSP}$2`);
+    .replace(UNITE, `$1${NBSP}$2`)
+    .replace(DUREE, `$1${NBSP}$2`);
 }
 
 const IGNORES = new Set(['SCRIPT', 'STYLE', 'TEXTAREA', 'CODE', 'PRE']);

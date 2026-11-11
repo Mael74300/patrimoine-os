@@ -42,7 +42,7 @@ export default function SimObjectif() {
         </form>
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
-            <Kpi label="Versement mensuel nécessaire" value={fmtEur(r.monthly)} sub={r.monthly === 0 ? 'objectif déjà couvert par l’épargne de départ' : `pendant ${r.months} mois, versements en fin de mois`} />
+            <Kpi label="Versement mensuel nécessaire" value={fmtEur(r.monthly)} sub={r.monthly === 0 ? 'objectif déjà couvert par l’épargne de départ' : `pendant ${r.months}\u00a0mois, versements en fin de mois`} />
             <Kpi label="Total des versements" value={fmtEur(r.deposits)} sub={`en plus des ${fmtEur(s.current)} déjà épargnés`} />
             <Kpi label="Intérêts attendus" value={fmtEur(r.interest)} sub={`soit ${fmtPct(r.interestShare)} de l'objectif`} />
           </div>
@@ -54,14 +54,14 @@ export default function SimObjectif() {
             format={fmtEur}
             series={[{ name: 'Solde', color: 'var(--chart-1)', values: r.series }]}
           />
-          <p className="muted small">Échéance : {n} an{n > 1 ? 's' : ''}.</p>
+          <p className="muted small">Échéance : {n}&nbsp;an{n > 1 ? 's' : ''}.</p>
           <h2>Effet de la durée</h2>
           <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th scope="col">Échéance</th><th scope="col" className="r">Versement mensuel</th></tr></thead>
               <tbody>
                 {byYears.map((d) => (
-                  <tr key={d.years}><th scope="row">{d.years} ans</th><td className="r">{fmtEur(d.monthly)}</td></tr>
+                  <tr key={d.years}><th scope="row">{d.years}&nbsp;ans</th><td className="r">{fmtEur(d.monthly)}</td></tr>
                 ))}
               </tbody>
             </table>

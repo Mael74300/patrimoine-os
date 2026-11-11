@@ -1,17 +1,11 @@
 import { Link } from 'react-router-dom';
-import { fmtEur, fmtPct, prepayVsInvest } from '../lib/finance';
+import { fmtEur, fmtMonths, fmtPct, prepayVsInvest } from '../lib/finance';
 import { prepayTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = { balance: number; annualRate: number; remainingYears: number; lump: number; annualReturn: number; annualFees: number; taxRate: number };
 
 const DEFAULTS: State = { balance: 150000, annualRate: 0.035, remainingYears: 15, lump: 20000, annualReturn: 0.05, annualFees: 0.005, taxRate: 0.314 };
-
-const fmtMonths = (m: number) => {
-  const y = Math.floor(m / 12);
-  const r = m % 12;
-  return `${y} an${y > 1 ? 's' : ''}${r ? ` ${r} mois` : ''}`;
-};
 
 export default function SimRembourser() {
   const [s, setS, up] = usePersistentState<State>('rembourser', DEFAULTS);
