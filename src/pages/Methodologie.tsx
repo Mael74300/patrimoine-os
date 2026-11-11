@@ -35,7 +35,7 @@ export const FORMULAS: [string, string[]][] = [
   ]],
   ['Immobilier locatif', [
     'Rendement brut = loyers annuels / prix. Rendement net de charges = (loyers encaissés − charges) / (prix + frais + travaux + mobilier).',
-    'Flux de trésorerie avant impôt = loyers − charges − intérêts − capital remboursé − assurance.',
+    'Solde (cash-flow, ou flux de trésorerie) avant impôt = loyers − charges − intérêts − capital remboursé − assurance.',
     'Impôt estimé = base × (tranche marginale + prélèvements sociaux). Micro : base = loyers × (1 − abattement). Réel : loyers − charges − intérêts − assurance, déficit reporté ; LMNP : amortissement sans création de déficit.',
     'Patrimoine net immobilier = prix × (1 + évolution)^années − capital restant dû. Plus-value : 19 % + 17,2 % avec abattements pour durée de détention.',
   ]],

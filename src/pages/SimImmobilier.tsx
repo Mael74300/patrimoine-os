@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ADVERSE, adverseScenario, amortize, fmtEur, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, type TaxRegime } from '../lib/finance';
-import { rentalTakeaway } from '../lib/takeaways';
+import { rentalCashflowSub, rentalTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, ChoiceField, usePersistentState, JumpToResults } from '../components/ui';
 
 export const RENTAL_DEFAULTS: RentalInput = {
@@ -54,7 +54,7 @@ export default function SimImmobilier() {
             <legend>Votre projet</legend>
             <NumberField label="Prix du bien" unit="€" value={s.price} onChange={up('price')} min={0} step={5000} sliderMax={1000000} />
             <NumberField label="Apport" unit="€" value={s.downPayment} onChange={up('downPayment')} min={0} step={1000} sliderMax={300000} hint="La somme que vous payez de votre poche ; le reste est emprunté." />
-            <NumberField label="Taux d'intérêt nominal" unit="%" percent value={s.loanRate} onChange={up('loanRate')} step={0.05} min={0} max={15} sliderMax={8} hint="Le taux figure dans l'offre de votre banque ; la valeur proposée n'est qu'un exemple." />
+            <NumberField label="Taux du crédit (hors assurance)" unit="%" percent value={s.loanRate} onChange={up('loanRate')} step={0.05} min={0} max={15} sliderMax={8} hint="Le taux figure dans l'offre de votre banque ; la valeur proposée n'est qu'un exemple." />
             <NumberField label="Durée du crédit" unit="ans" value={s.loanYears} onChange={up('loanYears')} min={0} max={30} sliderMax={30} />
             <NumberField label="Loyer mensuel hors charges" unit="€" value={s.monthlyRent} onChange={up('monthlyRent')} min={0} step={25} sliderMax={3000} />
           </fieldset>
@@ -102,21 +102,21 @@ export default function SimImmobilier() {
         </form>
 
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
-          <div className="section-label">Calculs avant impôt · première année</div>
+          <div className="section-label">Avant impôt · première année</div>
           <div className="kpis">
             <Kpi label="Mensualité" value={fmtEur(r.monthlyLoan)} sub="assurance comprise" />
-            <Kpi label="Coût total du crédit" value={fmtEur(loan.totalCost)} sub={`${fmtEur(loan.totalInterest)} d'intérêts`} />
-            <Kpi label="Rendement brut" value={fmtPct(r.grossYield)} sub="loyers annuels / prix" />
-            <Kpi label="Rendement net de charges" value={fmtPct(r.netYield)} sub="sur le coût total, avant crédit" />
-            <Kpi label="Flux de trésorerie mensuel" value={fmtEur(r.monthlyCashflow)} tone={r.monthlyCashflow >= 0 ? 'pos' : 'neg'} sub="avant impôt" />
+            <Kpi label="Coût total du crédit" value={fmtEur(loan.totalCost)} sub={`dont ${fmtEur(loan.totalInterest)} d'intérêts`} />
+            <Kpi label="Rendement brut" value={fmtPct(r.grossYield)} sub="loyers d’un an ÷ prix d’achat" />
+            <Kpi label="Rendement net de charges" value={fmtPct(r.netYield)} sub="loyers − charges ÷ coût total, frais compris" />
+            <Kpi label="Solde mensuel (cash-flow)" value={fmtEur(r.monthlyCashflow)} tone={r.monthlyCashflow >= 0 ? 'pos' : 'neg'} sub={rentalCashflowSub(r.monthlyCashflow, false)} />
           </div>
 
           <div className="section-label">Estimations après impôt et patrimoine</div>
           <div className="kpis">
-            <Kpi label="Impôt estimé, année 1" value={fmtEur(y1?.tax ?? 0)} sub={REGIMES.find((g) => g.v === s.regime)?.label} />
-            <Kpi label="Flux mensuel après impôt, année 1" value={fmtEur((y1?.cashflowAfterTax ?? 0) / 12)} tone={(y1?.cashflowAfterTax ?? 0) >= 0 ? 'pos' : 'neg'} />
-            <Kpi label={`Capital restant dû à ${s.horizon}\u00a0ans`} value={fmtEur(end?.remaining ?? 0)} />
-            <Kpi label={`Patrimoine net immobilier estimé à ${s.horizon}\u00a0ans`} value={fmtEur(end?.netEquity ?? 0)} sub="valeur estimée − capital restant dû" />
+            <Kpi label="Impôt estimé, année 1" value={fmtEur(y1?.tax ?? 0)} sub={s.regime === 'aucune' ? 'non estimé' : `régime : ${REGIMES.find((g) => g.v === s.regime)?.label ?? ''}`} />
+            <Kpi label="Solde mensuel après impôt, année 1" value={fmtEur((y1?.cashflowAfterTax ?? 0) / 12)} tone={(y1?.cashflowAfterTax ?? 0) >= 0 ? 'pos' : 'neg'} sub={rentalCashflowSub((y1?.cashflowAfterTax ?? 0) / 12, true)} />
+            <Kpi label={`Capital restant dû à ${s.horizon}\u00a0ans`} value={fmtEur(end?.remaining ?? 0)} sub="ce qu’il resterait à rembourser" />
+            <Kpi label={`Patrimoine net immobilier estimé à ${s.horizon}\u00a0ans`} value={fmtEur(end?.netEquity ?? 0)} sub="valeur du bien − crédit restant" />
           </div>
           <Takeaway>{rentalTakeaway({ totalCost: r.totalCost, netYield: r.netYield, monthlyCashflow: r.monthlyCashflow, monthlyCashflowAfterTax: s.regime === 'aucune' || !y1 ? null : y1.cashflowAfterTax / 12, horizon: s.horizon, netEquity: end?.netEquity ?? 0 })}</Takeaway>
           {s.regime === 'micro-foncier' && r.annualRentCollected > 15000 && (
@@ -133,7 +133,7 @@ export default function SimImmobilier() {
                 { name: 'Patrimoine net (central)', color: 'var(--chart-1)', values: [s.price - r.loanAmount, ...proj.map((p) => p.netEquity)] },
                 { name: 'Patrimoine net (défavorable)', color: 'var(--chart-3)', values: [bad.price - badSnap.loanAmount, ...badProj.map((p) => p.netEquity)], dashed: true },
                 { name: 'Capital restant dû', color: 'var(--chart-4)', values: [r.loanAmount, ...proj.map((p) => p.remaining)] },
-                { name: 'Trésorerie cumulée après impôt', color: 'var(--chart-2)', values: [0, ...proj.map((p) => p.cumulativeCashflowAfterTax)] },
+                { name: 'Soldes mensuels cumulés après impôt', color: 'var(--chart-2)', values: [0, ...proj.map((p) => p.cumulativeCashflowAfterTax)] },
               ]}
             />
           </div>
@@ -148,8 +148,8 @@ export default function SimImmobilier() {
               <thead><tr><th><span className="sr-only">Indicateur</span></th><th className="r">Central</th><th className="r">Défavorable</th></tr></thead>
               <tbody>
                 <tr><td>Rendement net de charges</td><td className="r">{fmtPct(r.netYield)}</td><td className="r">{fmtPct(badSnap.netYield)}</td></tr>
-                <tr><td>Flux mensuel avant impôt</td><td className="r">{fmtEur(r.monthlyCashflow)}</td><td className="r">{fmtEur(badSnap.monthlyCashflow)}</td></tr>
-                <tr><td>Flux mensuel après impôt (estimation, année 1)</td><td className="r">{fmtEur((y1?.cashflowAfterTax ?? 0) / 12)}</td><td className="r">{fmtEur((badProj[0]?.cashflowAfterTax ?? 0) / 12)}</td></tr>
+                <tr><td>Solde mensuel avant impôt</td><td className="r">{fmtEur(r.monthlyCashflow)}</td><td className="r">{fmtEur(badSnap.monthlyCashflow)}</td></tr>
+                <tr><td>Solde mensuel après impôt (estimation, année 1)</td><td className="r">{fmtEur((y1?.cashflowAfterTax ?? 0) / 12)}</td><td className="r">{fmtEur((badProj[0]?.cashflowAfterTax ?? 0) / 12)}</td></tr>
                 <tr><td>Effort cumulé après impôt sur {s.horizon}&nbsp;ans</td><td className="r">{fmtEur(end?.cumulativeCashflowAfterTax ?? 0)}</td><td className="r">{fmtEur(badEnd?.cumulativeCashflowAfterTax ?? 0)}</td></tr>
                 <tr><td>Patrimoine net immobilier estimé à {s.horizon}&nbsp;ans</td><td className="r">{fmtEur(end?.netEquity ?? 0)}</td><td className="r">{fmtEur(badEnd?.netEquity ?? 0)}</td></tr>
               </tbody>
@@ -162,7 +162,7 @@ export default function SimImmobilier() {
               <thead>
                 <tr>
                   <th>Année</th><th className="r">Loyers</th><th className="r">Charges</th><th className="r">Intérêts + ass.</th><th className="r">Capital remb.</th>
-                  <th className="r">Flux avant impôt</th><th className="r">Impôt estimé</th><th className="r">Flux après impôt</th><th className="r">Restant dû</th><th className="r">Patrimoine net</th>
+                  <th className="r">Solde avant impôt</th><th className="r">Impôt estimé</th><th className="r">Solde après impôt</th><th className="r">Restant dû</th><th className="r">Patrimoine net</th>
                 </tr>
               </thead>
               <tbody>
