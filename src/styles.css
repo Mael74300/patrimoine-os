@@ -331,6 +331,13 @@ td.neg { color: var(--danger); }
 @media (min-width: 481px) {
   .ill-svg[viewBox^="0 0 340 "] { max-width: 360px; }
   .ill-svg[viewBox^="0 0 260 "] { max-width: 276px; }
+  /* Schémas étroits (viewBox 340) : quand le cadre est assez large (guides et simulateurs sur grand écran),
+     la légende se place à droite du dessin au lieu de laisser deux bandes vides de part et d'autre
+     (dessin de 360 px dans un cadre de 704 px). Si la place manque (360 + 24 + 260 px), la légende repasse
+     dessous, dessin centré, comme avant. Navigateurs sans :has() : présentation inchangée. */
+  .illustration:has(> .ill-svg[viewBox^="0 0 340 "]) { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; }
+  .illustration:has(> .ill-svg[viewBox^="0 0 340 "]) > .ill-svg { flex: 0 1 360px; margin: 0 auto; }
+  .illustration:has(> .ill-svg[viewBox^="0 0 340 "]) > figcaption { flex: 1 1 260px; margin-top: 0; }
 }
 /* Mobile : le cadre du schéma déborde de la marge de page (16 px de chaque côté) et occupe toute la largeur de l'écran,
    ce qui garde le dessin grand (~85 % de sa taille). Une marge intérieure de 10 px empêche le dessin de toucher
