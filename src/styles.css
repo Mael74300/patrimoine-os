@@ -925,3 +925,40 @@ a.term:hover { color: var(--primary); text-decoration-style: solid; }
 }
 .term-pop-close:hover { color: var(--primary); background: var(--surface-2); }
 @media print { a.term { text-decoration: none; } .term-pop { display: none !important; } }
+
+/* Guide « Types d’investissements » : classement risque × durée conseillée */
+.rm { margin: 14px 0 6px; }
+.rm-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+.rm-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: .93rem; }
+.rm-table th, .rm-table td { padding: 10px 12px; vertical-align: top; text-align: left; border-bottom: 1px solid var(--line); }
+.rm-table thead th { background: var(--surface-2); color: var(--ink); font-size: .9rem; }
+.rm-corner { background: var(--surface-2); width: 22%; font-size: .78rem; color: var(--ink-3); line-height: 1.3; }
+.rm-corner span { display: block; }
+.rm-table tbody tr:last-child > * { border-bottom: 0; }
+.rm-table tbody th { border-left: 5px solid var(--rm-c); background: color-mix(in srgb, var(--rm-c) 9%, var(--surface)); }
+.rm-faible { --rm-c: var(--accent); }
+.rm-modere { --rm-c: var(--gold); }
+.rm-eleve { --rm-c: #c2452f; }
+.rm-risk { display: block; font-weight: 700; color: var(--ink); }
+.rm-hint { display: block; font-weight: 400; font-size: .8rem; color: var(--ink-2); }
+.rm-table ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+.rm-table li { line-height: 1.35; }
+.rm-table td.rm-empty { color: var(--ink-3); }
+.rm-effort { color: var(--warn); vertical-align: -2px; margin-left: 4px; flex: none; }
+.rm-legend { margin: 6px 0 0; color: var(--ink-2); }
+.rm-legend .rm-effort { margin: 0 4px 0 0; }
+.rm-env { margin: 8px 0 0; }
+@media (max-width: 700px) {
+  .rm-wrap { background: none; border: 0; box-shadow: none; overflow: visible; }
+  .rm-table, .rm-table tbody, .rm-table tr, .rm-table th, .rm-table td { display: block; width: auto; }
+  .rm-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .rm-table tbody tr { background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--rm-c); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; }
+  .rm-table tbody th { border-left: 0; padding: 7px 12px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; }
+  .rm-hint { display: inline; }
+  .rm-table td { padding: 8px 12px; }
+  .rm-table ul { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+  .rm-table li { white-space: normal; }
+  .rm-table td.rm-empty { display: none; }
+  .rm-table td::before { content: attr(data-label); display: block; font-weight: 600; font-size: .8rem; color: var(--ink-2); margin-bottom: 3px; }
+  .rm-table tbody tr > :last-child { border-bottom: 0; }
+}
