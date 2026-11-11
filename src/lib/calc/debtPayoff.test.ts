@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { comparePayoff, payoffPlan } from './debtPayoff';
+import { comparePayoff, payoffPlan, payoffTimeline } from './debtPayoff';
 
 // Exemple fictif.
 const D = [
@@ -49,5 +49,37 @@ describe('Remboursement de plusieurs dettes', () => {
     const r = payoffPlan([{ name: 'a', balance: -5, rate: NaN, minPayment: -1 }], NaN, 'avalanche');
     expect(r.months).toBe(0);
     expect(Number.isFinite(r.totalInterest)).toBe(true);
+  });
+});
+
+describe('Frise « quand chaque dette est soldée »', () => {
+  // Exemple fictif (valeurs par défaut du simulateur).
+  const c = comparePayoff(D, 100);
+  const t = payoffTimeline(D, c);
+
+  it('reprend les mois de solde du calcul, dans l’ordre où les dettes sont soldées', () => {
+    expect(t.avalanche.map((b) => b.index)).toEqual([0, 2, 1]); // taux 20 % d’abord
+    expect(t.snowball.map((b) => b.index)).toEqual([2, 0, 1]); // plus petit solde d’abord
+    for (const m of ['avalanche', 'snowball'] as const) for (const b of t[m]) expect(b.months).toBe(c[m].payoffMonths[b.index]);
+    expect(t.avalanche.map((b) => b.months)).toEqual([15, 21, 27]);
+    expect(t.snowball.map((b) => b.months)).toEqual([7, 17, 28]);
+  });
+
+  it('échelle commune : la dette soldée en dernier fait 100 %, les autres sont proportionnelles', () => {
+    expect(t.snowball[2].width).toBeCloseTo(100, 9);
+    expect(t.avalanche[2].width).toBeCloseTo((27 / 28) * 100, 9);
+    expect(t.snowball[0].width).toBeCloseTo((7 / 28) * 100, 9);
+  });
+
+  it('dette à solde nul exclue ; dette jamais soldée en dernier, barre pleine', () => {
+    const d = [
+      { name: 'a', balance: 0, rate: 0.1, minPayment: 10 },
+      { name: 'b', balance: 1000, rate: 0.5, minPayment: 1 },
+      { name: 'c', balance: 120, rate: 0, minPayment: 10 },
+    ];
+    const tt = payoffTimeline(d, comparePayoff(d, 0));
+    expect(tt.avalanche.map((b) => b.index)).toEqual([2, 1]);
+    expect(tt.avalanche[1]).toEqual({ index: 1, months: null, width: 100 });
+    expect(tt.avalanche[0]).toEqual({ index: 2, months: 12, width: 100 });
   });
 });
