@@ -249,7 +249,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Construire un patrimoine avec une épargne limitée',
     summary: 'Les leviers qui comptent vraiment quand on ne peut épargner que quelques dizaines d’euros par mois.',
     readingMinutes: 6,
-    updatedOn: '2026-10-10',
+    updatedOn: '2026-11-11',
     sections: [
       {
         heading: 'Commencer petit, mais commencer',
@@ -260,25 +260,31 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       },
       {
         heading: 'Les priorités',
+        points: true,
         body: [
-          'Le LEP si vous y avez droit : c’est le meilleur taux sans risque, sans impôt. Une épargne de précaution, même modeste, évite le recours au découvert ou au crédit renouvelable, dont le coût annule tout rendement.',
-          'Un virement automatique le jour de la paie rend l’épargne régulière sans effort de volonté. Certains PEA et contrats d’assurance-vie acceptent de petits versements programmés.',
+          'Le LEP, si vous y avez droit : c’est le meilleur taux sans risque, et ses intérêts ne sont pas imposés.',
+          'Une épargne de précaution, même modeste : elle évite le découvert ou le crédit renouvelable, dont le coût annule tout rendement.',
+          'Un virement automatique le jour de la paie : l’épargne devient régulière sans effort de volonté. Certains PEA et contrats d’assurance-vie acceptent de petits versements programmés.',
+          'Vos revenus : une formation qui les augmente durablement peut accroître votre capacité d’épargne plus que n’importe quel placement (capital humain).',
         ],
       },
       {
         heading: 'Les pièges',
+        points: true,
         body: [
-          'Les produits à frais élevés, qui pèsent proportionnellement plus sur de petits montants. Les promesses de rendement élevé sans risque : consultez les listes noires de l’AMF avant tout placement proposé par un inconnu.',
-          'Enfin, le capital humain : une formation qui augmente durablement vos revenus peut accroître votre capacité d’épargne plus que n’importe quel placement.',
+          'Les frais fixes : sur un petit versement, ils pèsent lourd. Exemple fictif : 2 € de frais sur un versement de 50 €, c’est déjà 4 % de perdu.',
+          'Les promesses de rendement élevé sans risque : rendement et risque vont toujours ensemble, rappelle l’AMF. Avant tout placement proposé par un inconnu, consultez ses listes noires.',
         ],
       },
     ],
     related: ['lep', 'livret-a', 'etf-monde', 'capital-humain'],
-    sources: [SP('LEP', 'F2367'), AMF],
+    sources: [
+      SP('LEP', 'F2367'),
+      { label: 'AMF — Risques et rendements des placements', url: 'https://www.amf-france.org/fr/espace-epargnants/savoir-bien-investir/cadrer-son-projet/risques-et-rendements-des-placements', official: true },
+      { label: 'AMF — Listes noires et mises en garde', url: 'https://www.amf-france.org/fr/espace-epargnants/proteger-son-epargne/listes-noires-et-mises-en-garde', official: true },
+    ],
     faq: [
       { q: 'Peut-on se constituer un patrimoine en épargnant 50 € par mois ?', a: 'Exemple fictif : 50 € par mois pendant 30 ans, avec un rendement supposé de 4 %, représentent environ 34 400 € pour 18 000 € versés. Ce n’est pas une prévision : les rendements réels varient.' },
-      { q: 'Faut-il d’abord placer ou constituer une épargne de précaution ?', a: 'Une épargne de précaution, même modeste, évite le recours au découvert ou au crédit renouvelable, dont le coût annule tout rendement. Le LEP, si vous y avez droit, est le meilleur taux sans risque, sans impôt.' },
-      { q: 'Comment épargner régulièrement sans y penser ?', a: 'Un virement automatique le jour de la paie rend l’épargne régulière sans effort de volonté. Certains PEA et contrats d’assurance-vie acceptent de petits versements programmés.' },
     ],
     cta: { to: '/simulateurs/patrimoine', label: 'Simuler une épargne progressive' },
   },

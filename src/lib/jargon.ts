@@ -95,3 +95,21 @@ export function annotateJargon(paragraphs: string[], page: { path?: string; titl
     return out;
   });
 }
+
+/**
+ * Sépare l'amorce d'un point de liste (« Les frais fixes » dans « Les frais fixes : sur un petit… ») du reste,
+ * en conservant les notions du glossaire de part et d'autre. Renvoie null s'il n'y a pas de « : ».
+ */
+export function splitLead(segs: JargonSegment[]): { lead: JargonSegment[]; rest: JargonSegment[] } | null {
+  for (let i = 0; i < segs.length; i++) {
+    const s = segs[i];
+    if (typeof s !== 'string') continue;
+    const m = /\s:\s/.exec(s);
+    if (!m) continue;
+    const before = s.slice(0, m.index);
+    const lead = [...segs.slice(0, i), ...(before ? [before] : [])];
+    if (lead.length === 0) return null;
+    return { lead, rest: [s.slice(m.index), ...segs.slice(i + 1)] };
+  }
+  return null;
+}

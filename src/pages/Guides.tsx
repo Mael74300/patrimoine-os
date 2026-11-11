@@ -12,7 +12,7 @@ import { LivretsTable } from '../components/LivretsTable';
 import { RiskMap } from '../components/RiskMap';
 import { GuideGroupIcon } from '../components/Icons';
 import { SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz } from '../components/Illustrations';
-import { annotateJargon } from '../lib/jargon';
+import { annotateJargon, splitLead, type JargonSegment } from '../lib/jargon';
 import { JargonText } from '../components/Jargon';
 import NotFound from './NotFound';
 
@@ -100,6 +100,13 @@ function NetWorthCalculator() {
   );
 }
 
+/** Point de liste d'un guide : l'amorce avant « : » en gras, pour parcourir la liste d'un coup d'œil. */
+function PointText({ segs }: { segs: JargonSegment[] }) {
+  const parts = splitLead(segs);
+  if (!parts) return <JargonText segs={segs} />;
+  return <><strong><JargonText segs={parts.lead} /></strong><JargonText segs={parts.rest} /></>;
+}
+
 /** Identifiant d’ancre stable d’une rubrique de guide (sans accents). */
 export function sectionId(heading: string): string {
   return 'rub-' + heading.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -126,7 +133,10 @@ export function GuidePage() {
         {g.sections.map((s, i) => (
           <section key={s.heading}>
             <h2 id={sectionId(s.heading)}>{g.slug === 'par-ou-commencer' ? `${i + 1}. ${s.heading}` : s.heading}</h2>
-            {cardsInstead(s) ? <EnvelopeCards /> : s.body.map((p, k) => (
+            {s.points && !cardsInstead(s) && (
+              <ul className="guide-points">{s.body.map((p, k) => <li key={p}><PointText segs={jargon[jargonStart[i] + k]} /></li>)}</ul>
+            )}
+            {cardsInstead(s) ? <EnvelopeCards /> : !s.points && s.body.map((p, k) => (
               <Fragment key={p}>
                 <p><JargonText segs={jargon[jargonStart[i] + k]} /></p>
                 {g.slug === 'investir-a-credit' && s.heading === 'Un exemple fictif' && (k === 0 ? <SchemaMensualite /> : <SchemaLevier />)}
