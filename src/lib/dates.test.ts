@@ -6,6 +6,7 @@ import { investments } from '../data/investments';
 import { glossary } from '../data/glossary';
 import { guides } from '../data/guides';
 import { CheckedText } from '../components/ui';
+import { MemoryRouter } from 'react-router-dom';
 
 const ISO = /\b\d{4}-\d{2}-\d{2}\b/;
 const plain = (s: string) => s.replace(/ /g, ' ');
@@ -26,7 +27,7 @@ describe('dates en toutes lettres', () => {
     for (const inv of investments) {
       for (const c of [inv.minCapital, inv.fees, inv.tax]) {
         if (!c?.verified || !c.asOf) continue;
-        const html = renderToStaticMarkup(createElement(CheckedText, { c }));
+        const html = renderToStaticMarkup(createElement(MemoryRouter, null, createElement(CheckedText, { c })));
         expect(html, `${inv.slug} : ${c.asOf}`).not.toMatch(ISO);
         expect(plain(html)).toMatch(/vérifié(<!-- -->)? au \d{1,2}(er)? [a-zéû]+ 20\d\d/);
       }

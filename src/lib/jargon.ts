@@ -7,6 +7,7 @@
  * « amortissement » (qui a un autre sens en location meublée) sont volontairement absents.
  */
 import { glossary, glossaryId, type GlossaryTerm } from '../data/glossary';
+import { INLINE_LINKS, linkRegExp, pathOf } from './inlineLinks';
 
 /** Expressions repérées dans le texte, par notion du glossaire (premier mot exact du glossaire). */
 export const JARGON_PATTERNS: Record<string, string[]> = {
@@ -59,7 +60,14 @@ const MATCHERS: Matcher[] = Object.entries(JARGON_PATTERNS).flatMap(([name, pats
   return pats.map((p) => ({ term, re: new RegExp(`(?<![\\p{L}\\d-])(?:${p})(?![\\p{L}\\d-])`, isAcronym(p) ? 'u' : 'iu') }));
 });
 
-export type JargonSegment = string | { text: string; term: GlossaryTerm; id: string };
+export type TermSegment = { text: string; term: GlossaryTerm; id: string };
+/** Nom d'une autre page du site cité dans le texte, rendu en lien vers cette page. */
+export type LinkSegment = { text: string; to: string };
+export type JargonSegment = string | TermSegment | LinkSegment;
+export const isLink = (s: JargonSegment): s is LinkSegment => typeof s !== 'string' && 'to' in s;
+export const isTerm = (s: JargonSegment): s is TermSegment => typeof s !== 'string' && 'term' in s;
+
+const LINK_MATCHERS = INLINE_LINKS.map((l) => ({ to: l.to, re: linkRegExp(l.phrase) }));
 
 /** Au plus six notions soulignées par page : au-delà, le texte deviendrait un champ de liens. */
 export const MAX_PER_PAGE = 6;
@@ -71,6 +79,7 @@ export const MAX_PER_PAGE = 6;
  */
 export function annotateJargon(paragraphs: string[], page: { path?: string; title?: string } = {}, max = MAX_PER_PAGE): JargonSegment[][] {
   const used = new Set<string>();
+  const linked = new Set<string>();
   const here = (page.path ?? '').replace(/\/$/, '');
   const skipped = new Set(MATCHERS.filter(({ term, re }) => term.links.some((l) => l.to.replace(/\/$/, '') === here) || (page.title && re.test(page.title))).map((m) => m.term.term));
   const skip = (t: GlossaryTerm) => skipped.has(t.term);
@@ -78,24 +87,37 @@ export function annotateJargon(paragraphs: string[], page: { path?: string; titl
     const out: JargonSegment[] = [];
     let rest = text;
     for (;;) {
-      if (used.size >= max) break;
-      let best: { m: RegExpExecArray; t: GlossaryTerm } | null = null;
-      for (const { term, re } of MATCHERS) {
-        if (used.has(term.term) || skip(term)) continue;
-        const m = re.exec(rest);
-        if (m && (!best || m.index < best.m.index || (m.index === best.m.index && m[0].length > best.m[0].length))) best = { m, t: term };
+      type Best = { m: RegExpExecArray; seg: (text: string) => Exclude<JargonSegment, string>; key: string; kind: 'term' | 'link' };
+      let best: Best | null = null;
+      const consider = (m: RegExpExecArray | null, cand: Omit<Best, 'm'>) => {
+        if (m && (!best || m.index < best.m.index || (m.index === best.m.index && m[0].length > best.m[0].length))) best = { m, ...cand };
+      };
+      // Liens vers les pages citées par leur nom (une fois par cible, jamais vers la page courante).
+      for (const { to, re } of LINK_MATCHERS) {
+        if (linked.has(pathOf(to)) || pathOf(to) === here) continue;
+        consider(re.exec(rest), { seg: (t) => ({ text: t, to }), key: pathOf(to), kind: 'link' });
+      }
+      // Notions du glossaire (au plus `max` par page).
+      if (used.size < max) {
+        for (const { term, re } of MATCHERS) {
+          if (used.has(term.term) || skip(term)) continue;
+          consider(re.exec(rest), { seg: (t) => ({ text: t, term, id: `def-${glossaryId(term.term)}` }), key: term.term, kind: 'term' });
+        }
       }
       if (!best) break;
-      const { m, t } = best;
+      const { m, seg, key, kind } = best as Best;
       if (m.index > 0) out.push(rest.slice(0, m.index));
-      out.push({ text: m[0], term: t, id: `def-${glossaryId(t.term)}` });
-      used.add(t.term);
+      out.push(seg(m[0]));
+      (kind === 'link' ? linked : used).add(key);
       rest = rest.slice(m.index + m[0].length);
     }
     if (rest) out.push(rest);
     return out;
   });
 }
+
+/** Segments d'un texte court (rubrique de fiche, exemple) : liens vers les pages citées seulement, sans notion du glossaire. */
+export const linkOnly = (text: string, path?: string): JargonSegment[] => annotateJargon([text], { path }, 0)[0];
 
 /**
  * Sépare l'amorce d'un point de liste (« Les frais fixes » dans « Les frais fixes : sur un petit… ») du reste,

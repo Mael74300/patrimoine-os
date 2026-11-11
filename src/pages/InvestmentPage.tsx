@@ -12,7 +12,7 @@ import { SchemaActions, SchemaForet, SchemaDonation, SchemaAssuranceVie, SchemaC
 import NotFound from './NotFound';
 import { fmtDate } from '../lib/dates';
 import { guideBySlug } from '../data/guides';
-import { annotateJargon } from '../lib/jargon';
+import { annotateJargon, linkOnly } from '../lib/jargon';
 import { JargonText } from '../components/Jargon';
 
 /** Guide qui détaille une notion de la fiche (lien « Pour aller plus loin »). */
@@ -123,8 +123,8 @@ export default function InvestmentPage() {
             </div>
           )}
           <div className={`facts-grid${unbalanced(inv.fees.text, inv.tax.text) ? ' facts-stack' : ''}`}>
-            <div className="panel"><h3>Frais</h3><CheckedText c={inv.fees} split /></div>
-            <div className="panel"><h3>Fiscalité française</h3><CheckedText c={inv.tax} split /></div>
+            <div className="panel"><h3>Frais</h3><CheckedText c={inv.fees} split path={`/encyclopedie/${inv.slug}`} /></div>
+            <div className="panel"><h3>Fiscalité française</h3><CheckedText c={inv.tax} split path={`/encyclopedie/${inv.slug}`} /></div>
             <p className="facts-wide"><strong>Temps et compétences :</strong> {inv.timeSkills}</p>
           </div>
 
@@ -135,7 +135,7 @@ export default function InvestmentPage() {
           </div>
 
           <h2>Exemple chiffré</h2>
-          <p className="notice info">{inv.example}</p>
+          <p className="notice info"><JargonText segs={linkOnly(inv.example, `/encyclopedie/${inv.slug}`)} /></p>
 
           <AdSlot id={`fiche-${inv.slug}`} />
 
