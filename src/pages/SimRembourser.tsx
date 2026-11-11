@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { fmtEur, fmtMonths, fmtPct, prepayVsInvest } from '../lib/finance';
+import { fmtEur, fmtMonths, fmtPct, prepayVsInvest, prepayVsInvestByReturn } from '../lib/finance';
 import { prepayTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, MobileFold, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = { balance: number; annualRate: number; remainingYears: number; lump: number; annualReturn: number; annualFees: number; taxRate: number };
 
@@ -11,6 +11,8 @@ export default function SimRembourser() {
   const [s, setS, up] = usePersistentState<State>('rembourser', DEFAULTS);
   const r = prepayVsInvest(s);
   const investWins = r.advantageInvest > 0;
+  const byReturn = prepayVsInvestByReturn(s);
+  const be = r.breakEvenReturn;
 
   return (
     <>
@@ -47,7 +49,27 @@ export default function SimRembourser() {
             <Kpi label="Rendement brut d'équilibre" value={r.breakEvenReturn === null ? 'Hors plage' : fmtPct(r.breakEvenReturn)} sub="en dessous, rembourser l'emporte" />
           </div>
           <Takeaway>{prepayTakeaway({ lump: r.lump, advantageInvest: r.advantageInvest, interestSaved: r.interestSaved, breakEvenReturn: r.breakEvenReturn })}</Takeaway>
-          <h2>Comparaison à la fin de la durée restante</h2>
+          {r.lump > 0 && r.monthlyPayment > 0 && (
+            <>
+              <h2>Et si le placement rapportait plus ou moins ?</h2>
+              <LineChart
+                title="Patrimoine net à la fin du crédit selon le rendement brut du placement"
+                xLabels={byReturn.map((p) => `${Math.round(p.annualReturn * 100)}\u00a0%`)}
+                format={fmtEur}
+                series={[
+                  { name: 'Rembourser', color: 'var(--chart-1)', values: byReturn.map((p) => p.wealthPrepay) },
+                  { name: 'Investir', color: 'var(--chart-2)', values: byReturn.map((p) => p.wealthInvest) },
+                ]}
+                defaultIndex={Math.round(s.annualReturn * 100)}
+                band={be !== null && be * 100 >= 2.5 ? { from: 0, to: be * 100, label: 'Rembourser l’emporte' } : undefined}
+              />
+              <p className="muted small">
+                Chaque point refait le calcul avec un autre rendement, le reste inchangé.
+                {be !== null ? ` Les courbes se croisent vers ${fmtPct(be)} : en dessous (zone grisée), rembourser l’emporte ; au-dessus, investir.` : ''}
+              </p>
+            </>
+          )}
+          <MobileFold label="Patrimoine net à la fin du crédit, option par option">
           <div className="table-wrap" tabIndex={0}>
             <table>
               <thead><tr><th>Option</th><th className="r">Patrimoine net</th><th className="r">Crédit soldé en</th></tr></thead>
@@ -57,6 +79,7 @@ export default function SimRembourser() {
               </tbody>
             </table>
           </div>
+          </MobileFold>
           <p className="muted small">
             Mensualité du crédit : {fmtEur(r.monthlyPayment)}. Le patrimoine net est le placement après impôt sur les gains, moins le capital restant dû éventuel.
             Ni l'assurance emprunteur ni les indemnités de remboursement anticipé (plafonnées par la loi) ne sont incluses : renseignez-vous auprès de votre banque.
