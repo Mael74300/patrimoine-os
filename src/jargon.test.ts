@@ -7,11 +7,11 @@ import { readFileSync } from 'node:fs';
 import { glossary } from './data/glossary';
 import { investments } from './data/investments';
 import { guides } from './data/guides';
-import { annotateJargon, JARGON_PATTERNS, MAX_PER_PAGE, type JargonSegment } from './lib/jargon';
+import { annotateJargon, isTerm, JARGON_PATTERNS, MAX_PER_PAGE, type JargonSegment, type TermSegment } from './lib/jargon';
 import { JargonText } from './components/Jargon';
 
 const css: string = readFileSync('src/styles.css', 'utf8');
-const marked = (segs: JargonSegment[][]) => segs.flat().filter((s): s is Exclude<JargonSegment, string> => typeof s !== 'string');
+const marked = (segs: JargonSegment[][]): TermSegment[] => segs.flat().filter(isTerm);
 const join = (segs: JargonSegment[]) => segs.map((s) => (typeof s === 'string' ? s : s.text)).join('');
 
 const pages = [

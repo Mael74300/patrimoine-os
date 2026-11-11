@@ -1,4 +1,6 @@
 import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
+import { JargonText } from './Jargon';
+import { linkOnly } from '../lib/jargon';
 import { simFaq, type FaqItem } from '../data/simFaq';
 import { Link } from 'react-router-dom';
 import { config } from '../config';
@@ -199,7 +201,10 @@ export function splitSentences(text: string): string[] {
   return text.split(/(?<=[.!?])\s+(?=[A-ZÉÈÀÂÎÔ])/).map((t) => t.trim()).filter(Boolean);
 }
 
-export function CheckedText({ c, split = false }: { c: Checked; split?: boolean }) {
+/** Texte d'une rubrique où les pages citées par leur nom (« fiche PEA ») deviennent des liens. */
+const Linked = ({ text, path }: { text: string; path?: string }) => <JargonText segs={linkOnly(text, path)} />;
+
+export function CheckedText({ c, split = false, path }: { c: Checked; split?: boolean; path?: string }) {
   const badge = c.verified ? (
     <span className="badge-verified">✓ vérifié{c.asOf ? ` au ${fmtDate(c.asOf)}` : ''}</span>
   ) : c.advice ? null : (
@@ -209,7 +214,7 @@ export function CheckedText({ c, split = false }: { c: Checked; split?: boolean 
   if (parts.length < 3) {
     return (
       <p>
-        {c.text} {badge}
+        <Linked text={c.text} path={path} /> {badge}
       </p>
     );
   }
@@ -220,7 +225,7 @@ export function CheckedText({ c, split = false }: { c: Checked; split?: boolean 
           const l = sentenceLead(t);
           return (
             <li key={t}>
-              {l ? <><strong>{l.lead}</strong>{l.rest}</> : t}
+              {l ? <><strong>{l.lead}</strong><Linked text={l.rest} path={path} /></> : <Linked text={t} path={path} />}
               {badge && k === parts.length - 1 && <> {badge}</>}
             </li>
           );

@@ -152,7 +152,7 @@ const raw: Omit<Investment, 'review'>[] = [
     horizon: '8 ans et plus', horizonYears: 8,
     liquidity: 4, risk: 4, effort: 2,
     fees: { text: "Frais annuels moyens des ETF d'actions : 0,33 % en 2025 (AMF). Le courtage, payé à chaque achat ou vente, diffère d'un établissement à l'autre.", verified: true, asOf: '10 novembre 2026' },
-    tax: { text: 'Dépend de l’enveloppe : voir les fiches PEA et compte-titres.', verified: true, asOf: AS_OF },
+    tax: { text: 'Dépend de l’enveloppe : voir la fiche PEA et la fiche Compte-titres.', verified: true, asOf: AS_OF },
     pros: ['Diversification immédiate', 'Frais faibles', 'Simplicité de gestion'],
     cons: ['Baisses temporaires fortes possibles (−30 % à −50 % lors de crises passées)', 'Aucune garantie en capital'],
     timeSkills: 'Une à deux heures pour comprendre et mettre en place, puis quelques minutes par mois.',

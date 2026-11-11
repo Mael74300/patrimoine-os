@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { glossaryId } from '../data/glossary';
-import type { JargonSegment } from '../lib/jargon';
+import { isLink, type JargonSegment, type TermSegment } from '../lib/jargon';
 
 /** Attributs HTML de l'API Popover, absents des types de React 18 (transmis tels quels au DOM). */
 const POPOVER = { popover: 'auto' } as Record<string, string>;
@@ -20,7 +20,7 @@ function place(anchor: HTMLElement, pop: HTMLElement) {
 }
 
 /** Un mot de jargon : lien vers le glossaire, qui ouvre la définition sur place quand le navigateur le permet. */
-function Term({ seg }: { seg: Exclude<JargonSegment, string> }) {
+function Term({ seg }: { seg: TermSegment }) {
   const link = useRef<HTMLAnchorElement>(null);
   const pop = useRef<PopEl>(null);
 
@@ -58,7 +58,7 @@ function Term({ seg }: { seg: Exclude<JargonSegment, string> }) {
   );
 }
 
-/** Texte dont les mots de jargon (calculés par `annotateJargon`) s'expliquent au clic. */
+/** Texte dont les mots de jargon (calculés par `annotateJargon`) s'expliquent au clic et dont les pages citées sont des liens. */
 export function JargonText({ segs }: { segs: JargonSegment[] }) {
-  return <>{segs.map((s, i) => (typeof s === 'string' ? <Fragment key={i}>{s}</Fragment> : <Term key={s.id} seg={s} />))}</>;
+  return <>{segs.map((s, i) => (typeof s === 'string' ? <Fragment key={i}>{s}</Fragment> : isLink(s) ? <Link key={i} to={s.to} className="inline-link">{s.text}</Link> : <Term key={s.id} seg={s} />))}</>;
 }
