@@ -697,7 +697,6 @@ h2.gloss-letter::before { content: none; }
 }
 
 /* Choix long d'un menu déroulant : affiché en entier sous le menu quand il est coupé */
-.select-full { margin-top: 4px; font-size: 0.85rem; line-height: 1.35; color: var(--ink-2); }
 
 /* Bouton « Haut de page » (affiché après un long défilement) */
 .back-top { position: fixed; right: 12px; bottom: 12px; z-index: 40; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--primary); font: inherit; font-weight: 600; box-shadow: var(--shadow-sm); cursor: pointer; }
@@ -882,6 +881,11 @@ h2.gloss-letter::before { content: none; }
 .choice-opt { position: relative; display: flex; margin: 0; font-weight: 400; cursor: pointer; flex-grow: 1; flex-basis: calc((var(--n, 2) * 7.5rem - 100%) * 999); }
 .choice-opts--compact { flex-wrap: nowrap; gap: 6px; }
 .choice-opts--compact .choice-opt { flex: 1 1 0; min-width: 0; }
+/* Deux options par ligne (taux et régimes fiscaux avec un détail) ; une dernière option seule prend toute la ligne. */
+.choice-opts--1 { flex-direction: column; }
+.choice-opts--2 { display: grid; grid-template-columns: 1fr 1fr; }
+.choice-opts--2 .choice-opt { min-width: 0; }
+.choice-opts--2 .choice-opt:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .choice-opt input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
 .choice-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; min-height: 48px; padding: 7px 8px; text-align: center; line-height: 1.25; border: 1.5px solid #c5d2e4; border-radius: 12px; background: var(--surface); transition: border-color .15s, background .15s, box-shadow .15s; }
 .choice-label { font-size: 0.92rem; font-weight: 600; color: var(--primary-deep); }

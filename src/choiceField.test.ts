@@ -5,6 +5,10 @@ import { ChoiceField } from './components/ui';
 import creditSrc from './pages/SimCredit.tsx?raw';
 import etalementSrc from './pages/SimEtalement.tsx?raw';
 import interetsSrc from './pages/SimInteretsComposes.tsx?raw';
+import { PROFILE_MONTHS } from './lib/calc/precaution';
+import { PS_OPTIONS, REGIMES } from './pages/SimImmobilier';
+
+const simSources = import.meta.glob('./pages/Sim*.tsx', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
 
 describe('ChoiceField : choix en boutons au lieu d’un menu déroulant', () => {
   const html = renderToStaticMarkup(createElement(ChoiceField<string>, {
@@ -39,5 +43,21 @@ describe('ChoiceField : choix en boutons au lieu d’un menu déroulant', () => 
     expect(interetsSrc).not.toContain('<SelectField');
     // Le plafond légal reste expliqué sous le choix (mêmes règles qu’avant).
     expect(credit).toContain('au plus 6 mois d\'intérêts sur la somme remboursée, dans la limite de 3 % du capital restant dû');
+  });
+
+  it('aucun simulateur n’utilise de menu déroulant (texte coupé sur mobile)', () => {
+    expect(Object.keys(simSources).length).toBeGreaterThan(20);
+    for (const [file, src] of Object.entries(simSources)) {
+      expect(src, file).not.toContain('<select');
+      expect(src, file).not.toContain('SelectField');
+    }
+  });
+
+  it('les choix convertis gardent les mêmes valeurs et les mêmes repères', () => {
+    expect(Object.values(PROFILE_MONTHS).map((p) => p.months)).toEqual([3, 6, 9]);
+    expect(REGIMES.map((r) => r.v).sort()).toEqual(['aucune', 'micro-bic', 'micro-foncier', 'reel-bic', 'reel-foncier']);
+    expect(REGIMES.find((r) => r.v === 'micro-foncier')?.allowance).toBe(0.3);
+    expect(REGIMES.find((r) => r.v === 'micro-bic')?.allowance).toBe(0.5);
+    expect(PS_OPTIONS.map((o) => o.v)).toEqual([0.172, 0.186]);
   });
 });

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ADVERSE, adverseScenario, amortize, fmtEur, fmtPct, rentalAnalysis, rentalProjection, type RentalInput, type TaxRegime } from '../lib/finance';
 import { rentalTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, ChoiceField, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, ChoiceField, usePersistentState, JumpToResults } from '../components/ui';
 
 export const RENTAL_DEFAULTS: RentalInput = {
   price: 150000, notaryRate: 0.08, works: 10000, furniture: 0,
@@ -13,18 +13,19 @@ export const RENTAL_DEFAULTS: RentalInput = {
   appreciation: 0.01, indexation: 0.015, horizon: 20,
 };
 
-export const REGIMES: { v: TaxRegime; label: string; allowance?: number }[] = [
+// Ordre d'affichage en deux colonnes : location nue sur la première ligne, location meublée sur la deuxième.
+export const REGIMES: { v: TaxRegime; label: string; detail?: string; allowance?: number }[] = [
+  { v: 'micro-foncier', label: 'Micro-foncier', detail: 'location nue, abattement 30 %', allowance: 0.3 },
+  { v: 'reel-foncier', label: 'Régime réel', detail: 'location nue' },
+  { v: 'micro-bic', label: 'Micro-BIC', detail: 'location meublée, abattement 50 %', allowance: 0.5 },
+  { v: 'reel-bic', label: 'LMNP au réel', detail: 'location meublée' },
   { v: 'aucune', label: 'Ne pas estimer l’impôt' },
-  { v: 'micro-foncier', label: 'Location nue — micro-foncier (abattement 30 %)', allowance: 0.3 },
-  { v: 'reel-foncier', label: 'Location nue — régime réel' },
-  { v: 'micro-bic', label: 'Location meublée — micro-BIC (abattement 50 %)', allowance: 0.5 },
-  { v: 'reel-bic', label: 'Location meublée — LMNP au réel' },
 ];
 
 export const TMI_OPTIONS = [0, 0.11, 0.3, 0.41, 0.45].map((v) => ({ v, label: `${Math.round(v * 100)} %` }));
 export const PS_OPTIONS = [
-  { v: 0.172, label: '17,2 % (revenus fonciers)' },
-  { v: 0.186, label: '18,6 % (taux général des revenus du patrimoine ; à confirmer pour le meublé)' },
+  { v: 0.172, label: '17,2 %', detail: 'revenus fonciers' },
+  { v: 0.186, label: '18,6 %', detail: 'taux général des revenus du patrimoine ; à confirmer pour le meublé' },
 ];
 
 export default function SimImmobilier() {
@@ -79,9 +80,9 @@ export default function SimImmobilier() {
               </fieldset>
               <fieldset>
                 <legend>Fiscalité (estimation)</legend>
-                <SelectField label="Régime" value={s.regime} options={REGIMES} onChange={(v) => setS((x) => ({ ...x, regime: v, microAllowance: REGIMES.find((g) => g.v === v)?.allowance ?? x.microAllowance }))} />
+                <ChoiceField label="Régime" value={s.regime} options={REGIMES} columns={2} onChange={(v) => setS((x) => ({ ...x, regime: v, microAllowance: REGIMES.find((g) => g.v === v)?.allowance ?? x.microAllowance }))} />
                 <ChoiceField label="Tranche marginale d'imposition" value={s.marginalRate} options={TMI_OPTIONS} onChange={up('marginalRate')} compact />
-                <SelectField label="Prélèvements sociaux" value={s.socialRate} options={PS_OPTIONS} onChange={up('socialRate')} />
+                <ChoiceField label="Prélèvements sociaux" value={s.socialRate} options={PS_OPTIONS} columns={1} onChange={up('socialRate')} />
                 {isMicro && <NumberField label="Abattement forfaitaire" unit="%" percent value={s.microAllowance} onChange={up('microAllowance')} step={1} min={0} max={100} />}
                 {s.regime === 'reel-bic' && (
                   <NumberField label="Amortissement annuel estimé" unit="€" value={s.annualDepreciation} onChange={up('annualDepreciation')} min={0} step={250}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { compareEtfImmo, fmtEur, fmtPct, netOfFees, rentalAnalysis, type RentalInput } from '../lib/finance';
 import { load } from '../lib/storage';
 import { etfImmoTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, ChoiceField, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, ChoiceField, usePersistentState, JumpToResults } from '../components/ui';
 import { PS_OPTIONS, REGIMES, RENTAL_DEFAULTS, TMI_OPTIONS } from './SimImmobilier';
 
 type State = {
@@ -29,9 +29,9 @@ const DEFAULTS: State = {
 };
 
 const ETF_TAX = [
-  { v: 0.314, label: '31,4 % (compte-titres, PFU 2026)' },
-  { v: 0.186, label: '18,6 % (PEA après 5 ans, taux 2026)' },
-  { v: 0.172, label: '17,2 % (PEA, taux historique)' },
+  { v: 0.314, label: '31,4 %', detail: 'compte-titres, PFU 2026' },
+  { v: 0.186, label: '18,6 %', detail: 'PEA après 5 ans, taux 2026' },
+  { v: 0.172, label: '17,2 %', detail: 'PEA, taux historique' },
   { v: 0, label: 'Aucune' },
 ];
 
@@ -107,7 +107,7 @@ export default function SimEtfImmobilier() {
             <legend>ETF</legend>
             <NumberField label="Rendement hypothétique brut" unit="%" percent value={st.etfReturn} onChange={set('etfReturn')} step={0.25} min={-10} max={20} />
             <NumberField label="Frais annuels" unit="%" percent value={st.etfFees} onChange={set('etfFees')} step={0.05} min={0} max={5} />
-            <SelectField label="Fiscalité des gains à la sortie" value={st.etfTax} options={ETF_TAX} onChange={set('etfTax')} />
+            <ChoiceField label="Fiscalité des gains à la sortie" value={st.etfTax} options={ETF_TAX} columns={2} onChange={set('etfTax')} />
           </fieldset>
           <fieldset>
             <legend>Immobilier</legend>
@@ -125,9 +125,9 @@ export default function SimEtfImmobilier() {
             <NumberField label="Vacance" unit="mois/an" value={R.vacancyMonths} onChange={setR('vacancyMonths')} min={0} max={12} step={0.5} />
             <NumberField label="Taxe foncière" unit="€/an" value={R.propertyTax} onChange={setR('propertyTax')} min={0} step={50} />
             <NumberField label="Autres charges" unit="€/an" value={R.coOwnership} onChange={setR('coOwnership')} min={0} step={50} />
-            <SelectField label="Régime fiscal" value={R.regime} options={REGIMES} onChange={(v) => setSt((x) => ({ ...x, rental: { ...x.rental, regime: v, microAllowance: REGIMES.find((g) => g.v === v)?.allowance ?? x.rental.microAllowance } }))} />
+            <ChoiceField label="Régime fiscal" value={R.regime} options={REGIMES} columns={2} onChange={(v) => setSt((x) => ({ ...x, rental: { ...x.rental, regime: v, microAllowance: REGIMES.find((g) => g.v === v)?.allowance ?? x.rental.microAllowance } }))} />
             <ChoiceField label="Tranche marginale" value={R.marginalRate} options={TMI_OPTIONS} onChange={setR('marginalRate')} compact />
-            <SelectField label="Prélèvements sociaux" value={R.socialRate} options={PS_OPTIONS} onChange={setR('socialRate')} />
+            <ChoiceField label="Prélèvements sociaux" value={R.socialRate} options={PS_OPTIONS} columns={1} onChange={setR('socialRate')} />
             <NumberField label="Évolution du prix du bien" unit="%/an" percent value={R.appreciation} onChange={setR('appreciation')} step={0.25} min={-10} max={10} />
             <NumberField label="Indexation loyers et charges" unit="%/an" percent value={R.indexation} onChange={setR('indexation')} step={0.25} min={-5} max={10} />
             <NumberField label="Frais de revente" unit="%" percent value={st.saleCostRate} onChange={set('saleCostRate')} step={0.5} min={0} max={15} />

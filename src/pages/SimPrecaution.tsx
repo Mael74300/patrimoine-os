@@ -6,7 +6,7 @@ import {
 } from '../lib/finance';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
 import { precautionTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, SelectField, ChoiceField, Sources, usePersistentState, JumpToResults, CoverageGauge, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, ChoiceField, Sources, usePersistentState, JumpToResults, CoverageGauge, SimNotice } from '../components/ui';
 
 type State = PrecautionInput & { profile: PrecautionProfile; lep: 'oui' | 'non'; deadline: number };
 
@@ -52,12 +52,14 @@ export default function SimPrecaution() {
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
             <legend>Votre situation</legend>
-            <SelectField
+            <ChoiceField
               label="Situation professionnelle"
               value={s.profile}
               onChange={setProfile}
-              options={(Object.keys(PROFILE_MONTHS) as PrecautionProfile[]).map((k) => ({ v: k, label: PROFILE_MONTHS[k].label }))}
-              hint="Propose un nombre de mois, modifiable dans les réglages avancés."
+              options={(Object.keys(PROFILE_MONTHS) as PrecautionProfile[]).map((k) => ({
+                v: k, label: PROFILE_MONTHS[k].label, detail: `${PROFILE_MONTHS[k].examples} · ${fmtNum(PROFILE_MONTHS[k].months)}\u00a0mois`,
+              }))}
+              hint="Repère en mois de dépenses, modifiable dans les réglages avancés."
             />
             <NumberField label="Dépenses mensuelles incompressibles" unit="€" value={s.monthlyExpenses} onChange={up('monthlyExpenses')} min={0} step={100} sliderMax={6000} hint="Logement, alimentation, énergie, transport, assurances, remboursements de crédit." />
             <NumberField label="Épargne disponible aujourd'hui" unit="€" value={s.currentSavings} onChange={up('currentSavings')} min={0} step={500} sliderMax={50000} hint="Sommes mobilisables sans délai ni perte." />

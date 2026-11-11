@@ -8,10 +8,10 @@ import { clamp, monthlyRate, num } from './common';
 export type PrecautionProfile = 'stable' | 'variable' | 'independant';
 
 /** Repères indicatifs, en mois de dépenses (non réglementaires). */
-export const PROFILE_MONTHS: Record<PrecautionProfile, { label: string; months: number }> = {
-  stable: { label: 'Revenus stables (CDI, fonction publique, retraite)', months: 3 },
-  variable: { label: 'Revenus variables (CDD, intérim, primes importantes)', months: 6 },
-  independant: { label: 'Indépendant, dirigeant, revenus irréguliers', months: 9 },
+export const PROFILE_MONTHS: Record<PrecautionProfile, { label: string; examples: string; months: number }> = {
+  stable: { label: 'Revenus stables', examples: 'CDI, fonction publique, retraite', months: 3 },
+  variable: { label: 'Revenus variables', examples: 'CDD, intérim, primes importantes', months: 6 },
+  independant: { label: 'Indépendant ou dirigeant', examples: 'revenus irréguliers', months: 9 },
 };
 
 export type PrecautionInput = {
