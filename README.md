@@ -39,7 +39,7 @@ Plateforme française et gratuite consacrée à la construction du patrimoine : 
 | Portefeuille, comparateur de fiches | Allocation, frais pondérés, rééquilibrage ; jusqu'à 3 fiches côte à côte |
 | Guides | 20 guides, chacun répondant à une intention de recherche précise (patrimoine net, rentabilité locative, PEA, frais…) |
 | Liens internes | Chaque fiche et chaque guide renvoie vers ses simulateurs liés (table `src/lib/relatedSims.ts`, cohérence testée : cibles existantes, aucun simulateur sans lien entrant) |
-| Glossaire | 38 notions expliquées, avec liens vers simulateurs, fiches et guides (liens vérifiés par les tests). Dans les fiches et les guides, la première apparition d’une notion (six au plus par page) est soulignée en pointillé et ouvre sa définition en bulle, sans quitter la page (`src/lib/jargon.ts`, `src/components/Jargon.tsx`) |
+| Glossaire | 39 notions expliquées, avec liens vers simulateurs, fiches et guides (liens vérifiés par les tests). Dans les fiches et les guides, la première apparition d’une notion (six au plus par page) est soulignée en pointillé et ouvre sa définition en bulle, sans quitter la page (`src/lib/jargon.ts`, `src/components/Jargon.tsx`) |
 | Simulations locales | Chaque simulateur permet d'enregistrer, d'exporter et d'importer ses simulations en fichier JSON (local, rien n'est envoyé) |
 | Plan du site | Page HTML listant toutes les fiches, guides et simulateurs (aide à la navigation et à l’exploration par les moteurs) |
 | Légal | Politique de confidentialité, mentions légales, effacement des données locales |

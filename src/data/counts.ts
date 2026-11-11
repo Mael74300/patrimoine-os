@@ -5,4 +5,4 @@
  */
 export const FICHES_COUNT = 29;
 export const GUIDES_COUNT = 20;
-export const GLOSSARY_COUNT = 38;
+export const GLOSSARY_COUNT = 39;
