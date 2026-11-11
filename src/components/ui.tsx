@@ -615,45 +615,13 @@ export function RowsEditor({ title, rows, onChange, aLabel, bLabel, bUnit, addLa
   );
 }
 
-export function SelectField<V extends string | number>({ label, value, options, onChange, hint }: {
-  label: string;
-  value: V;
-  options: { v: V; label: string }[];
-  onChange: (v: V) => void;
-  hint?: string;
-}) {
-  const id = useId();
-  const ref = useRef<HTMLSelectElement>(null);
-  const [cut, setCut] = useState(false);
-  const current = options.find((x) => String(x.v) === String(value))?.label ?? '';
-  useEffect(() => {
-    const measure = () => setCut(selectTextIsCut(ref.current, current));
-    measure();
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
-  }, [current]);
-  return (
-    <div className="field">
-      <label htmlFor={id}>{label}</label>
-      <select ref={ref} id={id} value={String(value)} onChange={(e) => {
-        const o = options.find((x) => String(x.v) === e.target.value);
-        if (o) onChange(o.v);
-      }}>
-        {options.map((o) => <option key={String(o.v)} value={String(o.v)}>{o.label}</option>)}
-      </select>
-      {cut && <div className="select-full" aria-hidden="true">{current}</div>}
-      {hint && <div className="hint">{hint}</div>}
-    </div>
-  );
-}
-
 /**
  * Choix parmi quelques options (2 à 5), affichées toutes à la fois sous forme de boutons.
  * Contrairement à un menu déroulant, rien n'est coupé sur mobile, les autres possibilités
  * restent visibles et un seul geste suffit. Boutons radio natifs : flèches du clavier,
  * lecteurs d'écran et formulaires fonctionnent sans code supplémentaire.
  */
-export function ChoiceField<V extends string | number>({ label, value, options, onChange, hint, compact }: {
+export function ChoiceField<V extends string | number>({ label, value, options, onChange, hint, compact, columns }: {
   label: string;
   value: V;
   options: { v: V; label: string; detail?: string }[];
@@ -661,13 +629,16 @@ export function ChoiceField<V extends string | number>({ label, value, options, 
   hint?: string;
   /** Options très courtes (« 11 % ») : toutes sur une ligne. */
   compact?: boolean;
+  /** 2 : options courtes avec un détail, deux par ligne même sur mobile (une dernière option seule occupe toute la ligne).
+   *  1 : options au détail long, toujours empilées. */
+  columns?: 1 | 2;
 }) {
   const name = useId();
   const hintId = `${name}-hint`;
   return (
     <fieldset className="field choice-field" aria-describedby={hint ? hintId : undefined}>
       <legend>{label}</legend>
-      <div className={`choice-opts${compact ? ' choice-opts--compact' : ''}`} style={{ '--n': options.length } as CSSProperties}>
+      <div className={`choice-opts${compact ? ' choice-opts--compact' : ''}${columns ? ` choice-opts--${columns}` : ''}`} style={{ '--n': options.length } as CSSProperties}>
         {options.map((o) => (
           <label key={String(o.v)} className="choice-opt">
             <input type="radio" name={name} value={String(o.v)} checked={String(o.v) === String(value)} onChange={() => onChange(o.v)} />
@@ -681,17 +652,6 @@ export function ChoiceField<V extends string | number>({ label, value, options, 
       {hint && <div className="hint" id={hintId}>{hint}</div>}
     </fieldset>
   );
-}
-
-/** Vrai si le choix affiché est plus long que la place du menu (texte coupé sur mobile). */
-function selectTextIsCut(el: HTMLSelectElement | null, text: string): boolean {
-  if (!el || !text) return false;
-  const ctx = document.createElement('canvas').getContext('2d');
-  if (!ctx) return false;
-  const cs = getComputedStyle(el);
-  ctx.font = cs.font;
-  const room = el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 28;
-  return ctx.measureText(text).width > room;
 }
 
 export function Tabs({ items, active, onSelect, label }: { items: string[]; active: number; onSelect: (i: number) => void; label: string }) {

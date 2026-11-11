@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { wealthTakeaway } from '../lib/takeaways';
 import { afterTax, fmtEur, fmtPct, netOfFees, projectGrowth, requiredMonthly, type SavingsChange, type Withdrawal } from '../lib/finance';
-import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, RowsEditor, SavedSims, SelectField, Tabs, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, RowsEditor, SavedSims, ChoiceField, Tabs, usePersistentState, JumpToResults } from '../components/ui';
 
 type Scenario = {
   name: string;
@@ -31,10 +31,10 @@ const PROFILES = [
   { name: 'Ambitieux', rate: 0.07, label: '7 % par an' },
 ];
 const TAX_OPTIONS = [
-  { v: 0, label: 'Aucune (livret réglementé)' },
-  { v: 0.172, label: '17,2 % (prélèvements sociaux seuls, ex. assurance-vie après abattement)' },
-  { v: 0.186, label: '18,6 % (prélèvements sociaux, taux relevé 2026)' },
-  { v: 0.314, label: '31,4 % (PFU 2026, compte-titres)' },
+  { v: 0, label: 'Aucune', detail: 'livret réglementé' },
+  { v: 0.172, label: '17,2 %', detail: 'prélèvements sociaux seuls, ex. assurance-vie après abattement' },
+  { v: 0.186, label: '18,6 %', detail: 'prélèvements sociaux, taux relevé 2026' },
+  { v: 0.314, label: '31,4 %', detail: 'PFU 2026, compte-titres' },
 ];
 
 export default function SimPatrimoine() {
@@ -113,7 +113,7 @@ export default function SimPatrimoine() {
               <NumberField label="Rendement annuel choisi (avant frais)" unit="%" percent value={s.annualReturn} onChange={set('annualReturn')} step={0.25} min={-10} max={20} hint="Ce que le placement rapporte chaque année en moyenne, avant frais." />
               <NumberField label="Frais annuels" unit="%" percent value={s.annualFees} onChange={set('annualFees')} step={0.1} min={0} max={5} hint="Frais prélevés chaque année par le placement (gestion, courtage…). Ils réduisent le rendement." />
               <NumberField label="Inflation supposée" unit="%" percent value={s.inflation} onChange={set('inflation')} step={0.25} min={-2} max={15} hint="Hausse moyenne des prix par an : elle réduit ce que l'on peut acheter avec le même capital." />
-              <SelectField label="Impôts sur les gains à la sortie" value={s.taxRate} options={TAX_OPTIONS} onChange={set('taxRate')} hint="Simplification : un taux unique appliqué aux gains restants. Pas sûr ? Gardez la valeur proposée." />
+              <ChoiceField label="Impôts sur les gains à la sortie" value={s.taxRate} options={TAX_OPTIONS} onChange={set('taxRate')} hint="Simplification : un taux unique appliqué aux gains restants. Pas sûr ? Gardez la valeur proposée." />
               <NumberField label="Hausse annuelle de l'épargne" unit="%" percent value={s.contributionGrowth} onChange={set('contributionGrowth')} step={0.5} min={0} max={20} hint="Si vous augmentez votre épargne chaque année (par exemple avec votre salaire)." />
               <RowsEditor
                 title="Changer le montant épargné en cours de route"
