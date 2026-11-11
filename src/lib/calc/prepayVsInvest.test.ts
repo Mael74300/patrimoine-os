@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { prepayVsInvest } from './prepayVsInvest';
+import { prepayVsInvest, prepayVsInvestByReturn } from './prepayVsInvest';
 
 const I = { balance: 150000, annualRate: 0.035, remainingYears: 15, lump: 20000, annualReturn: 0.06, annualFees: 0.005, taxRate: 0.314 };
 
@@ -43,5 +43,27 @@ describe('rembourser ou investir', () => {
     const r = prepayVsInvest({ ...I, remainingYears: 0 });
     expect(r.monthsSaved).toBe(0);
     expect(r.interestSaved).toBe(0);
+  });
+
+  it('gamme de rendements : mêmes valeurs que le calcul, courbes croisées au rendement d’équilibre', () => {
+    const pts = prepayVsInvestByReturn(I);
+    expect(pts.map((p) => Math.round(p.annualReturn * 100))).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    for (const p of pts) {
+      const r = prepayVsInvest({ ...I, annualReturn: p.annualReturn });
+      expect(p.wealthPrepay).toBeCloseTo(r.wealthPrepay, 6);
+      expect(p.wealthInvest).toBeCloseTo(r.wealthInvest, 6);
+    }
+    const be = prepayVsInvest(I).breakEvenReturn as number;
+    for (const p of pts) {
+      if (p.annualReturn < be - 1e-9) expect(p.wealthPrepay).toBeGreaterThan(p.wealthInvest);
+      if (p.annualReturn > be + 1e-9) expect(p.wealthInvest).toBeGreaterThan(p.wealthPrepay);
+    }
+  });
+
+  it('gamme étendue jusqu’au rendement saisi au-delà de 10 %, plafonnée à 30 %', () => {
+    expect(prepayVsInvestByReturn({ ...I, annualReturn: 0.125 }).at(-1)?.annualReturn).toBeCloseTo(0.13, 9);
+    expect(prepayVsInvestByReturn({ ...I, annualReturn: 0.1 }).length).toBe(11);
+    expect(prepayVsInvestByReturn({ ...I, annualReturn: 0.9 }).length).toBe(31);
+    expect(prepayVsInvestByReturn({ ...I, annualReturn: NaN }).length).toBe(11);
   });
 });

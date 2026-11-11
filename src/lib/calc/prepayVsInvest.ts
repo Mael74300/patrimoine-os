@@ -100,3 +100,20 @@ export function prepayVsInvest(input: PrepayVsInvestInput): PrepayVsInvestResult
     breakEvenReturn,
   };
 }
+
+export type PrepayVsInvestPoint = { annualReturn: number; wealthPrepay: number; wealthInvest: number };
+
+/**
+ * Patrimoine net des deux options pour une gamme de rendements bruts (0 %, 1 %, 2 %…), le reste des
+ * hypothèses étant inchangé. La gamme va jusqu'à 10 %, ou jusqu'au rendement saisi s'il est plus élevé (30 % au plus).
+ * Les deux courbes se croisent au rendement d'équilibre.
+ */
+export function prepayVsInvestByReturn(input: PrepayVsInvestInput): PrepayVsInvestPoint[] {
+  const top = Math.min(30, Math.max(10, Math.ceil(num(input.annualReturn) * 100 - 1e-9)));
+  const out: PrepayVsInvestPoint[] = [];
+  for (let k = 0; k <= top; k++) {
+    const r = prepayVsInvest({ ...input, annualReturn: k / 100 });
+    out.push({ annualReturn: k / 100, wealthPrepay: r.wealthPrepay, wealthInvest: r.wealthInvest });
+  }
+  return out;
+}

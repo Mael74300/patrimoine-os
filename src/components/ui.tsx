@@ -292,6 +292,8 @@ type ChartProps = {
   axisLabels?: string[];
   /** Zone grisée entre deux index (par exemple la période d'étalement), avec un court libellé. */
   band?: { from: number; to: number; label: string };
+  /** Point lu par défaut dans la légende (sinon le dernier), par exemple la valeur saisie. */
+  defaultIndex?: number;
 };
 
 const CHAR_W = 6.6; // largeur moyenne d'un caractère de la police des graduations (px)
@@ -328,7 +330,7 @@ export function placeXLabels(
 }
 
 /** Graphique en lignes SVG, sans dépendance, utilisable à la souris, au doigt et au clavier. */
-export function LineChart({ series, xLabels, format, title, showTitle, height = 300, axisLabels, band }: ChartProps) {
+export function LineChart({ series, xLabels, format, title, showTitle, height = 300, axisLabels, band, defaultIndex }: ChartProps) {
   // Largeur du dessin = largeur affichée : les textes gardent leur taille réelle (lisibles sur mobile).
   const [W, setW] = useState(720);
   const narrow = W < 480;
@@ -383,7 +385,8 @@ export function LineChart({ series, xLabels, format, title, showTitle, height = 
     setHover(Math.max(0, Math.min(n - 1, i)));
   };
 
-  const active = hover ?? n - 1;
+  const rest = defaultIndex !== undefined && defaultIndex >= 0 && defaultIndex < n ? defaultIndex : n - 1;
+  const active = hover ?? rest;
   const descId = useId();
   const summary = useMemo(() => summarizeSeries(series, xLabels, format), [series, xLabels, format]);
 
@@ -401,8 +404,8 @@ export function LineChart({ series, xLabels, format, title, showTitle, height = 
         onPointerMove={(e) => onMove(e.clientX)}
         onPointerLeave={() => setHover(null)}
         onKeyDown={(e) => {
-          if (e.key === 'ArrowRight') setHover(Math.min(n - 1, (hover ?? n - 1) + 1));
-          if (e.key === 'ArrowLeft') setHover(Math.max(0, (hover ?? n - 1) - 1));
+          if (e.key === 'ArrowRight') setHover(Math.min(n - 1, (hover ?? rest) + 1));
+          if (e.key === 'ArrowLeft') setHover(Math.max(0, (hover ?? rest) - 1));
         }}
       >
         {band && band.to > band.from && (
