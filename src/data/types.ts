@@ -60,7 +60,8 @@ export type Guide = {
   title: string;
   summary: string;
   readingMinutes: number;
-  sections: { heading: string; body: string[] }[];
+  /** `points` : la rubrique s'affiche en liste à puces (un élément par entrée de `body`) au lieu de paragraphes. */
+  sections: { heading: string; body: string[]; points?: boolean }[];
   related: string[];
   sources: Source[];
   updatedOn: string;

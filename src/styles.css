@@ -964,3 +964,8 @@ a.term:hover { color: var(--primary); text-decoration-style: solid; }
   .rm-table td::before { content: attr(data-label); display: block; font-weight: 600; font-size: .8rem; color: var(--ink-2); margin-bottom: 3px; }
   .rm-table tbody tr > :last-child { border-bottom: 0; }
 }
+
+/* Rubriques de guide en liste courte (`points: true`) : un trait coloré à gauche de chaque point, sans cadre
+   (aussi compact qu'un paragraphe), plus facile à parcourir qu'un texte dense. L'amorce (avant « : ») est en gras. */
+.prose ul.guide-points { list-style: none; padding: 0; margin: 0.8rem 0 0; display: grid; gap: 12px; }
+.prose ul.guide-points li { margin: 0; padding: 1px 0 1px 14px; border-left: 3px solid var(--accent); }
