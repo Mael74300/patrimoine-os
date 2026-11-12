@@ -331,6 +331,21 @@ export function portfolioTakeaway(p: { total: number; netReturn: number; annualF
   return `Votre portefeuille de ${fmtEur(p.total)} ${annuel}.${frais}${poids}${proj}`;
 }
 
+/** Portefeuille : ce qu'il faut acheter ou vendre pour revenir à la répartition visée, en une phrase. Les écarts de moins de 1 € sont ignorés. */
+export function rebalanceTakeaway(items: { label: string; move: number }[]): string {
+  const moves = items.filter((i) => Math.abs(i.move) >= 1);
+  if (!items.length) return '';
+  if (!moves.length) return 'Votre portefeuille correspond déjà à votre cible : rien à acheter ni à vendre.';
+  const list = (xs: string[]) => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} et ${xs[xs.length - 1]}` : xs[0]);
+  const ventes = moves.filter((i) => i.move < 0).map((i) => `${fmtEur(-i.move)} de « ${i.label} »`);
+  const achats = moves.filter((i) => i.move > 0).map((i) => `${fmtEur(i.move)} à « ${i.label} »`);
+  const parts = [ventes.length ? `retirer ${list(ventes)}` : '', achats.length ? `ajouter ${list(achats)}` : ''].filter(Boolean);
+  const sansVente = ventes.length && achats.length
+    ? ' Sans rien vendre, vous pouvez aussi vous en rapprocher en plaçant vos prochains versements sur les supports sous leur cible.'
+    : '';
+  return `Pour retrouver la répartition visée, il faudrait ${parts.join(' et ')}.${sansVente}`;
+}
+
 /** Investir d'un coup ou progressivement : ce que l'on obtient dans chaque cas, et l'écart, en mots simples. */
 export function lumpGradualTakeaway(p: { amount: number; spreadMonths: number; months: number; lump: number; gradual: number; advantageGradual: number }): string {
   if (!(p.amount > 0)) return '';

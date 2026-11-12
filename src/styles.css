@@ -304,6 +304,18 @@ svg text { font-family: var(--font-schema); }
 .chart-legend > span.dashed::before { border-top-style: dashed; }
 .chart-legend .num { color: var(--ink); font-weight: 600; }
 
+/* Répartition actuelle et visée (portefeuille) : barre = part actuelle, trait = part visée */
+.alloc-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.alloc-row { margin: 0; }
+.alloc-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+.alloc-name { font-weight: 600; color: var(--ink); min-width: 0; overflow-wrap: anywhere; }
+.alloc-action { white-space: nowrap; font-size: .92rem; color: var(--ink-2); }
+.alloc-action.pos { color: var(--accent); }
+.alloc-action.neg { color: var(--danger); }
+.alloc-bar { position: relative; height: 14px; background: var(--surface-2); border-radius: 999px; }
+.alloc-fill { height: 100%; border-radius: 999px; }
+.alloc-target { position: absolute; top: -4px; bottom: -4px; width: 3px; margin-left: -1.5px; background: var(--ink); border-radius: 2px; }
+.alloc-nums { margin-top: 4px; }
 .bar { height: 10px; background: var(--surface-2); border-radius: 999px; overflow: hidden; }
 .bar > div { height: 100%; background: var(--primary); }
 
@@ -653,14 +665,10 @@ details.advanced[open] .fold-hint { display: none; }
   .line-table td { padding: 0; border: 0; text-align: left; }
   .line-table td::before { content: attr(data-label); display: block; font-weight: 600; font-size: .85rem; color: var(--ink-2); margin-bottom: 2px; }
   .line-table .lt-name { grid-column: 1 / -1; padding-right: 44px; }
-  .line-table td:nth-child(8) { grid-column: 1 / -1; display: flex; justify-content: space-between; }
-  .line-table td:nth-child(8)::before { display: inline; margin: 0; }
   .line-table td input[type=number] { padding-left: 8px; padding-right: 8px; }
   .line-table .lt-name::before { display: none; }
   .line-table .lt-name input { width: calc(100% - 24px) !important; }
   .line-table td input[type=number] { width: 100% !important; text-align: left !important; }
-  .line-table .lt-res { font-weight: 600; }
-  .line-table td:nth-child(8) { padding-top: 8px; border-top: 1px solid var(--line); }
   .line-table .lt-del { position: absolute; top: 10px; right: 10px; z-index: 1; }
   .line-table .lt-del::before { display: none; }
 }
