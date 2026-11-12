@@ -20,14 +20,20 @@ describe('Tableaux de scénarios compacts (stack-table)', () => {
     expect(mobile).toMatch(/@media \(min-width: 701px\) \{\s*\.stack-table \.st-name \{ white-space: nowrap; \}/);
   });
 
-  it('chaque ligne des trois tableaux commence par un nom puis des valeurs étiquetées', () => {
-    for (const src of [credits, budget, entreprise]) {
+  it('chaque ligne des deux tableaux commence par un nom puis des valeurs étiquetées', () => {
+    for (const src of [credits, entreprise]) {
       const start = src.indexOf('className="stack-table"');
       const table = src.slice(start, src.indexOf('</table>', start));
       const tds = [...table.matchAll(/<td ([^>]*)>/g)].map((m) => m[1]);
       expect(tds[0]).toContain('st-name');
       for (const td of tds.slice(1).filter((t) => !t.includes('st-name'))) expect(td).toContain('data-label=');
     }
+  });
+
+  it('simulateur Budget : le tableau répétant les barres est remplacé par une phrase par poste', () => {
+    expect(budget).not.toContain('stack-table');
+    expect(budget).toContain('className="bb-list"');
+    expect(budget).toContain('budgetGapPhrase(');
   });
 
   it('simulateur Frais : le tableau répétant les cartes est remplacé par des barres (versements, gains gardés, frais)', () => {

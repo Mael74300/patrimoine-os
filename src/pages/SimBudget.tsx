@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { analyzeBudget, BUDGET_BENCHMARK, budgetBarSegments, catchUp, fmtEur, fmtNum, fmtPct, monthsOfIncomeSavedPerYear, projectBudgetSaving } from '../lib/finance';
-import { budgetTakeaway } from '../lib/takeaways';
+import { budgetGapPhrase, budgetTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 function BudgetBars({ b }: { b: ReturnType<typeof analyzeBudget> }) {
@@ -44,11 +44,10 @@ export default function SimBudget() {
   const c = catchUp(s, s.targetRate);
   const proj = projectBudgetSaving(b.saving, s.projReturn, s.projYears);
   const rows = [
-    { label: 'Besoins (dépenses contraintes)', amount: b.needs, share: b.shares.needs, bench: BUDGET_BENCHMARK.needs, gap: b.gaps.needs },
-    { label: 'Envies (confort, loisirs)', amount: b.wants, share: b.shares.wants, bench: BUDGET_BENCHMARK.wants, gap: b.gaps.wants },
-    { label: 'Épargne', amount: b.saving, share: b.shares.saving, bench: BUDGET_BENCHMARK.saving, gap: b.gaps.saving },
+    { key: 'needs', label: 'Besoins', hint: 'dépenses contraintes', amount: b.needs, share: b.shares.needs, bench: BUDGET_BENCHMARK.needs, gap: b.gaps.needs },
+    { key: 'wants', label: 'Envies', hint: 'confort, loisirs', amount: b.wants, share: b.shares.wants, bench: BUDGET_BENCHMARK.wants, gap: b.gaps.wants },
+    { key: 'saving', label: 'Épargne', hint: 'mise de côté', amount: b.saving, share: b.shares.saving, bench: BUDGET_BENCHMARK.saving, gap: b.gaps.saving },
   ];
-  const signed = (n: number) => (n > 0 ? '+' : '') + fmtEur(n);
 
   return (
     <>
@@ -95,24 +94,17 @@ export default function SimBudget() {
 
           <h2>Votre budget face au repère 50 / 30 / 20</h2>
           <BudgetBars b={b} />
-          <div className="table-wrap stack-wrap">
-            <table className="stack-table">
-              <caption className="sr-only">Chaque poste du budget comparé au repère 50 / 30 / 20</caption>
-              <thead><tr><th>Poste</th><th className="r">Montant</th><th className="r">Part<span className="sr-only"> du revenu</span></th><th className="r">Repère</th><th className="r">Écart<span className="sr-only"> au repère</span></th></tr></thead>
-              <tbody>
-                {rows.map((r) => (
-                  <tr key={r.label}>
-                    <td className="st-name">{r.label}</td>
-                    <td data-label="Montant" className="r">{fmtEur(r.amount)}</td>
-                    <td data-label="Part du revenu" className="r">{fmtPct(r.share)}</td>
-                    <td data-label="Repère" className="r">{fmtPct(r.bench)}</td>
-                    <td data-label="Écart au repère" className="r">{signed(r.gap)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="small muted">Part : part de votre revenu net. Écart : différence avec le repère, en euros par mois (+ : au-dessus du repère).</p>
+          <ul className="bb-list" aria-label="Chaque poste du budget comparé au repère 50 / 30 / 20">
+            {rows.map((r) => (
+              <li key={r.key}>
+                <i className={'bb-dot bb-' + r.key} aria-hidden="true" />
+                <span>
+                  <strong>{r.label}</strong> <span className="muted">({r.hint})</span> : <strong>{fmtEur(r.amount)}</strong> par mois, soit {fmtPct(r.share)} du revenu.
+                  <span className="bb-gap">{budgetGapPhrase(r.gap, r.bench).replace(/^./, (ch) => ch.toUpperCase())}.</span>
+                </span>
+              </li>
+            ))}
+          </ul>
 
           <h2>Atteindre {fmtPct(s.targetRate)} d'épargne</h2>
           {c.missing === 0 ? (
