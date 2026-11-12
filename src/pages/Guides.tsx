@@ -5,8 +5,8 @@ import { investmentBySlug } from '../data/investments';
 import { guideBlurb } from '../lib/guideBlurbs';
 import { simBlurb } from '../lib/simThemes';
 import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
-import { fmtEur, fmtPct, netWorth, type NetWorthItem } from '../lib/finance';
-import { Crumbs, MobileFold, PageHead, SimFaq, Sources, usePersistentState } from '../components/ui';
+import { NetWorthCalculator } from '../components/NetWorthCalculator';
+import { Crumbs, MobileFold, PageHead, SimFaq, Sources } from '../components/ui';
 import { EnvelopeCards } from '../components/EnvelopeCards';
 import { LivretsTable } from '../components/LivretsTable';
 import { RiskMap } from '../components/RiskMap';
@@ -54,49 +54,6 @@ export function GuideList() {
       ))}
       </div>
     </>
-  );
-}
-
-const NW_DEFAULT: { items: NetWorthItem[] } = {
-  items: [
-    { id: 'a1', label: 'Comptes et livrets', amount: 12000, kind: 'actif' },
-    { id: 'a2', label: 'Placements (PEA, assurance-vie…)', amount: 25000, kind: 'actif' },
-    { id: 'a3', label: 'Résidence principale (valeur estimée)', amount: 250000, kind: 'actif' },
-    { id: 'd1', label: 'Crédit immobilier (capital restant dû)', amount: 180000, kind: 'dette' },
-  ],
-};
-
-function NetWorthCalculator() {
-  const [st, setSt] = usePersistentState('patrimoine-net', NW_DEFAULT);
-  const r = netWorth(st.items);
-  const setItem = (id: string, patch: Partial<NetWorthItem>) => setSt((x) => ({ items: x.items.map((i) => (i.id === id ? { ...i, ...patch } : i)) }));
-  const add = (kind: NetWorthItem['kind']) => setSt((x) => ({ items: [...x.items, { id: kind[0] + Date.now(), label: kind === 'actif' ? 'Autre actif' : 'Autre dette', amount: 0, kind }] }));
-  const block = (kind: NetWorthItem['kind'], title: string) => (
-    <div>
-      <h3 style={{ marginTop: 0 }}>{title}</h3>
-      {st.items.filter((i) => i.kind === kind).map((i) => (
-        <div key={i.id} className="nw-row">
-          <input type="text" aria-label="Libellé" value={i.label} onChange={(e) => setItem(i.id, { label: e.target.value })} />
-          <input type="number" aria-label={`Montant ${i.label}`} min={0} value={i.amount} onChange={(e) => setItem(i.id, { amount: Math.max(0, +e.target.value || 0) })} />
-          <button type="button" className="btn small secondary" aria-label={`Supprimer ${i.label}`} onClick={() => setSt((x) => ({ items: x.items.filter((y) => y.id !== i.id) }))}>×</button>
-        </div>
-      ))}
-      <button type="button" className="btn small secondary" onClick={() => add(kind)}>Ajouter</button>
-    </div>
-  );
-  return (
-    <div className="panel" style={{ marginTop: 8 }}>
-      <div className="split">
-        {block('actif', 'Actifs')}
-        {block('dette', 'Dettes')}
-      </div>
-      <div className="kpis" style={{ marginTop: 16, marginBottom: 0 }}>
-        <div className="kpi"><div className="k-label">Total des actifs</div><div className="k-value">{fmtEur(r.assets)}</div></div>
-        <div className="kpi"><div className="k-label">Total des dettes</div><div className="k-value">{fmtEur(r.debts)}</div><div className="k-sub">{fmtPct(r.debtRatio)} des actifs</div></div>
-        <div className={'kpi ' + (r.net >= 0 ? 'pos' : 'neg')}><div className="k-label">Patrimoine net</div><div className="k-value">{fmtEur(r.net)}</div></div>
-      </div>
-      <p className="small muted" style={{ margin: '12px 0 0' }}>Exemple pré-rempli fictif. Vos montants restent dans ce navigateur.</p>
-    </div>
   );
 }
 

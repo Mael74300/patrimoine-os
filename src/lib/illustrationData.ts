@@ -1,4 +1,5 @@
 import { prepayVsInvest } from './calc/prepayVsInvest';
+import type { NetWorthItem } from './calc/networth';
 import { PFU_TOTAL_PCT } from './calc/pfu';
 import { amortize } from './calc/loan';
 import { debtRatio, HCSF } from './calc/debtRatio';
@@ -135,6 +136,16 @@ export function patrimoineParts() {
   const assets = home + savings;
   return { home, savings, debt, assets, net: assets - debt };
 }
+
+/** Valeurs de départ du calculateur du guide : le même exemple fictif que le schéma (épargne de 15 000 € répartie sur deux lignes). */
+export const NW_DEFAULT: { items: NetWorthItem[] } = {
+  items: [
+    { id: 'a1', label: 'Comptes et livrets', amount: 10000, kind: 'actif' },
+    { id: 'a2', label: 'Placements (PEA, assurance-vie…)', amount: PATRIMOINE_EXAMPLE.savings - 10000, kind: 'actif' },
+    { id: 'a3', label: 'Logement (valeur estimée)', amount: PATRIMOINE_EXAMPLE.home, kind: 'actif' },
+    { id: 'd1', label: 'Crédit immobilier', amount: PATRIMOINE_EXAMPLE.debt, kind: 'dette' },
+  ],
+};
 
 /** Exemple fictif du guide « Rembourser son crédit par anticipation ou investir ? » (mêmes chiffres que le texte). Gains imposés au PFU 2026 (31,4 %, valeur partagée avec le simulateur et la fiche Compte-titres). */
 export const REMBOURSER_EXAMPLE = { balance: 150000, annualRate: 0.04, remainingYears: 20, lump: 20000, annualReturn: 0.05, annualFees: 0.002, taxRate: PFU_TOTAL_PCT / 100 };
