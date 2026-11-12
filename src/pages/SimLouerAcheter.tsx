@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { advantageByHorizon, advantageByPriceGrowth, fmtEur, fmtMonths, fmtPct, rentVsBuy } from '../lib/finance';
+import { advantageByHorizon, advantageByPriceGrowth, breakEvenBand, fmtEur, fmtMonths, fmtPct, rentVsBuy } from '../lib/finance';
 import { rentVsBuyTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
@@ -25,6 +25,7 @@ export default function SimLouerAcheter() {
   const byGrowth = advantageByPriceGrowth(s, [-0.01, 0, 0.02, 0.04]);
   const byHorizon = advantageByHorizon(s, [3, 5, 10, 15, 20]);
   const buyWins = r.advantage > 0;
+  const band = breakEvenBand(r.breakEvenMonth, r.series.length);
 
   return (
     <>
@@ -82,10 +83,16 @@ export default function SimLouerAcheter() {
                 format={fmtEur}
                 series={[
                   { name: 'Propriétaire', color: 'var(--chart-1)', values: r.series.map((p) => p.buyer) },
-                  { name: 'Locataire', color: 'var(--chart-2)', values: r.series.map((p) => p.renter) },
+                  { name: 'Locataire', color: 'var(--chart-2)', values: r.series.map((p) => p.renter), dashed: true },
                 ]}
+                band={band ? { ...band, label: 'L’achat l’emporte', labelAt: 'bottom' } : undefined}
               />
-              <p className="muted small">Les deux courbes se croisent quand acheter devient plus avantageux que louer. À chaque date, le patrimoine du propriétaire est calculé comme s’il revendait le bien ce jour-là, frais de revente déduits.</p>
+              <p className="muted small">
+                {band
+                  ? `Zone grisée : à partir de ${fmtMonths(r.breakEvenMonth!)}, le propriétaire reste plus riche. Avant, louer et placer la différence laisse davantage.`
+                  : 'Tant que la courbe pleine (propriétaire) reste sous la courbe en tirets (locataire), louer et placer la différence laisse davantage.'}
+                {' '}Le patrimoine du propriétaire est compté comme s’il revendait le bien à cette date, frais de revente déduits.
+              </p>
             </>
           )}
           <p className="muted small">Mensualité du prêt hors assurance : {fmtEur(r.monthlyPayment)} sur un capital emprunté de {fmtEur(r.loanAmount)}.</p>
