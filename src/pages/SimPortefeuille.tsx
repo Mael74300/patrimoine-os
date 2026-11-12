@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { portfolioTakeaway } from '../lib/takeaways';
+import { portfolioTakeaway, rebalanceTakeaway } from '../lib/takeaways';
 import { fmtEur, fmtPct, projectGrowth, rebalance, summarizePortfolio, type PortfolioLine } from '../lib/finance';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
@@ -10,9 +10,9 @@ const DEFAULTS: State = {
   monthly: 300,
   years: 20,
   lines: [
-    { id: 'l1', label: 'ETF actions monde', amount: 12000, expectedReturn: 0.06, fees: 0.002, risk: 4, target: 0.6 },
-    { id: 'l2', label: 'Fonds euros', amount: 5000, expectedReturn: 0.025, fees: 0.006, risk: 1, target: 0.25 },
-    { id: 'l3', label: 'Livret A', amount: 3000, expectedReturn: 0.017, fees: 0, risk: 1, target: 0.15 },
+    { id: 'l1', label: 'ETF actions monde', amount: 12000, expectedReturn: 0.06, fees: 0.002, risk: 4, target: 0.5 },
+    { id: 'l2', label: 'Fonds euros', amount: 5000, expectedReturn: 0.025, fees: 0.006, risk: 1, target: 0.3 },
+    { id: 'l3', label: 'Livret A', amount: 3000, expectedReturn: 0.017, fees: 0, risk: 1, target: 0.2 },
   ],
 };
 const COLORS = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)', 'var(--chart-4)', '#5a7d8c', '#a0a35a'];
@@ -22,6 +22,7 @@ export default function SimPortefeuille() {
   const sum = useMemo(() => summarizePortfolio(s.lines), [s.lines]);
   const top = sum.weights.reduce<(typeof sum.weights)[number] | undefined>((a, w) => (!a || w.weight > a.weight ? w : a), undefined);
   const targetTotal = s.lines.reduce((a, l) => a + l.target, 0);
+  const targetsOk = Math.abs(targetTotal - 1) <= 0.001;
   const moves = useMemo(() => rebalance(s.lines, Object.fromEntries(s.lines.map((l) => [l.id, l.target]))), [s.lines]);
   const proj = useMemo(
     () => projectGrowth({ initial: sum.total, monthly: s.monthly, annualReturn: sum.netReturn, annualFees: 0, years: s.years, inflation: 0 }),
@@ -53,12 +54,11 @@ export default function SimPortefeuille() {
           <thead>
             <tr>
               <th>Support</th><th className="r">Montant (€)</th><th className="r">Rendement supposé (%)</th><th className="r">Frais (%)</th>
-              <th className="r">Risque (1-7)</th><th className="r">Cible (%)</th><th className="r">Poids actuel</th><th className="r">Rééquilibrage</th><th><span className="sr-only">Actions</span></th>
+              <th className="r">Risque (1 à 7)</th><th className="r">Cible (%)</th><th><span className="sr-only">Actions</span></th>
             </tr>
           </thead>
           <tbody>
             {s.lines.map((l, idx) => {
-              const w = sum.weights.find((x) => x.id === l.id)?.weight ?? 0;
               const num = (v: number, f: (n: number) => void, step = 1, label = '') => (
                 <input type="number" aria-label={`${label} ${l.label}`} step={step} value={v} style={{ width: 90, textAlign: 'right' }}
                   onChange={(e) => { const n = parseFloat(e.target.value); if (Number.isFinite(n)) f(n); }} />
@@ -72,12 +72,8 @@ export default function SimPortefeuille() {
                   <td className="r" data-label="Montant €">{num(l.amount, (n) => setLine(l.id, { amount: Math.max(0, n) }), 100, 'Montant')}</td>
                   <td className="r" data-label="Rendement %">{num(+(l.expectedReturn * 100).toFixed(4), (n) => setLine(l.id, { expectedReturn: n / 100 }), 0.25, 'Rendement')}</td>
                   <td className="r" data-label="Frais %">{num(+(l.fees * 100).toFixed(4), (n) => setLine(l.id, { fees: Math.max(0, n / 100) }), 0.05, 'Frais')}</td>
-                  <td className="r" data-label="Risque 1-7">{num(l.risk, (n) => setLine(l.id, { risk: Math.min(7, Math.max(1, n)) }), 1, 'Risque')}</td>
+                  <td className="r" data-label="Risque 1 à 7">{num(l.risk, (n) => setLine(l.id, { risk: Math.min(7, Math.max(1, n)) }), 1, 'Risque')}</td>
                   <td className="r" data-label="Cible %">{num(+(l.target * 100).toFixed(4), (n) => setLine(l.id, { target: Math.max(0, n / 100) }), 5, 'Cible')}</td>
-                  <td className="r lt-res" data-label="Poids actuel">{fmtPct(w)}</td>
-                  <td className="r lt-res" data-label="Rééquilibrage" style={{ color: moves[l.id] >= 0 ? 'var(--accent)' : 'var(--danger)' }}>
-                    {moves[l.id] >= 0 ? '+' : ''}{fmtEur(moves[l.id])}
-                  </td>
                   <td className="lt-del">
                     <button className="btn small secondary" aria-label={`Retirer ${l.label}`} onClick={() => setS((st) => ({ ...st, lines: st.lines.filter((x) => x.id !== l.id) }))}>×</button>
                   </td>
@@ -94,22 +90,41 @@ export default function SimPortefeuille() {
         <button className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
       </div>
       <p className="small muted" style={{ marginTop: 12 }}>
-        <strong>Cible (%)</strong> : la part que vous voulez donner à ce support (le total doit faire 100 %). <strong>Rééquilibrage</strong> : en vert, le montant à ajouter pour atteindre la cible ; en rouge, le montant à retirer.
+        <strong>Cible (%)</strong> : la part que vous voulez donner à ce support (le total doit faire 100 %). Le risque se note de 1 (très prudent) à 7 (très risqué).
       </p>
-      {Math.abs(targetTotal - 1) > 0.001 && (
+      {!targetsOk && (
         <p className="notice small" style={{ marginTop: 12 }}>
-          Vos allocations cibles totalisent {fmtPct(targetTotal)} au lieu de 100 % : le rééquilibrage affiché n'est pas cohérent.
+          Vos allocations cibles totalisent {fmtPct(targetTotal)} au lieu de 100 % : les montants à ajouter ou à retirer ne peuvent pas être calculés.
         </p>
       )}
 
-      <h2>Répartition actuelle</h2>
+      <h2>Répartition : aujourd’hui et cible</h2>
       <div className="panel">
-        {sum.weights.map((w, i) => (
-          <div key={w.id} style={{ marginBottom: 10 }}>
-            <div className="small" style={{ display: 'flex', justifyContent: 'space-between' }}><span>{w.label}</span><span className="num">{fmtPct(w.weight)}</span></div>
-            <div className="bar"><div style={{ width: `${w.weight * 100}%`, background: COLORS[i % COLORS.length] }} /></div>
-          </div>
-        ))}
+        <ul className="alloc-list">
+          {s.lines.map((l, i) => {
+            const w = sum.weights.find((x) => x.id === l.id)?.weight ?? 0;
+            const m = moves[l.id] ?? 0;
+            const action = !targetsOk ? '' : Math.abs(m) < 1 ? 'À la cible' : m > 0 ? `Ajouter ${fmtEur(m)}` : `Retirer ${fmtEur(-m)}`;
+            return (
+              <li key={l.id} className="alloc-row">
+                <div className="alloc-head">
+                  <span className="alloc-name">{l.label}</span>
+                  {action && <strong className={`alloc-action ${Math.abs(m) < 1 ? '' : m > 0 ? 'pos' : 'neg'}`}>{action}</strong>}
+                </div>
+                <div className="alloc-bar" role="img" aria-label={`${l.label} : ${fmtPct(w)} aujourd’hui, cible ${fmtPct(l.target)}`}>
+                  <div className="alloc-fill" style={{ width: `${Math.min(100, w * 100)}%`, background: COLORS[i % COLORS.length] }} />
+                  <div className="alloc-target" style={{ left: `${Math.min(100, l.target * 100)}%` }} />
+                </div>
+                <div className="alloc-nums small muted num" aria-hidden="true">{fmtPct(w)} aujourd’hui · cible {fmtPct(l.target)}{i === 0 ? ' (trait vertical)' : ''}</div>
+              </li>
+            );
+          })}
+        </ul>
+        {targetsOk && sum.total > 0 && (
+          <p className="small" style={{ margin: '14px 0 0' }}>
+            {rebalanceTakeaway(s.lines.map((l) => ({ label: l.label, move: moves[l.id] ?? 0 })))}
+          </p>
+        )}
       </div>
 
       <h2>Projection</h2>

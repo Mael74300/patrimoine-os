@@ -4,7 +4,7 @@ import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio } f
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
 import { precautionTarget } from './calc/precaution';
-import { businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, budgetGapPhrase, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionTargetSub, prepayTakeaway, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { rebalanceTakeaway, businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, budgetGapPhrase, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionTargetSub, prepayTakeaway, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -518,5 +518,32 @@ describe('etfImmoAdvancedHint', () => {
     const t = etfImmoAdvancedHint({ regimeLabel: 'Ne pas estimer l’impôt', taxed: false, marginalRate: 0.3, appreciation: -0.01 });
     expect(t).toBe(`Impôt non estimé, prix du bien ${fmtPct(-0.01)}/an`);
     expect(t).not.toContain('tranche');
+  });
+});
+
+describe('phrase de rééquilibrage du portefeuille', () => {
+  const digits = (t: string) => t.replace(/\s/g, '');
+  it('les montants viennent de rebalance (exemple fictif : 12 000 / 5 000 / 3 000 € visés à 50 / 30 / 20 %)', async () => {
+    const { rebalance } = await import('./calc/portfolio');
+    const lines = [
+      { id: 'a', label: 'ETF actions monde', amount: 12000, expectedReturn: 0.06, fees: 0.002, risk: 4 },
+      { id: 'b', label: 'Fonds euros', amount: 5000, expectedReturn: 0.025, fees: 0.006, risk: 1 },
+      { id: 'c', label: 'Livret A', amount: 3000, expectedReturn: 0.017, fees: 0, risk: 1 },
+    ];
+    const m = rebalance(lines, { a: 0.5, b: 0.3, c: 0.2 });
+    expect(m.a).toBeCloseTo(-2000, 8);
+    expect(m.b).toBeCloseTo(1000, 8);
+    expect(m.c).toBeCloseTo(1000, 8);
+    const t = rebalanceTakeaway(lines.map((l) => ({ label: l.label, move: m[l.id] })));
+    expect(digits(t)).toContain(digits('retirer 2 000 € de « ETF actions monde » et ajouter 1 000 € à « Fonds euros » et 1 000 € à « Livret A »'));
+    expect(t).toContain('Sans rien vendre');
+  });
+  it('déjà à la cible, achats seuls, liste vide', () => {
+    expect(rebalanceTakeaway([{ label: 'A', move: 0.4 }, { label: 'B', move: -0.4 }])).toContain('rien à acheter ni à vendre');
+    const t = rebalanceTakeaway([{ label: 'A', move: 500 }, { label: 'B', move: 0 }]);
+    expect(t).toContain('ajouter');
+    expect(t).not.toContain('retirer');
+    expect(t).not.toContain('Sans rien vendre');
+    expect(rebalanceTakeaway([])).toBe('');
   });
 });
