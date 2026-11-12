@@ -8,6 +8,7 @@ import { simulators } from './lib/simulatorsList';
 import { INLINE_LINKS, pathOf } from './lib/inlineLinks';
 import { annotateJargon, isLink, linkOnly, type JargonSegment } from './lib/jargon';
 import { JargonText } from './components/Jargon';
+import { ficheParagraphs } from './lib/ficheText';
 
 const join = (segs: JargonSegment[]) => segs.map((s) => (typeof s === 'string' ? s : s.text)).join('');
 const routes = new Set([
@@ -18,7 +19,7 @@ const routes = new Set([
 ]);
 
 const guidePages = guides.map((g) => ({ path: `/guides/${g.slug}`, title: g.title, paras: g.sections.flatMap((s) => s.body) }));
-const fichePages = investments.map((i) => ({ path: `/encyclopedie/${i.slug}`, title: i.name, paras: [i.definition, i.howItWorks, ...i.howToInvest] }));
+const fichePages = investments.map((i) => ({ path: `/encyclopedie/${i.slug}`, title: i.name, paras: ficheParagraphs(i) }));
 const shortTexts = investments.flatMap((i) => [i.example, i.fees.text, i.tax.text, i.minCapital.text].map((t) => ({ path: `/encyclopedie/${i.slug}`, t })));
 
 describe('Liens dans le texte (pages citées par leur nom)', () => {

@@ -1,6 +1,6 @@
 import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
 import { JargonText } from './Jargon';
-import { linkOnly } from '../lib/jargon';
+import { linkOnly, type JargonSegment } from '../lib/jargon';
 import { simFaq, type FaqItem } from '../data/simFaq';
 import { Link } from 'react-router-dom';
 import { config } from '../config';
@@ -14,6 +14,7 @@ import { readingForSimulator } from '../lib/relatedSims';
 import { readableNumber } from '../lib/readableNumber';
 import { fmtDate } from '../lib/dates';
 import { sentenceLead } from '../lib/sentenceLead';
+import { checkedParts, leadOfSegments, splitSentences } from '../lib/ficheText';
 import { buildExport, mergeSims, parseExport } from '../lib/simExport';
 
 // ------------------------------------------------------------ Champs
@@ -212,25 +213,27 @@ export function MetersLegend() {
   );
 }
 
-/** Découpe un texte en phrases (sans rien modifier au contenu) pour l'afficher ligne par ligne. */
-export function splitSentences(text: string): string[] {
-  return text.split(/(?<=[.!?])\s+(?=[A-ZÉÈÀÂÎÔ])/).map((t) => t.trim()).filter(Boolean);
-}
+export { splitSentences };
 
 /** Texte d'une rubrique où les pages citées par leur nom (« fiche PEA ») deviennent des liens. */
 const Linked = ({ text, path }: { text: string; path?: string }) => <JargonText segs={linkOnly(text, path)} />;
 
-export function CheckedText({ c, split = false, path }: { c: Checked; split?: boolean; path?: string }) {
+/**
+ * Rubrique vérifiable (Frais, Fiscalité…). `segs` : texte déjà annoté par la page (jargon expliqué sur place),
+ * un tableau par morceau de `checkedParts` ; sans lui, seules les pages citées par leur nom deviennent des liens.
+ */
+export function CheckedText({ c, split = false, path, segs }: { c: Checked; split?: boolean; path?: string; segs?: JargonSegment[][] }) {
   const badge = c.verified ? (
     <span className="badge-verified">✓ vérifié{c.asOf ? ` au ${fmtDate(c.asOf)}` : ''}</span>
   ) : c.advice ? null : (
     <span className="badge-unverified">à vérifier</span>
   );
-  const parts = split ? splitSentences(c.text) : [c.text];
-  if (parts.length < 3) {
+  const parts = checkedParts(c, split);
+  const text = (k: number) => (segs?.[k] ? <JargonText segs={segs[k]} /> : <Linked text={parts[k]} path={path} />);
+  if (parts.length === 1) {
     return (
       <p>
-        <Linked text={c.text} path={path} /> {badge}
+        {text(0)} {badge}
       </p>
     );
   }
@@ -238,10 +241,12 @@ export function CheckedText({ c, split = false, path }: { c: Checked; split?: bo
     <>
       <ul className="sentence-list">
         {parts.map((t, k) => {
-          const l = sentenceLead(t);
+          const annotated = segs?.[k] ? leadOfSegments(segs[k]) : null;
+          const l = segs?.[k] ? null : sentenceLead(t);
           return (
             <li key={t}>
-              {l ? <><strong>{l.lead}</strong><Linked text={l.rest} path={path} /></> : <Linked text={t} path={path} />}
+              {annotated ? <><strong><JargonText segs={annotated.lead} /></strong><JargonText segs={annotated.rest} /></>
+                : l ? <><strong>{l.lead}</strong><Linked text={l.rest} path={path} /></> : text(k)}
               {badge && k === parts.length - 1 && <> {badge}</>}
             </li>
           );

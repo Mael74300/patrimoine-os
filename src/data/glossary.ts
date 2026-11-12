@@ -3,7 +3,13 @@
  * Chaque lien interne doit pointer vers une page existante : vérifié par les tests.
  */
 export type GlossaryLink = { label: string; to: string };
-export type GlossaryTerm = { term: string; definition: string; links: GlossaryLink[] };
+export type GlossaryTerm = {
+  term: string;
+  definition: string;
+  links: GlossaryLink[];
+  /** Vrai si la notion doit être expliquée sur place même sur les pages vers lesquelles elle renvoie (la page cite le sigle sans l'expliquer). */
+  explainOnLinkedPages?: boolean;
+};
 
 /** Ancre d'une notion dans la page Glossaire (utilisée aussi par la recherche). */
 export const glossaryId = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -51,5 +57,7 @@ export const glossary: GlossaryTerm[] = [
   { term: 'TMI (tranche marginale d’imposition)', definition: 'Taux de la tranche la plus élevée de vos revenus dans le barème de l’impôt sur le revenu. Il ne s’applique pas à tous vos revenus, seulement à la part comprise dans cette tranche : votre taux moyen d’imposition est plus bas.', links: [sim('immobilier', 'Calculateur immobilier'), fiche('location-nue', 'Location nue')] },
   { term: 'DIC (document d’informations clés)', definition: 'Document de trois pages, harmonisé en Europe, qui présente un placement collectif (fonds, SCPI, contrat d’assurance-vie en unités de compte…) : ses caractéristiques, un indicateur de risque de 1 à 7, la perte maximale possible, des scénarios de performance, la durée de détention recommandée et les frais. Il doit vous être remis gratuitement, assez tôt pour l’examiner avant de souscrire. Il remplace l’ancien « DICI » (AMF, consulté le 9 novembre 2026). Les actions détenues directement en compte-titres ou en PEA n’en ont pas.', links: [guide('comparer-les-frais', 'Comment comparer les frais d’investissement')] },
   { term: 'Usufruit et nue-propriété', definition: 'Quand la propriété d’un bien est partagée en deux (on parle de démembrement) : l’usufruitier a le droit d’utiliser le bien et d’en tirer les revenus (par exemple habiter une maison ou percevoir des loyers), sans pouvoir le vendre seul ; le nu-propriétaire garde le droit d’en disposer (le vendre, le donner, le léguer). Réunis, ils forment la pleine propriété.', links: [guide('pret-a-taux-zero-ptz', 'Prêt à taux zéro (PTZ)'), fiche('donation', 'Donation')] },
+  { term: 'PSCA (prestataire de services sur crypto-actifs)', definition: 'Entreprise autorisée à proposer des services sur crypto-actifs (achat, vente, conservation, conseil…), selon le règlement européen MiCA. Elle doit être agréée : en France par l’AMF, qui publie la liste blanche des prestataires autorisés. Depuis le 1er juillet 2026, l’ancien statut français de PSAN (prestataire de services sur actifs numériques) ne suffit plus (AMF, consulté le 12 novembre 2026).', links: [fiche('cryptomonnaies', 'Fiche Cryptomonnaies')], explainOnLinkedPages: true },
+  { term: 'FGDR (Fonds de garantie des dépôts et de résolution)', definition: 'Organisme auquel adhèrent toutes les banques établies en France : si l’une d’elles fait faillite, il indemnise ses clients pour l’argent déposé, jusqu’à un plafond par client et par banque (indiqué, daté, dans les fiches). Il ne couvre pas les crypto-actifs si une plateforme fait faillite (La finance pour tous et AMF, consultés le 12 novembre 2026).', links: [fiche('compte-a-terme', 'Fiche Compte à terme'), fiche('livret-a', 'Fiche Livret A')], explainOnLinkedPages: true },
   { term: 'Livret A', definition: 'Compte d’épargne réglementé, ouvert à tous et défiscalisé, dont le taux d’intérêt est fixé par l’État. L’argent reste disponible : on peut faire des retraits en cas de besoin.', links: [fiche('livret-a', 'Fiche Livret A'), sim('epargne-de-precaution', 'Épargne de précaution')] },
 ];
