@@ -886,11 +886,31 @@ h2.gloss-letter::before { content: none; }
   .sim-notice[open] > p { padding-bottom: 0; }
 }
 
-/* Lignes du mini-calculateur de patrimoine net (guide) : libellé lisible en entier sur mobile */
-.nw-row { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) auto; gap: 6px; margin-bottom: 6px; }
+/* Mini-calculateur de patrimoine net (guide) : nom en entier, montant en euros, suppression en cible tactile */
+.nw-panel { margin-top: 8px; }
+.nw-block { min-width: 0; }
+.nw-title { margin: 0; font-size: 1.02rem; }
+.nw-hint { margin: 2px 0 12px; font-size: 0.85rem; color: var(--ink-3); }
+.nw-row { display: grid; grid-template-columns: minmax(0, 1fr) 9.5rem 40px; gap: 8px; align-items: center; margin-bottom: 8px; }
+.nw-row input { width: 100%; min-width: 0; }
+.nw-row input[type="number"] { font-variant-numeric: tabular-nums; text-align: right; }
+.nw-label { font-weight: 500; }
+.nw-del { width: 40px; height: 40px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink-3); font-size: 1.15rem; line-height: 1; cursor: pointer; }
+.nw-del:hover, .nw-del:focus-visible { color: var(--danger); border-color: var(--danger); }
+.nw-block > .btn { margin-top: 2px; }
+.nw-kpis { margin: 20px 0 0; }
+.nw-note { margin: 0; }
+.linklike { background: none; border: 0; padding: 0; font: inherit; color: var(--primary); text-decoration: underline; cursor: pointer; }
 @media (max-width: 479px) {
-  .nw-row { grid-template-columns: minmax(0, 1fr) auto; margin-bottom: 12px; }
-  .nw-row > input[type="text"] { grid-column: 1 / -1; }
+  .nw-row { grid-template-columns: minmax(0, 1fr) 40px; row-gap: 6px; margin-bottom: 14px; }
+  .nw-row > .nw-label { grid-column: 1 / -1; }
+  /* Résultats en trois lignes « libellé … montant » : moins haut que trois cartes empilées */
+  .nw-kpis { gap: 8px; }
+  .nw-kpis > .kpi { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 12px; padding: 10px 14px; }
+  .nw-kpis .k-label { font-size: 0.9rem; color: var(--ink-2); }
+  .nw-kpis .k-value { font-size: 1.2rem; }
+  .nw-kpis .k-sub { grid-column: 1 / -1; }
+  .nw-hint { margin-bottom: 10px; }
 }
 
 /* Sommaire des guides : colonne de droite sur grand écran, absent sur mobile (aucune hauteur ajoutée). */

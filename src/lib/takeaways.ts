@@ -399,3 +399,18 @@ export function etfImmoAdvancedHint(p: { regimeLabel: string; taxed: boolean; ma
   if (!p.taxed) return `Impôt non estimé, ${prix}`;
   return `${p.regimeLabel}, tranche ${fmtPct(p.marginalRate)}, ${prix}`;
 }
+
+/** Patrimoine net (calculateur du guide) : ce qui resterait si l'on vendait tout et remboursait toutes ses dettes. */
+export function netWorthTakeaway(p: { assets: number; debts: number; net: number }): string {
+  if (!(p.assets > 0) && !(p.debts > 0)) return 'Saisissez ce que vous possédez et ce que vous devez : le patrimoine net s’affiche ici.';
+  if (p.net < 0) {
+    return `Vos dettes dépassent de ${fmtEur(-p.net)} ce que vous possédez. À valeur des biens égale, chaque euro de capital remboursé fait remonter le patrimoine net d’un euro.`;
+  }
+  return `Si vous vendiez tout au prix estimé et remboursiez vos dettes, il vous resterait ${fmtEur(p.net)}, avant frais et impôts de vente.`;
+}
+
+/** Part des dettes rapportée à ce que l'on possède, en pourcentage entier (« 68 % »). */
+export function debtShareLabel(p: { assets: number; debts: number }): string {
+  if (!(p.assets > 0) || !(p.debts > 0)) return '';
+  return `soit ${Math.round((p.debts / p.assets) * 100)}\u00a0% de ce que vous possédez`;
+}
