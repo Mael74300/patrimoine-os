@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allocateEnvelopes, monthlySavingNeeded, monthsCovered, precautionPath, precautionTarget } from './precaution';
+import { allocateEnvelopes, monthlySavingNeeded, monthsCovered, precautionPath, precautionSegments, precautionTarget } from './precaution';
 import { LIVRETS } from '../../data/livrets';
 import { investmentBySlug } from '../../data/investments';
 
@@ -36,6 +36,28 @@ describe('épargne de précaution', () => {
   it('déjà atteint, ou jamais sans versement', () => {
     expect(precautionPath({ ...P, currentSavings: 20000 }).reachedAt).toBe(0);
     expect(precautionPath({ ...P, monthlySaving: 0, annualRate: 0 }).reachedAt).toBeNull();
+  });
+
+  it('barre « D’où viendra la réserve » : départ + versements + intérêts = solde', () => {
+    const b = precautionSegments({ ...P, annualRate: 0 })!;
+    expect(b.month).toBe(35);
+    expect(b.segments.map((x) => [x.key, x.amount])).toEqual([['start', 3000], ['deposits', 10500]]);
+    expect(b.segments.reduce((a, x) => a + x.width, 0)).toBeCloseTo(100, 9);
+    const c = precautionSegments(P)!;
+    const sum = c.segments.reduce((a, x) => a + x.amount, 0);
+    expect(sum).toBeCloseTo(c.balance, 6);
+    expect(c.segments.find((x) => x.key === 'interest')!.amount).toBeGreaterThan(0);
+    expect(c.segments.find((x) => x.key === 'deposits')!.amount).toBe(300 * c.month);
+    expect(precautionSegments({ ...P, currentSavings: 20000 })).toBeNull();
+    expect(precautionSegments({ ...P, monthlySaving: 0, annualRate: 0 })).toBeNull();
+  });
+
+  it('exemple par défaut de la page (fictif) : 2 500 € + 250 € par mois, 7 000 € visés', () => {
+    const d = { monthlyExpenses: 2000, months: 3, extraReserve: 1000, currentSavings: 2500, monthlySaving: 250, annualRate: 0.017 };
+    const b = precautionSegments(d)!;
+    expect(b.month).toBe(18);
+    expect(Math.round(b.balance)).toBe(7118);
+    expect(b.segments.map((x) => Math.round(x.amount))).toEqual([2500, 4500, 118]);
   });
 
   it('versement nécessaire : cohérent avec la trajectoire', () => {
