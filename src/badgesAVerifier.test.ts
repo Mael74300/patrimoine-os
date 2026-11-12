@@ -63,8 +63,31 @@ describe('badges « à vérifier » des fiches (chantier 12)', () => {
     expect(sim).not.toContain('7 à 8 %');
   });
 
-  it('le nombre de rubriques à vérifier ne remonte pas (31 avant le 2026-11-10, 24 avant le 2026-11-12)', () => {
+  it('les frais des actifs alternatifs revus le 2026-11-12 (étape 3) sont sourcés', () => {
+    const cases: [string, string[], string][] = [
+      ['private-equity', ['3,5 %', '3,2 %', '2,4 % à 2,5 %'], 'publication_performance_fonds_actifs_non_cotes'],
+      ['or', ['0,165 % à 0,85 %'], 'acheter-de-l-or'],
+      ['objets-d-art-collection', ['20 %'], 'collectionner-des-oeuvres-d-art'],
+      ['groupements-forestiers', ['cinq commissions', 'note d’information'], '422-249-2'],
+      ['cryptomonnaies', ['transparen'], 'quel-professionnel-choisir'],
+    ];
+    for (const [slug, values, source] of cases) {
+      const f = investmentBySlug[slug]!;
+      expect(f.fees.verified, slug).toBe(true);
+      expect(f.fees.asOf, slug).toBe('12 novembre 2026');
+      for (const v of values) {
+        expect(plain(f.fees.text), `${slug} : ${v}`).toContain(v);
+        expect(plain(f.review.data.join(' ')), `${slug} (suivi) : ${v}`).toContain(v);
+      }
+      expect(f.sources.some((s) => s.url.includes(source)), `${slug} : source ${source}`).toBe(true);
+    }
+    for (const slug of ['or', 'objets-d-art-collection', 'groupements-forestiers', 'crowdfunding']) {
+      expect(investmentBySlug[slug]!.minCapital.advice, `${slug} : capital en conseil`).toBe(true);
+    }
+  });
+
+  it('le nombre de rubriques à vérifier ne remonte pas (31 avant le 2026-11-10, 24 puis 17 avant les deux passes du 2026-11-12)', () => {
     const flagged = investments.flatMap((i) => [i.minCapital, i.fees, i.tax]).filter(needsCheck);
-    expect(flagged.length).toBeLessThanOrEqual(17);
+    expect(flagged.length).toBeLessThanOrEqual(8);
   });
 });
