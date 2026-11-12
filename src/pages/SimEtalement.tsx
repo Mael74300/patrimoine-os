@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { lumpVsGradual, fmtEur, fmtPct, fmtMonths, type PricePath } from '../lib/finance';
-import { lumpGradualTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, ChoiceField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
+import { lumpVsGradual, lumpVsGradualByPath, gapBarWidths, fmtEur, fmtPct, fmtMonths, type PricePath } from '../lib/finance';
+import { lumpGradualTakeaway, lumpGradualPathsSummary } from '../lib/takeaways';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, ChoiceField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice, Fold } from '../components/ui';
 
 type State = { amount: number; spread: number; years: number; ret: number; cash: number; path: PricePath; move: number };
 
@@ -21,11 +21,25 @@ function axisLabel(t: number, months: number): string {
   return t % 12 === 0 ? `An ${t / 12}` : '';
 }
 
+/** Ce que suppose chaque parcours, en mots simples, avec les valeurs saisies. */
+function pathDetail(path: PricePath, s: State, spread: number): string {
+  const ensuite = `puis ${fmtPct(s.ret)} par an`;
+  if (path === 'steady') return `${fmtPct(s.ret)} par an, du premier au dernier mois`;
+  return `${path === 'dip' ? 'baisse' : 'hausse'} de ${fmtPct(s.move)} pendant les ${spread}\u00a0mois d’étalement, ${ensuite}`;
+}
+
+/** Verdict court d'un écart : qui finit au-dessus, et de combien. */
+function verdict(gap: number): string {
+  if (Math.abs(gap) < 0.005) return 'Égalité';
+  return gap > 0 ? `Étalement +${fmtEur(gap)}` : `D’un coup +${fmtEur(-gap)}`;
+}
+
 export default function SimEtalement() {
   const [s, setS, up] = usePersistentState<State>('etalement', DEFAULTS);
   const r = lumpVsGradual({ amount: s.amount, spreadMonths: s.spread, years: s.years, annualReturn: s.ret, cashRate: s.cash, path: s.path, move: s.move });
-  const better = r.advantageGradual > 0.005 ? 'L’étalement' : r.advantageGradual < -0.005 ? 'L’investissement en une fois' : 'Aucune des deux méthodes';
-  const gap = r.lump > 0 ? r.advantageGradual / r.lump : 0;
+  const byPath = lumpVsGradualByPath({ amount: s.amount, spreadMonths: s.spread, years: s.years, annualReturn: s.ret, cashRate: s.cash, move: s.move });
+  const bars = gapBarWidths(byPath.map((p) => p.advantageGradual));
+  const nameOf = (p: PricePath) => PATHS.find((x) => x.v === p)!.label;
 
   return (
     <>
@@ -49,9 +63,8 @@ export default function SimEtalement() {
             <legend>Hypothèses de marché</legend>
             <NumberField label="Rendement annuel du placement" unit="%" percent value={s.ret} onChange={up('ret')} min={-50} max={100} step={0.5} />
             <NumberField label="Rendement annuel de la part non investie" unit="%" percent value={s.cash} onChange={up('cash')} min={-50} max={100} step={0.5} />
-            <ChoiceField label="Parcours de prix" value={s.path} options={PATHS} onChange={up('path')} compact
-              hint="Baisse ou hausse pendant l’étalement, puis rendement saisi." />
-            {s.path !== 'steady' && <NumberField label="Ampleur de la variation pendant l’étalement" unit="%" percent value={s.move} onChange={up('move')} min={0} max={90} step={5} />}
+            <ChoiceField label="Parcours de prix pendant l’étalement" value={s.path} options={PATHS} onChange={up('path')} compact />
+            <NumberField label="Ampleur de la baisse ou de la hausse" unit="%" percent value={s.move} onChange={up('move')} min={0} max={90} step={5} />
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
           <JumpToResults />
@@ -60,26 +73,58 @@ export default function SimEtalement() {
           <div className="kpis">
             <Kpi label="En une seule fois" value={fmtEur(r.lump)} sub={`valeur après ${fmtMonths(r.months)}`} />
             <Kpi label="En tranches égales" value={fmtEur(r.gradual)} sub={`${r.spreadMonths}\u00a0mois d’étalement`} />
-            <Kpi label="Écart (étalement − une fois)" value={fmtEur(r.advantageGradual)} sub={`${better} finit au-dessus (${fmtPct(Math.abs(gap))})`} />
           </div>
           <Takeaway>{lumpGradualTakeaway({ amount: s.amount, spreadMonths: r.spreadMonths, months: r.months, lump: r.lump, gradual: r.gradual, advantageGradual: r.advantageGradual })}</Takeaway>
+          {s.amount > 0 && (
+            <>
+              <h2>Qui finit au-dessus, selon ce que fait le prix</h2>
+              <figure className="fb gp" aria-label="Écart entre l’étalement et l’investissement en une fois, pour chacun des trois parcours de prix">
+                <div className="gp-axis" aria-hidden="true">
+                  <span><i className="gp-lump" />D’un coup au-dessus</span>
+                  <span>Étalement au-dessus<i className="gp-gradual" /></span>
+                </div>
+                <ul className="fb-list">
+                  {byPath.map((p, i) => (
+                    <li key={p.path} className={'fb-row gp-row' + (p.path === s.path ? ' gp-cur' : '')}>
+                      <div className="fb-head">
+                        <span className="fb-name">
+                          {nameOf(p.path)}
+                          {p.path === s.path && <span className="gp-tag">votre choix</span>}
+                        </span>
+                        <span className={'fb-value gp-v-' + bars[i].side}>{verdict(p.advantageGradual)}</span>
+                      </div>
+                      <p className="gp-detail">{pathDetail(p.path, s, r.spreadMonths)}</p>
+                      <div className="gp-track" aria-hidden="true">
+                        {bars[i].side !== 'none' && <span className={'gp-bar gp-' + bars[i].side} style={{ width: `${bars[i].pct / 2}%` }} />}
+                      </div>
+                      <p className="fb-sub">En une fois : {fmtEur(p.lump)} · en tranches : {fmtEur(p.gradual)}</p>
+                    </li>
+                  ))}
+                </ul>
+              </figure>
+              <p className="gp-summary">{lumpGradualPathsSummary(byPath.map((p) => ({ name: nameOf(p.path), advantageGradual: p.advantageGradual })))}</p>
+            </>
+          )}
           {r.series.length > 1 && (
-            <LineChart
-              showTitle
-              title="Valeur des deux méthodes, mois après mois"
-              xLabels={r.series.map((p) => (p.month === 0 ? 'Au départ' : `Après ${fmtMonths(p.month)}`))}
-              axisLabels={r.series.map((p) => axisLabel(p.month, r.months))}
-              band={r.spreadMonths > 1 ? { from: 0, to: r.spreadMonths, label: 'Étalement' } : undefined}
-              format={fmtEur}
-              series={[
-                { name: 'En une seule fois', color: 'var(--chart-1)', values: r.series.map((p) => p.lump) },
-                { name: 'En tranches égales', color: 'var(--chart-2)', values: r.series.map((p) => p.gradual) },
-              ]}
-            />
+            <Fold title="Voir la valeur mois après mois (parcours choisi)">
+              <LineChart
+                showTitle
+                title="Valeur des deux méthodes, mois après mois"
+                xLabels={r.series.map((p) => (p.month === 0 ? 'Au départ' : `Après ${fmtMonths(p.month)}`))}
+                axisLabels={r.series.map((p) => axisLabel(p.month, r.months))}
+                band={r.spreadMonths > 1 ? { from: 0, to: r.spreadMonths, label: 'Étalement' } : undefined}
+                format={fmtEur}
+                series={[
+                  { name: 'En une seule fois', color: 'var(--chart-1)', values: r.series.map((p) => p.lump) },
+                  { name: 'En tranches égales', color: 'var(--chart-2)', values: r.series.map((p) => p.gradual) },
+                ]}
+              />
+              <p className="muted small">La courbe « En une seule fois » suit le prix que vous supposez ; la zone grisée marque l’étalement.</p>
+            </Fold>
           )}
           <p className="muted small">
-            La courbe « En une seule fois » suit le prix que vous supposez. Pendant la zone grisée, une tranche est investie au début de chaque mois ;
-            la part qui attend rapporte le rendement saisi pour elle. Valeurs de départ fictives : remplacez-les par les vôtres.
+            Une tranche est investie au début de chaque mois ; la part qui attend rapporte le rendement saisi pour elle.
+            Valeurs de départ fictives : remplacez-les par les vôtres.
           </p>
           <SavedSims simKey="etalement" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>

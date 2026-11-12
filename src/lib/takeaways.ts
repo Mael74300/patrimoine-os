@@ -462,3 +462,16 @@ export function wealthGoalTakeaway(p: { target: number; years: number; projected
     : `. L'épargne nécessaire ci-dessus suppose un versement constant, sans retrait ni changement d'épargne.`;
   return `Avec vos réglages, le capital simulé atteint ${fmtEur(p.projected)}${suite}`;
 }
+
+/** Investir d'un coup ou progressivement : dans quels parcours de prix l'étalement finit au-dessus. */
+export function lumpGradualPathsSummary(rows: { name: string; advantageGradual: number }[]): string {
+  if (rows.length === 0) return '';
+  const wins = rows.filter((r) => r.advantageGradual > 0.005).map((r) => `« ${r.name} »`);
+  const loses = rows.filter((r) => r.advantageGradual < -0.005).map((r) => `« ${r.name} »`);
+  const list = (l: string[]) => (l.length > 1 ? `${l.slice(0, -1).join(', ')} et ${l[l.length - 1]}` : l[0]);
+  if (wins.length === rows.length) return 'Avec ces hypothèses, l’étalement finit au-dessus dans les trois parcours.';
+  if (loses.length === rows.length) return 'Avec ces hypothèses, investir d’un coup finit au-dessus dans les trois parcours.';
+  if (wins.length === 0) return 'Avec ces hypothèses, l’étalement ne finit au-dessus dans aucun parcours.';
+  const tail = loses.length ? ` ; investir d’un coup gagne avec ${list(loses)}` : '';
+  return `Avec ces hypothèses, l’étalement ne finit au-dessus qu’avec ${list(wins)}${tail}. Personne ne sait à l’avance quel parcours le prix suivra.`;
+}
