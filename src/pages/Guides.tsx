@@ -11,7 +11,7 @@ import { EnvelopeCards } from '../components/EnvelopeCards';
 import { LivretsTable } from '../components/LivretsTable';
 import { RiskMap } from '../components/RiskMap';
 import { GuideGroupIcon } from '../components/Icons';
-import { SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz } from '../components/Illustrations';
+import { SchemaEnveloppe, SchemaPea, SchemaQuinzaines, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaLevier, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaFamillesFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz } from '../components/Illustrations';
 import { annotateJargon, splitLead, type JargonSegment } from '../lib/jargon';
 import { JargonText } from '../components/Jargon';
 import NotFound from './NotFound';
@@ -98,6 +98,7 @@ export function GuidePage() {
                 <p><JargonText segs={jargon[jargonStart[i] + k]} /></p>
                 {g.slug === 'investir-a-credit' && s.heading === 'Un exemple fictif' && (k === 0 ? <SchemaMensualite /> : <SchemaLevier />)}
                 {g.slug === 'combien-epargne-de-precaution' && s.heading === 'Où placer cette réserve' && k === 0 && <LivretsTable />}
+                {g.slug === 'comparer-les-frais' && s.heading === 'Les familles de frais' && k === 0 && <SchemaFamillesFrais />}
               </Fragment>
             ))}
             {g.slug === 'taux-endettement-capacite-emprunt' && s.heading === 'Le repère de 35 %' && <SchemaEndettement />}

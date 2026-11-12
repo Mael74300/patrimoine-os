@@ -1937,3 +1937,56 @@ export function SchemaActiviteNumerique() {
     </figure>
   );
 }
+
+/** Schéma « où se cachent les frais » (guide Comparer les frais) : frais payés une fois, à l’entrée, à la sortie ou au changement
+ *  de support, et frais prélevés chaque année sur l’enveloppe et sur les fonds. Aucun chiffre ; reprend la liste du guide. */
+export function SchemaFamillesFrais() {
+  const once = { fill: 'var(--warn-soft)', stroke: 'var(--gold)' };
+  const yearly = { fill: 'var(--surface-2)', stroke: 'var(--primary)' };
+  const tag = (x: number, y: number, w: number, c: typeof once, l1: string, l2: string) => (
+    <g>
+      <rect x={x} y={y} width={w} height={42} rx={9} fill={c.fill} stroke={c.stroke} strokeWidth={1.5} />
+      <text x={x + 10} y={y + 17} className="ill-in ill-fee-head">{l1}</text>
+      <text x={x + 10} y={y + 34} className="ill-in ill-fee">{l2}</text>
+    </g>
+  );
+  const arrowDown = (x: number, y1: number, y2: number) => (
+    <path d={`M ${x} ${y1} V ${y2 - 2} M ${x - 5} ${y2 - 8} L ${x} ${y2 - 2} L ${x + 5} ${y2 - 8}`} fill="none" stroke="var(--ink-2)" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
+  );
+  const fund = (x: number, name: string) => (
+    <g>
+      <rect x={x} y={196} width={114} height={66} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
+      <text x={x + 57} y={218} textAnchor="middle" className="ill-in">{name}</text>
+      <rect x={x + 8} y={226} width={98} height={28} rx={7} fill={yearly.fill} stroke={yearly.stroke} strokeWidth={1.2} />
+      <text x={x + 57} y={244} textAnchor="middle" className="ill-in ill-fee">frais courants</text>
+    </g>
+  );
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 374" role="img" aria-labelledby="ill-ff-t ill-ff-d" className="ill-svg">
+        <title id="ill-ff-t">Où se trouvent les frais d’un placement</title>
+        <desc id="ill-ff-d">Vos versements entrent dans une enveloppe (assurance-vie, PEA, compte-titres…) qui contient des fonds. Frais payés une fois : à l’entrée (frais sur versement, courtage), au changement de fonds (arbitrage) et à la sortie (frais de sortie, courtage). Frais prélevés chaque année : frais de gestion ou droits de garde de l’enveloppe, et frais courants de chaque fonds.</desc>
+        <rect x={14} y={4} width={128} height={30} rx={15} fill="var(--surface)" stroke="var(--ink-2)" strokeWidth={1.5} />
+        <text x={78} y={24} textAnchor="middle" className="ill-in">Vos versements</text>
+        {arrowDown(78, 34, 98)}
+        {tag(100, 44, 232, once, 'Une fois, à l’entrée', 'frais sur versement, courtage')}
+        <rect x={6} y={98} width={328} height={178} rx={16} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={20} y={122} className="ill-step">L’enveloppe</text>
+        <text x={110} y={122} className="ill-in ill-fee">assurance-vie, PEA, compte-titres…</text>
+        {tag(20, 134, 240, yearly, 'Chaque année', 'frais de gestion ou droits de garde')}
+        {fund(20, 'Un fonds')}
+        {fund(206, 'Un autre fonds')}
+        <path d="M 140 222 H 198 M 192 217 L 198 222 L 192 227 M 146 217 L 140 222 L 146 227" fill="none" stroke="var(--warn)" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
+        <text x={169} y={244} textAnchor="middle" className="ill-in ill-fee-head">arbitrage</text>
+        <text x={169} y={259} textAnchor="middle" className="ill-in ill-fee">une fois</text>
+        {arrowDown(78, 276, 340)}
+        {tag(100, 288, 232, once, 'Une fois, à la sortie', 'frais de sortie, courtage')}
+        <rect x={14} y={340} width={128} height={30} rx={15} fill="var(--surface)" stroke="var(--ink-2)" strokeWidth={1.5} />
+        <text x={78} y={360} textAnchor="middle" className="ill-in">Votre retrait</text>
+      </svg>
+      <figcaption>
+        <strong>En jaune</strong>, les frais payés une fois, à chaque opération ; <strong>en bleu</strong>, ceux prélevés chaque année. Selon l’enveloppe et le contrat, seuls certains existent.
+      </figcaption>
+    </figure>
+  );
+}
