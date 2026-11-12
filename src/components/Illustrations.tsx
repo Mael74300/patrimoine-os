@@ -438,15 +438,15 @@ export function SchemaVerification() {
         <desc id="ill-ver-d">Trois étapes : une source officielle est consultée, la fiche en garde la date et les sources, puis des contrôles automatiques passent chaque semaine. Quand un changement est repéré, une personne vérifie et décide : rien n’est modifié automatiquement.</desc>
         {steps.map((st, i) => (
           <g key={st.a}>
-            <rect x={i * 148} y={4} width={124} height={86} rx={12} fill={st.fill} stroke={st.stroke} strokeWidth={2} />
-            <text x={i * 148 + 62} y={32} textAnchor="middle" className="ill-step">{st.a}</text>
-            <text x={i * 148 + 62} y={52} textAnchor="middle" className="ill-step">{st.b}</text>
-            <text x={i * 148 + 62} y={76} textAnchor="middle" className="ill-sub">{st.c}</text>
-            {i < 2 && <path d={`M ${i * 148 + 128} 47 h 16 m -6 -6 l 6 6 l -6 6`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />}
+            <rect x={i * 145} y={4} width={130} height={86} rx={12} fill={st.fill} stroke={st.stroke} strokeWidth={2} />
+            <text x={i * 145 + 65} y={32} textAnchor="middle" className="ill-step">{st.a}</text>
+            <text x={i * 145 + 65} y={52} textAnchor="middle" className="ill-step">{st.b}</text>
+            <text x={i * 145 + 65} y={76} textAnchor="middle" className="ill-sub">{st.c}</text>
+            {i < 2 && <path d={`M ${i * 145 + 132} 47 h 11 m -6 -6 l 6 6 l -6 6`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />}
           </g>
         ))}
-        <path d="M 358 90 V 120 m -7 -8 l 7 8 l 7 -8" fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-        <text x={344} y={110} textAnchor="end" className="ill-in">si un changement est repéré</text>
+        <path d="M 355 90 V 120 m -7 -8 l 7 8 l 7 -8" fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+        <text x={341} y={110} textAnchor="end" className="ill-in">si un changement est repéré</text>
         <rect x={0} y={128} width={420} height={72} rx={14} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
         <text x={210} y={158} textAnchor="middle" className="ill-step">Une personne vérifie et décide</text>
         <text x={210} y={182} textAnchor="middle" className="ill-sub">Aucune règle n’est modifiée automatiquement</text>
@@ -464,20 +464,20 @@ export function SchemaScpi() {
       <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-scpi-t ill-scpi-d" className="ill-svg">
         <title id="ill-scpi-t">Comment fonctionne une SCPI</title>
         <desc id="ill-scpi-d">Les épargnants achètent des parts de la SCPI. La SCPI, gérée par une société de gestion, achète des immeubles et les loue. Les loyers perçus, après déduction des frais, reviennent aux épargnants sous forme de revenus.</desc>
-        <rect x={0} y={2} width={220} height={58} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={110} y={28} textAnchor="middle" className="ill-step">Les épargnants</text>
-        <text x={110} y={48} textAnchor="middle" className="ill-sub">achètent des parts</text>
-        <path d="M 110 60 V 108 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={0} y={2} width={228} height={58} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={114} y={28} textAnchor="middle" className="ill-step">Les épargnants</text>
+        <text x={114} y={48} textAnchor="middle" className="ill-sub">achètent des parts</text>
+        <path d="M 114 60 V 108 m -7 -8 l 7 8 l 7 -8" {...arrow} />
         <text x={126} y={90} textAnchor="start" className="ill-in">leur argent</text>
-        <rect x={0} y={108} width={220} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={110} y={134} textAnchor="middle" className="ill-step">La SCPI</text>
-        <text x={110} y={156} textAnchor="middle" className="ill-sub">gérée par une société de gestion</text>
-        <path d="M 110 172 V 220 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={126} y={202} textAnchor="start" className="ill-in">achète et met en location</text>
-        <rect x={0} y={220} width={220} height={58} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={110} y={246} textAnchor="middle" className="ill-step">Des immeubles loués</text>
-        <text x={110} y={266} textAnchor="middle" className="ill-sub">bureaux, commerces…</text>
-        <path d="M 220 249 H 290 V 31 H 228 m 8 -7 l -8 7 l 8 7" {...arrow} />
+        <rect x={0} y={108} width={228} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={114} y={134} textAnchor="middle" className="ill-step">La SCPI</text>
+        <text x={114} y={156} textAnchor="middle" className="ill-sub">gérée par une société de gestion</text>
+        <path d="M 114 172 V 220 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={124} y={202} textAnchor="start" className="ill-in">achète et met en location</text>
+        <rect x={0} y={220} width={228} height={58} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={114} y={246} textAnchor="middle" className="ill-step">Des immeubles loués</text>
+        <text x={114} y={266} textAnchor="middle" className="ill-sub">bureaux, commerces…</text>
+        <path d="M 228 249 H 290 V 31 H 236 m 8 -7 l -8 7 l 8 7" {...arrow} />
         <text x={302} y={118} textAnchor="start" className="ill-in">les loyers,</text>
         <text x={302} y={136} textAnchor="start" className="ill-in">moins les frais,</text>
         <text x={302} y={154} textAnchor="start" className="ill-in">reviennent aux</text>
@@ -505,16 +505,16 @@ export function SchemaAssuranceVie() {
         <text x={210} y={121} textAnchor="middle" className="ill-sub">entre deux types de supports</text>
         <path d="M 130 130 V 164 m -7 -8 l 7 8 l 7 -8" {...arrow} />
         <path d="M 290 130 V 164 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={164} width={200} height={110} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={100} y={190} textAnchor="middle" className="ill-step">Fonds en euros</text>
-        <text x={100} y={214} textAnchor="middle" className="ill-in">Capital garanti</text>
-        <text x={100} y={232} textAnchor="middle" className="ill-in">par l'assureur</text>
-        <text x={100} y={256} textAnchor="middle" className="ill-sub">rendement plus faible</text>
-        <rect x={220} y={164} width={200} height={110} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={320} y={190} textAnchor="middle" className="ill-step">Unités de compte</text>
-        <text x={320} y={214} textAnchor="middle" className="ill-in">Valeur variable selon</text>
-        <text x={320} y={232} textAnchor="middle" className="ill-in">les marchés : perte possible</text>
-        <text x={320} y={256} textAnchor="middle" className="ill-sub">rendement possible plus élevé</text>
+        <rect x={0} y={164} width={204} height={110} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={102} y={190} textAnchor="middle" className="ill-step">Fonds en euros</text>
+        <text x={102} y={214} textAnchor="middle" className="ill-in">Capital garanti</text>
+        <text x={102} y={232} textAnchor="middle" className="ill-in">par l'assureur</text>
+        <text x={102} y={256} textAnchor="middle" className="ill-sub">rendement plus faible</text>
+        <rect x={216} y={164} width={204} height={110} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={318} y={190} textAnchor="middle" className="ill-step">Unités de compte</text>
+        <text x={318} y={214} textAnchor="middle" className="ill-in">Valeur variable selon</text>
+        <text x={318} y={232} textAnchor="middle" className="ill-in">les marchés : perte possible</text>
+        <text x={318} y={256} textAnchor="middle" className="ill-sub">peut rapporter davantage</text>
         <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
       </svg>
     </figure>
@@ -1574,26 +1574,26 @@ export function SchemaLep() {
       <svg viewBox="0 0 420 300" role="img" aria-labelledby="ill-lep-t ill-lep-d" className="ill-svg">
         <title id="ill-lep-t">LEP : le revenu fiscal de référence décide de l’ouverture, et deux années de suite au-dessus du plafond entraînent la clôture</title>
         <desc id="ill-lep-d">Pour ouvrir un LEP, la banque regarde le revenu fiscal de référence de l’avis d’imposition. En dessous du plafond (ou égal), le livret peut être ouvert ; au-dessus, il ne peut pas l’être. Une fois le livret ouvert, un dépassement du plafond une seule année n’oblige pas à le fermer, tant que l’année suivante repasse sous le plafond. Deux années consécutives au-dessus du plafond entraînent la clôture obligatoire.</desc>
-        <text x={14} y={20} className="ill-step" fontWeight="700">1. Pour ouvrir le livret</text>
+        <text x={8} y={20} className="ill-step" fontWeight="700">1. Pour ouvrir le livret</text>
         <rect x={110} y={30} width={200} height={44} rx={10} fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
         <text x={210} y={49} textAnchor="middle" className="ill-sub">Revenu fiscal de référence</text>
         <text x={210} y={65} textAnchor="middle" className="ill-sub">(avis d’imposition)</text>
-        <path d="M160 74 L90 100 M260 74 L330 100" stroke="var(--ink-2)" strokeWidth={1.5} fill="none" />
-        <rect x={14} y={100} width={190} height={50} rx={10} fill="var(--accent)" />
-        <text x={109} y={121} textAnchor="middle" className="ill-on-dark ill-total">≤ plafond</text>
-        <text x={109} y={140} textAnchor="middle" className="ill-on-dark" fontSize={13}>LEP possible</text>
-        <rect x={216} y={100} width={190} height={50} rx={10} fill="var(--warn)" />
-        <text x={311} y={121} textAnchor="middle" className="ill-on-dark ill-total">&gt; plafond</text>
-        <text x={311} y={140} textAnchor="middle" className="ill-on-dark" fontSize={13}>pas d’ouverture</text>
-        <text x={14} y={186} className="ill-step" fontWeight="700">2. Une fois le livret ouvert</text>
-        <rect x={14} y={198} width={190} height={46} rx={10} fill="var(--primary)" />
-        <text x={109} y={217} textAnchor="middle" className="ill-on-dark ill-total">1 année au-dessus</text>
-        <text x={109} y={235} textAnchor="middle" className="ill-on-dark" fontSize={13}>conservé si retour en dessous</text>
-        <rect x={216} y={198} width={190} height={46} rx={10} fill="var(--warn)" />
-        <text x={311} y={217} textAnchor="middle" className="ill-on-dark ill-total">2 années de suite</text>
-        <text x={311} y={235} textAnchor="middle" className="ill-on-dark" fontSize={13}>clôture obligatoire</text>
-        <text x={14} y={272} className="ill-sub" textAnchor="start">Un seul LEP par personne : chaque époux ou</text>
-        <text x={14} y={288} className="ill-sub" textAnchor="start">partenaire de Pacs peut avoir le sien.</text>
+        <path d="M160 74 L107 100 M260 74 L313 100" stroke="var(--ink-2)" strokeWidth={1.5} fill="none" />
+        <rect x={8} y={100} width={198} height={50} rx={10} fill="var(--accent)" />
+        <text x={107} y={121} textAnchor="middle" className="ill-on-dark ill-total">≤ plafond</text>
+        <text x={107} y={140} textAnchor="middle" className="ill-on-dark" fontSize={13}>LEP possible</text>
+        <rect x={214} y={100} width={198} height={50} rx={10} fill="var(--warn)" />
+        <text x={313} y={121} textAnchor="middle" className="ill-on-dark ill-total">&gt; plafond</text>
+        <text x={313} y={140} textAnchor="middle" className="ill-on-dark" fontSize={13}>pas d’ouverture</text>
+        <text x={8} y={186} className="ill-step" fontWeight="700">2. Une fois le livret ouvert</text>
+        <rect x={8} y={198} width={198} height={46} rx={10} fill="var(--primary)" />
+        <text x={107} y={217} textAnchor="middle" className="ill-on-dark ill-total">1 année au-dessus</text>
+        <text x={107} y={235} textAnchor="middle" className="ill-on-dark" fontSize={13}>conservé si retour en dessous</text>
+        <rect x={214} y={198} width={198} height={46} rx={10} fill="var(--warn)" />
+        <text x={313} y={217} textAnchor="middle" className="ill-on-dark ill-total">2 années de suite</text>
+        <text x={313} y={235} textAnchor="middle" className="ill-on-dark" fontSize={13}>clôture obligatoire</text>
+        <text x={8} y={272} className="ill-sub" textAnchor="start">Un seul LEP par personne : chaque époux ou</text>
+        <text x={8} y={288} className="ill-sub" textAnchor="start">partenaire de Pacs peut avoir le sien.</text>
       </svg>
       <figcaption>
         <strong>Illustration</strong> : le plafond dépend du nombre de parts et du lieu de résidence ; il est révisé chaque année (valeurs 2026 dans la fiche). La banque vérifie sur l’année N-2 ou N-1.
@@ -1820,8 +1820,8 @@ export function SchemaCpf() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   const cols = [
     { x: 0, a: 'Vous travaillez', b: 'chez un employeur' },
-    { x: 145, a: 'Vous changez', b: 'd’employeur' },
-    { x: 290, a: 'Vous perdez', b: 'votre emploi' },
+    { x: 143, a: 'Vous changez', b: 'd’employeur' },
+    { x: 286, a: 'Vous perdez', b: 'votre emploi' },
   ];
   return (
     <figure className="illustration">
@@ -1830,10 +1830,10 @@ export function SchemaCpf() {
         <desc id="ill-cpf-d">Quelle que soit votre situation (en poste, changement d’employeur, perte d’emploi), vous gardez vos droits sur votre compte personnel de formation. Si une formation coûte plus que le montant disponible, vous pouvez demander un complément à votre employeur, à l’Agefiph ou à la région.</desc>
         {cols.map((c) => (
           <g key={c.x}>
-            <rect x={c.x} y={2} width={130} height={58} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-            <text x={c.x + 65} y={28} textAnchor="middle" className="ill-in">{c.a}</text>
-            <text x={c.x + 65} y={48} textAnchor="middle" className="ill-in">{c.b}</text>
-            <path d={`M ${c.x + 65} 60 V 98 m -7 -8 l 7 8 l 7 -8`} {...arrow} />
+            <rect x={c.x} y={2} width={134} height={58} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+            <text x={c.x + 67} y={28} textAnchor="middle" className="ill-in">{c.a}</text>
+            <text x={c.x + 67} y={48} textAnchor="middle" className="ill-in">{c.b}</text>
+            <path d={`M ${c.x + 67} 60 V 98 m -7 -8 l 7 8 l 7 -8`} {...arrow} />
           </g>
         ))}
         <rect x={0} y={98} width={420} height={64} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
