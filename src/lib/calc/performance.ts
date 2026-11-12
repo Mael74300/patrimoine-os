@@ -57,3 +57,30 @@ export function performance(input: PerformanceInput): PerformanceResult {
   const m = (lo + hi) / 2;
   return { invested, gain, cumulative, annualized: Math.pow(1 + m, 12) - 1 };
 }
+
+export type PerformanceSegment = { key: 'initial' | 'monthly' | 'gain' | 'value' | 'loss'; label: string; amount: number; width: number };
+
+/**
+ * Barre « D'où vient la valeur actuelle » : en cas de gain, versement initial + versements mensuels + gain = valeur actuelle ;
+ * en cas de perte, valeur actuelle + perte = total versé. Largeurs en % de la plus grande des deux sommes.
+ */
+export function performanceSegments(input: PerformanceInput): PerformanceSegment[] {
+  const initial = Math.max(0, num(input.initial));
+  const monthly = Math.max(0, num(input.monthly));
+  const months = Math.floor(clamp(input.months, 0, 960, 0));
+  const finalValue = Math.max(0, num(input.finalValue));
+  const invested = initial + monthly * months;
+  const base = Math.max(invested, finalValue);
+  if (!(invested > 0) || !(base > 0)) return [];
+  const raw: PerformanceSegment[] = finalValue >= invested
+    ? [
+        { key: 'initial', label: 'Versement initial', amount: initial, width: 0 },
+        { key: 'monthly', label: 'Versements mensuels', amount: monthly * months, width: 0 },
+        { key: 'gain', label: 'Gain', amount: finalValue - invested, width: 0 },
+      ]
+    : [
+        { key: 'value', label: 'Valeur actuelle', amount: finalValue, width: 0 },
+        { key: 'loss', label: 'Perte', amount: invested - finalValue, width: 0 },
+      ];
+  return raw.filter((s) => s.amount > 0).map((s) => ({ ...s, width: (s.amount / base) * 100 }));
+}

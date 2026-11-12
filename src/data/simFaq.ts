@@ -164,7 +164,6 @@ export const simFaq: Record<string, FaqItem[]> = {
   ],
   'rendement-reel-de-mon-placement': [
     { q: 'Comment calculer le rendement réel de mon placement si j’ai fait plusieurs versements ?', a: 'Diviser le gain par le total versé ne tient pas compte de la date des versements. Le taux de rendement interne est le taux annuel qui, appliqué à chaque versement pendant la durée où il est resté placé, redonne la valeur actuelle. Le simulateur le calcule à partir du versement initial, du versement mensuel, de la durée et de la valeur actuelle.' },
-    { q: 'Quelle différence entre rendement cumulé et rendement annuel équivalent ?', a: 'Le rendement cumulé est le gain rapporté au total versé, sans tenir compte de la durée. Le rendement annuel équivalent le ramène à un taux par an, ce qui permet de comparer des placements détenus pendant des durées différentes.' },
     { q: 'Le résultat tient-il compte des frais, des impôts et de l’inflation ?', a: 'Seulement dans la mesure où la valeur que vous saisissez les intègre déjà. Pour un rendement net de frais et d’impôts, saisissez la valeur nette que vous obtiendriez en cas de retrait. L’inflation n’est pas déduite : le résultat est un rendement nominal.' },
     { q: 'Ce rendement passé permet-il de prévoir l’avenir ?', a: 'Non. Il décrit ce qui s’est passé sur la période saisie et ne garantit rien pour la suite. Les montants par défaut sont fictifs.' },
   ],
