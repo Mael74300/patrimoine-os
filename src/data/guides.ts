@@ -703,39 +703,38 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Livret A : comment sont calculés les intérêts (quinzaines)',
     summary: 'À quelle date un dépôt ou un retrait est pris en compte, comment fonctionnent les quinzaines et quand les intérêts sont ajoutés au capital.',
     readingMinutes: 4,
-    updatedOn: '2026-10-28',
+    updatedOn: '2026-11-12',
     sections: [
       {
         heading: 'Des intérêts calculés par quinzaines',
         body: [
-          'Sur le Livret A, les intérêts sont calculés le 1er et le 16 de chaque mois. Une somme ne produit des intérêts que si elle reste placée pendant une quinzaine entière : l’argent déposé ou retiré en cours de quinzaine ne compte qu’à la date de valeur indiquée ci-dessous.',
-          'Selon Service-Public.fr (page vérifiée le 1er août 2026, consultée le 28 octobre 2026), les intérêts sont exonérés d’impôt sur le revenu et de prélèvements sociaux.',
+          'Le Livret A coupe chaque mois en deux quinzaines : du 1er au 15, puis du 16 à la fin du mois. Une somme ne rapporte des intérêts que pour les quinzaines entières où elle reste sur le livret.',
+          'Ce qui compte n’est donc pas le jour exact de votre dépôt ou de votre retrait, mais la date à partir de laquelle la banque le prend en compte (la « date de valeur ») :',
         ],
       },
       {
-        heading: 'À partir de quand un dépôt rapporte-t-il ?',
+        heading: 'Dépôt ou retrait : exemples en mai',
+        points: true,
         body: [
-          'Un dépôt effectué entre le 1er et le 15 du mois est pris en compte à partir du 16 du même mois. Un dépôt effectué à partir du 16 est pris en compte à partir du 1er du mois suivant.',
-          'Exemple : un dépôt le 10 mai commence à rapporter le 16 mai ; un dépôt le 20 mai commence à rapporter le 1er juin.',
-        ],
-      },
-      {
-        heading: 'Et un retrait ?',
-        body: [
-          'Un retrait effectué jusqu’au 15 du mois est calculé sur le solde arrêté au dernier jour du mois précédent. Un retrait effectué à partir du 16 est calculé sur le solde arrêté au 15 du mois. Retirer juste après le début d’une quinzaine fait donc perdre les intérêts de cette quinzaine sur la somme retirée.',
+          'Dépôt le 10 mai (entre le 1er et le 15) : il rapporte dès le 16 mai.',
+          'Dépôt le 20 mai (à partir du 16) : il rapporte dès le 1er juin.',
+          'Retrait le 10 mai (jusqu’au 15) : la banque retient le solde du 30 avril ; la somme retirée ne rapporte rien du 1er au 15 mai.',
+          'Retrait le 20 mai (à partir du 16) : la banque retient le solde du 15 mai ; la somme retirée ne rapporte rien du 16 au 31 mai.',
+          'Astuce : retirer le 16 plutôt que le 15 (ou le 1er plutôt que la veille) évite de perdre une quinzaine d’intérêts.',
         ],
       },
       {
         heading: 'Combien représente une quinzaine ?',
         body: [
-          'Exemple fictif au taux de 1,70 % par an (taux en vigueur du 1er août 2026 au 31 janvier 2027) : sur 1 000 €, une quinzaine rapporte environ 1 000 × 1,70 % ÷ 24 ≈ 0,71 €. Déposer le 10 mai plutôt que le 20 mai fait donc gagner une quinzaine, soit environ 0,71 €.',
-          'L’écart est faible pour une somme modeste : l’enjeu est surtout de ne pas retirer ou déposer au mauvais moment sur de gros montants. Le taux est susceptible de changer au 1er février 2027.',
+          'Exemple fictif au taux de 1,70 % par an (taux en vigueur du 1er août 2026 au 31 janvier 2027) : 1 000 € rapportent 17 € sur une année entière. Une année compte 24 quinzaines : une quinzaine rapporte donc environ 0,71 €.',
+          'Déposer le 10 mai plutôt que le 20 mai fait donc gagner environ 0,71 € pour 1 000 € : l’écart compte surtout pour de gros montants. Le taux est susceptible de changer au 1er février 2027.',
         ],
       },
       {
-        heading: 'Quand les intérêts sont-ils ajoutés au capital ?',
+        heading: 'Quand les intérêts sont-ils versés ?',
         body: [
-          'Au 31 décembre de chaque année, les intérêts cumulés sur l’année s’ajoutent au capital et produisent eux-mêmes des intérêts l’année suivante, même si le plafond de 22 950 € est déjà dépassé. En cas de clôture en cours d’année, les intérêts du 1er janvier à la date de clôture sont crédités le jour de la clôture.',
+          'Au 31 décembre de chaque année, les intérêts cumulés sur l’année s’ajoutent au capital et produisent eux-mêmes des intérêts l’année suivante, même si le plafond de 22 950 € est déjà dépassé. En cas de clôture en cours d’année, les intérêts du 1er janvier à la date de clôture sont crédités le jour de la clôture.',
+          'Ces intérêts ne sont pas imposés : ni impôt sur le revenu, ni prélèvements sociaux (Service-Public.fr, page vérifiée le 1er août 2026, consultée le 12 novembre 2026).',
         ],
       },
     ],

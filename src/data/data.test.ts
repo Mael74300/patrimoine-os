@@ -233,9 +233,13 @@ describe('guide Livret A quinzaines : exemple fictif et taux cohérents', () => 
   it('une quinzaine sur 1 000 € à 1,70 % ≈ 0,71 €, taux et plafond = LIVRETS', () => {
     const a = LIVRETS.find((l) => l.id === 'livretA')!;
     expect(((1000 * a.rate) / 24).toFixed(2)).toBe('0.71');
+    expect(1000 * a.rate).toBeCloseTo(17, 10);
     const t = JSON.stringify(guides.find((x) => x.slug === 'livret-a-calcul-interets-quinzaines')!).replace(/\u00a0/g, ' ');
     expect(t).toContain('1,70 %');
     expect(t).toContain('22 950 €');
+    expect(t).toContain('1 000 € rapportent 17 € sur une année entière');
+    expect(t).toContain('une quinzaine rapporte donc environ 0,71 €');
+    expect(t).not.toMatch(/×|÷/);
     expect(a.rate).toBe(0.017);
     expect(a.cap).toBe(22950);
   });

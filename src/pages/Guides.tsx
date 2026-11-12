@@ -113,7 +113,7 @@ export function GuidePage() {
             {g.slug === 'types-investissements' && s.heading === 'Le classement' && <RiskMap />}
             {(g.slug === 'types-investissements' || g.slug === 'choisir-son-enveloppe') && s.heading.startsWith('Placement et enveloppe') && <SchemaEnveloppe />}
             {g.slug === 'fonctionnement-pea' && s.heading === 'Retraits et fiscalité' && <SchemaPea />}
-            {g.slug === 'livret-a-calcul-interets-quinzaines' && s.heading === 'Et un retrait ?' && <SchemaQuinzaines />}
+            {g.slug === 'livret-a-calcul-interets-quinzaines' && s.heading === 'Des intérêts calculés par quinzaines' && <SchemaQuinzaines />}
             {g.slug === 'rentabilite-locative' && s.heading === 'Le rendement net de charges' && <SchemaRendement />}
             {g.slug === 'interets-composes' && i === 0 && <SchemaInterets />}
             {g.slug === 'inflation-pouvoir-d-achat-epargne' && s.heading === 'Un exemple fictif chiffré' && <SchemaInflation />}
