@@ -1094,3 +1094,13 @@ ul.points { margin: 0.9rem 0 0.5rem; gap: 8px; }
 .gb-unit { font-weight: 400; color: var(--ink-3); font-size: .84rem; }
 .ill-svg text.ill-fee { font-weight: 500; fill: var(--ink-2); }
 .ill-svg text.ill-fee-head { font-weight: 700; }
+/* Simulateur Rendement réel : barre « D'où vient la valeur actuelle ». */
+.pf-initial { background: var(--primary); }
+.pf-monthly { background: var(--chart-4); }
+.pf-gain { background: var(--accent); }
+.pf-value { background: var(--primary); }
+.pf-loss { background: repeating-linear-gradient(45deg, var(--danger) 0 6px, var(--surface) 6px 10px); }
+.pf-legend { list-style: none; padding: 0; margin: 10px 0 12px; display: grid; gap: 4px; line-height: 1.45; }
+.pf-legend li { display: grid; grid-template-columns: 18px 1fr; align-items: baseline; }
+.pf-legend .bb-dot { margin: 0; }
+.pf-why { margin: 0 0 10px; line-height: 1.5; }

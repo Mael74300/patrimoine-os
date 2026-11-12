@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { performance, fmtEur, fmtPct } from '../lib/finance';
+import { performance, performanceSegments, fmtAns, fmtEur, fmtPct } from '../lib/finance';
 import { performanceTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
@@ -10,7 +10,16 @@ const DEFAULTS: State = { initial: 5000, monthly: 200, years: 10, finalValue: 34
 
 export default function SimRendement() {
   const [s, setS, up] = usePersistentState<State>('rendement', DEFAULTS);
-  const r = performance({ initial: s.initial, monthly: s.monthly, months: Math.round(s.years * 12), finalValue: s.finalValue });
+  const input = { initial: s.initial, monthly: s.monthly, months: Math.round(s.years * 12), finalValue: s.finalValue };
+  const r = performance(input);
+  const segs = performanceSegments(input);
+  const segHint: Record<string, string> = {
+    initial: ', placé dès le début',
+    monthly: ` (${fmtEur(s.monthly)} par mois, ${fmtAns(Math.round(s.years * 12) / 12)})`,
+    gain: ' rapportés par le placement',
+    value: ' aujourd’hui',
+    loss: ' par rapport au total versé',
+  };
 
   return (
     <>
@@ -39,15 +48,37 @@ export default function SimRendement() {
         </form>
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
-            <Kpi label="Rendement annuel équivalent" value={r.annualized === null ? '—' : fmtPct(r.annualized)} sub="taux annuel constant qui mènerait à la valeur actuelle" />
-            <Kpi label="Total versé" value={fmtEur(r.invested)} sub="versement initial et versements mensuels" />
-            <Kpi label="Gain ou perte" value={fmtEur(r.gain)} sub={r.cumulative === null ? '' : `${fmtPct(r.cumulative)} du total versé, non annualisé`} />
+            <Kpi label="Rendement annuel équivalent" value={r.annualized === null ? '—' : fmtPct(r.annualized)} sub="par an, en moyenne" />
+            <Kpi label="Total versé" value={fmtEur(r.invested)} sub="initial et mensuels" />
+            <Kpi label="Gain ou perte" value={fmtEur(r.gain)} sub={r.cumulative === null ? '' : `soit ${fmtPct(r.cumulative)} du total versé`} />
           </div>
           <Takeaway>{performanceTakeaway({ invested: r.invested, gain: r.gain, annualized: r.annualized })}</Takeaway>
-          <p className="muted small">
-            Le versement initial est placé au début, chaque versement mensuel en fin de mois. Le rendement cumulé (gain divisé par le total versé) ne tient pas compte du temps : le rendement annuel équivalent est le taux qui, appliqué à chaque versement pendant la durée qu’il est resté placé, redonne la valeur actuelle.
-            Si rien n’a été versé ou si la durée est nulle, le rendement annuel n’est pas défini. Les exemples ci-dessus sont fictifs.
-          </p>
+          {segs.length > 0 && (
+            <>
+              <h2>D’où vient la valeur actuelle</h2>
+              <figure className="bb">
+                <div className="bb-bar" role="img" aria-label={segs.map((x) => `${x.label} ${fmtEur(x.amount)}`).join(', ')}>
+                  {segs.map((x) => <span key={x.key} className={'bb-seg pf-' + x.key} style={{ width: `${x.width}%` }} />)}
+                </div>
+              </figure>
+              <ul className="pf-legend" aria-label="Détail de la barre">
+                {segs.map((x) => (
+                  <li key={x.key}>
+                    <i className={'bb-dot pf-' + x.key} aria-hidden="true" />
+                    <span><strong>{x.label}</strong> : {fmtEur(x.amount)}{segHint[x.key]}</span>
+                  </li>
+                ))}
+              </ul>
+              {r.annualized !== null && r.cumulative !== null && (
+                <p className="pf-why">
+                  <strong>Pourquoi deux taux ?</strong> {fmtPct(r.cumulative)} compare le gain au total versé, sur toute la durée.
+                  {' '}{fmtPct(r.annualized)} par an ramène ce résultat à une année, en tenant compte du temps passé placé par chaque versement : les premiers euros ont travaillé plus longtemps que les derniers.
+                </p>
+              )}
+            </>
+          )}
+          {r.annualized === null && <p className="muted small">Indiquez un versement et une durée pour obtenir un rendement annuel.</p>}
+          <p className="muted small">Calcul : versement initial placé au début, versements mensuels en fin de mois. L’exemple proposé au départ est fictif.</p>
           <SavedSims simKey="rendement" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
           <SimFaq slug="rendement-reel-de-mon-placement" />
