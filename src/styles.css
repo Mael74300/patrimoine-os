@@ -159,6 +159,8 @@ legend { font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; }
 .kpi .k-label { font-size: 0.8rem; color: var(--ink-3); }
 .kpi .k-value { text-wrap: balance; font-size: 1.45rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); }
 .kpi .k-sub { font-size: 0.8rem; color: var(--ink-3); }
+/* Durée : chiffres en grand, mots (« ans », « et », « mois ») plus petits, pour tenir sur une ligne comme un montant. */
+.kpi .k-unit { font-size: 0.6em; font-weight: 600; }
 .kpi.pos .k-value { color: var(--accent); }
 .kpi.neg .k-value { color: var(--danger); }
 
