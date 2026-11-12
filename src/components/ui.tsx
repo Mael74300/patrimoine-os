@@ -694,9 +694,21 @@ export function Tabs({ items, active, onSelect, label }: { items: string[]; acti
 
 /** Questions fréquentes d'un simulateur (mêmes questions que les données structurées FAQPage). */
 export function SimFaq({ slug, items = simFaq[slug] }: { slug: string; items?: FaqItem[] }) {
-  if (!items?.length) return <SimNext slug={slug} />;
   return (
     <>
+    <FaqSection items={items ?? []} />
+    <SimNext slug={slug} />
+    </>
+  );
+}
+
+/**
+ * Questions fréquentes repliées, sans repli sur une autre page : un guide n'affiche que ses propres questions
+ * (un guide et un simulateur peuvent porter le même identifiant, comme « interets-composes »).
+ */
+export function FaqSection({ items }: { items: FaqItem[] }) {
+  if (!items.length) return null;
+  return (
     <section aria-label="Questions fréquentes" style={{ marginTop: 32 }}>
       <h2>Questions fréquentes</h2>
       <div className="faq">
@@ -708,8 +720,6 @@ export function SimFaq({ slug, items = simFaq[slug] }: { slug: string; items?: F
         ))}
       </div>
     </section>
-    <SimNext slug={slug} />
-    </>
   );
 }
 
