@@ -56,24 +56,44 @@ export function relatedSimulators(slugs: string[] | undefined) {
   return (slugs ?? []).map((s) => bySlug[s]).filter(Boolean);
 }
 
-export type ReadingLink = { to: string; title: string; kind: 'Guide' | 'Fiche' };
+export type ReadingLink = { to: string; title: string; kind: 'Guide' | 'Fiche' | 'Simulateur' };
 
 /**
- * Pistes de lecture à la fin d'un simulateur : guides et fiches qui renvoient vers lui
- * (déduites des tables ci-dessus, donc toujours cohérentes). Au plus deux guides et deux fiches.
+ * « Pour aller plus loin » en bas de chaque simulateur, choisi à la main dans l'ordre d'utilité pour le visiteur :
+ * d'abord le guide qui explique le résultat, puis une étape suivante (au plus un autre simulateur), puis la fiche
+ * du placement concerné. Préfixes : « g: » guide, « f: » fiche, « s: » simulateur. Cohérence vérifiée par les tests.
  */
+export const nextForSimulator: Record<string, string[]> = {
+  patrimoine: ['g:interets-composes', 'g:choisir-son-enveloppe', 's:independance-financiere', 'f:etf-monde'],
+  immobilier: ['g:rentabilite-locative', 'g:immobilier-ou-etf', 's:etf-immobilier', 'f:location-nue'],
+  'etf-immobilier': ['g:immobilier-ou-etf', 's:immobilier', 'f:etf-monde', 'f:location-nue'],
+  credit: ['g:taux-endettement-capacite-emprunt', 'g:pret-a-taux-zero-ptz', 's:louer-ou-acheter', 'f:credit-immobilier'],
+  portefeuille: ['g:diversification-placements', 's:frais', 'f:etf-monde', 'f:obligations'],
+  entreprise: ['f:creation-entreprise', 'f:reprise-entreprise', 'f:activite-numerique', 's:credit'],
+  'independance-financiere': ['g:interets-composes', 's:retraits-reguliers-duree-du-capital', 'f:per', 'f:etf-monde'],
+  'epargne-de-precaution': ['g:combien-epargne-de-precaution', 'g:livret-a-calcul-interets-quinzaines', 's:budget', 'f:lep'],
+  budget: ['g:par-ou-commencer', 'g:combien-epargne-de-precaution', 's:epargne-de-precaution', 'f:livret-a'],
+  frais: ['g:comparer-les-frais', 'g:choisir-son-enveloppe', 's:portefeuille', 'f:etf-monde'],
+  'rembourser-ou-investir': ['g:rembourser-credit-par-anticipation-ou-investir', 'g:interets-composes', 's:comparer-des-credits', 'f:credit-immobilier'],
+  inflation: ['g:inflation-pouvoir-d-achat-epargne', 'g:regle-de-72-doubler-son-capital', 's:rendement-reel-de-mon-placement', 'f:livret-a'],
+  endettement: ['g:taux-endettement-capacite-emprunt', 'g:pret-a-taux-zero-ptz', 's:credit', 'f:credit-immobilier'],
+  'objectif-epargne': ['g:combien-epargner-par-mois-objectif', 'g:par-ou-commencer', 's:budget', 'f:livret-a'],
+  'louer-ou-acheter': ['g:pret-a-taux-zero-ptz', 'g:taux-endettement-capacite-emprunt', 's:credit', 'f:credit-immobilier'],
+  dettes: ['g:taux-endettement-capacite-emprunt', 'g:combien-epargne-de-precaution', 's:budget'],
+  'investir-d-un-coup-ou-progressivement': ['g:choisir-son-enveloppe', 'g:diversification-placements', 's:frais', 'f:etf-monde'],
+  'retraits-reguliers-duree-du-capital': ['g:inflation-pouvoir-d-achat-epargne', 's:independance-financiere', 'f:assurance-vie', 'f:donation'],
+  'rendement-reel-de-mon-placement': ['g:inflation-pouvoir-d-achat-epargne', 'g:comparer-les-frais', 's:frais', 'f:etf-monde'],
+  'interets-composes': ['g:interets-composes', 'g:regle-de-72-doubler-son-capital', 's:objectif-epargne', 'g:par-ou-commencer'],
+  'comparer-des-credits': ['g:taux-endettement-capacite-emprunt', 'g:rembourser-credit-par-anticipation-ou-investir', 's:credit', 'f:credit-immobilier'],
+};
+
+/** Pistes de lecture à la fin d'un simulateur (au plus quatre), dans l'ordre choisi ci-dessus. */
 export function readingForSimulator(slug: string): ReadingLink[] {
-  const guidesOut = Object.entries(simsForGuide)
-    .filter(([, sims]) => sims.includes(slug))
-    .map(([g]) => g)
-    .filter((g) => guideTitles[g])
-    .slice(0, 2)
-    .map((g) => ({ to: `/guides/${g}`, title: guideTitles[g], kind: 'Guide' as const }));
-  const fichesOut = Object.entries(simsForInvestment)
-    .filter(([, sims]) => sims.includes(slug))
-    .map(([i]) => i)
-    .filter((i) => investmentNames[i])
-    .slice(0, 2)
-    .map((i) => ({ to: `/encyclopedie/${i}`, title: investmentNames[i], kind: 'Fiche' as const }));
-  return [...guidesOut, ...fichesOut];
+  return (nextForSimulator[slug] ?? []).flatMap((ref): ReadingLink[] => {
+    const [k, id] = ref.split(':');
+    if (k === 'g' && guideTitles[id]) return [{ to: `/guides/${id}`, title: guideTitles[id], kind: 'Guide' }];
+    if (k === 'f' && investmentNames[id]) return [{ to: `/encyclopedie/${id}`, title: investmentNames[id], kind: 'Fiche' }];
+    if (k === 's' && bySlug[id]) return [{ to: `/simulateurs/${id}`, title: bySlug[id].title, kind: 'Simulateur' }];
+    return [];
+  });
 }
