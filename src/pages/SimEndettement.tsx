@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { capacityAtHcsf, debtRatio, fmtEur, fmtPct, HCSF } from '../lib/finance';
 import { debtRatioTakeaway } from '../lib/takeaways';
 import { SchemaMois } from '../components/Illustrations';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, Sources, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 import { fmtDate } from '../lib/dates';
 
 type State = { income: number; existingPayments: number; newPayment: number; livingCosts: number; householdSize: number; rate: number; years: number; insuranceRate: number };
@@ -22,7 +22,7 @@ export default function SimEndettement() {
         Quelle part de vos revenus part dans les crédits, que reste-t-il pour vivre, et jusqu’à quel montant le repère de {pct} est-il respecté ?
       </PageHead>
       <SimNotice>
-        Le repère de {pct} (assurance comprise, {HCSF.maxYears}&nbsp;ans au plus) est une recommandation du HCSF appliquée par les banques avec une marge de
+        Le repère de {pct} (assurance comprise, {HCSF.maxYears}&nbsp;ans au plus) est une recommandation du Haut Conseil de stabilité financière (HCSF), appliquée par les banques avec une marge de
         dérogation, pas une garantie d’accord ni une capacité d’emprunt personnalisée. Pour la mensualité d’un projet précis, voir le
         {' '}<Link to="/simulateurs/credit">calculateur de crédit</Link>.
       </SimNotice>
@@ -54,22 +54,26 @@ export default function SimEndettement() {
           <Takeaway>{debtRatioTakeaway({ income: s.income, ratioAfter: r.ratioAfter, remainingAfter: r.remainingAfter, withinRef: r.withinHcsf, refLabel: pct })}</Takeaway>
           <SchemaMois income={s.income} existingPayments={s.existingPayments} newPayment={s.newPayment} livingCosts={s.livingCosts} />
           <h2>Repères</h2>
+          <p><strong>Taux d’endettement</strong> : part de vos revenus nets consacrée à vos crédits (anciens et nouveau).</p>
           <div className="table-wrap" tabIndex={0}>
             <table>
               <tbody>
-                <tr><th scope="row">Revenu net minimal pour la mensualité saisie</th><td className="r">{fmtEur(r.minIncome)}</td></tr>
-                <tr><th scope="row">Capital empruntable à {pct} (taux, durée et assurance ci-contre)</th><td className="r">{fmtEur(cap)}</td></tr>
+                <tr><th scope="row">Revenus nets nécessaires pour rester à {pct}</th><td className="r">{fmtEur(r.minIncome)}</td></tr>
+                <tr><th scope="row">Montant empruntable à {pct} (taux, durée et assurance saisis)</th><td className="r">{fmtEur(cap)}</td></tr>
               </tbody>
             </table>
           </div>
+          <ul className="points">
+            <li><strong>Reste à vivre</strong> : aucun seuil officiel unique, il dépend de vos charges réelles.</li>
+            <li>Les banques regardent aussi l’apport, la stabilité des revenus et l’épargne.</li>
+            <li>
+              Avant d’emprunter : <Link to="/simulateurs/epargne-de-precaution">constituer une réserve</Link>, <Link to="/simulateurs/budget">répartir son budget</Link>.
+            </li>
+          </ul>
           <p className="muted small">
-            Taux d’endettement = (crédits en cours + nouvelle mensualité) / revenus nets. Le reste à vivre dépend de vos charges réelles ; il n’existe pas de seuil
-            officiel unique, et les banques apprécient aussi l’apport, la stabilité des revenus et l’épargne. Pour constituer une réserve avant d’emprunter, voir le
-            {' '}<Link to="/simulateurs/epargne-de-precaution">simulateur d’épargne de précaution</Link> ; pour répartir votre budget, le <Link to="/simulateurs/budget">simulateur de budget</Link>.
-            Repère vérifié le {fmtDate(HCSF.verifiedOn)}.
+            Repère de {pct} vérifié le {fmtDate(HCSF.verifiedOn)}, source :{' '}
+            <a href={HCSF.source.url} target="_blank" rel="noopener noreferrer">{HCSF.source.label}</a>.
           </p>
-          <h2>Source</h2>
-          <Sources list={[{ ...HCSF.source, official: true }]} />
           <SavedSims simKey="endettement" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <SimFaq slug="endettement" />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
