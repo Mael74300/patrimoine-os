@@ -324,14 +324,22 @@ export type ChartBand = { from: number; to: number; label: string; labelAt?: 'to
 
 /**
  * Place le libellé d'une zone grisée : dans la zone s'il y tient ; sinon juste avant la zone,
- * suivi d'une flèche qui pointe vers elle ; sinon (zone collée au bord gauche) dans la zone, coupé si besoin.
- * `left` et `right` sont les bords de la zone, `plotLeft` le bord gauche du tracé (px).
+ * suivi d'une flèche qui pointe vers elle ; sinon juste après, précédé d'une flèche ; sinon dans la zone.
+ * `left` et `right` sont les bords de la zone, `plotLeft` et `plotRight` ceux du tracé (px).
  */
-export function placeBandLabel(label: string, left: number, right: number, plotLeft: number): { text: string; x: number; anchor: 'start' | 'end' } {
+export function placeBandLabel(
+  label: string,
+  left: number,
+  right: number,
+  plotLeft: number,
+  plotRight = Infinity,
+): { text: string; x: number; anchor: 'start' | 'end' } {
   const width = (s: string) => s.length * CHAR_W * 1.1; // libellé en gras, un peu plus large
   if (left + 6 + width(label) <= right - 4) return { text: label, x: left + 6, anchor: 'start' };
-  const outside = `${label}\u00a0\u2192`;
-  if (left - 6 - width(outside) >= plotLeft) return { text: outside, x: left - 6, anchor: 'end' };
+  const before = `${label}\u00a0\u2192`;
+  if (left - 6 - width(before) >= plotLeft) return { text: before, x: left - 6, anchor: 'end' };
+  const after = `\u2190\u00a0${label}`;
+  if (right + 6 + width(after) <= plotRight) return { text: after, x: right + 6, anchor: 'start' };
   return { text: label, x: left + 6, anchor: 'start' };
 }
 
@@ -422,7 +430,7 @@ export function LineChart({ series, xLabels, format, title, showTitle, height = 
     setHover(Math.max(0, Math.min(n - 1, i)));
   };
 
-  const bandLabel = band && band.to > band.from ? placeBandLabel(band.label, x(band.from), x(band.to), pad.l) : null;
+  const bandLabel = band && band.to > band.from ? placeBandLabel(band.label, x(band.from), x(band.to), pad.l, W - pad.r) : null;
 
   const rest = defaultIndex !== undefined && defaultIndex >= 0 && defaultIndex < n ? defaultIndex : n - 1;
   const active = hover ?? rest;

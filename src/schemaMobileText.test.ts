@@ -55,6 +55,13 @@ describe('textes des schémas agrandis sur mobile', () => {
     expect(largeur('sur un contrat d\'assurance-vie', MOBILE_SUB)).toBeLessThan(240 - 8);
   });
 
+  it('assurance-vie : la dernière ligne des unités de compte tient dans sa case de 204 unités', () => {
+    const s = svg(SchemaAssuranceVie);
+    expect(s).toContain('<rect x="216" y="164" width="204"');
+    expect(s).toContain('>peut rapporter davantage</text>');
+    expect(largeur('peut rapporter davantage', MOBILE_SUB)).toBeLessThan(204 - 16);
+  });
+
   it('PTZ : « Au plus » et « 25 ans » ne se chevauchent pas', () => {
     const s = svg(SchemaPtz);
     const y1 = Number(/y="(\d+)" class="ill-sub">Au plus</.exec(s)?.[1]);
