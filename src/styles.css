@@ -1104,3 +1104,6 @@ ul.points { margin: 0.9rem 0 0.5rem; gap: 8px; }
 .pf-legend li { display: grid; grid-template-columns: 18px 1fr; align-items: baseline; }
 .pf-legend .bb-dot { margin: 0; }
 .pf-why { margin: 0 0 10px; line-height: 1.5; }
+/* Notes sous un tableau : points courts, espacés du tableau */
+.table-notes { list-style: none; padding: 0; margin: 14px 0 20px; display: grid; gap: 6px; font-size: .92rem; line-height: 1.5; color: var(--ink-2); }
+.table-notes strong { color: var(--ink); }

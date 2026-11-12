@@ -61,6 +61,30 @@ export function precautionPath(i: PrecautionInput, maxMonths = 600): { series: P
   return { series, reachedAt, target };
 }
 
+export type PrecautionSegment = { key: 'start' | 'deposits' | 'interest'; label: string; amount: number; width: number };
+
+/**
+ * Barre « D'où viendra la réserve » : au mois où le montant visé est atteint,
+ * épargne de départ + versements mensuels + intérêts = solde. Largeurs en % du solde.
+ * Vide si la réserve est déjà atteinte (mois 0) ou jamais atteinte.
+ */
+export function precautionSegments(i: PrecautionInput): { month: number; balance: number; segments: PrecautionSegment[] } | null {
+  const path = precautionPath(i);
+  if (path.reachedAt === null || path.reachedAt === 0) return null;
+  const last = path.series[path.reachedAt];
+  const start = Math.max(0, num(i.currentSavings));
+  const deposits = Math.max(0, num(i.monthlySaving)) * path.reachedAt;
+  const interest = last.interest;
+  const balance = last.balance;
+  if (!(balance > 0)) return null;
+  const raw: PrecautionSegment[] = [
+    { key: 'start', label: 'Épargne de départ', amount: start, width: 0 },
+    { key: 'deposits', label: 'Vos versements', amount: deposits, width: 0 },
+    { key: 'interest', label: 'Intérêts', amount: interest, width: 0 },
+  ];
+  return { month: path.reachedAt, balance, segments: raw.filter((x) => x.amount > 0).map((x) => ({ ...x, width: (x.amount / balance) * 100 })) };
+}
+
 /** Versement mensuel nécessaire pour atteindre la cible en n mois (formule de la valeur future d'une suite de versements). */
 export function monthlySavingNeeded(target: number, current: number, months: number, annualRate: number): number {
   const n = Math.floor(clamp(months, 0, 1200, 0));

@@ -2,11 +2,11 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   allocateEnvelopes, fmtEur, fmtMonths, fmtNum, fmtPct, monthlySavingNeeded, monthsCovered, precautionPath,
-  PROFILE_MONTHS, type PrecautionInput, type PrecautionProfile,
+  PROFILE_MONTHS, precautionSegments, type PrecautionInput, type PrecautionSegment, type PrecautionProfile,
 } from '../lib/finance';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
 import { precautionTakeaway, precautionTargetSub } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, ChoiceField, Sources, usePersistentState, JumpToResults, CoverageGauge, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, ChoiceField, Sources, usePersistentState, JumpToResults, CoverageGauge, SimNotice } from '../components/ui';
 
 type State = PrecautionInput & { profile: PrecautionProfile; lep: 'oui' | 'non'; deadline: number };
 
@@ -14,6 +14,8 @@ const DEFAULTS: State = {
   profile: 'stable', monthlyExpenses: 2000, months: PROFILE_MONTHS.stable.months, extraReserve: 1000,
   currentSavings: 2500, monthlySaving: 250, annualRate: 0.017, lep: 'non', deadline: 24,
 };
+
+const SEG_CLASS: Record<PrecautionSegment['key'], string> = { start: 'pf-initial', deposits: 'pf-monthly', interest: 'pf-gain' };
 
 const fmtDelay = (m: number | null) => (m === null ? 'non atteint en 50\u00a0ans' : m === 0 ? 'déjà atteint' : fmtMonths(m));
 
@@ -26,9 +28,14 @@ export default function SimPrecaution() {
   const need = monthlySavingNeeded(target, s.currentSavings, s.deadline, s.annualRate);
   const envelopes = useMemo(() => LIVRETS.filter((l) => s.lep === 'oui' || l.id !== 'lep'), [s.lep]);
   const alloc = useMemo(() => allocateEnvelopes(target, envelopes), [target, envelopes]);
-  const chart = path.series.length > 1 ? path.series : [path.series[0], { ...path.series[0], month: 1 }];
-  const step = Math.max(1, Math.ceil(chart.length / 60));
-  const points = chart.filter((_, i) => i % step === 0 || i === chart.length - 1);
+  const bar = useMemo(() => precautionSegments(s), [s]);
+  const interestPart = bar?.segments.find((x) => x.key === 'interest');
+  const interestShare = bar ? (interestPart ? interestPart.amount / bar.balance : 0) : null;
+  const segHint: Record<PrecautionSegment['key'], string> = {
+    start: ', déjà de côté',
+    deposits: bar ? ` (${fmtEur(s.monthlySaving)} par mois pendant ${fmtMonths(bar.month)})` : '',
+    interest: ` à ${fmtPct(s.annualRate)} par an`,
+  };
 
   const setProfile = (p: PrecautionProfile) => setS((x) => ({ ...x, profile: p, months: PROFILE_MONTHS[p].months }));
 
@@ -94,27 +101,39 @@ export default function SimPrecaution() {
           <CoverageGauge savings={s.currentSavings} target={target} label="Épargne actuelle" />
           <Takeaway>{precautionTakeaway({ target, savings: s.currentSavings, monthlySaving: s.monthlySaving, reachedAt: path.reachedAt })}</Takeaway>
 
-          <h2>Constitution de la réserve</h2>
-          <p className="muted small">
-            Intérêts au taux mensuel équivalent, versement en fin de mois. Approximation : les livrets réglementés calculent les intérêts par quinzaine
-            et les versent une fois par an, au 31 décembre.
-          </p>
-          <div className="panel">
-            <LineChart
-              title="Épargne de précaution accumulée"
-              xLabels={points.map((p) => `Mois ${p.month}`)}
-              format={fmtEur}
-              series={[
-                { name: 'Épargne accumulée', color: 'var(--chart-1)', values: points.map((p) => p.balance) },
-                { name: 'Montant visé', color: 'var(--chart-3)', values: points.map(() => target) },
-              ]}
-            />
-          </div>
+          {bar && (
+            <>
+              <h2>D’où viendra la réserve</h2>
+              <figure className="bb">
+                <div className="bb-bar" role="img" aria-label={bar.segments.map((x) => `${x.label} ${fmtEur(x.amount)}`).join(', ')}>
+                  {bar.segments.map((x) => <span key={x.key} className={'bb-seg ' + SEG_CLASS[x.key]} style={{ width: `${x.width}%` }} />)}
+                </div>
+              </figure>
+              <ul className="pf-legend" aria-label="Détail de la barre">
+                {bar.segments.map((x) => (
+                  <li key={x.key}>
+                    <i className={'bb-dot ' + SEG_CLASS[x.key]} aria-hidden="true" />
+                    <span><strong>{x.label}</strong> : {fmtEur(x.amount)}{segHint[x.key]}</span>
+                  </li>
+                ))}
+              </ul>
+              {interestShare !== null && interestShare < 0.2 && (
+                <p className="pf-why">
+                  <strong>Les intérêts pèsent peu</strong> ({fmtEur(interestPart?.amount ?? 0)} sur {fmtEur(bar.balance)}) : c’est surtout votre épargne qui la constitue.
+                  Son rôle est d’être disponible tout de suite, pas de rapporter.
+                </p>
+              )}
+              <p className="muted small">
+                Calcul simplifié : un versement chaque fin de mois, des intérêts ajoutés chaque mois. Les livrets, eux, comptent les intérêts
+                par quinzaine et les versent une fois par an, au 31 décembre (<Link to="/guides/livret-a-calcul-interets-quinzaines">comment ça marche</Link>).
+              </p>
+            </>
+          )}
 
           <h2>Une répartition possible du montant visé</h2>
           <p className="muted small">
-            Remplissage du livret le mieux rémunéré vers le moins rémunéré, dans la limite des plafonds de versement (un livret de chaque type par personne).
-            Taux {LIVRETS_PERIOD}, vérifiés au {LIVRETS_AS_OF}.
+            On remplit d’abord le livret qui rapporte le plus, jusqu’à son plafond (la somme maximale que l’on peut y verser), puis le suivant.
+            Chaque personne ne peut avoir qu’un livret de chaque type. Taux {LIVRETS_PERIOD}, vérifiés au {LIVRETS_AS_OF}.
           </p>
           <div className="table-wrap" tabIndex={0}>
             <table>
@@ -148,10 +167,11 @@ export default function SimPrecaution() {
               </tbody>
             </table>
           </div>
-          <p className="muted small">
-            Les intérêts des livrets réglementés sont exonérés d'impôt sur le revenu et de prélèvements sociaux. Au-delà des plafonds, d'autres livrets
-            bancaires existent, généralement imposables. Un taux réglementé peut changer au 1er février et au 1er août.
-          </p>
+          <ul className="table-notes">
+            <li><strong>Sans impôt :</strong> les intérêts de ces livrets sont exonérés d’impôt sur le revenu et de prélèvements sociaux.</li>
+            <li><strong>Au-delà des plafonds :</strong> d’autres livrets bancaires existent, généralement imposables.</li>
+            <li><strong>Taux révisables :</strong> un taux réglementé peut changer au 1er février et au 1er août.</li>
+          </ul>
           <h2>Sources</h2>
           <Sources list={LIVRETS.map((l) => ({ ...l.source, official: true }))} />
           <SavedSims simKey="precaution" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
