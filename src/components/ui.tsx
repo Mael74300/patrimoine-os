@@ -126,11 +126,27 @@ export function usePersistentState<T extends object>(key: string, initial: T) {
 /** Colle le nombre à son unité (« 6 mois », « 1 an ») : une durée ne se coupe plus entre le chiffre et le mot. */
 export const gluedUnits = (s: string) => s.replace(/(\d) (ans?|mois|€|%)(?![\p{L}\d])/gu, '$1\u00a0$2');
 
+/**
+ * Découpe une durée (« 18 ans et 5 mois », « 6,8 ans », « 9 mois ») en chiffres et en mots, pour afficher les mots
+ * plus petits que les chiffres : la durée tient sur une ligne dans une carte de résultat, comme un montant.
+ * Le nombre reste collé à son mot ; si la carte est trop étroite, la coupure se fait avant « et ».
+ * Renvoie `null` si la valeur n'est pas une durée de ce type (montant, « jamais », « déjà atteint »…).
+ */
+export function splitDuration(value: string): { text: string; unit: boolean }[] | null {
+  const v = value.replace(/[\u00a0\u202f]/g, ' ').trim();
+  const part = String.raw`\d+(?:,\d+)? (?:ans?|mois)`;
+  if (!new RegExp(`^${part}(?: et ${part})?$`).test(v)) return null;
+  return v.split(/(\d+(?:,\d+)?)/).filter(Boolean).map((t) => (/^\d/.test(t) ? { text: t, unit: false } : { text: t.replace(/^ /, '\u00a0').replace(/ $/, '\u00a0'), unit: true }));
+}
+
 export function Kpi({ label, value, sub, tone }: { label: string; value: string; sub?: string; tone?: 'pos' | 'neg' }) {
+  const duration = splitDuration(value);
   return (
     <div className={'kpi ' + (tone ?? '')}>
       <div className="k-label">{label}</div>
-      <div className="k-value">{gluedUnits(value)}</div>
+      <div className={duration ? 'k-value k-duration' : 'k-value'}>
+        {duration ? duration.map((d, i) => (d.unit ? <span key={i} className="k-unit">{d.text}</span> : d.text)) : gluedUnits(value)}
+      </div>
       {sub && <div className="k-sub">{sub}</div>}
     </div>
   );
