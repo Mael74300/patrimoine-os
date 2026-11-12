@@ -5,7 +5,7 @@ import {
   PROFILE_MONTHS, type PrecautionInput, type PrecautionProfile,
 } from '../lib/finance';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
-import { precautionTakeaway } from '../lib/takeaways';
+import { precautionTakeaway, precautionTargetSub } from '../lib/takeaways';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, ChoiceField, Sources, usePersistentState, JumpToResults, CoverageGauge, SimNotice } from '../components/ui';
 
 type State = PrecautionInput & { profile: PrecautionProfile; lep: 'oui' | 'non'; deadline: number };
@@ -81,7 +81,7 @@ export default function SimPrecaution() {
         </form>
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
-            <Kpi label="Montant visé" value={fmtEur(target)} sub={`${fmtNum(s.months)}\u00a0mois × ${fmtEur(s.monthlyExpenses)} + ${fmtEur(s.extraReserve)}`} />
+            <Kpi label="Montant visé" value={fmtEur(target)} sub={precautionTargetSub(s.months, s.extraReserve)} />
             <Kpi
               label="Couverture actuelle"
               value={Number.isFinite(covered) ? `${fmtNum(Math.floor(covered * 10) / 10)}\u00a0mois` : '—'}

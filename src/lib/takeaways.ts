@@ -87,6 +87,12 @@ export function precautionTakeaway(p: { target: number; savings: number; monthly
   return `${base} Avec ${fmtEur(p.monthlySaving)} par mois, vous y arrivez en ${fmtMonths(p.reachedAt)}.`;
 }
 
+/** Épargne de précaution : composition du montant visé, en mots (sous-titre de la carte « Montant visé »). */
+export function precautionTargetSub(months: number, extraReserve: number): string {
+  const base = `${fmtNum(months)}\u00a0mois de dépenses`;
+  return extraReserve > 0 ? `${base} + ${fmtEur(extraReserve)} de réserve (réglages avancés)` : base;
+}
+
 /** Rembourser ou investir : l'option qui laisse le plus à l'horizon, avec le compromis certain / incertain. */
 export function prepayTakeaway(p: { lump: number; advantageInvest: number; interestSaved: number; breakEvenReturn: number | null }): string {
   if (!(p.lump > 0)) return '';

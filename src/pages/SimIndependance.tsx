@@ -52,9 +52,9 @@ export default function SimIndependance() {
         </form>
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
-            <Kpi label="Capital visé" value={Number.isFinite(target) ? fmtEur(target) : '—'} sub={`dépenses non couvertes / ${fmtPct(s.withdrawalRate)}`} />
-            <Kpi label="Délai estimé" value={fmtYears(yrs)} sub="en euros constants" />
-            <Kpi label="Rendement réel retenu" value={fmtPct(realRate(s.nominalReturn, s.inflation))} sub="(1 + rendement) / (1 + inflation) − 1" />
+            <Kpi label="Capital visé" value={Number.isFinite(target) ? fmtEur(target) : '—'} sub={`en retirant ${fmtPct(s.withdrawalRate)} la première année`} />
+            <Kpi label="Délai estimé" value={fmtYears(yrs)} sub="en euros d’aujourd’hui" />
+            <Kpi label="Rendement réel retenu" value={fmtPct(realRate(s.nominalReturn, s.inflation))} sub="rendement une fois l’inflation retirée" />
           </div>
           <Takeaway>{fireTakeaway({ gap: Math.max(0, s.annualExpenses - s.recurringIncome), withdrawalRate: s.withdrawalRate, target, currentWealth: s.currentWealth, annualSavings: s.annualSavings, years: yrs })}</Takeaway>
 

@@ -39,8 +39,8 @@ export default function SimRendement() {
         </form>
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
-            <Kpi label="Rendement annuel équivalent" value={r.annualized === null ? '—' : fmtPct(r.annualized)} sub="taux de rendement interne" />
-            <Kpi label="Total versé" value={fmtEur(r.invested)} sub="versement initial + versements mensuels" />
+            <Kpi label="Rendement annuel équivalent" value={r.annualized === null ? '—' : fmtPct(r.annualized)} sub="taux annuel constant qui mènerait à la valeur actuelle" />
+            <Kpi label="Total versé" value={fmtEur(r.invested)} sub="versement initial et versements mensuels" />
             <Kpi label="Gain ou perte" value={fmtEur(r.gain)} sub={r.cumulative === null ? '' : `${fmtPct(r.cumulative)} du total versé, non annualisé`} />
           </div>
           <Takeaway>{performanceTakeaway({ invested: r.invested, gain: r.gain, annualized: r.annualized })}</Takeaway>

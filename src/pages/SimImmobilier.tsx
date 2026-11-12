@@ -106,8 +106,8 @@ export default function SimImmobilier() {
           <div className="kpis">
             <Kpi label="Mensualité" value={fmtEur(r.monthlyLoan)} sub="assurance comprise" />
             <Kpi label="Coût total du crédit" value={fmtEur(loan.totalCost)} sub={`dont ${fmtEur(loan.totalInterest)} d'intérêts`} />
-            <Kpi label="Rendement brut" value={fmtPct(r.grossYield)} sub="loyers d’un an ÷ prix d’achat" />
-            <Kpi label="Rendement net de charges" value={fmtPct(r.netYield)} sub="loyers − charges ÷ coût total, frais compris" />
+            <Kpi label="Rendement brut" value={fmtPct(r.grossYield)} sub="loyers d’une année rapportés au prix d’achat" />
+            <Kpi label="Rendement net de charges" value={fmtPct(r.netYield)} sub="loyers après charges, sur le coût total frais compris" />
             <Kpi label="Solde mensuel (cash-flow)" value={fmtEur(r.monthlyCashflow)} tone={r.monthlyCashflow >= 0 ? 'pos' : 'neg'} sub={rentalCashflowSub(r.monthlyCashflow, false)} />
           </div>
 
@@ -116,7 +116,7 @@ export default function SimImmobilier() {
             <Kpi label="Impôt estimé, année 1" value={fmtEur(y1?.tax ?? 0)} sub={s.regime === 'aucune' ? 'non estimé' : `régime : ${REGIMES.find((g) => g.v === s.regime)?.label ?? ''}`} />
             <Kpi label="Solde mensuel après impôt, année 1" value={fmtEur((y1?.cashflowAfterTax ?? 0) / 12)} tone={(y1?.cashflowAfterTax ?? 0) >= 0 ? 'pos' : 'neg'} sub={rentalCashflowSub((y1?.cashflowAfterTax ?? 0) / 12, true)} />
             <Kpi label={`Capital restant dû à ${s.horizon}\u00a0ans`} value={fmtEur(end?.remaining ?? 0)} sub="ce qu’il resterait à rembourser" />
-            <Kpi label={`Patrimoine net immobilier estimé à ${s.horizon}\u00a0ans`} value={fmtEur(end?.netEquity ?? 0)} sub="valeur du bien − crédit restant" />
+            <Kpi label={`Patrimoine net immobilier estimé à ${s.horizon}\u00a0ans`} value={fmtEur(end?.netEquity ?? 0)} sub="valeur du bien moins le crédit restant" />
           </div>
           <Takeaway>{rentalTakeaway({ totalCost: r.totalCost, netYield: r.netYield, monthlyCashflow: r.monthlyCashflow, monthlyCashflowAfterTax: s.regime === 'aucune' || !y1 ? null : y1.cashflowAfterTax / 12, horizon: s.horizon, netEquity: end?.netEquity ?? 0 })}</Takeaway>
           {s.regime === 'micro-foncier' && r.annualRentCollected > 15000 && (
