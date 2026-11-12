@@ -4,7 +4,7 @@ import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio } f
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
 import { precautionTarget } from './calc/precaution';
-import { businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionTargetSub, prepayTakeaway, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, budgetGapPhrase, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionTargetSub, prepayTakeaway, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -266,6 +266,13 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     const ok = analyzeBudget({ ...inp, saving: 600, wants: 500 });
     expect(budgetTakeaway({ income: ok.income, shares: ok.shares, unallocated: ok.unallocated, targetRate: 0.2, missing: 0 })).toContain('déjà');
     expect(budgetTakeaway({ income: 0, shares: { needs: 0, wants: 0, saving: 0 }, unallocated: 0, targetRate: 0.2, missing: 0 })).toBe('');
+  });
+  it('budget : écart de chaque poste au repère, en mots, issu de analyzeBudget', () => {
+    const b = analyzeBudget({ netIncome: 2500, needs: 1400, wants: 650, saving: 250 });
+    expect(digits(budgetGapPhrase(b.gaps.needs, 0.5))).toBe(digits(`${eur(150)} € de plus que le repère de 50 %`));
+    expect(digits(budgetGapPhrase(b.gaps.wants, 0.3))).toBe(digits(`${eur(100)} € de moins que le repère de 30 %`));
+    expect(digits(budgetGapPhrase(b.gaps.saving, 0.2))).toBe(digits(`${eur(250)} € de moins que le repère de 20 %`));
+    expect(digits(budgetGapPhrase(0.3, 0.2))).toBe(digits('au niveau du repère de 20 %'));
   });
   it('inflation : valeurs issues de purchasingPower, gain ou perte de pouvoir d\'achat', () => {
     const inp = { amount: 10000, years: 20, inflation: 0.02, annualReturn: 0.03 };

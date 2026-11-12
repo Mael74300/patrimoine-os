@@ -223,6 +223,14 @@ export function budgetTakeaway(p: { income: number; shares: { needs: number; wan
   return repartition + reste + cible;
 }
 
+/** Budget : position d'un poste face au repère 50 / 30 / 20, en mots (écart en euros par mois, repère en part du revenu). */
+export function budgetGapPhrase(gap: number, bench: number): string {
+  const g = Math.round(gap);
+  const repere = `le repère de ${fmtPct(bench)}`;
+  if (g === 0) return `au niveau du repère de ${fmtPct(bench)}`;
+  return g > 0 ? `${fmtEur(g)} de plus que ${repere}` : `${fmtEur(-g)} de moins que ${repere}`;
+}
+
 /** Inflation : ce que la somme permet d'acheter à l'horizon, laissée telle quelle ou placée. */
 export function inflationTakeaway(p: { amount: number; years: number; inflation: number; annualReturn: number; idleRealValue: number; nominalToKeepPower: number; investedRealValue: number }): string {
   if (!(p.amount > 0) || !(p.years > 0)) return '';
