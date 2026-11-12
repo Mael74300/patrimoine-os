@@ -74,3 +74,26 @@ export function lumpVsGradual(input: LumpVsGradualInput): LumpVsGradualResult {
 
   return { months, spreadMonths: spread, lump, gradual, advantageGradual: gradual - lump, series };
 }
+
+export type PathGap = { path: PricePath; lump: number; gradual: number; advantageGradual: number };
+
+/** Les trois parcours de prix avec les mêmes hypothèses (capital, étalement, horizon, rendements, ampleur) : pour voir d'un coup d'œil quand l'étalement gagne. */
+export function lumpVsGradualByPath(input: Omit<LumpVsGradualInput, 'path'>): PathGap[] {
+  return (['steady', 'dip', 'rise'] as const).map((path) => {
+    const r = lumpVsGradual({ ...input, path });
+    return { path, lump: r.lump, gradual: r.gradual, advantageGradual: r.advantageGradual };
+  });
+}
+
+/**
+ * Barres divergentes autour d'un axe central : pour chaque écart, le côté (étalement au-dessus à droite, une fois au-dessus à gauche)
+ * et la longueur en pourcentage d'une demi-barre (le plus grand écart en valeur absolue occupe toute la demi-barre).
+ * Un écart inférieur à un demi-centime est considéré comme nul.
+ */
+export function gapBarWidths(gaps: number[]): { side: 'gradual' | 'lump' | 'none'; pct: number }[] {
+  const max = Math.max(0, ...gaps.map((g) => (Number.isFinite(g) ? Math.abs(g) : 0)));
+  return gaps.map((g) => {
+    if (!Number.isFinite(g) || Math.abs(g) < 0.005 || max < 0.005) return { side: 'none', pct: 0 };
+    return { side: g > 0 ? 'gradual' : 'lump', pct: (Math.abs(g) / max) * 100 };
+  });
+}

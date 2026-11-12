@@ -419,6 +419,21 @@ describe('phrase « Concrètement » : investir d’un coup ou progressivement',
     const { lumpGradualTakeaway } = await import('./takeaways');
     expect(lumpGradualTakeaway({ amount: 0, spreadMonths: 12, months: 60, lump: 0, gradual: 0, advantageGradual: 0 })).toBe('');
   });
+  it('trois parcours : la phrase nomme les parcours où l’étalement gagne, d’après le calcul', async () => {
+    const f = await import('./finance');
+    const { lumpGradualPathsSummary } = await import('./takeaways');
+    const names = { steady: 'Régulière', dip: 'Baisse d’abord', rise: 'Hausse d’abord' } as const;
+    const rows = f.lumpVsGradualByPath(base).map((r) => ({ name: names[r.path], advantageGradual: r.advantageGradual }));
+    expect(lumpGradualPathsSummary(rows)).toBe('Avec ces hypothèses, l’étalement ne finit au-dessus qu’avec « Baisse d’abord » ; investir d’un coup gagne avec « Régulière » et « Hausse d’abord ». Personne ne sait à l’avance quel parcours le prix suivra.');
+    // Part en attente rémunérée bien au-dessus du placement : l'étalement gagne partout.
+    const all = f.lumpVsGradualByPath({ ...base, annualReturn: 0, cashRate: 0.5, move: 0 }).map((r) => ({ name: names[r.path], advantageGradual: r.advantageGradual }));
+    expect(all.every((r) => r.advantageGradual > 0)).toBe(true);
+    expect(lumpGradualPathsSummary(all)).toContain('dans les trois parcours');
+    // Sans variation de prix ni rendement : égalité partout.
+    const eq = f.lumpVsGradualByPath({ ...base, annualReturn: 0, move: 0 }).map((r) => ({ name: names[r.path], advantageGradual: r.advantageGradual }));
+    expect(lumpGradualPathsSummary(eq)).toBe('Avec ces hypothèses, l’étalement ne finit au-dessus dans aucun parcours.');
+    expect(lumpGradualPathsSummary([])).toBe('');
+  });
 });
 
 describe('etfImmoTakeaway', () => {

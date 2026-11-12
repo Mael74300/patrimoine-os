@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { lumpVsGradual, type LumpVsGradualInput } from './lumpVsGradual';
+import { lumpVsGradual, lumpVsGradualByPath, gapBarWidths, type LumpVsGradualInput } from './lumpVsGradual';
 
 // Exemples fictifs.
 const base: LumpVsGradualInput = { amount: 12000, spreadMonths: 12, years: 5, annualReturn: 0.05, cashRate: 0, path: 'steady', move: 0.2 };
@@ -57,5 +57,30 @@ describe("Investir d'un coup ou progressivement", () => {
     const r = lumpVsGradual({ amount: NaN, spreadMonths: -3, years: NaN, annualReturn: NaN, cashRate: Infinity, path: 'dip', move: 5 });
     for (const [k, v] of Object.entries(r)) if (k !== 'series') expect(Number.isFinite(v)).toBe(true);
     for (const p of r.series) expect(Number.isFinite(p.lump) && Number.isFinite(p.gradual)).toBe(true);
+  });
+
+  it('trois parcours : mêmes valeurs que le calcul parcours par parcours (exemple fictif par défaut)', () => {
+    const { path: _p, ...rest } = base;
+    const rows = lumpVsGradualByPath(rest);
+    expect(rows.map((r) => r.path)).toEqual(['steady', 'dip', 'rise']);
+    for (const row of rows) {
+      const r = lumpVsGradual({ ...base, path: row.path });
+      expect(row.lump).toBeCloseTo(r.lump, 9);
+      expect(row.gradual).toBeCloseTo(r.gradual, 9);
+      expect(row.advantageGradual).toBeCloseTo(r.gradual - r.lump, 9);
+    }
+    // Valeurs affichées par défaut sur la page (arrondies à l'euro).
+    expect(rows.map((r) => Math.round(r.advantageGradual))).toEqual([-337, 1230, -1425]);
+    expect(Math.round(rows[1].lump)).toBe(11669);
+    expect(Math.round(rows[1].gradual)).toBe(12898);
+  });
+
+  it('barres divergentes : plus grand écart sur toute la demi-barre, côté selon le signe', () => {
+    const w = gapBarWidths([-337, 1229, -1425]);
+    expect(w.map((x) => x.side)).toEqual(['lump', 'gradual', 'lump']);
+    expect(w[2].pct).toBeCloseTo(100, 9);
+    expect(w[1].pct).toBeCloseTo((1229 / 1425) * 100, 9);
+    expect(gapBarWidths([0, 0.001, NaN])).toEqual([{ side: 'none', pct: 0 }, { side: 'none', pct: 0 }, { side: 'none', pct: 0 }]);
+    expect(gapBarWidths([])).toEqual([]);
   });
 });
