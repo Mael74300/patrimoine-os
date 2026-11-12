@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { renegotiation } from './renegotiation';
+import { renegotiation, renegotiationBars } from './renegotiation';
 import { loanPayment } from './loan';
 
 // Exemples fictifs.
@@ -43,5 +43,34 @@ describe('Renégociation de crédit', () => {
     for (const v of Object.values(renegotiation({ ...base, remaining: 0, newYears: 0, currentYearsLeft: 0 }))) {
       if (typeof v === 'number') expect(Number.isNaN(v)).toBe(false);
     }
+  });
+});
+
+// Exemples fictifs : barres « ce qu'il reste à payer » du simulateur.
+describe('Barres de la renégociation', () => {
+  const base = { remaining: 150000, currentRate: 0.045, currentYearsLeft: 20, newRate: 0.035, newYears: 20, fees: 3000 };
+
+  it('opération avantageuse : la barre actuelle vaut 100 et l’écart correspond au gain net', () => {
+    const r = renegotiation(base);
+    const b = renegotiationBars(r, 3000);
+    expect(b.current).toBeCloseTo(100, 9);
+    expect(b.newInterest).toBeCloseTo((100 * r.newInterest) / r.currentRemainingInterest, 9);
+    expect(b.fees).toBeCloseTo((100 * 3000) / r.currentRemainingInterest, 9);
+    expect(b.saved).toBeCloseTo((100 * r.netGain) / r.currentRemainingInterest, 9);
+    expect(b.newInterest + b.fees + b.saved).toBeCloseTo(100, 9);
+  });
+
+  it('opération perdante : la barre « renégocier » vaut 100 et rien n’est économisé', () => {
+    const r = renegotiation({ ...base, newYears: 25, newRate: 0.045, fees: 0 });
+    const b = renegotiationBars(r, 0);
+    expect(b.newInterest).toBeCloseTo(100, 9);
+    expect(b.current).toBeLessThan(100);
+    expect(b.saved).toBe(0);
+  });
+
+  it('valeurs nulles ou invalides : barres vides, jamais NaN', () => {
+    expect(renegotiationBars({ currentRemainingInterest: 0, newInterest: 0 }, 0)).toEqual({ current: 0, newInterest: 0, fees: 0, saved: 0 });
+    const b = renegotiationBars({ currentRemainingInterest: NaN, newInterest: NaN }, NaN);
+    expect(Object.values(b).every((v) => Number.isFinite(v))).toBe(true);
   });
 });

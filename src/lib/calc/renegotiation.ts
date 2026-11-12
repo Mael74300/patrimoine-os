@@ -57,3 +57,31 @@ export function renegotiation(input: RenegotiationInput): RenegotiationResult {
     longer: nNew > nOld,
   };
 }
+
+export type RenegotiationBars = {
+  /** Barre « garder le prêt actuel » : intérêts restants, en % de la plus grande barre. */
+  current: number;
+  /** Barre « renégocier » : intérêts du nouveau prêt, puis frais, en % de la même échelle. */
+  newInterest: number;
+  fees: number;
+  /** Écart en faveur de la renégociation (vide si l'opération coûte plus cher), à la suite de la barre « renégocier ». */
+  saved: number;
+};
+
+/**
+ * Découpe des deux barres « ce qu'il reste à payer » du simulateur de renégociation, sur une même échelle :
+ * la plus longue des deux barres vaut 100. L'écart entre les deux longueurs est exactement le gain net (ou la perte).
+ */
+export function renegotiationBars(r: Pick<RenegotiationResult, 'currentRemainingInterest' | 'newInterest'>, fees: number): RenegotiationBars {
+  const cur = Math.max(0, num(r.currentRemainingInterest));
+  const ni = Math.max(0, num(r.newInterest));
+  const f = Math.max(0, num(fees));
+  const scale = Math.max(cur, ni + f);
+  if (!(scale > 0)) return { current: 0, newInterest: 0, fees: 0, saved: 0 };
+  const pct = (v: number) => clamp((100 * v) / scale, 0, 100, 0);
+  const newInterest = pct(ni);
+  const feesPct = Math.min(pct(f), 100 - newInterest);
+  const current = pct(cur);
+  const saved = Math.max(0, current - newInterest - feesPct);
+  return { current, newInterest, fees: feesPct, saved };
+}
