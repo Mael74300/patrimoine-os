@@ -72,6 +72,7 @@ for (const viewport of VIEWPORTS) {
     // pour un résultat identique quelle que soit la police système de la machine.
     const serres = await page.evaluate((marge) => {
       document.documentElement.style.setProperty('--font', "'Liberation Sans', Arial, sans-serif");
+      document.documentElement.style.setProperty('--font-schema', "'Liberation Sans', Arial, sans-serif");
       const out = [];
       for (const svg of document.querySelectorAll('svg')) {
         const sb = svg.getBoundingClientRect();

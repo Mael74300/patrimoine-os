@@ -26,6 +26,10 @@
   --radius: 14px;
   --maxw: 1120px;
   --font: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  /* Texte des schémas et graphiques SVG : même police que le texte sur macOS, Windows et Android, mais sans
+     passer par ui-sans-serif ni system-ui, qui donnent sous Linux une police large (DejaVu Sans) qui fait
+     déborder le texte de ses cases. Linux prend alors Arial ou son équivalent métrique Liberation Sans. */
+  --font-schema: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', Arimo, sans-serif;
   --font-num: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, Consolas, monospace;
   color-scheme: light;
 }
@@ -284,10 +288,11 @@ details.fold > p { margin-left: 14px; margin-right: 14px; }
 
 
 /* ---------- Chart */
+svg text { font-family: var(--font-schema); }
 .chart { width: 100%; height: auto; display: block; }
 /* Graphique en courbes : un espace sous la légende pour que la note qui suit ne s'y colle pas */
 .line-chart { margin: 0 0 14px; }
-.chart text { font-family: var(--font); fill: var(--ink-3); font-size: 12px; }
+.chart text { font-family: var(--font-schema); fill: var(--ink-3); font-size: 12px; }
 .chart .grid-line { stroke: var(--line); stroke-width: 1; }
 .chart .chart-band rect { fill: var(--surface-2); }
 .chart .chart-band text { fill: var(--ink-2); font-weight: 600; }
@@ -330,7 +335,7 @@ td.neg { color: var(--danger); }
 .illustration { margin: 20px 0; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
 .illustration figcaption { font-size: 0.875rem; color: var(--ink-2); margin-top: 8px; }
 .ill-svg { display: block; width: 100%; max-width: 440px; height: auto; margin: 0 auto; }
-.ill-svg text { font-family: var(--font); fill: var(--ink); }
+.ill-svg text { font-family: var(--font-schema); fill: var(--ink); }
 .ill-total { font-size: 14px; font-weight: 700; }
 .ill-in { font-size: 12px; font-weight: 600; }
 .ill-sub { font-size: 13px; fill: var(--ink-2) !important; }
