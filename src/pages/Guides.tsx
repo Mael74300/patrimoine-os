@@ -6,7 +6,7 @@ import { guideBlurb } from '../lib/guideBlurbs';
 import { simBlurb } from '../lib/simThemes';
 import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
 import { NetWorthCalculator } from '../components/NetWorthCalculator';
-import { Crumbs, MobileFold, PageHead, SimFaq, Sources } from '../components/ui';
+import { Crumbs, FaqSection, MobileFold, PageHead, Sources } from '../components/ui';
 import { EnvelopeCards } from '../components/EnvelopeCards';
 import { LivretsTable } from '../components/LivretsTable';
 import { RiskMap } from '../components/RiskMap';
@@ -122,7 +122,7 @@ export function GuidePage() {
             {g.slug === 'par-ou-commencer' && etapesSuite[i] && <p className="step-more"><Link to={etapesSuite[i].to}>{etapesSuite[i].label}</Link></p>}
           </section>
         ))}
-        <SimFaq slug={g.slug} items={g.faq} />
+        <FaqSection items={g.faq ?? []} />
       </div>
       {g.sections.length > 2 && (
         <nav className="guide-toc" aria-label="Sur cette page">
