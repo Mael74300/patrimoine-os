@@ -31,3 +31,18 @@ describe('sous-titres des cartes de résultat', () => {
     expect(a).toContain(`${(realRate(0.05, 0.02) * 100).toFixed(2).replace('.', ',')}\u00a0%`);
   });
 });
+
+describe('texte affiché des simulateurs', () => {
+  it('ne contient plus de formule en puissance (gardées sur la page Méthode et dans les questions repliées)', () => {
+    const bad: string[] = [];
+    for (const f of readdirSync(dir) as string[]) {
+      if (!/^Sim.*\.tsx$/.test(f)) continue;
+      const src: string = readFileSync(`${dir}/${f}`, 'utf8');
+      if (/\)\^|\(1 \+ [a-zé]{3}/.test(src)) bad.push(f);
+    }
+    expect(bad).toEqual([]);
+  });
+  it('simulateur Inflation : la formule de la valeur en euros d’aujourd’hui reste dans sa question repliée', () => {
+    expect(simFaq.inflation[0].a).toContain('(1 + inflation) à la puissance du nombre d’années');
+  });
+});

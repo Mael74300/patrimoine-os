@@ -22,8 +22,8 @@ export default function SimInflation() {
       </PageHead>
       <SimNotice>
         L’inflation (hausse générale des prix) réduit ce qu’une somme permet d’acheter. Le taux d’inflation et le rendement saisis sont des hypothèses
-        modifiables, pas des prévisions : les valeurs réellement constatées sont publiées par l’Insee. Voir la <Link to="/glossaire">définition des termes</Link>
-        {' '}et le <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link>, qui intègre l’inflation à un plan d’épargne complet.
+        modifiables, pas des prévisions : les valeurs constatées sont publiées par l’Insee. Le <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link>
+        {' '}intègre l’inflation à un plan d’épargne complet.
       </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
@@ -50,10 +50,12 @@ export default function SimInflation() {
             xLabels={r.idleSeries.map((_, i) => `An ${i}`)}
             format={fmtEur}
             series={[
-              { name: 'Somme inchangée', color: 'var(--chart-2)', values: r.idleSeries },
+              { name: 'Somme inchangée', color: 'var(--danger)', values: r.idleSeries },
               { name: `Somme placée à ${fmtPct(s.annualReturn)}`, color: 'var(--chart-1)', values: r.investedSeries },
+              { name: 'Pouvoir d’achat de départ', color: 'var(--ink-3)', dashed: true, values: r.idleSeries.map(() => Math.max(0, s.amount)) },
             ]}
           />
+          <p className="muted small">Au-dessus des pointillés, la somme achète plus qu’aujourd’hui ; en dessous, moins.</p>
           <h2>Repères de durée</h2>
           <div className="table-wrap" tabIndex={0}>
             <table>
@@ -63,11 +65,10 @@ export default function SimInflation() {
               </tbody>
             </table>
           </div>
-          <p className="muted small">
-            Pouvoir d’achat à la date T = somme / (1 + inflation)^T. Le placement est supposé sans versement et le rendement avant impôt ; la fiscalité
-            et les frais d’enveloppe peuvent réduire le rendement réel. Pour garder une réserve disponible, voir le
-            {' '}<Link to="/simulateurs/epargne-de-precaution">simulateur d’épargne de précaution</Link> ; pour l’effet des frais, le <Link to="/simulateurs/frais">simulateur d’impact des frais</Link>.
-          </p>
+          <ul className="points">
+            <li><strong>En euros d’aujourd’hui</strong> : ce que la somme permettra d’acheter, aux prix actuels. <strong>En euros courants</strong> : le montant inscrit sur le compte à ce moment-là.</li>
+            <li>Calcul sans versement ajouté et avant impôt : les <Link to="/simulateurs/frais">frais</Link> et l’impôt réduisent le résultat. Argent à garder disponible : <Link to="/simulateurs/epargne-de-precaution">épargne de précaution</Link>.</li>
+          </ul>
           <SavedSims simKey="inflation" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
           <SimFaq slug="inflation" />
