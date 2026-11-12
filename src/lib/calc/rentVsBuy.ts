@@ -98,3 +98,15 @@ export function advantageByPriceGrowth(input: RentVsBuyInput, growths: number[])
 export function advantageByHorizon(input: RentVsBuyInput, horizons: number[]): { years: number; advantage: number }[] {
   return horizons.map((horizonYears) => ({ years: horizonYears, advantage: rentVsBuy({ ...input, horizonYears }).advantage }));
 }
+
+/**
+ * Zone du graphique « année après année » où l'achat l'emporte pour de bon, en index de la série
+ * (index 0 = fin de la 1re année, donc le mois m est à l'index m / 12 − 1). Aucune zone si l'achat
+ * ne l'emporte pas ou si la zone serait réduite à un point (dernière année seulement).
+ */
+export function breakEvenBand(breakEvenMonth: number | null, points: number): { from: number; to: number } | null {
+  if (breakEvenMonth === null || !(points >= 2)) return null;
+  const from = Math.max(0, breakEvenMonth / 12 - 1);
+  const to = points - 1;
+  return from < to ? { from, to } : null;
+}

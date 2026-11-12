@@ -312,12 +312,28 @@ type ChartProps = {
   /** Graduations de l'axe horizontal, si elles diffèrent des libellés de lecture (`xLabels`) ; une chaîne vide = pas de graduation. */
   axisLabels?: string[];
   /** Zone grisée entre deux index (par exemple la période d'étalement), avec un court libellé. */
-  band?: { from: number; to: number; label: string };
+  band?: ChartBand;
   /** Point lu par défaut dans la légende (sinon le dernier), par exemple la valeur saisie. */
   defaultIndex?: number;
 };
 
 const CHAR_W = 6.6; // largeur moyenne d'un caractère de la police des graduations (px)
+
+/** Zone grisée d'un graphique en courbes. `from` et `to` sont des index (fractionnaires possibles). */
+export type ChartBand = { from: number; to: number; label: string; labelAt?: 'top' | 'bottom' };
+
+/**
+ * Place le libellé d'une zone grisée : dans la zone s'il y tient ; sinon juste avant la zone,
+ * suivi d'une flèche qui pointe vers elle ; sinon (zone collée au bord gauche) dans la zone, coupé si besoin.
+ * `left` et `right` sont les bords de la zone, `plotLeft` le bord gauche du tracé (px).
+ */
+export function placeBandLabel(label: string, left: number, right: number, plotLeft: number): { text: string; x: number; anchor: 'start' | 'end' } {
+  const width = (s: string) => s.length * CHAR_W * 1.1; // libellé en gras, un peu plus large
+  if (left + 6 + width(label) <= right - 4) return { text: label, x: left + 6, anchor: 'start' };
+  const outside = `${label}\u00a0\u2192`;
+  if (left - 6 - width(outside) >= plotLeft) return { text: outside, x: left - 6, anchor: 'end' };
+  return { text: label, x: left + 6, anchor: 'start' };
+}
 
 /**
  * Choisit les étiquettes de l'axe horizontal : toujours la dernière, alignée vers l'intérieur si elle
@@ -406,6 +422,8 @@ export function LineChart({ series, xLabels, format, title, showTitle, height = 
     setHover(Math.max(0, Math.min(n - 1, i)));
   };
 
+  const bandLabel = band && band.to > band.from ? placeBandLabel(band.label, x(band.from), x(band.to), pad.l) : null;
+
   const rest = defaultIndex !== undefined && defaultIndex >= 0 && defaultIndex < n ? defaultIndex : n - 1;
   const active = hover ?? rest;
   const descId = useId();
@@ -429,10 +447,11 @@ export function LineChart({ series, xLabels, format, title, showTitle, height = 
           if (e.key === 'ArrowLeft') setHover(Math.max(0, (hover ?? rest) - 1));
         }}
       >
-        {band && band.to > band.from && (
+        {bandLabel && band && (
           <g className="chart-band">
             <rect x={x(band.from)} y={pad.t} width={x(band.to) - x(band.from)} height={H - pad.t - pad.b} />
-            <text x={x(band.from) + 6} y={pad.t + 14}>{band.label}</text>
+            {band.from > 0 && <line x1={x(band.from)} x2={x(band.from)} y1={pad.t} y2={H - pad.b} />}
+            <text x={bandLabel.x} y={band.labelAt === 'bottom' ? H - pad.b - 8 : pad.t + 14} textAnchor={bandLabel.anchor}>{bandLabel.text}</text>
           </g>
         )}
         {ticks.map((t) => (
