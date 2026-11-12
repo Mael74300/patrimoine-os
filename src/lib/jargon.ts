@@ -47,6 +47,8 @@ export const JARGON_PATTERNS: Record<string, string[]> = {
   'DIC (document d’informations clés)': ['DIC', 'document d[’\']informations clés'],
   'Usufruit et nue-propriété': ['usufruit', 'nue-propriété'],
   'Livret A': ['Livret A'],
+  'PSCA (prestataire de services sur crypto-actifs)': ['PSCA', 'prestataires? de services sur crypto-actifs'],
+  'FGDR (Fonds de garantie des dépôts et de résolution)': ['FGDR', 'garantie des dépôts'],
 };
 
 /** Les sigles (tout en majuscules) sont repérés en respectant la casse ; les expressions, sans. */
@@ -74,14 +76,14 @@ export const MAX_PER_PAGE = 6;
 
 /**
  * Découpe une suite de paragraphes : la première apparition de chaque notion (sur l'ensemble des paragraphes)
- * devient un segment à expliquer. Une notion n'est pas soulignée si le glossaire renvoie vers la page courante
- * ou si elle figure dans son titre : la page entière l'explique déjà.
+ * devient un segment à expliquer. Une notion n'est pas soulignée si elle figure dans le titre de la page, ou si
+ * le glossaire renvoie vers la page courante (sauf `explainOnLinkedPages`) : la page entière l'explique déjà.
  */
 export function annotateJargon(paragraphs: string[], page: { path?: string; title?: string } = {}, max = MAX_PER_PAGE): JargonSegment[][] {
   const used = new Set<string>();
   const linked = new Set<string>();
   const here = (page.path ?? '').replace(/\/$/, '');
-  const skipped = new Set(MATCHERS.filter(({ term, re }) => term.links.some((l) => l.to.replace(/\/$/, '') === here) || (page.title && re.test(page.title))).map((m) => m.term.term));
+  const skipped = new Set(MATCHERS.filter(({ term, re }) => (!term.explainOnLinkedPages && term.links.some((l) => l.to.replace(/\/$/, '') === here)) || (page.title && re.test(page.title))).map((m) => m.term.term));
   const skip = (t: GlossaryTerm) => skipped.has(t.term);
   return paragraphs.map((text) => {
     const out: JargonSegment[] = [];

@@ -12,7 +12,8 @@ import { SchemaActions, SchemaForet, SchemaDonation, SchemaAssuranceVie, SchemaC
 import NotFound from './NotFound';
 import { fmtDate } from '../lib/dates';
 import { guideBySlug } from '../data/guides';
-import { annotateJargon, linkOnly } from '../lib/jargon';
+import { linkOnly } from '../lib/jargon';
+import { annotateFiche } from '../lib/ficheText';
 import { JargonText } from '../components/Jargon';
 
 /** Guide qui détaille une notion de la fiche (lien « Pour aller plus loin »). */
@@ -35,7 +36,11 @@ export default function InvestmentPage() {
     setStale(new Date().toISOString().slice(0, 10) >= inv.review.nextReview);
   }, [inv.review.nextReview]);
   // Jargon expliqué sur place : première apparition de chaque notion du glossaire, dans l'ordre de lecture.
-  const [jDef, jHow, ...jSteps] = annotateJargon([inv.definition, inv.howItWorks, ...inv.howToInvest], { path: `/encyclopedie/${inv.slug}`, title: inv.name });
+  // Toutes les rubriques comptent (Frais, Fiscalité, Avantages et Inconvénients compris) : six notions au plus par fiche.
+  const j = annotateFiche(inv);
+  const [jDef] = j.definition;
+  const [jHow] = j.howItWorks;
+  const jSteps = j.steps;
 
   return (
     <>
@@ -123,15 +128,15 @@ export default function InvestmentPage() {
             </div>
           )}
           <div className={`facts-grid${unbalanced(inv.fees.text, inv.tax.text) ? ' facts-stack' : ''}`}>
-            <div className="panel"><h3>Frais</h3><CheckedText c={inv.fees} split path={`/encyclopedie/${inv.slug}`} /></div>
-            <div className="panel"><h3>Fiscalité française</h3><CheckedText c={inv.tax} split path={`/encyclopedie/${inv.slug}`} /></div>
+            <div className="panel"><h3>Frais</h3><CheckedText c={inv.fees} split path={`/encyclopedie/${inv.slug}`} segs={j.fees} /></div>
+            <div className="panel"><h3>Fiscalité française</h3><CheckedText c={inv.tax} split path={`/encyclopedie/${inv.slug}`} segs={j.tax} /></div>
             <p className="facts-wide"><strong>Temps et compétences :</strong> {inv.timeSkills}</p>
           </div>
 
           <h2>Avantages et inconvénients</h2>
           <div className="proscons">
-            <div className="panel pros"><h3 style={{ marginTop: 0, color: 'var(--accent)' }}>Avantages</h3><ul>{inv.pros.map((p) => <li key={p}>{p}</li>)}</ul></div>
-            <div className="panel cons"><h3 style={{ marginTop: 0, color: 'var(--danger)' }}>Inconvénients</h3><ul>{inv.cons.map((p) => <li key={p}>{p}</li>)}</ul></div>
+            <div className="panel pros"><h3 style={{ marginTop: 0, color: 'var(--accent)' }}>Avantages</h3><ul>{inv.pros.map((p, k) => <li key={p}><JargonText segs={j.pros[k]} /></li>)}</ul></div>
+            <div className="panel cons"><h3 style={{ marginTop: 0, color: 'var(--danger)' }}>Inconvénients</h3><ul>{inv.cons.map((p, k) => <li key={p}><JargonText segs={j.cons[k]} /></li>)}</ul></div>
           </div>
 
           <h2>Exemple chiffré</h2>
