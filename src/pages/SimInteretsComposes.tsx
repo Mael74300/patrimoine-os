@@ -225,7 +225,7 @@ function Simple() {
       <div className="kpis">
         <Kpi label="Capital en intérêts simples" value={fmtEur(r.simpleFinal)} sub={`dont ${fmtEur(r.simpleInterest)} d’intérêts`} />
         <Kpi label="Capital en intérêts composés" value={fmtEur(r.compoundFinal)} sub={`dont ${fmtEur(r.compoundInterest)} d’intérêts`} />
-        <Kpi label="Écart en faveur des composés" value={fmtEur(r.gap)} sub="intérêts composés − intérêts simples" />
+        <Kpi label="Écart en faveur des composés" value={fmtEur(r.gap)} sub="intérêts gagnés en plus en les réinvestissant" />
         <Kpi label="Rapport composé / simple" value={`× ${fmtNum(r.ratio)}`} sub="sur le capital final" />
       </div>
       <div className="table-wrap" tabIndex={0} style={{ marginTop: 16 }}><table>
@@ -352,7 +352,7 @@ function Taux() {
       <div className="kpis">
         <Kpi label={`Taux ${label} équivalent`} value={fmtRate(r.equivalentRate)} sub="capitalisé sur l’année, redonne exactement le taux annuel" />
         <Kpi label={`Taux ${label} proportionnel`} value={fmtRate(r.proportionalRate)} sub="taux annuel divisé par le nombre de périodes" />
-        <Kpi label="Taux annuel nominal équivalent" value={fmtRate(r.nominalRate)} sub="taux équivalent × nombre de périodes" />
+        <Kpi label="Taux annuel nominal équivalent" value={fmtRate(r.nominalRate)} sub="taux équivalent multiplié par le nombre de périodes" />
         <Kpi label="Taux annuel réel du taux proportionnel" value={fmtRate(r.effectiveFromProportional)} sub={`écart de ${fmtPts(r.gap, 4)} avec le taux saisi`} />
       </div>
       <Takeaway>{rateConversionTakeaway({ annualRate: s.annualRate / 100, periods: s.periods, equivalentRate: r.equivalentRate, proportionalRate: r.proportionalRate, gap: r.gap })}</Takeaway>

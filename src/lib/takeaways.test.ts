@@ -3,7 +3,8 @@ import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, cat
 import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio } from './finance';
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
-import { businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, prepayTakeaway, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { precautionTarget } from './calc/precaution';
+import { businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionTargetSub, prepayTakeaway, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -112,6 +113,13 @@ describe('phrases « Concrètement »', () => {
     expect(precautionTakeaway({ target: 7000, savings: 0, monthlySaving: 0, reachedAt: null })).toContain('ne se comble pas');
     expect(precautionTakeaway({ target: 7000, savings: 0, monthlySaving: 1, reachedAt: null }).replace(/\u00a0/g, ' ')).toContain('50 ans');
     expect(precautionTakeaway({ target: 0, savings: 0, monthlySaving: 0, reachedAt: 0 })).toBe('');
+  });
+  it('épargne de précaution : sous-titre du montant visé en mots, réserve nommée et égal au calcul', () => {
+    const sub = digits(precautionTargetSub(3, 1000));
+    expect(sub).toContain('3moisdedépenses');
+    expect(sub).toContain('1000€deréserve(réglagesavancés)');
+    expect(3 * 2000 + 1000).toBe(precautionTarget({ monthlyExpenses: 2000, months: 3, extraReserve: 1000 }));
+    expect(precautionTargetSub(6, 0)).not.toContain('réserve');
   });
   it('rembourser ou investir : sens de l’écart, intérêts économisés et seuil', () => {
     const base = { balance: 150000, annualRate: 0.035, remainingYears: 15, lump: 20000, annualReturn: 0.05, annualFees: 0.005, taxRate: 0.314 };

@@ -73,7 +73,7 @@ export default function SimCredit() {
             <Kpi label="Somme remboursée" value={fmtEur(pre.prepaid)} sub={`sur ${fmtEur(pre.remainingBefore)} restant dû`} />
             <Kpi label="Intérêts économisés" value={fmtEur(pre.interestSaved)} tone="pos" />
             <Kpi label="Indemnités" value={fmtEur(pre.penalty)} tone={pre.penalty > 0 ? 'neg' : undefined} />
-            <Kpi label="Gain net" value={fmtEur(pre.netSaving)} tone={pre.netSaving >= 0 ? 'pos' : 'neg'} sub="intérêts et assurance économisés − indemnités" />
+            <Kpi label="Gain net" value={fmtEur(pre.netSaving)} tone={pre.netSaving >= 0 ? 'pos' : 'neg'} sub="intérêts et assurance économisés, indemnités déduites" />
             {s.prepayMode === 'duree'
               ? <Kpi label="Nouvelle durée totale" value={fmtMonths(pre.newTotalMonths)} sub={`${pre.monthsSaved}\u00a0mois gagnés`} />
               : <Kpi label="Nouvelle mensualité" value={fmtEur2(pre.newMonthlyPayment)} sub="hors assurance" />}
