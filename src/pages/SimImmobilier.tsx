@@ -64,7 +64,7 @@ export default function SimImmobilier() {
               <p className="small muted">Déjà remplis avec des valeurs d'exemple. Si vous ne savez pas, laissez-les telles quelles.</p>
               <fieldset>
                 <legend>Acquisition</legend>
-                <NumberField label="Frais d'acquisition" unit="%" percent value={s.notaryRate} onChange={up('notaryRate')} step={0.5} min={0} max={20} hint="Ordre de grandeur dans l'ancien : 7 à 8 % (à vérifier)." />
+                <NumberField label="Frais d'acquisition" unit="%" percent value={s.notaryRate} onChange={up('notaryRate')} step={0.5} min={0} max={20} hint="Ordre de grandeur : 6 à 8 % du prix dans l’ancien, 2 à 3,5 % dans le neuf (La finance pour tous, juillet 2026)." />
                 <NumberField label="Travaux" unit="€" value={s.works} onChange={up('works')} min={0} step={1000} />
                 <NumberField label="Mobilier" unit="€" value={s.furniture} onChange={up('furniture')} min={0} step={500} />
                 <NumberField label="Assurance emprunteur" unit="%" percent value={s.loanInsuranceRate} onChange={up('loanInsuranceRate')} step={0.05} min={0} max={2} hint="Taux annuel sur le capital emprunté." />
