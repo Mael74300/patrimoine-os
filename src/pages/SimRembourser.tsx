@@ -83,7 +83,6 @@ export default function SimRembourser() {
           <p className="muted small">
             Mensualité du crédit : {fmtEur(r.monthlyPayment)}. Le patrimoine net est le placement après impôt sur les gains, moins le capital restant dû éventuel.
             Ni l'assurance emprunteur ni les indemnités de remboursement anticipé (plafonnées par la loi) ne sont incluses : renseignez-vous auprès de votre banque.
-            Pour aller plus loin : <Link to="/simulateurs/frais">impact des frais</Link>, <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link>.
           </p>
           <SavedSims simKey="rembourser" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>

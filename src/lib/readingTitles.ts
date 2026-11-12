@@ -49,4 +49,5 @@ export const investmentNames: Record<string, string> = {
   "activite-numerique": "SaaS, e-commerce et produits numériques",
   "per": "Plan d'épargne retraite (PER)",
   "capital-humain": "Formation et compétences",
+  "donation": "Donation et transmission",
 };

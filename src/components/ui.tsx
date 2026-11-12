@@ -771,7 +771,7 @@ export function FaqSection({ items }: { items: FaqItem[] }) {
   );
 }
 
-/** « Pour aller plus loin » : évite l'impasse en bas d'un simulateur (guides et fiches qui y renvoient). */
+/** « Pour aller plus loin » : évite l'impasse en bas d'un simulateur (guide, étape suivante, fiche ; carte entièrement cliquable). */
 export function SimNext({ slug }: { slug: string }) {
   const links = readingForSimulator(slug);
   if (!links.length) return null;
@@ -780,7 +780,9 @@ export function SimNext({ slug }: { slug: string }) {
       <h3>Pour aller plus loin</h3>
       <ul>
         {links.map((l) => (
-          <li key={l.to}><span className="sim-next-kind">{l.kind}</span><Link to={l.to}>{l.title}</Link></li>
+          <li key={l.to}>
+            <Link to={l.to}><span className="sim-next-kind">{l.kind}</span><span className="sim-next-title">{l.title}</span></Link>
+          </li>
         ))}
       </ul>
     </nav>

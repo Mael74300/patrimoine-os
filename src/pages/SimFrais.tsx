@@ -104,7 +104,7 @@ export default function SimFrais() {
           </Fold>
           <p className="muted small">
             Le coût des frais est la différence avec le capital obtenu sans frais, à versements et rendement brut identiques. Il ne tient compte
-            ni de la fiscalité ni des écarts de performance entre produits. Pour aller plus loin : <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link>, <Link to="/simulateurs/portefeuille">calculateur de portefeuille</Link>.
+            ni de la fiscalité ni des écarts de performance entre produits.
           </p>
           <SavedSims simKey="frais" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <div style={{ marginTop: 16 }}><Disclaimer /></div>
