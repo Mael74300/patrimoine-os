@@ -152,7 +152,7 @@ export const simFaq: Record<string, FaqItem[]> = {
     { q: 'Comment la valeur de l’entreprise est-elle estimée ?', a: 'Par un multiple du résultat net de l’année, que vous choisissez : sans bénéfice, la valeur affichée est nulle. C’est une estimation pédagogique : elle n’est ni de la trésorerie ni un revenu, et une valorisation réelle dépend de nombreux autres facteurs. Le multiple, le taux d’impôt sur les sociétés, les charges sociales et les autres montants par défaut sont fictifs : vérifiez-les pour votre situation.' },
   ],
   inflation: [
-    { q: 'Que mesure la perte de pouvoir d’achat affichée ?', a: 'Elle compare ce que l’on pourra acheter avec la somme dans l’avenir à ce qu’elle permet d’acheter aujourd’hui, si les prix progressent au taux d’inflation que vous saisissez. La somme n’a pas diminué en euros : ce sont les prix qui ont augmenté.' },
+    { q: 'Que mesure la perte de pouvoir d’achat affichée ?', a: 'Elle compare ce que l’on pourra acheter avec la somme dans l’avenir à ce qu’elle permet d’acheter aujourd’hui, si les prix progressent au taux d’inflation que vous saisissez. La somme n’a pas diminué en euros : ce sont les prix qui ont augmenté. Le calcul divise la somme par (1 + inflation) à la puissance du nombre d’années.' },
     { q: 'Qu’est-ce que le rendement réel ?', a: 'C’est le rendement net corrigé de l’inflation, calculé par (1 + rendement) / (1 + inflation) − 1. Il est positif si le placement progresse plus vite que les prix, négatif sinon.' },
     { q: 'Quel taux d’inflation faut-il saisir ?', a: 'Aucun taux n’est imposé : c’est une hypothèse de votre choix, que vous pouvez faire varier pour tester plusieurs scénarios. L’inflation future est inconnue et le résultat n’est pas une prévision.' },
   ],

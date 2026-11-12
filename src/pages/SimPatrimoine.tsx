@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useMemo } from 'react';
 import { wealthGoalTakeaway, wealthTakeaway } from '../lib/takeaways';
 import { afterTax, fmtEur, fmtPct, netOfFees, projectGrowth, requiredMonthly, type SavingsChange, type Withdrawal } from '../lib/finance';
@@ -204,7 +205,7 @@ export default function SimPatrimoine() {
           </div>
           <p className="small muted" style={{ marginTop: 12 }}>
             Conventions : versements en début de mois, capitalisation mensuelle au taux équivalent au taux annuel net de frais,
-            retraits en fin d'année. Rendement nominal ; la colonne « corrigé inflation » divise par (1 + inflation)^année.
+            retraits en fin d'année. Rendement nominal ; la colonne « corrigé inflation » ramène chaque montant en euros d'aujourd'hui (détail sur la page <Link to="/methodologie">Méthode</Link>).
           </p>
           </Fold>
           <SavedSims simKey="patrimoine-v2" current={st} onLoad={(d) => setSt({ ...DEFAULTS, ...d })} />

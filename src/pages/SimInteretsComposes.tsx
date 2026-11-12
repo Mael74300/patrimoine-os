@@ -61,8 +61,8 @@ function Placer() {
       </div>
       <Takeaway>{presentValueTakeaway({ target: s.target, years: s.years, monthly: s.monthly, ...r })}</Takeaway>
       <p className="muted small">
-        Avec r = (1 + R)^(1/12) − 1 et n le nombre de mois : capital à placer = (capital visé − versement × ((1 + r)^n − 1) / r) / (1 + r)^n, et jamais moins de 0 €.
-        Les montants par défaut sont fictifs.
+        Les versements ont lieu en fin de mois et le rendement est supposé le même chaque année. Si vos versements suffisent seuls, il n’y a rien à placer (0 €).
+        Les montants par défaut sont fictifs ; le détail du calcul est sur la page <Link to="/methodologie">Méthode</Link>.
       </p>
       <SavedSims simKey="capital-a-placer" current={s} onLoad={(d) => setS({ ...PLACER, ...d })} />
     </Layout>
@@ -102,8 +102,8 @@ function Duree() {
       )}
       <Takeaway>{timeToTargetTakeaway({ target: s.target, months: r.months, interest: r.interest, contributed: r.contributed, monthsWithoutReturn: r.monthsWithoutReturn })}</Takeaway>
       <p className="muted small">
-        Chaque mois : capital = capital × (1 + rendement mensuel équivalent) + versement (en fin de mois), jusqu’à atteindre le capital visé (100 ans au plus).
-        Les montants par défaut sont fictifs.
+        Chaque mois, le capital rapporte des intérêts, puis le versement s’y ajoute (en fin de mois), jusqu’à atteindre le capital visé (100 ans au plus).
+        Les montants par défaut sont fictifs ; le détail du calcul est sur la page <Link to="/methodologie">Méthode</Link>.
       </p>
       <SavedSims simKey="duree-objectif" current={s} onLoad={(d) => setS({ ...DUREE, ...d })} />
     </Layout>
@@ -141,8 +141,8 @@ function Rendement() {
       )}
       <Takeaway>{requiredReturnTakeaway({ target: s.target, years: s.years, annualRate: r.annualRate, contributed: r.contributed, withoutReturn: r.withoutReturn, alreadyReached: r.alreadyReached })}</Takeaway>
       <p className="muted small">
-        On cherche le rendement annuel R tel que, chaque mois : capital = capital × (1 + r) + versement (fin de mois), avec r = (1 + R)^(1/12) − 1, jusqu’à égaler le capital visé.
-        Les montants par défaut sont fictifs.
+        Le simulateur cherche le rendement annuel qui, mois après mois et avec les mêmes versements en fin de mois, mène tout juste au capital visé.
+        Les montants par défaut sont fictifs ; le détail du calcul est sur la page <Link to="/methodologie">Méthode</Link>.
       </p>
       <SavedSims simKey="rendement-requis" current={s} onLoad={(d) => setS({ ...RENDEMENT, ...d })} />
     </Layout>
@@ -182,7 +182,7 @@ function Doubler() {
       </div>
       <Takeaway>{doublingTakeaway({ multiple: s.multiple, exactYears: r.exactYears, realYears: r.realYears, realReturn: r.realReturn })}</Takeaway>
       <p className="muted small">
-        Durée exacte = ln(multiple) / ln(1 + rendement). La règle de 72 divise 72 par le rendement en % : c’est une approximation de tête, proche du résultat pour des rendements de quelques pour cent, moins précise aux taux très faibles ou très élevés.
+        La durée exacte est calculée sans approximation (détail sur la page <Link to="/methodologie">Méthode</Link>). La règle de 72 divise 72 par le rendement en % : c’est une approximation de tête, proche du résultat pour des rendements de quelques pour cent, moins précise aux taux très faibles ou très élevés.
         Si le rendement n’est pas positif, le capital n’atteint jamais le multiple. Les exemples ci-dessus sont fictifs.
       </p>
       <SavedSims simKey="doubler" current={s} onLoad={(d) => setS({ ...DOUBLER, ...d })} />
@@ -238,7 +238,7 @@ function Simple() {
       </table></div>
       <Takeaway>{simpleVsCompoundTakeaway({ initial: s.initial, years: s.years, simpleFinal: r.simpleFinal, compoundFinal: r.compoundFinal, gap: r.gap })}</Takeaway>
       <p className="muted small">
-        Intérêts simples : capital × (1 + taux × années). Intérêts composés : capital × (1 + taux)^années. Les deux coïncident la première année ; l’écart croît ensuite de plus en plus vite.
+        Intérêts simples : seul le capital de départ rapporte, le même montant chaque année. Intérêts composés : les intérêts déjà gagnés rapportent à leur tour. Les deux coïncident la première année ; l’écart croît ensuite de plus en plus vite.
         Les exemples ci-dessus sont fictifs.
       </p>
       <SavedSims simKey="simple-compose" current={s} onLoad={(d) => setS({ ...SIMPLE, ...d })} />
@@ -320,7 +320,7 @@ function Progressif() {
       </div>
       <Takeaway>{stepUpTakeaway({ monthly: s.monthly, years: s.years, flatCapital: r.flatCapital, steppedCapital: r.steppedCapital, extraCapital: r.extraCapital, lastMonthly: r.lastMonthly })}</Takeaway>
       <p className="muted small">
-        Le versement est multiplié par (1 + hausse) au début de chaque année à partir de la deuxième ; les versements ont lieu en fin de mois. Le « versement constant équivalent » est la mensualité fixe qui donnerait le même capital final.
+        Le versement augmente du pourcentage choisi au début de chaque année à partir de la deuxième ; les versements ont lieu en fin de mois. Le « versement constant équivalent » est la mensualité fixe qui donnerait le même capital final.
         Les exemples ci-dessus sont fictifs.
       </p>
       <SavedSims simKey="progressif" current={s} onLoad={(d) => setS({ ...PROGRESSIF, ...d })} />
@@ -357,8 +357,7 @@ function Taux() {
       </div>
       <Takeaway>{rateConversionTakeaway({ annualRate: s.annualRate / 100, periods: s.periods, equivalentRate: r.equivalentRate, proportionalRate: r.proportionalRate, gap: r.gap })}</Takeaway>
       <p className="muted small">
-        Taux équivalent = (1 + taux annuel)^(1 / n) − 1 ; taux proportionnel = taux annuel / n ; taux annuel du taux proportionnel = (1 + taux / n)^n − 1.
-        Les montants par défaut sont fictifs.
+        Les montants par défaut sont fictifs ; le détail du calcul est sur la page <Link to="/methodologie">Méthode</Link>.
       </p>
       <SavedSims simKey="conversion-taux" current={s} onLoad={(d) => setS({ ...TAUX, ...d })} />
     </Layout>
