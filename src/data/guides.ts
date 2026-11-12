@@ -221,8 +221,8 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       {
         heading: 'Les familles de frais',
         body: [
-          'Ponctuels : frais d’entrée ou sur versement, frais de courtage par ordre, frais de sortie, frais d’arbitrage. Récurrents : frais de gestion de l’enveloppe, frais courants des fonds, droits de garde.',
-          'Le document d’informations clés (DIC), obligatoire pour les fonds, indique les coûts des supports. Les frais propres à l’enveloppe figurent dans les conditions du contrat ou la grille tarifaire.',
+          'Deux sortes de frais s’additionnent : ceux payés une fois, à chaque opération (versement, ordre de bourse, changement de support, retrait), et ceux prélevés chaque année, sur l’enveloppe comme sur chaque fonds.',
+          'Où les lire : le document d’informations clés (DIC), obligatoire pour les fonds, indique les coûts des supports ; les frais de l’enveloppe figurent dans les conditions du contrat ou la grille tarifaire.',
         ],
       },
       {

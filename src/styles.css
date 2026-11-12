@@ -1092,3 +1092,5 @@ ul.points { margin: 0.9rem 0 0.5rem; gap: 8px; }
 .gb-mine { margin-left: -8px; margin-right: -8px; padding: 6px 8px 8px; border-radius: 8px; background: color-mix(in srgb, var(--chart-2) 10%, var(--surface)); }
 .gb-tag { margin-left: 8px; padding: 1px 8px; border-radius: 999px; font-size: .74rem; font-weight: 600; color: var(--accent); background: color-mix(in srgb, var(--chart-2) 18%, var(--surface)); white-space: nowrap; }
 .gb-unit { font-weight: 400; color: var(--ink-3); font-size: .84rem; }
+.ill-svg text.ill-fee { font-weight: 500; fill: var(--ink-2); }
+.ill-svg text.ill-fee-head { font-weight: 700; }
