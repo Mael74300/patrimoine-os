@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { fmtEur, fmtEur2, fmtMonths, fmtNum, fmtPct, fmtPts, inFine, loanDuration, renegotiation, taeg, taegByFees, taegByInsurance } from '../lib/finance';
+import { fmtEur, fmtEur2, fmtMonths, fmtNum, fmtPct, fmtPts, inFine, loanDuration, renegotiation, renegotiationBars, taeg, taegByFees, taegByInsurance } from '../lib/finance';
 import { loanDurationTakeaway, taegTakeaway, inFineTakeaway, renegoTakeaway } from '../lib/takeaways';
 import { comparerCreditsFaq } from '../data/simFaq';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
@@ -81,8 +81,8 @@ function Duree() {
           </table>
         </div>
         <p className="muted small">
-          Mensualité = capital × (taux / 12) ÷ (1 − (1 + taux / 12)^(−mois)) ; coût total = intérêts + assurance. Une durée plus longue réduit la mensualité mais augmente le coût total.
-          Les montants par défaut sont fictifs.
+          Une durée plus longue réduit la mensualité mais augmente le coût total : le capital est remboursé plus lentement, donc les intérêts courent plus longtemps.
+          Coût total = intérêts + assurance. Les montants par défaut sont fictifs ; le détail du calcul est sur la page <Link to="/methodologie">Méthode</Link>.
         </p>
         <SavedSims simKey="duree-credit" current={s} onLoad={(d) => setS({ ...DUREE, ...d })} />
       </Layout>
@@ -202,14 +202,15 @@ function InFine() {
             <thead><tr><th>Poste</th><th className="r">Amortissable</th><th className="r">In fine</th></tr></thead>
             <tbody>
               <tr><td>Intérêts + assurance</td><td className="r">{fmtEur(r.amortizingCost)}</td><td className="r">{fmtEur(r.inFineCost)}</td></tr>
-              <tr><td>Gains de l’épargne</td><td className="r">—</td><td className="r">− {fmtEur(r.savingsGain)}</td></tr>
+              <tr><td>Moins les gains de l’épargne</td><td className="r">—</td><td className="r">− {fmtEur(r.savingsGain)}</td></tr>
               <tr><td>Coût net</td><td className="r">{fmtEur(r.amortizingCost)}</td><td className="r">{fmtEur(r.inFineNetCost)}</td></tr>
             </tbody>
           </table>
         </div>
         <p className="muted small">
-          In fine : intérêts mensuels = capital × taux / 12 ; épargne mensuelle = capital × r ÷ ((1 + r)^mois − 1), avec r le taux mensuel équivalent du rendement net. Si l’épargne rapporte moins
-          que le taux du crédit, l’in fine coûte plus cher ; sinon, il coûte moins, sans garantie de rendement. Les montants par défaut sont fictifs.
+          En in fine, le capital dû ne baisse jamais : chaque mois, vous payez les intérêts sur la totalité de la somme empruntée, et vous mettez de côté le montant qui, avec ses gains,
+          reconstitue le capital à la fin. Si l’épargne rapporte moins que le taux du crédit, l’in fine coûte plus cher ; sinon, il coûte moins, sans garantie de rendement.
+          Les montants par défaut sont fictifs ; le détail du calcul est sur la page <Link to="/methodologie">Méthode</Link>.
         </p>
         <SavedSims simKey="credit-in-fine" current={s} onLoad={(d) => setS({ ...IN_FINE, ...d })} />
       </Layout>
@@ -218,6 +219,47 @@ function InFine() {
 }
 
 /* ---------- Renégocier ou racheter son crédit */
+/** Deux barres sur la même échelle : ce qu'il reste à payer en gardant le prêt, ou en renégociant (nouveaux intérêts + frais). L'écart est le gain net. */
+function RenegoBars({ r, fees }: { r: ReturnType<typeof renegotiation>; fees: number }) {
+  const b = renegotiationBars(r, fees);
+  if (b.current === 0 && b.newInterest === 0 && b.fees === 0) return null;
+  const costNew = r.newInterest + Math.max(0, fees);
+  const win = r.netGain > 0.5;
+  const lose = r.netGain < -0.5;
+  return (
+    <>
+      <h2>Ce qu’il reste à payer</h2>
+      <figure className="fb rb">
+        <ul className="fb-legend" aria-hidden="true">
+          <li><i className="rb-int" />Intérêts</li>
+          {fees > 0.5 && <li><i className="rb-fees" />Frais de l’opération</li>}
+          {win && <li><i className="rb-saved" />Économisé</li>}
+        </ul>
+        <ul className="fb-list">
+          <li className="fb-row">
+            <div className="fb-head"><span className="fb-name">Garder le prêt actuel</span><span className="fb-value">{fmtEur(r.currentRemainingInterest)}</span></div>
+            <div className="fb-track" aria-hidden="true"><span className="rb-int" style={{ width: `${b.current}%` }} /></div>
+            <p className="fb-sub">intérêts restants jusqu’à la fin</p>
+          </li>
+          <li className="fb-row">
+            <div className="fb-head"><span className="fb-name">Renégocier</span><span className="fb-value">{fmtEur(costNew)}</span></div>
+            <div className="fb-track" aria-hidden="true">
+              <span className="rb-int" style={{ width: `${b.newInterest}%` }} />
+              {b.fees > 0 && <span className="rb-fees" style={{ width: `${b.fees}%` }} />}
+              {b.saved > 0 && <span className="rb-saved" style={{ width: `${b.saved}%` }} />}
+            </div>
+            <p className="fb-sub">nouveaux intérêts {fmtEur(r.newInterest)}{fees > 0.5 ? ` + frais ${fmtEur(fees)}` : ''}</p>
+          </li>
+        </ul>
+        <figcaption className={'rb-total' + (lose ? ' rb-lose' : '')}>
+          {win && <>Écart : <strong>{fmtEur(r.netGain)}</strong> de moins à payer en renégociant, c’est le gain net.</>}
+          {lose && <>Écart : <strong>{fmtEur(-r.netGain)}</strong> de plus à payer en renégociant : l’opération coûte plus qu’elle ne rapporte.</>}
+          {!win && !lose && <>Les deux options coûtent à peu près la même chose : aucun gain net.</>}
+        </figcaption>
+      </figure>
+    </>
+  );
+}
 type RenegoState = { remaining: number; currentRate: number; currentYearsLeft: number; newRate: number; newYears: number; fees: number };
 const RENEGO: RenegoState = { remaining: 150000, currentRate: 4.5, currentYearsLeft: 20, newRate: 3.5, newYears: 20, fees: 3000 };
 
@@ -227,7 +269,7 @@ function Renegocier() {
   return (
     <>
       <p className="notice" role="note">
-        Calcul fondé uniquement sur les hypothèses que vous saisissez, sans chiffre réglementaire : les frais (dossier, garantie, indemnités éventuelles) sont à relever sur vos documents et sur l’offre reçue. L’assurance n’est pas incluse.
+        Les frais (dossier, garantie, indemnités éventuelles) sont à relever sur vos documents et sur l’offre reçue. L’assurance n’est pas incluse.
         Voir aussi le <Link to="/simulateurs/credit">simulateur de crédit</Link>.
       </p>
       <Layout
@@ -259,9 +301,10 @@ function Renegocier() {
         {r.longer && (
           <p className="notice" role="note">Le nouveau prêt dure plus longtemps que le prêt actuel : la mensualité peut baisser tout en augmentant le coût total. Lisez le gain net, pas seulement la mensualité.</p>
         )}
+        <RenegoBars r={r} fees={s.fees} />
         <p className="muted small">
-          Intérêts restants du prêt actuel : {fmtEur(r.currentRemainingInterest)} ; intérêts du nouveau prêt : {fmtEur(r.newInterest)}. Gain net = intérêts restants actuels − intérêts du nouveau prêt − frais.
-          Le point mort divise les frais par l’économie mensuelle ; s’il dépasse le temps pendant lequel vous comptez garder le prêt (revente, remboursement anticipé), l’opération ne se rentabilise pas. Les exemples ci-dessus sont fictifs.
+          Le point mort est le temps qu’il faut pour que la baisse de mensualité rembourse les frais. Si vous pensez revendre le bien ou solder le prêt avant, l’opération ne se rentabilise pas.
+          Les exemples ci-dessus sont fictifs ; le détail du calcul est sur la page <Link to="/methodologie">Méthode</Link>.
         </p>
         <SavedSims simKey="renegociation" current={s} onLoad={(d) => setS({ ...RENEGO, ...d })} />
       </Layout>
