@@ -137,7 +137,7 @@ export function Kpi({ label, value, sub, tone }: { label: string; value: string;
 }
 
 /** Jauge « où j'en suis » : part du montant visé déjà couverte (calcul exact, pas une illustration). */
-export function CoverageGauge({ savings, target, label }: { savings: number; target: number; label: string }) {
+export function CoverageGauge({ savings, target, label, suffix = 'couvert' }: { savings: number; target: number; label: string; suffix?: string }) {
   if (!(target > 0)) return null;
   const pct = coveragePercent(savings, target);
   const done = pct >= 100;
@@ -148,7 +148,7 @@ export function CoverageGauge({ savings, target, label }: { savings: number; tar
       </div>
       <div className="gauge-scale" aria-hidden="true">
         <span>0 €</span>
-        <strong>{done ? 'Objectif atteint' : `${pct} % couvert`}</strong>
+        <strong>{done ? 'Objectif atteint' : `${pct} % ${suffix}`}</strong>
         <span>{fmtEur(target)}</span>
       </div>
     </div>

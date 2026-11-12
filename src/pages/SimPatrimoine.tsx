@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { wealthTakeaway } from '../lib/takeaways';
+import { wealthGoalTakeaway, wealthTakeaway } from '../lib/takeaways';
 import { afterTax, fmtEur, fmtPct, netOfFees, projectGrowth, requiredMonthly, type SavingsChange, type Withdrawal } from '../lib/finance';
-import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, RowsEditor, SavedSims, ChoiceField, Tabs, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, RowsEditor, SavedSims, ChoiceField, Tabs, usePersistentState, JumpToResults, CoverageGauge } from '../components/ui';
 
 type Scenario = {
   name: string;
@@ -100,7 +100,7 @@ export default function SimPatrimoine() {
                 </button>
               ))}
             </div>
-            <p className="small muted">Ce sont des hypothèses de calcul, pas des prévisions : personne ne peut garantir un rendement. Les placements peuvent aussi perdre de la valeur. Vous pouvez saisir votre propre valeur dans les réglages avancés.</p>
+            <p className="small muted">Des hypothèses, pas des prévisions : aucun rendement n'est garanti et un placement peut perdre de la valeur. Autre valeur : réglages avancés.</p>
           </fieldset>
           <details className="fold advanced">
             <summary>Réglages avancés (facultatif)</summary>
@@ -175,13 +175,14 @@ export default function SimPatrimoine() {
           )}
 
           <h2>Atteindre un objectif</h2>
-          <div className="grid cols-2" style={{ maxWidth: 520 }}>
-            <NumberField label="Objectif de capital" unit="€" value={st.target} onChange={(v) => setSt((x) => ({ ...x, target: v }))} min={0} step={10000} />
+          <div className="panel goal">
+            <div className="goal-grid">
+              <NumberField label="Capital que vous visez" unit="€" value={st.target} onChange={(v) => setSt((x) => ({ ...x, target: v }))} min={0} step={10000} hint={`Dans ${s.years}\u00a0ans, avant impôt, hors inflation.`} />
+              <Kpi label="Épargne mensuelle nécessaire" value={fmtEur(need)} sub={`à ${fmtPct(netRate)} par an, frais déduits`} />
+            </div>
+            <CoverageGauge savings={last.value} target={st.target} label="Capital simulé" suffix="de l'objectif" />
+            <p className="goal-text">{wealthGoalTakeaway({ target: st.target, years: s.years, projected: last.value, monthly: s.monthly, need, plain: !s.withdrawals.length && !s.savingsChanges.length && !s.contributionGrowth })}</p>
           </div>
-          <p>
-            Avec un rendement net de frais de <strong>{fmtPct(netRate)}</strong>, atteindre <strong>{fmtEur(st.target)}</strong> en {s.years} ans
-            demanderait une épargne mensuelle constante d'environ <strong>{fmtEur(need)}</strong> (hors retraits).
-          </p>
 
           <Fold title={`Tableau d'évolution année par année — ${s.name}`}>
           <div className="table-wrap" tabIndex={0}>

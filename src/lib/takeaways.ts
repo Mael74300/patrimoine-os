@@ -414,3 +414,28 @@ export function debtShareLabel(p: { assets: number; debts: number }): string {
   if (!(p.assets > 0) || !(p.debts > 0)) return '';
   return `soit ${Math.round((p.debts / p.assets) * 100)}\u00a0% de ce que vous possédez`;
 }
+
+/**
+ * Patrimoine, bloc « Atteindre un objectif » : où mènent les réglages actuels par rapport au capital visé,
+ * et l'épargne mensuelle constante qui l'atteindrait (`requiredMonthly`, même rendement net de frais).
+ * L'écart avec l'épargne saisie n'est donné que si le scénario est « simple » (versement constant,
+ * sans retrait ni changement d'épargne), sinon les deux montants ne sont pas comparables.
+ */
+export function wealthGoalTakeaway(p: { target: number; years: number; projected: number; monthly: number; need: number; plain: boolean }): string {
+  if (!(p.target > 0) || !(p.years > 0)) return '';
+  const ans = fmtAns(p.years);
+  const cible = fmtEur(p.target);
+  if (p.need <= 0) {
+    return `Votre capital de départ suffirait : placé au rendement choisi, il atteindrait au moins ${cible} en ${ans} sans aucun versement.`;
+  }
+  if (p.projected >= p.target) {
+    const marge = p.plain && Math.round(p.monthly) > Math.round(p.need)
+      ? ` Vous pourriez épargner ${fmtEur(Math.round(p.monthly) - Math.round(p.need))} de moins par mois.`
+      : '';
+    return `Objectif atteint : avec vos réglages, le capital simulé (${fmtEur(p.projected)}) dépasse ${cible} au bout de ${ans}.${marge}`;
+  }
+  const suite = p.plain
+    ? ` : il vous manque ${fmtEur(Math.round(p.need) - Math.round(p.monthly))} par mois pour arriver à ${cible} en ${ans}.`
+    : `. L'épargne nécessaire ci-dessus suppose un versement constant, sans retrait ni changement d'épargne.`;
+  return `Avec vos réglages, le capital simulé atteint ${fmtEur(p.projected)}${suite}`;
+}
