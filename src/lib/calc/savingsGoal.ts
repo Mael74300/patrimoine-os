@@ -55,3 +55,46 @@ export function monthlyByRate(input: Omit<SavingsGoalInput, 'annualRate'>, rates
 export function monthlyByDuration(input: Omit<SavingsGoalInput, 'years'>, durations: number[]): { years: number; monthly: number }[] {
   return durations.map((years) => ({ years, monthly: monthlySavingNeeded(input.target, input.current, Math.floor(clamp(years, 0, 60, 0)) * 12, input.annualRate) }));
 }
+
+export type GoalDurationRow = {
+  years: number;
+  monthly: number;
+  /** Épargne de départ. */
+  current: number;
+  /** Total des versements mensuels. */
+  deposits: number;
+  /** Intérêts cumulés (négatifs si le rendement est négatif). */
+  interest: number;
+  /** Solde final (objectif atteint, ou plus si l'épargne de départ suffit déjà). */
+  final: number;
+};
+
+/**
+ * Composition du montant final pour plusieurs échéances (en années) : épargne de départ, versements et intérêts.
+ * Chaque ligne reprend exactement le calcul de `savingsGoal`, pour rester cohérente avec les cartes de résultat.
+ */
+export function goalByDuration(input: Omit<SavingsGoalInput, 'years'>, durations: number[]): GoalDurationRow[] {
+  const current = Math.max(0, num(input.current));
+  return durations.map((years) => {
+    const r = savingsGoal({ ...input, years });
+    const final = r.series[r.series.length - 1];
+    return { years: r.months / 12, monthly: r.monthly, current, deposits: r.deposits, interest: final - current - r.deposits, final };
+  });
+}
+
+/**
+ * Découpe d'une barre en pourcentages d'une échelle commune : épargne de départ, versements, intérêts gagnés,
+ * et part perdue quand le rendement est négatif (la barre mesure alors ce qui a été mis, la partie gardée vaut le solde final).
+ */
+export function goalSplit(row: GoalDurationRow, scale: number): { current: number; deposits: number; interest: number; lost: number } {
+  const pct = (v: number) => (scale > 0 ? Math.max(0, (v / scale) * 100) : 0);
+  if (row.interest >= 0) return { current: pct(row.current), deposits: pct(row.deposits), interest: pct(row.interest), lost: 0 };
+  const loss = Math.min(-row.interest, row.current + row.deposits);
+  const fromDeposits = Math.min(loss, row.deposits);
+  return { current: pct(row.current - (loss - fromDeposits)), deposits: pct(row.deposits - fromDeposits), interest: 0, lost: pct(loss) };
+}
+
+/** Échelle commune des barres : la plus grande somme mise de côté ou le plus grand solde final. */
+export function goalScale(rows: GoalDurationRow[]): number {
+  return rows.reduce((m, r) => Math.max(m, r.final, r.current + r.deposits), 0);
+}

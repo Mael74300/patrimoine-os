@@ -1064,3 +1064,11 @@ a.term:hover { color: var(--primary); text-decoration-style: solid; }
    (aussi compact qu'un paragraphe), plus facile à parcourir qu'un texte dense. L'amorce (avant « : ») est en gras. */
 .prose ul.guide-points { list-style: none; padding: 0; margin: 0.8rem 0 0; display: grid; gap: 12px; }
 .prose ul.guide-points li { margin: 0; padding: 1px 0 1px 14px; border-left: 3px solid var(--accent); }
+/* Barres « ce que changent quelques années de plus » (simulateur Objectif d'épargne) */
+.gb-start { background: var(--chart-1); }
+.gb-dep { background: color-mix(in srgb, var(--chart-1) 35%, var(--surface)); }
+.gb-int { background: var(--chart-2); }
+.fb-track .gb-start + span, .fb-track .gb-dep + span { border-left: 2px solid var(--surface); }
+.gb-mine { margin-left: -8px; margin-right: -8px; padding: 6px 8px 8px; border-radius: 8px; background: color-mix(in srgb, var(--chart-2) 10%, var(--surface)); }
+.gb-tag { margin-left: 8px; padding: 1px 8px; border-radius: 999px; font-size: .74rem; font-weight: 600; color: var(--accent); background: color-mix(in srgb, var(--chart-2) 18%, var(--surface)); white-space: nowrap; }
+.gb-unit { font-weight: 400; color: var(--ink-3); font-size: .84rem; }

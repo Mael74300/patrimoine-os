@@ -48,3 +48,53 @@ describe('objectif d’épargne', () => {
     expect(LIVRETS.find((l) => l.id === 'livretA')!.rate).toBeGreaterThan(0);
   });
 });
+
+describe('objectif d’épargne : barres selon l’échéance', () => {
+  it('exemple fictif de la page (20 000 € visés, 2 000 € déjà épargnés, 1,7 %) : départ + versements + intérêts = objectif', async () => {
+    const { goalByDuration, goalSplit, goalScale } = await import('./savingsGoal');
+    const rows = goalByDuration({ target: 20000, current: 2000, annualRate: 0.017 }, [2, 5, 15]);
+    for (const r of rows) {
+      expect(r.current + r.deposits + r.interest).toBeCloseTo(20000, 6);
+      expect(r.final).toBeCloseTo(20000, 6);
+      expect(r.interest).toBeGreaterThan(0);
+    }
+    // Même calcul que les cartes de résultat pour l'échéance de 5 ans.
+    const five = savingsGoal({ target: 20000, current: 2000, years: 5, annualRate: 0.017 });
+    expect(rows[1].monthly).toBeCloseTo(five.monthly, 10);
+    expect(rows[1].deposits).toBeCloseTo(five.deposits, 8);
+    expect(rows[1].interest).toBeCloseTo(five.interest, 8);
+    // Plus l'échéance est lointaine, plus les intérêts pèsent.
+    expect(rows[2].interest).toBeGreaterThan(rows[1].interest);
+    expect(rows[1].interest).toBeGreaterThan(rows[0].interest);
+    const scale = goalScale(rows);
+    expect(scale).toBeCloseTo(20000, 6);
+    const b = goalSplit(rows[1], scale);
+    expect(b.current + b.deposits + b.interest).toBeCloseTo(100, 6);
+    expect(b.current).toBeCloseTo(10, 6);
+    expect(b.lost).toBe(0);
+  });
+
+  it('rendement négatif : la partie perdue est montrée à part, la partie gardée vaut le solde final', async () => {
+    const { goalByDuration, goalSplit, goalScale } = await import('./savingsGoal');
+    const rows = goalByDuration({ target: 20000, current: 2000, annualRate: -0.02 }, [5]);
+    const r = rows[0];
+    expect(r.interest).toBeLessThan(0);
+    expect(r.final).toBeCloseTo(20000, 6);
+    const scale = goalScale(rows);
+    expect(scale).toBeCloseTo(r.current + r.deposits, 6);
+    const b = goalSplit(r, scale);
+    expect(b.interest).toBe(0);
+    expect(b.current + b.deposits + b.lost).toBeCloseTo(100, 6);
+    expect(((b.current + b.deposits) / 100) * scale).toBeCloseTo(r.final, 6);
+  });
+
+  it('épargne de départ suffisante : aucun versement, sans NaN', async () => {
+    const { goalByDuration, goalSplit, goalScale } = await import('./savingsGoal');
+    const rows = goalByDuration({ target: 1000, current: 5000, annualRate: 0.03 }, [2]);
+    expect(rows[0].monthly).toBe(0);
+    expect(rows[0].deposits).toBe(0);
+    const b = goalSplit(rows[0], goalScale(rows));
+    for (const v of Object.values(b)) expect(Number.isFinite(v)).toBe(true);
+    expect(goalSplit(rows[0], 0).current).toBe(0);
+  });
+});

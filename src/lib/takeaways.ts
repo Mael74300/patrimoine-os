@@ -41,7 +41,7 @@ export function savingsGoalTakeaway(p: { target: number; current: number; years:
   const interets = p.interest > 0
     ? ` Les intérêts apportent ${fmtEur(p.interest)} : le reste, soit ${fmtEur(p.deposits)}, vient de vos versements.`
     : ` Avec ce taux, il n'y a pas d'intérêts : tout vient de vos versements.`;
-  return `Pour disposer de ${fmtEur(p.target)} dans ${ans}, il faut mettre de côté ${fmtEur(p.monthly)} chaque mois.${interets} Plus l'échéance est lointaine, plus la mensualité baisse (voir le tableau plus bas).`;
+  return `Pour disposer de ${fmtEur(p.target)} dans ${ans}, il faut mettre de côté ${fmtEur(p.monthly)} chaque mois.${interets} Plus l'échéance est lointaine, plus la mensualité baisse (voir les barres plus bas).`;
 }
 
 /** Louer ou acheter : qui est le plus riche à l'horizon, avec la mise en garde sur les hypothèses. */

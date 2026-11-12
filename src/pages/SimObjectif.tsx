@@ -1,13 +1,40 @@
 import { Link } from 'react-router-dom';
-import { fmtEur, fmtPct, monthlyByDuration, monthlyByRate, savingsGoal } from '../lib/finance';
+import { fmtEur, fmtPct, goalByDuration, goalScale, goalSplit, monthlyByRate, savingsGoal, type GoalDurationRow } from '../lib/finance';
 import { savingsGoalTakeaway } from '../lib/takeaways';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice, Fold } from '../components/ui';
 
 type State = { target: number; current: number; years: number; annualRate: number };
 
 const DEFAULTS: State = { target: 20000, current: 2000, years: 5, annualRate: 0.017 };
 const LIVRET_A = LIVRETS.find((l) => l.id === 'livretA')!;
+const DURATIONS = [2, 3, 5, 10, 15];
+
+/** Une barre par échéance : épargne de départ, versements et intérêts, à la même échelle pour toutes. */
+function GoalBar({ row, scale, mine }: { row: GoalDurationRow; scale: number; mine: boolean }) {
+  const b = goalSplit(row, scale);
+  const label = `${row.years}\u00a0an${row.years > 1 ? 's' : ''}`;
+  const sub = row.monthly === 0
+    ? `aucun versement : l’épargne de départ suffit${row.interest > 0 ? `, intérêts ${fmtEur(row.interest)}` : ''}`
+    : row.interest >= 0
+      ? `versements ${fmtEur(row.deposits)} · intérêts ${fmtEur(row.interest)}`
+      : `versements ${fmtEur(row.deposits)} · pertes ${fmtEur(-row.interest)}`;
+  return (
+    <li className={'fb-row' + (mine ? ' gb-mine' : '')}>
+      <div className="fb-head">
+        <span className="fb-name">{label}{mine && <span className="gb-tag">votre échéance</span>}</span>
+        <span className="fb-value">{row.monthly === 0 ? '0\u00a0€' : fmtEur(row.monthly)} <span className="gb-unit">par mois</span></span>
+      </div>
+      <div className="fb-track" aria-hidden="true">
+        {b.current > 0 && <span className="gb-start" style={{ width: `${b.current}%` }} />}
+        {b.deposits > 0 && <span className="gb-dep" style={{ width: `${b.deposits}%` }} />}
+        {b.interest > 0 && <span className="gb-int" style={{ width: `${b.interest}%` }} />}
+        {b.lost > 0 && <span className="fb-lost" style={{ width: `${b.lost}%` }} />}
+      </div>
+      <p className="fb-sub">{sub}</p>
+    </li>
+  );
+}
 
 export default function SimObjectif() {
   const [s, setS, up] = usePersistentState<State>('objectif-epargne', DEFAULTS);
@@ -15,7 +42,11 @@ export default function SimObjectif() {
   const n = r.series.length - 1;
   const rates = [0, LIVRET_A.rate, 0.03, 0.05];
   const byRate = monthlyByRate(s, rates);
-  const byYears = monthlyByDuration(s, [2, 3, 5, 10, 15]);
+  const durations = n >= 1 && !DURATIONS.includes(n) ? [...DURATIONS, n].sort((a, b) => a - b) : DURATIONS;
+  const rows = goalByDuration(s, durations);
+  const scale = goalScale(rows);
+  const hasLoss = rows.some((row) => row.interest < 0);
+  const contributed = r.series.map((_, i) => s.current + r.monthly * 12 * i);
 
   return (
     <>
@@ -47,25 +78,34 @@ export default function SimObjectif() {
             <Kpi label="Intérêts attendus" value={fmtEur(r.interest)} sub={`soit ${fmtPct(r.interestShare)} de l'objectif`} />
           </div>
           <Takeaway>{savingsGoalTakeaway({ target: s.target, current: s.current, years: n, monthly: r.monthly, deposits: r.deposits, interest: r.interest })}</Takeaway>
-          <h2>Progression vers l’objectif</h2>
-          <LineChart
-            title="Solde de l'épargne à la fin de chaque année"
-            xLabels={r.series.map((_, i) => `An ${i}`)}
-            format={fmtEur}
-            series={[{ name: 'Solde', color: 'var(--chart-1)', values: r.series }]}
-          />
-          <p className="muted small">Échéance : {n}&nbsp;an{n > 1 ? 's' : ''}.</p>
-          <h2>Effet de la durée</h2>
-          <div className="table-wrap" tabIndex={0}>
-            <table>
-              <thead><tr><th scope="col">Échéance</th><th scope="col" className="r">Versement mensuel</th></tr></thead>
-              <tbody>
-                {byYears.map((d) => (
-                  <tr key={d.years}><th scope="row">{d.years}&nbsp;ans</th><td className="r">{fmtEur(d.monthly)}</td></tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <h2>Ce que changent quelques années de plus</h2>
+          <p className="fb-intro">
+            {hasLoss
+              ? <>Chaque barre montre ce que vous mettez de côté pour atteindre {fmtEur(s.target)}. Avec un rendement négatif, une partie est perdue (hachures).</>
+              : <>Chaque barre mesure le montant visé ({fmtEur(s.target)}) et montre d’où il vient.</>}
+          </p>
+          <figure className="fb">
+            <ul className="fb-legend" aria-hidden="true">
+              <li><i className="gb-start" />Déjà épargné ({fmtEur(s.current)})</li>
+              <li><i className="gb-dep" />Vos versements</li>
+              {hasLoss ? <li><i className="fb-lost" />Pertes</li> : <li><i className="gb-int" />Intérêts</li>}
+            </ul>
+            <ul className="fb-list">
+              {rows.map((row) => <GoalBar key={row.years} row={row} scale={scale} mine={row.years === n} />)}
+            </ul>
+          </figure>
+          <Fold title="Voir le solde année par année">
+            <LineChart
+              title="Solde de l'épargne à la fin de chaque année"
+              xLabels={r.series.map((_, i) => `An ${i}`)}
+              format={fmtEur}
+              series={[
+                { name: 'Solde', color: 'var(--chart-1)', values: r.series },
+                { name: 'Mis de côté (départ + versements)', color: 'var(--chart-3)', values: contributed },
+              ]}
+            />
+            <p className="muted small">L’écart entre les deux courbes correspond aux intérêts gagnés (ou aux pertes si le rendement est négatif).</p>
+          </Fold>
           <h2>Effet du taux</h2>
           <div className="table-wrap" tabIndex={0}>
             <table>
