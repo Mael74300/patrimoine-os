@@ -11,7 +11,7 @@ import { EnvelopeCards } from '../components/EnvelopeCards';
 import { LivretsTable } from '../components/LivretsTable';
 import { RiskMap } from '../components/RiskMap';
 import { GuideGroupIcon } from '../components/Icons';
-import { SchemaEnveloppe, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaFamillesFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz } from '../components/schemas/guides';
+import { SchemaEnveloppe, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaFamillesFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz, SchemaCashflow } from '../components/schemas/guides';
 import { SchemaPea, SchemaQuinzaines, SchemaLevier } from '../components/schemas/communs';
 import { annotateJargon, splitLead, type JargonSegment } from '../lib/jargon';
 import { JargonText } from '../components/Jargon';
@@ -116,6 +116,7 @@ export function GuidePage() {
             {g.slug === 'fonctionnement-pea' && s.heading === 'Retraits et fiscalité' && <SchemaPea />}
             {g.slug === 'livret-a-calcul-interets-quinzaines' && s.heading === 'Des intérêts calculés par quinzaines' && <SchemaQuinzaines />}
             {g.slug === 'rentabilite-locative' && s.heading === 'Le rendement net de charges' && <SchemaRendement />}
+            {g.slug === 'rentabilite-locative' && s.heading.startsWith('Le cash-flow') && <SchemaCashflow />}
             {g.slug === 'interets-composes' && i === 0 && <SchemaInterets />}
             {g.slug === 'inflation-pouvoir-d-achat-epargne' && s.heading === 'Un exemple fictif chiffré' && <SchemaInflation />}
             {g.slug === 'diversification-placements' && s.heading === 'Le principe' && <SchemaDiversificationPrincipe />}

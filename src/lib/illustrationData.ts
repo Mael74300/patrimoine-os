@@ -8,6 +8,7 @@ import { savingsGoal } from './calc/savingsGoal';
 import { feeImpact } from './calc/fees';
 import { projectGrowth } from './calc/growth';
 import { fireTarget } from './calc/fire';
+import { rentalAnalysis, type RentalInput } from './calc/rental';
 
 /** Exemple fictif du schéma « Intérêts simples ou composés » : toutes les valeurs sont calculées, jamais saisies à la main. */
 export const SNOWBALL_EXAMPLE = { initial: 10000, annualRate: 0.05, years: [10, 20] as const };
@@ -108,11 +109,30 @@ export function rendementSteps(): RendementStep[] {
   const cost = price * (1 + acquisitionFeesRate) + works;
   const rents = monthlyRent * (12 - vacancyMonths);
   return [
-    { label: 'Rendement brut', detail: 'loyers annuels ÷ prix d’achat', value: (monthlyRent * 12) / price },
-    { label: 'En ajoutant frais d’achat et travaux', detail: 'même loyer, mais un coût total plus élevé', value: (monthlyRent * 12) / cost },
-    { label: 'En retirant un mois sans locataire', detail: 'seuls 11 loyers sur 12 sont encaissés', value: rents / cost },
-    { label: 'Rendement net de charges', detail: 'après taxe foncière, assurance, entretien…', value: (rents - yearlyCharges) / cost },
+    { label: 'Brut, celui des annonces', detail: 'loyers d’une année comparés au prix d’achat', value: (monthlyRent * 12) / price },
+    { label: 'Avec frais d’achat et travaux', detail: 'même loyer, mais un coût total plus élevé', value: (monthlyRent * 12) / cost },
+    { label: 'Avec un mois sans locataire', detail: 'seuls 11 loyers sur 12 sont encaissés', value: rents / cost },
+    { label: 'Net, après charges et taxe foncière', detail: 'après taxe foncière, assurance, entretien…', value: (rents - yearlyCharges) / cost },
   ];
+}
+
+/** Le même bien fictif, financé à crédit, pour le schéma « cash-flow » du guide : 22 000 € d'apport couvrent frais et travaux, 150 000 € empruntés à 3,5 % sur 20 ans, assurance emprunteur 0,3 % par an ; charges annuelles 900 € de taxe foncière, 600 € de copropriété, 150 € d'assurance, 5 % des loyers d'entretien (≈ 2 060 €). */
+export const CASHFLOW_EXAMPLE: RentalInput = {
+  price: RENDEMENT_EXAMPLE.price, notaryRate: RENDEMENT_EXAMPLE.acquisitionFeesRate, works: RENDEMENT_EXAMPLE.works, furniture: 0,
+  monthlyRent: RENDEMENT_EXAMPLE.monthlyRent, vacancyMonths: RENDEMENT_EXAMPLE.vacancyMonths,
+  propertyTax: 900, coOwnership: 600, insurancePno: 150, managementRate: 0, maintenanceRate: 0.05,
+  downPayment: 22000, loanRate: 0.035, loanYears: 20, loanInsuranceRate: 0.003,
+  regime: 'aucune', marginalRate: 0, socialRate: 0, microAllowance: 0, annualDepreciation: 0,
+  appreciation: 0, indexation: 0, horizon: 20,
+};
+
+/** Un mois moyen de la première année, avant impôt, calculé par le simulateur immobilier ; montants arrondis à l'euro, effort = sorties − entrées (arrondies). */
+export function cashflowParts() {
+  const r = rentalAnalysis(CASHFLOW_EXAMPLE);
+  const rents = Math.round(r.annualRentCollected / 12);
+  const charges = Math.round(r.annualCharges / 12);
+  const loan = Math.round(r.monthlyLoan);
+  return { loanAmount: r.loanAmount, rents, charges, loan, out: charges + loan, effort: charges + loan - rents, exactCashflow: r.monthlyCashflow };
 }
 
 /** Exemple fictif du guide « Taux d'endettement » : 3 000 € de revenus nets par mois, 200 € de crédit en cours, 850 € de nouvelle mensualité. */

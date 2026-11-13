@@ -1,5 +1,5 @@
 import { fmtEur, HCSF } from '../../lib/finance';
-import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, petitsVersementsRows, precautionRows, PRECAUTION_EXAMPLE, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../../lib/illustrationData';
+import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, cashflowParts, endettementParts, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, petitsVersementsRows, precautionRows, PRECAUTION_EXAMPLE, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../../lib/illustrationData';
 import { W, BASE, TOP, BAR_W, pct, wrapLabel } from './outils';
 
 /** Schéma « boule de neige » : même capital, mêmes 5 %, intérêts simples ou réinvestis. Les hauteurs sont proportionnelles aux montants. */
@@ -380,33 +380,67 @@ export function SchemaEnveloppe() {
 /** Schéma « De 6 % à 3,6 % » : le rendement brut d’une annonce fond quand on compte les frais, la vacance et les charges. Exemple fictif calculé (illustrationData). */
 export function SchemaRendement() {
   const steps = rendementSteps();
-  const pctFr = (v: number) => `${(Math.round(v * 1000) / 10).toLocaleString('fr-FR', { minimumFractionDigits: 1 })} %`;
+  const pctFr = (v: number) => `${(Math.round(v * 1000) / 10).toLocaleString('fr-FR', { minimumFractionDigits: 1 })} %`;
   const max = steps[0].value;
   const X0 = 14;
-  const BW = 300;
-  const alt = steps.map((s) => `${s.label} : ${pctFr(s.value)}`).join(' ; ');
+  const BW = 250;
+  const alt = steps.map((s) => `${s.label} (${s.detail}) : ${pctFr(s.value)}`).join(' ; ');
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 316" role="img" aria-labelledby="ill-rend-t ill-rend-d" className="ill-svg">
+      <svg viewBox="0 0 340 214" role="img" aria-labelledby="ill-rend-t ill-rend-d" className="ill-svg">
         <title id="ill-rend-t">Le rendement locatif baisse à mesure qu’on compte les vrais coûts</title>
         <desc id="ill-rend-d">{`Exemple fictif d’un bien à ${fmtEur(RENDEMENT_EXAMPLE.price)} loué ${fmtEur(RENDEMENT_EXAMPLE.monthlyRent)} par mois. ${alt}.`}</desc>
         {steps.map((s, i) => {
-          const y = 4 + i * 80;
+          const y = 4 + i * 54;
           const w = (s.value / max) * BW;
           const last = i === steps.length - 1;
           return (
             <g key={s.label}>
               <text x={X0} y={y + 14} className="ill-step">{s.label}</text>
-              <rect x={X0} y={y + 22} width={BW} height={26} rx={6} fill="var(--surface-2)" />
-              <rect x={X0} y={y + 22} width={w} height={26} rx={6} fill={last ? 'var(--accent)' : 'var(--primary)'} />
-              <text x={X0 + BW + 12} y={y + 41} className="ill-total">{pctFr(s.value)}</text>
-              <text x={X0} y={y + 63} className="ill-sub">{s.detail}</text>
+              <rect x={X0} y={y + 22} width={BW} height={24} rx={6} fill="var(--surface-2)" />
+              <rect x={X0} y={y + 22} width={w} height={24} rx={6} fill={last ? 'var(--accent)' : 'var(--primary)'} />
+              <text x={X0 + BW + 10} y={y + 39} className="ill-total">{pctFr(s.value)}</text>
             </g>
           );
         })}
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : le même bien de {fmtEur(RENDEMENT_EXAMPLE.price)}, loué {fmtEur(RENDEMENT_EXAMPLE.monthlyRent)} par mois, vu sous quatre angles. Barres proportionnelles aux pourcentages ; le rendement après impôt dépend de votre situation et n’est pas montré.
+        <strong>Illustration, exemple fictif</strong> : le même bien, loué {fmtEur(RENDEMENT_EXAMPLE.monthlyRent)} par mois, vu sous quatre angles. Barres proportionnelles aux pourcentages.
+      </figcaption>
+    </figure>
+  );
+}
+
+/** Schéma « cash-flow » : sur un mois moyen, ce qui sort (charges, crédit) face à ce qui entre (loyer) ; l’écart est l’effort de l’investisseur. Exemple fictif calculé par le simulateur (illustrationData). */
+export function SchemaCashflow() {
+  const c = cashflowParts();
+  const X0 = 14;
+  const BW = 312;
+  const x = (v: number) => X0 + (v / c.out) * BW;
+  const mid = (a: number, b: number) => (x(a) + x(b)) / 2;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 176" role="img" aria-labelledby="ill-cf-t ill-cf-d" className="ill-svg">
+        <title id="ill-cf-t">Le loyer ne couvre pas tout : l’écart sort de votre poche</title>
+        <desc id="ill-cf-d">{`Exemple fictif, un mois moyen avant impôt. Ce qui sort : ${fmtEur(c.out)}, soit ${fmtEur(c.charges)} de charges du bien et ${fmtEur(c.loan)} de crédit, assurance comprise. Ce qui entre : ${fmtEur(c.rents)} de loyer encaissé en moyenne. Il manque ${fmtEur(c.effort)} par mois, à payer de votre poche.`}</desc>
+        <text x={X0} y="16" className="ill-step">{`Ce qui sort : ${fmtEur(c.out)} par mois`}</text>
+        <rect x={X0} y="26" width={BW} height="32" rx="8" fill="var(--primary)" />
+        <rect x={X0} y="26" width={x(c.charges) - X0} height="32" rx="8" fill="var(--surface-2)" stroke="var(--line)" />
+        <rect x={x(c.charges)} y="26" width="8" height="32" fill="var(--primary)" />
+        <text x={mid(0, c.charges)} y="47" textAnchor="middle" className="ill-in">{fmtEur(c.charges)}</text>
+        <text x={mid(c.charges, c.out)} y="47" textAnchor="middle" className="ill-total ill-on-dark">{fmtEur(c.loan)}</text>
+        <text x={X0} y="76" className="ill-sub">charges</text>
+        <text x={x(c.charges) + 10} y="76" className="ill-sub">crédit, assurance comprise</text>
+        <text x={X0} y="110" className="ill-step">{`Ce qui entre : ${fmtEur(c.rents)} par mois`}</text>
+        <rect x={X0} y="120" width={BW} height="32" rx="8" fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth="2" strokeDasharray="5 4" />
+        <rect x={X0} y="120" width={x(c.rents) - X0} height="32" rx="8" fill="var(--accent)" />
+        <text x={mid(0, c.rents)} y="141" textAnchor="middle" className="ill-total ill-on-dark">{fmtEur(c.rents)}</text>
+        <text x={mid(c.rents, c.out)} y="141" textAnchor="middle" className="ill-total">{fmtEur(c.effort)}</text>
+        <text x={X0} y="170" className="ill-sub">loyer encaissé (moyenne)</text>
+        <text x={x(c.rents) + 6} y="170" className="ill-sub">votre effort</text>
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : un mois moyen de la première année, avant impôt. Largeurs proportionnelles aux montants, arrondis à l’euro.
       </figcaption>
     </figure>
   );
