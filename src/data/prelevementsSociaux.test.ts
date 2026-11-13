@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { investmentBySlug } from './investments';
-import { PFU_PS_PCT } from '../lib/calc/pfu';
+import { PFU_IR_PCT, PFU_PS_PCT, PFU_TOTAL_PCT } from '../lib/calc/pfu';
 import { splitSentences } from '../components/ui';
 import { sentenceLead } from '../lib/sentenceLead';
 
@@ -22,6 +22,16 @@ describe('prélèvements sociaux : hausse de 2026 expliquée', () => {
       expect(t, slug).not.toContain('Hausse issue de');
       expect(t, slug).toContain(`passent de 17,2 % à ${pct(PFU_PS_PCT)} sur les revenus de 2026`);
       expect(f.sources.some((s) => s.url.endsWith('/F2329')), slug).toBe(true);
+    }
+  });
+
+  it('fiches au PFU : fiscalité en trois points à amorce (défaut, option, changement de 2026), mêmes taux que le calcul', () => {
+    for (const slug of ['compte-titres', 'compte-a-terme', 'obligations', 'crowdfunding']) {
+      const parts = splitSentences(investmentBySlug[slug]!.tax.text).map(norm);
+      const leads = parts.slice(0, 3).map((p) => sentenceLead(p)?.lead);
+      expect(leads, slug).toEqual([slug === 'obligations' ? 'En compte-titres' : 'Par défaut', 'Sur option', 'Ce qui change en 2026']);
+      expect(parts[0], slug).toContain(`prélèvement forfaitaire unique de ${pct(PFU_TOTAL_PCT)} sur les revenus de 2026 (${pct(PFU_IR_PCT)} d'impôt sur le revenu et ${pct(PFU_PS_PCT)} de prélèvements sociaux)`);
+      expect(parts[1], slug).toContain(`à la place des ${pct(PFU_IR_PCT)} (option globale) ; les prélèvements sociaux restent dus`);
     }
   });
 
