@@ -517,7 +517,7 @@ export function SchemaPatrimoineNet() {
         ))}
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : ce que l’on possède moins ce que l’on doit donne le patrimoine net ({fmtEur(p.assets)} − {fmtEur(p.debt)} = {fmtEur(p.net)}). Largeurs proportionnelles aux montants.
+        <strong>Illustration, exemple fictif</strong> : {fmtEur(p.assets)} − {fmtEur(p.debt)} = {fmtEur(p.net)}. Largeurs proportionnelles aux montants.
       </figcaption>
     </figure>
   );

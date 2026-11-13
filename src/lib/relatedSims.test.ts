@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { guideBySlug } from '../data/guides';
+import { guideBySlug, guides } from '../data/guides';
 import { investmentBySlug } from '../data/investments';
-import { nextForSimulator, readingForSimulator, simsForGuide, simsForInvestment } from './relatedSims';
+import { guideSimulators, nextForSimulator, readingForSimulator, simsForGuide, simsForInvestment } from './relatedSims';
 import { simulators } from './search';
 
 const simSlugs = new Set(simulators.map((s) => s.slug));
@@ -71,5 +71,14 @@ describe('pistes de lecture du futur acheteur', () => {
     expect(to).toContain('/guides/pret-a-taux-zero-ptz');
     expect(to).toContain('/simulateurs/louer-ou-acheter');
     expect(to).not.toContain('/encyclopedie/reprise-entreprise');
+  });
+});
+
+describe('simulateurs liés d’un guide', () => {
+  it('ne répètent jamais le simulateur du bouton principal', () => {
+    for (const g of guides) {
+      expect(guideSimulators(g.slug, g.cta?.to).map((s) => `/simulateurs/${s.slug}`), g.slug).not.toContain(g.cta?.to);
+    }
+    expect(guideSimulators('patrimoine-net', guideBySlug['patrimoine-net'].cta?.to).map((s) => s.slug)).toEqual(['budget']);
   });
 });

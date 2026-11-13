@@ -46,8 +46,8 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'patrimoine-net',
     title: 'Comment calculer son patrimoine net',
     summary: 'La méthode pour additionner ses actifs, retrancher ses dettes et obtenir un chiffre utile, avec un calculateur.',
-    readingMinutes: 5,
-    updatedOn: '2026-10-10',
+    readingMinutes: 4,
+    updatedOn: '2026-11-13',
     widget: 'patrimoine-net',
     sections: [
       {
@@ -58,16 +58,24 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       },
       {
         heading: 'Ce qu’il faut compter',
+        points: true,
         body: [
-          'Actifs : comptes et livrets ; placements à leur valeur actuelle (valeur de rachat pour une assurance-vie, valeur liquidative pour un PEA) ; biens immobiliers à leur valeur de marché estimée ; parts d’entreprise si une valeur raisonnable peut être retenue ; véhicule éventuellement, à sa valeur de revente.',
-          'Dettes : le capital restant dû de chaque crédit, et non la somme des mensualités restantes, qui inclut des intérêts pas encore courus. Le tableau d’amortissement de votre banque l’indique.',
+          'Comptes et livrets : le solde du jour.',
+          'Assurance-vie : la valeur de rachat (l’épargne disponible moins les éventuels frais de retrait), pas la somme versée.',
+          'PEA, compte-titres : la valeur actuelle des titres et des fonds, plus les espèces.',
+          'Immobilier : le prix de vente estimé aujourd’hui, pas le prix d’achat.',
+          'Entreprise, véhicule : seulement à une valeur de revente raisonnable.',
+          'Crédits : le capital restant dû (voir le tableau d’amortissement), pas la somme des mensualités restantes, qui inclut des intérêts futurs.',
         ],
       },
       {
         heading: 'Les erreurs fréquentes',
+        points: true,
         body: [
-          'Retenir le prix d’achat d’un bien au lieu de sa valeur actuelle ; oublier les frais et impôts d’une vente éventuelle ; compter deux fois un crédit déjà déduit d’une valeur ; inclure des droits à la retraite, qui ne sont pas un capital disponible.',
-          'L’important est la régularité : refaire le calcul une ou deux fois par an avec la même méthode permet de suivre la tendance.',
+          'Oublier les frais de vente : frais et impôts réduisent ce qu’il vous resterait.',
+          'Compter un crédit deux fois : déjà déduit de la valeur d’un bien, il ne va pas aussi dans les dettes.',
+          'Compter sa retraite : des droits à la retraite ne sont pas un capital disponible.',
+          'Changer de méthode : refaites le calcul une ou deux fois par an, de la même façon, pour suivre la tendance.',
         ],
       },
     ],

@@ -4,7 +4,7 @@ import { guideBySlug, guideGroups, guides, otherGuides } from '../data/guides';
 import { investmentBySlug } from '../data/investments';
 import { guideBlurb } from '../lib/guideBlurbs';
 import { simBlurb } from '../lib/simThemes';
-import { relatedSimulators, simsForGuide } from '../lib/relatedSims';
+import { guideSimulators } from '../lib/relatedSims';
 import { NetWorthCalculator } from '../components/NetWorthCalculator';
 import { Crumbs, FaqSection, MobileFold, PageHead, Sources } from '../components/ui';
 import { EnvelopeCards } from '../components/EnvelopeCards';
@@ -75,6 +75,8 @@ export function GuidePage() {
   const g = guideBySlug[slug];
   if (!g) return <NotFound />;
   const others = otherGuides(g.slug);
+  // Le simulateur ouvert par le bouton principal n’est pas répété dans « Simulateurs liés ».
+  const sims = guideSimulators(g.slug, g.cta?.to);
   // Jargon expliqué sur place : première apparition de chaque notion du glossaire dans le guide.
   // Une rubrique remplacée par des cartes (enveloppes) n'affiche pas ses paragraphes : ils ne comptent pas.
   const cardsInstead = (s: { heading: string }) => g.slug === 'choisir-son-enveloppe' && s.heading === 'Les grandes différences';
@@ -150,10 +152,10 @@ export function GuidePage() {
           </ul>
           </>)}
         </>)}
-        {g.slug !== 'par-ou-commencer' && relatedSimulators(simsForGuide[g.slug]).length > 0 && (<>
+        {g.slug !== 'par-ou-commencer' && sims.length > 0 && (<>
           <h3 className="next-sub">Simulateurs liés</h3>
           <ul className="next-list">
-            {relatedSimulators(simsForGuide[g.slug]).map((sim) => (
+            {sims.map((sim) => (
               <li key={sim.slug}><Link to={`/simulateurs/${sim.slug}`}>{sim.title}</Link><span>{simBlurb(sim.slug)}</span></li>
             ))}
           </ul>

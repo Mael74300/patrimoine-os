@@ -97,6 +97,11 @@ export function relatedSimulators(slugs: string[] | undefined) {
   return (slugs ?? []).map((s) => bySlug[s]).filter(Boolean);
 }
 
+/** Simulateurs liés d’un guide, sans celui que le bouton principal du guide ouvre déjà juste au-dessus. */
+export function guideSimulators(guideSlug: string, ctaTo?: string) {
+  return relatedSimulators(simsForGuide[guideSlug]).filter((sim) => `/simulateurs/${sim.slug}` !== ctaTo);
+}
+
 /** Cible du bouton « Simuler » d’une fiche : son simulateur principal, sinon le catalogue. */
 export function simulateTarget(ficheSlug: string): { to: string; title?: string } {
   const main = relatedSimulators(simsForInvestment[ficheSlug])[0];
