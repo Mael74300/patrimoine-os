@@ -1143,3 +1143,17 @@ ul.points { margin: 0.9rem 0 0.5rem; gap: 8px; }
 /* Notes sous un tableau : points courts, espacés du tableau */
 .table-notes { list-style: none; padding: 0; margin: 14px 0 20px; display: grid; gap: 6px; font-size: .92rem; line-height: 1.5; color: var(--ink-2); }
 .table-notes strong { color: var(--ink); }
+/* Simulateur Immobilier : bilan « ce que vous mettez, ce que vous gardez ». */
+.rb-down { background: var(--primary); }
+.rb-top { background: color-mix(in srgb, var(--primary) 38%, var(--surface)); }
+.rb-eq { background: var(--accent); }
+.rb-cash { background: color-mix(in srgb, var(--accent) 40%, var(--surface)); }
+.fb-track .rb-down + .rb-top, .fb-track .rb-eq + .rb-cash { border-left: 2px solid var(--surface); }
+.rb-list { display: grid; gap: 14px; }
+.rb-group { padding: 12px 14px 4px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.rb-title { margin: 0 0 10px; font-size: .95rem; color: var(--ink); }
+.rb-diff { margin: 0 0 10px; font-size: .9rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.rb-diff.pos strong { color: var(--accent); }
+.rb-diff.neg strong { color: var(--danger); }
+.rb-chart { margin: 12px 0; }
+@media (min-width: 960px) { .rb-list { grid-template-columns: 1fr 1fr; } }
