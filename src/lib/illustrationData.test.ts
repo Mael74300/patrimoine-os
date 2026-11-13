@@ -47,6 +47,10 @@ describe('schéma diversification', () => {
     expect(mix.stocks).toBeCloseTo(0.7, 10);
     expect(mix.safe).toBeCloseTo(0.3, 10);
     expect(mix.result).toBeCloseTo(-0.134, 10);
+    expect(Math.round(all.totalEur)).toBe(-2000);
+    expect(Math.round(mix.stocksEur)).toBe(-1400);
+    expect(Math.round(mix.safeEur)).toBe(60);
+    expect(Math.round(mix.totalEur)).toBe(-1340);
   });
 });
 

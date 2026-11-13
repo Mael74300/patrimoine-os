@@ -219,46 +219,51 @@ export function SchemaLevier() {
   );
 }
 
-/** Schéma « diversification » : même année, 100 % actions ou 70 % actions et 30 % placement prudent. Les longueurs des barres de perte sont proportionnelles. */
+/** Schéma « diversification » : même année, 10 000 € tout en actions ou 70 % en actions et 30 % en placement prudent. Les longueurs des barres de perte sont proportionnelles. */
 export function SchemaDiversification() {
   const rows = diversificationRows();
-  const { stocksReturn, safeReturn } = DIVERSIFICATION_EXAMPLE;
+  const { capital, stocksReturn, safeReturn } = DIVERSIFICATION_EXAMPLE;
   const X0 = 20;
   const FULL = 380;
   const len = (v: number) => (Math.abs(v) / Math.abs(stocksReturn)) * 280;
-  const titles = ['Tout en actions', 'Actions et placement prudent'];
+  const titles = rows.map((r) => (r.safe > 0 ? `${fmtEur(capital)} : ${fmtEur(capital * r.stocks)} en actions, ${fmtEur(capital * r.safe)} prudents` : `${fmtEur(capital)} tout en actions`));
+  const signed = (v: number) => (v > 0 ? `+${fmtEur(v)}` : fmtEur(v));
   const alt = rows
-    .map((r, i) => `${titles[i]} (${pct(r.stocks)} d’actions${r.safe > 0 ? `, ${pct(r.safe)} de placement prudent` : ''}) : ${pct(r.result)} sur l’année.`)
+    .map((r, i) => `${titles[i]} (${fmtEur(capital * r.stocks)} en actions${r.safe > 0 ? `, ${fmtEur(capital * r.safe)} en placement prudent` : ''}) : ${signed(r.totalEur)} sur l’année, soit ${pct(r.result)}.`)
     .join(' ');
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 258" role="img" aria-labelledby="ill-div-t ill-div-d" className="ill-svg">
+      <svg viewBox="0 0 420 292" role="img" aria-labelledby="ill-div-t ill-div-d" className="ill-svg">
         <title id="ill-div-t">Répartir son épargne entre plusieurs placements réduit la perte d’une année où les actions baissent</title>
         <desc id="ill-div-d">{`Une année fictive où les actions perdent ${pct(-stocksReturn)} et un placement prudent gagne ${pct(safeReturn)}. ${alt}`}</desc>
         {rows.map((r, i) => {
-          const y = 8 + i * 124;
+          const y = 8 + i * 146;
           const ws = r.stocks * FULL;
           return (
             <g key={titles[i]}>
               <text x={X0} y={y + 14} className="ill-year" textAnchor="start">{titles[i]}</text>
               <rect x={X0} y={y + 24} width={ws} height={30} rx={4} fill="var(--primary)" />
-              <text x={X0 + 10} y={y + 44} className="ill-on-dark ill-in" textAnchor="start">{`Actions ${pct(r.stocks)}`}</text>
+              <text x={X0 + 10} y={y + 44} className="ill-on-dark ill-in" textAnchor="start">Actions</text>
               {r.safe > 0 && (
                 <>
                   <rect x={X0 + ws} y={y + 24} width={FULL - ws} height={30} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-                  <text x={X0 + ws + 10} y={y + 44} className="ill-in" textAnchor="start">{`Prudent ${pct(r.safe)}`}</text>
+                  <text x={X0 + ws + 10} y={y + 44} className="ill-in" textAnchor="start">Prudent</text>
                 </>
               )}
               <text x={X0} y={y + 78} className="ill-sub" textAnchor="start">Résultat de l’année</text>
               <rect x={X0} y={y + 86} width={len(r.result)} height={22} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-              <text x={X0 + len(r.result) + 10} y={y + 102} className="ill-total" textAnchor="start">{pct(r.result)}</text>
+              <text x={X0 + len(r.result) + 10} y={y + 102} className="ill-total" textAnchor="start">{signed(r.totalEur)}</text>
+              <text x={X0} y={y + 126} className="ill-sub" textAnchor="start">
+                {r.safe > 0
+                  ? `Actions ${signed(r.stocksEur)}, prudent ${signed(r.safeEur)} : ${pct(r.result)}`
+                  : `Tout suit la baisse des actions : ${pct(r.result)}`}
+              </text>
             </g>
           );
         })}
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : une année où les actions perdent {pct(-stocksReturn)} et où un placement prudent gagne {pct(safeReturn)}.
-        La barre foncée montre la part de chaque placement ; la barre ocre est la perte de l’année. La répartition amortit la baisse, sans l’empêcher ni garantir un gain. Ces rendements ne sont ni observés ni prévus.
+        <strong>Illustration, exemple fictif</strong> : actions à {pct(stocksReturn)} et placement prudent à +{pct(safeReturn)} sur l’année. La barre foncée montre où est placé l’argent, la barre ocre la perte de l’année : la répartition amortit la baisse, sans l’empêcher.
       </figcaption>
     </figure>
   );
