@@ -72,6 +72,26 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
     expect(abattement).toBe(3300);
     expect(ex).toContain('retire 3 300 €');
     expect(ex).toContain('seuls 3 300 €');
+    // Suite de l’exemple : tranche à 30 % (barème Service-Public F1419, consulté le 2026-11-13).
+    const impot = abattement * 0.3;
+    expect(impot).toBeCloseTo(990, 6);
+    expect(Math.round((impot / loyers) * 100)).toBe(15);
+    expect(ex).toContain('tranche à 30 %');
+    expect(ex).toContain('990 € d’impôt sur le revenu');
+    expect(ex).toContain('15 % des loyers');
+  });
+
+  it('lmnp : jargon expliqué (BIC, amortissement), début d’activité sourcé, rubrique « Comment se lancer »', () => {
+    const f = investmentBySlug['lmnp'];
+    const norm = (t: string) => t.replace(/[\u00a0\u202f]/g, ' ');
+    expect(f.definition).toContain('bénéfices industriels et commerciaux (BIC)');
+    expect(f.howItWorks).toContain('étalé sur leur durée d');
+    expect(f.howToTitle).toBe('Comment se lancer');
+    expect(norm(f.howToInvest[0])).toContain('15 jours');
+    expect(norm(f.review.data.join(' '))).toContain('15 jours');
+    expect(f.sources.some((x) => x.url.includes('F32744'))).toBe(true);
+    expect(f.sources.some((x) => x.url.includes('F1419'))).toBe(true);
+    expect(f.sources.some((x) => x.url.includes('amortissement-comptable'))).toBe(true);
   });
 
   it('Objets d’art : 8 000 € revendus, taxe forfaitaire 6 % + 0,5 % de CRDS → 520 €', () => {

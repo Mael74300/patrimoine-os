@@ -40,7 +40,6 @@ describe('badges « à vérifier » des fiches (chantier 12)', () => {
   it('les frais de la location nue et de la location meublée revus le 2026-11-12 sont sourcés', () => {
     const cases: [string, string[], string][] = [
       ['location-nue', ['6 % à 8 %', '2 % à 3,5 %'], 'les-frais-a-supporter-lors-de-lacquisition'],
-      ['lmnp', ['1 an', '9 mois', '3 ans'], 'F1165'],
     ];
     for (const [slug, values, source] of cases) {
       const f = investmentBySlug[slug]!;
@@ -52,6 +51,17 @@ describe('badges « à vérifier » des fiches (chantier 12)', () => {
       }
       expect(f.sources.some((s) => s.url.includes(source)), `${slug} : source ${source}`).toBe(true);
     }
+    // Fiche LMNP (2026-11-13) : la durée du bail n’est pas un frais, elle passe dans les inconvénients.
+    const lmnp = investmentBySlug['lmnp']!;
+    expect(lmnp.fees.verified).toBe(true);
+    expect(lmnp.fees.asOf).toBe('13 novembre 2026');
+    expect(plain(lmnp.fees.text)).not.toMatch(/bail/i);
+    const bail = plain(lmnp.cons.join(' '));
+    for (const v of ['1 an', '9 mois', '3 ans']) {
+      expect(bail, `lmnp : ${v}`).toContain(v);
+      expect(plain(lmnp.review.data.join(' ')), `lmnp (suivi) : ${v}`).toContain(v);
+    }
+    expect(lmnp.sources.some((s) => s.url.includes('F1165'))).toBe(true);
     for (const slug of ['location-nue', 'lmnp', 'credit-immobilier', 'private-equity', 'per']) {
       expect(investmentBySlug[slug]!.minCapital.advice, `${slug} : capital en conseil`).toBe(true);
     }
