@@ -48,16 +48,18 @@ export default function PlanDuSite() {
 
       <h2 id="plan-fiches">Fiches de l’encyclopédie</h2>
       <MobileFold label={`Voir les ${fiches.length} fiches`} quietOnDesktop>
-      {categories.map((c) => {
-        const list = fiches.filter((i) => i.category === c.id);
-        if (!list.length) return null;
-        return (
-          <section key={c.id}>
-            <h3>{c.name}</h3>
-            <ul className="sitemap-list">{list.map((i) => <li key={i.slug}><Link to={`/encyclopedie/${i.slug}`}>{i.name}</Link></li>)}</ul>
-          </section>
-        );
-      })}
+        <div className="sitemap-families">
+          {categories.map((c) => {
+            const list = fiches.filter((i) => i.category === c.id);
+            if (!list.length) return null;
+            return (
+              <section key={c.id} className="sitemap-family">
+                <h3>{c.name}</h3>
+                <ul className="sitemap-list">{list.map((i) => <li key={i.slug}><Link to={`/encyclopedie/${i.slug}`}>{i.name}</Link></li>)}</ul>
+              </section>
+            );
+          })}
+        </div>
       </MobileFold>
 
       <h2 id="plan-legal">Informations légales</h2>
