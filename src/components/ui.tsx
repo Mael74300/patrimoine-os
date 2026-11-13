@@ -173,10 +173,10 @@ export function CoverageGauge({ savings, target, label, suffix = 'couvert' }: { 
   );
 }
 
-export function Dots({ level, kind, label, compact = false }: { level: Level; kind?: 'risk' | 'liq'; label: string; compact?: boolean }) {
+export function Dots({ level, kind, label }: { level: Level; kind?: 'risk' | 'liq'; label: string }) {
   return (
-    <div className={'meter' + (compact ? ' compact' : '')} aria-label={`${label} : ${level} sur 5`} role="img">
-      {compact ? <span className="meter-score" aria-hidden="true">{level}/5</span> : <span>{label}</span>}
+    <div className="meter" aria-label={`${label} : ${level} sur 5`} role="img">
+      <span>{label}</span>
       <div className={'dots ' + (kind ?? '')}>
         {[1, 2, 3, 4, 5].map((i) => (
           <i key={i} className={i <= level ? 'on' : ''} />
@@ -189,8 +189,9 @@ export function Dots({ level, kind, label, compact = false }: { level: Level; ki
 /**
  * Les trois repères d'une fiche, une ligne chacun : nom, points, puis le niveau en un mot
  * (« Risque ●●●●○ élevé »). Le texte « Temps et compétences » de la fiche donne le mot de l'effort et le précise juste dessous.
+ * `noNote` : sans cette précision, pour le comparateur où les trois repères tiennent dans une seule case.
  */
-export function MeterRows({ risk, liquidity, effort, effortNote }: { risk: Level; liquidity: Level; effort: Level; effortNote: string }) {
+export function MeterRows({ risk, liquidity, effort, effortNote, noNote = false }: { risk: Level; liquidity: Level; effort: Level; effortNote: string; noNote?: boolean }) {
   const rows: { label: string; kind: MeterKind; level: Level }[] = [
     { label: 'Risque', kind: 'risk', level: risk },
     { label: 'Liquidité', kind: 'liq', level: liquidity },
@@ -206,7 +207,7 @@ export function MeterRows({ risk, liquidity, effort, effortNote }: { risk: Level
             {[1, 2, 3, 4, 5].map((i) => <i key={i} className={i <= r.level ? 'on' : ''} />)}
           </span>
           <span className="mr-word">{r.kind === 'effort' ? effort_.word : meterWord(r.kind, r.level)}<span className="sr-only"> ({r.level} sur 5)</span></span>
-          {r.kind === 'effort' && effort_.note && <span className="mr-note">{effort_.note}</span>}
+          {r.kind === 'effort' && effort_.note && !noNote && <span className="mr-note">{effort_.note}</span>}
         </li>
       ))}
     </ul>
