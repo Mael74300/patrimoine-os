@@ -27,6 +27,7 @@ export type Investment = {
   summary: string;
   definition: string;
   howItWorks: string;
+  howToTitle?: string; // intitulé de la rubrique « Comment investir » quand il ne convient pas (ex. donation)
   howToInvest: string[];
   minCapital: Checked;
   horizon: string;

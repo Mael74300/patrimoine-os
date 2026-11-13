@@ -1469,7 +1469,7 @@ export function SchemaDonation() {
         <text x={210} y={250} textAnchor="middle" className="ill-sub">Parents de moins de 80 ans, enfant majeur.</text>
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : montants en vigueur à la date de vérification de la fiche. Au-delà, des droits s’appliquent selon un barème progressif.
+        <strong>Illustration, exemple fictif</strong> : montants en vigueur à la date de vérification de la fiche.
       </figcaption>
     </figure>
   );

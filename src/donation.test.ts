@@ -12,7 +12,6 @@ describe('schéma Donation', () => {
     const svg = renderToStaticMarkup(createElement(SchemaDonation)).replace(/[  ]/g, ' ');
     expect(svg).toContain('263 730');
     expect(svg).toContain('131 865');
-    expect(f.example.replace(/[  ]/g, ' ')).toContain('263 730');
     expect(f.tax.text.replace(/[  ]/g, ' ')).toContain('131 865');
   });
 });

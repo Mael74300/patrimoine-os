@@ -1,3 +1,5 @@
+import { droitsDonationLigneDirecte, BAREME_LIGNE_DIRECTE } from '../lib/calc/donation';
+import { DONATION_ABATTEMENTS } from './donationAbattements';
 import { describe, expect, it } from 'vitest';
 import { categoryById } from './categories';
 import { guideGroups, guides, otherGuides } from './guides';
@@ -251,11 +253,21 @@ describe('guide Livret A quinzaines : exemple fictif et taux cohérents', () => 
 });
 
 describe('fiche donation : cohérence des montants', () => {
-  it('l’exemple fictif recalcule les abattements (2 × (100 000 + 31 865))', () => {
+  it('l’exemple fictif recalcule les droits avec le barème (200 000 € − 100 000 € d’abattement → 18 194 €)', () => {
     const f = investments.find((i) => i.slug === 'donation')!;
-    expect(2 * (100_000 + 31_865)).toBe(263_730);
-    expect(f.example.replace(/\u00a0/g, ' ')).toContain('263 730');
+    const ex = f.example.replace(/\u00a0/g, ' ');
+    const abattementEnfant = DONATION_ABATTEMENTS.find((a) => a.lien === 'Enfant')!.montant;
+    expect(ex).toContain('fictif');
+    expect(ex).toContain('200 000 €');
+    expect(ex).toContain('100 000 €');
+    expect(droitsDonationLigneDirecte(200_000 - abattementEnfant)).toBe(18_194);
+    expect(ex).toContain('18 194 €');
+    expect(ex).toContain('8 072 €');
+    expect(BAREME_LIGNE_DIRECTE[0].jusqua).toBe(8_072);
+    expect(f.review.data.join(' ').replace(/\u00a0/g, ' ')).toContain('18 194 €');
     expect(f.tax.text.replace(/\u00a0/g, ' ')).toContain('131 865');
+    expect(f.tax.text).not.toContain('fiche Donation');
+    expect(f.howToTitle).toBe('Comment s’y prendre');
   });
 });
 

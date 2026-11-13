@@ -112,7 +112,7 @@ export default function InvestmentPage() {
           {inv.slug === 'activite-numerique' && <SchemaActiviteNumerique />}
           {inv.slug === 'compte-a-terme' && <SchemaCompteATerme />}
           {inv.slug === 'credit-immobilier' && <SchemaLevier />}
-          <h2>Comment investir</h2>
+          <h2>{inv.howToTitle ?? 'Comment investir'}</h2>
           <ul>{inv.howToInvest.map((s, i) => <li key={s}><JargonText segs={jSteps[i]} /></li>)}</ul>
 
           <h2>En pratique</h2>
