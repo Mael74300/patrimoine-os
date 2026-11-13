@@ -26,6 +26,12 @@ describe('contrôle SEO', () => {
     expect(errs.some((e) => e.includes('lien interne cassé'))).toBe(true);
     expect(errs.some((e) => e.includes('/b : page orpheline'))).toBe(true);
   });
+  it('accepte un lien vers une page pré-rendue hors plan du site (recherche, non indexée)', () => {
+    const a = page('/', { links: ['/a', '/recherche'] });
+    const b = page('/a/', { title: 'Autre titre de page parfaitement valide', desc: 'Une autre description, différente de la première, et assez longue.', links: ['/'] });
+    expect(run([a, b]).some((e) => e.includes('lien interne cassé'))).toBe(true);
+    expect(checkSeo([a, b], { siteUrl: site, base: '/', extraKnown: ['/recherche/'] })).toEqual([]);
+  });
   it('retire le préfixe de déploiement, avec ou sans barre finale', () => {
     const a = page('/', { links: ['/depot', '/depot/a'] });
     const b = page('/a/', { title: 'Autre titre de page parfaitement valide', desc: 'Une autre description, différente de la première, et assez longue.', links: ['/depot/'] });

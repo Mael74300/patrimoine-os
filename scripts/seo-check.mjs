@@ -4,7 +4,7 @@
  * incohérente, liens internes cassés, pages orphelines (sans lien entrant), JSON-LD invalide.
  * Utilisé par le build (échec en cas d'erreur) et par les tests.
  */
-import { access, readFile } from 'node:fs/promises';
+import { access, readFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -13,10 +13,13 @@ export const LIMITS = { titleMin: 10, titleMax: 70, descMin: 50, descMax: 170 };
 const unesc = (s) => s.replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 const norm = (p) => (p.replace(/\/+$/, '') || '/');
 
-/** pages : [{ path, html, noindex? }] ; paths : chemins publics (« /guides/x/ »). */
-export function checkSeo(pages, { siteUrl, base = '/' }) {
+/**
+ * pages : [{ path, html, noindex? }] ; paths : chemins publics (« /guides/x/ »).
+ * extraKnown : autres pages existantes hors plan du site (non indexées, comme /recherche/), cibles de lien valides.
+ */
+export function checkSeo(pages, { siteUrl, base = '/', extraKnown = [] }) {
   const errors = [];
-  const known = new Set(pages.map((p) => norm(p.path)));
+  const known = new Set([...pages.map((p) => norm(p.path)), ...extraKnown.map(norm)]);
   const inbound = new Map(pages.map((p) => [norm(p.path), new Set()]));
   const titles = new Map();
   const descs = new Map();
@@ -64,7 +67,7 @@ export function checkSeo(pages, { siteUrl, base = '/' }) {
       const target = norm(href);
       if (/\.[a-z0-9]+$/i.test(target)) continue; // fichier (og.png, sitemap.xml…)
       if (!known.has(target)) errors.push(`${here} : lien interne cassé vers « ${m[1]} »`);
-      else if (target !== here) inbound.get(target).add(here);
+      else if (target !== here) inbound.get(target)?.add(here);
     }
   }
   for (const [t, where] of titles) if (where.length > 1) errors.push(`titre en double « ${t} » : ${where.join(', ')}`);
@@ -109,7 +112,9 @@ export async function checkDist(dist, siteUrl, base) {
   const pages = [];
   for (const path of paths) pages.push({ path, html: await readFile(join(dist, path, 'index.html'), 'utf8') });
   pages.push({ path: '/404/', html: await readFile(join(dist, '404.html'), 'utf8') });
-  const errors = checkSeo(pages.filter((p) => p.path !== '/404/'), { siteUrl, base });
+  // Pages pré-rendues hors plan du site (non indexées : recherche, anciennes adresses) : liens valides vers elles.
+  const extraKnown = (await readdir(dist, { recursive: true })).filter((f) => f.endsWith('index.html')).map((f) => '/' + f.replace(/\\/g, '/').replace(/index\.html$/, ''));
+  const errors = checkSeo(pages.filter((p) => p.path !== '/404/'), { siteUrl, base, extraKnown });
   for (const p of pages) for (const t of breakableNumbers(p.html)) errors.push(`${p.path} : nombre sécable « ${t} » (espace insécable attendue, voir src/lib/nbsp.ts)`);
   for (const p of pages) for (const t of isoDatesInText(p.html)) errors.push(`${p.path} : date au format machine « ${t} » (date en toutes lettres attendue, voir src/lib/dates.ts)`);
   // Chaque image Open Graph du site doit exister dans dist/.

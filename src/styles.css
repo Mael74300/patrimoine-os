@@ -643,6 +643,18 @@ th { background: var(--surface-2); color: var(--primary-deep); }
 .inv-row { border-radius: 12px; transition: background .15s, box-shadow .15s; }
 .btn { letter-spacing: 0.005em; }
 .nav a { border-radius: 10px; }
+/* Loupe de recherche dans l'en-tête : sur toutes les pages, à droite du menu (grand écran) ou à gauche du bouton Menu (mobile). */
+.search-link { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 10px; color: var(--ink-2); transition: background .15s, color .15s; }
+.search-link:hover { background: var(--grad-soft); color: var(--primary-deep); }
+.search-link.active { background: var(--primary); color: #fff; }
+.site-header .nav { margin-left: auto; }
+@media (max-width: 820px) {
+  .site-header .container { column-gap: 8px; }
+  .site-header .search-link { order: 1; margin-left: auto; }
+  .site-header .menu-btn { order: 2; margin-left: 0; }
+  .site-header .nav { order: 3; margin-left: 0; }
+}
+.search-more { margin-top: 16px; }
 main { padding-top: 28px; }
 ::selection { background: rgba(232, 166, 28, 0.35); }
 @media (max-width: 600px) { .home-hero .search-box { gap: 6px; } .home-hero .search-box input { padding: 14px 10px; } .home-hero .btn { padding: 14px 12px; } }

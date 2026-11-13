@@ -16,4 +16,12 @@ describe('Page de recherche', () => {
     const html = render('/recherche?q=PEA');
     expect(html).toContain('inv-list');
   });
+  it('affiche les dix premiers résultats et un bouton pour les autres', () => {
+    const html = render('/recherche?q=impots');
+    expect((html.match(/class="inv-row"/g) ?? []).length).toBe(10);
+    expect(html).toMatch(/Voir les \d+ autres résultats/);
+  });
+  it('signale quand aucune page ne contient tous les mots', () => {
+    expect(render('/recherche?q=combien%20de%20temps%20durera%20mon%20capital')).toContain('voici les plus proches');
+  });
 });

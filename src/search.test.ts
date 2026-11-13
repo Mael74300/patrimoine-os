@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { search, searchSuggestions } from './lib/search';
+import { search, searchDetailed, searchSuggestions, searchTerms, stem } from './lib/search';
 import { guides } from './data/guides';
 import { investments } from './data/investments';
 import { simulators } from './lib/search';
@@ -38,5 +38,36 @@ describe('recherche', () => {
       ...simulators.map((s) => `/simulateurs/${s.slug}`),
     ]);
     for (const s of searchSuggestions) expect(ok.has(s.to), s.to).toBe(true);
+  });
+  it('ignore les petits mots d’une question et ramène les mots à leur racine', () => {
+    expect(searchTerms('Comment placer mon argent ?')).toEqual(['plac', 'argent']);
+    expect(searchTerms('de la')).toEqual(['de', 'la']); // seulement des petits mots : on les garde
+    expect(stem('emprunter')).toBe('emprunt');
+    expect(stem('retraite')).toBe('retrait');
+    expect(stem('placement')).toBe('plac');
+    expect(stem('investissement')).toBe('invest');
+    expect(stem('pea')).toBe('pea');
+  });
+  it('les questions courantes des visiteurs mènent à la bonne page en tête', () => {
+    const top = (q: string, n = 3) => search(q).slice(0, n).map((h) => h.to);
+    expect(top('acheter une maison')).toContain('/simulateurs/louer-ou-acheter');
+    expect(top('acheter un appartement')).toContain('/simulateurs/louer-ou-acheter');
+    expect(top('maison', 5)).not.toContain('/encyclopedie/objets-d-art-collection');
+    expect(top('retraite')).toContain('/simulateurs/retraits-reguliers-duree-du-capital');
+    expect(top('combien de temps durera mon capital', 2)).toContain('/simulateurs/retraits-reguliers-duree-du-capital');
+    expect(top('premier salaire', 2)).toContain('/guides/par-ou-commencer');
+    expect(top('débuter', 1)).toContain('/guides/par-ou-commencer');
+    expect(top('vivre de ses rentes', 6)).toContain('/simulateurs/independance-financiere');
+    expect(top('simulateur crédit', 3)).toContain('/simulateurs/credit');
+    expect(top('livret a', 1)).toContain('/encyclopedie/livret-a');
+    expect(top('taux livret a', 1)).toContain('/encyclopedie/livret-a');
+    expect(top('flat tax', 1)[0]).toMatch(/^\/glossaire#/);
+  });
+  it('sans page contenant tous les mots, montre les plus proches et le signale', () => {
+    const r = searchDetailed('combien de temps durera mon capital');
+    expect(r.partial).toBe(true);
+    expect(r.hits.length).toBeGreaterThan(0);
+    expect(searchDetailed('livret').partial).toBe(false);
+    expect(searchDetailed('zzzz').hits).toEqual([]);
   });
 });
