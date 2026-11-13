@@ -17,7 +17,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'types-investissements',
     title: 'Tous les types d’investissements accessibles aux particuliers',
     summary: 'Panorama des familles de placements ouvertes à un particulier en France, classées par risque, horizon et effort.',
-    readingMinutes: 6,
+    readingMinutes: 3,
     updatedOn: '2026-10-10',
     sections: [
       {
@@ -46,7 +46,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'patrimoine-net',
     title: 'Comment calculer son patrimoine net',
     summary: 'La méthode pour additionner ses actifs, retrancher ses dettes et obtenir un chiffre utile, avec un calculateur.',
-    readingMinutes: 4,
+    readingMinutes: 2,
     updatedOn: '2026-11-13',
     widget: 'patrimoine-net',
     sections: [
@@ -87,7 +87,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'immobilier-ou-etf',
     title: 'Comment comparer immobilier et ETF',
     summary: 'Pourquoi comparer un rendement locatif à la performance d’un ETF est trompeur, et la méthode pour le faire sur une base identique.',
-    readingMinutes: 7,
+    readingMinutes: 3,
     updatedOn: '2026-10-10',
     sections: [
       {
@@ -121,7 +121,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'investir-a-credit',
     title: 'Comment fonctionne un investissement à crédit',
     summary: 'L’effet de levier expliqué par un exemple chiffré : quand il enrichit, quand il appauvrit, et ce que la banque regarde.',
-    readingMinutes: 6,
+    readingMinutes: 3,
     updatedOn: '2026-10-10',
     sections: [
       {
@@ -153,7 +153,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'rentabilite-locative',
     title: 'Comment calculer la rentabilité locative',
     summary: 'Rendement brut, net de charges, après impôt et cash-flow : quatre indicateurs, quatre usages.',
-    readingMinutes: 6,
+    readingMinutes: 2,
     updatedOn: '2026-11-13',
     sections: [
       {
@@ -226,7 +226,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'comparer-les-frais',
     title: 'Comment comparer les frais d’investissement',
     summary: 'Les différents frais, comment les additionner et pourquoi un écart d’un point pèse lourd sur 25 ans.',
-    readingMinutes: 6,
+    readingMinutes: 3,
     updatedOn: '2026-10-10',
     sections: [
       {
@@ -259,7 +259,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'epargne-limitee',
     title: 'Construire un patrimoine avec une épargne limitée',
     summary: 'Les leviers qui comptent vraiment quand on ne peut épargner que quelques dizaines d’euros par mois.',
-    readingMinutes: 6,
+    readingMinutes: 3,
     updatedOn: '2026-11-11',
     sections: [
       {
@@ -303,7 +303,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'par-ou-commencer',
     title: 'Par où commencer pour construire son patrimoine',
     summary: 'Un ordre de priorité simple, de l’épargne de précaution aux investissements de long terme.',
-    readingMinutes: 6,
+    readingMinutes: 2,
     updatedOn: '2026-10-10',
     sections: [
       { heading: 'Connaître sa capacité d’épargne', body: ['Listez vos revenus nets et vos dépenses fixes sur trois mois. Passer de 100 € à 300 € d’épargne mensuelle a souvent plus d’effet que gagner un point de rendement.'] },
@@ -320,7 +320,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'interets-composes',
     title: 'Comprendre les intérêts composés',
     summary: 'Pourquoi le temps, les frais et la régularité comptent plus que la recherche du meilleur placement.',
-    readingMinutes: 4,
+    readingMinutes: 2,
     updatedOn: '2026-11-12',
     sections: [
       { heading: 'Le principe', body: ['Les intérêts composés, ce sont des intérêts qui rapportent à leur tour des intérêts. Chaque année, les gains restent placés et s’ajoutent au capital : la somme grossit donc de plus en plus vite.', 'Exemple fictif : 10 000 € à 5 % par an deviennent environ 16 289 € après 10 ans et 26 533 € après 20 ans. La seconde décennie rapporte plus que la première : c’est pourquoi la durée compte autant que le taux.'] },
@@ -340,7 +340,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'choisir-son-enveloppe',
     title: 'PEA, assurance-vie, PER, compte-titres : choisir son enveloppe',
     summary: 'Ce qui distingue les principales enveloppes et comment les combiner.',
-    readingMinutes: 7,
+    readingMinutes: 2,
     updatedOn: '2026-11-05',
     sections: [
       { heading: 'Placement et enveloppe', body: ['Le support détermine le risque ; l’enveloppe détermine la fiscalité, la disponibilité et la transmission.'] },
@@ -354,7 +354,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'combien-epargne-de-precaution',
     title: 'Combien mettre en épargne de précaution ?',
     summary: 'Trois, six ou neuf mois de dépenses : comment choisir son repère, où placer cette réserve et dans quel ordre remplir les livrets.',
-    readingMinutes: 5,
+    readingMinutes: 4,
     updatedOn: '2026-11-11',
     sections: [
       {
@@ -396,7 +396,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'taux-endettement-capacite-emprunt',
     title: 'Taux d’endettement : quel repère pour emprunter ?',
     summary: 'Comment se calcule le taux d’endettement, d’où vient le repère de 35 % et pourquoi le reste à vivre compte autant.',
-    readingMinutes: 5,
+    readingMinutes: 3,
     updatedOn: '2026-11-13',
     sections: [
       {
@@ -499,7 +499,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'combien-epargner-par-mois-objectif',
     title: 'Combien épargner par mois pour atteindre un objectif ?',
     summary: 'Apport, voyage, travaux : comment calculer le versement mensuel selon le montant visé, la durée et le taux, et ce que changent les intérêts.',
-    readingMinutes: 4,
+    readingMinutes: 3,
     updatedOn: '2026-10-27',
     sections: [
       {
@@ -541,7 +541,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'rembourser-credit-par-anticipation-ou-investir',
     title: 'Rembourser son crédit par anticipation ou investir ?',
     summary: 'Comment comparer l’économie d’intérêts d’un remboursement anticipé au gain d’un placement, et ce qui fait pencher la balance.',
-    readingMinutes: 5,
+    readingMinutes: 3,
     updatedOn: '2026-11-11',
     sections: [
       {
@@ -583,7 +583,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'diversification-placements',
     title: 'Diversifier ses placements : à quoi ça sert, comment faire ?',
     summary: 'Pourquoi ne pas tout placer au même endroit, comment la répartition entre placements amortit une baisse, et ce que la diversification ne garantit pas.',
-    readingMinutes: 5,
+    readingMinutes: 4,
     updatedOn: '2026-10-28',
     sections: [
       {
@@ -628,7 +628,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'inflation-pouvoir-d-achat-epargne',
     title: 'Inflation : que devient le pouvoir d’achat de votre épargne ?',
     summary: 'Ce que l’inflation fait à une somme placée, la différence entre rendement nominal et rendement réel, et comment la calculer.',
-    readingMinutes: 5,
+    readingMinutes: 3,
     updatedOn: '2026-11-13',
     sections: [
       {
@@ -676,7 +676,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'regle-de-72-doubler-son-capital',
     title: 'La règle de 72 : en combien de temps un capital double-t-il ?',
     summary: 'Comment estimer de tête la durée pour doubler un capital, pourquoi la règle fonctionne, ses limites et le calcul exact.',
-    readingMinutes: 4,
+    readingMinutes: 3,
     updatedOn: '2026-11-11',
     sections: [
       {
@@ -714,7 +714,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     slug: 'livret-a-calcul-interets-quinzaines',
     title: 'Livret A : comment sont calculés les intérêts (quinzaines)',
     summary: 'À quelle date un dépôt ou un retrait est pris en compte, comment fonctionnent les quinzaines et quand les intérêts sont ajoutés au capital.',
-    readingMinutes: 4,
+    readingMinutes: 3,
     updatedOn: '2026-11-12',
     sections: [
       {

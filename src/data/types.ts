@@ -60,6 +60,7 @@ export type Guide = {
   slug: string;
   title: string;
   summary: string;
+  /** Durée de lecture en minutes, à 200 mots par minute du texte affiché (contrôlée par `src/guideReadingTime.test.ts`). */
   readingMinutes: number;
   /** `points` : la rubrique s'affiche en liste à puces (un élément par entrée de `body`) au lieu de paragraphes. */
   sections: { heading: string; body: string[]; points?: boolean }[];
