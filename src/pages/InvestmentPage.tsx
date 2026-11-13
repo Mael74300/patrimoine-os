@@ -8,7 +8,7 @@ import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Fold, MeterRows, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
 import { DONATION_ABATTEMENTS, fmtEuros } from '../data/donationAbattements';
-import { SchemaActions, SchemaForet, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaScpi, SchemaUniteDeCompte, SchemaFondsEuros, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaActiviteNumerique } from '../components/schemas/fiches';
+import { SchemaActions, SchemaForet, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaScpi, SchemaScpiBilan, SchemaCrowdfundingBilan, SchemaUniteDeCompte, SchemaFondsEuros, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaActiviteNumerique } from '../components/schemas/fiches';
 import { SchemaPea, SchemaQuinzaines, SchemaLevier } from '../components/schemas/communs';
 import NotFound from './NotFound';
 import { fmtDate } from '../lib/dates';
@@ -136,9 +136,13 @@ export default function InvestmentPage() {
           </div>
 
           <h2>Exemple chiffré</h2>
-          {inv.slug === 'per'
-            ? <SchemaPerBilan><JargonText segs={linkOnly(inv.example, `/encyclopedie/${inv.slug}`)} /></SchemaPerBilan>
-            : <p className="notice info"><JargonText segs={linkOnly(inv.example, `/encyclopedie/${inv.slug}`)} /></p>}
+          {(() => {
+            const ex = <JargonText segs={linkOnly(inv.example, `/encyclopedie/${inv.slug}`)} />;
+            if (inv.slug === 'per') return <SchemaPerBilan>{ex}</SchemaPerBilan>;
+            if (inv.slug === 'crowdfunding') return <SchemaCrowdfundingBilan>{ex}</SchemaCrowdfundingBilan>;
+            if (inv.slug === 'scpi') return <SchemaScpiBilan>{ex}</SchemaScpiBilan>;
+            return <p className="notice info">{ex}</p>;
+          })()}
 
           <AdSlot id={`fiche-${inv.slug}`} />
 
