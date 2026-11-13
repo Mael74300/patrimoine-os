@@ -86,7 +86,7 @@ export function GuidePage() {
       <div className="prose">
         <PageHead eyebrow={`Guide · ${g.readingMinutes} min de lecture`} title={g.title}>{g.summary}</PageHead>
         <p className="small muted">Mis à jour le {fmtDate(g.updatedOn)}</p>
-        {g.slug === 'par-ou-commencer' && <SchemaEscalier steps={g.sections.map((s) => s.heading)} title="Les cinq étapes pour construire son patrimoine, dans l’ordre" />}
+        {g.slug === 'par-ou-commencer' && <SchemaEscalier steps={g.sections.map((s) => s.heading)} targets={g.sections.map((s) => sectionId(s.heading))} title="Les cinq étapes pour construire son patrimoine, dans l’ordre" />}
         {g.sections.map((s, i) => (
           <section key={s.heading}>
             <h2 id={sectionId(s.heading)}>{g.slug === 'par-ou-commencer' ? `${i + 1}. ${s.heading}` : s.heading}</h2>
@@ -140,9 +140,10 @@ export function GuidePage() {
           {/* Le classement du guide Types d’investissements renvoie déjà vers chaque fiche. */}
           {g.slug !== 'types-investissements' && (<>
           <h3 className="next-sub">Fiches liées</h3>
-          <ul className="next-list">
+          {/* « Par où commencer » : chaque étape a déjà son lien ; les fiches sont listées sans résumé pour garder la page courte. */}
+          <ul className={g.slug === 'par-ou-commencer' ? 'next-list next-list-compact' : 'next-list'}>
             {g.related.filter((r) => investmentBySlug[r]).map((r) => (
-              <li key={r}><Link to={`/encyclopedie/${r}`}>{investmentBySlug[r].name}</Link><span>{investmentBySlug[r].summary}</span></li>
+              <li key={r}><Link to={`/encyclopedie/${r}`}>{investmentBySlug[r].name}</Link>{g.slug !== 'par-ou-commencer' && <span>{investmentBySlug[r].summary}</span>}</li>
             ))}
           </ul>
           </>)}

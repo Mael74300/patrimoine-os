@@ -343,32 +343,73 @@ export function SchemaPtz() {
   );
 }
 
-/** Schéma « escalier » : les étapes d’un guide, dans l’ordre, chacune un cran plus haut. Les libellés viennent des titres du guide. */
-export function SchemaEscalier({ steps, title }: { steps: string[]; title: string }) {
-  const ROW = 46;
-  const STEP = 14;
-  const H = steps.length * ROW + 34;
-  const alt = steps.map((s, i) => `Étape ${i + 1} : ${s}.`).join(' ');
+/** Coupe un libellé en lignes d'au plus `max` caractères, aux espaces. */
+export function wrapLabel(label: string, max: number): string[] {
+  const lines: string[] = [];
+  for (const word of label.split(' ')) {
+    const last = lines[lines.length - 1];
+    if (last !== undefined && (last + ' ' + word).length <= max) lines[lines.length - 1] = last + ' ' + word;
+    else lines.push(word);
+  }
+  return lines;
+}
+
+/** Nombre de caractères par ligne dans une case d'étape (largeur de texte ~250 unités, 14,5 unités × 0,52 par caractère). */
+export const ESCALIER_MAX_CHARS = 32;
+
+/**
+ * Schéma « parcours » du guide « Par où commencer » : les étapes dans l'ordre, reliées par un fil qui descend vers le long terme,
+ * en deux temps (bases solides, puis faire fructifier). Chaque case est un lien vers la rubrique du guide : sur mobile,
+ * où le sommaire latéral n'est pas affiché, le schéma sert de sommaire. Aucun chiffre ; libellés = titres des rubriques.
+ */
+export function SchemaEscalier({ steps, targets, title, splitAt = 3 }: { steps: string[]; targets?: string[]; title: string; splitAt?: number }) {
+  const CARD_X = 40;
+  const CARD_W = 298;
+  const LINE = 18;
+  const GAP = 6;
+  const PHASE = 24;
+  let y = 0;
+  const phases: { y: number; label: string; color: string }[] = [];
+  const rows = steps.map((s, i) => {
+    if (i === 0 || i === splitAt) {
+      const first = i === 0;
+      phases.push({ y: y + 14, label: first ? 'D’abord : des bases solides' : 'Ensuite : faire fructifier', color: first ? 'var(--primary)' : 'var(--accent)' });
+      y += PHASE;
+    }
+    const lines = wrapLabel(s, ESCALIER_MAX_CHARS);
+    const h = 22 + lines.length * LINE;
+    const row = { s, i, y, h, lines, grow: i >= splitAt };
+    y += h + GAP;
+    return row;
+  });
+  const H = y + 14;
   return (
     <figure className="illustration">
-      <svg viewBox={`0 0 420 ${H}`} role="img" aria-labelledby="ill-esc-t ill-esc-d" className="ill-svg ill-stairs">
+      <svg viewBox={`0 0 340 ${H}`} role="group" aria-labelledby="ill-esc-t" className="ill-svg ill-stairs">
         <title id="ill-esc-t">{title}</title>
-        <desc id="ill-esc-d">{alt}</desc>
-        {steps.map((s, i) => {
-          const x = i * STEP;
-          const y = i * ROW;
-          return (
-            <g key={s}>
-              <rect x={x} y={y + 2} width={420 - x} height={ROW - 6} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
-              <circle cx={x + 24} cy={y + ROW / 2 - 1} r={14} fill="var(--primary)" />
-              <text x={x + 24} y={y + ROW / 2 + 4} textAnchor="middle" className="ill-on-dark ill-num">{i + 1}</text>
-              <text x={x + 48} y={y + ROW / 2 + 4.5} textAnchor="start" className="ill-step">{s}</text>
-            </g>
+        <path d={`M 17 ${rows[0].y + rows[0].h / 2} V ${H - 2} m -5 -7 l 5 7 l 5 -7`} fill="none" stroke="var(--ink-3)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+        {phases.map((p) => (
+          <text key={p.label} x={CARD_X} y={p.y} className="ill-phase" style={{ fill: p.color }}>{p.label}</text>
+        ))}
+        {rows.map(({ s, i, y: ry, h, lines, grow }) => {
+          const cy = ry + h / 2;
+          const body = (
+            <>
+              <rect x={CARD_X} y={ry} width={CARD_W} height={h} rx={12} className="ill-step-card" fill={grow ? 'var(--accent-soft)' : 'var(--surface-2)'} stroke={grow ? 'var(--accent)' : 'var(--primary)'} strokeWidth={1.5} />
+              <circle cx={17} cy={cy} r={15} fill={grow ? 'var(--accent)' : 'var(--primary)'} />
+              <text x={17} y={cy + 5} textAnchor="middle" className="ill-on-dark ill-num">{i + 1}</text>
+              {lines.map((l, k) => (
+                <text key={l} x={CARD_X + 14} y={cy + 5 + (k - (lines.length - 1) / 2) * LINE} className="ill-step">{l}</text>
+              ))}
+              {targets && <path d={`M ${CARD_X + CARD_W - 22} ${cy - 3} l 5 5 l 5 -5`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />}
+            </>
           );
+          return targets?.[i]
+            ? <a key={s} href={`#${targets[i]}`} aria-label={`Étape ${i + 1} : ${s}`} className="ill-step-link">{body}</a>
+            : <g key={s}>{body}</g>;
         })}
-        <text x={0} y={H - 8} textAnchor="start" className="ill-sub">Du plus urgent au plus long terme</text>
-        <path d={`M 262 ${H - 12} H 400 m -8 -5 l 8 5 l -8 5`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
       </svg>
+      {targets && <figcaption>Du plus urgent au plus long terme : choisissez une étape pour lire son explication.</figcaption>}
     </figure>
   );
 }

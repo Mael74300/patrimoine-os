@@ -147,6 +147,8 @@ legend { font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; }
 .sim > * { min-width: 0; }
 .sim-form { position: sticky; top: 84px; }
 #resultats { scroll-margin-top: 76px; }
+/* Rubriques des guides atteintes par le sommaire ou le schéma-sommaire : le titre n'est plus caché sous l'en-tête fixe. */
+h2[id^="rub-"] { scroll-margin-top: 84px; }
 #resultats:focus { outline: none; }
 .sim-jump { display: none; }
 @media (max-width: 900px) { .sim-jump { display: flex; justify-content: center; width: 100%; min-height: 48px; margin-top: 14px; font-size: 1rem; font-weight: 600; } }
@@ -429,6 +431,13 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 @media (max-width: 600px) { .theme-nav a { gap: 6px; padding: 0 12px; } .theme-nav a .sim-theme-icon { width: 20px; height: 20px; margin-left: -2px; } }
 .ill-num { font-size: 15px; font-weight: 700; }
 .ill-step { font-size: 14.5px; font-weight: 600; }
+/* Schéma-sommaire du guide « Par où commencer » : chaque case est un lien vers sa rubrique. */
+.ill-phase { font-size: 12.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.ill-step-link { cursor: pointer; }
+.ill-step-link:hover .ill-step-card, .ill-step-link:focus-visible .ill-step-card { stroke-width: 3px; }
+.ill-step-link:hover text.ill-step { text-decoration: underline; }
+.ill-step-link:focus { outline: none; }
+.ill-step-link:focus-visible .ill-step-card { stroke: var(--ink); }
 
 /* Blocs repliés sous 700 px seulement (comparateur, familles de l'accueil) */
 .mob-fold > summary { font-weight: 600; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; background: var(--surface); }
@@ -1002,7 +1011,6 @@ h2.gloss-letter::before { content: none; }
   .guide-toc ol { margin: 0; padding-left: 1.2rem; display: grid; gap: 6px; }
   .guide-toc a { color: var(--primary); text-decoration: none; }
   .guide-toc a:hover, .guide-toc a:focus-visible { text-decoration: underline; }
-  .prose h2[id^="rub-"] { scroll-margin-top: 80px; }
 }
 
 /* Petits tableaux de chiffres dans les fiches et les guides (abattements de donation, livrets) */
