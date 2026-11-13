@@ -617,7 +617,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Inflation : que devient le pouvoir d’achat de votre épargne ?',
     summary: 'Ce que l’inflation fait à une somme placée, la différence entre rendement nominal et rendement réel, et comment la calculer.',
     readingMinutes: 5,
-    updatedOn: '2026-10-28',
+    updatedOn: '2026-11-13',
     sections: [
       {
         heading: 'Ce que mesure l’inflation',
@@ -629,17 +629,17 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       {
         heading: 'Rendement nominal et rendement réel',
         body: [
-          'Le rendement nominal est celui qui est affiché : 3 % par an, par exemple. Le rendement réel est ce qu’il reste une fois l’inflation retirée. C’est lui qui dit si votre pouvoir d’achat progresse.',
-          'La finance pour tous résume l’idée ainsi : un taux d’intérêt diminué de l’inflation. Pour un calcul exact, on divise au lieu de soustraire : (1 + rendement nominal) ÷ (1 + inflation) − 1. L’écart entre les deux méthodes est faible quand les taux sont bas.',
+          'Le rendement nominal est celui qui est affiché : 3 % par an, par exemple. Le rendement réel est ce qu’il reste une fois la hausse des prix retirée. C’est lui qui dit si votre pouvoir d’achat progresse.',
+          'La finance pour tous résume l’idée ainsi : un taux d’intérêt diminué de l’inflation. De tête, 3 % de rendement avec 2 % d’inflation font environ 1 % par an. Le calcul exact, détaillé plus bas, donne 0,98 % : un écart minime tant que les taux restent bas.',
           'Si le rendement réel est positif, votre pouvoir d’achat augmente. S’il est négatif, il baisse, même si le montant affiché grossit.',
         ],
       },
       {
         heading: 'Un exemple fictif chiffré',
         body: [
-          'Supposons une inflation de 2 % par an, constante pendant 10 ans. Une somme de 10 000 € laissée telle quelle ne permet plus d’acheter que l’équivalent de 10 000 ÷ 1,02^10 ≈ 8 203 € d’aujourd’hui.',
-          'Placée à 3 % par an, la même somme atteint 10 000 × 1,03^10 ≈ 13 439 €. En euros d’aujourd’hui, cela vaut ≈ 11 025 €.',
-          'Le rendement réel est donc (1,03 ÷ 1,02) − 1 ≈ 0,98 % par an. Exemple fictif, à but pédagogique : ces taux ne sont ni observés ni prévus.',
+          'Si les prix montent de 2 % par an pendant 10 ans, 10 000 € gardés tels quels n’achètent plus que ce que 8 203 € achètent aujourd’hui.',
+          'Placés à 3 % par an, intérêts réinvestis, ils deviennent environ 13 439 €, qui n’achètent que ce que 11 025 € achètent aujourd’hui.',
+          'Concrètement, le pouvoir d’achat gagne environ 1 025 € en 10 ans, pas les 3 439 € affichés : un rendement réel d’environ 0,98 % par an (1,03 divisé par 1,02, moins 1). Exemple fictif : ces taux ne sont ni observés ni prévus.',
         ],
       },
       {
@@ -655,7 +655,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     sources: [{ label: 'La finance pour tous — L’inflation', url: 'https://www.lafinancepourtous.com/decryptages/politiques-economiques/economie-mondiale/inflation/', official: true }],
     faq: [
       { q: 'Comment l’inflation réduit-elle le pouvoir d’achat de l’épargne ?', a: 'Les prix montent de façon générale et durable : avec la même somme, on achète moins de choses qu’avant. Une épargne qui ne progresse pas, ou moins vite que les prix, perd donc de la valeur réelle.' },
-      { q: 'Comment calculer un rendement réel ?', a: 'Avec la formule (1 + rendement nominal) ÷ (1 + inflation) − 1. Exemple fictif : 3 % de rendement et 2 % d’inflation donnent environ 0,98 % de rendement réel.' },
+      { q: 'Comment calculer un rendement réel ?', a: 'De tête, retranchez l’inflation du rendement affiché. Exemple fictif : 3 % de rendement et 2 % d’inflation donnent environ 1 %, et 0,98 % au calcul exact (1,03 divisé par 1,02, moins 1).' },
       { q: 'Un rendement nominal positif garantit-il de ne pas perdre de pouvoir d’achat ?', a: 'Non. Si le rendement nominal est inférieur à l’inflation, le rendement réel est négatif : le montant affiché augmente mais permet d’acheter moins.' },
     ],
     cta: { to: '/simulateurs/inflation', label: 'Simuler l’effet de l’inflation' },
