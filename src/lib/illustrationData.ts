@@ -272,3 +272,12 @@ export function moisParts(input: { income: number; existingPayments: number; new
  * dans la tranche à 11 % ou toujours à 30 %. Tranches du barème 2026 (Service-Public F1419, consulté le 2026-11-13).
  */
 export const PER_EXAMPLE = { amount: 3000, entryRatePct: 30, exitRatesPct: [11, 30] as const, pfuPct: PFU_TOTAL_PCT };
+
+/** Fiche Financement participatif : exemple fictif, 20 prêts de 100 € à 9 % sur un an, avec 0, 1 ou 2 défauts totaux. */
+export const CROWDFUNDING_EXAMPLE = { projects: 20, ticket: 100, ratePct: 9, defaults: [0, 1, 2] as const };
+
+/**
+ * Fiche SCPI : exemple fictif, 10 000 € souscrits avec 10 % de frais d'entrée (dans la fourchette de 6 % à 12 % du montant
+ * souscrit, La finance pour tous, mise à jour le 2 janvier 2024, consultée le 2026-11-13) et 5 % de distribution par an.
+ */
+export const SCPI_EXAMPLE = { amount: 10000, entryFeePct: 10, distributionPct: 5 };

@@ -2,7 +2,8 @@ import type { ReactNode } from 'react';
 import { fmtEur } from '../../lib/finance';
 import { pfuSplit } from '../../lib/calc/pfu';
 import { perDeductionBalance } from '../../lib/calc/per';
-import { PER_EXAMPLE } from '../../lib/illustrationData';
+import { CROWDFUNDING_EXAMPLE, PER_EXAMPLE, SCPI_EXAMPLE } from '../../lib/illustrationData';
+import { crowdfundingScenario, scpiFeesPayback } from '../../lib/calc/ficheExemples';
 import { W } from './outils';
 
 /** Schéma « Comment fonctionne une SCPI » : principe qualitatif (aucun chiffre), repris du texte de la fiche et de La finance pour tous. */
@@ -968,6 +969,92 @@ export function SchemaActiviteNumerique() {
         <text x={210} y={256} textAnchor="middle" className="ill-in">dépendance à une plateforme</text>
         <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe</text>
       </svg>
+    </figure>
+  );
+}
+
+/**
+ * Schéma « Financement participatif : ce qu’un défaut coûte » (exemple fictif de la fiche, montants recalculés par
+ * `crowdfundingScenario`). Chaque carré représente un prêt de 100 € ; un carré barré est un projet en défaut total.
+ */
+export function SchemaCrowdfundingBilan({ children }: { children: ReactNode }) {
+  const { projects, ticket, ratePct, defaults } = CROWDFUNDING_EXAMPLE;
+  const rows = defaults.map((d) => crowdfundingScenario(projects, ticket, ratePct, d));
+  const titre = (d: number) => (d === 0 ? 'Les 20 projets remboursent' : `${d} projet${d > 1 ? 's' : ''} sur ${projects} en défaut`);
+  const bilan = (g: number) => (g >= 0 ? `Bilan : ${fmtEur(g)} gagnés` : `Bilan : ${fmtEur(-g)} perdus`);
+  const alt = rows.map((r) => `${titre(r.defaults)} : vous récupérez ${fmtEur(r.recovered)}, ${r.gain >= 0 ? `soit ${fmtEur(r.gain)} gagnés` : `soit ${fmtEur(-r.gain)} perdus`}.`).join(' ');
+  const step = 16.4;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 268" role="img" aria-labelledby="ill-cfb-t ill-cfb-d" className="ill-svg">
+        <title id="ill-cfb-t">Financement participatif : ce qu’un seul défaut coûte</title>
+        <desc id="ill-cfb-d">{`Exemple fictif : ${fmtEur(projects * ticket)} répartis en ${projects} prêts de ${fmtEur(ticket)} à ${ratePct} % sur un an. ${alt}`}</desc>
+        {rows.map((r, i) => {
+          const y = 4 + i * 78;
+          const color = r.gain > 0 ? (r.defaults === 0 ? 'var(--accent)' : 'var(--warn)') : 'var(--danger)';
+          return (
+            <g key={r.defaults}>
+              {i > 0 && <line x1={0} x2={340} y1={y - 8} y2={y - 8} stroke="var(--line)" strokeWidth={1} />}
+              <text x={0} y={y + 14} className="ill-year" textAnchor="start">{titre(r.defaults)}</text>
+              {Array.from({ length: projects }, (_, k) => {
+                const ko = k >= projects - r.defaults;
+                const x = 1 + k * step;
+                return (
+                  <g key={k}>
+                    <rect x={x} y={y + 24} width={13} height={13} rx={3} fill={ko ? 'var(--surface)' : 'var(--accent-soft)'} stroke={ko ? 'var(--danger)' : 'var(--accent)'} strokeWidth={1.5} />
+                    {ko && <path d={`M ${x + 3} ${y + 27} l 7 7 m 0 -7 l -7 7`} stroke="var(--danger)" strokeWidth={1.8} strokeLinecap="round" />}
+                  </g>
+                );
+              })}
+              <text x={0} y={y + 60} className="ill-total" textAnchor="start" style={{ fill: color }}>{bilan(r.gain)}</text>
+              <text x={340} y={y + 60} className="ill-sub" textAnchor="end">{`${fmtEur(r.recovered)} récupérés`}</text>
+            </g>
+          );
+        })}
+        <rect x={1} y={242} width={13} height={13} rx={3} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
+        <text x={20} y={253} className="ill-sub" textAnchor="start">{`prêt de ${fmtEur(ticket)} remboursé`}</text>
+        <rect x={190} y={242} width={13} height={13} rx={3} fill="var(--surface)" stroke="var(--danger)" strokeWidth={1.5} />
+        <path d="M 193 245 l 7 7 m 0 -7 l -7 7" stroke="var(--danger)" strokeWidth={1.8} strokeLinecap="round" />
+        <text x={209} y={253} className="ill-sub" textAnchor="start">projet en défaut</text>
+      </svg>
+      <figcaption>{children}</figcaption>
+    </figure>
+  );
+}
+
+/**
+ * Schéma « SCPI : combien de temps pour compenser les frais d’entrée » (exemple fictif de la fiche, montants recalculés par
+ * `scpiFeesPayback`). Frais de souscription : 6 % à 12 % du montant souscrit (La finance pour tous, mise à jour le
+ * 2 janvier 2024, consultée le 2026-11-13). Les longueurs des barres sont proportionnelles aux montants.
+ */
+export function SchemaScpiBilan({ children }: { children: ReactNode }) {
+  const { amount, entryFeePct, distributionPct } = SCPI_EXAMPLE;
+  const { fees, yearly, years } = scpiFeesPayback(amount, entryFeePct, distributionPct);
+  const scale = 240 / fees;
+  const years_ = Array.from({ length: years }, (_, k) => k + 1);
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 196" role="img" aria-labelledby="ill-scpib-t ill-scpib-d" className="ill-svg">
+        <title id="ill-scpib-t">SCPI : les loyers distribués compensent d’abord les frais d’entrée</title>
+        <desc id="ill-scpib-d">{`Exemple fictif : ${fmtEur(amount)} souscrits avec ${entryFeePct} % de frais d’entrée, soit ${fmtEur(fees)} de frais. Avec ${fmtEur(yearly)} distribués par an, il faut ${years} ans pour les compenser, à prix de part constant et avant impôt.`}</desc>
+        <text x={0} y={18} className="ill-year" textAnchor="start">{`Frais d’entrée : ${entryFeePct}\u00a0% de ${fmtEur(amount)}`}</text>
+        <rect x={1} y={28} width={fees * scale} height={24} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={fees * scale + 10} y={45} className="ill-in" textAnchor="start">{fmtEur(fees)}</text>
+        <text x={0} y={90} className="ill-year" textAnchor="start">{`Loyers distribués : ${distributionPct}\u00a0% par an`}</text>
+        {years_.map((k) => {
+          const x = 1 + (k - 1) * yearly * scale;
+          return (
+            <g key={k}>
+              <rect x={x} y={100} width={yearly * scale - 4} height={24} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+              <text x={x + (yearly * scale - 4) / 2} y={117} className="ill-in" textAnchor="middle">{`année ${k} : ${fmtEur(yearly)}`}</text>
+            </g>
+          );
+        })}
+        <path d={`M ${fees * scale + 1} 22 V 132`} stroke="var(--ink-2)" strokeWidth={1.5} strokeDasharray="4 3" />
+        <text x={0} y={162} className="ill-total" textAnchor="start" style={{ fill: 'var(--accent)' }}>{`Après ${years} ans, frais compensés`}</text>
+        <text x={0} y={184} className="ill-sub" textAnchor="start">ensuite, les loyers deviennent un gain</text>
+      </svg>
+      <figcaption>{children}</figcaption>
     </figure>
   );
 }
