@@ -1007,7 +1007,7 @@ export function SchemaCrowdfundingBilan({ children }: { children: ReactNode }) {
                 );
               })}
               <text x={0} y={y + 60} className="ill-total" textAnchor="start" style={{ fill: color }}>{bilan(r.gain)}</text>
-              <text x={340} y={y + 60} className="ill-sub" textAnchor="end">{`${fmtEur(r.recovered)} récupérés`}</text>
+              <text x={336} y={y + 60} className="ill-sub" textAnchor="end">{`${fmtEur(r.recovered)} récupérés`}</text>
             </g>
           );
         })}
