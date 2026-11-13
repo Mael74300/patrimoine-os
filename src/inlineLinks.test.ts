@@ -31,7 +31,7 @@ describe('Liens dans le texte (pages citées par leur nom)', () => {
     const found = new Set<string>();
     for (const p of [...guidePages, ...fichePages]) for (const s of annotateJargon(p.paras, p).flat()) if (isLink(s)) found.add(s.to);
     for (const { path, t } of shortTexts) for (const s of linkOnly(t, path)) if (isLink(s)) found.add(s.to);
-    // Comparateur : rubriques Frais et Fiscalité affichées hors de leur fiche (« fiche Donation » y devient un lien).
+    // Comparateur : rubriques Frais et Fiscalité affichées hors de leur fiche.
     for (const { t } of shortTexts) for (const s of linkOnly(t)) if (isLink(s)) found.add(s.to);
     for (const l of INLINE_LINKS) expect(found.has(l.to), l.phrase).toBe(true);
   });
@@ -55,7 +55,7 @@ describe('Liens dans le texte (pages citées par leur nom)', () => {
     const html = renderToStaticMarkup(createElement(MemoryRouter, null, createElement(JargonText, { segs: linkOnly(etf.tax.text, '/encyclopedie/etf-monde') })));
     expect(html).toContain('href="/encyclopedie/pea"');
     expect(html).toContain('href="/encyclopedie/compte-titres"');
-    // Sur sa propre fiche, « fiche Donation » reste du texte.
+    // Sur sa propre fiche, la Donation ne se lie jamais à elle-même.
     const don = investments.find((i) => i.slug === 'donation')!;
     expect(linkOnly(don.tax.text, '/encyclopedie/donation').some(isLink)).toBe(false);
   });

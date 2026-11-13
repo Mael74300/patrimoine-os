@@ -12,7 +12,6 @@ export const INLINE_LINKS: InlineLink[] = [
   { phrase: 'fiche Livret A', to: '/encyclopedie/livret-a' },
   { phrase: 'fiche PEA', to: '/encyclopedie/pea' },
   { phrase: 'fiche Compte-titres', to: '/encyclopedie/compte-titres' },
-  { phrase: 'fiche Donation', to: '/encyclopedie/donation' },
   { phrase: 'simulateur de budget', to: '/simulateurs/budget' },
   { phrase: 'simulateur de frais', to: '/simulateurs/frais' },
   { phrase: 'simulateur d’inflation', to: '/simulateurs/inflation' },
