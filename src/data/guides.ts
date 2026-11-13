@@ -392,7 +392,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
         heading: 'Le calcul',
         body: [
           'Le taux d’endettement est la part de vos revenus qui part chaque mois dans le remboursement de vos crédits. On divise vos mensualités par vos revenus nets mensuels (ce que vous touchez après cotisations).',
-          'Exemple fictif : 200 € de crédit en cours et 850 € de nouvelle mensualité pour 3 000 € de revenus donnent (200 + 850) / 3 000 = 35 %.',
+          'Exemple fictif : 200 € de crédit en cours et 850 € de nouvelle mensualité pour 3 000 € de revenus. Les crédits prennent 1 050 € par mois, soit 35 % des revenus.',
         ],
       },
       {
@@ -582,14 +582,14 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       {
         heading: 'Un exemple fictif chiffré',
         body: [
-          'Supposons qu’une année, les actions perdent 20 % et qu’un placement prudent gagne 2 %. Avec 100 % en actions, la perte est de 20 %. Avec 70 % en actions et 30 % en placement prudent, elle est de 0,7 × (−20 %) + 0,3 × 2 % = −13,4 %.',
-          'Exemple fictif, à but pédagogique : ces rendements ne sont ni observés ni prévus. Le rendement d’un ensemble de placements est la moyenne de leurs rendements pondérée par leur part dans le patrimoine.',
+          'Prenons 10 000 € et une année où les actions perdent 20 % pendant qu’un placement prudent gagne 2 %. Tout en actions, vous perdez 2 000 €. Avec 7 000 € d’actions et 3 000 € de placement prudent, les actions perdent 1 400 € et la part prudente rapporte 60 € : vous perdez 1 340 €, soit 13,4 % au lieu de 20 %.',
+          'Chaque placement pèse selon sa part : plus la part prudente est grande, plus la baisse est amortie. Exemple fictif : ces rendements ne sont ni observés ni prévus.',
         ],
       },
       {
         heading: 'Ce que la diversification ne fait pas',
         body: [
-          'Elle ne supprime pas le risque de perte : si tous vos placements baissent en même temps, la répartition n’amortit rien. Elle ne garantit pas non plus un meilleur rendement ; dans l’exemple ci-dessus, la part prudente limite la perte mais limiterait aussi le gain d’une année haussière.',
+          'Elle ne supprime pas le risque de perte : si tous vos placements baissent en même temps, la répartition n’amortit rien. Elle ne garantit pas non plus un meilleur rendement : dans l’exemple ci-dessus, la part prudente limite la perte, mais elle limiterait aussi le gain d’une année où les actions montent.',
           'Elle ne remplace pas l’épargne de précaution, qui doit rester disponible sans risque de moins-value.',
         ],
       },
@@ -606,9 +606,9 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     faq: [
       { q: 'Pourquoi diversifier ses placements ?', a: 'Parce que les placements n’évoluent pas tous de la même manière et n’offrent pas le même degré de disponibilité. Répartir l’épargne évite qu’un seul placement décide de tout le patrimoine.' },
       { q: 'La diversification supprime-t-elle le risque de perte ?', a: 'Non. Si tous les placements détenus baissent en même temps, la répartition n’amortit rien. Elle réduit la dépendance à un seul placement, sans garantir un gain ni l’absence de perte.' },
-      { q: 'Comment calculer le rendement d’un ensemble de placements ?', a: 'C’est la moyenne des rendements de chaque placement pondérée par sa part dans le patrimoine. Exemple fictif : 70 % à −20 % et 30 % à +2 % donnent −13,4 %.' },
+      { q: 'Comment calculer le rendement d’un ensemble de placements ?', a: 'On calcule le gain ou la perte de chaque placement en euros, on les additionne, puis on rapporte le résultat à la somme placée. Exemple fictif sur 10 000 € : 7 000 € d’actions qui perdent 20 % (−1 400 €) et 3 000 € qui gagnent 2 % (+60 €) donnent −1 340 €, soit −13,4 %.' },
     ],
-    cta: { to: '/simulateurs/frais', label: 'Comparer l’effet des frais' },
+    cta: { to: '/simulateurs/portefeuille', label: 'Analyser ma répartition' },
   },
   {
     slug: 'inflation-pouvoir-d-achat-epargne',

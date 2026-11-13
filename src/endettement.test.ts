@@ -18,7 +18,8 @@ describe('schéma « taux d’endettement »', () => {
     expect(p.limit).toBe(1050);
     expect(p.maxNewPayment).toBe(850);
     expect(HCSF.maxRatio).toBe(0.35);
-    expect(texte.replace(/\u00a0/g, ' ')).toContain('(200 + 850) / 3 000 = 35 %');
+    expect(texte.replace(/\u00a0/g, ' ')).toContain('Les crédits prennent 1 050 € par mois, soit 35 % des revenus');
+    expect(texte).not.toMatch(/\(200 \+ 850\)/);
     expect(texte.replace(/\u00a0/g, ' ')).toContain('200 € de crédit en cours et 850 € de nouvelle mensualité pour 3 000 €');
   });
   it('est accessible, léger et marqué « exemple fictif »', () => {

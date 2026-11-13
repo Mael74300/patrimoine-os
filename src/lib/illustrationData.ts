@@ -63,14 +63,19 @@ export function inflationBars(): InflationBar[] {
 }
 
 /** Exemple fictif du guide « Diversifier » : une année où les actions perdent 20 % et un placement prudent gagne 2 %. */
-export const DIVERSIFICATION_EXAMPLE = { stocksReturn: -0.2, safeReturn: 0.02, stocksShares: [1, 0.7] };
+export const DIVERSIFICATION_EXAMPLE = { capital: 10000, stocksReturn: -0.2, safeReturn: 0.02, stocksShares: [1, 0.7] };
 
-export type DiversificationRow = { stocks: number; safe: number; result: number };
+/** Pour chaque répartition : parts, rendement de l'année, et en euros sur le capital de l'exemple (perte des actions, gain du placement prudent, total). */
+export type DiversificationRow = { stocks: number; safe: number; result: number; stocksEur: number; safeEur: number; totalEur: number };
 
 /** Rendement de l'année pour chaque répartition : moyenne des rendements pondérée par la part de chaque placement. */
 export function diversificationRows(): DiversificationRow[] {
-  const { stocksReturn, safeReturn, stocksShares } = DIVERSIFICATION_EXAMPLE;
-  return stocksShares.map((s) => ({ stocks: s, safe: 1 - s, result: s * stocksReturn + (1 - s) * safeReturn }));
+  const { capital, stocksReturn, safeReturn, stocksShares } = DIVERSIFICATION_EXAMPLE;
+  return stocksShares.map((s) => {
+    const stocksEur = capital * s * stocksReturn;
+    const safeEur = capital * (1 - s) * safeReturn;
+    return { stocks: s, safe: 1 - s, result: s * stocksReturn + (1 - s) * safeReturn, stocksEur, safeEur, totalEur: stocksEur + safeEur };
+  });
 }
 
 /** Exemple fictif du guide « investir à crédit » : bien de 200 000 €, 20 000 € d'apport, 180 000 € empruntés à 3,5 % sur 20 ans, loyers nets de charges de 5 % ou 3 % du prix. */

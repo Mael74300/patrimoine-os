@@ -133,7 +133,7 @@ describe('les exemples chiffrés des guides sont exacts', () => {
     for (const s of ['10 000 €', '22 950 €', '12 000 €', '2,5 %', '1,7 %']) expect(t, s).not.toContain(s);
     expect(LIVRETS_AS_OF).toBe('5 novembre 2026');
   });
-  it('endettement : (200 + 850) / 3 000 = 35 %, mensualité maximale 850 €, repère HCSF cité', () => {
+  it('endettement : 200 + 850 € sur 3 000 € = 35 %, mensualité maximale 850 €, repère HCSF cité', () => {
     const r = debtRatio({ income: 3000, existingPayments: 200, newPayment: 850, livingCosts: 0, householdSize: 1 });
     expect(r.ratioAfter).toBeCloseTo(0.35, 10);
     expect(r.maxNewPayment).toBeCloseTo(850, 6);
@@ -164,11 +164,19 @@ describe('les exemples chiffrés des guides sont exacts', () => {
 });
 
 describe('guide diversification', () => {
-  it('exemple fictif : 70 % à −20 % et 30 % à +2 % → −13,4 %', () => {
+  it('exemple fictif sur 10 000 € : 7 000 € à −20 % et 3 000 € à +2 % → −1 400 €, +60 €, −1 340 € soit −13,4 %', () => {
     expect(0.7 * -20 + 0.3 * 2).toBeCloseTo(-13.4, 10);
+    expect(Math.round(7000 * -0.2)).toBe(-1400);
+    expect(Math.round(3000 * 0.02)).toBe(60);
+    expect(Math.round(10000 * -0.2)).toBe(-2000);
+    expect(-1400 + 60).toBe(-1340);
+    expect((-1340 / 10000) * 100).toBeCloseTo(-13.4, 10);
     const g = guides.find((x) => x.slug === 'diversification-placements')!;
-    expect(JSON.stringify(g).replace(/\u00a0/g, ' ')).toContain('−13,4 %');
-    expect(JSON.stringify(g).replace(/\u00a0/g, ' ')).toContain('fictif');
+    const t = JSON.stringify(g).replace(/\u00a0/g, ' ');
+    for (const v of ['10 000 €', '7 000 €', '3 000 €', '2 000 €', '1 400 €', '60 €', '1 340 €', '13,4 %', 'fictif']) expect(t, v).toContain(v);
+    // Plus de formule brute ni de « moyenne pondérée » : des euros à la place.
+    expect(t).not.toMatch(/×|pondérée/);
+    expect(g.cta?.to).toBe('/simulateurs/portefeuille');
   });
 });
 
