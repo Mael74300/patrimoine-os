@@ -2,7 +2,7 @@ import { prepayVsInvest } from './calc/prepayVsInvest';
 import type { NetWorthItem } from './calc/networth';
 import { PFU_TOTAL_PCT } from './calc/pfu';
 import { amortize } from './calc/loan';
-import { debtRatio, HCSF } from './calc/debtRatio';
+import { capacityAtHcsf, debtRatio, HCSF } from './calc/debtRatio';
 import { simpleVsCompound } from './calc/simpleVsCompound';
 import { savingsGoal } from './calc/savingsGoal';
 import { feeImpact } from './calc/fees';
@@ -150,6 +150,28 @@ export function endettementParts() {
     ratioAfter: r.ratioAfter,
     limit: income * HCSF.maxRatio,
     maxNewPayment: r.maxNewPayment,
+  };
+}
+
+/**
+ * Leviers du guide « Taux d'endettement » sur le même foyer fictif : capital empruntable au repère de 35 %,
+ * assurance comprise, avec un taux et une assurance fictifs (ceux proposés par défaut dans le simulateur).
+ * Montants arrondis au millier d'euros inférieur, calculés par capacityAtHcsf (jamais saisis à la main).
+ */
+export const LEVIERS_EXAMPLE = { rate: 0.036, insuranceRate: 0.003, years: 20, longerYears: 25, secondIncome: 1500 };
+
+export function leviersEndettement() {
+  const { income, existingPayments } = ENDETTEMENT_EXAMPLE;
+  const { rate, insuranceRate, years, longerYears, secondIncome } = LEVIERS_EXAMPLE;
+  const cap = (inc: number, existing: number, y: number) => Math.floor(capacityAtHcsf(inc, existing, rate, y, insuranceRate) / 1000) * 1000;
+  const coupleLimit = Math.round((income + secondIncome) * HCSF.maxRatio);
+  return {
+    base: cap(income, existingPayments, years),
+    longer: cap(income, existingPayments, longerYears),
+    noOldLoan: cap(income, 0, years),
+    couple: cap(income + secondIncome, existingPayments, years),
+    coupleLimit,
+    coupleNewPayment: coupleLimit - existingPayments,
   };
 }
 

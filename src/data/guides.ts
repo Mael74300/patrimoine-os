@@ -397,7 +397,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Taux d’endettement : quel repère pour emprunter ?',
     summary: 'Comment se calcule le taux d’endettement, d’où vient le repère de 35 % et pourquoi le reste à vivre compte autant.',
     readingMinutes: 5,
-    updatedOn: '2026-10-27',
+    updatedOn: '2026-11-13',
     sections: [
       {
         heading: 'Le calcul',
@@ -416,15 +416,18 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       {
         heading: 'Le reste à vivre',
         body: [
-          'Le taux ne dit pas ce qu’il vous reste pour vivre. Deux foyers au même taux n’ont pas la même marge si leurs charges ou le nombre de personnes diffèrent.',
-          'Le reste à vivre complète le taux. C’est ce qu’il reste de vos revenus après les crédits et les charges courantes, rapporté au nombre de personnes du foyer. Il aide à vérifier qu’une mensualité reste supportable.',
+          'Le taux ne dit pas ce qu’il vous reste pour vivre. Le reste à vivre le complète : c’est ce qu’il reste de vos revenus après les crédits et les charges courantes, rapporté au nombre de personnes du foyer. Deux foyers au même taux n’ont donc pas la même marge si leurs charges ou leur taille diffèrent.',
         ],
       },
       {
         heading: 'Que faire si le taux dépasse 35 %',
+        points: true,
         body: [
-          'Plusieurs leviers existent : allonger la durée (dans la limite du repère), augmenter l’apport, viser un bien moins cher, solder un petit crédit ou emprunter à deux.',
-          'Le simulateur calcule la mensualité maximale, le revenu minimal et le capital empruntable.',
+          'Point de départ : le foyer de l’exemple fictif peut mettre 850 € par mois dans le nouveau prêt, soit environ 139 000 € sur 20 ans (avec un taux fictif de 3,6 % et une assurance de 0,3 %).',
+          'Solder un petit crédit : sans les 200 € du crédit en cours, les 1 050 € vont tous au nouveau prêt, soit environ 172 000 €.',
+          'Allonger la durée : sur 25 ans au lieu de 20, environ 160 000 €, mais plus d’intérêts à payer. La durée reste plafonnée (voir plus haut).',
+          'Emprunter à deux : avec 1 500 € de revenus en plus, la limite passe à 1 575 € par mois, dont 1 375 € pour le nouveau prêt, soit environ 225 000 €.',
+          'Plus d’apport ou un bien moins cher : vous pouvez emprunter autant, mais vous avez besoin de moins.',
         ],
       },
     ],

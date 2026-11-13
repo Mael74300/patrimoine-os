@@ -11,7 +11,7 @@ import { EnvelopeCards } from '../components/EnvelopeCards';
 import { LivretsTable } from '../components/LivretsTable';
 import { RiskMap } from '../components/RiskMap';
 import { GuideGroupIcon } from '../components/Icons';
-import { SchemaEnveloppe, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaFamillesFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz, SchemaCashflow } from '../components/schemas/guides';
+import { SchemaEnveloppe, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaLeviers, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaFamillesFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz, SchemaCashflow } from '../components/schemas/guides';
 import { SchemaPea, SchemaQuinzaines, SchemaLevier } from '../components/schemas/communs';
 import { annotateJargon, splitLead, type JargonSegment } from '../lib/jargon';
 import { JargonText } from '../components/Jargon';
@@ -105,6 +105,7 @@ export function GuidePage() {
               </Fragment>
             ))}
             {g.slug === 'taux-endettement-capacite-emprunt' && s.heading === 'Le repère de 35 %' && <SchemaEndettement />}
+            {g.slug === 'taux-endettement-capacite-emprunt' && s.heading.startsWith('Que faire si') && <SchemaLeviers />}
             {g.slug === 'rembourser-credit-par-anticipation-ou-investir' && s.heading === 'Un exemple fictif chiffré' && <SchemaRembourser />}
             {g.slug === 'immobilier-ou-etf' && s.heading.startsWith('La méthode') && <SchemaImmoEtf />}
             {g.slug === 'regle-de-72-doubler-son-capital' && s.heading.startsWith('Jusqu’où') && <SchemaRegle72 />}
