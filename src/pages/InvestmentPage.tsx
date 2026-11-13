@@ -5,7 +5,7 @@ import { categoryById } from '../data/categories';
 import { investmentBySlug } from '../data/investments';
 import { needsCheck } from '../data/types';
 import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
-import { AdSlot, CheckedText, Crumbs, Dots, Fold, MetersLegend, PageHead, Sources } from '../components/ui';
+import { AdSlot, CheckedText, Crumbs, Fold, MeterRows, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
 import { DONATION_ABATTEMENTS, fmtEuros } from '../data/donationAbattements';
 import { SchemaActions, SchemaForet, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaPea, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaQuinzaines, SchemaScpi, SchemaUniteDeCompte, SchemaFondsEuros, SchemaLevier, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaActiviteNumerique } from '../components/Illustrations';
@@ -54,11 +54,7 @@ export default function InvestmentPage() {
           <PageHead eyebrow={cat.name} title={inv.name}>{inv.summary}</PageHead>
 
           <div className="panel fiche-brief">
-            <div className="meters">
-              <Dots level={inv.risk} kind="risk" label="Risque" />
-              <Dots level={inv.liquidity} kind="liq" label="Liquidité" />
-              <Dots level={inv.effort} label="Effort" />
-            </div>
+            <MeterRows risk={inv.risk} liquidity={inv.liquidity} effort={inv.effort} effortNote={inv.timeSkills} />
             <MetersLegend />
             <p className="small fiche-facts" style={{ margin: '10px 0 0' }}>
               <span><strong>Horizon :</strong> {inv.horizon}.</span>{' '}
@@ -130,7 +126,6 @@ export default function InvestmentPage() {
           <div className={`facts-grid${unbalanced(inv.fees.text, inv.tax.text) ? ' facts-stack' : ''}`}>
             <div className="panel"><h3>Frais</h3><CheckedText c={inv.fees} split path={`/encyclopedie/${inv.slug}`} segs={j.fees} /></div>
             <div className="panel"><h3>Fiscalité française</h3><CheckedText c={inv.tax} split path={`/encyclopedie/${inv.slug}`} segs={j.tax} /></div>
-            <p className="facts-wide"><strong>Temps et compétences :</strong> {inv.timeSkills}</p>
           </div>
 
           <h2>Avantages et inconvénients</h2>
@@ -185,11 +180,7 @@ export default function InvestmentPage() {
         <aside>
           <div className="panel">
             <strong>En bref</strong>
-            <div className="meters" style={{ marginTop: 12 }}>
-              <Dots level={inv.risk} kind="risk" label="Risque" />
-              <Dots level={inv.liquidity} kind="liq" label="Liquidité" />
-              <Dots level={inv.effort} label="Effort" />
-            </div>
+            <MeterRows risk={inv.risk} liquidity={inv.liquidity} effort={inv.effort} effortNote={inv.timeSkills} />
             <MetersLegend />
             <dl className="facts">
               <dt>Horizon</dt><dd>{inv.horizon}</dd>
