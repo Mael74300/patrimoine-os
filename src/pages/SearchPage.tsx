@@ -16,7 +16,9 @@ export default function SearchPage() {
   useEffect(() => {
     if (!pending.current && urlQ !== q) setQ(urlQ); // adresse changée ailleurs (loupe de l'en-tête, accueil)
   }, [urlQ]);
-  useEffect(() => () => window.clearTimeout(pending.current), []);
+  useEffect(() => {
+    return () => window.clearTimeout(pending.current);
+  }, []);
   const onType = (v: string) => {
     setQ(v);
     window.clearTimeout(pending.current);
