@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { drawdown, fireTarget, fmtEur, fmtPct, fmtYears, realRate, yearsToTarget, type FireInput } from '../lib/finance';
 import { fireTakeaway } from '../lib/takeaways';
-import { SchemaCapitalVise } from '../components/Illustrations';
+import { SchemaCapitalVise } from '../components/schemas/SchemaCapitalVise';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 const DEFAULTS: FireInput = {

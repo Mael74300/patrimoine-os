@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 // @ts-expect-error les types de Node ne sont pas installés ; le module existe sous Vitest
 import { readFileSync } from 'node:fs';
 
-const src: string = readFileSync('src/components/Illustrations.tsx', 'utf8');
+const src: string = readFileSync('src/components/schemas/guides.tsx', 'utf8');
 
 describe('schéma Immobilier ou ETF', () => {
   it('garde des légendes assez courtes pour ne pas être coupées par le bord du dessin (colonne de 206 unités)', () => {

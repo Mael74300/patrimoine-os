@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { withdrawal, withdrawalSeries, fmtEur, fmtMonths } from '../lib/finance';
 import { withdrawalTakeaway } from '../lib/takeaways';
-import { SchemaRetraits } from '../components/Illustrations';
+import { SchemaRetraits } from '../components/schemas/SchemaRetraits';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = { capital: number; monthly: number; ret: number; idx: number; years: number };

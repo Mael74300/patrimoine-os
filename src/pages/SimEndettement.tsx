@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { capacityAtHcsf, debtRatio, fmtEur, fmtPct, HCSF } from '../lib/finance';
 import { debtRatioTakeaway } from '../lib/takeaways';
-import { SchemaMois } from '../components/Illustrations';
+import { SchemaMois } from '../components/schemas/SchemaMois';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 import { fmtDate } from '../lib/dates';
 
