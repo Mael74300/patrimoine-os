@@ -1,7 +1,7 @@
 import { renderToString } from 'react-dom/server';
-import { StaticRouter } from 'react-router-dom';
+import { StaticRouter, matchRoutes } from 'react-router-dom';
 import App from './App';
-import { eager } from './routes';
+import { eager, ROUTES } from './routes';
 
 // Le pré-rendu embarque toutes les pages : le HTML statique doit contenir leur contenu.
 Object.assign(eager, import.meta.glob('./pages/*.tsx', { eager: true }));
@@ -16,4 +16,9 @@ export function render(url: string, basename: string): string {
       <App />
     </StaticRouter>,
   );
+}
+
+/** Fichier source de la page servie à cette adresse (ex. `src/pages/Guides.tsx`), pour précharger ses modules. */
+export function pageFile(url: string): string | undefined {
+  return matchRoutes(ROUTES, url)?.[0]?.route.Component.file;
 }

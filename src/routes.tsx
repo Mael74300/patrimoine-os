@@ -8,7 +8,8 @@ import { movedSims } from './lib/movedSims';
  * le HTML pré-rendu soit conservé tel quel.
  */
 type PageModule = Record<string, ComponentType>;
-export type LazyPage = ComponentType & { preload: () => Promise<unknown> };
+/** `file` : fichier source de la page (clé du manifeste de Vite, utilisée au pré-rendu pour précharger ses modules). */
+export type LazyPage = ComponentType & { preload: () => Promise<unknown>; file: string };
 
 const loaders = import.meta.glob<PageModule>('./pages/*.tsx');
 /** Pages déjà chargées : renseigné par entry-server.tsx pour le pré-rendu, vide dans le navigateur. */
@@ -26,7 +27,7 @@ function lazyPage(file: string, name = 'default'): LazyPage {
     Loaded ??= eager[key]?.[name];
     if (!Loaded) throw preload(); // Suspense affiche le repli pendant le chargement
     return <Loaded />;
-  }, { preload }) as LazyPage;
+  }, { preload, file: `src/pages/${file}.tsx` }) as LazyPage;
   return Page;
 }
 

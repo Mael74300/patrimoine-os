@@ -8,6 +8,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { buildAtom, feedEntries, pageLastmod } from './lib/atom.mjs';
 import { ogFileName, ogLabel, renderOgImage } from './lib/ogimage.mjs';
+import { modulePreloads, modulePreloadTags } from './lib/preload.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
@@ -15,7 +16,7 @@ const dist = join(root, 'dist');
 const siteUrl = new URL(process.env.SITE_URL || 'https://exemple.github.io/patrimoine-os').href.replace(/\/$/, '');
 const base = process.env.BASE_PATH || '/';
 
-const { render, pagesMeta, lastModified, config } = await import(pathToFileURL(join(root, 'dist-ssr', 'entry-server.js')).href);
+const { render, pageFile, pagesMeta, lastModified, config } = await import(pathToFileURL(join(root, 'dist-ssr', 'entry-server.js')).href);
 
 const gc = config.analytics.goatcounter;
 const gcOrigin = gc ? `https://${gc}.goatcounter.com` : '';
@@ -34,9 +35,13 @@ const CSP = [
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 const template = await readFile(join(dist, 'index.html'), 'utf8');
+// Manifeste de Vite : sert seulement à lister les modules de chaque page, il n'est pas publié.
+const manifest = JSON.parse(await readFile(join(dist, '.vite', 'manifest.json'), 'utf8'));
+await rm(join(dist, '.vite'), { recursive: true, force: true });
 
-function page(meta, html, { noindex = false, path = '' } = {}) {
+function page(meta, html, { noindex = false, path = '', route = meta.path } = {}) {
   const url = siteUrl + meta.path;
+  const file = pageFile(route);
   const head = [
     `<title>${esc(meta.title)}</title>`,
     `<meta name="description" content="${esc(meta.description)}" />`,
@@ -55,6 +60,8 @@ function page(meta, html, { noindex = false, path = '' } = {}) {
     gc ? `<script data-goatcounter="${gcOrigin}/count" data-goatcounter-settings='{"no_onload": true}' async src="https://gc.zgo.at/count.js"></script>` : '',
     `<link rel="alternate" type="application/atom+xml" title="Patrimoine OS — nouveautés" href="${esc(siteUrl)}/feed.xml" />`,
     noindex ? '' : `<meta property="og:url" content="${esc(url)}" />`,
+    // Modules de la page téléchargés en parallèle du script principal : la page devient interactive plus tôt.
+    ...(file ? modulePreloadTags(modulePreloads(manifest, file), base) : []),
     ...(meta.jsonLd ?? []).map((j) => `<script type="application/ld+json">${JSON.stringify(j).replace(/</g, '\\u003c')}</script>`),
   ].filter(Boolean).join('\n    ');
   return template
@@ -81,7 +88,7 @@ for (const meta of pages) {
 // Page 404 servie par GitHub Pages pour toute adresse inconnue.
 await writeFile(
   join(dist, '404.html'),
-  page({ path: '/404/', title: 'Page introuvable | Patrimoine OS', description: 'Cette page n’existe pas.' }, render('/page-introuvable/', base), { noindex: true }),
+  page({ path: '/404/', title: 'Page introuvable | Patrimoine OS', description: 'Cette page n’existe pas.' }, render('/page-introuvable/', base), { noindex: true, route: '/page-introuvable/' }),
 );
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
