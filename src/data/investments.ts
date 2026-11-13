@@ -57,7 +57,13 @@ const S = {
   forme2041gk: { label: 'impots.gouv.fr — Notice 2041-GK : investissements forestiers (revenus 2024)', url: 'https://www.impots.gouv.fr/sites/default/files/formulaires/2041-gk/2025/2041-gk_5115.pdf', official: true },
 } satisfies Record<string, Source>;
 
-const PFU = "Prélèvement forfaitaire unique de 31,4 % (12,8 % d'impôt sur le revenu + 18,6 % de prélèvements sociaux) sur les revenus 2026, ou option globale pour le barème progressif. Hausse de 2026 : les prélèvements sociaux passent de 17,2 % à 18,6 % sur les revenus de 2026 (loi de financement de la Sécurité sociale pour 2026).";
+/**
+ * Fiscalité au prélèvement forfaitaire unique, en trois points à amorce (chantier 83) : ce qu'on paie par défaut,
+ * l'option pour le barème, ce qui a changé en 2026. Service-Public F21618 et F2329, consultés le 13 novembre 2026.
+ * `lead` : amorce du premier point (« En compte-titres » pour un placement qui peut aussi être logé ailleurs).
+ */
+const pfuText = (lead = 'Par défaut') => `${lead} : prélèvement forfaitaire unique de 31,4 % sur les revenus de 2026 (12,8 % d'impôt sur le revenu et 18,6 % de prélèvements sociaux). Sur option : barème progressif à la place des 12,8 % (option globale) ; les prélèvements sociaux restent dus. Ce qui change en 2026 : les prélèvements sociaux passent de 17,2 % à 18,6 % sur les revenus de 2026 (loi de financement de la Sécurité sociale pour 2026).`;
+const PFU = pfuText();
 
 const raw: Omit<Investment, 'review'>[] = [
   // ------------------------------------------------------------------ Épargne
@@ -110,7 +116,7 @@ const raw: Omit<Investment, 'review'>[] = [
     category: 'epargne',
     summary: 'Épargne bancaire fiscalisée, parfois avec un taux promotionnel temporaire.',
     definition: "Un compte à terme est un prêt que vous faites à une banque : vous immobilisez une somme pendant une durée choisie avec elle (de 1 mois à quelques années, généralement 1 à 4 ans), et elle vous verse des intérêts. Les livrets bancaires « boostés » sont des offres voisines, proposées librement par les banques.",
-    howItWorks: "Le taux, ou la formule de calcul, est connu dès le départ. Sur un compte à terme à taux fixe, on verse la somme en une seule fois et on récupère capital et intérêts à l'échéance ; un retrait avant l'échéance entraîne une pénalité sur les intérêts. Il existe aussi des comptes à taux progressif (le taux monte par paliers) ou révisable (indexé sur un indice). Les offres promotionnelles des livrets ne durent souvent que quelques mois, puis le taux de base s'applique.",
+    howItWorks: "Sur un compte à terme, le taux peut être fixe, progressif (il monte par paliers) ou révisable (indexé sur un indice) : le schéma ci-dessous montre les trois formules. Les offres promotionnelles des livrets ne durent souvent que quelques mois, puis le taux de base s'applique.",
     howToInvest: ["Choisir la durée la plus courte si vous hésitez : une sortie anticipée est pénalisée.", 'Comparer le taux après la période promotionnelle (livrets) et calculer le rendement net après fiscalité.', 'Lire les conditions de sortie anticipée avant de signer : la publicité doit préciser les pénalités.'],
     minCapital: { text: 'Demandez le minimum à la banque avant de signer.', verified: false, advice: true },
     horizon: 'Court à moyen terme', horizonYears: 0,
@@ -205,7 +211,7 @@ const raw: Omit<Investment, 'review'>[] = [
     horizon: '3 à 8 ans', horizonYears: 3,
     liquidity: 3, risk: 2, effort: 3,
     fees: { text: 'Frais annuels moyens des fonds obligataires vendus en Europe : 0,81 % en 2024 (ESMA, repris par l’AMF), plus les frais de l’enveloppe (assurance-vie ou compte-titres).', verified: true, asOf: '10 novembre 2026' },
-    tax: { text: `En compte-titres : ${PFU}`, verified: true, asOf: AS_OF },
+    tax: { text: pfuText('En compte-titres'), verified: true, asOf: AS_OF },
     pros: ['Revenus réguliers', 'Généralement moins volatiles que les actions'],
     cons: ['Sensibles aux variations de taux', 'Risque de défaut des émetteurs'],
     timeSkills: 'Modéré : comprendre comment le prix varie quand les taux bougent, et la solidité de l’émetteur.',
