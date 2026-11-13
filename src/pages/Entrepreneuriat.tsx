@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { investments } from '../data/investments';
 import { Dots, PageHead } from '../components/ui';
-import { SchemaSeparer } from '../components/Illustrations';
+import { SchemaSeparer } from '../components/schemas/SchemaSeparer';
 
 const PATHS = [
   {

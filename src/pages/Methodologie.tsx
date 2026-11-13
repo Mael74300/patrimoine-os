@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { investments } from '../data/investments';
 import { needsCheck } from '../data/types';
 import { Fold, PageHead } from '../components/ui';
-import { SchemaVerification } from '../components/Illustrations';
+import { SchemaVerification } from '../components/schemas/SchemaVerification';
 
 const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
 
