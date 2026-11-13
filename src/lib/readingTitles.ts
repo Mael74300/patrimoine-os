@@ -50,4 +50,10 @@ export const investmentNames: Record<string, string> = {
   "per": "Plan d'épargne retraite (PER)",
   "capital-humain": "Formation et compétences",
   "donation": "Donation et transmission",
+  "crowdfunding": "Financement participatif",
+  "private-equity": "Capital-investissement (private equity)",
+  "or": "Or physique et papier",
+  "objets-d-art-collection": "Objets d'art et de collection",
+  "groupements-forestiers": "Forêt : parts de groupement forestier",
+  "cryptomonnaies": "Cryptomonnaies",
 };

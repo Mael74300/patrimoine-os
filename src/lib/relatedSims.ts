@@ -3,28 +3,69 @@ import { simulators } from './simulatorsList';
 
 /** Simulateurs liés à chaque fiche (clé : slug de fiche) et à chaque guide (clé : slug de guide). Cohérence vérifiée par les tests. */
 export const simsForInvestment: Record<string, string[]> = {
-  'livret-a': ['budget', 'epargne-de-precaution', 'objectif-epargne', 'inflation'],
+  // Le premier simulateur de chaque liste est la cible du bouton « Simuler » de la fiche : le plus utile pour ce placement.
+  // Trois au plus par fiche, et quatre cartes au plus avec les guides ci-dessous, pour garder « Pour aller plus loin » court.
+  'livret-a': ['epargne-de-precaution', 'budget', 'objectif-epargne'],
   lep: ['epargne-de-precaution', 'inflation'],
   'compte-a-terme': ['inflation', 'patrimoine'],
-  pel: ['inflation', 'objectif-epargne'],
-  'etf-monde': ['frais', 'portefeuille', 'patrimoine', 'investir-d-un-coup-ou-progressivement', 'rendement-reel-de-mon-placement'],
+  pel: ['objectif-epargne', 'inflation'],
+  'etf-monde': ['patrimoine', 'frais', 'portefeuille'],
   'actions-individuelles': ['portefeuille', 'frais'],
   obligations: ['portefeuille', 'inflation'],
   pea: ['frais', 'patrimoine'],
   'compte-titres': ['frais', 'patrimoine'],
   'assurance-vie': ['frais', 'patrimoine', 'retraits-reguliers-duree-du-capital'],
-  'fonds-euros': ['inflation', 'frais'],
+  'fonds-euros': ['rendement-reel-de-mon-placement', 'frais'],
   'unites-de-compte': ['frais', 'portefeuille'],
   'location-nue': ['immobilier', 'etf-immobilier'],
   lmnp: ['immobilier', 'etf-immobilier'],
   scpi: ['immobilier', 'frais'],
   'foncieres-cotees': ['etf-immobilier', 'portefeuille'],
-  'credit-immobilier': ['credit', 'comparer-des-credits', 'louer-ou-acheter', 'endettement', 'rembourser-ou-investir', 'immobilier'],
+  'credit-immobilier': ['credit', 'endettement', 'comparer-des-credits'],
   'creation-entreprise': ['entreprise'],
   'reprise-entreprise': ['entreprise', 'credit'],
   'activite-numerique': ['entreprise'],
+  crowdfunding: ['portefeuille'],
+  'private-equity': ['portefeuille'],
+  or: ['portefeuille'],
+  'objets-d-art-collection': ['portefeuille'],
+  'groupements-forestiers': ['portefeuille'],
+  cryptomonnaies: ['portefeuille'],
   per: ['patrimoine', 'independance-financiere', 'retraits-reguliers-duree-du-capital'],
   'capital-humain': ['independance-financiere'],
+};
+
+/**
+ * Guides qui expliquent la notion de chaque fiche (clé : slug de fiche), deux au plus, le plus proche en premier ;
+ * avec les simulateurs, quatre cartes au plus par fiche.
+ * Choisis à la main : un guide généraliste (« Par où commencer », « Types d’investissements ») n’y figure que s’il n’y a rien de plus précis.
+ */
+export const guidesForInvestment: Record<string, string[]> = {
+  'livret-a': ['livret-a-calcul-interets-quinzaines'],
+  lep: ['combien-epargne-de-precaution', 'epargne-limitee'],
+  'compte-a-terme': ['inflation-pouvoir-d-achat-epargne'],
+  pel: ['inflation-pouvoir-d-achat-epargne'],
+  'etf-monde': ['diversification-placements'],
+  'actions-individuelles': ['diversification-placements', 'fonctionnement-pea'],
+  obligations: ['diversification-placements'],
+  pea: ['fonctionnement-pea', 'choisir-son-enveloppe'],
+  'compte-titres': ['choisir-son-enveloppe', 'fonctionnement-pea'],
+  'assurance-vie': ['choisir-son-enveloppe'],
+  'fonds-euros': ['inflation-pouvoir-d-achat-epargne', 'choisir-son-enveloppe'],
+  'unites-de-compte': ['comparer-les-frais', 'diversification-placements'],
+  'location-nue': ['rentabilite-locative', 'immobilier-ou-etf'],
+  lmnp: ['rentabilite-locative', 'immobilier-ou-etf'],
+  scpi: ['immobilier-ou-etf', 'comparer-les-frais'],
+  'foncieres-cotees': ['immobilier-ou-etf', 'diversification-placements'],
+  'credit-immobilier': ['investir-a-credit'],
+  crowdfunding: ['diversification-placements'],
+  'private-equity': ['diversification-placements'],
+  or: ['diversification-placements'],
+  'objets-d-art-collection': ['diversification-placements'],
+  'groupements-forestiers': ['diversification-placements'],
+  cryptomonnaies: ['diversification-placements'],
+  per: ['choisir-son-enveloppe'],
+  'capital-humain': ['par-ou-commencer'],
 };
 
 export const simsForGuide: Record<string, string[]> = {
@@ -54,6 +95,12 @@ const bySlug = Object.fromEntries(simulators.map((s) => [s.slug, s]));
 
 export function relatedSimulators(slugs: string[] | undefined) {
   return (slugs ?? []).map((s) => bySlug[s]).filter(Boolean);
+}
+
+/** Cible du bouton « Simuler » d’une fiche : son simulateur principal, sinon le catalogue. */
+export function simulateTarget(ficheSlug: string): { to: string; title?: string } {
+  const main = relatedSimulators(simsForInvestment[ficheSlug])[0];
+  return main ? { to: `/simulateurs/${main.slug}`, title: main.title } : { to: '/simulateurs' };
 }
 
 export type ReadingLink = { to: string; title: string; kind: 'Guide' | 'Fiche' | 'Simulateur' };
