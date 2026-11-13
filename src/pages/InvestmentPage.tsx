@@ -8,7 +8,7 @@ import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Dots, Fold, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
 import { DONATION_ABATTEMENTS, fmtEuros } from '../data/donationAbattements';
-import { SchemaActions, SchemaForet, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaPea, SchemaLep, SchemaPel, SchemaPer, SchemaQuinzaines, SchemaScpi, SchemaUniteDeCompte, SchemaFondsEuros, SchemaLevier, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaActiviteNumerique } from '../components/Illustrations';
+import { SchemaActions, SchemaForet, SchemaDonation, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaPea, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaQuinzaines, SchemaScpi, SchemaUniteDeCompte, SchemaFondsEuros, SchemaLevier, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaActiviteNumerique } from '../components/Illustrations';
 import NotFound from './NotFound';
 import { fmtDate } from '../lib/dates';
 import { guideBySlug } from '../data/guides';
@@ -140,7 +140,9 @@ export default function InvestmentPage() {
           </div>
 
           <h2>Exemple chiffré</h2>
-          <p className="notice info"><JargonText segs={linkOnly(inv.example, `/encyclopedie/${inv.slug}`)} /></p>
+          {inv.slug === 'per'
+            ? <SchemaPerBilan><JargonText segs={linkOnly(inv.example, `/encyclopedie/${inv.slug}`)} /></SchemaPerBilan>
+            : <p className="notice info"><JargonText segs={linkOnly(inv.example, `/encyclopedie/${inv.slug}`)} /></p>}
 
           <AdSlot id={`fiche-${inv.slug}`} />
 

@@ -1,6 +1,8 @@
+import type { ReactNode } from 'react';
 import { fmtEur, HCSF } from '../lib/finance';
 import { pfuSplit } from '../lib/calc/pfu';
-import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, petitsVersementsRows, capitalViseRows, CAPITAL_VISE_EXAMPLE, precautionRows, PRECAUTION_EXAMPLE, moisParts, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../lib/illustrationData';
+import { perDeductionBalance } from '../lib/calc/per';
+import { DIVERSIFICATION_EXAMPLE, PER_EXAMPLE, INFLATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, leverageBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, endettementParts, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, petitsVersementsRows, capitalViseRows, CAPITAL_VISE_EXAMPLE, precautionRows, PRECAUTION_EXAMPLE, moisParts, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../lib/illustrationData';
 
 const W = 420;
 const BASE = 262;
@@ -661,6 +663,46 @@ export function SchemaPer() {
         <text x={210} y={298} textAnchor="middle" className="ill-sub">La sortie est imposée</text>
         <text x={210} y={342} textAnchor="middle" className="ill-sub">Schéma de principe d’après Service-Public.fr</text>
       </svg>
+    </figure>
+  );
+}
+
+/**
+ * Schéma « PER : ce que la déduction rapporte vraiment » (exemple fictif de la fiche, montants recalculés par `perDeductionBalance`).
+ * Règles : Service-Public F34982 (vérifiée le 12 octobre 2026, consultée le 2026-11-13) ; tranches de 11 % et 30 % du barème 2026 :
+ * Service-Public F1419 (consultée le 2026-11-13). Les longueurs des barres sont proportionnelles aux montants.
+ */
+export function SchemaPerBilan({ children }: { children: ReactNode }) {
+  const { amount, entryRatePct, exitRatesPct } = PER_EXAMPLE;
+  const rows = exitRatesPct.map((exit) => ({ exit, ...perDeductionBalance(amount, entryRatePct, exit) }));
+  const max = Math.max(...rows.flatMap((r) => [r.saved, r.paidLater]));
+  const len = (v: number) => (v / max) * 150;
+  const alt = rows
+    .map((r) => `Si, à la retraite, ces ${fmtEur(amount)} sont imposés dans la tranche à ${r.exit} % : ${fmtEur(r.saved)} d’impôt évité à l’entrée, ${fmtEur(r.paidLater)} payés à la sortie, ${r.net > 0 ? `soit ${fmtEur(r.net)} gagnés` : 'l’impôt est seulement reporté'}.`)
+    .join(' ');
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 236" role="img" aria-labelledby="ill-perb-t ill-perb-d" className="ill-svg">
+        <title id="ill-perb-t">PER : l’impôt évité au versement est en partie repayé à la sortie</title>
+        <desc id="ill-perb-d">{`Exemple fictif : ${fmtEur(amount)} versés et déduits dans la tranche à ${entryRatePct} %, puis retirés en capital à la retraite. ${alt}`}</desc>
+        {rows.map((r, i) => {
+          const y = 4 + i * 120;
+          return (
+            <g key={r.exit}>
+              {i > 0 && <line x1={0} x2={340} y1={y - 10} y2={y - 10} stroke="var(--line)" strokeWidth={1} />}
+              <text x={0} y={y + 14} className="ill-year" textAnchor="start">{`Retraite dans la tranche à ${r.exit}\u00a0%`}</text>
+              <rect x={0} y={y + 24} width={len(r.saved)} height={22} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+              <text x={len(r.saved) + 8} y={y + 40} className="ill-in" textAnchor="start">{`${fmtEur(r.saved)} évités à l’entrée`}</text>
+              <rect x={0} y={y + 54} width={len(r.paidLater)} height={22} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+              <text x={len(r.paidLater) + 8} y={y + 70} className="ill-in" textAnchor="start">{`${fmtEur(r.paidLater)} payés à la sortie`}</text>
+              <text x={0} y={y + 98} className="ill-total" textAnchor="start" style={{ fill: r.net > 0 ? 'var(--accent)' : 'var(--ink-2)' }}>
+                {r.net > 0 ? `Bilan : ${fmtEur(r.net)} gagnés` : 'Bilan : 0\u00a0€, l’impôt est seulement reporté'}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+      <figcaption>{children}</figcaption>
     </figure>
   );
 }
