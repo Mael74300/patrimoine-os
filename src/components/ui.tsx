@@ -16,6 +16,7 @@ import { fmtDate } from '../lib/dates';
 import { sentenceLead } from '../lib/sentenceLead';
 import { checkedParts, leadOfSegments, splitSentences } from '../lib/ficheText';
 import { buildExport, mergeSims, parseExport } from '../lib/simExport';
+import { effortParts, meterWord, type MeterKind } from '../lib/meters';
 
 // ------------------------------------------------------------ Champs
 
@@ -185,7 +186,34 @@ export function Dots({ level, kind, label, compact = false }: { level: Level; ki
   );
 }
 
-const METER_HELP: { label: string; kind?: 'risk' | 'liq'; level: Level; text: string }[] = [
+/**
+ * Les trois repères d'une fiche, une ligne chacun : nom, points, puis le niveau en un mot
+ * (« Risque ●●●●○ élevé »). Le texte « Temps et compétences » de la fiche donne le mot de l'effort et le précise juste dessous.
+ */
+export function MeterRows({ risk, liquidity, effort, effortNote }: { risk: Level; liquidity: Level; effort: Level; effortNote: string }) {
+  const rows: { label: string; kind: MeterKind; level: Level }[] = [
+    { label: 'Risque', kind: 'risk', level: risk },
+    { label: 'Liquidité', kind: 'liq', level: liquidity },
+    { label: 'Effort', kind: 'effort', level: effort },
+  ];
+  const effort_ = effortParts(effortNote, effort);
+  return (
+    <ul className="meter-rows">
+      {rows.map((r) => (
+        <li key={r.label}>
+          <span className="mr-label">{r.label}</span>
+          <span className={'dots ' + (r.kind === 'effort' ? '' : r.kind)} aria-hidden="true">
+            {[1, 2, 3, 4, 5].map((i) => <i key={i} className={i <= r.level ? 'on' : ''} />)}
+          </span>
+          <span className="mr-word">{r.kind === 'effort' ? effort_.word : meterWord(r.kind, r.level)}<span className="sr-only"> ({r.level} sur 5)</span></span>
+          {r.kind === 'effort' && effort_.note && <span className="mr-note">{effort_.note}</span>}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+const METER_HELP:{ label: string; kind?: 'risk' | 'liq'; level: Level; text: string }[] = [
   { label: 'Risque', kind: 'risk', level: 4, text: 'plus c’est rempli, plus on peut perdre une partie de son argent.' },
   { label: 'Liquidité', kind: 'liq', level: 4, text: 'plus c’est rempli, plus on récupère son argent vite et sans perte.' },
   { label: 'Effort', level: 4, text: 'plus c’est rempli, plus il faut de temps, de suivi et de connaissances.' },

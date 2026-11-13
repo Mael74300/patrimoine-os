@@ -227,6 +227,13 @@ tr:last-child td, tbody tr:last-child th { border-bottom: 0; }
 .dots i.on { background: var(--primary); }
 .dots.risk i.on { background: #c2452f; }
 .dots.liq i.on { background: var(--accent); }
+.meter-rows, .prose .meter-rows { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 9px; }
+.meter-rows li { display: grid; grid-template-columns: 5.2rem auto minmax(0, 1fr); align-items: center; column-gap: 12px; row-gap: 2px; }
+.meter-rows .mr-label { font-size: 0.85rem; color: var(--ink-3); }
+.meter-rows .dots i { width: 11px; height: 11px; }
+.meter-rows .mr-word { font-size: 0.92rem; font-weight: 600; color: var(--ink); }
+.meter-rows .mr-note { grid-column: 2 / -1; font-size: 0.85rem; line-height: 1.4; color: var(--ink-2); }
+.fiche aside .meter-rows { margin-top: 12px; }
 .meters-legend { margin: 0 0 12px; font-size: 0.93rem; }
 .meters-legend summary { color: var(--primary); font-weight: 600; }
 .meters-legend ul { list-style: none; margin: 0 0 8px; padding: 12px 14px; display: grid; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
@@ -259,7 +266,6 @@ details.fold > p { margin-left: 14px; margin-right: 14px; }
 .facts-grid.facts-stack { grid-template-columns: 1fr; }
 .facts-grid h3 { margin: 0 0 6px; font-size: 1rem; }
 .facts-grid p { margin: 0; font-size: .95rem; }
-.facts-grid .facts-wide { grid-column: 1 / -1; padding: 2px 4px; }
 /* Marqueurs ✓ et ✕ : le sens ne repose pas sur la seule couleur */
 .proscons .pros li::marker { content: "✓  "; color: var(--accent); font-weight: 700; }
 .proscons .cons li::marker { content: "✕  "; color: var(--danger); font-weight: 700; }
