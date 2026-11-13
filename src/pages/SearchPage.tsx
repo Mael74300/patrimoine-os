@@ -1,16 +1,46 @@
+import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { search, searchSuggestions } from '../lib/search';
+import { searchDetailed, searchSuggestions } from '../lib/search';
 import { PageHead } from '../components/ui';
+
+/** Nombre de résultats affichés avant le bouton « Voir les autres ». */
+export const FIRST = 10;
 
 export default function SearchPage() {
   const [params, setParams] = useSearchParams();
-  const q = params.get('q') ?? '';
-  const hits = search(q);
+  const urlQ = params.get('q') ?? '';
+  // La saisie vit dans la page et n'est recopiée dans l'adresse qu'après une courte pause :
+  // une frappe rapide ne perd plus de lettres, et l'adresse reste partageable.
+  const [q, setQ] = useState(urlQ);
+  const pending = useRef(0);
+  useEffect(() => {
+    if (!pending.current && urlQ !== q) setQ(urlQ); // adresse changée ailleurs (loupe de l'en-tête, accueil)
+  }, [urlQ]);
+  useEffect(() => () => window.clearTimeout(pending.current), []);
+  const onType = (v: string) => {
+    setQ(v);
+    window.clearTimeout(pending.current);
+    pending.current = window.setTimeout(() => {
+      pending.current = 0;
+      setParams(v ? { q: v } : {}, { replace: true });
+    }, 250);
+  };
+  const { hits, partial } = searchDetailed(q);
+  // Les premiers résultats d'abord ; le reste sur demande, pour ne pas dérouler 40 cartes sur mobile.
+  const [more, setMore] = useState<string | null>(null);
+  const shown = more === q ? hits : hits.slice(0, FIRST);
+  // Arrivée par la loupe de l'en-tête : la zone de saisie prend le focus, après celui que l'application
+  // donne au contenu à chaque changement de page (d'où le léger délai).
+  const input = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const t = window.setTimeout(() => input.current?.focus({ preventScroll: true }), 0);
+    return () => window.clearTimeout(t);
+  }, []);
   return (
     <>
       <PageHead title="Recherche" />
       <div className="search-box" role="search">
-        <input type="search" value={q} autoFocus aria-label="Rechercher" placeholder="PEA, SCPI, crédit…" onChange={(e) => setParams({ q: e.target.value }, { replace: true })} />
+        <input ref={input} type="search" value={q} autoFocus aria-label="Rechercher" placeholder="PEA, SCPI, crédit…" onChange={(e) => onType(e.target.value)} />
       </div>
       <p className="small muted" aria-live="polite">{q ? `${hits.length} résultat${hits.length > 1 ? 's' : ''} pour « ${q} »` : 'Saisissez un mot-clé.'}</p>
       {hits.length === 0 && (
@@ -24,9 +54,10 @@ export default function SearchPage() {
           </ul>
         </section>
       )}
+      {partial && <p className="small">Aucune page ne contient tous ces mots : voici les plus proches.</p>}
       {hits.length > 0 && (
         <ul className="inv-list">
-          {hits.map((h) => (
+          {shown.map((h) => (
             <li key={h.to}>
               <Link className="inv-row" to={h.to}>
                 <div>
@@ -38,6 +69,11 @@ export default function SearchPage() {
             </li>
           ))}
         </ul>
+      )}
+      {shown.length < hits.length && (
+        <button type="button" className="btn secondary search-more" onClick={() => setMore(q)}>
+          {`Voir les ${hits.length - shown.length} autres résultats`}
+        </button>
       )}
     </>
   );
