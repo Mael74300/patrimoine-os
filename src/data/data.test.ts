@@ -177,7 +177,12 @@ describe('guide inflation', () => {
     expect(10000 * 1.03 ** 10 / 1.02 ** 10).toBeCloseTo(11025, 0);
     expect(1.03 / 1.02 - 1).toBeCloseTo(0.0098, 4);
     const t = JSON.stringify(guides.find((x) => x.slug === 'inflation-pouvoir-d-achat-epargne')!).replace(/\u00a0/g, ' ');
-    for (const v of ['8 203', '13 439', '11 025', '0,98 %', 'fictif']) expect(t).toContain(v);
+    expect(Math.round(10000 * 1.03 ** 10 / 1.02 ** 10) - 10000).toBe(1025);
+    expect(Math.round(10000 * 1.03 ** 10) - 10000).toBe(3439);
+    expect(Math.round((0.03 - 0.02) * 100)).toBe(1);
+    for (const v of ['8 203', '13 439', '11 025', '1 025', '3 439', 'environ 1 % par an', '0,98 %', 'fictif']) expect(t).toContain(v);
+    // Plus de formule brute dans le guide : des mots à la place des puissances et des parenthèses.
+    expect(t).not.toMatch(/\^|\(1 \+/);
   });
 });
 
