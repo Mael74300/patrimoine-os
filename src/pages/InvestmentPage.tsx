@@ -4,7 +4,7 @@ import { config } from '../config';
 import { categoryById } from '../data/categories';
 import { investmentBySlug } from '../data/investments';
 import { needsCheck } from '../data/types';
-import { relatedSimulators, simsForInvestment } from '../lib/relatedSims';
+import { guidesForInvestment, relatedSimulators, simsForInvestment, simulateTarget } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Fold, MeterRows, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
 import { DONATION_ABATTEMENTS, fmtEuros } from '../data/donationAbattements';
@@ -16,12 +16,6 @@ import { guideBySlug } from '../data/guides';
 import { linkOnly } from '../lib/jargon';
 import { annotateFiche } from '../lib/ficheText';
 import { JargonText } from '../components/Jargon';
-
-/** Guide qui détaille une notion de la fiche (lien « Pour aller plus loin »). */
-const FICHE_GUIDE: Record<string, string> = {
-  'livret-a': 'livret-a-calcul-interets-quinzaines',
-  pea: 'fonctionnement-pea',
-};
 
 /** Une carte longue (plus de 280 caractères) à côté d'une carte au moins deux fois plus courte laisserait un grand vide : on les empile. */
 const unbalanced = (a: string, b: string) => Math.max(a.length, b.length) > 280 && Math.min(a.length, b.length) * 2 < Math.max(a.length, b.length);
@@ -39,6 +33,10 @@ export default function InvestmentPage() {
   // Jargon expliqué sur place : première apparition de chaque notion du glossaire, dans l'ordre de lecture.
   // Toutes les rubriques comptent (Frais, Fiscalité, Avantages et Inconvénients compris) : six notions au plus par fiche.
   const j = annotateFiche(inv);
+  // « Simuler » ouvre directement le simulateur principal du placement (le catalogue seulement à défaut).
+  const sim = simulateTarget(inv.slug);
+  const sims = relatedSimulators(simsForInvestment[inv.slug]);
+  const guidesLies = (guidesForInvestment[inv.slug] ?? []).filter((g) => guideBySlug[g]);
   const [jDef] = j.definition;
   const [jHow] = j.howItWorks;
   const jSteps = j.steps;
@@ -64,21 +62,14 @@ export default function InvestmentPage() {
             </p>
             <div className="btn-row" style={{ marginTop: 12 }}>
               <Link className="btn small" to={`/comparateur?ids=${[inv.slug, ...inv.alternatives.slice(0, 2)].join(',')}`}>Comparer</Link>
-              <Link className="btn small secondary" to="/simulateurs">Simuler</Link>
+              <Link className="btn small secondary" to={sim.to} aria-label={sim.title ? `Simuler : ${sim.title}` : undefined}>Simuler</Link>
             </div>
-            <p className="small muted" style={{ margin: '8px 0 0' }}>Échelles de 1 à 5 attribuées par la rédaction à titre indicatif.</p>
           </div>
 
           <h2>Définition</h2>
           <p><JargonText segs={jDef} /></p>
           <h2>Fonctionnement</h2>
           <p><JargonText segs={jHow} /></p>
-          {FICHE_GUIDE[inv.slug] && guideBySlug[FICHE_GUIDE[inv.slug]] && (
-            <p className="small">
-              <strong>Pour aller plus loin :</strong>{' '}
-              <Link to={`/guides/${FICHE_GUIDE[inv.slug]}`}>{guideBySlug[FICHE_GUIDE[inv.slug]].title}</Link>
-            </p>
-          )}
           {inv.slug === 'scpi' && <SchemaScpi />}
           {inv.slug === 'objets-d-art-collection' && <SchemaObjetsArt />}
           {inv.slug === 'groupements-forestiers' && <SchemaForet />}
@@ -146,6 +137,26 @@ export default function InvestmentPage() {
 
           <AdSlot id={`fiche-${inv.slug}`} />
 
+          {/* Suites logiques avant les sources, comme sur les guides : simulateur, guide qui explique, placements voisins. */}
+          <h2>Pour aller plus loin</h2>
+          {/* Simulateurs puis guides dans une même grille, chaque carte dit ce qu'elle est (comme en bas des simulateurs). */}
+          {sims.length + guidesLies.length > 0 && (
+            <ul className="next-list">
+              {sims.map((s) => (
+                <li key={s.slug}><span className="next-kind">Simulateur</span><Link to={`/simulateurs/${s.slug}`}>{s.title}</Link><span>{simBlurb(s.slug)}</span></li>
+              ))}
+              {guidesLies.map((g) => (
+                <li key={g}><span className="next-kind">Guide</span><Link className="next-solo" to={`/guides/${g}`}>{guideBySlug[g].title}</Link></li>
+              ))}
+            </ul>
+          )}
+          <h3 className="next-sub">Placements comparables</h3>
+          <ul className="next-list">
+            {inv.alternatives.filter((a) => investmentBySlug[a]).map((a) => (
+              <li key={a}><Link to={`/encyclopedie/${a}`}>{investmentBySlug[a].name}</Link><span>{investmentBySlug[a].summary}</span></li>
+            ))}
+          </ul>
+
           <h2>Sources et vérification</h2>
           <Sources list={inv.sources} />
           {stale && <p className="notice small">La date de révision prévue est dépassée : certaines informations ont pu changer. Vérifiez-les auprès des sources officielles.</p>}
@@ -165,21 +176,6 @@ export default function InvestmentPage() {
             </p>
           )}
 
-          {relatedSimulators(simsForInvestment[inv.slug]).length > 0 && (<>
-            <h2>Simulateurs liés</h2>
-            <ul className="next-list">
-              {relatedSimulators(simsForInvestment[inv.slug]).map((sim) => (
-                <li key={sim.slug}><Link to={`/simulateurs/${sim.slug}`}>{sim.title}</Link><span>{simBlurb(sim.slug)}</span></li>
-              ))}
-            </ul>
-          </>)}
-
-          <h2>Alternatives comparables</h2>
-          <ul className="next-list">
-            {inv.alternatives.filter((a) => investmentBySlug[a]).map((a) => (
-              <li key={a}><Link to={`/encyclopedie/${a}`}>{investmentBySlug[a].name}</Link><span>{investmentBySlug[a].summary}</span></li>
-            ))}
-          </ul>
         </article>
 
         <aside>
@@ -196,11 +192,8 @@ export default function InvestmentPage() {
             </dl>
             <div className="btn-row" style={{ marginTop: 16 }}>
               <Link className="btn small" to={`/comparateur?ids=${[inv.slug, ...inv.alternatives.slice(0, 2)].join(',')}`}>Comparer</Link>
-              <Link className="btn small secondary" to="/simulateurs">Simuler</Link>
+              <Link className="btn small secondary" to={sim.to} aria-label={sim.title ? `Simuler : ${sim.title}` : undefined}>Simuler</Link>
             </div>
-            <p className="small muted" style={{ marginTop: 12, marginBottom: 0 }}>
-              Échelles de 1 à 5 attribuées par la rédaction à titre indicatif.
-            </p>
           </div>
         </aside>
       </div>

@@ -279,6 +279,10 @@ details.fold > p { margin-left: 14px; margin-right: 14px; }
 .next-list span { display: block; padding: 2px 14px 0; margin-bottom: 10px; font-size: 0.9rem; color: var(--ink-3); }
 /* Variante compacte : titre seul, même carte que les autres listes de fin de page. */
 .next-list-compact a { padding-bottom: 10px; }
+/* Nature du lien (« Simulateur », « Guide ») au-dessus du titre, comme les pistes en bas des simulateurs. */
+.next-list .next-kind { display: block; padding: 9px 14px 0; margin: 0; font-size: .7rem; line-height: 1.5; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-3); }
+.next-list .next-kind + a { padding-top: 0; }
+.next-list a.next-solo { padding-bottom: 10px; }
 @media (min-width: 701px) { .prose ul.next-list { grid-template-columns: 1fr 1fr; } }
 .source-list { padding-left: 1.1rem; }
 
