@@ -105,7 +105,7 @@ export function prepayTakeaway(p: { lump: number; advantageInvest: number; inter
 }
 
 /** Immobilier locatif : ce que rapporte le bien, ce que le propriétaire paie de sa poche, et le patrimoine à l'horizon. */
-export function rentalTakeaway(p: { totalCost: number; netYield: number; monthlyCashflow: number; monthlyCashflowAfterTax: number | null; horizon: number; netEquity: number }): string {
+export function rentalTakeaway(p: { totalCost: number; netYield: number; monthlyCashflow: number; monthlyCashflowAfterTax: number | null; horizon: number; netEquity: number; putIn?: number }): string {
   if (!(p.totalCost > 0) || !Number.isFinite(p.netYield)) return '';
   const mois = Math.round(p.monthlyCashflow);
   const tresorerie = mois >= 0
@@ -118,7 +118,10 @@ export function rentalTakeaway(p: { totalCost: number; netYield: number; monthly
       ? `\nAprès l'impôt estimé de la première année, il reste environ ${fmtEur(a)} par mois.`
       : `\nAprès l'impôt estimé de la première année, l'effort mensuel est d'environ ${fmtEur(-a)}.`;
   }
-  const fin = `\nÀ ${fmtAns(p.horizon)}, crédit déduit, le bien représenterait environ ${fmtEur(p.netEquity)} de patrimoine (estimation, si prix et loyers évoluent comme saisi).`;
+  const poche = p.putIn !== undefined && p.putIn > 0
+    ? `\nEn ${fmtAns(p.horizon)}, vous auriez sorti environ ${fmtEur(p.putIn)} de votre poche, apport compris. Crédit déduit, le bien représenterait alors`
+    : `\nÀ ${fmtAns(p.horizon)}, crédit déduit, le bien représenterait`;
+  const fin = `${poche} environ ${fmtEur(p.netEquity)} de patrimoine (estimation, si prix et loyers évoluent comme saisi).`;
   return tresorerie + apres + fin;
 }
 

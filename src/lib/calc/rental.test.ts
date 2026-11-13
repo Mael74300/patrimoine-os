@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { amortize } from './loan';
-import { ADVERSE, adverseScenario, capitalGainsTaxRealEstate, rentalAnalysis, rentalProjection } from './rental';
+import { ADVERSE, adverseScenario, capitalGainsTaxRealEstate, rentalAnalysis, rentalBalance, rentalProjection } from './rental';
 
 import { RENTAL } from './fixtures';
 
@@ -88,4 +88,33 @@ describe('plus-value immobilière', () => {
   });
   it('30 ans : exonération totale', () => expect(capitalGainsTaxRealEstate(100000, 30).total).toBeCloseTo(0, 8));
   it('moins-value : aucun impôt', () => expect(capitalGainsTaxRealEstate(-5000, 10).total).toBe(0));
+});
+
+describe('bilan à l’horizon (exemple fictif)', () => {
+  it('loyer insuffisant : apport + compléments mensuels, face au patrimoine net', () => {
+    const proj = rentalProjection(RENTAL);
+    const end = proj[proj.length - 1];
+    const b = rentalBalance(RENTAL);
+    expect(end.cumulativeCashflowAfterTax).toBeLessThan(0);
+    expect(b.downPayment).toBe(RENTAL.downPayment);
+    expect(b.topUps).toBeCloseTo(-end.cumulativeCashflowAfterTax, 8);
+    expect(b.received).toBe(0);
+    expect(b.putIn).toBeCloseTo(RENTAL.downPayment - end.cumulativeCashflowAfterTax, 8);
+    expect(b.got).toBeCloseTo(end.netEquity, 8);
+    expect(b.diff).toBeCloseTo(end.netEquity + end.cumulativeCashflowAfterTax - RENTAL.downPayment, 8);
+  });
+  it('loyer élevé : l’excédent encaissé s’ajoute à ce que l’on détient', () => {
+    const i = { ...RENTAL, monthlyRent: 2000 };
+    const end = rentalProjection(i).at(-1)!;
+    const b = rentalBalance(i);
+    expect(end.cumulativeCashflowAfterTax).toBeGreaterThan(0);
+    expect(b.topUps).toBe(0);
+    expect(b.putIn).toBe(i.downPayment);
+    expect(b.got).toBeCloseTo(end.netEquity + end.cumulativeCashflowAfterTax, 8);
+  });
+  it('apport supérieur au coût total : seul le coût total est compté', () => {
+    const i = { ...RENTAL, downPayment: 1_000_000 };
+    const b = rentalBalance(i);
+    expect(b.downPayment).toBeCloseTo(rentalAnalysis(i).totalCost, 8);
+  });
 });

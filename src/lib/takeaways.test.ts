@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, fmtEur, rentalAnalysis, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
+import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, fmtEur, rentalAnalysis, rentalBalance, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
 import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio } from './finance';
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
@@ -161,6 +161,13 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(t).toContain(eur(-a.monthlyCashflow));
     expect(t).toContain('devotrepoche');
     expect(t).toContain(eur(a.netEquity));
+  });
+  it('bilan : somme sortie de sa poche reprise du calcul', () => {
+    const b = rentalBalance(base);
+    const t = digits(rentalTakeaway({ ...args(base), putIn: b.putIn }));
+    expect(t).toContain(eur(b.putIn));
+    expect(t).toContain('apportcompris');
+    expect(t).toContain(eur(b.netEquity));
   });
   it('flux positif : le loyer couvre mensualité et charges', () => {
     const a = args({ ...base, monthlyRent: 1500 });

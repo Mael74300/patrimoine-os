@@ -166,6 +166,40 @@ export function rentalProjection(i: RentalInput): RentalYear[] {
   return out;
 }
 
+/** Bilan à l'horizon : ce que l'investisseur a sorti de sa poche, ce qu'il détient à la fin. */
+export interface RentalBalance {
+  /** Apport réellement utilisé (plafonné au coût total de l'opération). */
+  downPayment: number;
+  /** Somme des compléments versés chaque mois (soldes après impôt négatifs, cumulés), 0 si le loyer a tout couvert. */
+  topUps: number;
+  /** Excédent cumulé encaissé (soldes après impôt positifs, cumulés), 0 sinon. */
+  received: number;
+  /** Patrimoine net immobilier à l'horizon : valeur estimée du bien − capital restant dû. */
+  netEquity: number;
+  /** Total sorti de votre poche = apport + compléments. */
+  putIn: number;
+  /** Total détenu à la fin = patrimoine net + excédent encaissé. */
+  got: number;
+  /** Écart = détenu − sorti, avant frais de revente et impôt sur la plus-value, sans coût d'opportunité. */
+  diff: number;
+}
+
+/**
+ * Bilan simple à l'horizon de la projection. Les soldes cumulés tiennent compte de l'impôt estimé
+ * (aucun impôt si le régime « aucune » est choisi). Aucun frais de revente ni impôt sur la plus-value.
+ */
+export function rentalBalance(i: RentalInput, proj: RentalYear[] = rentalProjection(i)): RentalBalance {
+  const downPayment = Math.min(Math.max(0, num(i.downPayment)), totalCostOf(i));
+  const end = proj[proj.length - 1];
+  const cumulative = end?.cumulativeCashflowAfterTax ?? 0;
+  const topUps = Math.max(0, -cumulative);
+  const received = Math.max(0, cumulative);
+  const netEquity = end?.netEquity ?? Math.max(0, num(i.price)) - loanOf(i).loanAmount;
+  const putIn = downPayment + topUps;
+  const got = netEquity + received;
+  return { downPayment, topUps, received, netEquity, putIn, got, diff: got - putIn };
+}
+
 /** Hypothèses du scénario défavorable, appliquées à la saisie de l'utilisateur. */
 export const ADVERSE = {
   extraVacancyMonths: 2,
