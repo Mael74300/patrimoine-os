@@ -223,7 +223,6 @@ tr:last-child td, tbody tr:last-child th { border-bottom: 0; }
 .inv-row p { margin: 0; color: var(--ink-2); font-size: 0.93rem; }
 .meters { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
 .meter { display: flex; flex-direction: column; gap: 3px; font-size: 0.72rem; color: var(--ink-3); min-width: 64px; }
-.meter.compact { font-size: 0.82rem; font-weight: 600; color: var(--ink-2); }
 .dots { display: flex; gap: 3px; }
 .dots i { width: 9px; height: 9px; border-radius: 2px; background: var(--line); display: block; }
 .dots i.on { background: var(--primary); }
@@ -451,6 +450,8 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
   .mob-fold:not([open]) .fold-hint { display: block; font-weight: 400; font-size: .85rem; color: var(--ink-3); margin-top: 2px; }
 }
 .cmp-list { margin: 0; padding-left: 16px; }
+.cmp-table .meter-rows { margin: 0; gap: 6px; }
+.cmp-table .meter-rows li { grid-template-columns: 4.6rem auto minmax(0, 1fr); column-gap: 10px; }
 .cmp-table td > p { margin: 0; }
 .cmp-table .sentence-list { font-size: inherit; padding-left: 16px; }
 .cmp-table .sentence-list li { margin-bottom: 2px; }
@@ -471,10 +472,9 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
   .cmp-closed td { display: none; }
   .cmp-closed th { border-bottom: 1px solid var(--line); padding-bottom: 4px; }
   .cmp-table tbody td::before { content: attr(data-label); display: block; font-weight: 600; font-size: 0.85rem; color: var(--ink-2); }
-  /* Repères sur 5 : nom du placement à gauche, points à droite, sur une seule ligne (le critère est déjà dans l'intitulé de la ligne). */
-  .cmp-table tbody td.cmp-meter { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-  .cmp-table tbody td.cmp-meter::before { display: inline; }
-  .cmp-table tbody td.cmp-meter .meter > span:not(.meter-score) { display: none; }
+  /* Repères : nom du placement, puis ses trois lignes Risque, Liquidité, Effort. */
+  .cmp-table tbody td.cmp-meter { padding-bottom: 10px; }
+  .cmp-table tbody td.cmp-meter::before { margin-bottom: 6px; }
 }
 
 .search-ideas { list-style: none; padding: 0; margin: 12px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }

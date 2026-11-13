@@ -4,7 +4,7 @@ import { categoryById } from '../data/categories';
 import { investmentBySlug, investments } from '../data/investments';
 import { fmtEur, projectGrowth } from '../lib/finance';
 import { projectionSplit, totalContributed } from '../lib/calc/compareSummary';
-import { CheckedText, Disclaimer, Dots, LineChart, MetersLegend, NumberField, PageHead } from '../components/ui';
+import { CheckedText, Disclaimer, LineChart, MeterRows, MetersLegend, NumberField, PageHead } from '../components/ui';
 
 /** Critères longs : repliés par ligne sur mobile (le tableau y est empilé), toujours ouverts sans JavaScript et en écran large. */
 export const CMP_FOLDED_ON_MOBILE = ['Capital nécessaire', 'Frais', 'Fiscalité', 'Avantages', 'Inconvénients'];
@@ -56,9 +56,9 @@ export default function Compare() {
 
   const rows: [string, (i: (typeof items)[number]) => ReactNode][] = [
     ['Famille', (i) => categoryById[i.category].name],
-    ['Risque', (i) => <Dots level={i.risk} kind="risk" label="Risque" compact />],
-    ['Liquidité', (i) => <Dots level={i.liquidity} kind="liq" label="Liquidité" compact />],
-    ['Effort', (i) => <Dots level={i.effort} label="Effort" compact />],
+    // Les trois repères dans une seule case, en points et en mots, comme le cadre « En bref » des fiches :
+    // on lit un placement d'un coup d'œil, et la page mobile perd deux blocs empilés.
+    ['Repères', (i) => <MeterRows risk={i.risk} liquidity={i.liquidity} effort={i.effort} effortNote={i.timeSkills} noNote />],
     ['Horizon', (i) => i.horizon],
     ['Capital nécessaire', (i) => <CheckedText c={i.minCapital} split />],
     ['Frais', (i) => <CheckedText c={i.fees} split />],
@@ -103,7 +103,7 @@ export default function Compare() {
                       <button type="button" className="cmp-toggle" aria-expanded={!closed.includes(label)} onClick={() => toggle(label)}>{label}</button>
                     ) : label}
                   </th>
-                  {items.map((i) => <td key={i.slug} data-label={i.name} className={['Risque', 'Liquidité', 'Effort'].includes(label) ? 'cmp-meter' : undefined}>{render(i)}</td>)}
+                  {items.map((i) => <td key={i.slug} data-label={i.name} className={label === 'Repères' ? 'cmp-meter' : undefined}>{render(i)}</td>)}
                 </tr>
               ))}
             </tbody>

@@ -12,6 +12,15 @@ describe('Comparateur', () => {
     for (const label of CMP_FOLDED_ON_MOBILE) expect(html).toContain(`>${label}</th>`);
     expect(html).toContain('Avantages');
   });
+  it('regroupe Risque, Liquidité et Effort dans une seule ligne, avec le niveau en mots comme sur les fiches', () => {
+    expect(html).toContain('>Repères</th>');
+    for (const label of ['Risque', 'Liquidité', 'Effort']) expect(html).not.toContain(`>${label}</th>`);
+    expect(html).not.toMatch(/\d\/5</);
+    // Livret A : risque 1 sur 5 → « très faible », liquidité 5 sur 5 → « très bonne ».
+    const text = html.replace(/<!-- -->/g, '');
+    expect(text).toContain('très faible<span class="sr-only"> (1 sur 5)</span>');
+    expect(text).toContain('très bonne<span class="sr-only"> (5 sur 5)</span>');
+  });
   it('ne replie sur mobile que des critères longs', () => {
     expect(CMP_FOLDED_ON_MOBILE).toEqual(['Capital nécessaire', 'Frais', 'Fiscalité', 'Avantages', 'Inconvénients']);
   });
