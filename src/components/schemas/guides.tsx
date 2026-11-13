@@ -1,5 +1,5 @@
-import { fmtEur, HCSF } from '../../lib/finance';
-import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, cashflowParts, endettementParts, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, petitsVersementsRows, precautionRows, PRECAUTION_EXAMPLE, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../../lib/illustrationData';
+import { fmtEur, fmtPct, HCSF } from '../../lib/finance';
+import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, cashflowParts, endettementParts, leviersEndettement, LEVIERS_EXAMPLE, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, petitsVersementsRows, precautionRows, PRECAUTION_EXAMPLE, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../../lib/illustrationData';
 import { W, BASE, TOP, BAR_W, pct, wrapLabel } from './outils';
 
 /** Schéma « boule de neige » : même capital, mêmes 5 %, intérêts simples ou réinvestis. Les hauteurs sont proportionnelles aux montants. */
@@ -479,6 +479,44 @@ export function SchemaEndettement() {
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : avec {fmtEur(p.income)} de revenus, la charge totale de crédit maximale est de {fmtEur(p.limit)} par mois ; si {fmtEur(p.existing)} sont déjà engagés, il reste {fmtEur(p.maxNewPayment)} pour le nouveau crédit. Largeurs proportionnelles aux montants.
+      </figcaption>
+    </figure>
+  );
+}
+
+/** Guide « Taux d'endettement » : somme empruntable selon le levier, sur le foyer fictif du guide (calculée par leviersEndettement). */
+export function SchemaLeviers() {
+  const l = leviersEndettement();
+  const X0 = 14;
+  const BW = 312;
+  const max = l.couple;
+  const w = (v: number) => (v / max) * BW;
+  const rows = [
+    { label: `Au départ (${LEVIERS_EXAMPLE.years} ans)`, value: l.base, base: true },
+    { label: `Durée allongée à ${LEVIERS_EXAMPLE.longerYears} ans`, value: l.longer },
+    { label: 'Petit crédit soldé', value: l.noOldLoan },
+    { label: 'À deux revenus', value: l.couple },
+  ];
+  const xBase = X0 + w(l.base);
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 238" role="img" aria-labelledby="ill-lev-t ill-lev-d" className="ill-svg">
+        <title id="ill-lev-t">Ce que chaque levier change à la somme empruntable</title>
+        <desc id="ill-lev-d">{`Exemple fictif, au repère de 35 %, assurance comprise : ${rows.map((r) => `${r.label}, environ ${fmtEur(r.value)}`).join(' ; ')}.`}</desc>
+        <line x1={xBase} x2={xBase} y1="20" y2="232" stroke="var(--ink-2)" strokeWidth="1.5" strokeDasharray="4 3" />
+        {rows.map((r, i) => {
+          const y = 8 + i * 56;
+          return (
+            <g key={r.label}>
+              <text x={X0} y={y + 10} className="ill-step">{r.label}</text>
+              <rect x={X0} y={y + 18} width={w(r.value)} height="28" rx="7" fill={r.base ? 'var(--primary)' : 'var(--accent)'} />
+              <text x={X0 + w(r.value) - 10} y={y + 37} textAnchor="end" className="ill-in ill-on-dark">{`≈ ${fmtEur(r.value)}`}</text>
+            </g>
+          );
+        })}
+      </svg>
+      <figcaption>
+        <strong>Illustration, exemple fictif</strong> : taux de {fmtPct(LEVIERS_EXAMPLE.rate)}, assurance de {fmtPct(LEVIERS_EXAMPLE.insuranceRate)}. Le pointillé marque le point de départ ; longueurs proportionnelles aux montants.
       </figcaption>
     </figure>
   );
