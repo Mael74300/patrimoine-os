@@ -146,12 +146,12 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Comment calculer la rentabilité locative',
     summary: 'Rendement brut, net de charges, après impôt et cash-flow : quatre indicateurs, quatre usages.',
     readingMinutes: 6,
-    updatedOn: '2026-10-10',
+    updatedOn: '2026-11-13',
     sections: [
       {
         heading: 'Le rendement brut',
         body: [
-          'Loyers annuels hors charges divisés par le prix d’achat. Un bien de 150 000 € loué 750 € par mois affiche 9 000 / 150 000 = 6 %. C’est l’indicateur des annonces : il ignore les frais d’acquisition, la vacance, les charges et les impôts.',
+          'C’est le loyer d’une année, hors charges, comparé au prix d’achat. Exemple fictif : un bien de 150 000 € loué 750 € par mois rapporte 9 000 € de loyers par an, soit 6 % de son prix. C’est l’indicateur des annonces : il ignore les frais d’achat, les mois sans locataire, les charges et les impôts.',
         ],
       },
       {
@@ -162,10 +162,10 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
         ],
       },
       {
-        heading: 'Après impôt et cash-flow',
+        heading: 'Le cash-flow : ce qui sort de votre poche',
         body: [
-          'Le rendement après impôt dépend du régime (micro-foncier, réel, location meublée) et de votre tranche marginale d’imposition. Il se calcule au cas par cas.',
-          'Le cash-flow mensuel mesure l’argent qui entre ou sort de votre poche chaque mois une fois la mensualité de crédit payée. Avec 150 000 € empruntés à 3,5 % sur 20 ans, l’exemple ci-dessus demande un effort d’environ 390 € par mois avant impôt.',
+          'Le cash-flow, c’est ce qui reste chaque mois une fois tout payé, crédit compris. Négatif, c’est votre effort : la somme à ajouter de votre poche. Avec 150 000 € empruntés à 3,5 % sur 20 ans, assurance emprunteur comprise, l’exemple demande un effort d’environ 390 € par mois avant impôt.',
+          'L’impôt s’ajoute ensuite : il dépend du régime (micro-foncier, réel, location meublée) et de votre tranche marginale d’imposition.',
         ],
       },
     ],
