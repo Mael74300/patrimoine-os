@@ -303,7 +303,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     ],
     related: ['livret-a', 'lep', 'pea', 'assurance-vie', 'etf-monde'],
     sources: [IFP, AMF],
-    cta: { to: '/simulateurs/patrimoine', label: 'Faire une simulation' },
+    cta: { to: '/simulateurs/patrimoine', label: 'Voir ce que deviendra mon épargne' },
   },
   {
     slug: 'interets-composes',
