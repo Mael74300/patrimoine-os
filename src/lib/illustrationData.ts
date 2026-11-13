@@ -261,3 +261,9 @@ export function moisParts(input: { income: number; existingPayments: number; new
   if (rest > 0) parts.push({ key: 'rest', label: 'Reste à vivre', value: rest });
   return { income, parts, shortfall: Math.max(0, -rest), scale: Math.max(income, spent), limit: income * HCSF.maxRatio };
 }
+
+/**
+ * Exemple fictif de la fiche PER : 3 000 € versés et déduits dans la tranche à 30 %, puis retirés en capital à la retraite
+ * dans la tranche à 11 % ou toujours à 30 %. Tranches du barème 2026 (Service-Public F1419, consulté le 2026-11-13).
+ */
+export const PER_EXAMPLE = { amount: 3000, entryRatePct: 30, exitRatesPct: [11, 30] as const, pfuPct: PFU_TOTAL_PCT };
