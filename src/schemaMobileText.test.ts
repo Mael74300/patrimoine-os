@@ -65,7 +65,7 @@ describe('textes des schémas agrandis sur mobile', () => {
   it('PTZ : « Au plus » et « 25 ans » ne se chevauchent pas', () => {
     const s = svg(SchemaPtz);
     const y1 = Number(/y="(\d+)" class="ill-sub">Au plus</.exec(s)?.[1]);
-    const y2 = Number(/y="(\d+)" class="ill-sub">25 ans</.exec(s)?.[1]);
+    const y2 = Number(/y="(\d+)" class="ill-year">25 ans</.exec(s)?.[1]);
     expect(y2 - y1).toBeGreaterThanOrEqual(MOBILE_SUB + 4);
   });
 

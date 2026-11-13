@@ -303,33 +303,39 @@ export function SchemaDiversificationPrincipe() {
   );
 }
 
-/** Schéma « PTZ : remboursement » : le PTZ s'ajoute à un autre prêt et se rembourse en une ou deux périodes (différé d'au moins 2 ans), 25 ans au plus. Durées non à l'échelle ; Service-Public F10871 (page vérifiée le 15 septembre 2026). */
+/** Schéma « PTZ : remboursement » : frise dans le temps. Le PTZ s'ajoute à un autre prêt et se rembourse en une ou deux périodes
+ * (différé d'au moins 2 ans), 25 ans au plus. Format étroit (viewBox 340) pour rester lisible à 375 px. Durées non à l'échelle ;
+ * Service-Public F10871 (page vérifiée le 15 septembre 2026, consultée le 13 novembre 2026). */
 export function SchemaPtz() {
+  const END = 252;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 270" role="img" aria-labelledby="ill-ptz-t ill-ptz-d" className="ill-svg">
+      <svg viewBox="0 0 340 272" role="img" aria-labelledby="ill-ptz-t ill-ptz-d" className="ill-svg">
         <title id="ill-ptz-t">Comment se rembourse un prêt à taux zéro</title>
-        <desc id="ill-ptz-d">Trois frises alignées sur le même calendrier. Le PTZ s’ajoute toujours à un autre prêt immobilier. Le PTZ se rembourse soit en une seule période, soit en deux périodes : d’abord un différé d’au moins 2 ans sans remboursement du PTZ, puis le remboursement. La durée du PTZ ne dépasse pas 25 ans.</desc>
-        <text x={0} y={16} className="ill-step">Autre prêt immobilier (au moins un)</text>
-        <rect x={0} y={24} width={420} height={32} rx={10} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={210} y={45} textAnchor="middle" className="ill-in">Le PTZ s’ajoute toujours à ce prêt</text>
-        <text x={0} y={92} className="ill-step">PTZ, en une seule période</text>
-        <rect x={0} y={100} width={320} height={32} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={160} y={121} textAnchor="middle" className="ill-in">On rembourse, sans intérêts</text>
-        <text x={0} y={168} className="ill-step">PTZ, avec différé</text>
-        <rect x={0} y={176} width={110} height={32} rx={10} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} strokeDasharray="5 4" />
-        <text x={55} y={190} textAnchor="middle" className="ill-in">Différé :</text>
-        <text x={55} y={203} textAnchor="middle" className="ill-in">rien à payer</text>
-        <rect x={116} y={176} width={204} height={32} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={218} y={197} textAnchor="middle" className="ill-in">On rembourse, sans intérêts</text>
-        <path d="M 320 92 V 214" fill="none" stroke="var(--ink-3)" strokeWidth={1.5} strokeDasharray="4 4" />
-        <text x={326} y={146} className="ill-sub">Au plus</text>
-        <text x={326} y={164} className="ill-sub">25 ans</text>
-        <text x={0} y={236} className="ill-sub">Différé : 2 ans au minimum. Plus les revenus sont élevés,</text>
-        <text x={0} y={250} className="ill-sub">plus la durée est courte. Durées non à l’échelle.</text>
+        <desc id="ill-ptz-d">Frise dans le temps. Le PTZ s’ajoute toujours à un autre prêt immobilier. Il se rembourse soit en une seule période, soit en deux périodes : d’abord un différé d’au moins 2 ans pendant lequel on ne rembourse pas le PTZ, puis le remboursement. La durée du PTZ ne dépasse pas 25 ans.</desc>
+        <text x={0} y={14} className="ill-step">Autre prêt immobilier (au moins un)</text>
+        <rect x={1} y={22} width={332} height={32} rx={10} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={167} y={43} textAnchor="middle" className="ill-in">Le PTZ vient toujours en plus de ce prêt</text>
+        <text x={0} y={84} className="ill-step">Cas 1 : PTZ en une seule période</text>
+        <rect x={1} y={92} width={END - 1} height={32} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={END / 2} y={113} textAnchor="middle" className="ill-in">Remboursement sans intérêts</text>
+        <text x={0} y={154} className="ill-step">Cas 2 : PTZ avec différé</text>
+        <rect x={1} y={162} width={111} height={32} rx={10} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} strokeDasharray="5 4" />
+        <text x={56} y={183} textAnchor="middle" className="ill-in">Différé</text>
+        <rect x={118} y={162} width={END - 118} height={32} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={(END + 118) / 2} y={183} textAnchor="middle" className="ill-in">Remboursement</text>
+        <text x={2} y={212} className="ill-sub">Rien à payer,</text>
+        <text x={2} y={228} className="ill-sub">2 ans au minimum</text>
+        <path d={`M ${END} 88 V 246`} fill="none" stroke="var(--ink-3)" strokeWidth={1.5} strokeDasharray="4 4" />
+        <text x={END + 8} y={140} className="ill-sub">Au plus</text>
+        <text x={END + 8} y={158} className="ill-year">25 ans</text>
+        <path d="M 1 246 H 334 m -7 -5 l 7 5 l -7 5" fill="none" stroke="var(--ink-2)" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M 1 241 V 251" stroke="var(--ink-2)" strokeWidth={1.5} />
+        <text x={0} y={266} className="ill-sub">Début du prêt</text>
+        <text x={END} y={266} textAnchor="middle" className="ill-sub">Fin du PTZ</text>
       </svg>
       <figcaption>
-        <strong>Illustration, sans montant</strong> : pendant le différé, le PTZ ne se rembourse pas. Les durées réelles dépendent de votre situation ; voir Service-Public.
+        <strong>Illustration, sans montant, durées non à l’échelle</strong> : pendant le différé, vous ne remboursez pas le PTZ. Plus vos revenus sont élevés, plus la durée est courte ; la vôtre dépend de votre situation (voir Service-Public).
       </figcaption>
     </figure>
   );
