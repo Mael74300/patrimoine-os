@@ -10,4 +10,14 @@ describe('glossaire : largeur des colonnes', () => {
     expect(page).toContain('prose gloss-page');
     expect(css).toMatch(/\.prose\.gloss-page \{ max-width: none; \}/);
   });
+
+  it('sur mobile, chaque notion est une entrée à plat et les liens se suivent sur une ligne', () => {
+    const block = css.slice(css.indexOf('/* Glossaire sur mobile (une seule règle'));
+    const rule = block.slice(0, block.indexOf('\n}\n'));
+    expect(rule).toContain('.gloss-item { background: none; box-shadow: none; border: 0;');
+    expect(rule).toContain('.gloss-links-list { display: inline; }');
+    // La flèche décorative n'entre pas dans le nom du lien ; « Voir aussi » reste dans la page pour les lecteurs d'écran.
+    expect(rule).toMatch(/content: '→\\00a0' \/ '';/);
+    expect(page).toContain('<span>Voir aussi</span>');
+  });
 });
