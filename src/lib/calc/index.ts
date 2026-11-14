@@ -34,3 +34,4 @@ export * from './requiredReturn';
 export * from './presentValue';
 export * from './donation';
 export * from './per';
+export * from './compoundBars';

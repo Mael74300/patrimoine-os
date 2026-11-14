@@ -1197,3 +1197,10 @@ ul.points { margin: 0.9rem 0 0.5rem; gap: 8px; }
 .gap-exit { background: repeating-linear-gradient(45deg, var(--ink-3) 0 3px, color-mix(in srgb, var(--ink-3) 30%, var(--surface)) 3px 7px); }
 .fb-track .gap-in + .gap-gain, .fb-track .gap-in + .gap-exit, .fb-track .gap-gain + .gap-exit { border-left: 2px solid var(--surface); }
 .gap-note { margin: 2px 0 12px; padding-top: 10px; border-top: 1px solid var(--line); font-size: .92rem; line-height: 1.5; color: var(--ink-2); }
+/* Simulateur Intérêts composés : barres « d'où vient le capital » ; les intérêts produits par les intérêts en ambre. */
+.cb-extra { background: var(--chart-3); }
+.fb-track .gb-int + .cb-extra { border-left: 2px solid var(--surface); }
+.cb-amounts { display: grid; gap: 4px; max-width: 28rem; }
+.cb-amounts li { display: flex; align-items: baseline; }
+.cb-amounts strong { margin-left: auto; padding-left: 12px; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cb-amounts i { flex: none; }
