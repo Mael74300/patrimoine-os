@@ -624,7 +624,7 @@ export function SchemaImmoEtf() {
         <text x={210} y={308} textAnchor="middle" className="ill-sub">après frais, impôts et frais de revente</text>
       </svg>
       <figcaption>
-        <strong>Schéma sans chiffres</strong> : ce qui est comparable, c’est le patrimoine final à effort égal, pas le rendement brut.
+        <strong>Schéma sans chiffres</strong> : on compare le patrimoine final à effort égal, pas le rendement brut.
       </figcaption>
     </figure>
   );
