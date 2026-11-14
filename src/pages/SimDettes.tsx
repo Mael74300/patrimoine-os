@@ -71,24 +71,19 @@ export default function SimDettes() {
       </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
-          <fieldset>
-            <legend>Dette 1</legend>
-            <NumberField label="Solde restant dû (dette 1)" unit="€" value={s.b1} onChange={up('b1')} min={0} step={100} />
-            <NumberField label="Taux annuel (dette 1)" unit="%" percent value={s.r1} onChange={up('r1')} min={0} max={100} step={0.1} />
-            <NumberField label="Mensualité minimale (dette 1)" unit="€" value={s.m1} onChange={up('m1')} min={0} step={10} />
-          </fieldset>
-          <fieldset>
-            <legend>Dette 2</legend>
-            <NumberField label="Solde restant dû (dette 2)" unit="€" value={s.b2} onChange={up('b2')} min={0} step={100} />
-            <NumberField label="Taux annuel (dette 2)" unit="%" percent value={s.r2} onChange={up('r2')} min={0} max={100} step={0.1} />
-            <NumberField label="Mensualité minimale (dette 2)" unit="€" value={s.m2} onChange={up('m2')} min={0} step={10} />
-          </fieldset>
-          <fieldset>
-            <legend>Dette 3</legend>
-            <NumberField label="Solde restant dû (dette 3)" unit="€" value={s.b3} onChange={up('b3')} min={0} step={100} />
-            <NumberField label="Taux annuel (dette 3)" unit="%" percent value={s.r3} onChange={up('r3')} min={0} max={100} step={0.1} />
-            <NumberField label="Mensualité minimale (dette 3)" unit="€" value={s.m3} onChange={up('m3')} min={0} step={10} />
-          </fieldset>
+          <p className="debt-intro">Pour chaque dette : ce qu’il reste à rembourser, son taux annuel et la mensualité minimale demandée.</p>
+          <div className="debt-list">
+            {([1, 2, 3] as const).map((n, i) => (
+              <fieldset key={n} className="debt-set">
+                <legend><i className={'pt-dot ' + DEBT_TONES[i]} aria-hidden="true" />Dette {n}</legend>
+                <div className="field-trio">
+                  <NumberField label={`Solde restant dû (dette ${n})`} shortLabel="Restant dû" unit="€" value={s[`b${n}` as const]} onChange={up(`b${n}` as const)} min={0} step={100} />
+                  <NumberField label={`Taux annuel (dette ${n})`} shortLabel="Taux annuel" unit="%" percent value={s[`r${n}` as const]} onChange={up(`r${n}` as const)} min={0} max={100} step={0.1} />
+                  <NumberField label={`Mensualité minimale (dette ${n})`} shortLabel="Mensualité min." unit="€" value={s[`m${n}` as const]} onChange={up(`m${n}` as const)} min={0} step={10} />
+                </div>
+              </fieldset>
+            ))}
+          </div>
           <fieldset>
             <legend>Budget</legend>
             <NumberField label="Versement supplémentaire par mois" unit="€" value={s.extra} onChange={up('extra')} min={0} step={10} />
