@@ -5,6 +5,7 @@ import { guides } from './data/guides';
 import { investments, VERIFIED_ON } from './data/investments';
 import { simulators } from './lib/search';
 import { movedSims } from './lib/movedSims';
+import { ficheLastUpdate } from './lib/ficheDates';
 
 export type PageMeta = { path: string; title: string; description: string; jsonLd?: object[]; noindex?: boolean; canonicalPath?: string };
 
@@ -87,7 +88,7 @@ export function pagesMeta(siteUrl: string): PageMeta[] {
       title: fit(`${i.name} : fonctionnement, risques, frais et fiscalité | ${SITE}`, `${i.name} : risques, frais, fiscalité | ${SITE}`, `${i.name} : risques, frais, fiscalité`, `${i.name} | ${SITE}`, i.name),
       description: i.summary,
       jsonLd: [
-        { '@context': 'https://schema.org', '@type': 'Article', headline: i.name, description: i.summary, inLanguage: 'fr-FR', dateModified: i.review.verifiedOn, author: ORG, publisher: ORG },
+        { '@context': 'https://schema.org', '@type': 'Article', headline: i.name, description: i.summary, inLanguage: 'fr-FR', dateModified: ficheLastUpdate(i), author: ORG, publisher: ORG },
         crumbs(siteUrl, [['Accueil', '/'], ['Encyclopédie', '/encyclopedie/'], [cat.name, '/encyclopedie/'], [i.name, `/encyclopedie/${i.slug}/`]]),
       ],
     });

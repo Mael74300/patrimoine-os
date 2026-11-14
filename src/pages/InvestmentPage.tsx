@@ -12,6 +12,7 @@ import { SchemaActions, SchemaForet, SchemaDonation, SchemaAssuranceVie, SchemaC
 import { SchemaPea, SchemaQuinzaines, SchemaLevier } from '../components/schemas/communs';
 import NotFound from './NotFound';
 import { fmtDate } from '../lib/dates';
+import { ficheRubricUpdate } from '../lib/ficheDates';
 import { guideBySlug } from '../data/guides';
 import { linkOnly } from '../lib/jargon';
 import { annotateFiche } from '../lib/ficheText';
@@ -40,6 +41,7 @@ export default function InvestmentPage() {
   const [jDef] = j.definition;
   const [jHow] = j.howItWorks;
   const jSteps = j.steps;
+  const later = ficheRubricUpdate(inv);
 
   return (
     <>
@@ -160,7 +162,15 @@ export default function InvestmentPage() {
           <h2>Sources et vérification</h2>
           <Sources list={inv.sources} />
           {stale && <p className="notice small">La date de révision prévue est dépassée : certaines informations ont pu changer. Vérifiez-les auprès des sources officielles.</p>}
-          <p className="verif-line">Dernière vérification : <strong>{fmtDate(inv.review.verifiedOn)}</strong> · prochaine révision prévue : <strong>{fmtDate(inv.review.nextReview)}</strong></p>
+          {/* Une rubrique revérifiée après la relecture complète porte sa propre date : la ligne le dit, au lieu d'afficher une « dernière vérification » plus ancienne qu'elle. */}
+          <p className="verif-line">
+            {later ? (
+              <>Dernière vérification : <strong>{fmtDate(later.date)}</strong> ({later.labels.join(' et ')}) · relecture complète : <strong>{fmtDate(inv.review.verifiedOn)}</strong></>
+            ) : (
+              <>Dernière vérification : <strong>{fmtDate(inv.review.verifiedOn)}</strong></>
+            )}
+            {' '}· prochaine révision : <strong>{fmtDate(inv.review.nextReview)}</strong>
+          </p>
           <Fold title="Détail du suivi, données et hypothèses">
             <dl className="facts">
               <dt>Fiscalité considérée valable au</dt><dd>{fmtDate(inv.review.taxValidAsOf)}</dd>
