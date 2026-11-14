@@ -85,7 +85,7 @@ export default function SimRembourser() {
             Ni l'assurance emprunteur ni les indemnités de remboursement anticipé (plafonnées par la loi) ne sont incluses : renseignez-vous auprès de votre banque.
           </p>
           <SavedSims simKey="rembourser" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <Disclaimer />
           <SimFaq slug="rembourser-ou-investir" />
         </section>
       </div>

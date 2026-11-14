@@ -147,7 +147,7 @@ export default function SimPortefeuille() {
         </p>
       </div>
       <SavedSims simKey="portefeuille" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-      <div style={{ marginTop: 16 }}><Disclaimer /></div>
+      <Disclaimer />
       <SimFaq slug="portefeuille" />
     </>
   );

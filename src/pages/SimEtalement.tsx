@@ -127,7 +127,7 @@ export default function SimEtalement() {
             Valeurs de départ fictives : remplacez-les par les vôtres.
           </p>
           <SavedSims simKey="etalement" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <Disclaimer />
           <SimFaq slug="investir-d-un-coup-ou-progressivement" />
         </section>
       </div>

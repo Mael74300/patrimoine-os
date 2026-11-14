@@ -129,7 +129,7 @@ export default function SimDettes() {
             Les exemples ci-dessus sont fictifs. Voir aussi <Link to="/simulateurs/rembourser-ou-investir">rembourser ou investir</Link>.
           </p>
           <SavedSims simKey="dettes" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <Disclaimer kind="credit" />
           <SimFaq slug="dettes" />
         </section>
       </div>

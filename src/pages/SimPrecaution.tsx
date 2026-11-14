@@ -176,7 +176,7 @@ export default function SimPrecaution() {
           <Sources list={LIVRETS.map((l) => ({ ...l.source, official: true }))} />
           <SavedSims simKey="precaution" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <SimFaq slug="epargne-de-precaution" />
-          <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <Disclaimer kind="reserve" />
         </section>
       </div>
     </>

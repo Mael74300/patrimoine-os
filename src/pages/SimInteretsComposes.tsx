@@ -410,7 +410,7 @@ export default function SimInteretsComposes() {
       <div role="tabpanel" id="panneau-calcul" aria-labelledby={`tab-${tab}`}>
         <Panel />
       </div>
-      <div style={{ marginTop: 16 }}><Disclaimer /></div>
+      <Disclaimer />
       <SimFaq slug="interets-composes" items={interetsComposesFaq[tab]} />
     </>
   );

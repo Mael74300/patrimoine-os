@@ -80,7 +80,7 @@ export default function SimRendement() {
           {r.annualized === null && <p className="muted small">Indiquez un versement et une durée pour obtenir un rendement annuel.</p>}
           <p className="muted small">Calcul : versement initial placé au début, versements mensuels en fin de mois. L’exemple proposé au départ est fictif.</p>
           <SavedSims simKey="rendement" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <Disclaimer />
           <SimFaq slug="rendement-reel-de-mon-placement" />
         </section>
       </div>
