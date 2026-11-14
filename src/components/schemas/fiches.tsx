@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 import { fmtEur } from '../../lib/finance';
 import { pfuSplit } from '../../lib/calc/pfu';
 import { perDeductionBalance } from '../../lib/calc/per';
-import { CROWDFUNDING_EXAMPLE, PER_EXAMPLE, SCPI_EXAMPLE } from '../../lib/illustrationData';
-import { crowdfundingScenario, scpiFeesPayback } from '../../lib/calc/ficheExemples';
+import { CROWDFUNDING_EXAMPLE, LOCATION_NUE_EXAMPLE, PER_EXAMPLE, SCPI_EXAMPLE } from '../../lib/illustrationData';
+import { crowdfundingScenario, microFoncierExample, scpiFeesPayback } from '../../lib/calc/ficheExemples';
 import { W } from './outils';
 
 /** Schéma « Comment fonctionne une SCPI » : principe qualitatif (aucun chiffre), repris du texte de la fiche et de La finance pour tous. */
@@ -1086,6 +1086,44 @@ export function SchemaScpiBilan({ children }: { children: ReactNode }) {
         <path d={`M ${fees * scale + 1} 22 V 132`} stroke="var(--ink-2)" strokeWidth={1.5} strokeDasharray="4 3" />
         <text x={0} y={162} className="ill-total" textAnchor="start" style={{ fill: 'var(--accent)' }}>{`Après ${years} ans, frais compensés`}</text>
         <text x={0} y={184} className="ill-sub" textAnchor="start">ensuite, les loyers deviennent un gain</text>
+      </svg>
+      <figcaption>{children}</figcaption>
+    </figure>
+  );
+}
+
+/**
+ * Schéma « Location nue : ce que le micro-foncier impose » (exemple fictif de la fiche, montants recalculés par
+ * `microFoncierExample`). Abattement de 30 % jusqu'à 15 000 € de loyers par an (Service-Public F1991) ; tranche à 30 %
+ * (Service-Public F1419) ; prélèvements sociaux de 17,2 % sur les revenus fonciers (Service-Public F2329) ; consultés le
+ * 2026-11-14. Les longueurs des barres sont proportionnelles aux montants.
+ */
+export function SchemaLocationNueBilan({ children }: { children: ReactNode }) {
+  const { monthlyRent, allowancePct, marginalRatePct, socialPct } = LOCATION_NUE_EXAMPLE;
+  const r = microFoncierExample(monthlyRent, allowancePct, marginalRatePct);
+  const k = 338 / r.rents;
+  const xa = 1 + r.allowance * k;
+  const pct = (n: number) => `${n.toLocaleString('fr-FR')}\u00a0%`;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 186" role="img" aria-labelledby="ill-lnb-t ill-lnb-d" className="ill-svg">
+        <title id="ill-lnb-t">Location nue au micro-foncier : la part des loyers qui est imposée</title>
+        <desc id="ill-lnb-d">{`Exemple fictif : ${fmtEur(monthlyRent)} de loyer par mois, soit ${fmtEur(r.rents)} par an. Le micro-foncier retire d’office ${allowancePct} %, soit ${fmtEur(r.allowance)} : ${fmtEur(r.taxable)} s’ajoutent aux autres revenus. Dans la tranche à ${marginalRatePct} %, cela fait ${fmtEur(r.incomeTax)} d’impôt sur le revenu, ${pct(r.incomeTaxPctOfRents)} des loyers, plus ${socialPct.toLocaleString('fr-FR')} % de prélèvements sociaux.`}</desc>
+        <text x={0} y={16} className="ill-year" textAnchor="start">{`Loyers : ${fmtEur(r.rents)} par an (12 × ${fmtEur(monthlyRent)})`}</text>
+        <rect x={1} y={26} width={r.allowance * k - 3} height={26} rx={4} fill="var(--surface)" stroke="var(--ink-3)" strokeWidth={1.5} strokeDasharray="4 3" />
+        <text x={(1 + xa - 3) / 2} y={44} className="ill-in" textAnchor="middle">{fmtEur(r.allowance)}</text>
+        <rect x={xa} y={26} width={339 - xa} height={26} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={(xa + 339) / 2} y={44} className="ill-in" textAnchor="middle">{fmtEur(r.taxable)}</text>
+        <text x={1} y={70} className="ill-sub" textAnchor="start">{`${pct(allowancePct)} retirés`}</text>
+        <text x={xa} y={70} className="ill-sub" textAnchor="start">ajoutés à vos autres revenus</text>
+
+        <text x={0} y={104} className="ill-year" textAnchor="start">{`Impôt dans la tranche à ${pct(marginalRatePct)}`}</text>
+        <rect x={xa} y={114} width={r.incomeTax * k} height={26} rx={4} fill="var(--danger)" />
+        <text x={xa + (r.incomeTax * k) / 2} y={132} className="ill-in" textAnchor="middle" style={{ fill: '#fff' }}>{fmtEur(r.incomeTax)}</text>
+        <text x={xa + r.incomeTax * k + 8} y={132} className="ill-sub" textAnchor="start">{`sur ces ${fmtEur(r.taxable)}`}</text>
+
+        <text x={0} y={166} className="ill-total" textAnchor="start" style={{ fill: 'var(--danger)' }}>{`Impôt : ${fmtEur(r.incomeTax)}, soit ${pct(r.incomeTaxPctOfRents)} des loyers`}</text>
+        <text x={0} y={184} className="ill-sub" textAnchor="start">{`plus ${pct(socialPct)} de prélèvements sociaux`}</text>
       </svg>
       <figcaption>{children}</figcaption>
     </figure>

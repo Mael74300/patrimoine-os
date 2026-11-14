@@ -38,3 +38,19 @@ export function abattementDetentionMeubles(fullYears: number): number {
   const years = Math.max(0, Math.floor(fullYears) - 2);
   return Math.min(1, Math.round(years * 5) / 100);
 }
+
+export interface MicroFoncier { rents: number; allowance: number; taxable: number; incomeTax: number; incomeTaxPctOfRents: number }
+
+/**
+ * Location nue au micro-foncier : un abattement forfaitaire de `allowancePct` % est retiré des loyers bruts annuels, le reste
+ * s'ajoute aux autres revenus et est imposé ici entièrement dans la tranche à `marginalRatePct` %. Les prélèvements sociaux
+ * s'ajoutent ; ils ne sont pas calculés ici. Service-Public F1991 (abattement de 30 %, loyers jusqu'à 15 000 €) et F1419
+ * (tranche à 30 %), consultés le 2026-11-14. Arrondis à l'euro.
+ */
+export function microFoncierExample(monthlyRent: number, allowancePct: number, marginalRatePct: number): MicroFoncier {
+  const rents = monthlyRent * 12;
+  const allowance = Math.round((rents * allowancePct) / 100);
+  const taxable = rents - allowance;
+  const incomeTax = Math.round((taxable * marginalRatePct) / 100);
+  return { rents, allowance, taxable, incomeTax, incomeTaxPctOfRents: Math.round((incomeTax / rents) * 1000) / 10 };
+}
