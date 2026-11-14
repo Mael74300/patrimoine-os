@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { loanDuration } from './loanDuration';
+import { loanDuration, loanDurationBars } from './loanDuration';
 
 // Exemples fictifs.
 describe('Effet de la durée du crédit', () => {
@@ -32,5 +32,27 @@ describe('Effet de la durée du crédit', () => {
   it('entrées invalides : jamais NaN', () => {
     const r = loanDuration({ principal: NaN, annualRate: Infinity, durations: [NaN, 0] });
     for (const x of r) for (const v of Object.values(x)) expect(Number.isFinite(v)).toBe(true);
+  });
+
+  it('barres : la mensualité la plus forte et le coût le plus fort valent 100, le reste est proportionnel', () => {
+    const r = loanDuration({ principal: 200000, annualRate: 0.03, insuranceRate: 0.003, durations: [10, 20, 30] });
+    const b = loanDurationBars(r);
+    expect(b[0].monthly).toBeCloseTo(100, 9);
+    expect(b[2].monthly).toBeCloseTo((100 * r[2].monthlyTotal) / r[0].monthlyTotal, 9);
+    expect(b[2].interest + b[2].insurance).toBeCloseTo(100, 9);
+    expect(b[0].interest).toBeCloseTo((100 * r[0].totalInterest) / r[2].totalCost, 9);
+    expect(b[0].interest + b[0].insurance).toBeCloseTo((100 * r[0].totalCost) / r[2].totalCost, 9);
+  });
+
+  it('barres : capital nul ou taux nul, jamais NaN ni hors de 0 à 100', () => {
+    for (const input of [{ principal: 0, annualRate: 0.03 }, { principal: 120000, annualRate: 0 }]) {
+      for (const x of loanDurationBars(loanDuration({ ...input, durations: [10, 20] }))) {
+        for (const v of [x.monthly, x.interest, x.insurance]) {
+          expect(Number.isFinite(v)).toBe(true);
+          expect(v).toBeGreaterThanOrEqual(0);
+          expect(v).toBeLessThanOrEqual(100);
+        }
+      }
+    }
   });
 });
