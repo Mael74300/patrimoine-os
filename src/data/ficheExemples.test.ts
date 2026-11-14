@@ -2,9 +2,10 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { investmentBySlug } from './investments';
-import { crowdfundingScenario, scpiFeesPayback } from '../lib/calc/ficheExemples';
-import { CROWDFUNDING_EXAMPLE, SCPI_EXAMPLE } from '../lib/illustrationData';
-import { SchemaCrowdfundingBilan, SchemaScpiBilan } from '../components/schemas/fiches';
+import { crowdfundingScenario, microFoncierExample, scpiFeesPayback } from '../lib/calc/ficheExemples';
+import { CROWDFUNDING_EXAMPLE, LOCATION_NUE_EXAMPLE, SCPI_EXAMPLE } from '../lib/illustrationData';
+import { SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaScpiBilan } from '../components/schemas/fiches';
+import { guideBySlug } from './guides';
 
 /**
  * Exemples fictifs des fiches Financement participatif et SCPI : montants recalculés, cohérents entre le texte de la fiche
@@ -69,6 +70,53 @@ describe('fiche SCPI : frais d’entrée compensés par les loyers', () => {
     expect(t).toContain(eur(r.fees));
     expect(t).toContain(`année 2 : ${eur(r.yearly)}`);
     expect(t).toContain(`Après ${r.years} ans, frais compensés`);
+    expect(svg.length).toBeLessThan(15000);
+  });
+});
+
+/**
+ * Fiche Location nue : micro-foncier (abattement de 30 %, loyers jusqu'à 15 000 € par an, choix du réel pour 3 ans :
+ * Service-Public F1991), tranche à 30 % (F1419), prélèvements sociaux de 17,2 % sur les revenus fonciers (F1991, F2329).
+ * Sources consultées le 2026-11-14.
+ */
+describe('fiche Location nue : ce que le micro-foncier impose', () => {
+  const { price, monthlyRent, allowancePct, ceiling, marginalRatePct, socialPct } = LOCATION_NUE_EXAMPLE;
+  const r = microFoncierExample(monthlyRent, allowancePct, marginalRatePct);
+  const fiche = investmentBySlug['location-nue']!;
+  const ex = norm(fiche.example);
+  const pctFr = (n: number) => `${n.toLocaleString('fr-FR')} %`;
+
+  it('montants recalculés : 9 000 € de loyers, 2 700 € retirés, 6 300 € imposés, 1 890 € d’impôt (21 %)', () => {
+    expect(r).toEqual({ rents: 9000, allowance: 2700, taxable: 6300, incomeTax: 1890, incomeTaxPctOfRents: 21 });
+    expect(r.rents).toBeLessThanOrEqual(ceiling);
+  });
+  it('mêmes règles que la rubrique Fiscalité de la fiche', () => {
+    const tax = norm(fiche.tax.text);
+    expect(tax).toContain(`ne dépassent pas ${eur(ceiling)} par an (abattement de ${pctFr(allowancePct)})`);
+    expect(tax).toContain(`Prélèvements sociaux de ${pctFr(socialPct)}`);
+  });
+  it('même bien que le guide Rentabilité locative, qui renvoie vers la fiche', () => {
+    const guide = guideBySlug['rentabilite-locative']!;
+    const txt = norm(JSON.stringify(guide));
+    expect(txt).toContain(`un bien de ${eur(price)} loué ${eur(monthlyRent)} par mois`);
+    expect(txt).toContain('La fiche Location nue fait le calcul sur ce même bien.');
+    expect(txt).not.toContain('quatre indicateurs');
+  });
+  it('le texte de la fiche et le schéma citent les mêmes montants', () => {
+    expect(ex).toMatch(/^Exemple fictif/);
+    for (const v of [price, monthlyRent, ceiling]) expect(ex).toContain(eur(v));
+    expect(ex).toContain(`retire d’office ${pctFr(allowancePct)}`);
+    expect(ex).toContain(`dépassent ${pctFr(allowancePct)} des loyers`);
+    expect(ex).toContain('pour 3 ans');
+    expect(fiche.sources.some((s) => s.url.endsWith('/F1991'))).toBe(true);
+    expect(fiche.sources.some((s) => s.url.endsWith('/F1419'))).toBe(true);
+    const svg = renderToStaticMarkup(createElement(SchemaLocationNueBilan, null, 'légende'));
+    const t = plain(svg);
+    for (const v of [r.rents, monthlyRent, r.allowance, r.taxable, r.incomeTax]) expect(t).toContain(eur(v));
+    expect(t).toContain(`Impôt dans la tranche à ${pctFr(marginalRatePct)}`);
+    expect(t).toContain(`soit ${pctFr(r.incomeTaxPctOfRents)} des loyers`);
+    expect(t).toContain(`plus ${pctFr(socialPct)} de prélèvements sociaux`);
+    expect(svg).toContain('role="img"');
     expect(svg.length).toBeLessThan(15000);
   });
 });

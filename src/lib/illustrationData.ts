@@ -323,3 +323,10 @@ export const CROWDFUNDING_EXAMPLE = { projects: 20, ticket: 100, ratePct: 9, def
  * souscrit, La finance pour tous, mise à jour le 2 janvier 2024, consultée le 2026-11-13) et 5 % de distribution par an.
  */
 export const SCPI_EXAMPLE = { amount: 10000, entryFeePct: 10, distributionPct: 5 };
+
+/**
+ * Fiche Location nue : exemple fictif, le bien de 150 000 € loué 750 € par mois toute l'année (même cas que le guide
+ * Rentabilité locative), au micro-foncier (abattement de 30 %, loyers jusqu'à 15 000 € par an : Service-Public F1991,
+ * consulté le 2026-11-14), revenus imposés dans la tranche à 30 % (Service-Public F1419, consulté le 2026-11-14).
+ */
+export const LOCATION_NUE_EXAMPLE = { price: 150000, monthlyRent: 750, allowancePct: 30, ceiling: 15000, marginalRatePct: 30, socialPct: 17.2 };

@@ -155,7 +155,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
   {
     slug: 'rentabilite-locative',
     title: 'Comment calculer la rentabilité locative',
-    summary: 'Rendement brut, net de charges, après impôt et cash-flow : quatre indicateurs, quatre usages.',
+    summary: 'Rendement brut, net de charges et cash-flow : trois indicateurs, puis l’impôt.',
     readingMinutes: 2,
     updatedOn: '2026-11-13',
     sections: [
@@ -176,7 +176,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
         heading: 'Le cash-flow : ce qui sort de votre poche',
         body: [
           'Le cash-flow, c’est ce qui reste chaque mois une fois tout payé, crédit compris. Négatif, c’est votre effort : la somme à ajouter de votre poche. Avec 150 000 € empruntés à 3,5 % sur 20 ans, assurance emprunteur comprise, l’exemple demande un effort d’environ 390 € par mois avant impôt.',
-          'L’impôt s’ajoute ensuite : il dépend du régime (micro-foncier, réel, location meublée) et de votre tranche marginale d’imposition.',
+          'L’impôt s’ajoute ensuite : il dépend du régime (micro-foncier, réel, location meublée) et de votre tranche marginale d’imposition. La fiche Location nue fait le calcul sur ce même bien.',
         ],
       },
     ],
