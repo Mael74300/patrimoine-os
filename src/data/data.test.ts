@@ -7,6 +7,7 @@ import { simFaq } from './simFaq';
 import { investmentBySlug, investments } from './investments';
 import { splitSentences } from '../components/ui';
 import { loanPayment, projectGrowth } from '../lib/finance';
+import { LEVERAGE_EXAMPLE, LOAN_EXAMPLE, loanSlices } from '../lib/illustrationData';
 
 describe('intégrité des données éditoriales', () => {
   it('slugs uniques', () => {
@@ -48,8 +49,20 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
   it('Fonds euros : 20 000 € à 2,5 % sur 5 ans ≈ 22 630 €', () => {
     expect(20000 * Math.pow(1.025, 5)).toBeCloseTo(22628, -1);
   });
-  it('Crédit : 200 000 € à 3,6 % sur 20 ans → ≈ 80 850 € d’intérêts', () => {
-    expect(loanPayment(200000, 0.036, 20) * 240 - 200000).toBeCloseTo(80850, -2);
+  it('Crédit : l’exemple de la fiche reprend le cas du schéma (180 000 € à 3,5 % sur 20 ans), recalculé', () => {
+    const { price, down } = LEVERAGE_EXAMPLE;
+    const { principal, annualRate, years } = LOAN_EXAMPLE;
+    expect(price - down).toBe(principal);
+    const m = loanPayment(principal, annualRate, years);
+    const ex = investmentBySlug['credit-immobilier'].example.replace(/\u00a0/g, ' ');
+    const eur = (v: number, step: number) => `${(Math.round(v / step) * step).toLocaleString('fr-FR').replace(/\u202f|\u00a0/g, ' ')} €`;
+    for (const t of [eur(price, 1), eur(down, 1), eur(principal, 1), '3,5 %', `${years} ans`, eur(m, 1), eur(m * years * 12 - principal, 10), eur(loanSlices().slices[0].interest, 100)]) expect(ex).toContain(t);
+    expect(ex).toContain('Exemple fictif');
+  });
+  it('Crédit immobilier : sources en rapport avec le crédit (Service-Public F22152), plus de page « Épargne réglementée »', () => {
+    const f = investmentBySlug['credit-immobilier'];
+    expect(f.sources.some((x) => x.url.endsWith('/F22152') && x.official)).toBe(true);
+    expect(f.sources.some((x) => /épargne réglementée/i.test(x.label))).toBe(false);
   });
   it('Crédit immobilier : fiche renvoie à l’assurance emprunteur (Service-Public F1671)', () => {
     const f = investmentBySlug['credit-immobilier'];
