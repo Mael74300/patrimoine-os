@@ -76,7 +76,7 @@ export default function SimEndettement() {
           </p>
           <SavedSims simKey="endettement" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <SimFaq slug="endettement" />
-          <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <Disclaimer kind="credit" />
         </section>
       </div>
     </>

@@ -187,7 +187,7 @@ export default function SimEtfImmobilier() {
             Méthode détaillée dans le guide <Link to="/guides/immobilier-ou-etf">Comment comparer immobilier et ETF</Link>.
           </p>
           <SavedSims simKey="etf-immobilier" current={st} onLoad={(d) => setSt({ ...DEFAULTS, ...d })} />
-          <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <Disclaimer />
           <SimFaq slug="etf-immobilier" />
         </section>
       </div>

@@ -125,7 +125,7 @@ export default function SimBudget() {
           </p>
           <p className="muted small">Estimation purement arithmétique à partir de vos saisies ; elle ne tient compte ni des imprévus ni de l'évolution de vos revenus.</p>
           <SavedSims simKey="budget" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <Disclaimer />
           <SimFaq slug="budget" />
         </section>
       </div>

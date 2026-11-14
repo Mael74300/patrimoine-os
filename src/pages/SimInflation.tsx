@@ -70,7 +70,7 @@ export default function SimInflation() {
             <li>Calcul sans versement ajouté et avant impôt : les <Link to="/simulateurs/frais">frais</Link> et l’impôt réduisent le résultat. Argent à garder disponible : <Link to="/simulateurs/epargne-de-precaution">épargne de précaution</Link>.</li>
           </ul>
           <SavedSims simKey="inflation" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <Disclaimer />
           <SimFaq slug="inflation" />
         </section>
       </div>

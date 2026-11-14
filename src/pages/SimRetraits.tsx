@@ -69,7 +69,7 @@ export default function SimRetraits() {
             Total retiré sur la période : {fmtEur(r.totalWithdrawn)}. Les exemples ci-dessus sont fictifs.
           </p>
           <SavedSims simKey="retraits" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <Disclaimer />
           <SimFaq slug="retraits-reguliers-duree-du-capital" />
         </section>
       </div>

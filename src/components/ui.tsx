@@ -312,11 +312,29 @@ export function PageHead({ eyebrow, title, children, art }: { eyebrow?: string; 
   );
 }
 
-export function Disclaimer() {
+/** Nature du calcul, pour un avertissement qui parle de ce que la page simule vraiment. */
+export type DisclaimerKind = 'rendement' | 'credit' | 'reserve' | 'entreprise';
+
+export const DISCLAIMER_TEXT: Record<DisclaimerKind, string> = {
+  rendement:
+    'Les rendements saisis sont des hypothèses, jamais une garantie : les performances passées ne préjugent pas des performances futures.',
+  credit: 'Le taux, l’assurance, les frais et l’accord réels sont fixés par le prêteur, au cas par cas.',
+  reserve: 'Le bon montant dépend de vos dépenses réelles et de la stabilité de vos revenus.',
+  entreprise: 'Les ventes, marges et charges réelles peuvent s’écarter fortement de ces hypothèses.',
+};
+
+/** Avertissement discret du bas des simulateurs, adapté au calcul de la page. */
+export function Disclaimer({ kind = 'rendement' }: { kind?: DisclaimerKind }) {
   return (
-    <p className="notice small" role="note">
-      Simulation pédagogique fondée sur vos hypothèses. Les rendements passés ou supposés ne préjugent pas des
-      rendements futurs. Ce site ne fournit pas de conseil en investissement personnalisé.
+    <p className="sim-disclaimer" role="note">
+      <svg className="sim-disclaimer-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+        <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" strokeWidth="1.4" />
+        <circle cx="8" cy="4.9" r="1" fill="currentColor" />
+        <path d="M8 7.3v4.4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      </svg>
+      <span>
+        Simulation pédagogique, fondée sur vos hypothèses. {DISCLAIMER_TEXT[kind]} Pas de conseil personnalisé.
+      </span>
     </p>
   );
 }

@@ -209,7 +209,7 @@ export default function SimPatrimoine() {
           </p>
           </Fold>
           <SavedSims simKey="patrimoine-v2" current={st} onLoad={(d) => setSt({ ...DEFAULTS, ...d })} />
-          <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <Disclaimer />
           <SimFaq slug="patrimoine" />
         </section>
       </div>

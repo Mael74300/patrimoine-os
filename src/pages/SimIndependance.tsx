@@ -103,7 +103,7 @@ export default function SimIndependance() {
             />
           </div>
           <SavedSims simKey="independance" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <Disclaimer />
           <SimFaq slug="independance-financiere" />
         </section>
       </div>

@@ -122,7 +122,7 @@ export default function SimObjectif() {
             avant impôt et prélèvements éventuels. Pour l’effet de l’inflation sur le montant visé, voir le <Link to="/simulateurs/inflation">simulateur d’inflation</Link>.
           </p>
           <SavedSims simKey="objectif-epargne" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <Disclaimer />
           <SimFaq slug="objectif-epargne" />
         </section>
       </div>

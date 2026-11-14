@@ -354,7 +354,7 @@ export default function SimComparerCredits() {
       <div role="tabpanel" id="panneau-calcul" aria-labelledby={`tab-${tab}`}>
         <Panel />
       </div>
-      <div style={{ marginTop: 16 }}><Disclaimer /></div>
+      <Disclaimer />
       <SimFaq slug="comparer-des-credits" items={comparerCreditsFaq[tab]} />
     </>
   );

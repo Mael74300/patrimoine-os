@@ -127,7 +127,7 @@ export default function SimLouerAcheter() {
             les travaux exceptionnels et la valeur d’usage (stabilité, liberté de déménager). Pour l’arbitrage rembourser ou investir, voir <Link to="/simulateurs/rembourser-ou-investir">rembourser ou investir</Link>.
           </p>
           <SavedSims simKey="louer-acheter" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <div style={{ marginTop: 16 }}><Disclaimer /></div>
+          <Disclaimer />
           <SimFaq slug="louer-ou-acheter" />
         </section>
       </div>
