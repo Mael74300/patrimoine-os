@@ -1068,6 +1068,14 @@ h2.gloss-letter::before { content: none; }
 /* Cartes « façons d'entreprendre » : le lien vers la fiche reste en bas de carte. */
 .path-card { display: flex; flex-direction: column; }
 .path-card .path-more { margin: auto 0 0; padding-top: 14px; font-weight: 600; }
+.path-card h3 { margin: 0 0 6px; }
+.path-card > p.muted { margin: 0 0 14px; }
+.path-card .meter-rows { gap: 6px; margin: 0 0 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.path-card .path-steps { padding-left: 18px; margin: 0; }
+.path-card + .meters-legend, .grid + .meters-legend { margin-top: 12px; }
+.path-before { display: grid; gap: 4px; text-decoration: none; color: var(--ink-2); }
+.path-before strong { color: var(--primary); }
+.path-before:hover strong, .path-before:focus-visible strong { text-decoration: underline; }
 .prose h3.next-sub { font-size: 1rem; margin: 1.1rem 0 0; color: var(--ink-2, inherit); }
 
 .guide-min-inline { display: none; }
