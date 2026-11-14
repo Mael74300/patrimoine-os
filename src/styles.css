@@ -1080,6 +1080,17 @@ h2.gloss-letter::before { content: none; }
 
 .guide-min-inline { display: none; }
 @media (max-width: 600px) { .guide-min { display: none; } .guide-min-inline { display: inline; color: var(--ink-2); white-space: nowrap; } }
+/* Encyclopédie en écran large : familles sur deux colonnes, chaque famille d'un seul tenant,
+   repères placés sous le nom de la fiche (au lieu d'être rejetés au bord droit de la page). */
+@media (min-width: 900px) {
+  .inv-groups { columns: 2; column-gap: 40px; }
+  .inv-groups .inv-group { display: inline-block; width: 100%; margin: 0 0 26px; break-inside: avoid; }
+  .inv-groups { margin-top: 18px; }
+  .inv-groups .inv-row { grid-template-columns: 1fr; gap: 6px; padding: 10px 6px; }
+  .inv-groups .inv-row h3 { margin-bottom: 2px; }
+  .inv-groups .inv-row .meters { gap: 18px; }
+  .inv-groups .meter { flex-direction: row; align-items: center; gap: 6px; min-width: 0; }
+}
 /* Encyclopédie mobile : familles plus serrées (même contenu) */
 @media (max-width: 600px) {
   .inv-group { margin-top: 14px; }

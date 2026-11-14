@@ -109,6 +109,8 @@ export default function Encyclopedia() {
         <p className="notice info">Les fiches de cette famille sont en préparation. Elles seront publiées une fois leurs informations vérifiées.</p>
       )}
       <MetersLegend />
+      {/* Écran large : familles sur deux colonnes (comme le catalogue des guides), repères sous chaque fiche. */}
+      <div className={groups.length > 1 ? 'inv-groups' : undefined}>
       {groups.map((g) => (
         <section key={g.cat.id} className="inv-group" aria-labelledby={`fam-${g.cat.id}`}>
           <h2 id={`fam-${g.cat.id}`} className="inv-group-title">
@@ -118,6 +120,7 @@ export default function Encyclopedia() {
           {unfiltered && g.items.length > 1 ? <MobileFold quietOnDesktop label={`Voir les ${g.items.length} fiches`} hint={g.items.map((i) => i.name).join(' · ')}>{rows(g.items)}</MobileFold> : rows(g.items)}
         </section>
       ))}
+      </div>
     </>
   );
 }
