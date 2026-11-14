@@ -7,7 +7,7 @@ import { simBlurb } from '../lib/simThemes';
 import { guideSimulators } from '../lib/relatedSims';
 import { NetWorthCalculator } from '../components/NetWorthCalculator';
 import { Crumbs, FaqSection, MobileFold, PageHead, Sources } from '../components/ui';
-import { EnvelopeCards } from '../components/EnvelopeCards';
+import { ENVELOPE_CARDS, EnvelopeCards } from '../components/EnvelopeCards';
 import { LivretsTable } from '../components/LivretsTable';
 import { RiskMap } from '../components/RiskMap';
 import { GuideGroupIcon } from '../components/Icons';
@@ -78,9 +78,10 @@ export function GuidePage() {
   // Le simulateur ouvert par le bouton principal n’est pas répété dans « Simulateurs liés ».
   const sims = guideSimulators(g.slug, g.cta?.to);
   // Jargon expliqué sur place : première apparition de chaque notion du glossaire dans le guide.
-  // Une rubrique remplacée par des cartes (enveloppes) n'affiche pas ses paragraphes : ils ne comptent pas.
+  // Les paragraphes remplacés par les cartes des enveloppes ne s'affichent pas : ils ne comptent pas. Ceux qui suivent s'affichent sous les cartes.
   const cardsInstead = (s: { heading: string }) => g.slug === 'choisir-son-enveloppe' && s.heading === 'Les grandes différences';
-  const jargon = annotateJargon(g.sections.flatMap((s) => (cardsInstead(s) ? s.body.map(() => '') : s.body)), { path: `/guides/${g.slug}`, title: g.title });
+  const asCard = (s: { heading: string }, k: number) => cardsInstead(s) && k < ENVELOPE_CARDS.length;
+  const jargon = annotateJargon(g.sections.flatMap((s) => s.body.map((p, k) => (asCard(s, k) ? '' : p))), { path: `/guides/${g.slug}`, title: g.title });
   const jargonStart = g.sections.map((_, i) => g.sections.slice(0, i).reduce((n, s) => n + s.body.length, 0));
   return (
     <article>
@@ -96,7 +97,8 @@ export function GuidePage() {
             {s.points && !cardsInstead(s) && (
               <ul className="guide-points">{s.body.map((p, k) => <li key={p}><PointText segs={jargon[jargonStart[i] + k]} /></li>)}</ul>
             )}
-            {cardsInstead(s) ? <EnvelopeCards /> : !s.points && s.body.map((p, k) => (
+            {cardsInstead(s) && <EnvelopeCards />}
+            {!s.points && s.body.map((p, k) => !asCard(s, k) && (
               <Fragment key={p}>
                 <p><JargonText segs={jargon[jargonStart[i] + k]} /></p>
                 {g.slug === 'investir-a-credit' && s.heading === 'Un exemple fictif' && (k === 0 ? <SchemaMensualite /> : <SchemaLevier />)}
