@@ -369,6 +369,9 @@ td.neg { color: var(--danger); }
 .ill-sub { font-size: 13px; fill: var(--ink-2) !important; }
 .ill-svg text.ill-on-dark { fill: var(--primary-ink); }
 .ill-svg text.ill-loss { fill: var(--danger); font-size: 13px; font-weight: 700; }
+.ill-svg text.ill-halo-warn, .ill-svg text.ill-halo-accent { paint-order: stroke; stroke-width: 5px; stroke-linejoin: round; }
+.ill-svg text.ill-halo-warn { stroke: var(--warn-soft); }
+.ill-svg text.ill-halo-accent { stroke: var(--accent-soft); }
 .ill-year { font-size: 14px; font-weight: 700; }
 /* Sur grand écran, les schémas à viewBox étroit (340 ou 260) ne sont pas agrandis au-delà de ~1,06× : leurs textes gardent
    la même taille que ceux des schémas à viewBox 420 (sinon ils s'affichaient à 1,3× et paraissaient disproportionnés). */

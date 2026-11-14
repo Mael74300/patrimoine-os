@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { amortize, borrowingCapacity, fmtEur, fmtEur2, fmtMonths, prepayment } from '../lib/finance';
+import { amortize, borrowingCapacity, loanSplit, fmtEur, fmtEur2, fmtMonths, prepayment } from '../lib/finance';
 import { creditTakeaway } from '../lib/takeaways';
+import { SchemaMensualite } from '../components/schemas/SchemaMensualite';
 import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, ChoiceField, usePersistentState, JumpToResults } from '../components/ui';
 
 type State = {
@@ -16,6 +17,7 @@ const DEFAULTS: State = {
 export default function SimCredit() {
   const [s, setS, up] = usePersistentState<State>('credit', DEFAULTS);
   const res = useMemo(() => amortize(s), [s]);
+  const split = useMemo(() => loanSplit(s), [s]);
   const pre = useMemo(
     () => prepayment({ ...s, atMonth: s.prepayYear * 12, amount: s.prepayAmount, mode: s.prepayMode, withPenalty: s.withPenalty }),
     [s],
@@ -52,6 +54,13 @@ export default function SimCredit() {
 
           <Takeaway>{creditTakeaway({ principal: s.principal, years: s.years, monthlyTotal: res.monthlyPayment + res.monthlyInsurance, totalCost: res.totalCost })}</Takeaway>
 
+          {split && (
+            <>
+              <h2>Où part chaque mensualité</h2>
+              <SchemaMensualite split={split} years={s.years} />
+            </>
+          )}
+
           <Fold title="Régler la capacité d'emprunt (revenus, taux d'effort)">
             <div className="fold-form">
               <NumberField label="Revenus nets mensuels" unit="€" value={s.income} onChange={up('income')} min={0} step={100} />
@@ -62,7 +71,7 @@ export default function SimCredit() {
           <h2>Remboursement anticipé</h2>
           <div className="panel fold-form">
             <NumberField label="À la fin de l'année" unit="an" value={s.prepayYear} onChange={up('prepayYear')} min={0} max={30} />
-            <NumberField label="Montant remboursé" unit="€" value={s.prepayAmount} onChange={up('prepayAmount')} min={0} step={1000} />
+            <NumberField label="Montant remboursé" unit="€" value={s.prepayAmount} onChange={up('prepayAmount')} min={0} step={1000} hint={`Restant dû à cette date : ${fmtEur(pre.remainingBefore)}${pre.prepaid < s.prepayAmount ? ', le maximum remboursable' : ''}.`} />
             <ChoiceField label="Effet" value={s.prepayMode} onChange={up('prepayMode')}
               options={[{ v: 'duree', label: 'Réduire la durée', detail: 'même mensualité' }, { v: 'mensualite', label: 'Réduire la mensualité', detail: 'même durée' }]} />
             <ChoiceField label="Indemnités de remboursement anticipé" value={s.withPenalty ? 1 : 0} onChange={(v) => up('withPenalty')(v === 1)}
@@ -70,7 +79,6 @@ export default function SimCredit() {
               hint="Crédit immobilier : au plus 6 mois d'intérêts sur la somme remboursée, dans la limite de 3 % du capital restant dû." />
           </div>
           <div className="kpis">
-            <Kpi label="Somme remboursée" value={fmtEur(pre.prepaid)} sub={`sur ${fmtEur(pre.remainingBefore)} restant dû`} />
             <Kpi label="Intérêts économisés" value={fmtEur(pre.interestSaved)} tone="pos" />
             <Kpi label="Indemnités" value={fmtEur(pre.penalty)} tone={pre.penalty > 0 ? 'neg' : undefined} />
             <Kpi label="Gain net" value={fmtEur(pre.netSaving)} tone={pre.netSaving >= 0 ? 'pos' : 'neg'} sub="intérêts et assurance économisés, indemnités déduites" />
@@ -86,7 +94,7 @@ export default function SimCredit() {
               format={fmtEur}
               series={[
                 { name: 'Sans remboursement anticipé', color: 'var(--chart-1)', values: [s.principal, ...res.schedule.map((y) => y.remaining)] },
-                { name: 'Avec remboursement anticipé', color: 'var(--chart-2)', values: [s.principal, ...pre.schedule.map((y) => y.remaining)], dashed: true },
+                { name: 'Avec remboursement anticipé', color: 'var(--chart-2)', values: [s.principal, ...pre.schedule.map((y) => y.remaining), ...Array<number>(Math.max(0, yearsAxis - pre.schedule.length)).fill(0)], dashed: true },
               ]}
             />
           </div>

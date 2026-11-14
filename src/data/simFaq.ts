@@ -204,7 +204,7 @@ export const simFaq: Record<string, FaqItem[]> = {
   ],
   credit: [
     { q: 'Comment la mensualité d’un crédit est-elle calculée ?', a: 'Pour un prêt à échéances constantes, la mensualité vaut capital × t / (1 − (1 + t)^−n), où t est le taux mensuel (taux nominal annuel divisé par 12) et n le nombre de mensualités. Chaque échéance rembourse des intérêts sur le capital restant dû, le reste amortit le capital.' },
-    { q: 'Pourquoi les intérêts diminuent-ils au fil du prêt ?', a: 'Les intérêts de chaque mois se calculent sur le capital restant dû. Celui-ci baisse à chaque échéance, donc la part d’intérêts décroît et la part de capital augmente, alors que la mensualité reste identique. Le tableau d’amortissement le montre mois par mois.' },
+    { q: 'Pourquoi les intérêts diminuent-ils au fil du prêt ?', a: 'Les intérêts de chaque mois se calculent sur le capital restant dû. Celui-ci baisse à chaque échéance, donc la part d’intérêts décroît et la part de capital augmente, alors que la mensualité reste identique. Le schéma « Où part chaque mensualité » le montre, et le tableau d’amortissement le détaille année par année.' },
     { q: 'Qu’est-ce que le coût total du crédit affiché ?', a: 'C’est la somme des intérêts, et de l’assurance si vous en saisissez une, payés sur toute la durée. Le TAEG, qui intègre aussi les frais payés au départ, se calcule dans le simulateur de TAEG.' },
     { q: 'Le résultat remplace-t-il une offre de prêt ?', a: 'Non, c’est une estimation à partir de vos saisies. Seule l’offre remise par l’établissement prêteur engage celui-ci et précise les montants exacts.' },
   ],
