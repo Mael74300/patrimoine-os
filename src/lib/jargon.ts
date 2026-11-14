@@ -27,6 +27,7 @@ export const JARGON_PATTERNS: Record<string, string[]> = {
   'Patrimoine net': ['patrimoine net'],
   'Plus-value': ['plus-values?'],
   'Rendement brut et net': ['rendement brut', 'rendement net'],
+  'Revenu fiscal de référence': ['revenu fiscal de référence'],
   'Risque de perte en capital': ['perte en capital', 'perte de capital'],
   'Taux d’endettement': ['taux d[’\']endettement'],
   'Taux d’épargne': ['taux d[’\']épargne'],
