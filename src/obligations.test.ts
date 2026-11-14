@@ -11,8 +11,8 @@ describe('schéma « Obligation : prêter, puis le prix selon les taux »', () =
   it('reprend la règle de la fiche (taux qui montent, prix qui baisse)', () => {
     expect(fiche.howItWorks).toContain('baisse quand les taux');
     expect(svg).toContain('Les taux montent');
-    expect(svg).toContain('le prix de l’obligation baisse');
-    expect(svg).toContain('le prix de l’obligation monte');
+    expect(svg).toMatch(/Les taux montent<\/text>[\s\S]*?>le prix baisse</);
+    expect(svg).toMatch(/Les taux baissent<\/text>[\s\S]*?>le prix monte</);
   });
   it('ne montre aucun chiffre, reste léger et accessible', () => {
     const texte = svg.replace(/<title[\s\S]*?<\/desc>/, '').replace(/<[^>]+>/g, ' ');

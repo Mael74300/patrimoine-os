@@ -315,26 +315,32 @@ export function SchemaLocationNue() {
 }
 
 /** Schéma « ETF : un fonds qui suit un indice, acheté en Bourse comme une action » : principe qualitatif (aucun chiffre), repris de l’AMF (communiqué « ETF et risques associés », 14 février 2017, consulté le 2026-11-05) : un fonds indiciel coté vise à répliquer la performance d’un indice de référence, en achetant les titres qui le composent ou par réplication synthétique ; il est négociable en Bourse comme une simple action. */
+/* ViewBox 340 (comme les schémas PEL, LEP et Livret A) : à 375 px, les textes s'affichent presque à leur taille
+ * (≈ 13 à 15 px au lieu de ≈ 11,2 px avec l'ancien viewBox 420). */
 export function SchemaEtf() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const titres = Array.from({ length: 8 }, (_, i) => 101 + i * 18);
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 300" role="img" aria-labelledby="ill-etf-t ill-etf-d" className="ill-svg">
+      <svg viewBox="0 0 340 352" role="img" aria-labelledby="ill-etf-t ill-etf-d" className="ill-svg">
         <title id="ill-etf-t">ETF : un fonds qui suit un indice, acheté en Bourse</title>
         <desc id="ill-etf-d">Un indice de référence mesure l’évolution d’un ensemble d’entreprises. Le fonds ETF cherche à en répliquer la performance, en achetant les titres de l’indice ou par des produits dérivés. Vous achetez des parts du fonds en Bourse, comme une action : vous suivez l’indice, à la hausse comme à la baisse.</desc>
-        <rect x={0} y={2} width={420} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={210} y={33} textAnchor="middle" className="ill-step">Un indice de référence</text>
-        <path d="M 210 52 V 78 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={80} width={420} height={104} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={210} y={106} textAnchor="middle" className="ill-step">Le fonds (ETF)</text>
-        <text x={210} y={134} textAnchor="middle" className="ill-in">Il cherche à répliquer la performance de l’indice</text>
-        <text x={210} y={160} textAnchor="middle" className="ill-sub">en achetant les titres de l’indice</text>
-        <text x={210} y={176} textAnchor="middle" className="ill-sub">ou par des produits dérivés (réplication synthétique)</text>
-        <path d="M 210 184 V 206 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={208} width={420} height={50} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={210} y={229} textAnchor="middle" className="ill-step">Vous : achat de parts en Bourse</text>
-        <text x={210} y={247} textAnchor="middle" className="ill-sub">comme une action : vous suivez l’indice</text>
-        <text x={210} y={290} textAnchor="middle" className="ill-sub">Schéma de principe d’après l’AMF</text>
+        <rect x={1} y={2} width={338} height={66} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={28} textAnchor="middle" className="ill-step">Un indice de référence</text>
+        {titres.map((x) => <rect key={x} x={x} y={40} width={12} height={12} rx={3} fill="var(--accent)" opacity={0.55} />)}
+        <path d="M 170 68 V 92 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={1} y={94} width={338} height={146} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={170} y={120} textAnchor="middle" className="ill-step">Le fonds (ETF)</text>
+        <text x={170} y={146} textAnchor="middle" className="ill-in">Il cherche à répliquer</text>
+        <text x={170} y={164} textAnchor="middle" className="ill-in">la performance de l’indice</text>
+        <text x={170} y={192} textAnchor="middle" className="ill-sub">en achetant les titres de l’indice</text>
+        <text x={170} y={210} textAnchor="middle" className="ill-sub">ou par des produits dérivés</text>
+        <text x={170} y={228} textAnchor="middle" className="ill-sub">(réplication synthétique)</text>
+        <path d="M 170 240 V 264 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={1} y={266} width={338} height={60} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={170} y={290} textAnchor="middle" className="ill-step">Vous : achat de parts en Bourse</text>
+        <text x={170} y={312} textAnchor="middle" className="ill-sub">comme une action : vous suivez l’indice</text>
+        <text x={170} y={348} textAnchor="middle" className="ill-sub">Schéma de principe d’après l’AMF</text>
       </svg>
     </figure>
   );
@@ -345,22 +351,25 @@ export function SchemaCrypto() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 300" role="img" aria-labelledby="ill-cr-t ill-cr-d" className="ill-svg">
+      <svg viewBox="0 0 340 362" role="img" aria-labelledby="ill-cr-t ill-cr-d" className="ill-svg">
         <title id="ill-cr-t">Cryptos : passer par un prestataire agréé, sans garantie des dépôts</title>
         <desc id="ill-cr-d">Pour acheter des crypto-actifs, vous passez par un prestataire de services sur crypto-actifs (PSCA), agréé par l’AMF en France. Depuis le 1er juillet 2026, l’ancien statut PSAN ne suffit plus. Attention : si la plateforme fait faillite, le fonds de garantie des dépôts (FGDR) ne couvre pas les crypto-actifs.</desc>
-        <rect x={0} y={2} width={420} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={210} y={33} textAnchor="middle" className="ill-step">Vous</text>
-        <path d="M 210 52 V 78 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={80} width={420} height={104} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={210} y={106} textAnchor="middle" className="ill-step">Un prestataire agréé (PSCA)</text>
-        <text x={210} y={134} textAnchor="middle" className="ill-in">Agrément de l’AMF en France</text>
-        <text x={210} y={160} textAnchor="middle" className="ill-sub">Depuis le 1er juillet 2026, l’ancien statut PSAN</text>
-        <text x={210} y={176} textAnchor="middle" className="ill-sub">ne suffit plus : à vérifier sur la liste blanche de l’AMF</text>
-        <path d="M 210 184 V 206 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={208} width={420} height={50} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={210} y={229} textAnchor="middle" className="ill-step">Vos crypto-actifs : aucune garantie des dépôts</text>
-        <text x={210} y={247} textAnchor="middle" className="ill-sub">le FGDR ne les couvre pas si la plateforme fait faillite</text>
-        <text x={210} y={290} textAnchor="middle" className="ill-sub">Schéma de principe d’après l’AMF</text>
+        <rect x={1} y={2} width={338} height={48} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={31} textAnchor="middle" className="ill-step">Vous</text>
+        <path d="M 170 50 V 74 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={1} y={76} width={338} height={128} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={170} y={102} textAnchor="middle" className="ill-step">Un prestataire agréé (PSCA)</text>
+        <text x={170} y={128} textAnchor="middle" className="ill-in">Agrément de l’AMF en France</text>
+        <text x={170} y={156} textAnchor="middle" className="ill-sub">Depuis le 1er juillet 2026, l’ancien</text>
+        <text x={170} y={174} textAnchor="middle" className="ill-sub">statut PSAN ne suffit plus : à vérifier</text>
+        <text x={170} y={192} textAnchor="middle" className="ill-sub">sur la liste blanche de l’AMF</text>
+        <path d="M 170 204 V 228 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={1} y={230} width={338} height={98} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={170} y={254} textAnchor="middle" className="ill-step">Vos crypto-actifs :</text>
+        <text x={170} y={274} textAnchor="middle" className="ill-step">aucune garantie des dépôts</text>
+        <text x={170} y={298} textAnchor="middle" className="ill-sub">le FGDR ne les couvre pas</text>
+        <text x={170} y={316} textAnchor="middle" className="ill-sub">si la plateforme fait faillite</text>
+        <text x={170} y={356} textAnchor="middle" className="ill-sub">Schéma de principe d’après l’AMF</text>
       </svg>
     </figure>
   );
@@ -371,32 +380,32 @@ export function SchemaObligation() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 340" role="img" aria-labelledby="ill-ob-t ill-ob-d" className="ill-svg">
+      <svg viewBox="0 0 340 328" role="img" aria-labelledby="ill-ob-t ill-ob-d" className="ill-svg">
         <title id="ill-ob-t">Une obligation : un prêt, et un prix qui varie avec les taux</title>
         <desc id="ill-ob-d">En achetant une obligation, vous prêtez de l’argent à un État ou à une entreprise, qui vous verse des intérêts (coupons) puis vous rembourse à l’échéance. Si vous revendez avant l’échéance, le prix dépend des taux : quand les taux montent, le prix des obligations déjà émises baisse ; quand les taux baissent, il monte.</desc>
-        <rect x={0} y={2} width={150} height={64} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={75} y={30} textAnchor="middle" className="ill-step">Vous</text>
-        <text x={75} y={50} textAnchor="middle" className="ill-sub">le prêteur</text>
-        <rect x={270} y={2} width={150} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={345} y={30} textAnchor="middle" className="ill-step">L’émetteur</text>
-        <text x={345} y={50} textAnchor="middle" className="ill-sub">État, entreprise</text>
-        <path d="M 156 22 H 262 m -8 -7 l 8 7 l -8 7" {...arrow} />
-        <text x={209} y={14} textAnchor="middle" className="ill-in">vous prêtez</text>
-        <path d="M 264 48 H 158 m 8 -7 l -8 7 l 8 7" {...arrow} />
-        <text x={209} y={72} textAnchor="middle" className="ill-in">intérêts (coupons)</text>
-        <text x={209} y={88} textAnchor="middle" className="ill-in">puis remboursement</text>
-        <line x1={0} y1={112} x2={420} y2={112} stroke="var(--line)" strokeWidth={2} strokeDasharray="4 6" />
-        <text x={210} y={140} textAnchor="middle" className="ill-step">Si vous revendez avant l’échéance</text>
-        <text x={210} y={160} textAnchor="middle" className="ill-sub">le prix suit les taux, comme une balançoire</text>
-        <rect x={0} y={178} width={200} height={110} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={100} y={206} textAnchor="middle" className="ill-step">Les taux montent</text>
-        <path d="M 100 218 V 252 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={100} y={276} textAnchor="middle" className="ill-in">le prix de l’obligation baisse</text>
-        <rect x={220} y={178} width={200} height={110} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={320} y={206} textAnchor="middle" className="ill-step">Les taux baissent</text>
-        <path d="M 320 252 V 218 m -7 8 l 7 -8 l 7 8" {...arrow} />
-        <text x={320} y={276} textAnchor="middle" className="ill-in">le prix de l’obligation monte</text>
-        <text x={210} y={322} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
+        <rect x={1} y={20} width={124} height={60} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={63} y={46} textAnchor="middle" className="ill-step">Vous</text>
+        <text x={63} y={66} textAnchor="middle" className="ill-sub">le prêteur</text>
+        <rect x={215} y={20} width={124} height={60} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={277} y={46} textAnchor="middle" className="ill-step">L’émetteur</text>
+        <text x={277} y={66} textAnchor="middle" className="ill-sub">État, entreprise</text>
+        <text x={170} y={14} textAnchor="middle" className="ill-in">vous prêtez</text>
+        <path d="M 132 36 H 207 m -8 -7 l 8 7 l -8 7" {...arrow} />
+        <path d="M 208 64 H 133 m 8 -7 l -8 7 l 8 7" {...arrow} />
+        <text x={170} y={100} textAnchor="middle" className="ill-in">intérêts (coupons)</text>
+        <text x={170} y={116} textAnchor="middle" className="ill-in">puis remboursement</text>
+        <line x1={1} y1={134} x2={339} y2={134} stroke="var(--line)" strokeWidth={2} strokeDasharray="4 6" />
+        <text x={170} y={160} textAnchor="middle" className="ill-step">Si vous revendez avant l’échéance</text>
+        <text x={170} y={180} textAnchor="middle" className="ill-sub">le prix suit les taux, comme une balançoire</text>
+        <rect x={1} y={196} width={162} height={100} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={82} y={222} textAnchor="middle" className="ill-step">Les taux montent</text>
+        <path d="M 82 234 V 262 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={82} y={284} textAnchor="middle" className="ill-step">le prix baisse</text>
+        <rect x={177} y={196} width={162} height={100} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={258} y={222} textAnchor="middle" className="ill-step">Les taux baissent</text>
+        <path d="M 258 262 V 234 m -7 8 l 7 -8 l 7 8" {...arrow} />
+        <text x={258} y={284} textAnchor="middle" className="ill-step">le prix monte</text>
+        <text x={170} y={322} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
       </svg>
     </figure>
   );
@@ -442,23 +451,24 @@ export function SchemaCto() {
 
 /** Schéma « Actions en direct : répartir sur 15 lignes limite l’effet d’une défaillance » : reprend l’exemple fictif de la fiche (15 lignes de 1 000 €, perte maximale 1 000 €, soit 6,7 % de 15 000 €), recalculé par test. Aucune information factuelle nouvelle. */
 export function SchemaActions() {
-  const cells = Array.from({ length: 15 }, (_, i) => ({ x: 40 + (i % 5) * 70, y: 54 + Math.floor(i / 5) * 46, bad: i === 7 }));
+  const cells = Array.from({ length: 15 }, (_, i) => ({ x: 11 + (i % 5) * 65, y: 42 + Math.floor(i / 5) * 46, bad: i === 7 }));
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 300" role="img" aria-labelledby="ill-act-t ill-act-d" className="ill-svg">
+      <svg viewBox="0 0 340 300" role="img" aria-labelledby="ill-act-t ill-act-d" className="ill-svg">
         <title id="ill-act-t">Actions : une seule entreprise défaillante sur quinze</title>
         <desc id="ill-act-d">Exemple fictif : un portefeuille de quinze actions de 1 000 € chacune, soit 15 000 €. Si une seule entreprise fait défaillance, la perte est au plus de 1 000 €, soit 6,7 % du total.</desc>
-        <text x={210} y={24} textAnchor="middle" className="ill-step">15 entreprises × 1 000 € = 15 000 €</text>
+        <text x={170} y={20} textAnchor="middle" className="ill-step">15 entreprises × 1 000 € = 15 000 €</text>
         {cells.map((c, i) => (
           <g key={i}>
-            <rect x={c.x} y={c.y} width={60} height={36} rx={8} fill={c.bad ? 'var(--warn-soft)' : 'var(--accent-soft)'} stroke={c.bad ? 'var(--warn)' : 'var(--accent)'} strokeWidth={2} />
-            <text x={c.x + 30} y={c.y + 23} textAnchor="middle" className="ill-in">{c.bad ? '0 €' : '1 000 €'}</text>
+            <rect x={c.x} y={c.y} width={58} height={36} rx={8} fill={c.bad ? 'var(--warn-soft)' : 'var(--accent-soft)'} stroke={c.bad ? 'var(--warn)' : 'var(--accent)'} strokeWidth={2} />
+            <text x={c.x + 29} y={c.y + 23} textAnchor="middle" className="ill-in">{c.bad ? '0 €' : '1 000 €'}</text>
           </g>
         ))}
-        <rect x={0} y={198} width={420} height={62} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={210} y={222} textAnchor="middle" className="ill-step">Une entreprise défaillante : − 1 000 € au plus</text>
-        <text x={210} y={244} textAnchor="middle" className="ill-sub">soit 6,7 % du total (1 000 € sur 15 000 €)</text>
-        <text x={210} y={288} textAnchor="middle" className="ill-sub">Exemple fictif, schéma d’illustration</text>
+        <rect x={1} y={184} width={338} height={82} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={170} y={208} textAnchor="middle" className="ill-step">Une entreprise défaillante :</text>
+        <text x={170} y={228} textAnchor="middle" className="ill-step">− 1 000 € au plus</text>
+        <text x={170} y={252} textAnchor="middle" className="ill-sub">soit 6,7 % du total (1 000 € sur 15 000 €)</text>
+        <text x={170} y={292} textAnchor="middle" className="ill-sub">Exemple fictif, schéma d’illustration</text>
       </svg>
     </figure>
   );
