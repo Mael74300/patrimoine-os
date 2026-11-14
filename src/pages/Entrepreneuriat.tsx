@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { investments } from '../data/investments';
-import { Dots, PageHead } from '../components/ui';
+import { MeterRows, MetersLegend, PageHead } from '../components/ui';
 import { SchemaSeparer } from '../components/schemas/SchemaSeparer';
 
 const PATHS = [
@@ -25,7 +25,8 @@ const PATHS = [
 ];
 
 export default function Entrepreneuriat() {
-  const related = investments.filter((i) => ['entreprise', 'numerique', 'capital-humain'].includes(i.category));
+  const fiche = (slug: string) => investments.find((i) => i.slug === slug)!;
+  const competences = fiche('capital-humain');
   return (
     <>
       <PageHead art="entrepreneuriat" eyebrow="Entrepreneuriat" title="Créer de la richesse par l'entreprise">
@@ -34,15 +35,20 @@ export default function Entrepreneuriat() {
 
       <h2>Trois façons d'entreprendre</h2>
       <div className="grid cols-3">
-        {PATHS.map((p) => (
-          <div className="panel path-card" key={p.title}>
-            <h3 style={{ marginTop: 0 }}>{p.title}</h3>
-            <p className="muted">{p.body}</p>
-            <ul className="small" style={{ paddingLeft: 18, marginBottom: 0 }}>{p.steps.map((s) => <li key={s}>{s}</li>)}</ul>
-            <p className="path-more"><Link to={`/encyclopedie/${p.fiche.slug}`} aria-label={`Lire ${p.fiche.label}`}>Voir la fiche →</Link></p>
-          </div>
-        ))}
+        {PATHS.map((p) => {
+          const inv = fiche(p.fiche.slug);
+          return (
+            <div className="panel path-card" key={p.title}>
+              <h3>{p.title}</h3>
+              <p className="muted">{p.body}</p>
+              <MeterRows risk={inv.risk} liquidity={inv.liquidity} effort={inv.effort} effortNote={inv.timeSkills} noNote />
+              <ul className="small path-steps">{p.steps.map((s) => <li key={s}>{s}</li>)}</ul>
+              <p className="path-more"><Link to={`/encyclopedie/${p.fiche.slug}`} aria-label={`Lire ${p.fiche.label}`}>Voir la fiche →</Link></p>
+            </div>
+          );
+        })}
       </div>
+      <MetersLegend />
 
       <p className="notice info" style={{ marginTop: 24 }}>
         Testez vos hypothèses de chiffre d'affaires, de marge, de rémunération et de trésorerie dans le{' '}
@@ -63,17 +69,11 @@ export default function Entrepreneuriat() {
         </p>
       </div>
 
-      <h2>Fiches liées</h2>
-      <ul className="inv-list">
-        {related.map((i) => (
-          <li key={i.slug}>
-            <Link className="inv-row" to={`/encyclopedie/${i.slug}`}>
-              <div><h3>{i.name}</h3><p>{i.summary}</p></div>
-              <div className="meters"><Dots level={i.risk} kind="risk" label="Risque" /><Dots level={i.effort} label="Effort" /></div>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <h2>Avant de vous lancer</h2>
+      <Link className="panel path-before" to={`/encyclopedie/${competences.slug}`}>
+        <strong>{competences.name} →</strong>
+        <span>{competences.summary}</span>
+      </Link>
 
       <h2>Ressources publiques gratuites</h2>
       <ul>
