@@ -964,6 +964,20 @@ h2.gloss-letter::before { content: none; }
 .rb-total { margin: 4px 0 10px; padding: 10px 12px; border-radius: 8px; background: var(--accent-soft); color: var(--ink); font-size: .92rem; }
 .rb-total strong { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .rb-total.rb-lose { background: color-mix(in srgb, var(--danger) 10%, var(--surface)); }
+/* Quelle durée ? : mensualité et coût total, une ligne par durée */
+.ld-month { background: var(--primary); }
+.ld-ins { background: color-mix(in srgb, var(--chart-1) 30%, var(--surface)); }
+.fb-track .rb-int + .ld-ins { border-left: 2px solid var(--surface); }
+.ld-row { display: grid; grid-template-columns: 3.6rem 1fr; column-gap: 10px; row-gap: 4px; align-items: center; margin-bottom: 9px; padding-bottom: 9px; border-bottom: 1px solid var(--line); }
+.ld-row:last-child { border-bottom: 0; }
+.ld-years { grid-row: span 2; font-variant-numeric: tabular-nums; }
+.ld-line { display: grid; grid-template-columns: 1fr 9.2rem; gap: 10px; align-items: center; }
+.ld-line .fb-track { height: 12px; }
+.ld-value { font-size: .88rem; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ld-value strong { color: var(--ink); }
+.ld-caption { margin: 0 0 10px; }
+@media (min-width: 900px) { .ld-row { grid-template-columns: 3.6rem 1fr 1fr; column-gap: 22px; } .ld-years { grid-row: auto; } .ld-line { grid-template-columns: 1fr 8.6rem; } }
+@media (max-width: 420px) { .ld-row { grid-template-columns: 3rem 1fr; column-gap: 8px; } .ld-line { grid-template-columns: 1fr 8.4rem; gap: 8px; } .ld-value { font-size: .84rem; } }
 
 /* Glossaire sur mobile : toutes les lettres visibles d'un coup (la rangée défilante cachait les lettres de P à V sans aucun indice) */
 @media (max-width: 599px) {

@@ -1,9 +1,9 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { fmtEur, fmtEur2, fmtMonths, fmtNum, fmtPct, fmtPts, inFine, loanDuration, renegotiation, renegotiationBars, taeg, taegByFees, taegByInsurance } from '../lib/finance';
+import { fmtEur, fmtEur2, fmtMonths, fmtNum, fmtPct, fmtPts, inFine, loanDuration, loanDurationBars, renegotiation, type LoanDurationRow, renegotiationBars, taeg, taegByFees, taegByInsurance } from '../lib/finance';
 import { loanDurationTakeaway, taegTakeaway, inFineTakeaway, renegoTakeaway } from '../lib/takeaways';
 import { comparerCreditsFaq } from '../data/simFaq';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
 
 // Exemples fictifs : toutes les valeurs par défaut sont des hypothèses à remplacer par les vôtres.
 
@@ -32,6 +32,47 @@ function Layout({ form, children, reset }: { form: ReactNode; children: ReactNod
 type DureeState = { principal: number; annualRate: number; insuranceRate: number };
 const DUREE: DureeState = { principal: 200000, annualRate: 0.03, insuranceRate: 0.003 };
 const DURATIONS = [10, 15, 20, 25, 30];
+
+/** Pour chaque durée, deux barres : la mensualité (plus courte quand on allonge) et le coût total (plus long), chacune sur sa propre échelle. */
+function DurationBars({ rows }: { rows: LoanDurationRow[] }) {
+  const bars = loanDurationBars(rows);
+  if (!rows.some((r) => r.monthlyTotal > 0)) return null;
+  const hasInsurance = rows.some((r) => r.totalCost - r.totalInterest > 0.5);
+  return (
+    <>
+      <h2>Mensualité et coût selon la durée</h2>
+      <figure className="fb ld">
+        <ul className="fb-legend" aria-hidden="true">
+          <li><i className="ld-month" />Mensualité{hasInsurance ? ', assurance comprise' : ''}</li>
+          <li><i className="rb-int" />Intérêts</li>
+          {hasInsurance && <li><i className="ld-ins" />Assurance</li>}
+        </ul>
+        <ul className="fb-list">
+          {rows.map((r, i) => (
+            <li className="fb-row ld-row" key={r.years}>
+              <span className="fb-name ld-years">{r.years}&nbsp;ans</span>
+              <div className="ld-line">
+                <div className="fb-track" aria-hidden="true"><span className="ld-month" style={{ width: `${bars[i].monthly}%` }} /></div>
+                <span className="ld-value"><strong>{fmtEur(r.monthlyTotal)}</strong> par mois</span>
+              </div>
+              <div className="ld-line">
+                <div className="fb-track" aria-hidden="true">
+                  <span className="rb-int" style={{ width: `${bars[i].interest}%` }} />
+                  {bars[i].insurance > 0 && <span className="ld-ins" style={{ width: `${bars[i].insurance}%` }} />}
+                </div>
+                <span className="ld-value"><strong>{fmtEur(r.totalCost)}</strong> de coût</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <figcaption className="fb-sub ld-caption">
+          Barre foncée : ce que vous payez chaque mois. Barre plus claire : ce que le crédit coûte en plus du capital emprunté{hasInsurance ? ' (intérêts et assurance)' : ' (intérêts)'}.
+          Plus le crédit est long, plus le capital est remboursé lentement : les intérêts courent plus longtemps. Montants par défaut fictifs ; calcul détaillé sur la page <Link to="/methodologie">Méthode</Link>.
+        </figcaption>
+      </figure>
+    </>
+  );
+}
 
 function Duree() {
   const [s, setS, up] = usePersistentState<DureeState>('duree-credit', DUREE);
@@ -62,28 +103,26 @@ function Duree() {
           <Kpi label={`Coût total sur ${longest.years}\u00a0ans`} value={fmtEur(longest.totalCost)} sub={`${fmtEur(longest.totalCost - shortest.totalCost)} de plus`} />
         </div>
         <Takeaway>{loanDurationTakeaway({ principal: s.principal, shortYears: shortest.years, longYears: longest.years, shortMonthly: shortest.monthlyTotal, longMonthly: longest.monthlyTotal, shortCost: shortest.totalCost, longCost: longest.totalCost })}</Takeaway>
-        <h2>Comparaison par durée</h2>
-        <div className="table-wrap stack-wrap">
-          <table className="stack-table">
-            <caption className="sr-only">Mensualité, intérêts et coût total selon la durée du crédit</caption>
-            <thead><tr><th>Durée</th><th className="r">Mensualité (hors assurance)</th><th className="r">Mensualité (assurance comprise)</th><th className="r">Intérêts</th><th className="r">Coût total</th></tr></thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.years}>
-                  <td className="st-name">{r.years}&nbsp;ans</td>
-                  <td data-label="Mensualité (hors assurance)" className="r">{fmtEur2(r.monthlyPayment)}</td>
-                  <td data-label="Mensualité (assurance comprise)" className="r">{fmtEur2(r.monthlyTotal)}</td>
-                  <td data-label="Intérêts" className="r">{fmtEur(r.totalInterest)}</td>
-                  <td data-label="Coût total" className="r">{fmtEur(r.totalCost)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className="muted small">
-          Une durée plus longue réduit la mensualité mais augmente le coût total : le capital est remboursé plus lentement, donc les intérêts courent plus longtemps.
-          Coût total = intérêts + assurance. Les montants par défaut sont fictifs ; le détail du calcul est sur la page <Link to="/methodologie">Méthode</Link>.
-        </p>
+        <DurationBars rows={rows} />
+        <Fold title="Voir le détail en tableau (mensualité hors assurance, intérêts)">
+          <div className="table-wrap stack-wrap">
+            <table className="stack-table">
+              <caption className="sr-only">Mensualité, intérêts et coût total selon la durée du crédit</caption>
+              <thead><tr><th>Durée</th><th className="r">Mensualité (hors assurance)</th><th className="r">Mensualité (assurance comprise)</th><th className="r">Intérêts</th><th className="r">Coût total</th></tr></thead>
+              <tbody>
+                {rows.map((r) => (
+                  <tr key={r.years}>
+                    <td className="st-name">{r.years}&nbsp;ans</td>
+                    <td data-label="Mensualité (hors assurance)" className="r">{fmtEur2(r.monthlyPayment)}</td>
+                    <td data-label="Mensualité (assurance comprise)" className="r">{fmtEur2(r.monthlyTotal)}</td>
+                    <td data-label="Intérêts" className="r">{fmtEur(r.totalInterest)}</td>
+                    <td data-label="Coût total" className="r">{fmtEur(r.totalCost)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Fold>
         <SavedSims simKey="duree-credit" current={s} onLoad={(d) => setS({ ...DUREE, ...d })} />
       </Layout>
     </>
@@ -354,7 +393,7 @@ export default function SimComparerCredits() {
       <div role="tabpanel" id="panneau-calcul" aria-labelledby={`tab-${tab}`}>
         <Panel />
       </div>
-      <Disclaimer />
+      <Disclaimer kind={tab === 'infine' ? 'rendement' : 'credit'} />
       <SimFaq slug="comparer-des-credits" items={comparerCreditsFaq[tab]} />
     </>
   );

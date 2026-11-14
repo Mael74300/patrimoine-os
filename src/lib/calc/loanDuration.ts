@@ -41,3 +41,32 @@ export function loanDuration(input: LoanDurationInput): LoanDurationRow[] {
     };
   });
 }
+
+export type LoanDurationBar = {
+  years: number;
+  /** Largeur de la barre « mensualité », en % de la plus forte mensualité comparée. */
+  monthly: number;
+  /** Part « intérêts » de la barre « coût total », en % du plus fort coût total comparé. */
+  interest: number;
+  /** Part « assurance » de la barre « coût total », même échelle. */
+  insurance: number;
+};
+
+/**
+ * Barres du simulateur « Quelle durée ? » : chaque mensualité sur l'échelle de la plus forte,
+ * chaque coût total (intérêts + assurance) sur l'échelle du plus fort. Toujours entre 0 et 100.
+ */
+export function loanDurationBars(rows: LoanDurationRow[]): LoanDurationBar[] {
+  const maxMonthly = Math.max(0, ...rows.map((r) => r.monthlyTotal));
+  const maxCost = Math.max(0, ...rows.map((r) => r.totalCost));
+  const pct = (v: number, max: number) => (max > 0 && Number.isFinite(v) ? Math.min(100, Math.max(0, (100 * v) / max)) : 0);
+  return rows.map((r) => {
+    const interest = pct(r.totalInterest, maxCost);
+    return {
+      years: r.years,
+      monthly: pct(r.monthlyTotal, maxMonthly),
+      interest,
+      insurance: Math.max(0, pct(r.totalCost, maxCost) - interest),
+    };
+  });
+}
