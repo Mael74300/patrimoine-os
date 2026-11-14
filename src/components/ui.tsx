@@ -395,13 +395,44 @@ export function placeBandLabel(
   return { text: label, x: left + 6, anchor: 'start' };
 }
 
+/** Pas « ronds » des graduations en années : on lit An 0, An 5, An 10… plutôt qu'An 0, An 7, An 14. */
+export const NICE_YEAR_STEPS = [1, 2, 5, 10, 20, 25, 50, 100, 200, 500];
+
+/**
+ * Graduations d'un axe en années (libellés « An 0 », « An 1 »… consécutifs) : les années multiples d'un pas rond,
+ * le plus petit qui laisse au moins la largeur d'une étiquette et 16 px entre deux graduations (ou, s'il reste proche,
+ * un pas qui tombe juste sur la dernière année et garde au moins trois graduations).
+ * La première année est gardée si elle n'est pas un multiple mais tient avant la graduation suivante (An 1 d'un axe qui
+ * commence à 1). La dernière est toujours affichée par `placeXLabels`. Renvoie null si les libellés ne sont pas des années.
+ */
+export function yearTicks(labels: string[], plotWidth: number): number[] | null {
+  const years = labels.map((l) => {
+    const m = /^An (\d+)$/.exec(l);
+    return m ? Number(m[1]) : NaN;
+  });
+  if (years.length < 2 || years.some((y, i) => y !== years[0] + i)) return null;
+  const perYear = plotWidth / (years.length - 1);
+  const widest = Math.max(...labels.map((l) => l.length)) * CHAR_W;
+  const lastYear = years[years.length - 1];
+  const fitting = NICE_YEAR_STEPS.filter((s) => s * perYear >= widest + 16);
+  const smallest = fitting[0] ?? NICE_YEAR_STEPS[NICE_YEAR_STEPS.length - 1];
+  // Un pas qui tombe juste sur la dernière année (An 0, 5… 25 plutôt qu'An 0, 2… 22, 25), s'il reste proche du plus petit.
+  const count = (s: number) => years.filter((y) => y % s === 0).length;
+  const step = fitting.find((s) => lastYear % s === 0 && s <= smallest * 2.5 && count(s) >= 3) ?? smallest;
+  const multiples = years.flatMap((y, i) => (y % step === 0 ? [i] : []));
+  if (years[0] % step === 0) return multiples;
+  const next = multiples[0] ?? years.length - 1;
+  return next >= step / 2 && next * perYear >= widest + 8 ? [0, ...multiples] : multiples;
+}
+
 /**
  * Choisit les étiquettes de l'axe horizontal : toujours la dernière, alignée vers l'intérieur si elle
  * dépasserait du dessin, et les autres seulement si elles ne la chevauchent pas ni ne chevauchent la précédente.
+ * `every` : une étiquette toutes les `every` positions, ou la liste des positions candidates (voir `yearTicks`).
  */
 export function placeXLabels(
   labels: string[],
-  every: number,
+  every: number | number[],
   x: (i: number) => number,
   width: number,
 ): ({ x: number; anchor: 'middle' | 'end' } | null)[] {
@@ -411,11 +442,17 @@ export function placeXLabels(
   const gap = 8;
   const last = n - 1;
   const wLast = labels[last].length * CHAR_W;
-  const lastAnchor = x(last) + wLast / 2 > width ? 'end' : 'middle';
-  const lastLeft = lastAnchor === 'end' ? x(last) - wLast : x(last) - wLast / 2;
-  out[last] = { x: x(last), anchor: lastAnchor };
+  // Si la dernière étiquette, centrée sur son point, dépasserait du dessin, elle est calée sur le bord droit (et non
+  // terminée sur le point) : elle reste au plus près de son année et laisse la place à la graduation précédente.
+  const overflow = x(last) + wLast / 2 > width - 1;
+  const lastX = overflow ? Math.max(x(last), width - 1) : x(last);
+  const lastLeft = overflow ? lastX - wLast : x(last) - wLast / 2;
+  out[last] = { x: lastX, anchor: overflow ? 'end' : 'middle' };
   let prevRight = -Infinity;
-  for (let i = 0; i < last; i += every) {
+  const candidates = Array.isArray(every)
+    ? every.filter((i) => i >= 0 && i < last)
+    : Array.from({ length: Math.ceil(last / every) }, (_, k) => k * every);
+  for (const i of candidates) {
     const w = labels[i].length * CHAR_W;
     const left = x(i) - w / 2;
     const right = x(i) + w / 2;
@@ -465,7 +502,9 @@ export function LineChart({ series, xLabels, format, title, showTitle, height = 
 
   const x = (i: number) => pad.l + (n <= 1 ? 0 : (i / (n - 1)) * (W - pad.l - pad.r));
   const y = (v: number) => pad.t + (1 - (v - min) / (max - min || 1)) * (H - pad.t - pad.b);
-  const labelEvery = axisLabels ? 1 : Math.max(1, Math.ceil(n / Math.max(3, Math.floor((W - pad.l - pad.r) / 56))));
+  const labelEvery = axisLabels
+    ? 1
+    : yearTicks(xLabels.map(String), W - pad.l - pad.r) ?? Math.max(1, Math.ceil(n / Math.max(3, Math.floor((W - pad.l - pad.r) / 56))));
   const tickLabels = axisLabels ?? xLabels.map(String);
   const xLabelBoxes = useMemo(
     () => placeXLabels(tickLabels, labelEvery, (i) => x(i), W),
