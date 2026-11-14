@@ -163,3 +163,64 @@ export function prepayment(input: PrepaymentInput): PrepaymentResult {
     schedule: toYears(rows),
   };
 }
+
+// ------------------------------------------------------------------ Où part chaque mensualité
+
+export type LoanSplitYear = {
+  year: number;
+  /** Part moyenne d'intérêts dans une mensualité de l'année (hors assurance). */
+  interest: number;
+  /** Part moyenne de capital remboursé dans une mensualité de l'année. */
+  principal: number;
+};
+
+export type LoanSplit = {
+  /** Mensualité hors assurance. */
+  payment: number;
+  first: { interest: number; principal: number };
+  last: { interest: number; principal: number };
+  /** Part des intérêts dans la première mensualité (0 à 1). */
+  firstInterestShare: number;
+  /** Mois à la fin duquel la moitié du capital emprunté est remboursée. */
+  halfMonth: number;
+  years: LoanSplitYear[];
+};
+
+/**
+ * Schéma « où part chaque mensualité » du calculateur de crédit : partage de la mensualité (hors assurance)
+ * entre intérêts et capital, mois par mois, avec la même simulation que le tableau d'amortissement.
+ * Renvoie null si aucun prêt n'est simulé (montant, durée ou mensualité nuls).
+ */
+export function loanSplit(input: LoanInput): LoanSplit | null {
+  const P = Math.max(0, num(input.principal));
+  const r = Math.max(0, num(input.annualRate)) / 12;
+  const pay = loanPayment(P, input.annualRate, input.years);
+  if (!(P > 0) || !(pay > 0)) return null;
+  const { rows } = simulate(P, r, pay, months(input.years), 0);
+  if (rows.length === 0) return null;
+  const a = rows[0];
+  const z = rows[rows.length - 1];
+  let paid = 0;
+  let halfMonth = rows.length;
+  for (const row of rows) {
+    paid += row.principal;
+    if (paid >= P / 2 - 1e-6) { halfMonth = row.month; break; }
+  }
+  const years: LoanSplitYear[] = [];
+  for (let i = 0; i < rows.length; i += 12) {
+    const slice = rows.slice(i, i + 12);
+    years.push({
+      year: i / 12 + 1,
+      interest: slice.reduce((t, x) => t + x.interest, 0) / slice.length,
+      principal: slice.reduce((t, x) => t + x.principal, 0) / slice.length,
+    });
+  }
+  return {
+    payment: pay,
+    first: { interest: a.interest, principal: a.principal },
+    last: { interest: z.interest, principal: z.principal },
+    firstInterestShare: a.interest / pay,
+    halfMonth,
+    years,
+  };
+}
