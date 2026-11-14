@@ -466,6 +466,32 @@ describe('etfImmoTakeaway', () => {
   });
 });
 
+describe('etfImmoGapText', () => {
+  const digits = (t: string) => t.replace(/\s/g, '');
+  const eur = (n: number) => digits(Math.round(n).toLocaleString('fr-FR'));
+  it('versements communs et gains nets recalculés par compareEtfImmo', async () => {
+    const f = await import('./finance');
+    const { etfImmoGapText } = await import('./takeaways');
+    const r = f.compareEtfImmo({
+      rental: { ...(await import('../pages/SimImmobilier')).RENTAL_DEFAULTS },
+      etf: { annualReturn: 0.06, annualFees: 0.003, exitTaxRate: 0.314 },
+      horizon: 20, inflation: 0.02, cashRate: 0.017, saleCostRate: 0.05,
+    });
+    const t = digits(etfImmoGapText({ invested: r.etf.invested, etfNet: r.etf.netWealth, immoNet: r.immo.netWealth }));
+    const inv = Math.round(r.etf.invested);
+    expect(t).toContain(eur(inv));
+    expect(t).toContain(eur(Math.round(r.etf.netWealth) - inv));
+    expect(t).toContain(eur(Math.round(r.immo.netWealth) - inv));
+  });
+  it('perte et égalité dites en mots', async () => {
+    const { etfImmoGapText } = await import('./takeaways');
+    const t = etfImmoGapText({ invested: 100000, etfNet: 100000, immoNet: 90000 });
+    expect(t).toContain('le portefeuille d’ETF rend tout juste vos versements');
+    expect(digits(t)).toContain('lebienimmobilierenperd10000');
+    expect(etfImmoGapText({ invested: 0, etfNet: 1, immoNet: 1 })).toBe('');
+  });
+});
+
 describe('phrases « Concrètement » : comparer des crédits', () => {
   const digits = (t: string) => t.replace(/\s/g, '');
   const eur = (n: number) => digits(Math.round(n).toLocaleString('fr-FR'));
