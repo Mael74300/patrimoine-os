@@ -22,6 +22,8 @@ import { effortParts, meterWord, type MeterKind } from '../lib/meters';
 
 type NumberFieldProps = {
   label: string;
+  /** Libellé visible plus court (champs groupés) ; `label` reste le nom lu par les lecteurs d’écran. */
+  shortLabel?: string;
   value: number;
   onChange: (v: number) => void;
   unit?: string;
@@ -35,7 +37,7 @@ type NumberFieldProps = {
   sliderMax?: number;
 };
 
-export function NumberField({ label, value, onChange, unit, step = 1, min, max, hint, percent, sliderMax }: NumberFieldProps) {
+export function NumberField({ label, shortLabel, value, onChange, unit, step = 1, min, max, hint, percent, sliderMax }: NumberFieldProps) {
   const id = useId();
   const shown = percent ? round(value * 100, 4) : value;
   const [text, setText] = useState(String(shown));
@@ -50,7 +52,9 @@ export function NumberField({ label, value, onChange, unit, step = 1, min, max, 
   return (
     <div className="field">
       <div className="field-label">
-        <label htmlFor={id}>{label}</label>
+        <label htmlFor={id}>
+          {shortLabel ? (<><span aria-hidden="true">{shortLabel}</span><span className="sr-only">{label}</span></>) : label}
+        </label>
         {echo && <span className="field-echo" aria-hidden="true">{echo}</span>}
       </div>
       <div className="input-unit">
