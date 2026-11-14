@@ -26,6 +26,28 @@ describe('schéma « Livret A : le jour de l’opération décide »', () => {
   });
 });
 
+describe('schéma des quinzaines : quatre frises lisibles sur mobile', () => {
+  const svg = renderToStaticMarkup(createElement(SchemaQuinzaines));
+  it('est dessiné en viewBox 340 (textes ~13,5 px à 375 px)', () => {
+    expect(svg).toContain('viewBox="0 0 340 ');
+  });
+  it('chaque frise dit la règle de Service-Public.fr (F2365) et place la bande « rapporte » au bon endroit du calendrier', () => {
+    const txt = svg.replace(/<[^>]+>/g, '').replace(/&#x27;|’/g, '’');
+    expect(txt).toContain('Dépôt : rapporte dès le 16');
+    expect(txt).toContain('Dépôt : rapporte dès le 1er du mois suivant');
+    expect(txt).toContain('Retrait : ne rapporte plus dès le 1er');
+    expect(txt).toContain('Retrait : ne rapporte plus dès le 16');
+    // Bandes vertes (accent) : calendrier 1 | 64 (1er) | 164 (16) | 264 (mois suivant) | 339.
+    const bandes = [...svg.matchAll(/<rect x="(\d+)" y="\d+" width="(\d+)" height="20" rx="6" fill="var\(--accent-soft\)"/g)].map((m) => [Number(m[1]), Number(m[1]) + Number(m[2])]);
+    expect(bandes).toEqual([[164, 339], [264, 339], [1, 64], [1, 164]]);
+  });
+  it('les titres des frises tiennent dans la largeur du dessin', () => {
+    const largeur = (gras: string, normal: string) => gras.length * 0.56 * 14.5 + normal.length * 0.52 * 13;
+    expect(largeur('Dépôt', ' : rapporte dès le 1er du mois suivant')).toBeLessThan(340);
+    expect(largeur('Retrait', ' : ne rapporte plus dès le 1er')).toBeLessThan(340);
+  });
+});
+
 describe('fiche Livret A : règle des quinzaines cohérente avec le guide', () => {
   it('la fiche et le guide donnent les mêmes dates (16, 1er du mois suivant, 31 décembre)', async () => {
     const { investmentBySlug } = await import('./data/investments');

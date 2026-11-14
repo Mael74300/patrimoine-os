@@ -723,7 +723,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
         heading: 'Des intérêts calculés par quinzaines',
         body: [
           'Le Livret A coupe chaque mois en deux quinzaines : du 1er au 15, puis du 16 à la fin du mois. Une somme ne rapporte des intérêts que pour les quinzaines entières où elle reste sur le livret.',
-          'Ce qui compte n’est donc pas le jour exact de votre dépôt ou de votre retrait, mais la date à partir de laquelle la banque le prend en compte (la « date de valeur ») :',
+          'Ce qui compte, c’est la date à laquelle la banque prend en compte votre dépôt ou votre retrait (la « date de valeur ») :',
         ],
       },
       {

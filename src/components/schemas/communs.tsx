@@ -88,33 +88,66 @@ export function SchemaPea() {
   );
 }
 
-/** Schéma « Livret A : le jour de l’opération décide » : un mois coupé au 15, ce que devient un dépôt ou un retrait de chaque côté. Seuls chiffres : 1er, 15, 16 ; reprend le texte du guide (Service-Public.fr). */
+/** Schéma « Livret A : le jour de l’opération décide » : quatre frises (dépôt ou retrait, dans la première ou la seconde quinzaine)
+ * montrent sur le calendrier quand la somme rapporte, et la quinzaine où elle reste sur le livret sans rien rapporter.
+ * Seuls chiffres : 1er, 15, 16 ; règle reprise de Service-Public.fr, fiche F2365 (« Livret A », vérifiée le 1er août 2026,
+ * consultée le 2026-11-14) : dépôt jusqu’au 15 → 16 du même mois ; à partir du 16 → 1er du mois suivant ;
+ * retrait jusqu’au 15 → solde du dernier jour du mois précédent ; à partir du 16 → solde du 15.
+ * ViewBox 340 : à 375 px, le dessin s’affiche presque à sa taille (textes ~13,5 px au lieu de ~11 px avec l’ancien viewBox 420). */
 export function SchemaQuinzaines() {
-  const cols = [
-    { x: 0, c: 'var(--accent)', soft: 'var(--accent-soft)', jour: 'Du 1er au 15 du mois', dep: ['Dépôt : il rapporte', 'dès le 16 du même mois'], ret: ['Retrait : calcul sur', 'le solde du dernier jour', 'du mois précédent'] },
-    { x: 214, c: 'var(--warn)', soft: 'var(--warn-soft)', jour: 'À partir du 16', dep: ['Dépôt : il rapporte', 'dès le 1er du mois suivant'], ret: ['Retrait : calcul sur', 'le solde du 15 du mois'] },
+  // Calendrier commun aux quatre frises : fin du mois d’avant, 1er → 15, 16 → fin du mois, début du mois suivant.
+  const P = 1;
+  const A = 64;
+  const B = 164;
+  const N = 264;
+  const FIN = 339;
+  const BAR_H = 20;
+  const rows = [
+    { y: 74, op: 'Dépôt', res: ' : rapporte dès le 16', at: 114, rapporte: [B, FIN], attente: [114, B], depot: true },
+    { y: 136, op: 'Dépôt', res: ' : rapporte dès le 1er du mois suivant', at: 214, rapporte: [N, FIN], attente: [214, N], depot: true },
+    { y: 214, op: 'Retrait', res: ' : ne rapporte plus dès le 1er', at: 114, rapporte: [P, A], attente: [A, 114], depot: false },
+    { y: 276, op: 'Retrait', res: ' : ne rapporte plus dès le 16', at: 214, rapporte: [P, B], attente: [B, 214], depot: false },
   ];
+  const gridBottom = 276 + 12 + BAR_H + 6;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 262" role="img" aria-labelledby="ill-quinz-t ill-quinz-d" className="ill-svg">
+      <svg viewBox="0 0 340 358" role="img" aria-labelledby="ill-quinz-t ill-quinz-d" className="ill-svg">
         <title id="ill-quinz-t">Livret A : le jour du dépôt ou du retrait décide</title>
-        <desc id="ill-quinz-d">Un dépôt du 1er au 15 du mois rapporte à partir du 16 du même mois ; un dépôt à partir du 16 rapporte à partir du 1er du mois suivant. Un retrait du 1er au 15 est calculé sur le solde arrêté au dernier jour du mois précédent ; un retrait à partir du 16, sur le solde arrêté au 15.</desc>
-        <text x={210} y={16} textAnchor="middle" className="ill-sub">Le mois est coupé en deux quinzaines</text>
-        {cols.map((k) => (
-          <g key={k.x}>
-            <rect x={k.x} y={28} width={206} height={30} rx={15} fill={k.soft} stroke={k.c} strokeWidth={2} />
-            <text x={k.x + 103} y={48} textAnchor="middle" className="ill-step">{k.jour}</text>
-            <path d={`M ${k.x + 103} 58 V 78 m -6 -7 l 6 7 l 6 -7`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-            <rect x={k.x} y={86} width={206} height={62} rx={12} fill="var(--surface)" stroke={k.c} strokeWidth={2} />
-            <text x={k.x + 103} y={112} textAnchor="middle" className="ill-sub">{k.dep[0]}</text>
-            <text x={k.x + 103} y={130} textAnchor="middle" className="ill-sub">{k.dep[1]}</text>
-            <rect x={k.x} y={156} width={206} height={62} rx={12} fill="var(--surface)" stroke={k.c} strokeWidth={2} />
-            {k.ret.map((ligne, i) => (
-              <text key={ligne} x={k.x + 103} y={(k.ret.length === 3 ? 173 : 182) + i * 18} textAnchor="middle" className="ill-sub">{ligne}</text>
-            ))}
-          </g>
+        <desc id="ill-quinz-d">Un dépôt du 1er au 15 du mois rapporte à partir du 16 du même mois ; un dépôt à partir du 16 rapporte à partir du 1er du mois suivant. Un retrait du 1er au 15 est calculé sur le solde arrêté au dernier jour du mois précédent ; un retrait à partir du 16, sur le solde arrêté au 15. Dans chaque cas, la somme passe jusqu’à une quinzaine sur le livret sans rien rapporter.</desc>
+        {/* En-tête du calendrier */}
+        <text x={(P + A) / 2} y={20} textAnchor="middle" className="ill-sub">mois</text>
+        <text x={(P + A) / 2} y={36} textAnchor="middle" className="ill-sub">d’avant</text>
+        <rect x={A + 3} y={12} width={B - A - 6} height={30} rx={15} fill="var(--surface-2)" />
+        <text x={(A + B) / 2} y={32} textAnchor="middle" className="ill-step">du 1er au 15</text>
+        <rect x={B + 3} y={12} width={N - B - 6} height={30} rx={15} fill="var(--surface-2)" />
+        <text x={(B + N) / 2} y={32} textAnchor="middle" className="ill-step">du 16 à la fin</text>
+        <text x={(N + FIN) / 2} y={20} textAnchor="middle" className="ill-sub">mois</text>
+        <text x={(N + FIN) / 2} y={36} textAnchor="middle" className="ill-sub">suivant</text>
+        {[A, B, N].map((x) => (
+          <line key={x} x1={x} x2={x} y1={46} y2={gridBottom} stroke="var(--line)" strokeWidth={1.5} strokeDasharray="3 4" />
         ))}
-        <text x={210} y={246} textAnchor="middle" className="ill-sub">Le jour de l’opération compte autant que le montant</text>
+        {rows.map((r) => {
+          const by = r.y + 12;
+          return (
+            <g key={r.y}>
+              <text x={0} y={r.y} className="ill-sub" style={{ paintOrder: 'stroke', stroke: 'var(--surface)', strokeWidth: 6, strokeLinejoin: 'round' }}><tspan className="ill-step" style={{ fill: 'var(--ink)' }}>{r.op}</tspan>{r.res}</text>
+              <rect x={P} y={by} width={FIN - P} height={BAR_H} rx={6} fill="var(--surface)" stroke="var(--line)" strokeWidth={1.5} />
+              <rect x={r.rapporte[0]} y={by} width={r.rapporte[1] - r.rapporte[0]} height={BAR_H} rx={6} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+              <rect x={r.attente[0]} y={by + 2} width={r.attente[1] - r.attente[0]} height={BAR_H - 4} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={1.5} strokeDasharray="4 3" />
+              <circle cx={r.at} cy={by + BAR_H / 2} r={10} fill="var(--primary)" stroke="var(--surface)" strokeWidth={2} />
+              <path d={r.depot ? `M ${r.at - 5} ${by + 10} h 10 M ${r.at} ${by + 5} v 10` : `M ${r.at - 5} ${by + 10} h 10`} stroke="var(--primary-ink)" strokeWidth={2.2} strokeLinecap="round" />
+            </g>
+          );
+        })}
+        <g transform="translate(1 334)">
+          <circle cx={9} cy={9} r={8} fill="var(--primary)" />
+          <path d="M 5 9 h 8 M 9 5 v 8" stroke="var(--primary-ink)" strokeWidth={2} strokeLinecap="round" />
+          <text x={22} y={14} className="ill-sub">opération</text>
+          <rect x={96} y={2} width={22} height={14} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+          <text x={124} y={14} className="ill-sub">rapporte</text>
+          <rect x={190} y={3} width={22} height={12} rx={3} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={1.5} strokeDasharray="4 3" />
+          <text x={218} y={14} className="ill-sub">sans intérêts</text>
+        </g>
       </svg>
     </figure>
   );
