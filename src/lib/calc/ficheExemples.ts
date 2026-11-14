@@ -28,3 +28,13 @@ export function scpiFeesPayback(amount: number, entryFeePct: number, distributio
   const yearly = Math.round((amount * distributionPct) / 100);
   return { fees, yearly, years: Math.ceil(fees / yearly) };
 }
+
+/**
+ * Or et objets précieux, option pour le régime des plus-values sur biens meubles : abattement de 5 % par année de
+ * détention au-delà de la deuxième, exonération totale au bout de la vingt-deuxième année (BOFiP
+ * BOI-RPPM-PVBMC-20-20, consulté le 2026-11-14). Renvoie la part de la plus-value effacée, de 0 à 1.
+ */
+export function abattementDetentionMeubles(fullYears: number): number {
+  const years = Math.max(0, Math.floor(fullYears) - 2);
+  return Math.min(1, Math.round(years * 5) / 100);
+}
