@@ -1,9 +1,10 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, fmtAns, fmtEur, fmtMonths, fmtNum, fmtPct, fmtPts } from '../lib/finance';
+import { compoundScale, compoundSplit, delayRows, dureeRow, placerRow, rendementRow, simpleCompoundRows, stepUpRows, type CompoundBarRow } from '../lib/finance';
 import { delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway } from '../lib/takeaways';
 import { interetsComposesFaq } from '../data/simFaq';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, ChoiceField, Takeaway, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, ChoiceField, Takeaway, usePersistentState, JumpToResults, SimNotice, Fold } from '../components/ui';
 
 // Exemples fictifs : toutes les valeurs par défaut sont des hypothèses à remplacer par les vôtres.
 
@@ -34,6 +35,59 @@ function Layout({ form, children, reset }: { form: ReactNode; children: ReactNod
   );
 }
 
+type BarLine = { name: string; row: CompoundBarRow };
+type PartKey = 'start' | 'deposits' | 'interest' | 'extra';
+type BarLabels = Partial<Record<PartKey, string>>;
+const LONG: Record<PartKey, string> = { start: 'Capital de départ', deposits: 'Versements', interest: 'Intérêts', extra: 'Intérêts des intérêts' };
+const SHORT: Record<PartKey, string> = { start: 'départ', deposits: 'versements', interest: 'intérêts', extra: 'intérêts des intérêts' };
+const CLS: Record<PartKey, string> = { start: 'gb-start', deposits: 'gb-dep', interest: 'gb-int', extra: 'cb-extra' };
+const KEYS: PartKey[] = ['start', 'deposits', 'interest', 'extra'];
+
+/**
+ * Barres « d'où vient le capital » : une ou deux barres à la même échelle, découpées en capital de départ,
+ * versements, intérêts (et intérêts produits par les intérêts). Les montants sont ceux des cartes de résultat.
+ * Une seule barre : la légende donne les montants. Deux barres : légende des couleurs et montants sous chaque barre.
+ */
+function CapitalBars({ title, lines, labels = {}, short = {} }: { title: string; lines: BarLine[]; labels?: BarLabels; short?: BarLabels }) {
+  const scale = compoundScale(lines.map((l) => l.row));
+  if (!(scale > 0)) return null;
+  const lost = (row: CompoundBarRow) => row.interest + row.extra < -0.5;
+  const loss = lines.some((l) => lost(l.row));
+  const keys = KEYS.filter((k) => lines.some((l) => l.row[k] > 0.5) && (!loss || k === 'start' || k === 'deposits'));
+  const long = (k: PartKey) => labels[k] ?? LONG[k];
+  const parts = (row: CompoundBarRow, name: (k: PartKey) => string) => [
+    ...keys.filter((k) => row[k] > 0.5).map((k) => `${name(k)} ${fmtEur(row[k])}`),
+    ...(lost(row) ? [`pertes ${fmtEur(-(row.interest + row.extra))}`] : []),
+  ];
+  const single = lines.length === 1 ? lines[0].row : null;
+  return (
+    <>
+      <h2>{title}</h2>
+      <figure className="fb cb">
+        <ul className={'fb-legend' + (single ? ' cb-amounts' : '')} aria-hidden="true">
+          {keys.map((k) => <li key={k}><i className={CLS[k]} />{long(k)}{single && <strong>{fmtEur(single[k])}</strong>}</li>)}
+          {loss && <li><i className="fb-lost" />Pertes{single && <strong>{fmtEur(-(single.interest + single.extra))}</strong>}</li>}
+        </ul>
+        <ul className="fb-list">
+          {lines.map((l) => {
+            const b = compoundSplit(l.row, scale);
+            return (
+              <li className="fb-row" key={l.name}>
+                <div className="fb-head"><span className="fb-name">{l.name}</span><span className="fb-value">{fmtEur(l.row.final)}</span></div>
+                <div className="fb-track" role="img" aria-label={`${l.name} : ${fmtEur(l.row.final)}, dont ${parts(l.row, (k) => long(k).toLowerCase()).join(', ')}`}>
+                  {KEYS.map((k) => b[k] > 0 && <span key={k} className={CLS[k]} style={{ width: `${b[k]}%` }} />)}
+                  {b.lost > 0 && <span className="fb-lost" style={{ width: `${b.lost}%` }} />}
+                </div>
+                {!single && <p className="fb-sub">{parts(l.row, (k) => short[k] ?? SHORT[k]).join(' · ')}</p>}
+              </li>
+            );
+          })}
+        </ul>
+      </figure>
+    </>
+  );
+}
+
 /* ---------- Combien placer aujourd'hui pour atteindre un capital ? */
 type PlacerState = { target: number; years: number; ratePct: number; monthly: number };
 const PLACER: PlacerState = { target: 30000, years: 10, ratePct: 4, monthly: 100 };
@@ -41,6 +95,7 @@ const PLACER: PlacerState = { target: 30000, years: 10, ratePct: 4, monthly: 100
 function Placer() {
   const [s, setS, up] = usePersistentState<PlacerState>('capital-a-placer', PLACER);
   const r = presentValue({ target: s.target, years: s.years, annualRate: s.ratePct / 100, monthly: s.monthly });
+  const row = placerRow(r, { target: s.target, monthly: s.monthly, annualRate: s.ratePct / 100 });
   return (
     <Layout
       reset={() => setS(PLACER)}
@@ -57,9 +112,9 @@ function Placer() {
       <div className="kpis">
         <Kpi label="Capital à placer aujourd’hui" value={fmtEur(r.initial)} sub={r.noInitialNeeded ? 'vos versements mensuels suffisent' : 'somme unique, placée dès maintenant'} />
         <Kpi label="Total versé" value={fmtEur(r.contributed)} sub="capital à placer et versements mensuels" />
-        <Kpi label="Gain dans cette hypothèse" value={fmtEur(r.gain)} sub="objectif moins total versé" />
       </div>
       <Takeaway>{presentValueTakeaway({ target: s.target, years: s.years, monthly: s.monthly, ...r })}</Takeaway>
+      <CapitalBars title="D’où vient le capital à l’arrivée" lines={[{ name: `Dans ${fmtAns(s.years)}`, row }]} labels={{ start: 'Capital placé aujourd’hui', deposits: 'Versements mensuels' }} />
       <p className="muted small">
         Les versements ont lieu en fin de mois et le rendement est supposé le même chaque année. Si vos versements suffisent seuls, il n’y a rien à placer (0 €).
         Les montants par défaut sont fictifs ; le détail du calcul est sur la page <Link to="/methodologie">Méthode</Link>.
@@ -76,6 +131,7 @@ const DUREE: DureeState = { initial: 2000, monthly: 300, annualRate: 4, target: 
 function Duree() {
   const [s, setS, up] = usePersistentState<DureeState>('duree-objectif', DUREE);
   const r = timeToTarget({ initial: s.initial, monthly: s.monthly, annualRate: s.annualRate / 100, target: s.target });
+  const row = dureeRow(r, s.initial);
   const saved = r.reached && r.monthsWithoutReturn !== null ? r.monthsWithoutReturn - (r.months ?? 0) : null;
   return (
     <Layout
@@ -101,6 +157,7 @@ function Duree() {
         <p className="notice" role="status">Avec ces hypothèses, le capital visé n’est pas atteint en 100 ans : augmentez le versement mensuel, le rendement supposé ou baissez l’objectif.</p>
       )}
       <Takeaway>{timeToTargetTakeaway({ target: s.target, months: r.months, interest: r.interest, contributed: r.contributed, monthsWithoutReturn: r.monthsWithoutReturn })}</Takeaway>
+      {row && <CapitalBars title="D’où vient le capital à l’arrivée" lines={[{ name: `Au bout de ${fmtMonths(r.months ?? 0)}`, row }]} labels={{ deposits: 'Versements mensuels' }} />}
       <p className="muted small">
         Chaque mois, le capital rapporte des intérêts, puis le versement s’y ajoute (en fin de mois), jusqu’à atteindre le capital visé (100 ans au plus).
         Les montants par défaut sont fictifs ; le détail du calcul est sur la page <Link to="/methodologie">Méthode</Link>.
@@ -117,6 +174,7 @@ const RENDEMENT: RendementState = { initial: 5000, monthly: 200, years: 15, targ
 function Rendement() {
   const [s, setS, up] = usePersistentState<RendementState>('rendement-requis', RENDEMENT);
   const r = requiredReturn(s);
+  const row = rendementRow(r, s);
   return (
     <Layout
       reset={() => setS(RENDEMENT)}
@@ -136,10 +194,10 @@ function Rendement() {
         <div className="kpis">
           <Kpi label="Rendement annuel nécessaire" value={fmtPct(r.annualRate)} sub={r.alreadyReached ? 'les versements suffisent sans rendement' : 'constant, avant frais, impôts et inflation'} />
           <Kpi label="Total versé" value={fmtEur(r.contributed)} sub="capital de départ compris" />
-          <Kpi label="Part à obtenir par le rendement" value={fmtEur(Math.max(0, s.target - r.withoutReturn))} sub="écart entre l’objectif et les versements seuls" />
         </div>
       )}
       <Takeaway>{requiredReturnTakeaway({ target: s.target, years: s.years, annualRate: r.annualRate, contributed: r.contributed, withoutReturn: r.withoutReturn, alreadyReached: r.alreadyReached })}</Takeaway>
+      {row && <CapitalBars title="Ce que le rendement doit apporter" lines={[{ name: `Capital visé dans ${fmtAns(s.years)}`, row }]} labels={{ deposits: 'Versements mensuels', interest: 'Part à obtenir par le rendement' }} />}
       <p className="muted small">
         Le simulateur cherche le rendement annuel qui, mois après mois et avec les mêmes versements en fin de mois, mène tout juste au capital visé.
         Les montants par défaut sont fictifs ; le détail du calcul est sur la page <Link to="/methodologie">Méthode</Link>.
@@ -208,6 +266,7 @@ function Simple() {
   const r = simpleVsCompound({ initial: s.initial, annualRate: s.annualRate / 100, years: s.years });
   const step = Math.max(1, Math.ceil((r.rows.length - 1) / 10));
   const shown = r.rows.filter((row) => row.year % step === 0 || row.year === r.rows.length - 1);
+  const bars = simpleCompoundRows(r, s.initial);
   return (
     <Layout
       reset={() => setS(SIMPLE)}
@@ -223,12 +282,19 @@ function Simple() {
       )}
     >
       <div className="kpis">
-        <Kpi label="Capital en intérêts simples" value={fmtEur(r.simpleFinal)} sub={`dont ${fmtEur(r.simpleInterest)} d’intérêts`} />
-        <Kpi label="Capital en intérêts composés" value={fmtEur(r.compoundFinal)} sub={`dont ${fmtEur(r.compoundInterest)} d’intérêts`} />
         <Kpi label="Écart en faveur des composés" value={fmtEur(r.gap)} sub="intérêts gagnés en plus en les réinvestissant" />
         <Kpi label="Rapport composé / simple" value={`× ${fmtNum(r.ratio)}`} sub="sur le capital final" />
       </div>
-      <div className="table-wrap" tabIndex={0} style={{ marginTop: 16 }}><table>
+      <Takeaway>{simpleVsCompoundTakeaway({ initial: s.initial, years: s.years, simpleFinal: r.simpleFinal, compoundFinal: r.compoundFinal, gap: r.gap })}</Takeaway>
+      {bars && (
+        <CapitalBars
+          title="Ce que rapportent les intérêts des intérêts"
+          lines={[{ name: 'Intérêts simples', row: bars.simple }, { name: 'Intérêts composés', row: bars.compound }]}
+          labels={{ interest: 'Intérêts du capital de départ', extra: 'Intérêts produits par les intérêts' }}
+        />
+      )}
+      <Fold title="Voir le tableau année par année">
+      <div className="table-wrap" tabIndex={0}><table>
         <thead><tr><th>Année</th><th className="r">Intérêts simples</th><th className="r">Intérêts composés</th><th className="r">Écart</th></tr></thead>
         <tbody>
           {shown.map((row) => (
@@ -236,7 +302,7 @@ function Simple() {
           ))}
         </tbody>
       </table></div>
-      <Takeaway>{simpleVsCompoundTakeaway({ initial: s.initial, years: s.years, simpleFinal: r.simpleFinal, compoundFinal: r.compoundFinal, gap: r.gap })}</Takeaway>
+      </Fold>
       <p className="muted small">
         Intérêts simples : seul le capital de départ rapporte, le même montant chaque année. Intérêts composés : les intérêts déjà gagnés rapportent à leur tour. Les deux coïncident la première année ; l’écart croît ensuite de plus en plus vite.
         Les exemples ci-dessus sont fictifs.
@@ -253,6 +319,7 @@ const ATTENDRE: AttendreState = { monthly: 200, annualReturn: 5, years: 25, dela
 function Attendre() {
   const [s, setS, up] = usePersistentState<AttendreState>('attendre', ATTENDRE);
   const r = delayCost({ monthly: s.monthly, annualReturn: s.annualReturn / 100, years: s.years, delayYears: s.delayYears });
+  const bars = delayRows(r);
   return (
     <Layout
       reset={() => setS(ATTENDRE)}
@@ -272,12 +339,15 @@ function Attendre() {
       )}
     >
       <div className="kpis">
-        <Kpi label="Capital en commençant tout de suite" value={fmtEur(r.startNow)} sub={`${fmtEur(r.investedNow)} versés`} />
-        <Kpi label="Capital en commençant après le délai" value={fmtEur(r.startLater)} sub={`${fmtEur(r.investedLater)} versés`} />
         <Kpi label="Coût de l’attente" value={fmtEur(r.cost)} sub="capital en moins à l’arrivée" />
         <Kpi label="Versement pour rattraper" value={r.catchUpMonthly === null ? '—' : fmtEur(r.catchUpMonthly)} sub="par mois après le délai, pour le même capital" />
       </div>
       <Takeaway>{delayCostTakeaway({ monthly: s.monthly, years: s.years, delayYears: s.delayYears, startNow: r.startNow, startLater: r.startLater, cost: r.cost, catchUpMonthly: r.catchUpMonthly })}</Takeaway>
+      <CapitalBars
+        title={`Le capital dans ${fmtAns(s.years)}`}
+        lines={[{ name: 'En commençant tout de suite', row: bars.now }, { name: `En commençant dans ${fmtAns(s.delayYears)}`, row: bars.later }]}
+        labels={{ deposits: 'Vos versements' }}
+      />
       <p className="muted small">
         Les versements ont lieu en fin de mois. Attendre fait perdre les versements des mois d’attente et les intérêts qu’ils auraient produits jusqu’à l’arrivée : plus le délai est long par rapport à l’horizon, plus l’écart est grand.
         Si le délai atteint l’horizon, aucun versement n’est possible et le rattrapage n’est pas défini. Les exemples ci-dessus sont fictifs.
@@ -294,6 +364,7 @@ const PROGRESSIF: ProgressifState = { monthly: 200, annualIncrease: 3, annualRet
 function Progressif() {
   const [s, setS, up] = usePersistentState<ProgressifState>('progressif', PROGRESSIF);
   const r = stepUp({ monthly: s.monthly, annualIncrease: s.annualIncrease / 100, annualReturn: s.annualReturn / 100, years: s.years });
+  const bars = stepUpRows(r);
   return (
     <Layout
       reset={() => setS(PROGRESSIF)}
@@ -313,12 +384,15 @@ function Progressif() {
       )}
     >
       <div className="kpis">
-        <Kpi label="Capital, versement constant" value={fmtEur(r.flatCapital)} sub={`pour ${fmtEur(r.flatInvested)} versés`} />
-        <Kpi label="Capital, versement qui augmente" value={fmtEur(r.steppedCapital)} sub={`pour ${fmtEur(r.steppedInvested)} versés`} />
         <Kpi label="Capital en plus" value={fmtEur(r.extraCapital)} sub="par rapport au versement constant" />
         <Kpi label="Dernier versement mensuel" value={fmtEur(r.lastMonthly)} sub={`équivalent à ${fmtEur(r.equivalentFlatMonthly)} constants par mois`} />
       </div>
       <Takeaway>{stepUpTakeaway({ monthly: s.monthly, years: s.years, flatCapital: r.flatCapital, steppedCapital: r.steppedCapital, extraCapital: r.extraCapital, lastMonthly: r.lastMonthly })}</Takeaway>
+      <CapitalBars
+        title={`Le capital dans ${fmtAns(s.years)}`}
+        lines={[{ name: 'Versement constant', row: bars.flat }, { name: 'Versement qui augmente', row: bars.stepped }]}
+        labels={{ deposits: 'Vos versements' }}
+      />
       <p className="muted small">
         Le versement augmente du pourcentage choisi au début de chaque année à partir de la deuxième ; les versements ont lieu en fin de mois. Le « versement constant équivalent » est la mensualité fixe qui donnerait le même capital final.
         Les exemples ci-dessus sont fictifs.
