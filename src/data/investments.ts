@@ -117,7 +117,7 @@ const raw: Omit<Investment, 'review'>[] = [
     category: 'epargne',
     summary: 'Épargne bancaire fiscalisée, parfois avec un taux promotionnel temporaire.',
     definition: "Un compte à terme est un prêt que vous faites à une banque : vous immobilisez une somme pendant une durée choisie avec elle (de 1 mois à quelques années, généralement 1 à 4 ans), et elle vous verse des intérêts. Les livrets bancaires « boostés » sont des offres voisines, proposées librement par les banques.",
-    howItWorks: "Sur un compte à terme, le taux peut être fixe, progressif (il monte par paliers) ou révisable (indexé sur un indice) : le schéma ci-dessous montre les trois formules. Les offres promotionnelles des livrets ne durent souvent que quelques mois, puis le taux de base s'applique.",
+    howItWorks: "Un compte à terme existe en trois formules de taux, montrées dans le schéma ci-dessous. Les offres promotionnelles des livrets ne durent souvent que quelques mois, puis le taux de base s'applique.",
     howToInvest: ["Choisir la durée la plus courte si vous hésitez : une sortie anticipée est pénalisée.", 'Comparer le taux après la période promotionnelle (livrets) et calculer le rendement net après fiscalité.', 'Lire les conditions de sortie anticipée avant de signer : la publicité doit préciser les pénalités.'],
     minCapital: { text: 'Demandez le minimum à la banque avant de signer.', verified: false, advice: true },
     horizon: 'Court à moyen terme', horizonYears: 0,
