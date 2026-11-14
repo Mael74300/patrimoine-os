@@ -16,6 +16,7 @@ export const INLINE_LINKS: InlineLink[] = [
   { phrase: 'simulateur de frais', to: '/simulateurs/frais' },
   { phrase: 'simulateur d’inflation', to: '/simulateurs/inflation' },
   { phrase: 'calculateur immobilier', to: '/simulateurs/immobilier' },
+  { phrase: 'guide sur la rentabilité locative', to: '/guides/rentabilite-locative' },
   { phrase: 'Inflation et pouvoir d’achat', to: '/simulateurs/inflation' },
   { phrase: 'Rendement réel de mon placement', to: '/simulateurs/rendement-reel-de-mon-placement' },
   { phrase: 'Doubler son capital', to: '/simulateurs/interets-composes#doubler' },

@@ -88,28 +88,31 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Comment comparer immobilier et ETF',
     summary: 'Pourquoi comparer un rendement locatif à la performance d’un ETF est trompeur, et la méthode pour le faire sur une base identique.',
     readingMinutes: 3,
-    updatedOn: '2026-10-10',
+    updatedOn: '2026-11-14',
     sections: [
       {
         heading: 'Pourquoi la comparaison directe est fausse',
         body: [
-          'Un rendement locatif brut de 6 % se calcule sur le prix du bien, avant charges, impôts et crédit. La performance d’un ETF se mesure sur la somme investie, frais du fonds déduits. Mettre ces deux chiffres côte à côte compare des grandeurs qui ne sont pas calculées sur la même base.',
-          'L’immobilier locatif est presque toujours financé à crédit : le résultat dépend de l’effet de levier, du coût du crédit et de l’effort d’épargne mensuel. Un ETF est généralement acheté comptant.',
+          'Exemple fictif : un bien de 150 000 € loué 750 € par mois affiche 6 % de rendement brut (9 000 € de loyers par an). Ce chiffre oublie les frais d’achat, les travaux, les mois sans locataire et les charges : en les comptant, il tombe à environ 3,6 %, avant impôts (voir le guide sur la rentabilité locative). La performance d’un ETF, elle, se mesure sur la somme placée, frais du fonds déjà déduits.',
+          'Autre différence : le bien s’achète presque toujours à crédit, l’ETF en général comptant. Le résultat du bien dépend donc aussi de l’effet de levier et de ce que vous ajoutez chaque mois.',
         ],
       },
       {
         heading: 'La méthode utilisée par notre comparateur',
+        points: true,
         body: [
-          'Même capital de départ : l’apport immobilier est investi en ETF dans l’autre scénario.',
-          'Même effort d’épargne chaque année : si le bien demande de compléter la mensualité (cash-flow négatif après impôt), la même somme est versée sur les ETF. Si le bien dégage un excédent, il est placé sur un support prudent.',
-          'Même horizon, puis comparaison du patrimoine net estimé : valeur du bien moins capital restant dû, frais de revente et impôt sur la plus-value, contre valeur des ETF après imposition des gains.',
+          'Même mise de départ : l’apport du bien est placé en ETF dans l’autre scénario.',
+          'Même effort chaque année : ce que vous ajoutez pour le bien (cash-flow négatif après impôt) va aussi sur les ETF ; un excédent va sur un placement prudent.',
+          'Même durée : à la fin, on compare le bien, moins la dette restante, les frais de revente et l’impôt sur la plus-value, aux ETF après impôt sur les gains.',
         ],
       },
       {
         heading: 'Ce que les chiffres ne disent pas',
+        points: true,
         body: [
-          'Liquidité : des ETF se vendent en quelques jours, un bien en plusieurs mois. Temps : la gestion locative demande des heures chaque année. Risques : vacance, impayés, travaux et réglementation d’un côté ; baisses de marché parfois supérieures à 30 % de l’autre.',
-          'Le résultat dépend surtout de vos hypothèses de rendement et de revalorisation. Testez plusieurs jeux d’hypothèses plutôt que de retenir un seul chiffre.',
+          'Revendre et gérer : des ETF se vendent en quelques jours et ne demandent presque pas de temps ; un bien se vend en plusieurs mois et demande des heures de gestion par an.',
+          'Les risques : vacance, impayés, travaux et nouvelles règles pour le bien ; pour les ETF, des baisses de marché parfois fortes, à traverser sans vendre.',
+          'Vos hypothèses : le résultat dépend surtout des rendements et de la hausse des prix saisis. Testez-en plusieurs plutôt qu’un seul chiffre.',
         ],
       },
     ],
