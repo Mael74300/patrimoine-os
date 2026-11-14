@@ -89,3 +89,35 @@ export function compareEtfImmo(input: CompareInput): CompareResult {
     },
   };
 }
+
+/**
+ * Bilan d'un côté de la comparaison, pour le schéma « d'où vient l'écart » :
+ * le patrimoine avant sortie se lit comme les versements récupérés, plus le gain net,
+ * plus les frais et impôts de sortie prélevés au moment de vendre.
+ * `kept + gain + exitCosts = beforeExit` quand le patrimoine net est positif.
+ */
+export type CompareBalance = {
+  invested: number; // sommes versées (identiques des deux côtés)
+  kept: number; // part des versements que l'on retrouve à la fin (≤ invested)
+  gain: number; // ce que le placement a ajouté, net de tout (≥ 0)
+  shortfall: number; // versements perdus si le patrimoine net est inférieur aux versements (≥ 0)
+  exitCosts: number; // frais et impôts de sortie (≥ 0)
+  net: number; // patrimoine net estimé
+  beforeExit: number; // patrimoine avant frais et impôts de sortie
+};
+
+export function compareBalance(side: CompareSide): CompareBalance {
+  const invested = Math.max(0, side.invested);
+  const net = side.netWealth;
+  const exitCosts = Math.max(0, side.exitCosts);
+  const kept = Math.min(invested, Math.max(0, net));
+  return {
+    invested,
+    kept,
+    gain: Math.max(0, net - invested),
+    shortfall: invested - kept,
+    exitCosts,
+    net,
+    beforeExit: net + exitCosts,
+  };
+}

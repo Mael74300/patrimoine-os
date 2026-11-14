@@ -372,6 +372,22 @@ export function etfImmoTakeaway(p: { horizon: number; etfNet: number; immoNet: n
   return `${base}${fin} Ce n'est pas une prévision : changez le rendement ou l'évolution du prix du bien, et l'écart peut s'inverser.`;
 }
 
+/**
+ * Comparateur ETF / immobilier : d'où vient l'écart. Les versements sont identiques des deux côtés,
+ * l'écart est donc la différence entre ce que chaque placement ajoute (ou retire) une fois vendu.
+ * Calculé sur les montants arrondis affichés pour que les soustractions tombent juste à l'euro près.
+ */
+export function etfImmoGapText(p: { invested: number; etfNet: number; immoNet: number }): string {
+  if (!(p.invested > 0)) return '';
+  const inv = Math.round(p.invested);
+  const part = (name: string, net: number) => {
+    const d = Math.round(net) - inv;
+    if (d === 0) return `${name} rend tout juste vos versements`;
+    return d > 0 ? `${name} y ajoute ${fmtEur(d)}` : `${name} en perd ${fmtEur(-d)}`;
+  };
+  return `Des deux côtés, vous versez la même somme : ${fmtEur(inv)}. L'écart vient seulement de ce que chaque placement en fait, une fois vendu et imposé : ${part('le portefeuille d’ETF', p.etfNet)}, ${part('le bien immobilier', p.immoNet)}.`;
+}
+
 /** Comparer des durées de crédit : la mensualité baisse, le coût total monte. */
 export function loanDurationTakeaway(p: { principal: number; shortYears: number; longYears: number; shortMonthly: number; longMonthly: number; shortCost: number; longCost: number }): string {
   if (!(p.principal > 0) || !(p.shortYears > 0) || !(p.longYears > p.shortYears)) return '';

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { compareEtfImmo } from './compare';
+import { compareBalance, compareEtfImmo } from './compare';
 import { rentalProjection } from './rental';
 import { RENTAL } from './fixtures';
 
@@ -33,5 +33,35 @@ describe('comparaison ETF / immobilier sur base identique', () => {
   it('horizon nul', () => {
     const r = compareEtfImmo({ ...input, horizon: 0 });
     expect(r.years).toHaveLength(1);
+  });
+});
+
+describe('bilan « d’où vient l’écart »', () => {
+  it('versements récupérés + gain net + frais de sortie = patrimoine avant sortie', () => {
+    const r = compareEtfImmo(input);
+    for (const side of [r.etf, r.immo]) {
+      const b = compareBalance(side);
+      expect(b.invested).toBe(side.invested);
+      expect(b.kept + b.gain + b.exitCosts).toBeCloseTo(b.beforeExit, 6);
+      expect(b.kept + b.gain - b.shortfall).toBeCloseTo(side.netWealth, 6);
+      expect(b.net).toBe(side.netWealth);
+    }
+  });
+  it('les deux côtés reçoivent les mêmes versements : l’écart est la différence des gains nets', () => {
+    const r = compareEtfImmo(input);
+    const e = compareBalance(r.etf);
+    const i = compareBalance(r.immo);
+    expect(e.invested).toBe(i.invested);
+    expect((e.gain - e.shortfall) - (i.gain - i.shortfall)).toBeCloseTo(r.etf.netWealth - r.immo.netWealth, 6);
+  });
+  it('perte : gain nul, versements en partie perdus', () => {
+    const b = compareBalance({ invested: 100000, grossValue: 80000, exitCosts: 0, netWealth: 80000, netWealthReal: 0, debtAtHorizon: 0 });
+    expect(b).toMatchObject({ kept: 80000, gain: 0, shortfall: 20000, beforeExit: 80000 });
+  });
+  it('patrimoine net négatif : rien de récupéré, pas de valeur négative', () => {
+    const b = compareBalance({ invested: 50000, grossValue: 0, exitCosts: 4000, netWealth: -10000, netWealthReal: 0, debtAtHorizon: 0 });
+    expect(b.kept).toBe(0);
+    expect(b.gain).toBe(0);
+    expect(b.shortfall).toBe(50000);
   });
 });

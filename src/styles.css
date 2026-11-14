@@ -1191,3 +1191,9 @@ ul.points { margin: 0.9rem 0 0.5rem; gap: 8px; }
 /* Avertissement du bas des simulateurs : discret, sous un filet, adapté au calcul. */
 .sim-disclaimer { display: flex; gap: 8px; align-items: flex-start; margin: 20px 0 0; padding-top: 12px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 0.85rem; line-height: 1.5; }
 .sim-disclaimer-icon { flex: none; margin-top: 2px; color: var(--ink-3); }
+/* Comparateur ETF / immobilier : d'où vient l'écart (versements, gain net, frais et impôts à la vente). */
+.gap-in { background: color-mix(in srgb, var(--primary) 38%, var(--surface)); }
+.gap-gain { background: var(--accent); }
+.gap-exit { background: repeating-linear-gradient(45deg, var(--ink-3) 0 3px, color-mix(in srgb, var(--ink-3) 30%, var(--surface)) 3px 7px); }
+.fb-track .gap-in + .gap-gain, .fb-track .gap-in + .gap-exit, .fb-track .gap-gain + .gap-exit { border-left: 2px solid var(--surface); }
+.gap-note { margin: 2px 0 12px; padding-top: 10px; border-top: 1px solid var(--line); font-size: .92rem; line-height: 1.5; color: var(--ink-2); }
