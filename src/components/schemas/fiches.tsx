@@ -776,40 +776,49 @@ export function SchemaAssuranceVieDeces() {
   );
 }
 
-/** Schéma « Forêt : parts de groupement forestier » : principe qualitatif. Seuls chiffres : 25 % et huit ans, confirmés sur le BOFiP (BOI-IR-RICI-60-20-20, consulté le 2026-11-08). */
+/**
+ * Schéma « Forêt : parts de groupement forestier » : principe qualitatif, empilé pour rester lisible à 375 px (viewBox 340).
+ * Seuls chiffres : 25 % et la conservation jusqu’au 31 décembre de la huitième année suivant l’achat, confirmés sur le BOFiP
+ * (BOI-IR-RICI-60-20-20, consulté le 2026-11-08 et le 2026-11-14).
+ */
 export function SchemaForet() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const boxes = [
+    { y: 2, title: 'L’épargnant', sub: 'achète des parts, en argent', fill: 'var(--accent-soft)', stroke: 'var(--accent)' },
+    { y: 76, title: 'Le groupement forestier', sub: 'plan simple de gestion agréé', fill: 'var(--surface)', stroke: 'var(--primary)' },
+    { y: 150, title: 'Des forêts', sub: 'bois, tempêtes, incendies…', fill: 'var(--warn-soft)', stroke: 'var(--warn)' },
+  ];
+  const links = [
+    { y: 50, label: 'son argent' },
+    { y: 124, label: 'possède et gère' },
+  ];
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-foret-t ill-foret-d" className="ill-svg">
+      <svg viewBox="0 0 340 360" role="img" aria-labelledby="ill-foret-t ill-foret-d" className="ill-svg">
         <title id="ill-foret-t">Comment fonctionne un groupement forestier</title>
-        <desc id="ill-foret-d">L’épargnant achète des parts du groupement forestier avec de l’argent. Le groupement possède des forêts et les gère selon un plan simple de gestion agréé. En échange, l’État accorde un crédit d’impôt de 25 % des sommes retenues, à condition de garder les parts jusqu’au 31 décembre de la huitième année suivant l’achat.</desc>
-        <rect x={0} y={2} width={220} height={58} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={110} y={28} textAnchor="middle" className="ill-step">L’épargnant</text>
-        <text x={110} y={48} textAnchor="middle" className="ill-sub">achète des parts, en argent</text>
-        <path d="M 110 60 V 108 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={126} y={90} textAnchor="start" className="ill-in">son argent</text>
-        <rect x={0} y={108} width={220} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={110} y={134} textAnchor="middle" className="ill-step">Le groupement forestier</text>
-        <text x={110} y={156} textAnchor="middle" className="ill-sub">plan simple de gestion agréé</text>
-        <path d="M 110 172 V 220 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={126} y={202} textAnchor="start" className="ill-in">possède et gère</text>
-        <rect x={0} y={220} width={220} height={58} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={110} y={246} textAnchor="middle" className="ill-step">Des forêts</text>
-        <text x={110} y={266} textAnchor="middle" className="ill-sub">bois, tempêtes, incendies…</text>
-        <path d="M 262 31 H 228 m 8 -7 l -8 7 l 8 7" {...arrow} />
-        <rect x={262} y={2} width={158} height={118} rx={12} fill="var(--surface)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={341} y={30} textAnchor="middle" className="ill-step">L’État</text>
-        <text x={341} y={54} textAnchor="middle" className="ill-in">crédit d’impôt</text>
-        <text x={341} y={74} textAnchor="middle" className="ill-in">de 25 % des</text>
-        <text x={341} y={94} textAnchor="middle" className="ill-in">sommes retenues</text>
-        <text x={341} y={112} textAnchor="middle" className="ill-sub">avec un plafond</text>
-        <text x={262} y={170} textAnchor="start" className="ill-in">À condition de garder</text>
-        <text x={262} y={190} textAnchor="start" className="ill-in">les parts jusqu’au</text>
-        <text x={262} y={210} textAnchor="start" className="ill-in">31 décembre de la</text>
-        <text x={262} y={230} textAnchor="start" className="ill-in">8e année suivant</text>
-        <text x={262} y={250} textAnchor="start" className="ill-in">l’achat</text>
-        <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe</text>
+        <desc id="ill-foret-d">L’épargnant achète des parts du groupement forestier avec de l’argent. Le groupement possède des forêts et les gère selon un plan simple de gestion agréé. En échange, l’État accorde à l’épargnant un crédit d’impôt de 25 % des sommes retenues, dans la limite d’un plafond, à condition de garder les parts jusqu’au 31 décembre de la huitième année suivant l’achat.</desc>
+        {boxes.map((b) => (
+          <g key={b.title}>
+            <rect x={0} y={b.y} width={276} height={48} rx={12} fill={b.fill} stroke={b.stroke} strokeWidth={2} />
+            <text x={138} y={b.y + 21} textAnchor="middle" className="ill-step">{b.title}</text>
+            <text x={138} y={b.y + 39} textAnchor="middle" className="ill-sub">{b.sub}</text>
+          </g>
+        ))}
+        {links.map((l) => (
+          <g key={l.label}>
+            <path d={`M 138 ${l.y + 2} V ${l.y + 24} m -7 -8 l 7 8 l 7 -8`} {...arrow} />
+            <text x={152} y={l.y + 18} textAnchor="start" className="ill-in">{l.label}</text>
+          </g>
+        ))}
+        <path d="M 312 210 V 26 H 282 m 8 -7 l -8 7 l 8 7" {...arrow} />
+        <rect x={0} y={210} width={340} height={124} rx={12} fill="var(--surface)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={234} textAnchor="middle" className="ill-step">En échange, l’État accorde</text>
+        <text x={170} y={254} textAnchor="middle" className="ill-in">un crédit d’impôt de 25 % des sommes retenues</text>
+        <text x={170} y={272} textAnchor="middle" className="ill-sub">dans la limite d’un plafond</text>
+        <line x1={16} x2={324} y1={286} y2={286} stroke="var(--line)" strokeWidth={1} />
+        <text x={170} y={306} textAnchor="middle" className="ill-sub">si les parts sont gardées jusqu’au 31 décembre</text>
+        <text x={170} y={324} textAnchor="middle" className="ill-sub">de la huitième année suivant l’achat</text>
+        <text x={170} y={354} textAnchor="middle" className="ill-sub">Schéma de principe</text>
       </svg>
     </figure>
   );
