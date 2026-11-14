@@ -741,13 +741,13 @@ h2.gloss-letter::before { content: none; }
 .env-card h3 a { color: inherit; text-decoration: none; display: inline-block; padding: 4px 0; }
 .env-card h3 a::after { content: ' →'; color: var(--accent); }
 .env-card h3 a:hover { text-decoration: underline; }
+.env-card-use { margin: 0 0 8px; padding: 6px 10px; border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; background: var(--accent-soft); color: var(--ink); font-size: 0.95rem; line-height: 1.45; }
 .env-card dl { margin: 0; }
-.env-card dl > div { display: grid; grid-template-columns: 7.5rem 1fr; gap: 8px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 0.95rem; }
-.env-card dt { color: var(--ink-3); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; padding-top: 2px; }
-.env-card dd { margin: 0; }
+.env-card dl > div { padding: 6px 0; border-top: 1px solid var(--line); font-size: 0.95rem; line-height: 1.5; }
+.env-card dt { display: inline; padding-right: 6px; color: var(--ink-3); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.env-card dd { display: inline; margin: 0; }
 @media (min-width: 700px) { .env-cards { grid-template-columns: 1fr 1fr; } }
 /* Mobile : le libellé passe au-dessus de la valeur, qui occupe toute la largeur de la carte. */
-@media (max-width: 500px) { .env-card dl > div { grid-template-columns: 1fr; gap: 2px; } .env-card dt { padding-top: 0; font-size: 0.75rem; } }
 
 .takeaway-line { display: block; }
 .takeaway-line + .takeaway-line { margin-top: 6px; }
