@@ -3,7 +3,7 @@ import { createElement } from 'react';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { SchemaDonation, SchemaOr, SchemaPtz } from './components/Illustrations';
+import { SchemaOr, SchemaPtz } from './components/Illustrations';
 
 /**
  * Sur mobile (≤ 480 px), les petits textes des schémas larges (viewBox 420) sont agrandis de 12 à 13,2 unités
@@ -42,10 +42,5 @@ describe('textes des schémas agrandis sur mobile', () => {
     expect(y2 - y1).toBeGreaterThanOrEqual(MOBILE_SUB + 4);
   });
 
-  it('donation : les trois lignes de chaque parent sont espacées d’au moins une hauteur de texte', () => {
-    const s = svg(SchemaDonation);
-    const ys = [...s.matchAll(/<text x="102" y="(\d+)"/g)].map((m) => Number(m[1]));
-    expect(ys).toHaveLength(8);
-    for (let i = 1; i < 4; i++) expect(ys[i] - ys[i - 1]).toBeGreaterThanOrEqual(MOBILE_SUB + 4);
-  });
+  // Donation : schéma redessiné en viewBox 340 le 2026-11-15, contrôlé par schemaDonationCtoMobile.test.ts.
 });

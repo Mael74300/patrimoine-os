@@ -443,34 +443,38 @@ export function SchemaObligation() {
 
 export const CTO_EXAMPLE_GAIN = 1000;
 
-/** Schéma « Compte-titres : sur un gain, ce qui reste après le PFU » : exemple fictif de 1 000 € de plus-value réalisée, taux de 2026 (12,8 % + 18,6 % = 31,4 %, Service-Public F21618, consulté le 2026-11-06). Chiffres recalculés par src/cto.test.ts. */
+/** Schéma « Compte-titres : sur un gain, ce qui reste après le PFU » : exemple fictif de 1 000 € de plus-value réalisée, taux de 2026 (12,8 % + 18,6 % = 31,4 %, Service-Public F21618, consulté le 2026-11-06). Chiffres recalculés par src/cto.test.ts.
+ * ViewBox 340 (chantier 112) : à 375 px, les textes s'affichent presque à leur taille (≈ 13 à 14,5 px au lieu de ≈ 11,2 px
+ * avec l'ancien viewBox 420). Mêmes chiffres et mêmes règles ; barre toujours proportionnelle aux montants. */
 export function SchemaCto() {
   const r = pfuSplit(CTO_EXAMPLE_GAIN);
-  const X0 = 14;
-  const W = 392;
+  const X0 = 10;
+  const W = 320;
   const wIr = (r.ir / CTO_EXAMPLE_GAIN) * W;
   const wPs = (r.ps / CTO_EXAMPLE_GAIN) * W;
   const wNet = W - wIr - wPs;
+  const COL2 = 176;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 214" role="img" aria-labelledby="ill-cto-t ill-cto-d" className="ill-svg">
+      <svg viewBox="0 0 340 222" role="img" aria-labelledby="ill-cto-t ill-cto-d" className="ill-svg">
         <title id="ill-cto-t">{`Compte-titres : sur un gain de ${fmtEur(CTO_EXAMPLE_GAIN)}, il vous reste ${fmtEur(r.net)}`}</title>
         <desc id="ill-cto-d">{`Exemple fictif : vous vendez des titres avec ${fmtEur(CTO_EXAMPLE_GAIN)} de plus-value. Le prélèvement forfaitaire unique de 31,4 % retire ${fmtEur(r.ir)} d’impôt sur le revenu (12,8 %) et ${fmtEur(r.ps)} de prélèvements sociaux (18,6 %), soit ${fmtEur(r.total)}. Il vous reste ${fmtEur(r.net)}.`}</desc>
         <text x={X0} y={20} className="ill-step">Un gain de {fmtEur(CTO_EXAMPLE_GAIN)} (exemple fictif)</text>
-        <rect x={X0} y={32} width={wIr} height={40} fill="var(--warn)" />
-        <rect x={X0 + wIr} y={32} width={wPs} height={40} fill="var(--primary)" />
-        <rect x={X0 + wIr + wPs} y={32} width={wNet} height={40} fill="var(--accent)" />
-        <rect x={X0} y={32} width={W} height={40} rx={8} fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
-        <text x={X0 + wIr + wPs + wNet / 2} y={58} textAnchor="middle" className="ill-on-dark ill-total">{fmtEur(r.net)} pour vous</text>
-        <path d={`M ${X0 + wIr / 2} 76 V 98 H ${X0 + 12} V 108`} fill="none" stroke="var(--warn)" strokeWidth={2} strokeLinejoin="round" />
-        <path d={`M ${X0 + wIr + wPs / 2} 76 V 98 H ${X0 + 214} V 108`} fill="none" stroke="var(--primary)" strokeWidth={2} strokeLinejoin="round" />
-        <text x={X0} y={128} className="ill-step">{fmtEur(r.ir)}</text>
-        <text x={X0} y={146} className="ill-sub">impôt sur le revenu</text>
-        <text x={X0} y={162} className="ill-sub">(12,8 %)</text>
-        <text x={X0 + 202} y={128} className="ill-step">{fmtEur(r.ps)}</text>
-        <text x={X0 + 202} y={146} className="ill-sub">prélèvements sociaux</text>
-        <text x={X0 + 202} y={162} className="ill-sub">(18,6 %)</text>
-        <text x={210} y={200} textAnchor="middle" className="ill-sub">Total retiré : {fmtEur(r.total)}, soit 31,4 % du gain</text>
+        <rect x={X0} y={32} width={wIr} height={44} fill="var(--warn)" />
+        <rect x={X0 + wIr} y={32} width={wPs} height={44} fill="var(--primary)" />
+        <rect x={X0 + wIr + wPs} y={32} width={wNet} height={44} fill="var(--accent)" />
+        <rect x={X0} y={32} width={W} height={44} rx={8} fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
+        <text x={X0 + wIr + wPs + wNet / 2} y={59} textAnchor="middle" className="ill-on-dark ill-total">{fmtEur(r.net)} pour vous</text>
+        <path d={`M ${X0 + wIr / 2} 80 V 104`} fill="none" stroke="var(--warn)" strokeWidth={2} />
+        <path d={`M ${X0 + wIr + wPs / 2} 80 V 92 H ${COL2 + 6} V 104`} fill="none" stroke="var(--primary)" strokeWidth={2} strokeLinejoin="round" />
+        <text x={X0} y={124} className="ill-step">{fmtEur(r.ir)}</text>
+        <text x={X0} y={142} className="ill-sub">impôt sur le revenu</text>
+        <text x={X0} y={159} className="ill-sub">(12,8 %)</text>
+        <text x={COL2} y={124} className="ill-step">{fmtEur(r.ps)}</text>
+        <text x={COL2} y={142} className="ill-sub">prélèvements sociaux</text>
+        <text x={COL2} y={159} className="ill-sub">(18,6 %)</text>
+        <line x1={X0} y1={180} x2={X0 + W} y2={180} stroke="var(--line)" strokeWidth={1} />
+        <text x={170} y={204} textAnchor="middle" className="ill-sub">Total retiré : {fmtEur(r.total)}, soit 31,4 % du gain</text>
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : taux de 2026 sur une plus-value réalisée, sans option pour le barème progressif. Barre proportionnelle aux montants.
@@ -513,31 +517,37 @@ export const DONATION_PAR_PARENT = DONATION_ABATTEMENT + DONATION_DON_ARGENT;
 
 export const DONATION_TOTAL_DEUX_PARENTS = 2 * DONATION_PAR_PARENT;
 
-/** Schéma « Donation : deux parents, un enfant » : reprend l'exemple fictif de la fiche (2 × (100 000 € + 31 865 €) = 263 730 € sans droits), recalculé par test. */
+/** Schéma « Donation : deux parents, un enfant » : reprend l'exemple fictif de la fiche (2 × (100 000 € + 31 865 €) = 263 730 € sans droits), recalculé par test.
+ * ViewBox 340 (chantier 112) : les deux parents côte à côte, l'enfant dessous ; à 375 px, les textes s'affichent presque
+ * à leur taille (≈ 13 à 14,5 px au lieu de ≈ 11,2 px avec l'ancien viewBox 420). Mêmes montants et mêmes règles. */
 export function SchemaDonation() {
-  const parent = (y: number, n: number) => (
+  const parent = (x: number, n: number) => (
     <g key={n}>
-      <rect x={14} y={y} width={176} height={90} rx={10} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-      <text x={102} y={y + 22} textAnchor="middle" className="ill-step">Parent {n}</text>
-      <text x={102} y={y + 44} textAnchor="middle" className="ill-sub">{fmtEur(DONATION_ABATTEMENT)} d’abattement</text>
-      <text x={102} y={y + 62} textAnchor="middle" className="ill-sub">+ {fmtEur(DONATION_DON_ARGENT)} don d’argent</text>
-      <text x={102} y={y + 81} textAnchor="middle" className="ill-step">= {fmtEur(DONATION_PAR_PARENT)}</text>
-      <path d={`M 190 ${y + 45} H 232 V 117 H 246`} fill="none" stroke="var(--primary)" strokeWidth={2} strokeLinejoin="round" />
+      <rect x={x} y={4} width={156} height={142} rx={10} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+      <text x={x + 78} y={26} textAnchor="middle" className="ill-step">Parent {n}</text>
+      <text x={x + 78} y={50} textAnchor="middle" className="ill-step">{fmtEur(DONATION_ABATTEMENT)}</text>
+      <text x={x + 78} y={67} textAnchor="middle" className="ill-sub">d’abattement</text>
+      <text x={x + 78} y={89} textAnchor="middle" className="ill-step">+ {fmtEur(DONATION_DON_ARGENT)}</text>
+      <text x={x + 78} y={106} textAnchor="middle" className="ill-sub">don d’argent</text>
+      <line x1={x + 14} y1={118} x2={x + 142} y2={118} stroke="var(--line)" strokeWidth={1.5} />
+      <text x={x + 78} y={137} textAnchor="middle" className="ill-step">= {fmtEur(DONATION_PAR_PARENT)}</text>
+      <path d={`M ${x + 78} 146 V 162 H 170 V 180`} fill="none" stroke="var(--primary)" strokeWidth={2} strokeLinejoin="round" />
     </g>
   );
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 262" role="img" aria-labelledby="ill-don-t ill-don-d" className="ill-svg">
+      <svg viewBox="0 0 340 308" role="img" aria-labelledby="ill-don-t ill-don-d" className="ill-svg">
         <title id="ill-don-t">{`Donation : deux parents peuvent donner ${fmtEur(DONATION_TOTAL_DEUX_PARENTS)} à un enfant sans droits`}</title>
         <desc id="ill-don-d">{`Exemple fictif : chaque parent de moins de 80 ans peut donner à son enfant majeur ${fmtEur(DONATION_ABATTEMENT)} (abattement) plus ${fmtEur(DONATION_DON_ARGENT)} (don familial d’argent), soit ${fmtEur(DONATION_PAR_PARENT)}. Pour deux parents, l’enfant reçoit ${fmtEur(DONATION_TOTAL_DEUX_PARENTS)} sans droits. Les abattements se renouvellent tous les 15 ans.`}</desc>
-        {parent(10, 1)}
-        {parent(112, 2)}
-        <rect x={246} y={80} width={160} height={74} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={326} y={104} textAnchor="middle" className="ill-step">Enfant majeur</text>
-        <text x={326} y={126} textAnchor="middle" className="ill-step">{fmtEur(DONATION_TOTAL_DEUX_PARENTS)}</text>
-        <text x={326} y={144} textAnchor="middle" className="ill-sub">sans droits</text>
-        <text x={210} y={230} textAnchor="middle" className="ill-sub">Les abattements se renouvellent tous les 15 ans.</text>
-        <text x={210} y={250} textAnchor="middle" className="ill-sub">Parents de moins de 80 ans, enfant majeur.</text>
+        {parent(4, 1)}
+        {parent(180, 2)}
+        <path d="M 164 174 L 170 181 L 176 174" fill="none" stroke="var(--primary)" strokeWidth={2} strokeLinejoin="round" />
+        <rect x={70} y={184} width={200} height={76} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={207} textAnchor="middle" className="ill-step">Enfant majeur</text>
+        <text x={170} y={231} textAnchor="middle" className="ill-num">{fmtEur(DONATION_TOTAL_DEUX_PARENTS)}</text>
+        <text x={170} y={250} textAnchor="middle" className="ill-sub">sans droits</text>
+        <text x={170} y={283} textAnchor="middle" className="ill-sub">Abattements renouvelés tous les 15 ans.</text>
+        <text x={170} y={302} textAnchor="middle" className="ill-sub">Parents de moins de 80 ans, enfant majeur.</text>
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : montants en vigueur à la date de vérification de la fiche.
