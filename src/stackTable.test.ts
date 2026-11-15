@@ -20,8 +20,8 @@ describe('Tableaux de scénarios compacts (stack-table)', () => {
     expect(mobile).toMatch(/@media \(min-width: 701px\) \{\s*\.stack-table \.st-name \{ white-space: nowrap; \}/);
   });
 
-  it('chaque ligne des deux tableaux commence par un nom puis des valeurs étiquetées', () => {
-    for (const src of [credits, entreprise]) {
+  it('chaque ligne du tableau Comparer des crédits commence par un nom puis des valeurs étiquetées', () => {
+    for (const src of [credits]) {
       const start = src.indexOf('className="stack-table"');
       const table = src.slice(start, src.indexOf('</table>', start));
       const tds = [...table.matchAll(/<td ([^>]*)>/g)].map((m) => m[1]);

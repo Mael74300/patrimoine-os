@@ -20,6 +20,16 @@ export default function SimEntreprise() {
   const rows = runs[tab];
   const start = s.initialCash - s.initialInvestment;
   const last = rows[rows.length - 1];
+  const finals = runs.map((r) => r[r.length - 1]);
+  const scenarioRows: { label: string; hint?: string; values: number[]; signed?: boolean }[] = [
+    { label: 'Chiffre d’affaires final', values: finals.map((l) => l?.revenue ?? 0) },
+    { label: 'Résultat net final', hint: 'après impôt', values: finals.map((l) => l?.netResult ?? 0), signed: true },
+    { label: 'Trésorerie finale', values: finals.map((l) => l?.cash ?? 0), signed: true },
+    { label: 'Trésorerie la plus basse', hint: 'sous 0\u00a0€ : à financer', values: runs.map((r) => lowestCash(r, start)), signed: true },
+    { label: 'Valeur estimée', hint: `${String(s.valuationMultiple).replace('.', ',')}\u00a0× le résultat net`, values: finals.map((l) => l?.valuation ?? 0) },
+  ];
+  // Montants très longs (plus de 10 caractères) : sur mobile, une ligne par scénario plutôt que trois colonnes trop étroites
+  const longValues = scenarioRows.some((r) => r.values.some((v) => fmtEur(v).length > 10));
   const zeroValue = businessZeroValueNote({ multiple: s.valuationMultiple, scenarios: runs.map((r, i) => ({ label: LABELS[i], netResultLast: r[r.length - 1]?.netResult ?? 0 })) });
 
   return (
@@ -80,32 +90,33 @@ export default function SimEntreprise() {
 
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <h2 style={{ marginTop: 0 }}>Trois scénarios à {s.years}&nbsp;ans</h2>
-          <div className="table-wrap stack-wrap">
-            <table className="stack-table">
-              <caption className="sr-only">Résultats des trois scénarios à {s.years}&nbsp;ans</caption>
-              <thead><tr><th>Scénario</th><th className="r">Chiffre d’affaires final</th><th className="r">Résultat net final</th><th className="r">Trésorerie finale</th><th className="r">Trésorerie la plus basse</th><th className="r">Valeur estimée</th></tr></thead>
+          <div className="table-wrap scn-wrap">
+            <table className={'scn-table' + (longValues ? ' scn-long' : '')}>
+              <caption className="sr-only">Résultats des trois scénarios à {s.years}&nbsp;ans, un indicateur par ligne</caption>
+              <thead>
+                <tr>
+                  <th scope="col"><span className="sr-only">Indicateur</span></th>
+                  {LABELS.map((l, i) => (
+                    <th key={l} scope="col" className="r"><span aria-hidden="true" className="scn-dot" style={{ background: COLORS[i] }} />{l}</th>
+                  ))}
+                </tr>
+              </thead>
               <tbody>
-                {runs.map((r, i) => {
-                  const l = r[r.length - 1];
-                  const low = lowestCash(r, start);
-                  return (
-                    <tr key={i}>
-                      <td className="st-name" style={{ whiteSpace: 'nowrap' }}><span aria-hidden="true" style={{ color: COLORS[i] }}>●</span> {LABELS[i]}</td>
-                      <td data-label="Chiffre d’affaires final" className="r">{fmtEur(l?.revenue ?? 0)}</td>
-                      <td data-label="Résultat net final" className={'r ' + ((l?.netResult ?? 0) < 0 ? 'neg' : '')}>{fmtEur(l?.netResult ?? 0)}</td>
-                      <td data-label="Trésorerie finale" className={'r ' + ((l?.cash ?? 0) < 0 ? 'neg' : '')}>{fmtEur(l?.cash ?? 0)}</td>
-                      <td data-label="Trésorerie la plus basse" className={'r ' + (low < 0 ? 'neg' : '')}>{fmtEur(low)}</td>
-                      <td data-label="Valeur estimée" className="r">{fmtEur(l?.valuation ?? 0)}</td>
-                    </tr>
-                  );
-                })}
+                {scenarioRows.map((row) => (
+                  <tr key={row.label}>
+                    <th scope="row">{row.label}{row.hint && <span className="scn-hint">{row.hint}</span>}</th>
+                    {row.values.map((v, i) => (
+                      <td key={i} data-label={LABELS[i]} className={'r ' + (row.signed && v < 0 ? 'neg' : '')}>{fmtEur(v)}</td>
+                    ))}
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
           <Takeaway>{businessTakeaway({ years: s.years, revenueFirst: runs[1][0]?.revenue ?? 0, revenueLast: runs[1][runs[1].length - 1]?.revenue ?? 0, netResultLast: runs[1][runs[1].length - 1]?.netResult ?? 0, cashLast: runs[1][runs[1].length - 1]?.cash ?? 0, pessimisticLowestCash: lowestCash(runs[0], start) })}</Takeaway>
           <p className="small muted">
             Pessimiste : ventes de départ −20 %, croissance −5 points, marge −5 points. Optimiste : ventes +15 %, croissance +5 points, marge +3 points.
-            Une trésorerie négative signale un besoin de financement.{zeroValue && <> {zeroValue}</>}
+            {zeroValue && <> {zeroValue}</>}
           </p>
           <div className="panel">
             <LineChart
