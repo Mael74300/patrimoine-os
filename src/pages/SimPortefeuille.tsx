@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { portfolioTakeaway, rebalanceTakeaway } from '../lib/takeaways';
+import { portfolioProjectionNote, portfolioTakeaway, rebalanceTakeaway } from '../lib/takeaways';
 import { fmtEur, fmtPct, projectGrowth, rebalance, summarizePortfolio, type PortfolioLine } from '../lib/finance';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
@@ -39,16 +39,7 @@ export default function SimPortefeuille() {
         Saisissez ce que vous détenez : le calculateur en déduit le rendement moyen, les frais et le risque, puis indique quoi acheter ou vendre pour retrouver la répartition que vous visez (votre « allocation cible », par exemple 60 % / 40 %).
       </PageHead>
 
-      <div className="kpis">
-        <Kpi label="Valeur totale" value={fmtEur(sum.total)} />
-        <Kpi label="Rendement supposé net de frais" value={fmtPct(sum.netReturn)} sub={`brut ${fmtPct(sum.grossReturn)}`} />
-        <Kpi label="Frais annuels" value={fmtEur(sum.annualFeesEuro)} sub={`${fmtPct(sum.weightedFees)} en moyenne`} tone="neg" />
-        <Kpi label="Risque moyen pondéré" value={`${sum.weightedRisk.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} / 7`} sub="échelle saisie par vous" />
-      </div>
-
-      <Takeaway>{portfolioTakeaway({ total: sum.total, netReturn: sum.netReturn, annualFeesEuro: sum.annualFeesEuro, topLabel: top?.label ?? '', topWeight: top?.weight ?? 0, years: s.years, monthly: s.monthly, contributed: proj[proj.length - 1]?.contributed ?? 0, value: proj[proj.length - 1]?.value ?? 0 })}</Takeaway>
-
-      <h2>Lignes du portefeuille</h2>
+      <h2>Ce que vous détenez</h2>
       <div className="table-wrap line-wrap" tabIndex={0}>
         <table className="line-table">
           <thead>
@@ -98,6 +89,16 @@ export default function SimPortefeuille() {
         </p>
       )}
 
+      <h2>Ce que cela donne</h2>
+      <div className="kpis">
+        <Kpi label="Valeur totale" value={fmtEur(sum.total)} />
+        <Kpi label="Rendement supposé net de frais" value={fmtPct(sum.netReturn)} sub={`brut ${fmtPct(sum.grossReturn)}`} />
+        <Kpi label="Frais annuels" value={fmtEur(sum.annualFeesEuro)} sub={`${fmtPct(sum.weightedFees)} en moyenne`} tone="neg" />
+        <Kpi label="Risque moyen pondéré" value={`${sum.weightedRisk.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} / 7`} sub="échelle saisie par vous" />
+      </div>
+
+      <Takeaway>{portfolioTakeaway({ total: sum.total, netReturn: sum.netReturn, annualFeesEuro: sum.annualFeesEuro, topLabel: top?.label ?? '', topWeight: top?.weight ?? 0 })}</Takeaway>
+
       <h2>Répartition : aujourd’hui et cible</h2>
       <div className="panel">
         <ul className="alloc-list">
@@ -128,7 +129,7 @@ export default function SimPortefeuille() {
       </div>
 
       <h2>Projection</h2>
-      <div className="grid cols-2" style={{ maxWidth: 520 }}>
+      <div className="grid cols-2 keep-2" style={{ maxWidth: 520 }}>
         <NumberField label="Versement mensuel" unit="€" value={s.monthly} onChange={(v) => setS((st) => ({ ...st, monthly: v }))} min={0} step={50} />
         <NumberField label="Durée" unit="ans" value={s.years} onChange={(v) => setS((st) => ({ ...st, years: v }))} min={1} max={50} />
       </div>
@@ -143,7 +144,8 @@ export default function SimPortefeuille() {
           ]}
         />
         <p className="small muted" style={{ margin: '8px 0 0' }}>
-          Hypothèse simplificatrice : allocation maintenue constante et rendement net pondéré appliqué chaque année, sans volatilité.
+          {portfolioProjectionNote({ years: s.years, monthly: s.monthly, contributed: proj[proj.length - 1]?.contributed ?? 0, value: proj[proj.length - 1]?.value ?? 0 })}{' '}
+          Hypothèse simplificatrice : répartition maintenue et rendement moyen net de frais appliqué chaque année, sans les hausses et baisses des marchés.
         </p>
       </div>
       <SavedSims simKey="portefeuille" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />

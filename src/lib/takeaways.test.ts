@@ -4,7 +4,7 @@ import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio } f
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
 import { precautionTarget } from './calc/precaution';
-import { rebalanceTakeaway, businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, budgetGapPhrase, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionPlacementTakeaway, precautionTargetSub, prepayTakeaway, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { rebalanceTakeaway, portfolioProjectionNote, businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, budgetGapPhrase, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionPlacementTakeaway, precautionTargetSub, prepayTakeaway, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -400,15 +400,20 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     const sum = summarizePortfolio(lines);
     const proj = projectGrowth({ initial: sum.total, monthly: 300, annualReturn: sum.netReturn, annualFees: 0, years: 20, inflation: 0 });
     const f = proj[proj.length - 1];
-    const t = digits(portfolioTakeaway({ total: sum.total, netReturn: sum.netReturn, annualFeesEuro: sum.annualFeesEuro, topLabel: 'ETF monde', topWeight: 0.6, years: 20, monthly: 300, contributed: f.contributed, value: f.value }));
+    const t = digits(portfolioTakeaway({ total: sum.total, netReturn: sum.netReturn, annualFeesEuro: sum.annualFeesEuro, topLabel: 'ETF monde', topWeight: 0.6 }));
     expect(t).toContain(eur(sum.total) + '€');
     expect(t).toContain(eur(sum.total * sum.netReturn) + '€');
     expect(t).toContain(eur(sum.annualFeesEuro) + '€');
     expect(t).toContain('ETFmonde');
-    expect(t).toContain(eur(f.value) + '€');
-    expect(t).toContain(eur(f.contributed) + '€');
-    expect(portfolioTakeaway({ total: 1000, netReturn: 0.02, annualFeesEuro: 0, topLabel: 'X', topWeight: 0.4, years: 5, monthly: 0, contributed: 1000, value: 1100 })).not.toContain('pèse');
-    expect(portfolioTakeaway({ total: 0, netReturn: 0, annualFeesEuro: 0, topLabel: '', topWeight: 0, years: 5, monthly: 0, contributed: 0, value: 0 })).toBe('');
+    const n = digits(portfolioProjectionNote({ years: 20, monthly: 300, contributed: f.contributed, value: f.value }));
+    expect(n).toContain('20ans');
+    expect(n).toContain('300€');
+    expect(n).toContain(eur(f.value) + '€');
+    expect(n).toContain(eur(f.contributed) + '€');
+    expect(portfolioProjectionNote({ years: 10, monthly: 0, contributed: 1000, value: 1500 })).toContain('sans versement supplémentaire');
+    expect(portfolioProjectionNote({ years: 10, monthly: 0, contributed: 0, value: 0 })).toBe('');
+    expect(portfolioTakeaway({ total: 1000, netReturn: 0.02, annualFeesEuro: 0, topLabel: 'X', topWeight: 0.4 })).not.toContain('pèse');
+    expect(portfolioTakeaway({ total: 0, netReturn: 0, annualFeesEuro: 0, topLabel: '', topWeight: 0 })).toBe('');
   });
 });
 

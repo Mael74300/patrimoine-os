@@ -332,7 +332,7 @@ export function businessZeroValueNote(p: { multiple: number; scenarios: { label:
 }
 
 /** Portefeuille : gain annuel supposé, frais, support dominant et projection. */
-export function portfolioTakeaway(p: { total: number; netReturn: number; annualFeesEuro: number; topLabel: string; topWeight: number; years: number; monthly: number; contributed: number; value: number }): string {
+export function portfolioTakeaway(p: { total: number; netReturn: number; annualFeesEuro: number; topLabel: string; topWeight: number }): string {
   if (!(p.total > 0)) return '';
   const gain = p.total * p.netReturn;
   const annuel = gain >= 0
@@ -340,10 +340,14 @@ export function portfolioTakeaway(p: { total: number; netReturn: number; annualF
     : `perd en moyenne ${fmtPct(-p.netReturn)} par an une fois les frais déduits, soit environ ${fmtEur(-gain)} par an`;
   const frais = p.annualFeesEuro > 0.5 ? ` Les frais vous coûtent ${fmtEur(p.annualFeesEuro)} par an.` : '';
   const poids = p.topWeight >= 0.5 ? ` « ${p.topLabel} » pèse ${fmtPct(p.topWeight)} du total : si ce support chute, tout le portefeuille en souffre.` : '';
-  const proj = p.years > 0 && p.value > 0
-    ? ` En ${fmtAns(p.years)}, avec ${fmtEur(p.monthly)} versés en plus chaque mois, il atteindrait environ ${fmtEur(p.value)} (dont ${fmtEur(p.contributed)} de versements, capital de départ compris), sans tenir compte des hausses et baisses des marchés.`
-    : '';
-  return `Votre portefeuille de ${fmtEur(p.total)} ${annuel}.${frais}${poids}${proj}`;
+  return `Votre portefeuille de ${fmtEur(p.total)} ${annuel}.${frais}${poids}`;
+}
+
+/** Portefeuille : la projection en une phrase, placée sous le graphique de projection (à côté de la durée et du versement saisis). */
+export function portfolioProjectionNote(p: { years: number; monthly: number; contributed: number; value: number }): string {
+  if (!(p.years > 0 && p.value > 0)) return '';
+  const verse = p.monthly > 0 ? `, avec ${fmtEur(p.monthly)} versés en plus chaque mois` : ', sans versement supplémentaire';
+  return `En ${fmtAns(p.years)}${verse}, le portefeuille atteindrait environ ${fmtEur(p.value)} (dont ${fmtEur(p.contributed)} de versements, capital de départ compris).`;
 }
 
 /** Portefeuille : ce qu'il faut acheter ou vendre pour revenir à la répartition visée, en une phrase. Les écarts de moins de 1 € sont ignorés. */
