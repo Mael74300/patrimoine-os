@@ -293,6 +293,33 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(budgetTakeaway({ income: ok.income, shares: ok.shares, unallocated: ok.unallocated, targetRate: 0.2, missing: 0 })).toContain('déjà');
     expect(budgetTakeaway({ income: 0, shares: { needs: 0, wants: 0, saving: 0 }, unallocated: 0, targetRate: 0.2, missing: 0 })).toBe('');
   });
+  it('budget : où trouver l’effort, chaque montant cité une seule fois, issu de catchUp', () => {
+    const run = (inp: { netIncome: number; needs: number; wants: number; saving: number }) => {
+      const b = analyzeBudget(inp);
+      const c = catchUp(inp, 0.2);
+      return { c, t: digits(budgetTakeaway({ income: b.income, shares: b.shares, unallocated: b.unallocated, targetRate: 0.2, missing: c.missing, fromUnallocated: c.fromUnallocated, fromWants: c.fromWants, uncovered: c.uncovered })) };
+    };
+    // Exemple fictif par défaut : 250 € manquants = 200 € non affectés + 50 € d'envies.
+    const d = run({ netIncome: 2500, needs: 1400, wants: 650, saving: 250 });
+    expect(d.c).toMatchObject({ missing: 250, fromUnallocated: 200, fromWants: 50, uncovered: 0 });
+    expect(d.t).toContain(`${eur(250)}€deplus`);
+    expect(d.t).toContain(`les${eur(200)}€nonaffectés,plus${eur(50)}€prissurlesenvies.`);
+    expect(d.t).not.toContain('affectésàrien');
+    expect(d.t).not.toContain('resterait');
+    // Non affecté plus grand que l'effort : une partie seulement est prise.
+    const big = run({ netIncome: 3000, needs: 1400, wants: 650, saving: 250 });
+    expect(big.c).toMatchObject({ missing: 350, fromUnallocated: 350, fromWants: 0 });
+    expect(big.t).toContain(`${eur(350)}€prissurles${eur(700)}€nonaffectés.`);
+    // Envies insuffisantes : la part non couverte est signalée.
+    const short = run({ netIncome: 2500, needs: 2200, wants: 50, saving: 250 });
+    expect(short.c).toMatchObject({ missing: 250, fromUnallocated: 0, fromWants: 50, uncovered: 200 });
+    expect(short.t).toContain(`:${eur(50)}€prissurlesenvies.`);
+    expect(short.t).toContain(`Ilresterait${eur(200)}€àtrouver`);
+    // Taux visé déjà atteint : le revenu non affecté reste mentionné.
+    const ok = run({ netIncome: 2500, needs: 1200, wants: 500, saving: 600 });
+    expect(ok.t).toContain(`Ilreste${eur(200)}€parmois`);
+    expect(ok.t).toContain('déjà');
+  });
   it('budget : écart de chaque poste au repère, en mots, issu de analyzeBudget', () => {
     const b = analyzeBudget({ netIncome: 2500, needs: 1400, wants: 650, saving: 250 });
     expect(digits(budgetGapPhrase(b.gaps.needs, 0.5))).toBe(digits(`${eur(150)} € de plus que le repère de 50 %`));

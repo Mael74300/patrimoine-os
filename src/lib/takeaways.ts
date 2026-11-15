@@ -219,19 +219,31 @@ export function rateConversionTakeaway(p: { annualRate: number; periods: number;
 }
 
 /** Budget : la répartition de 100 € de revenu et l'effort pour atteindre le taux visé. */
-export function budgetTakeaway(p: { income: number; shares: { needs: number; wants: number; saving: number }; unallocated: number; targetRate: number; missing: number }): string {
+export function budgetTakeaway(p: { income: number; shares: { needs: number; wants: number; saving: number }; unallocated: number; targetRate: number; missing: number; fromUnallocated?: number; fromWants?: number; uncovered?: number }): string {
   if (!(p.income > 0)) return '';
   const cent = (x: number) => Math.round(x * 100);
+  const fromFree = Math.max(0, p.fromUnallocated ?? 0);
+  const fromWants = Math.max(0, p.fromWants ?? 0);
+  const uncovered = Math.max(0, p.uncovered ?? 0);
   const repartition = `Sur 100 € de revenu, ${cent(p.shares.needs)} € vont aux besoins, ${cent(p.shares.wants)} € aux envies et ${cent(p.shares.saving)} € à l'épargne.`;
+  // Le revenu non affecté est cité une seule fois : dans la phrase sur l'effort s'il sert à le couvrir, sinon ici.
   const reste = p.unallocated < 0
     ? ` Vos postes dépassent le revenu de ${fmtEur(-p.unallocated)} par mois : le budget n'est pas équilibré.`
-    : Math.round(p.unallocated) > 0
+    : Math.round(p.unallocated) > 0 && !(p.missing > 0 && Math.round(fromFree) > 0)
       ? ` Il reste ${fmtEur(p.unallocated)} par mois que vous n'avez affectés à rien.`
       : '';
-  const cible = p.missing > 0
-    ? ` Pour épargner ${fmtPct(p.targetRate)} de votre revenu, il faudrait mettre de côté ${fmtEur(p.missing)} de plus chaque mois.`
-    : ` Vous atteignez déjà le taux d'épargne visé (${fmtPct(p.targetRate)}).`;
-  return repartition + reste + cible;
+  if (!(p.missing > 0)) return repartition + reste + ` Vous atteignez déjà le taux d'épargne visé (${fmtPct(p.targetRate)}).`;
+  const sources: string[] = [];
+  if (Math.round(fromFree) > 0) {
+    sources.push(Math.round(fromFree) === Math.round(p.unallocated) ? `les ${fmtEur(fromFree)} non affectés` : `${fmtEur(fromFree)} pris sur les ${fmtEur(p.unallocated)} non affectés`);
+  }
+  if (Math.round(fromWants) > 0) sources.push(`${fmtEur(fromWants)} pris sur les envies`);
+  const cible = ` Pour épargner ${fmtPct(p.targetRate)} de votre revenu, il faudrait mettre de côté ${fmtEur(p.missing)} de plus chaque mois`
+    + (sources.length ? ` : ${sources.join(', plus ')}.` : '.');
+  const manque = Math.round(uncovered) > 0
+    ? ` Il resterait ${fmtEur(uncovered)} à trouver en réduisant les besoins ou en augmentant le revenu, ou bien un taux plus réaliste à viser.`
+    : '';
+  return repartition + reste + cible + manque;
 }
 
 /** Budget : position d'un poste face au repère 50 / 30 / 20, en mots (écart en euros par mois, repère en part du revenu). */
