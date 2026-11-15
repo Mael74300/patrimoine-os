@@ -83,108 +83,129 @@ export function SchemaAssuranceVie() {
 }
 
 /** Schéma « Trois façons de participer » : principe qualitatif (aucun chiffre), repris de La finance pour tous (page « Crowdfunding ou Finance participative », mise à jour du 13 décembre 2024). */
+/* ViewBox 340 (chantier 112, étape 8) : à 375 px, les textes s'affichent presque à leur taille (≈ 11,2 px avec l'ancien
+ * viewBox 420). Mêmes textes, coupés autrement ; la colonne de gauche est un tracé à coins arrondis à gauche seulement. */
 export function SchemaCrowdfunding() {
   const rows = [
     { c: 'var(--accent)', soft: 'var(--accent-soft)', nom: 'Don', sous: ['avec ou sans', 'contrepartie'], recoit: ['Vous recevez : une contrepartie', '(un objet, une place…) ou rien'], risque: ['Risque : le projet échoue,', 'la contrepartie n’est pas livrée'] },
     { c: 'var(--primary)', soft: 'var(--surface-2)', nom: 'Prêt', sous: ['avec intérêts'], recoit: ['Vous recevez : des intérêts', 'si le prêt est remboursé'], risque: ['Risque : l’emprunteur', 'ne rembourse pas (défaut)'] },
-    { c: 'var(--warn)', soft: 'var(--warn-soft)', nom: 'Titres', sous: ['actions ou', 'obligations'], recoit: ['Vous recevez : dividendes ou', 'intérêts, selon le titre'], risque: ['Risque : perte partielle ou totale,', 'titres difficiles à revendre'] },
+    { c: 'var(--warn)', soft: 'var(--warn-soft)', nom: 'Titres', sous: ['actions ou', 'obligations'], recoit: ['Vous recevez : dividendes ou', 'intérêts, selon le titre'], risque: ['Risque : perte partielle ou', 'totale, titres difficiles', 'à revendre'] },
   ];
-  const H = 92;
+  const COL = 100;
+  let y = 44;
+  const placed = rows.map((r) => {
+    const h = 24 + r.recoit.length * 16 + 10 + (r.risque.length - 1) * 16 + 14;
+    const row = { ...r, y, h };
+    y += h + 8;
+    return row;
+  });
+  const H = y + 20;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 340" role="img" aria-labelledby="ill-cf-t ill-cf-d" className="ill-svg">
+      <svg viewBox={`0 0 340 ${H}`} role="img" aria-labelledby="ill-cf-t ill-cf-d" className="ill-svg">
         <title id="ill-cf-t">Financement participatif : trois façons de participer</title>
         <desc id="ill-cf-d">Sur une plateforme, on peut financer un projet de trois façons. Le don, avec ou sans contrepartie : le risque est que le projet échoue et que la contrepartie ne soit pas livrée. Le prêt avec intérêts : le risque est le défaut de remboursement. La souscription de titres, actions ou obligations non cotées : les risques sont la perte partielle ou totale du capital et la difficulté à revendre les titres.</desc>
-        <text x={210} y={14} textAnchor="middle" className="ill-sub">Sur une plateforme, trois façons de financer un projet</text>
-        {rows.map((r, i) => {
-          const y = 26 + i * (H + 8);
+        <text x={170} y={14} textAnchor="middle" className="ill-sub">Sur une plateforme, trois façons</text>
+        <text x={170} y={31} textAnchor="middle" className="ill-sub">de financer un projet</text>
+        {placed.map((r) => {
+          const top = r.y + (r.h - (18 + r.sous.length * 16)) / 2;
+          const risk = r.y + 24 + r.recoit.length * 16 + 10;
           return (
             <g key={r.nom}>
-              <rect x={1} y={y} width={418} height={H} rx={12} fill="var(--surface)" stroke={r.c} strokeWidth={2} />
-              <rect x={1} y={y} width={104} height={H} rx={12} fill={r.soft} stroke={r.c} strokeWidth={2} />
-              <rect x={90} y={y + 2} width={16} height={H - 4} fill="var(--surface)" />
-              <path d={`M 105 ${y + 2} V ${y + H - 2}`} stroke={r.c} strokeWidth={2} />
-              <text x={53} y={y + 44 - (r.sous.length - 1) * 8} textAnchor="middle" className="ill-step">{r.nom}</text>
-              {r.sous.map((t, k) => <text key={t} x={53} y={y + 62 - (r.sous.length - 1) * 8 + k * 15} textAnchor="middle" className="ill-sub">{t}</text>)}
-              <text x={118} y={y + 24} className="ill-in">{r.recoit[0]}</text>
-              <text x={118} y={y + 40} className="ill-in">{r.recoit[1]}</text>
-              <text x={118} y={y + 62} className="ill-sub">{r.risque[0]}</text>
-              <text x={118} y={y + 78} className="ill-sub">{r.risque[1]}</text>
+              <rect x={1} y={r.y} width={338} height={r.h} rx={12} fill="var(--surface)" />
+              <path d={`M 13 ${r.y} H ${1 + COL} V ${r.y + r.h} H 13 A 12 12 0 0 1 1 ${r.y + r.h - 12} V ${r.y + 12} A 12 12 0 0 1 13 ${r.y} Z`} fill={r.soft} />
+              <path d={`M ${1 + COL} ${r.y} V ${r.y + r.h}`} stroke={r.c} strokeWidth={2} />
+              <rect x={1} y={r.y} width={338} height={r.h} rx={12} fill="none" stroke={r.c} strokeWidth={2} />
+              <text x={51} y={top + 15} textAnchor="middle" className="ill-step">{r.nom}</text>
+              {r.sous.map((t, k) => <text key={t} x={51} y={top + 34 + k * 16} textAnchor="middle" className="ill-sub">{t}</text>)}
+              {r.recoit.map((t, k) => <text key={t} x={110} y={r.y + 24 + k * 16} className="ill-in">{t}</text>)}
+              {r.risque.map((t, k) => <text key={t} x={110} y={risk + k * 16} className="ill-sub">{t}</text>)}
             </g>
           );
         })}
-        <text x={210} y={332} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
+        <text x={170} y={H - 8} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
       </svg>
     </figure>
   );
 }
 
 /** Schéma « Comment fonctionne une foncière cotée » : principe qualitatif (aucun chiffre), repris de La finance pour tous (page « Les sociétés foncières »). */
+/* ViewBox 340 (chantier 112, étape 8), même construction que le schéma SCPI : mêmes textes, coupés en deux lignes quand il le faut. */
 export function SchemaFonciereCotee() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-fc-t ill-fc-d" className="ill-svg">
+      <svg viewBox="0 0 340 352" role="img" aria-labelledby="ill-fc-t ill-fc-d" className="ill-svg">
         <title id="ill-fc-t">Comment fonctionne une foncière cotée</title>
         <desc id="ill-fc-d">Les investisseurs achètent et revendent des actions de la foncière en Bourse, au prix du marché. La foncière possède des immeubles de bureaux et de commerces qu’elle loue. Les loyers lui permettent de verser des dividendes aux actionnaires.</desc>
-        <rect x={0} y={2} width={220} height={58} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={110} y={28} textAnchor="middle" className="ill-step">Les investisseurs</text>
-        <text x={110} y={48} textAnchor="middle" className="ill-sub">achètent des actions en Bourse</text>
-        <path d="M 110 60 V 108 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={126} y={90} textAnchor="start" className="ill-in">revendables en Bourse</text>
-        <rect x={0} y={108} width={220} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={110} y={134} textAnchor="middle" className="ill-step">La foncière cotée</text>
-        <text x={110} y={156} textAnchor="middle" className="ill-sub">société dont le prix varie</text>
-        <path d="M 110 172 V 220 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={126} y={202} textAnchor="start" className="ill-in">possède et loue</text>
-        <rect x={0} y={220} width={220} height={58} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={110} y={246} textAnchor="middle" className="ill-step">Des immeubles loués</text>
-        <text x={110} y={266} textAnchor="middle" className="ill-sub">surtout bureaux et commerces</text>
-        <path d="M 220 249 H 290 V 31 H 228 m 8 -7 l -8 7 l 8 7" {...arrow} />
-        <text x={296} y={118} textAnchor="start" className="ill-in">les loyers</text>
-        <text x={296} y={136} textAnchor="start" className="ill-in">financent les</text>
-        <text x={296} y={154} textAnchor="start" className="ill-in">dividendes versés</text>
-        <text x={296} y={172} textAnchor="start" className="ill-in">aux actionnaires</text>
-        <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
+        <rect x={1} y={2} width={190} height={76} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={96} y={28} textAnchor="middle" className="ill-step">Les investisseurs</text>
+        <text x={96} y={50} textAnchor="middle" className="ill-sub">achètent des</text>
+        <text x={96} y={68} textAnchor="middle" className="ill-sub">actions en Bourse</text>
+        <path d="M 96 78 V 126 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={106} y={100} textAnchor="start" className="ill-in">revendables</text>
+        <text x={106} y={117} textAnchor="start" className="ill-in">en Bourse</text>
+        <rect x={1} y={126} width={190} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={96} y={152} textAnchor="middle" className="ill-step">La foncière cotée</text>
+        <text x={96} y={174} textAnchor="middle" className="ill-sub">société dont le prix varie</text>
+        <path d="M 96 190 V 238 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={106} y={212} textAnchor="start" className="ill-in">possède</text>
+        <text x={106} y={229} textAnchor="start" className="ill-in">et loue</text>
+        <rect x={1} y={238} width={190} height={76} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={96} y={264} textAnchor="middle" className="ill-step">Des immeubles loués</text>
+        <text x={96} y={286} textAnchor="middle" className="ill-sub">surtout bureaux</text>
+        <text x={96} y={304} textAnchor="middle" className="ill-sub">et commerces</text>
+        <path d="M 191 276 H 208 V 40 H 199 m 8 -7 l -8 7 l 8 7" {...arrow} />
+        <text x={216} y={140} textAnchor="start" className="ill-in">les loyers</text>
+        <text x={216} y={158} textAnchor="start" className="ill-in">financent les</text>
+        <text x={216} y={176} textAnchor="start" className="ill-in">dividendes versés</text>
+        <text x={216} y={194} textAnchor="start" className="ill-in">aux actionnaires</text>
+        <text x={170} y={342} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
       </svg>
     </figure>
   );
 }
 
 /** Schéma « Capital-investissement : de l’épargne à la revente » : repris de l’AMF (page « Capital-investissement : FCPR, FCPI, FIP », consultée le 2026-11-05) : 50 % minimum de titres non cotés pour un FCPR, pas de rachat en cours de vie du fonds, durée de vie pouvant atteindre 10 ans, voire plus. */
+/* ViewBox 340 (chantier 112, étape 8) : deux colonnes plus étroites, mêmes textes coupés en deux lignes quand il le faut. */
 export function SchemaCapitalInvestissement() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 372" role="img" aria-labelledby="ill-ci-t ill-ci-d" className="ill-svg">
+      <svg viewBox="0 0 340 414" role="img" aria-labelledby="ill-ci-t ill-ci-d" className="ill-svg">
         <title id="ill-ci-t">Capital-investissement : l’argent est bloqué pendant la vie du fonds</title>
         <desc id="ill-ci-d">Vous achetez des parts d’un fonds de capital-investissement. Le fonds investit dans des sociétés non cotées : au moins la moitié de son actif pour un FCPR. Pendant la vie du fonds, qui peut atteindre 10 ans, voire plus, vous ne pouvez pas obtenir le rachat de vos parts. Vous récupérez votre argent à la fin, quand le fonds a revendu ses titres et est dissous. Vous pouvez perdre une partie ou la totalité de votre mise.</desc>
-        <rect x={0} y={2} width={220} height={58} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={110} y={28} textAnchor="middle" className="ill-step">Vous</text>
-        <text x={110} y={48} textAnchor="middle" className="ill-sub">achetez des parts du fonds</text>
-        <path d="M 110 60 V 100 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={126} y={86} textAnchor="start" className="ill-in">votre argent</text>
-        <rect x={0} y={100} width={220} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={110} y={126} textAnchor="middle" className="ill-step">Le fonds</text>
-        <text x={110} y={148} textAnchor="middle" className="ill-sub">FCPR, FCPI ou FIP</text>
-        <path d="M 110 164 V 204 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={126} y={190} textAnchor="start" className="ill-in">il investit</text>
-        <rect x={0} y={204} width={220} height={64} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={110} y={230} textAnchor="middle" className="ill-step">Des sociétés non cotées</text>
-        <text x={110} y={252} textAnchor="middle" className="ill-sub">50 % minimum pour un FCPR</text>
-        <rect x={244} y={2} width={176} height={266} rx={12} fill="var(--surface-2)" stroke="var(--line)" strokeWidth={2} />
-        <text x={332} y={32} textAnchor="middle" className="ill-step">Pendant la vie</text>
-        <text x={332} y={52} textAnchor="middle" className="ill-step">du fonds</text>
-        <text x={332} y={84} textAnchor="middle" className="ill-in">aucun rachat possible</text>
-        <text x={332} y={106} textAnchor="middle" className="ill-sub">durée : jusqu’à 10 ans,</text>
-        <text x={332} y={124} textAnchor="middle" className="ill-sub">voire plus</text>
-        <path d="M 332 142 V 182 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={332} y={206} textAnchor="middle" className="ill-in">À la fin : le fonds</text>
-        <text x={332} y={224} textAnchor="middle" className="ill-in">revend ses titres,</text>
-        <text x={332} y={242} textAnchor="middle" className="ill-in">puis il est dissous</text>
-        <rect x={0} y={288} width={420} height={44} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={210} y={315} textAnchor="middle" className="ill-in">Risque : perdre une partie ou la totalité de la mise</text>
-        <text x={210} y={358} textAnchor="middle" className="ill-sub">Schéma de principe d’après l’AMF</text>
+        <rect x={1} y={2} width={180} height={74} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={91} y={26} textAnchor="middle" className="ill-step">Vous</text>
+        <text x={91} y={48} textAnchor="middle" className="ill-sub">achetez des parts</text>
+        <text x={91} y={65} textAnchor="middle" className="ill-sub">du fonds</text>
+        <path d="M 91 76 V 112 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={101} y={99} textAnchor="start" className="ill-in">votre argent</text>
+        <rect x={1} y={112} width={180} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={91} y={138} textAnchor="middle" className="ill-step">Le fonds</text>
+        <text x={91} y={160} textAnchor="middle" className="ill-sub">FCPR, FCPI ou FIP</text>
+        <path d="M 91 176 V 212 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={101} y={199} textAnchor="start" className="ill-in">il investit</text>
+        <rect x={1} y={212} width={180} height={96} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={91} y={238} textAnchor="middle" className="ill-step">Des sociétés</text>
+        <text x={91} y={256} textAnchor="middle" className="ill-step">non cotées</text>
+        <text x={91} y={279} textAnchor="middle" className="ill-sub">50 % minimum</text>
+        <text x={91} y={296} textAnchor="middle" className="ill-sub">pour un FCPR</text>
+        <rect x={192} y={2} width={147} height={306} rx={12} fill="var(--surface-2)" stroke="var(--line)" strokeWidth={2} />
+        <text x={265.5} y={34} textAnchor="middle" className="ill-step">Pendant la vie</text>
+        <text x={265.5} y={54} textAnchor="middle" className="ill-step">du fonds</text>
+        <text x={265.5} y={92} textAnchor="middle" className="ill-in">aucun rachat</text>
+        <text x={265.5} y={110} textAnchor="middle" className="ill-in">possible</text>
+        <text x={265.5} y={138} textAnchor="middle" className="ill-sub">durée : jusqu’à</text>
+        <text x={265.5} y={156} textAnchor="middle" className="ill-sub">10 ans, voire plus</text>
+        <path d="M 265.5 174 V 214 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={265.5} y={244} textAnchor="middle" className="ill-in">À la fin : le fonds</text>
+        <text x={265.5} y={262} textAnchor="middle" className="ill-in">revend ses titres,</text>
+        <text x={265.5} y={280} textAnchor="middle" className="ill-in">puis il est dissous</text>
+        <rect x={1} y={324} width={338} height={56} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={170} y={347} textAnchor="middle" className="ill-in">Risque : perdre une partie</text>
+        <text x={170} y={366} textAnchor="middle" className="ill-in">ou la totalité de la mise</text>
+        <text x={170} y={404} textAnchor="middle" className="ill-sub">Schéma de principe d’après l’AMF</text>
       </svg>
     </figure>
   );
