@@ -375,32 +375,35 @@ export function SchemaEscalier({ steps, targets, title, splitAt = 3 }: { steps: 
   );
 }
 
-/** Schéma « placement et enveloppe » : un même ETF logé dans quatre enveloppes. Aucun chiffre ; reprend la phrase du guide. */
+/** Schéma « placement et enveloppe » : un même ETF logé dans quatre enveloppes. Aucun chiffre ; reprend la phrase du guide.
+ * ViewBox 340 (2026-11-15) : deux colonnes de 158, textes à 12 px et plus à 375 px, cadres écartés des bords (contre ~11 px avec l'ancien viewBox 420). */
 export function SchemaEnveloppe() {
   const envs = ['PEA', 'Compte-titres', 'Assurance-vie', 'PER'];
+  const CW = 158;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 270" role="img" aria-labelledby="ill-env-t ill-env-d" className="ill-svg">
+      <svg viewBox="0 0 340 262" role="img" aria-labelledby="ill-env-t ill-env-d" className="ill-svg">
         <title id="ill-env-t">Un même placement peut être logé dans plusieurs enveloppes</title>
         <desc id="ill-env-d">Un même ETF (le placement) peut être logé dans un PEA, un compte-titres, une assurance-vie ou un PER (les enveloppes). Le placement détermine le risque ; l’enveloppe détermine la fiscalité, la disponibilité et la transmission.</desc>
-        <rect x={110} y={2} width={200} height={40} rx={20} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
-        <text x={210} y={27} textAnchor="middle" className="ill-step">Le placement : un ETF</text>
-        <path d="M 210 42 V 189" fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
+        <rect x={70} y={2} width={200} height={40} rx={20} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
+        <text x={170} y={27} textAnchor="middle" className="ill-step">Le placement : un ETF</text>
+        <path d="M 170 42 V 179" fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
         {envs.map((e, i) => {
-          const x = (i % 2) * 220;
-          const y = 66 + Math.floor(i / 2) * 86;
+          const right = i % 2 === 1;
+          const x = right ? 340 - 1 - CW : 1;
+          const y = 62 + Math.floor(i / 2) * 82;
           return (
             <g key={e}>
-              <path d={`M 210 ${y + 37} H ${i % 2 ? 220 : 200}`} fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
-              <rect x={x} y={y} width={200} height={74} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-              <text x={x + 100} y={y + 25} textAnchor="middle" className="ill-step">{e}</text>
-              <rect x={x + 50} y={y + 36} width={100} height={26} rx={13} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
-              <text x={x + 100} y={y + 54} textAnchor="middle" className="ill-in">le même ETF</text>
+              <path d={`M 170 ${y + 35} H ${right ? x : x + CW}`} fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
+              <rect x={x} y={y} width={CW} height={70} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+              <text x={x + CW / 2} y={y + 25} textAnchor="middle" className="ill-step">{e}</text>
+              <rect x={x + CW / 2 - 50} y={y + 35} width={100} height={24} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
+              <text x={x + CW / 2} y={y + 52} textAnchor="middle" className="ill-in">le même ETF</text>
             </g>
           );
         })}
-        <text x={210} y={246} textAnchor="middle" className="ill-sub">L’enveloppe fixe la fiscalité,</text>
-        <text x={210} y={264} textAnchor="middle" className="ill-sub">la disponibilité et la transmission</text>
+        <text x={170} y={238} textAnchor="middle" className="ill-sub">L’enveloppe fixe la fiscalité,</text>
+        <text x={170} y={256} textAnchor="middle" className="ill-sub">la disponibilité et la transmission</text>
       </svg>
     </figure>
   );
