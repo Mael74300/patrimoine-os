@@ -4,7 +4,7 @@ import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio } f
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
 import { precautionTarget } from './calc/precaution';
-import { rebalanceTakeaway, businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, budgetGapPhrase, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionTargetSub, prepayTakeaway, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { rebalanceTakeaway, businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, budgetGapPhrase, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionPlacementTakeaway, precautionTargetSub, prepayTakeaway, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -120,6 +120,17 @@ describe('phrases « Concrètement »', () => {
     expect(sub).toContain('1000€deréserve(réglagesavancés)');
     expect(3 * 2000 + 1000).toBe(precautionTarget({ monthlyExpenses: 2000, months: 3, extraReserve: 1000 }));
     expect(precautionTargetSub(6, 0)).not.toContain('réserve');
+  });
+  it('épargne de précaution : intérêts d’une année pleine distingués de ceux de la constitution (exemple fictif)', () => {
+    const t = digits(precautionPlacementTakeaway({ yearlyInterest: 119, blendedRate: 0.017, overflow: 0, buildInterest: 118, buildMonths: 18 }));
+    expect(t).toContain('119€paran');
+    expect(t).toContain('1,7%');
+    expect(t).toContain('118€');
+    expect(t).toContain('1anet6mois');
+    expect(t).not.toContain('plafonds');
+    expect(digits(precautionPlacementTakeaway({ yearlyInterest: 200, blendedRate: 0.02, overflow: 5000, buildInterest: null, buildMonths: null }))).toContain('horsles5000€');
+    expect(precautionPlacementTakeaway({ yearlyInterest: 200, blendedRate: 0.02, overflow: 0, buildInterest: null, buildMonths: null })).not.toContain('vus plus haut');
+    expect(precautionPlacementTakeaway({ yearlyInterest: 0, blendedRate: 0, overflow: 0, buildInterest: 10, buildMonths: 3 })).toBe('');
   });
   it('rembourser ou investir : sens de l’écart, intérêts économisés et seuil', () => {
     const base = { balance: 150000, annualRate: 0.035, remainingYears: 15, lump: 20000, annualReturn: 0.05, annualFees: 0.005, taxRate: 0.314 };

@@ -93,6 +93,18 @@ export function precautionTargetSub(months: number, extraReserve: number): strin
   return extraReserve > 0 ? `${base} + ${fmtEur(extraReserve)} de réserve (réglages avancés)` : base;
 }
 
+/**
+ * Épargne de précaution : ce que rapporte la réserve une fois complète et placée sur les livrets (une année pleine),
+ * distingué des intérêts gagnés pendant la constitution (barre « D'où viendra la réserve »), qui ne portent que sur une réserve incomplète.
+ */
+export function precautionPlacementTakeaway(p: { yearlyInterest: number; blendedRate: number; overflow: number; buildInterest: number | null; buildMonths: number | null }): string {
+  if (!(p.yearlyInterest > 0)) return '';
+  const rest = p.overflow > 0 ? ` sur les livrets (hors les ${fmtEur(p.overflow)} placés au-delà des plafonds)` : '';
+  const base = `Une fois complète et placée ainsi, la réserve rapporterait environ ${fmtEur(p.yearlyInterest)} par an${rest}, soit ${fmtPct(p.blendedRate)} en moyenne.`;
+  if (p.buildInterest === null || p.buildMonths === null || !(p.buildInterest > 0)) return base;
+  return `${base} Les ${fmtEur(p.buildInterest)} vus plus haut, eux, sont gagnés pendant les ${fmtMonths(p.buildMonths)} de constitution, quand la réserve n’est pas encore complète.`;
+}
+
 /** Rembourser ou investir : l'option qui laisse le plus à l'horizon, avec le compromis certain / incertain. */
 export function prepayTakeaway(p: { lump: number; advantageInvest: number; interestSaved: number; breakEvenReturn: number | null }): string {
   if (!(p.lump > 0)) return '';

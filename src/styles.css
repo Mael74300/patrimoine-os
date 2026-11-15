@@ -1291,3 +1291,15 @@ ul.points { margin: 0.9rem 0 0.5rem; gap: 8px; }
 @media (max-width: 600px) { .cmp-hyp-set:last-child { border-bottom: 1px solid var(--line); } }
 @media (min-width: 601px) { .cmp-hyp-set { border-bottom: 1px solid var(--line); } }
 @media (min-width: 601px) and (max-width: 900px) { .grid.cols-3.cmp-hyp { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 14px; } }
+
+/* Épargne de précaution : un livret par carte, remplissage par rapport au plafond */
+.env-list { list-style: none; padding: 0; margin: 12px 0 10px; display: grid; gap: 10px; }
+@media (min-width: 900px) { .env-list { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); } }
+.env-item .gauge-scale { margin-top: 0; flex-wrap: wrap; }
+.env-item .gauge-scale span { white-space: nowrap; }
+.env-figs { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 12px; font-size: .95rem; color: var(--ink-2); }
+.env-figs strong, .env-item .gauge-scale strong { color: var(--ink); }
+.env-item { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; display: grid; gap: 6px; }
+.env-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-weight: 600; }
+.env-rate { font-size: .9rem; color: var(--ink-2); font-weight: 600; white-space: nowrap; }
+.env-over { border-style: dashed; background: var(--surface-2); }
