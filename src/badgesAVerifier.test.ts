@@ -96,8 +96,30 @@ describe('badges « à vérifier » des fiches (chantier 12)', () => {
     }
   });
 
-  it('le nombre de rubriques à vérifier ne remonte pas (31 avant le 2026-11-10, 24 puis 17 avant les deux passes du 2026-11-12)', () => {
+  it('les fiches Entrepreneuriat revues le 2026-11-15 (étape 4) sont sourcées sur impots.gouv.fr ou passent en conseil', () => {
+    const cases: [string, 'fees' | 'tax', string[], string][] = [
+      ['creation-entreprise', 'tax', ['micro-entreprise', 'abattement forfaitaire', 'régime réel', 'impôt sur les sociétés'], 'imposition-des-resultats'],
+      ['reprise-entreprise', 'fees', ['droits d’enregistrement', 'parts sociales'], 'cession-de-fonds-de-commerce'],
+      ['activite-numerique', 'tax', ['régime réel', 'impôt sur les sociétés'], 'professions-independantes'],
+    ];
+    for (const [slug, key, values, source] of cases) {
+      const f = investmentBySlug[slug]!;
+      expect(f[key].verified, slug).toBe(true);
+      expect(f[key].asOf, slug).toBe('15 novembre 2026');
+      expect(f.review.verifiedOn, slug).toBe('2026-11-15');
+      for (const v of values) expect(plain(f[key].text), `${slug} : ${v}`).toContain(v);
+      expect(f.sources.some((s) => s.url.includes(source)), `${slug} : source ${source}`).toBe(true);
+    }
+    expect(plain(investmentBySlug['reprise-entreprise']!.review.data.join(' '))).toContain('droit d’enregistrement');
+    // Aucun plafond de micro-entreprise recopié sans vérification complète.
+    expect(investmentBySlug['creation-entreprise']!.tax.text).not.toMatch(/\d/);
+    for (const [slug, key] of [['creation-entreprise', 'fees'], ['reprise-entreprise', 'minCapital'], ['reprise-entreprise', 'tax'], ['activite-numerique', 'minCapital'], ['activite-numerique', 'fees']] as const) {
+      expect(investmentBySlug[slug]![key].advice, `${slug} : ${key} en conseil`).toBe(true);
+    }
+  });
+
+  it('plus aucune rubrique à vérifier (31 avant le 2026-11-10, 8 avant le 2026-11-15)', () => {
     const flagged = investments.flatMap((i) => [i.minCapital, i.fees, i.tax]).filter(needsCheck);
-    expect(flagged.length).toBeLessThanOrEqual(8);
+    expect(flagged).toEqual([]);
   });
 });

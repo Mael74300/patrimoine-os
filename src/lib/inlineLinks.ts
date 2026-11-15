@@ -13,6 +13,7 @@ export const INLINE_LINKS: InlineLink[] = [
   { phrase: 'fiche PEA', to: '/encyclopedie/pea' },
   { phrase: 'fiche Compte-titres', to: '/encyclopedie/compte-titres' },
   { phrase: 'fiche Location nue', to: '/encyclopedie/location-nue' },
+  { phrase: 'fiche Créer son entreprise', to: '/encyclopedie/creation-entreprise' },
   { phrase: 'simulateur de budget', to: '/simulateurs/budget' },
   { phrase: 'simulateur de frais', to: '/simulateurs/frais' },
   { phrase: 'simulateur d’inflation', to: '/simulateurs/inflation' },
