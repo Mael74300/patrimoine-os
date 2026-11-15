@@ -181,7 +181,7 @@ export default function Methodologie() {
         Les informations de référence proviennent en priorité de sources officielles : AMF, Banque de France, ACPR, INSEE, Service-Public.fr,
         impots.gouv.fr et textes publiés au Journal officiel. Chaque fiche conserve ses sources, la date de vérification, la date à laquelle la fiscalité
         était considérée comme valable, les données chiffrées utilisées, les hypothèses et une date de prochaine révision. Chaque fiche affiche sa propre date de
-        vérification (la plus récente : {dateEnClair(derniereVerification())}). À ce jour, {flagged} fiche{flagged > 1 ? 's comportent' : ' comporte'} au moins un élément signalé « à vérifier ».
+        vérification (la plus récente : {dateEnClair(derniereVerification())}). {flagged === 0 ? 'À ce jour, aucune fiche ne comporte d’élément signalé « à vérifier ».' : `À ce jour, ${flagged} fiche${flagged > 1 ? 's comportent' : ' comporte'} au moins un élément signalé « à vérifier ».`}
       </p>
 
       <h2>Contrôles automatiques, décision humaine</h2>
