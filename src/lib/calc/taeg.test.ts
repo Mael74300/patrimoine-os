@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { taeg, taegByFees, taegByInsurance } from './taeg';
+import { taeg, taegBars, taegByFees, taegByInsurance, taegLevels } from './taeg';
 
 const B = { principal: 200000, annualRate: 0.036, years: 20, insuranceRate: 0, fees: 0 };
 
@@ -48,5 +48,39 @@ describe('TAEG', () => {
     expect(f[1].taeg).toBeLessThan(f[2].taeg);
     const a = taegByInsurance({ principal: 200000, annualRate: 0.036, years: 20, fees: 0 }, [0, 0.002, 0.004]);
     expect(a[0].taeg).toBeLessThan(a[2].taeg);
+  });
+});
+
+describe('Barres du TAEG', () => {
+  it('ajoute la valeur saisie aux niveaux, sans doublon, dans l’ordre', () => {
+    expect(taegLevels([0, 1000, 2500, 5000], 2500)).toEqual([0, 1000, 2500, 5000]);
+    expect(taegLevels([0, 1000, 2500, 5000], 1800)).toEqual([0, 1000, 1800, 2500, 5000]);
+    expect(taegLevels([0, 0.001, 0.003, 0.005], 0.003)).toEqual([0, 0.001, 0.003, 0.005]);
+    expect(taegLevels([0, 1000], Number.NaN)).toEqual([0, 1000]);
+    expect(taegLevels([0, 1000], -5)).toEqual([0, 1000]);
+  });
+
+  it('barres sur une échelle commune : nominal puis écart, le plus grand TAEG remplit la piste', () => {
+    const b = taegBars(0.036, [0.04, 0.05], 0.05);
+    expect(b[0].nominal).toBeCloseTo(72, 6);
+    expect(b[0].extra).toBeCloseTo(8, 6);
+    expect(b[1].nominal + b[1].extra).toBeCloseTo(100, 6);
+  });
+
+  it('sans échelle ou avec un TAEG inférieur au nominal : aucune largeur négative', () => {
+    expect(taegBars(0.036, [0.04], 0)).toEqual([{ nominal: 0, extra: 0 }]);
+    const b = taegBars(0.036, [0.03], 0.05);
+    expect(b[0].extra).toBe(0);
+    expect(b[0].nominal).toBeCloseTo(60, 6);
+  });
+
+  it('valeurs par défaut du simulateur (fictives) : barres cohérentes avec les TAEG calculés', () => {
+    const s = { principal: 200000, annualRate: 0.036, years: 20, insuranceRate: 0.003 };
+    const fees = taegByFees(s, taegLevels([0, 1000, 2500, 5000], 2500)).map((d) => d.taeg);
+    const max = Math.max(...fees);
+    const bars = taegBars(0.036, fees, max);
+    bars.forEach((b, i) => expect(b.nominal + b.extra).toBeCloseTo((100 * fees[i]) / max, 6));
+    // Plus de frais, barre plus longue.
+    for (let i = 1; i < bars.length; i++) expect(bars[i].extra).toBeGreaterThan(bars[i - 1].extra);
   });
 });
