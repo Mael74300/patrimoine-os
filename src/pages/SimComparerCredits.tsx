@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { fmtEur, fmtEur2, fmtMonths, fmtNum, fmtPct, fmtPts, inFine, loanDuration, loanDurationBars, renegotiation, type LoanDurationRow, renegotiationBars, taeg, taegByFees, taegByInsurance } from '../lib/finance';
+import { fmtEur, fmtEur2, fmtMonths, fmtNum, fmtPct, fmtPts, inFine, loanDuration, loanDurationBars, renegotiation, type LoanDurationRow, renegotiationBars, taeg, taegBars, taegByFees, taegByInsurance, taegLevels, type TaegBar } from '../lib/finance';
 import { loanDurationTakeaway, taegTakeaway, inFineTakeaway, renegoTakeaway } from '../lib/takeaways';
 import { comparerCreditsFaq } from '../data/simFaq';
 import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
@@ -130,14 +130,66 @@ function Duree() {
 }
 
 /* ---------- TAEG : taux, assurance et frais */
+const FEE_LEVELS = [0, 1000, 2500, 5000];
+const INSURANCE_LEVELS = [0, 0.001, 0.003, 0.005];
+
+/**
+ * Ce qui fait monter le TAEG : pour plusieurs niveaux de frais, puis d’assurance, une barre partant de zéro
+ * (taux nominal, puis écart jusqu’au TAEG), sur une échelle commune aux deux groupes. La ligne de l’offre saisie est signalée.
+ */
+function TaegBarsFigure({ s }: { s: TaegState }) {
+  const fees = taegByFees(s, taegLevels(FEE_LEVELS, s.fees));
+  const ins = taegByInsurance(s, taegLevels(INSURANCE_LEVELS, s.insuranceRate));
+  const max = Math.max(0, ...fees.map((d) => d.taeg), ...ins.map((d) => d.taeg));
+  if (!(max > 0) || !(s.principal > 0) || !(s.years > 0)) return null;
+  const nominal = Math.max(0, s.annualRate);
+  const feeBars = taegBars(nominal, fees.map((d) => d.taeg), max);
+  const insBars = taegBars(nominal, ins.map((d) => d.taeg), max);
+  const row = (key: string, name: string, t: number, bar: TaegBar, mine: boolean) => (
+    <li className={`fb-row tb-row${mine ? ' tb-mine' : ''}`} key={key}>
+      <span className="fb-name tb-name">{name}{mine && <em className="tb-tag">votre offre</em>}</span>
+      <div className="fb-track" aria-hidden="true">
+        <span className="tb-nom" style={{ width: `${bar.nominal}%` }} />
+        {bar.extra > 0 && <span className="tb-extra" style={{ width: `${bar.extra}%` }} />}
+      </div>
+      <span className="tb-value">
+        <strong>{fmtPct(t)}</strong>
+        <span className="sr-only"> de TAEG,</span>
+        <span className="tb-gap"> +{fmtPts(t - nominal)}</span>
+      </span>
+    </li>
+  );
+  return (
+    <>
+      <h2>Ce qui fait monter le TAEG</h2>
+      <figure className="fb tb">
+        <ul className="fb-legend" aria-hidden="true">
+          <li><i className="tb-nom" />Taux nominal ({fmtPct(nominal)})</li>
+          <li><i className="tb-extra" />Écart jusqu’au TAEG</li>
+        </ul>
+        <p className="tb-group">Selon les frais au départ <span>(assurance : {fmtPct(s.insuranceRate)})</span></p>
+        <ul className="fb-list">
+          {fees.map((d, i) => row(`f${d.fees}`, fmtEur(d.fees), d.taeg, feeBars[i], Math.abs(d.fees - s.fees) < 1e-9))}
+        </ul>
+        <p className="tb-group">Selon l’assurance <span>(frais : {fmtEur(Math.min(s.fees, s.principal))})</span></p>
+        <ul className="fb-list">
+          {ins.map((d, i) => row(`a${d.insuranceRate}`, fmtPct(d.insuranceRate), d.taeg, insBars[i], Math.abs(d.insuranceRate - s.insuranceRate) < 1e-9))}
+        </ul>
+        <figcaption className="fb-sub tb-caption">
+          Chaque ligne refait le calcul en ne changeant qu’un élément. Même sans frais ni assurance, le TAEG calculé ici dépasse un peu le taux nominal :
+          il exprime en taux annuel des intérêts comptés chaque mois (<Link to="/methodologie">Méthode</Link>). Montants par défaut fictifs.
+        </figcaption>
+      </figure>
+    </>
+  );
+}
+
 type TaegState = { principal: number; annualRate: number; years: number; insuranceRate: number; fees: number };
 const TAEG: TaegState = { principal: 200000, annualRate: 0.036, years: 20, insuranceRate: 0.003, fees: 2500 };
 
 function Taeg() {
   const [s, setS, up] = usePersistentState<TaegState>('taeg', TAEG);
   const r = taeg(s);
-  const byFees = taegByFees(s, [0, 1000, 2500, 5000]);
-  const byIns = taegByInsurance(s, [0, 0.001, 0.003, 0.005]);
   return (
     <>
       <p className="notice" role="note">
@@ -164,32 +216,7 @@ function Taeg() {
           <Kpi label="Coût total du crédit" value={fmtEur(r.totalCost)} sub={`intérêts ${fmtEur(r.totalInterest)} + assurance ${fmtEur(r.totalInsurance)} + frais ${fmtEur(Math.min(s.fees, s.principal))}`} />
         </div>
         <Takeaway>{taegTakeaway({ principal: s.principal, nominal: s.annualRate, taeg: r.taeg, totalCost: r.totalCost })}</Takeaway>
-        <h2>Effet des frais payés au départ</h2>
-        <div className="table-wrap" tabIndex={0}>
-          <table>
-            <thead><tr><th scope="col">Frais au départ</th><th scope="col" className="r">TAEG</th></tr></thead>
-            <tbody>
-              {byFees.map((d) => (
-                <tr key={d.fees}><th scope="row">{fmtEur(d.fees)}</th><td className="r">{fmtPct(d.taeg)}</td></tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <h2>Effet de l’assurance</h2>
-        <div className="table-wrap" tabIndex={0}>
-          <table>
-            <thead><tr><th scope="col">Assurance (taux annuel)</th><th scope="col" className="r">TAEG</th></tr></thead>
-            <tbody>
-              {byIns.map((d) => (
-                <tr key={d.insuranceRate}><th scope="row">{fmtPct(d.insuranceRate)}</th><td className="r">{fmtPct(d.taeg)}</td></tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className="muted small">
-          Le TAEG est exprimé en taux annuel effectif : il se compare directement d’une offre à l’autre, à durée comparable. Les exemples ci-dessus sont fictifs.
-          Pour juger de l’intérêt de rembourser un crédit plutôt que d’investir, voir <Link to="/simulateurs/rembourser-ou-investir">rembourser ou investir</Link>.
-        </p>
+        <TaegBarsFigure s={s} />
         <SavedSims simKey="taeg" current={s} onLoad={(d) => setS({ ...TAEG, ...d })} />
       </Layout>
     </>

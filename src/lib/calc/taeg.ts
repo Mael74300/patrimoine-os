@@ -79,3 +79,32 @@ export function taegByFees(input: Omit<TaegInput, 'fees'>, feesList: number[]): 
 export function taegByInsurance(input: Omit<TaegInput, 'insuranceRate'>, rates: number[]): { insuranceRate: number; taeg: number }[] {
   return rates.map((insuranceRate) => ({ insuranceRate, taeg: taeg({ ...input, insuranceRate }).taeg }));
 }
+
+/**
+ * Niveaux à comparer : la liste fixe, plus la valeur saisie si elle n'y figure pas (valeur finie et ≥ 0), triés par ordre croissant.
+ * Permet de situer l'offre saisie parmi les exemples.
+ */
+export function taegLevels(list: number[], current: number): number[] {
+  const out = list.filter((v) => Number.isFinite(v) && v >= 0);
+  if (Number.isFinite(current) && current >= 0 && !out.some((v) => Math.abs(v - current) < 1e-9)) out.push(current);
+  return [...new Set(out)].sort((a, b) => a - b);
+}
+
+export type TaegBar = {
+  /** Largeur du taux nominal, en % de l'échelle. */
+  nominal: number;
+  /** Largeur de l'écart TAEG − taux nominal, en % de l'échelle (≥ 0). */
+  extra: number;
+};
+
+/**
+ * Barres partant de zéro : taux nominal puis écart jusqu'au TAEG, sur une échelle commune `max` (le plus grand TAEG affiché),
+ * pour comparer à l'œil l'effet des frais et celui de l'assurance.
+ */
+export function taegBars(nominal: number, taegs: number[], max: number): TaegBar[] {
+  const pct = (v: number) => (max > 0 && Number.isFinite(v) ? Math.min(100, Math.max(0, (100 * v) / max)) : 0);
+  return taegs.map((t) => {
+    const n = pct(Math.min(Math.max(0, nominal), Math.max(0, t)));
+    return { nominal: n, extra: Math.max(0, pct(t) - n) };
+  });
+}
