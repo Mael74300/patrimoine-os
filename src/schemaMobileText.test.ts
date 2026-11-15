@@ -3,7 +3,7 @@ import { createElement } from 'react';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { SchemaAssuranceVie, SchemaDiversificationPrincipe, SchemaDonation, SchemaInterets, SchemaOr, SchemaPtz } from './components/Illustrations';
+import { SchemaDiversificationPrincipe, SchemaDonation, SchemaInterets, SchemaOr, SchemaPtz } from './components/Illustrations';
 
 /**
  * Sur mobile (≤ 480 px), les petits textes des schémas larges (viewBox 420) sont agrandis de 12 à 13,2 unités
@@ -49,18 +49,7 @@ describe('textes des schémas agrandis sur mobile', () => {
     expect(s).toMatch(/>11,5 % du prix de vente de [\d\s ]+€<\/text>/);
   });
 
-  it('assurance-vie : la case du haut contient « sur un contrat d’assurance-vie »', () => {
-    const s = svg(SchemaAssuranceVie);
-    expect(s).toContain('<rect x="90" y="2" width="240"');
-    expect(largeur('sur un contrat d\'assurance-vie', MOBILE_SUB)).toBeLessThan(240 - 8);
-  });
-
-  it('assurance-vie : la dernière ligne des unités de compte tient dans sa case de 204 unités', () => {
-    const s = svg(SchemaAssuranceVie);
-    expect(s).toContain('<rect x="216" y="164" width="204"');
-    expect(s).toContain('>peut rapporter davantage</text>');
-    expect(largeur('peut rapporter davantage', MOBILE_SUB)).toBeLessThan(204 - 16);
-  });
+  // Assurance-vie : schéma redessiné en viewBox 340 le 2026-11-15, contrôlé par schemaAssuranceVieMobile.test.ts.
 
   it('PTZ : « Au plus » et « 25 ans » ne se chevauchent pas', () => {
     const s = svg(SchemaPtz);

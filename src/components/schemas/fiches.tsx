@@ -39,33 +39,40 @@ export function SchemaScpi() {
 }
 
 /** Schéma « Assurance-vie : un contrat, deux types de supports » : principe qualitatif (aucun chiffre), repris de Service-Public (F15274) : garantie du fonds en euros, risque de perte en capital des unités de compte. */
+/* ViewBox 340 (chantier 112, étape 2) : à 375 px, les textes s'affichent presque à leur taille et les deux cadres
+ * gardent leur marge (≈ 11,2 px et cadres collés aux bords avec l'ancien viewBox 420). */
 export function SchemaAssuranceVie() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const L = 1;
+  const R = 175;
+  const BW = 164;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-av-t ill-av-d" className="ill-svg">
+      <svg viewBox="0 0 340 324" role="img" aria-labelledby="ill-av-t ill-av-d" className="ill-svg">
         <title id="ill-av-t">Assurance-vie : un contrat, deux types de supports</title>
         <desc id="ill-av-d">Vous versez de l'argent sur un contrat d'assurance-vie, puis vous choisissez la part placée sur chaque support. Le fonds en euros est garanti par l'assureur, avec un faible rendement. Les unités de compte peuvent rapporter davantage mais comportent un risque de perte en capital.</desc>
-        <rect x={90} y={2} width={240} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={210} y={24} textAnchor="middle" className="ill-step">Vous versez</text>
-        <text x={210} y={43} textAnchor="middle" className="ill-sub">sur un contrat d'assurance-vie</text>
-        <path d="M 210 52 V 84 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={60} y={84} width={300} height={46} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={210} y={104} textAnchor="middle" className="ill-step">Vous choisissez la répartition</text>
-        <text x={210} y={121} textAnchor="middle" className="ill-sub">entre deux types de supports</text>
-        <path d="M 130 130 V 164 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <path d="M 290 130 V 164 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={164} width={204} height={110} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={102} y={190} textAnchor="middle" className="ill-step">Fonds en euros</text>
-        <text x={102} y={214} textAnchor="middle" className="ill-in">Capital garanti</text>
-        <text x={102} y={232} textAnchor="middle" className="ill-in">par l'assureur</text>
-        <text x={102} y={256} textAnchor="middle" className="ill-sub">rendement plus faible</text>
-        <rect x={216} y={164} width={204} height={110} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={318} y={190} textAnchor="middle" className="ill-step">Unités de compte</text>
-        <text x={318} y={214} textAnchor="middle" className="ill-in">Valeur variable selon</text>
-        <text x={318} y={232} textAnchor="middle" className="ill-in">les marchés : perte possible</text>
-        <text x={318} y={256} textAnchor="middle" className="ill-sub">peut rapporter davantage</text>
-        <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
+        <rect x={40} y={2} width={260} height={52} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={24} textAnchor="middle" className="ill-step">Vous versez</text>
+        <text x={170} y={44} textAnchor="middle" className="ill-sub">sur un contrat d'assurance-vie</text>
+        <path d="M 170 54 V 80 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={14} y={80} width={312} height={52} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={170} y={102} textAnchor="middle" className="ill-step">Vous choisissez la répartition</text>
+        <text x={170} y={122} textAnchor="middle" className="ill-sub">entre deux types de supports</text>
+        <path d={`M ${L + BW / 2} 132 V 160 m -7 -8 l 7 8 l 7 -8`} {...arrow} />
+        <path d={`M ${R + BW / 2} 132 V 160 m -7 -8 l 7 8 l 7 -8`} {...arrow} />
+        <rect x={L} y={160} width={BW} height={136} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={L + BW / 2} y={186} textAnchor="middle" className="ill-step">Fonds en euros</text>
+        <text x={L + BW / 2} y={214} textAnchor="middle" className="ill-in">Capital garanti</text>
+        <text x={L + BW / 2} y={232} textAnchor="middle" className="ill-in">par l'assureur</text>
+        <text x={L + BW / 2} y={270} textAnchor="middle" className="ill-sub">rendement plus faible</text>
+        <rect x={R} y={160} width={BW} height={136} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={R + BW / 2} y={186} textAnchor="middle" className="ill-step">Unités de compte</text>
+        <text x={R + BW / 2} y={214} textAnchor="middle" className="ill-in">Valeur variable</text>
+        <text x={R + BW / 2} y={232} textAnchor="middle" className="ill-in">selon les marchés :</text>
+        <text x={R + BW / 2} y={250} textAnchor="middle" className="ill-in">perte possible</text>
+        <text x={R + BW / 2} y={270} textAnchor="middle" className="ill-sub">peut rapporter</text>
+        <text x={R + BW / 2} y={286} textAnchor="middle" className="ill-sub">davantage</text>
+        <text x={170} y={318} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
       </svg>
     </figure>
   );
@@ -778,33 +785,40 @@ export function SchemaCompteATerme() {
 }
 
 /** Fiche Assurance-vie : transmission au décès, repris de impots.gouv.fr (« Je suis bénéficiaire d’une assurance-vie, comment la déclarer ? », consulté le 2026-11-08), contrats souscrits depuis le 13 octobre 1998 : primes versées avant 70 ans, 152 500 € exonérés par bénéficiaire puis 20 % jusqu’à 700 000 € et 31,25 % au-delà ; primes versées après 70 ans, droits de succession après un abattement global de 30 500 €. */
+/* ViewBox 340 (chantier 112, étape 2) : à 375 px, les textes s'affichent presque à leur taille et les deux cadres
+ * gardent leur marge (≈ 11,2 px et cadres collés aux bords avec l'ancien viewBox 420). */
 export function SchemaAssuranceVieDeces() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const L = 1;
+  const R = 175;
+  const BW = 164;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 300" role="img" aria-labelledby="ill-avd-t ill-avd-d" className="ill-svg">
+      <svg viewBox="0 0 340 306" role="img" aria-labelledby="ill-avd-t ill-avd-d" className="ill-svg">
         <title id="ill-avd-t">Assurance-vie : ce qui se passe au décès de l’assuré</title>
         <desc id="ill-avd-d">Au décès de l’assuré, l’assureur verse le capital aux bénéficiaires désignés dans le contrat. Le traitement dépend de l’âge de l’assuré au moment du versement des primes. Primes versées avant 70 ans : 152 500 euros sont exonérés par bénéficiaire, puis 20 pour cent jusqu’à 700 000 euros et 31,25 pour cent au-delà. Primes versées après 70 ans : droits de succession, après un abattement global de 30 500 euros. Règles pour les contrats souscrits depuis le 13 octobre 1998.</desc>
-        <rect x={20} y={2} width={380} height={56} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={210} y={27} textAnchor="middle" className="ill-step">Décès de l’assuré</text>
-        <text x={210} y={46} textAnchor="middle" className="ill-sub">L’assureur verse le capital aux bénéficiaires désignés</text>
-        <path d="M 110 58 V 82 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <path d="M 310 58 V 82 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={82} width={204} height={170} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={102} y={106} textAnchor="middle" className="ill-step">Primes versées</text>
-        <text x={102} y={124} textAnchor="middle" className="ill-step">avant 70 ans</text>
-        <text x={102} y={152} textAnchor="middle" className="ill-sub">Par bénéficiaire :</text>
-        <text x={102} y={174} textAnchor="middle" className="ill-in">152 500 € sans impôt</text>
-        <text x={102} y={196} textAnchor="middle" className="ill-in">puis 20 % jusqu’à 700 000 €</text>
-        <text x={102} y={218} textAnchor="middle" className="ill-in">puis 31,25 % au-delà</text>
-        <rect x={216} y={82} width={204} height={170} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={318} y={106} textAnchor="middle" className="ill-step">Primes versées</text>
-        <text x={318} y={124} textAnchor="middle" className="ill-step">après 70 ans</text>
-        <text x={318} y={152} textAnchor="middle" className="ill-sub">Droits de succession</text>
-        <text x={318} y={174} textAnchor="middle" className="ill-in">après un abattement</text>
-        <text x={318} y={196} textAnchor="middle" className="ill-in">de 30 500 €, global</text>
-        <text x={318} y={218} textAnchor="middle" className="ill-in">pour tous les contrats</text>
-        <text x={210} y={282} textAnchor="middle" className="ill-sub">Contrats souscrits depuis le 13 octobre 1998</text>
+        <rect x={1} y={2} width={338} height={74} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={26} textAnchor="middle" className="ill-step">Décès de l’assuré</text>
+        <text x={170} y={47} textAnchor="middle" className="ill-sub">L’assureur verse le capital</text>
+        <text x={170} y={65} textAnchor="middle" className="ill-sub">aux bénéficiaires désignés</text>
+        <path d={`M ${L + BW / 2} 76 V 100 m -7 -8 l 7 8 l 7 -8`} {...arrow} />
+        <path d={`M ${R + BW / 2} 76 V 100 m -7 -8 l 7 8 l 7 -8`} {...arrow} />
+        <rect x={L} y={100} width={BW} height={170} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={L + BW / 2} y={124} textAnchor="middle" className="ill-step">Primes versées</text>
+        <text x={L + BW / 2} y={142} textAnchor="middle" className="ill-step">avant 70 ans</text>
+        <text x={L + BW / 2} y={170} textAnchor="middle" className="ill-sub">Par bénéficiaire :</text>
+        <text x={L + BW / 2} y={194} textAnchor="middle" className="ill-in">152 500 € sans impôt</text>
+        <text x={L + BW / 2} y={216} textAnchor="middle" className="ill-in">puis 20 % jusqu’à</text>
+        <text x={L + BW / 2} y={234} textAnchor="middle" className="ill-in">700 000 €</text>
+        <text x={L + BW / 2} y={256} textAnchor="middle" className="ill-in">puis 31,25 % au-delà</text>
+        <rect x={R} y={100} width={BW} height={170} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={R + BW / 2} y={124} textAnchor="middle" className="ill-step">Primes versées</text>
+        <text x={R + BW / 2} y={142} textAnchor="middle" className="ill-step">après 70 ans</text>
+        <text x={R + BW / 2} y={170} textAnchor="middle" className="ill-sub">Droits de succession</text>
+        <text x={R + BW / 2} y={194} textAnchor="middle" className="ill-in">après un abattement</text>
+        <text x={R + BW / 2} y={212} textAnchor="middle" className="ill-in">global de 30 500 €</text>
+        <text x={R + BW / 2} y={236} textAnchor="middle" className="ill-in">pour tous les contrats</text>
+        <text x={170} y={296} textAnchor="middle" className="ill-sub">Contrats souscrits depuis le 13 octobre 1998</text>
       </svg>
     </figure>
   );
