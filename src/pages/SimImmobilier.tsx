@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { ADVERSE, adverseScenario, amortize, fmtEur, fmtPct, rentalAnalysis, rentalBalance, rentalProjection, type RentalBalance, type RentalInput, type TaxRegime } from '../lib/finance';
+import { ADVERSE, adverseScenario, amortize, fmtEur, fmtPct, rentalAnalysis, rentalBalance, rentalProjection, rentalTaxDetail, type RentalBalance, type RentalTaxDetail, type RentalInput, type TaxRegime } from '../lib/finance';
 import { rentalCashflowSub, rentalTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, ChoiceField, usePersistentState, JumpToResults } from '../components/ui';
 
@@ -59,6 +59,33 @@ function BalanceGroup({ title, b, scale }: { title: string; b: RentalBalance; sc
   );
 }
 
+/** Détail de l'impôt estimé de l'année 1, ligne par ligne, avec la règle simplifiée du régime choisi. */
+function TaxDetail({ detail, regime }: { detail: RentalTaxDetail; regime: TaxRegime }) {
+  const total = detail.steps[detail.steps.length - 1]?.amount ?? 0;
+  const isMicro = regime === 'micro-foncier' || regime === 'micro-bic';
+  return (
+    <Fold title={total >= 0.5 ? `D’où viennent les ${fmtEur(total)} d’impôt\u00a0?` : 'Pourquoi aucun impôt l’année\u00a01\u00a0?'}>
+      <ol className="calc-steps" aria-label="Calcul de l’impôt estimé, année 1">
+        {detail.steps.map((st, k) => (
+          <li key={k} className={st.total ? 'is-total' : st.op === '=' ? 'is-sub' : undefined}>
+            <span className="cs-op" aria-hidden="true">{st.op}</span>
+            <span className="cs-label">{st.op === '−' && <span className="sr-only">moins </span>}{st.op === '×' && <span className="sr-only">multiplié par </span>}{st.label}</span>
+            <span className="cs-value">{st.rate !== undefined ? fmtPct(st.rate) : fmtEur(st.amount ?? 0)}</span>
+          </li>
+        ))}
+      </ol>
+      <ul className="calc-notes">
+        {isMicro && <li>En régime micro, aucune charge n’est déduite : l’abattement les remplace.{regime === 'micro-foncier' ? ' Il s’applique si vos loyers bruts ne dépassent pas 15\u00a0000\u00a0€ par an.' : ''}</li>}
+        {detail.deficitCarried > 0 && <li>Les charges dépassent les loyers : {fmtEur(detail.deficitCarried)} de déficit, que ce calcul reporte sur les loyers des années suivantes.</li>}
+        {regime === 'reel-foncier' && <li>En location nue, la part d’un déficit qui ne vient pas des intérêts d’emprunt peut aussi réduire votre revenu global, dans une limite fixée par la loi : ce calcul ne le fait pas.</li>}
+        {regime === 'reel-bic' && <li>En location meublée non professionnelle, un déficit ne réduit que vos revenus de location meublée, de l’année et des 10 années suivantes.</li>}
+        {detail.depreciationCarried > 0 && <li>Amortissement non utilisé cette année : {fmtEur(detail.depreciationCarried)}, que ce calcul reporte sur les années suivantes.</li>}
+        <li>Estimation simplifiée. Pour les règles complètes, voir les fiches <Link to="/encyclopedie/location-nue">location nue</Link> et <Link to="/encyclopedie/lmnp">LMNP</Link>.</li>
+      </ul>
+    </Fold>
+  );
+}
+
 export default function SimImmobilier() {
   const [s, setS, up] = usePersistentState<RentalInput>('immobilier', RENTAL_DEFAULTS);
   const r = useMemo(() => rentalAnalysis(s), [s]);
@@ -69,6 +96,7 @@ export default function SimImmobilier() {
   const badProj = useMemo(() => rentalProjection(bad), [bad]);
   const y1 = proj[0];
   const end = proj[proj.length - 1];
+  const taxDetail = y1 ? rentalTaxDetail(s, y1) : null;
   const badEnd = badProj[badProj.length - 1];
   const isMicro = s.regime === 'micro-foncier' || s.regime === 'micro-bic';
   const bal = useMemo(() => rentalBalance(s, proj), [s, proj]);
@@ -152,6 +180,7 @@ export default function SimImmobilier() {
             <Kpi label="Impôt estimé, année 1" value={fmtEur(y1?.tax ?? 0)} sub={s.regime === 'aucune' ? 'non estimé' : `régime : ${REGIMES.find((g) => g.v === s.regime)?.label ?? ''}`} />
             <Kpi label="Solde mensuel après impôt, année 1" value={fmtEur((y1?.cashflowAfterTax ?? 0) / 12)} tone={(y1?.cashflowAfterTax ?? 0) >= 0 ? 'pos' : 'neg'} sub={rentalCashflowSub((y1?.cashflowAfterTax ?? 0) / 12, true)} />
           </div>
+          {taxDetail && y1 && <TaxDetail detail={taxDetail} regime={s.regime} />}
           <Takeaway>{rentalTakeaway({ totalCost: r.totalCost, netYield: r.netYield, monthlyCashflow: r.monthlyCashflow, monthlyCashflowAfterTax: s.regime === 'aucune' || !y1 ? null : y1.cashflowAfterTax / 12, horizon: s.horizon, netEquity: end?.netEquity ?? 0, putIn: bal.putIn })}</Takeaway>
           {s.regime === 'micro-foncier' && r.annualRentCollected > 15000 && (
             <p className="notice small">Avec plus de 15 000 € de revenus fonciers bruts par an, le micro-foncier n'est pas applicable : choisissez le régime réel.</p>
@@ -237,11 +266,6 @@ export default function SimImmobilier() {
             </table>
           </div>
           </Fold>
-          <p className="notice info small" style={{ marginTop: 16 }}>
-            Estimation fiscale simplifiée : impôt = base imposable × (tranche marginale + prélèvements sociaux). Au réel, un déficit est reporté sur les
-            revenus locatifs suivants ; son imputation sur le revenu global n'est pas modélisée. Voir aussi les fiches{' '}
-            <Link to="/encyclopedie/location-nue">location nue</Link> et <Link to="/encyclopedie/lmnp">LMNP</Link>.
-          </p>
           <SavedSims simKey="immobilier" current={s} onLoad={(d) => setS({ ...RENTAL_DEFAULTS, ...d })} />
           <SimFaq slug="immobilier" />
           <Disclaimer />

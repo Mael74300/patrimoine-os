@@ -1,5 +1,6 @@
 import { clamp, num, safeDiv, years as toYears } from './common';
 import { amortize } from './loan';
+import { fmtPct } from './format';
 
 /**
  * Immobilier locatif.
@@ -245,4 +246,56 @@ export function capitalGainsTaxRealEstate(gain: number, heldYears: number) {
   const ir = g * (1 - irAbat) * 0.19;
   const ps = g * (1 - psAbat) * 0.172;
   return { ir, ps, total: ir + ps, irAllowance: irAbat, psAllowance: psAbat };
+}
+
+/** Une ligne du détail de l'impôt estimé : opération, libellé, montant (ou taux). */
+export interface RentalTaxStep {
+  op: '' | '−' | '×' | '=';
+  label: string;
+  /** Montant en euros ; absent pour la ligne du taux. */
+  amount?: number;
+  /** Taux appliqué (ligne « × »). */
+  rate?: number;
+  /** Ligne de résultat mise en avant. */
+  total?: boolean;
+}
+
+export interface RentalTaxDetail {
+  steps: RentalTaxStep[];
+  /** Déficit de l'année reporté sur les années suivantes (régimes réels), 0 sinon. */
+  deficitCarried: number;
+  /** Amortissement non utilisé, reporté (LMNP au réel), 0 sinon. */
+  depreciationCarried: number;
+}
+
+/**
+ * Détail, ligne par ligne, de l'impôt estimé d'une année de la projection (année 1 en pratique :
+ * aucun déficit ni amortissement antérieur n'est repris). Mêmes règles simplifiées que rentalProjection,
+ * dont il réutilise les montants : la dernière ligne égale exactement `year.tax`.
+ * Renvoie null si l'impôt n'est pas estimé.
+ */
+export function rentalTaxDetail(i: RentalInput, year: RentalYear): RentalTaxDetail | null {
+  if (i.regime === 'aucune') return null;
+  const marginal = clamp(i.marginalRate, 0, 0.6);
+  const social = clamp(i.socialRate, 0, 0.3);
+  const steps: RentalTaxStep[] = [{ op: '', label: 'Loyers encaissés dans l’année', amount: year.rents }];
+  let deficitCarried = 0;
+  let depreciationCarried = 0;
+  if (i.regime === 'micro-foncier' || i.regime === 'micro-bic') {
+    const allowance = clamp(i.microAllowance, 0, 1);
+    steps.push({ op: '−', label: `Abattement forfaitaire de ${fmtPct(allowance)}, à la place des charges réelles`, amount: year.rents * allowance });
+  } else {
+    steps.push({ op: '−', label: 'Charges : taxe foncière, copropriété, assurance, entretien, gestion', amount: year.charges });
+    steps.push({ op: '−', label: 'Intérêts et assurance du crédit', amount: year.interest + year.insurance });
+    const base = year.rents - year.charges - year.interest - year.insurance;
+    if (base < 0) deficitCarried = -base;
+    if (i.regime === 'reel-bic') {
+      steps.push({ op: '−', label: 'Amortissement déduit', amount: year.depreciationUsed });
+      depreciationCarried = Math.max(0, Math.max(0, num(i.annualDepreciation)) - year.depreciationUsed);
+    }
+  }
+  steps.push({ op: '=', label: 'Revenu imposable', amount: Math.max(0, year.taxable) });
+  steps.push({ op: '×', label: `Impôt sur le revenu (tranche de ${fmtPct(marginal)}) + prélèvements sociaux (${fmtPct(social)})`, rate: marginal + social });
+  steps.push({ op: '=', label: 'Impôt estimé', amount: year.tax, total: true });
+  return { steps, deficitCarried, depreciationCarried };
 }
