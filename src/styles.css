@@ -142,15 +142,19 @@ fieldset { border: 0; padding: 0; margin: 0 0 8px; }
 legend { padding: 0; font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; }
 /* Champs groupés par trois (une ligne par élément : dette…) : libellés courts, valeur lisible sous le champ. */
 .field-trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 8px; }
+/* Deux champs courts côte à côte dans un formulaire de simulateur (même présentation que .field-trio). */
+.field-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 12px; margin-bottom: 14px; }
 /* Sous-grille : libellés, champs et valeurs lisibles alignés d'une colonne à l'autre, même si un libellé passe sur deux lignes. */
-.field-trio .field { display: grid; grid-row: span 3; grid-template-rows: subgrid; align-items: end; margin-bottom: 0; }
-.field-trio .field-label { display: contents; }
-.field-trio label { grid-row: 1; font-size: 0.82rem; line-height: 1.25; }
-.field-trio .input-unit { grid-row: 2; }
-.field-trio .field-echo { grid-row: 3; align-self: start; font-size: 0.78rem; margin-top: 2px; }
+:is(.field-trio, .field-duo) .field { display: grid; grid-row: span 3; grid-template-rows: subgrid; align-items: end; margin-bottom: 0; }
+:is(.field-trio, .field-duo) .field-label { display: contents; }
+:is(.field-trio, .field-duo) label { grid-row: 1; font-size: 0.82rem; line-height: 1.25; }
+:is(.field-trio, .field-duo) .input-unit { grid-row: 2; }
+:is(.field-trio, .field-duo) .field-echo { grid-row: 3; align-self: start; font-size: 0.78rem; margin-top: 2px; }
 .field-trio .input-unit input { padding: 9px 22px 9px 9px; appearance: textfield; -moz-appearance: textfield; }
 .field-trio .input-unit input::-webkit-inner-spin-button, .field-trio .input-unit input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 .field-trio .input-unit span { right: 8px; }
+.fees-trio { margin-bottom: 14px; }
+.fees-intro { margin: -2px 0 8px; font-size: 0.85rem; color: var(--ink-2); line-height: 1.45; }
 .debt-intro { margin: 0 0 14px; font-size: 0.88rem; color: var(--ink-2); line-height: 1.45; }
 .debt-set { padding: 12px 0 14px; margin: 0; border-top: 1px solid var(--line); }
 .debt-set legend { float: left; width: 100%; margin-bottom: 8px; }
