@@ -7,32 +7,36 @@ import { crowdfundingScenario, microFoncierExample, scpiFeesPayback } from '../.
 import { W } from './outils';
 
 /** Schéma « Comment fonctionne une SCPI » : principe qualitatif (aucun chiffre), repris du texte de la fiche et de La finance pour tous. */
+/* ViewBox 340 (chantier 112, étape 3) : à 375 px, les textes s'affichent presque à leur taille
+ * (≈ 11,2 px et cadres collés aux bords avec l'ancien viewBox 420). Mêmes textes et mêmes règles. */
 export function SchemaScpi() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-scpi-t ill-scpi-d" className="ill-svg">
+      <svg viewBox="0 0 340 334" role="img" aria-labelledby="ill-scpi-t ill-scpi-d" className="ill-svg">
         <title id="ill-scpi-t">Comment fonctionne une SCPI</title>
         <desc id="ill-scpi-d">Les épargnants achètent des parts de la SCPI. La SCPI, gérée par une société de gestion, achète des immeubles et les loue. Les loyers perçus, après déduction des frais, reviennent aux épargnants sous forme de revenus.</desc>
-        <rect x={0} y={2} width={228} height={58} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={114} y={28} textAnchor="middle" className="ill-step">Les épargnants</text>
-        <text x={114} y={48} textAnchor="middle" className="ill-sub">achètent des parts</text>
-        <path d="M 114 60 V 108 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={126} y={90} textAnchor="start" className="ill-in">leur argent</text>
-        <rect x={0} y={108} width={228} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={114} y={134} textAnchor="middle" className="ill-step">La SCPI</text>
-        <text x={114} y={156} textAnchor="middle" className="ill-sub">gérée par une société de gestion</text>
-        <path d="M 114 172 V 220 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={124} y={202} textAnchor="start" className="ill-in">achète et met en location</text>
-        <rect x={0} y={220} width={228} height={58} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={114} y={246} textAnchor="middle" className="ill-step">Des immeubles loués</text>
-        <text x={114} y={266} textAnchor="middle" className="ill-sub">bureaux, commerces…</text>
-        <path d="M 228 249 H 290 V 31 H 236 m 8 -7 l -8 7 l 8 7" {...arrow} />
-        <text x={302} y={118} textAnchor="start" className="ill-in">les loyers,</text>
-        <text x={302} y={136} textAnchor="start" className="ill-in">moins les frais,</text>
-        <text x={302} y={154} textAnchor="start" className="ill-in">reviennent aux</text>
-        <text x={302} y={172} textAnchor="start" className="ill-in">épargnants</text>
-        <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
+        <rect x={1} y={2} width={190} height={58} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={96} y={28} textAnchor="middle" className="ill-step">Les épargnants</text>
+        <text x={96} y={48} textAnchor="middle" className="ill-sub">achètent des parts</text>
+        <path d="M 96 60 V 108 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={106} y={90} textAnchor="start" className="ill-in">leur argent</text>
+        <rect x={1} y={108} width={190} height={76} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={96} y={132} textAnchor="middle" className="ill-step">La SCPI</text>
+        <text x={96} y={154} textAnchor="middle" className="ill-sub">gérée par une</text>
+        <text x={96} y={172} textAnchor="middle" className="ill-sub">société de gestion</text>
+        <path d="M 96 184 V 232 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={106} y={204} textAnchor="start" className="ill-in">achète et met</text>
+        <text x={106} y={221} textAnchor="start" className="ill-in">en location</text>
+        <rect x={1} y={232} width={190} height={58} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={96} y={258} textAnchor="middle" className="ill-step">Des immeubles loués</text>
+        <text x={96} y={278} textAnchor="middle" className="ill-sub">bureaux, commerces…</text>
+        <path d="M 191 261 H 212 V 31 H 199 m 8 -7 l -8 7 l 8 7" {...arrow} />
+        <text x={222} y={122} textAnchor="start" className="ill-in">les loyers,</text>
+        <text x={222} y={140} textAnchor="start" className="ill-in">moins les frais,</text>
+        <text x={222} y={158} textAnchor="start" className="ill-in">reviennent aux</text>
+        <text x={222} y={176} textAnchor="start" className="ill-in">épargnants</text>
+        <text x={170} y={324} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
       </svg>
     </figure>
   );
@@ -257,65 +261,82 @@ export function SchemaPerBilan({ children }: { children: ReactNode }) {
 }
 
 /** Schéma « LMNP : deux façons de calculer le revenu imposable » : principe qualitatif (aucun chiffre), repris de Service-Public.fr (fiche F32744, consultée le 2026-11-05) : régime micro-BIC = recettes diminuées d’un abattement forfaitaire pour frais ; régime réel = déduction des charges réelles, dont l’amortissement du logement et des meubles, à justifier. */
+/* ViewBox 340 (chantier 112, étape 3) : à 375 px, les textes s'affichent presque à leur taille
+ * (≈ 11,2 px et cadres collés aux bords avec l'ancien viewBox 420). Mêmes textes et mêmes règles. */
 export function SchemaLmnp() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const L = 1;
+  const R = 175;
+  const BW = 164;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 300" role="img" aria-labelledby="ill-lmnp-t ill-lmnp-d" className="ill-svg">
+      <svg viewBox="0 0 340 312" role="img" aria-labelledby="ill-lmnp-t ill-lmnp-d" className="ill-svg">
         <title id="ill-lmnp-t">LMNP : deux façons de calculer le revenu imposable</title>
         <desc id="ill-lmnp-d">Dans les deux cas, on part des loyers encaissés. Au régime micro-BIC, on retire un abattement forfaitaire pour frais : aucun justificatif à fournir. Au régime réel, on retire les charges réelles, dont l’amortissement du logement et des meubles : il faut pouvoir les justifier. Ce qui reste est le revenu imposable.</desc>
-        <rect x={0} y={2} width={420} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={210} y={33} textAnchor="middle" className="ill-step">Loyers encaissés dans l’année</text>
-        <path d="M 105 52 V 80 m -7 -8 l 7 8 l 7 -8 M 315 52 V 80 m -7 -8 l 7 8 l 7 -8" fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-        <rect x={0} y={80} width={204} height={130} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={102} y={106} textAnchor="middle" className="ill-step">Micro-BIC</text>
-        <text x={102} y={134} textAnchor="middle" className="ill-in">On retire un</text>
-        <text x={102} y={152} textAnchor="middle" className="ill-in">abattement forfaitaire</text>
-        <text x={102} y={178} textAnchor="middle" className="ill-sub">Simple : pas de</text>
-        <text x={102} y={194} textAnchor="middle" className="ill-sub">frais à justifier</text>
-        <rect x={216} y={80} width={204} height={130} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={318} y={106} textAnchor="middle" className="ill-step">Régime réel</text>
-        <text x={318} y={134} textAnchor="middle" className="ill-in">On retire les charges</text>
-        <text x={318} y={152} textAnchor="middle" className="ill-in">réelles et l’amortissement</text>
-        <text x={318} y={178} textAnchor="middle" className="ill-sub">Du logement et des meubles ;</text>
-        <text x={318} y={194} textAnchor="middle" className="ill-sub">à justifier</text>
-        <path d="M 210 210 V 228 m -7 -8 l 7 8 l 7 -8" fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-        <rect x={0} y={230} width={420} height={36} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={210} y={254} textAnchor="middle" className="ill-step">= revenu imposable (BIC)</text>
-        <text x={210} y={290} textAnchor="middle" className="ill-sub">Schéma de principe d’après Service-Public.fr</text>
+        <rect x={1} y={2} width={338} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={32} textAnchor="middle" className="ill-step">Loyers encaissés dans l’année</text>
+        <path d={`M ${L + BW / 2} 52 V 80 m -7 -8 l 7 8 l 7 -8 M ${R + BW / 2} 52 V 80 m -7 -8 l 7 8 l 7 -8`} {...arrow} />
+        <rect x={L} y={80} width={BW} height={154} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={L + BW / 2} y={106} textAnchor="middle" className="ill-step">Micro-BIC</text>
+        <text x={L + BW / 2} y={134} textAnchor="middle" className="ill-in">On retire un</text>
+        <text x={L + BW / 2} y={152} textAnchor="middle" className="ill-in">abattement</text>
+        <text x={L + BW / 2} y={170} textAnchor="middle" className="ill-in">forfaitaire</text>
+        <text x={L + BW / 2} y={198} textAnchor="middle" className="ill-sub">Simple : pas de</text>
+        <text x={L + BW / 2} y={216} textAnchor="middle" className="ill-sub">frais à justifier</text>
+        <rect x={R} y={80} width={BW} height={154} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={R + BW / 2} y={106} textAnchor="middle" className="ill-step">Régime réel</text>
+        <text x={R + BW / 2} y={134} textAnchor="middle" className="ill-in">On retire les charges</text>
+        <text x={R + BW / 2} y={152} textAnchor="middle" className="ill-in">réelles et</text>
+        <text x={R + BW / 2} y={170} textAnchor="middle" className="ill-in">l’amortissement</text>
+        <text x={R + BW / 2} y={198} textAnchor="middle" className="ill-sub">du logement et des</text>
+        <text x={R + BW / 2} y={216} textAnchor="middle" className="ill-sub">meubles ; à justifier</text>
+        <path d="M 170 234 V 252 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={1} y={254} width={338} height={38} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={170} y={278} textAnchor="middle" className="ill-step">= revenu imposable (BIC)</text>
+        <text x={170} y={308} textAnchor="middle" className="ill-sub">Schéma de principe d’après Service-Public.fr</text>
       </svg>
     </figure>
   );
 }
 
 /** Schéma « Location nue : micro-foncier ou régime réel » : repris de Service-Public.fr (fiche F1991 « Revenus locatifs (location non meublée) », vérifiée le 15 avril 2026, consultée le 2026-11-07) : micro-foncier jusqu’à 15 000 € de revenus fonciers, abattement forfaitaire de 30 %, travaux et charges non déductibles ; régime réel au-delà de 15 000 €, option possible en dessous (irrévocable pendant 3 ans), recettes diminuées des frais et charges réels et justifiés. */
+/* ViewBox 340 (chantier 112, étape 3) : à 375 px, les textes s'affichent presque à leur taille
+ * (≈ 11,2 px et cadres collés aux bords avec l'ancien viewBox 420). Mêmes textes et mêmes règles. */
 export function SchemaLocationNue() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const L = 1;
+  const R = 175;
+  const BW = 164;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 320" role="img" aria-labelledby="ill-ln-t ill-ln-d" className="ill-svg">
+      <svg viewBox="0 0 340 338" role="img" aria-labelledby="ill-ln-t ill-ln-d" className="ill-svg">
         <title id="ill-ln-t">Location nue : micro-foncier ou régime réel</title>
         <desc id="ill-ln-d">On part des loyers encaissés. Jusqu’à 15 000 euros de revenus fonciers bruts par an, le micro-foncier s’applique : un abattement forfaitaire de 30 pour cent est retiré et les travaux et charges ne sont pas déductibles. Au-delà de 15 000 euros, le régime réel s’applique, et on peut aussi le choisir en dessous, pour trois ans minimum : on retire les frais et charges réels et justifiés. Ce qui reste est le revenu foncier imposable.</desc>
-        <rect x={0} y={2} width={420} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={210} y={33} textAnchor="middle" className="ill-step">Loyers encaissés dans l’année</text>
-        <path d="M 105 52 V 80 m -7 -8 l 7 8 l 7 -8 M 315 52 V 80 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={80} width={204} height={150} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={102} y={106} textAnchor="middle" className="ill-step">Micro-foncier</text>
-        <text x={102} y={124} textAnchor="middle" className="ill-sub">jusqu’à 15 000 € par an</text>
-        <text x={102} y={152} textAnchor="middle" className="ill-in">On retire un</text>
-        <text x={102} y={170} textAnchor="middle" className="ill-in">abattement de 30 %</text>
-        <text x={102} y={198} textAnchor="middle" className="ill-sub">Travaux et charges</text>
-        <text x={102} y={214} textAnchor="middle" className="ill-sub">non déductibles en plus</text>
-        <rect x={216} y={80} width={204} height={150} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={318} y={106} textAnchor="middle" className="ill-step">Régime réel</text>
-        <text x={318} y={124} textAnchor="middle" className="ill-sub">au-delà de 15 000 € par an</text>
-        <text x={318} y={152} textAnchor="middle" className="ill-in">On retire les frais</text>
-        <text x={318} y={170} textAnchor="middle" className="ill-in">et charges réels</text>
-        <text x={318} y={198} textAnchor="middle" className="ill-sub">À justifier ; choix possible</text>
-        <text x={318} y={214} textAnchor="middle" className="ill-sub">en dessous, pour 3 ans</text>
-        <path d="M 210 230 V 248 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={250} width={420} height={36} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={210} y={274} textAnchor="middle" className="ill-step">= revenu foncier imposable</text>
-        <text x={210} y={312} textAnchor="middle" className="ill-sub">Schéma de principe d’après Service-Public.fr</text>
+        <rect x={1} y={2} width={338} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={32} textAnchor="middle" className="ill-step">Loyers encaissés dans l’année</text>
+        <path d={`M ${L + BW / 2} 52 V 80 m -7 -8 l 7 8 l 7 -8 M ${R + BW / 2} 52 V 80 m -7 -8 l 7 8 l 7 -8`} {...arrow} />
+        <rect x={L} y={80} width={BW} height={178} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={L + BW / 2} y={106} textAnchor="middle" className="ill-step">Micro-foncier</text>
+        <text x={L + BW / 2} y={126} textAnchor="middle" className="ill-sub">jusqu’à 15 000 €</text>
+        <text x={L + BW / 2} y={143} textAnchor="middle" className="ill-sub">par an</text>
+        <text x={L + BW / 2} y={170} textAnchor="middle" className="ill-in">On retire un</text>
+        <text x={L + BW / 2} y={188} textAnchor="middle" className="ill-in">abattement de 30 %</text>
+        <text x={L + BW / 2} y={216} textAnchor="middle" className="ill-sub">Travaux et charges</text>
+        <text x={L + BW / 2} y={233} textAnchor="middle" className="ill-sub">non déductibles</text>
+        <text x={L + BW / 2} y={250} textAnchor="middle" className="ill-sub">en plus</text>
+        <rect x={R} y={80} width={BW} height={178} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={R + BW / 2} y={106} textAnchor="middle" className="ill-step">Régime réel</text>
+        <text x={R + BW / 2} y={126} textAnchor="middle" className="ill-sub">au-delà de 15 000 €</text>
+        <text x={R + BW / 2} y={143} textAnchor="middle" className="ill-sub">par an</text>
+        <text x={R + BW / 2} y={170} textAnchor="middle" className="ill-in">On retire les frais</text>
+        <text x={R + BW / 2} y={188} textAnchor="middle" className="ill-in">et charges réels</text>
+        <text x={R + BW / 2} y={216} textAnchor="middle" className="ill-sub">À justifier ; choix</text>
+        <text x={R + BW / 2} y={233} textAnchor="middle" className="ill-sub">possible en dessous,</text>
+        <text x={R + BW / 2} y={250} textAnchor="middle" className="ill-sub">pour 3 ans</text>
+        <path d="M 170 258 V 276 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={1} y={278} width={338} height={38} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={170} y={302} textAnchor="middle" className="ill-step">= revenu foncier imposable</text>
+        <text x={170} y={334} textAnchor="middle" className="ill-sub">Schéma de principe d’après Service-Public.fr</text>
       </svg>
     </figure>
   );
@@ -713,26 +734,31 @@ export function SchemaUniteDeCompte() {
 }
 
 /** Fiche Fonds en euros : principe qualitatif (aucun chiffre), repris de Service-Public F15274 (consulté le 2026-11-07) : sommes valorisées en euros, placées par l’assureur sur des actifs peu risqués, valeur des fonds investis garantie par l’assureur, garantie en capital en contrepartie d’un faible rendement, intérêts annuels ajoutés au capital. */
+/* ViewBox 340 (chantier 112, étape 3) : à 375 px, les textes s'affichent presque à leur taille
+ * (≈ 11,2 px et cadres collés aux bords avec l'ancien viewBox 420). Mêmes textes et mêmes règles. */
 export function SchemaFondsEuros() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 300" role="img" aria-labelledby="ill-fe-t ill-fe-d" className="ill-svg">
+      <svg viewBox="0 0 340 336" role="img" aria-labelledby="ill-fe-t ill-fe-d" className="ill-svg">
         <title id="ill-fe-t">Fonds en euros : capital garanti par l’assureur, intérêts ajoutés chaque année</title>
         <desc id="ill-fe-d">Vous versez de l’argent sur un contrat d’assurance-vie en fonds en euros. L’assureur le place sur des actifs peu risqués et garantit la valeur des fonds investis. Chaque année, il verse des intérêts qui s’ajoutent au capital et produisent à leur tour des intérêts. La contrepartie de cette garantie en capital est un faible rendement.</desc>
-        <rect x={0} y={2} width={420} height={50} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={210} y={33} textAnchor="middle" className="ill-step">Vous versez sur un contrat d’assurance-vie</text>
-        <path d="M 210 52 V 78 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={80} width={420} height={104} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={210} y={106} textAnchor="middle" className="ill-step">L’assureur place votre argent</text>
-        <text x={210} y={134} textAnchor="middle" className="ill-in">Sur des actifs peu risqués</text>
-        <text x={210} y={160} textAnchor="middle" className="ill-sub">La valeur des fonds investis est garantie</text>
-        <text x={210} y={176} textAnchor="middle" className="ill-sub">par l’assureur : c’est la garantie en capital</text>
-        <path d="M 210 184 V 206 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={208} width={420} height={50} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={210} y={229} textAnchor="middle" className="ill-step">Chaque année : des intérêts s’ajoutent au capital</text>
-        <text x={210} y={247} textAnchor="middle" className="ill-sub">contrepartie de la garantie : un faible rendement</text>
-        <text x={210} y={290} textAnchor="middle" className="ill-sub">Schéma de principe d’après Service-Public</text>
+        <rect x={40} y={2} width={260} height={52} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={24} textAnchor="middle" className="ill-step">Vous versez</text>
+        <text x={170} y={44} textAnchor="middle" className="ill-sub">sur un contrat d’assurance-vie</text>
+        <path d="M 170 54 V 80 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={1} y={80} width={338} height={104} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={170} y={106} textAnchor="middle" className="ill-step">L’assureur place votre argent</text>
+        <text x={170} y={132} textAnchor="middle" className="ill-in">Sur des actifs peu risqués</text>
+        <text x={170} y={158} textAnchor="middle" className="ill-sub">La valeur des fonds investis est garantie</text>
+        <text x={170} y={175} textAnchor="middle" className="ill-sub">par l’assureur : c’est la garantie en capital</text>
+        <path d="M 170 184 V 208 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={1} y={208} width={338} height={98} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={170} y={232} textAnchor="middle" className="ill-step">Chaque année, des intérêts</text>
+        <text x={170} y={251} textAnchor="middle" className="ill-step">s’ajoutent au capital</text>
+        <text x={170} y={276} textAnchor="middle" className="ill-sub">contrepartie de la garantie :</text>
+        <text x={170} y={293} textAnchor="middle" className="ill-sub">un faible rendement</text>
+        <text x={170} y={330} textAnchor="middle" className="ill-sub">Schéma de principe d’après Service-Public</text>
       </svg>
     </figure>
   );
