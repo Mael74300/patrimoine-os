@@ -10,7 +10,7 @@ import { HeaderArt, type HeaderArtName } from './HeaderArt';
 import { summarizeSeries } from '../lib/chartSummary';
 import { coveragePercent } from '../lib/coverage';
 import { fmtEur } from '../lib/finance';
-import { readingForSimulator } from '../lib/relatedSims';
+import { readingForSimulator, type ReadingLink } from '../lib/relatedSims';
 import { readableNumber } from '../lib/readableNumber';
 import { fmtDate } from '../lib/dates';
 import { sentenceLead } from '../lib/sentenceLead';
@@ -862,8 +862,7 @@ export function FaqSection({ items }: { items: FaqItem[] }) {
 }
 
 /** « Pour aller plus loin » : évite l'impasse en bas d'un simulateur (guide, étape suivante, fiche ; carte entièrement cliquable). */
-export function SimNext({ slug }: { slug: string }) {
-  const links = readingForSimulator(slug);
+export function SimNext({ slug, links = readingForSimulator(slug ?? '') }: { slug?: string; links?: ReadingLink[] }) {
   if (!links.length) return null;
   return (
     <nav className="sim-next" aria-label="Pour aller plus loin">

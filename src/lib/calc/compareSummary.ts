@@ -12,3 +12,17 @@ export function projectionSplit(value: number, contributed: number): ProjectionS
 export function totalContributed(initial: number, monthly: number, years: number): number {
   return Math.max(0, num(initial)) + Math.max(0, num(monthly)) * 12 * Math.max(0, Math.floor(num(years)));
 }
+
+/**
+ * Mois où le total versé dépasse un plafond de versements (capital initial puis un versement par mois).
+ * 0 si le capital initial le dépasse déjà ; null s'il n'est pas dépassé sur la durée (années pleines).
+ */
+export function monthCapExceeded(initial: number, monthly: number, years: number, cap: number): number | null {
+  const start = Math.max(0, num(initial));
+  const perMonth = Math.max(0, num(monthly));
+  const months = Math.max(0, Math.floor(num(years))) * 12;
+  if (start > cap) return 0;
+  if (perMonth <= 0) return null;
+  const month = Math.floor((cap - start) / perMonth) + 1;
+  return month <= months ? month : null;
+}

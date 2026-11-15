@@ -139,13 +139,21 @@ export const nextForSimulator: Record<string, string[]> = {
   'comparer-des-credits': ['g:taux-endettement-capacite-emprunt', 'g:rembourser-credit-par-anticipation-ou-investir', 's:credit', 'f:credit-immobilier'],
 };
 
-/** Pistes de lecture à la fin d'un simulateur (au plus quatre), dans l'ordre choisi ci-dessus. */
-export function readingForSimulator(slug: string): ReadingLink[] {
-  return (nextForSimulator[slug] ?? []).flatMap((ref): ReadingLink[] => {
+/** Pistes de lecture à la fin du comparateur : choisir l'enveloppe, répartir, puis chiffrer frais et durée. */
+export const nextForComparator: string[] = ['g:choisir-son-enveloppe', 'g:diversification-placements', 's:frais', 's:patrimoine'];
+
+/** Transforme des références « g:… », « f:… », « s:… » en liens ; une référence inconnue est ignorée. */
+export function readingFromRefs(refs: string[]): ReadingLink[] {
+  return refs.flatMap((ref): ReadingLink[] => {
     const [k, id] = ref.split(':');
     if (k === 'g' && guideTitles[id]) return [{ to: `/guides/${id}`, title: guideTitles[id], kind: 'Guide' }];
     if (k === 'f' && investmentNames[id]) return [{ to: `/encyclopedie/${id}`, title: investmentNames[id], kind: 'Fiche' }];
     if (k === 's' && bySlug[id]) return [{ to: `/simulateurs/${id}`, title: bySlug[id].title, kind: 'Simulateur' }];
     return [];
   });
+}
+
+/** Pistes de lecture à la fin d'un simulateur (au plus quatre), dans l'ordre choisi ci-dessus. */
+export function readingForSimulator(slug: string): ReadingLink[] {
+  return readingFromRefs(nextForSimulator[slug] ?? []);
 }
