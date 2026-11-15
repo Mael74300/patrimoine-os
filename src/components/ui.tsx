@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import { JargonText } from './Jargon';
 import { linkOnly, type JargonSegment } from '../lib/jargon';
 import { simFaq, type FaqItem } from '../data/simFaq';
@@ -10,6 +10,7 @@ import { HeaderArt, type HeaderArtName } from './HeaderArt';
 import { summarizeSeries } from '../lib/chartSummary';
 import { coveragePercent } from '../lib/coverage';
 import { fmtEur } from '../lib/finance';
+import { nextTabIndex } from '../lib/tabKeys';
 import { readingForSimulator, type ReadingLink } from '../lib/relatedSims';
 import { readableNumber } from '../lib/readableNumber';
 import { fmtDate } from '../lib/dates';
@@ -820,11 +821,46 @@ export function ChoiceField<V extends string | number>({ label, value, options, 
   );
 }
 
-export function Tabs({ items, active, onSelect, label }: { items: string[]; active: number; onSelect: (i: number) => void; label: string }) {
+/**
+ * Rangée d'onglets. Un seul arrêt de tabulation (l'onglet actif) ; les flèches, Début et Fin passent d'un onglet à l'autre.
+ * `grid` : onglets de même largeur dans un cadre (2 colonnes sur mobile, 4 en écran large), pour choisir un calcul en tête de page.
+ * `ids` et `controls` relient chaque onglet à son panneau (`role="tabpanel"`).
+ */
+export function Tabs({ items, active, onSelect, label, ids, controls, grid, style }: {
+  items: string[];
+  active: number;
+  onSelect: (i: number) => void;
+  label: string;
+  ids?: string[];
+  controls?: string;
+  grid?: boolean;
+  style?: CSSProperties;
+}) {
+  const refs = useRef<(HTMLButtonElement | null)[]>([]);
+  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    const next = nextTabIndex(e.key, active, items.length);
+    if (next === null) return;
+    e.preventDefault();
+    onSelect(next);
+    refs.current[next]?.focus();
+  };
   return (
-    <div className="tabs" role="tablist" aria-label={label}>
+    <div className={grid ? 'tabs tabs-grid' : 'tabs'} role="tablist" aria-label={label} onKeyDown={onKeyDown} style={style}>
       {items.map((t, i) => (
-        <button key={i} type="button" role="tab" aria-selected={i === active} className={i === active ? 'on' : ''} onClick={() => onSelect(i)}>{t}</button>
+        <button
+          key={i}
+          ref={(el) => { refs.current[i] = el; }}
+          type="button"
+          role="tab"
+          id={ids?.[i]}
+          aria-selected={i === active}
+          aria-controls={controls}
+          tabIndex={i === active ? 0 : -1}
+          className={i === active ? 'on' : ''}
+          onClick={() => onSelect(i)}
+        >
+          {t}
+        </button>
       ))}
     </div>
   );

@@ -614,6 +614,12 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px 
 .theme-nav a { box-shadow: var(--shadow-sm); transition: background .15s, border-color .15s; }
 .theme-nav a:hover { background: var(--grad-soft); border-color: var(--primary); }
 .tabs button.on { background: var(--grad); border-color: transparent; }
+/* Onglets « choix du calcul » en tête de simulateur : cases de même largeur dans un cadre, 2 colonnes sur mobile, 4 en écran large */
+.tabs-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; padding: 5px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px; }
+.tabs-grid [role="tab"] { display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.25; padding: 8px 10px; border-radius: 11px; text-wrap: balance; transition: background .15s, border-color .15s; }
+.tabs-grid [role="tab"]:not(.on):hover { border-color: var(--primary); background: var(--grad-soft); }
+.tabs-grid [role="tab"]:focus-visible { outline-offset: 1px; border-radius: 11px; }
+@media (min-width: 760px) { .tabs-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .inv-row:hover { background: var(--surface); box-shadow: inset 3px 0 0 var(--accent); }
 .inv-row h3 { color: var(--primary); }
 .inv-group-title span, .theme-nav a span { background: var(--surface-2); color: var(--primary); }

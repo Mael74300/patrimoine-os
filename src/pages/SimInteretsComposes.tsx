@@ -4,7 +4,7 @@ import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simp
 import { compoundScale, compoundSplit, delayRows, dureeRow, placerRow, rendementRow, simpleCompoundRows, stepUpRows, type CompoundBarRow } from '../lib/finance';
 import { delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway } from '../lib/takeaways';
 import { interetsComposesFaq } from '../data/simFaq';
-import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, ChoiceField, Takeaway, usePersistentState, JumpToResults, SimNotice, Fold } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, ChoiceField, Takeaway, usePersistentState, JumpToResults, SimNotice, Tabs, Fold } from '../components/ui';
 
 // Exemples fictifs : toutes les valeurs par défaut sont des hypothèses à remplacer par les vôtres.
 
@@ -465,22 +465,16 @@ export default function SimInteretsComposes() {
         Calcul fondé uniquement sur les hypothèses que vous saisissez, sans chiffre réglementaire ni prévision. Le rendement est supposé constant, avant frais, impôts et inflation, et n’est jamais garanti.
         Voir aussi les <Link to="/simulateurs/patrimoine">projections de patrimoine</Link>, l’<Link to="/simulateurs/inflation">effet de l’inflation</Link> et le <Link to="/simulateurs/objectif-epargne">versement à prévoir pour un objectif</Link>.
       </SimNotice>
-      <div className="tabs" role="tablist" aria-label="Calcul à choisir" style={{ marginTop: 24 }}>
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            role="tab"
-            id={`tab-${t.id}`}
-            aria-selected={tab === t.id}
-            aria-controls="panneau-calcul"
-            className={tab === t.id ? 'on' : ''}
-            onClick={() => choose(t.id)}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
+      <Tabs
+        grid
+        label="Calcul à choisir"
+        style={{ marginTop: 24 }}
+        items={TABS.map((t) => t.label)}
+        ids={TABS.map((t) => `tab-${t.id}`)}
+        controls="panneau-calcul"
+        active={TABS.findIndex((t) => t.id === tab)}
+        onSelect={(i) => choose(TABS[i].id)}
+      />
       <div role="tabpanel" id="panneau-calcul" aria-labelledby={`tab-${tab}`}>
         <Panel />
       </div>

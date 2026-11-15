@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { fmtEur, fmtEur2, fmtMonths, fmtNum, fmtPct, fmtPts, inFine, loanDuration, loanDurationBars, renegotiation, type LoanDurationRow, renegotiationBars, taeg, taegBars, taegByFees, taegByInsurance, taegLevels, type TaegBar } from '../lib/finance';
 import { loanDurationTakeaway, taegTakeaway, inFineTakeaway, renegoTakeaway } from '../lib/takeaways';
 import { comparerCreditsFaq } from '../data/simFaq';
-import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, Tabs } from '../components/ui';
 
 // Exemples fictifs : toutes les valeurs par défaut sont des hypothèses à remplacer par les vôtres.
 
@@ -401,22 +401,16 @@ export default function SimComparerCredits() {
       <PageHead eyebrow="Simulateur" title="Comparer des crédits : durée, TAEG, in fine, renégociation">
         Choisissez la question que vous vous posez : la durée qui convient, le coût réel d’une offre (TAEG), un crédit in fine face à un crédit classique, ou l’intérêt de renégocier un prêt en cours.
       </PageHead>
-      <div className="tabs" role="tablist" aria-label="Question à étudier" style={{ marginTop: 24 }}>
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            type="button"
-            role="tab"
-            id={`tab-${t.id}`}
-            aria-selected={tab === t.id}
-            aria-controls="panneau-calcul"
-            className={tab === t.id ? 'on' : ''}
-            onClick={() => choose(t.id)}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
+      <Tabs
+        grid
+        label="Question à étudier"
+        style={{ marginTop: 24 }}
+        items={TABS.map((t) => t.label)}
+        ids={TABS.map((t) => `tab-${t.id}`)}
+        controls="panneau-calcul"
+        active={TABS.findIndex((t) => t.id === tab)}
+        onSelect={(i) => choose(TABS[i].id)}
+      />
       <div role="tabpanel" id="panneau-calcul" aria-labelledby={`tab-${tab}`}>
         <Panel />
       </div>
