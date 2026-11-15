@@ -19,7 +19,7 @@ describe('schéma « rembourser ou investir »', () => {
     expect(Math.round(p.breakEvenReturn! * 1000) / 10).toBe(5.4);
     expect(p.monthsSaved).toBe(45);
     expect(p.interestSaved).toBe(21250);
-    expect(texte).toContain('Crédit de 150 000 € à 4 % sur 20 ans restants, 20 000 € disponibles, placement à 5 % par an');
+    expect(texte).toContain('crédit de 150 000 € à 4 % sur 20 ans restants, 20 000 € disponibles, placement à 5 % par an');
     expect(texte).toContain('45 mois');
     expect(texte).toContain('21 250 €');
     expect(texte).toContain(`gains imposés à ${PFU_TOTAL_PCT.toLocaleString('fr-FR')} % (prélèvement forfaitaire unique de 2026`);
