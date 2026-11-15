@@ -544,31 +544,40 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Rembourser son crédit par anticipation ou investir ?',
     summary: 'Comment comparer l’économie d’intérêts d’un remboursement anticipé au gain d’un placement, et ce qui fait pencher la balance.',
     readingMinutes: 3,
-    updatedOn: '2026-11-11',
+    updatedOn: '2026-11-15',
     sections: [
       {
         heading: 'Deux options, la même somme',
+        points: true,
         body: [
-          'Rembourser par anticipation réduit le capital restant dû : la mensualité reste identique et le crédit s’éteint plus tôt. Investir garde le crédit tel quel et place la somme. La bonne comparaison se fait au même horizon, la durée restante du crédit, sur le patrimoine net obtenu.',
+          'Rembourser par anticipation : la somme réduit le capital restant dû. La mensualité ne change pas, le crédit s’arrête plus tôt.',
+          'Investir : le crédit continue comme prévu et la somme est placée. Pour comparer, on regarde le patrimoine net (ce que vous possédez, dettes déduites) à la fin prévue du crédit.',
         ],
       },
       {
         heading: 'Un exemple fictif chiffré',
+        points: true,
         body: [
-          'Crédit de 150 000 € à 4 % sur 20 ans restants, 20 000 € disponibles, placement à 5 % par an, frais de 0,2 % par an, gains imposés à 31,4 % (prélèvement forfaitaire unique de 2026). Rembourser fait gagner 45 mois et économise environ 21 250 € d’intérêts ; le patrimoine net final est d’environ 43 850 €, contre 41 250 € en investissant. Dans cet exemple, rembourser l’emporte d’environ 2 600 €.',
-          'Le rendement d’équilibre est ici d’environ 5,4 % brut par an : au-dessus, investir gagne, en dessous, rembourser gagne. Ce rendement n’est pas garanti, alors que l’économie d’intérêts, elle, est certaine.',
+          'Le point de départ : crédit de 150 000 € à 4 % sur 20 ans restants, 20 000 € disponibles, placement à 5 % par an, frais de 0,2 % par an, gains imposés à 31,4 % (prélèvement forfaitaire unique de 2026).',
+          'Si vous remboursez : le crédit s’arrête 45 mois plus tôt, avec environ 21 250 € d’intérêts économisés. La mensualité libérée est placée pendant ces 45 mois : au bout des 20 ans, vous avez environ 43 850 €.',
+          'Si vous investissez : les 20 000 € restent placés 20 ans ; après frais et impôt, vous avez environ 41 250 €. Rembourser l’emporte d’environ 2 600 €.',
+          'Le rendement d’équilibre : environ 5,4 % brut par an. Au-dessus, investir gagne ; en dessous, rembourser gagne. Ce rendement n’est pas garanti, l’économie d’intérêts l’est.',
         ],
       },
       {
         heading: 'Ce qui fait pencher la balance',
+        points: true,
         body: [
-          'Le taux du crédit (plus il est élevé, plus rembourser est intéressant), le rendement net et son incertitude, la fiscalité du placement, les indemnités de remboursement anticipé (plafonnées par la loi pour les crédits immobiliers : consultez votre contrat) et le besoin de liquidité. Les sommes versées sur un crédit ne sont plus disponibles, alors qu’un placement reste mobilisable.',
+          'Le taux du crédit : plus il est élevé, plus rembourser est intéressant.',
+          'Le rendement du placement, après frais et impôt : plus il est élevé, plus investir est intéressant, sans garantie.',
+          'Les indemnités de remboursement anticipé : elles réduisent l’intérêt de rembourser ; la loi les plafonne pour les crédits immobiliers (voir votre contrat).',
+          'Le besoin de liquidité : l’argent versé sur un crédit n’est plus disponible, un placement reste mobilisable.',
         ],
       },
       {
         heading: 'Avant de choisir',
         body: [
-          'Constituez d’abord votre épargne de précaution : rembourser un crédit bloque l’argent. Le simulateur ne tient pas compte de l’assurance emprunteur ni des indemnités ; ajoutez-les à votre propre estimation.',
+          'Constituez d’abord votre épargne de précaution : rembourser un crédit bloque l’argent. Le simulateur ignore l’assurance emprunteur et les indemnités : ajoutez-les à votre estimation.',
         ],
       },
     ],
@@ -577,7 +586,6 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     faq: [
       { q: 'Vaut-il mieux rembourser son crédit ou investir ?', a: 'Cela dépend du taux du crédit et du rendement net espéré du placement. Dans l’exemple fictif de cette page (crédit à 4 %, placement à 5 %), rembourser l’emporte ; le rendement d’équilibre est d’environ 5,4 % brut par an.' },
       { q: 'Que se passe-t-il quand on rembourse par anticipation ?', a: 'Le capital restant dû baisse. Selon l’option choisie avec la banque, la mensualité ou la durée est réduite ; le simulateur suppose que la mensualité est conservée et que le crédit s’éteint plus tôt.' },
-      { q: 'Y a-t-il des frais pour un remboursement anticipé ?', a: 'Des indemnités peuvent s’appliquer, plafonnées par la loi pour les crédits immobiliers. Vérifiez votre contrat : le simulateur les ignore.' },
     ],
     cta: { to: '/simulateurs/rembourser-ou-investir', label: 'Comparer rembourser et investir' },
   },

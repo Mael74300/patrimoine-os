@@ -576,7 +576,7 @@ export function SchemaRembourser() {
     <figure className="illustration">
       <svg viewBox="0 0 340 210" role="img" aria-labelledby="ill-rb-t ill-rb-d" className="ill-svg">
         <title id="ill-rb-t">Rembourser ou investir : le patrimoine net obtenu dans chaque cas</title>
-        <desc id="ill-rb-d">{`Exemple fictif : ${fmtEur(p.lump)} disponibles, crédit de ${fmtEur(p.balance)} à ${pctFr(p.annualRate)} sur ${p.remainingYears} ans restants. Au bout de ${p.remainingYears} ans, patrimoine net d’environ ${fmtEur(p.wealthPrepay)} en remboursant, contre environ ${fmtEur(p.wealthInvest)} en investissant : écart d’environ ${fmtEur(p.gap)}.`}</desc>
+        <desc id="ill-rb-d">{`Exemple fictif : ${fmtEur(p.lump)} disponibles, crédit de ${fmtEur(p.balance)} à ${pctFr(p.annualRate)} sur ${p.remainingYears} ans restants. Au bout de ${p.remainingYears} ans, patrimoine net d’environ ${fmtEur(p.wealthPrepay)} en remboursant, contre environ ${fmtEur(p.wealthInvest)} en investissant : écart d’environ ${fmtEur(p.gap)}. Au-delà d’environ ${p.breakEvenReturn === null ? '—' : pctFr(p.breakEvenReturn)} brut par an de rendement, investir gagnerait.`}</desc>
         <text x={X0} y="16" className="ill-step">{`Patrimoine net après ${p.remainingYears} ans (environ)`}</text>
         {bars.map((b) => (
           <g key={b.title}>
@@ -588,7 +588,7 @@ export function SchemaRembourser() {
         ))}
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : avec {fmtEur(p.lump)} à placer, rembourser l’emporte d’environ {fmtEur(p.gap)}. Si le placement rapportait plus que le rendement d’équilibre (ici environ {p.breakEvenReturn === null ? '—' : pctFr(p.breakEvenReturn)} brut par an), investir gagnerait. Barres proportionnelles aux montants.
+        <strong>Illustration, exemple fictif</strong> : barres proportionnelles aux montants.
       </figcaption>
     </figure>
   );
