@@ -1277,3 +1277,17 @@ ul.points { margin: 0.9rem 0 0.5rem; gap: 8px; }
 .cb-amounts li { display: flex; align-items: baseline; }
 .cb-amounts strong { margin-left: auto; padding-left: 12px; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .cb-amounts i { flex: none; }
+
+/* ---------- Comparateur : réglages par placement avant le graphique (même présentation que les champs groupés des simulateurs). */
+.cmp-hyp-intro { margin: 4px 0 8px; font-size: 0.88rem; font-weight: 600; color: var(--ink-2); }
+.cmp-hyp { gap: 0 24px; margin-bottom: 16px; }
+.cmp-hyp-set { margin: 0; padding: 10px 0 12px; border-top: 1px solid var(--line); }
+.cmp-hyp-set legend { float: left; width: 100%; margin-bottom: 8px; font-size: 0.92rem; }
+.cmp-hyp-set legend + * { clear: both; }
+.cmp-hyp-set .field-duo { margin-bottom: 0; }
+.cmp-hyp-set .pt-dot, .cmp-concretement .pt-dot { border-radius: 50%; }
+.cmp-concretement p { margin: 0 0 6px; }
+.cmp-concretement ul { list-style: none; margin: 0 0 4px; padding: 0; display: grid; gap: 2px; }
+@media (max-width: 600px) { .cmp-hyp-set:last-child { border-bottom: 1px solid var(--line); } }
+@media (min-width: 601px) { .cmp-hyp-set { border-bottom: 1px solid var(--line); } }
+@media (min-width: 601px) and (max-width: 900px) { .grid.cols-3.cmp-hyp { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 14px; } }
