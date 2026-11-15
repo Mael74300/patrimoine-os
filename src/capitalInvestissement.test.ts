@@ -11,9 +11,12 @@ describe('schéma « Capital-investissement »', () => {
   it('reprend les règles de la fiche (pas de rachat, 10 ans voire plus)', () => {
     expect(fiche.howItWorks).toContain('ne peuvent pas être rachetées');
     expect(fiche.howItWorks).toContain('10 ans, voire plus');
-    expect(svg).toContain('aucun rachat possible');
-    expect(svg).toContain('jusqu’à 10 ans,');
-    expect(svg).toContain('50 % minimum pour un FCPR');
+    expect(svg).toContain('>aucun rachat</text>');
+    expect(svg).toContain('>possible</text>');
+    expect(svg).toContain('durée : jusqu’à');
+    expect(svg).toContain('10 ans, voire plus');
+    expect(svg).toContain('>50 % minimum</text>');
+    expect(svg).toContain('>pour un FCPR</text>');
   });
   it('reste léger et accessible', () => {
     expect(svg).toContain('role="img"');
