@@ -65,26 +65,27 @@ export function SchemaInterets() {
   );
 }
 
-/** Schéma « que contient une mensualité » : à total constant, la part d'intérêts diminue et la part de capital augmente. */
+/** Schéma « que contient une mensualité » : à total constant, la part d'intérêts diminue et la part de capital augmente.
+ * ViewBox 340 (2026-11-15) : à 375 px, textes à 12 px et plus (contre ~11 px avec l'ancien viewBox 420). */
 export function SchemaMensualite() {
   const { monthly, slices } = loanSlices();
   const { principal, annualRate, years } = LOAN_EXAMPLE;
   const ratePct = String(Math.round(annualRate * 1000) / 10).replace('.', ',');
-  const BASE_Y = 250;
-  const TOP_Y = 52;
-  const BW = 78;
+  const BASE_Y = 218;
+  const TOP_Y = 40;
+  const BW = 76;
   const scale = (BASE_Y - TOP_Y) / (monthly * 12);
   const alt = slices
     .map((s) => `Année ${s.year} : ${fmtEur(s.interest)} d’intérêts et ${fmtEur(s.principal)} de capital remboursé.`)
     .join(' ');
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 320" role="img" aria-labelledby="ill-loan-t ill-loan-d" className="ill-svg">
+      <svg viewBox="0 0 340 292" role="img" aria-labelledby="ill-loan-t ill-loan-d" className="ill-svg">
         <title id="ill-loan-t">Dans une mensualité fixe, la part d’intérêts diminue et la part de capital augmente</title>
         <desc id="ill-loan-d">{`Crédit de ${fmtEur(principal)} à ${ratePct} % sur ${years} ans, mensualité de ${fmtEur(monthly)} hors assurance, soit ${fmtEur(monthly * 12)} par an. ${alt}`}</desc>
-        <line x1={20} x2={400} y1={BASE_Y} y2={BASE_Y} stroke="var(--line)" strokeWidth={2} />
+        <line x1={6} x2={334} y1={BASE_Y} y2={BASE_Y} stroke="var(--line)" strokeWidth={2} />
         {slices.map((s, i) => {
-          const cx = 80 + i * 130;
+          const cx = 58 + i * 112;
           const x = cx - BW / 2;
           const hi = s.interest * scale;
           const hp = s.principal * scale;
@@ -99,11 +100,11 @@ export function SchemaMensualite() {
             </g>
           );
         })}
-        <g transform="translate(24 288)">
+        <g transform="translate(10 250)">
           <rect width={14} height={14} rx={3} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
           <text x={22} y={12} className="ill-sub" textAnchor="start">Intérêts (le prix du crédit)</text>
-          <rect x={200} width={14} height={14} rx={3} fill="var(--primary)" />
-          <text x={222} y={12} className="ill-sub" textAnchor="start">Capital remboursé</text>
+          <rect y={24} width={14} height={14} rx={3} fill="var(--primary)" />
+          <text x={22} y={36} className="ill-sub" textAnchor="start">Capital remboursé</text>
         </g>
       </svg>
       <figcaption>
@@ -114,13 +115,14 @@ export function SchemaMensualite() {
   );
 }
 
-/** Schéma « inflation » : montant affiché et pouvoir d'achat réel au bout de 10 ans, avec ou sans placement. */
+/** Schéma « inflation » : montant affiché et pouvoir d'achat réel au bout de 10 ans, avec ou sans placement.
+ * ViewBox 340 (2026-11-15) : à 375 px, textes à 12 px et plus (contre ~11,5 px avec l'ancien viewBox 420). */
 export function SchemaInflation() {
   const bars = inflationBars();
   const { initial, inflation, rate, years } = INFLATION_EXAMPLE;
-  const BASE_Y = 250;
-  const TOP_Y = 56;
-  const BW = 74;
+  const BASE_Y = 222;
+  const TOP_Y = 38;
+  const BW = 66;
   const max = Math.max(...bars.map((b) => b.shown));
   const h = (v: number) => (v / max) * (BASE_Y - TOP_Y);
   const alt = bars
@@ -128,32 +130,32 @@ export function SchemaInflation() {
     .join(' ');
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 340" role="img" aria-labelledby="ill-infl-t ill-infl-d" className="ill-svg">
+      <svg viewBox="0 0 340 320" role="img" aria-labelledby="ill-infl-t ill-infl-d" className="ill-svg">
         <title id="ill-infl-t">L’inflation réduit la valeur réelle d’une somme : le montant affiché ne dit pas ce qu’on peut acheter</title>
         <desc id="ill-infl-d">{`${fmtEur(initial)} sur ${years} ans, avec une inflation de ${inflation * 100} % par an. ${alt}`}</desc>
-        <line x1={20} x2={400} y1={BASE_Y} y2={BASE_Y} stroke="var(--line)" strokeWidth={2} />
+        <line x1={6} x2={334} y1={BASE_Y} y2={BASE_Y} stroke="var(--line)" strokeWidth={2} />
+        <line x1={6} x2={334} y1={BASE_Y - h(initial)} y2={BASE_Y - h(initial)} stroke="var(--accent)" strokeWidth={2} strokeDasharray="2 5" />
         {bars.map((b, i) => {
-          const cx = 105 + i * 215;
-          const xs = cx - BW - 6;
-          const xr = cx + 6;
+          const cx = 86 + i * 168;
+          const xs = cx - BW - 5;
+          const xr = cx + 5;
           return (
             <g key={b.label}>
               <rect x={xs} y={BASE_Y - h(b.shown)} width={BW} height={h(b.shown)} rx={4} fill="var(--surface-2)" stroke="var(--ink-2)" strokeWidth={2} strokeDasharray="6 4" />
               <rect x={xr} y={BASE_Y - h(b.real)} width={BW} height={h(b.real)} rx={4} fill="var(--primary)" />
-              <text x={xs + BW / 2} y={BASE_Y - h(b.shown) - 8} textAnchor="middle" className="ill-total">{fmtEur(b.shown)}</text>
-              <text x={xr + BW / 2} y={BASE_Y - h(b.real) - 8} textAnchor="middle" className="ill-total">{fmtEur(b.real)}</text>
+              <text x={xs + BW / 2} y={BASE_Y - h(b.shown) - 8} textAnchor="middle" className="ill-total ill-halo-bg">{fmtEur(b.shown)}</text>
+              <text x={xr + BW / 2} y={BASE_Y - h(b.real) - 8} textAnchor="middle" className="ill-total ill-halo-bg">{fmtEur(b.real)}</text>
               <text x={cx} y={BASE_Y + 20} textAnchor="middle" className="ill-year">{b.label}</text>
             </g>
           );
         })}
-        <line x1={20} x2={400} y1={BASE_Y - h(initial)} y2={BASE_Y - h(initial)} stroke="var(--accent)" strokeWidth={2} strokeDasharray="2 5" />
-        <g transform="translate(24 288)">
+        <g transform="translate(10 252)">
           <rect width={14} height={14} rx={3} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeDasharray="4 3" />
           <text x={22} y={12} className="ill-sub" textAnchor="start">Montant affiché</text>
-          <rect x={170} width={14} height={14} rx={3} fill="var(--primary)" />
-          <text x={192} y={12} className="ill-sub" textAnchor="start">Valeur en euros d’aujourd’hui</text>
-          <line x1={0} x2={14} y1={34} y2={34} stroke="var(--accent)" strokeWidth={2} strokeDasharray="2 3" />
-          <text x={22} y={39} className="ill-sub" textAnchor="start">{`Niveau de départ : ${fmtEur(initial)}`}</text>
+          <rect y={24} width={14} height={14} rx={3} fill="var(--primary)" />
+          <text x={22} y={36} className="ill-sub" textAnchor="start">Valeur en euros d’aujourd’hui</text>
+          <line x1={0} x2={14} y1={55} y2={55} stroke="var(--accent)" strokeWidth={2} strokeDasharray="2 3" />
+          <text x={22} y={60} className="ill-sub" textAnchor="start">{`Niveau de départ : ${fmtEur(initial)}`}</text>
         </g>
       </svg>
       <figcaption>
@@ -621,34 +623,40 @@ export function SchemaRembourser() {
   );
 }
 
-/** Schéma « immobilier ou ETF » : même effort d'épargne, deux chemins, comparaison du patrimoine à la même date. Aucun chiffre ; reprend la méthode décrite dans le guide. */
+/** Schéma « immobilier ou ETF » : même effort d'épargne, deux chemins, comparaison du patrimoine à la même date. Aucun chiffre ; reprend la méthode décrite dans le guide.
+ * ViewBox 340 (2026-11-15) : deux colonnes de 164, textes à 12 px et plus à 375 px (contre ~11 px avec l'ancien viewBox 420). */
 export function SchemaImmoEtf() {
   const cols = [
-    { x: 0, title: 'Scénario 1 : l’immobilier', fill: 'var(--accent-soft)', stroke: 'var(--accent)', lines: ['Apport + crédit : un bien', 'Les loyers paient une partie', 'Vous complétez la mensualité'], end: 'valeur du bien − dette restante' },
-    { x: 214, title: 'Scénario 2 : les ETF', fill: 'var(--surface-2, var(--surface))', stroke: 'var(--primary)', lines: ['L’apport est placé en ETF', 'puis la même somme chaque', 'année : rien à emprunter'], end: 'valeur des ETF' },
+    { x: 0, title: '1. L’immobilier', fill: 'var(--accent-soft)', stroke: 'var(--accent)', lines: [['Apport + crédit :', 'achat d’un bien'], ['Loyers + votre effort', 'paient la mensualité']], end: ['valeur du bien', '− dette restante'] },
+    { x: 176, title: '2. Les ETF', fill: 'var(--surface-2, var(--surface))', stroke: 'var(--primary)', lines: [['L’apport est placé', 'en ETF, puis votre', 'effort chaque année'], ['Rien à emprunter']], end: ['valeur des ETF'] },
   ];
+  const W = 164;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-ie-t ill-ie-d" className="ill-svg">
+      <svg viewBox="0 0 340 364" role="img" aria-labelledby="ill-ie-t ill-ie-d" className="ill-svg">
         <title id="ill-ie-t">Comparer immobilier et ETF à effort égal</title>
         <desc id="ill-ie-d">Même capital de départ et même effort d’épargne chaque année, placés soit dans un bien immobilier financé à crédit, soit en ETF. À la fin du même horizon, on compare le patrimoine obtenu dans chaque cas, après frais, impôts et frais de revente.</desc>
-        <rect x={40} y={2} width={340} height={44} rx={12} fill="var(--surface)" stroke="var(--ink-2)" strokeWidth={2} />
-        <text x={210} y={30} textAnchor="middle" className="ill-step">Même capital de départ, même effort par an</text>
+        <rect x={20} y={2} width={300} height={56} rx={12} fill="var(--surface)" stroke="var(--ink-2)" strokeWidth={2} />
+        <text x={170} y={26} textAnchor="middle" className="ill-step">Même capital de départ,</text>
+        <text x={170} y={46} textAnchor="middle" className="ill-step">même effort par an</text>
         {cols.map((c) => (
           <g key={c.title}>
-            <path d={`M ${c.x + 103} 46 V 70 m -7 -8 l 7 8 l 7 -8`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-            <rect x={c.x} y={76} width={206} height={126} rx={12} fill={c.fill} stroke={c.stroke} strokeWidth={2} />
-            <text x={c.x + 103} y={102} textAnchor="middle" className="ill-step">{c.title}</text>
-            {c.lines.map((l, i) => (
-              <text key={l} x={c.x + 103} y={130 + i * 22} textAnchor="middle" className="ill-in">{l}</text>
+            <path d={`M ${c.x + W / 2} 58 V 80 m -7 -8 l 7 8 l 7 -8`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+            <rect x={c.x + 1} y={86} width={W - 2} height={130} rx={12} fill={c.fill} stroke={c.stroke} strokeWidth={2} />
+            <text x={c.x + W / 2} y={110} textAnchor="middle" className="ill-step">{c.title}</text>
+            {c.lines.flatMap((phrase, p) => phrase.map((l, i) => (
+              <text key={l} x={c.x + W / 2} y={136 + (c.lines.slice(0, p).flat().length + i) * 18 + p * 8} textAnchor="middle" className="ill-in">{l}</text>
+            )))}
+            <path d={`M ${c.x + W / 2} 216 V 238 m -7 -8 l 7 8 l 7 -8`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+            {c.end.map((e, i) => (
+              <text key={e} x={c.x + W / 2} y={256 + i * 17} textAnchor="middle" className="ill-sub">{e}</text>
             ))}
-            <path d={`M ${c.x + 103} 202 V 226 m -7 -8 l 7 8 l 7 -8`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-            <text x={c.x + 103} y={246} textAnchor="middle" className="ill-sub">{c.end}</text>
           </g>
         ))}
-        <rect x={0} y={262} width={420} height={60} rx={12} fill="var(--surface)" stroke="var(--ink-2)" strokeWidth={2} />
-        <text x={210} y={288} textAnchor="middle" className="ill-step">Même horizon : on compare les deux patrimoines</text>
-        <text x={210} y={308} textAnchor="middle" className="ill-sub">après frais, impôts et frais de revente</text>
+        <rect x={1} y={286} width={338} height={76} rx={12} fill="var(--surface)" stroke="var(--ink-2)" strokeWidth={2} />
+        <text x={170} y={310} textAnchor="middle" className="ill-step">Même horizon : on compare</text>
+        <text x={170} y={330} textAnchor="middle" className="ill-step">les deux patrimoines</text>
+        <text x={170} y={350} textAnchor="middle" className="ill-sub">après frais, impôts et frais de revente</text>
       </svg>
       <figcaption>
         <strong>Schéma sans chiffres</strong> : on compare le patrimoine final à effort égal, pas le rendement brut.
