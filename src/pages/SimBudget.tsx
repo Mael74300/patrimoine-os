@@ -90,7 +90,7 @@ export default function SimBudget() {
             />
             <Kpi label={`Effort pour ${fmtPct(s.targetRate)}`} value={fmtEur(c.missing)} sub="à trouver chaque mois" tone={c.missing === 0 ? 'pos' : undefined} />
           </div>
-          <Takeaway>{budgetTakeaway({ income: b.income, shares: b.shares, unallocated: b.unallocated, targetRate: s.targetRate, missing: c.missing })}</Takeaway>
+          <Takeaway>{budgetTakeaway({ income: b.income, shares: b.shares, unallocated: b.unallocated, targetRate: s.targetRate, missing: c.missing, fromUnallocated: c.fromUnallocated, fromWants: c.fromWants, uncovered: c.uncovered })}</Takeaway>
 
           <h2>Votre budget face au repère 50 / 30 / 20</h2>
           <BudgetBars b={b} />
@@ -106,24 +106,15 @@ export default function SimBudget() {
             ))}
           </ul>
 
-          <h2>Atteindre {fmtPct(s.targetRate)} d'épargne</h2>
-          {c.missing === 0 ? (
-            <p>Votre taux d'épargne atteint déjà le taux visé.</p>
-          ) : (
-            <ul>
-              <li>Il manque <strong>{fmtEur(c.missing)}</strong> par mois.</li>
-              <li>Revenu non affecté à réorienter : {fmtEur(c.fromUnallocated)}.</li>
-              <li>À dégager sur les envies : {fmtEur(c.fromWants)}.</li>
-              {c.uncovered > 0 && <li>Reste non couvert : <strong>{fmtEur(c.uncovered)}</strong> — il faudrait agir sur les besoins ou sur le revenu, ou viser un taux plus réaliste.</li>}
-            </ul>
-          )}
           <h2>Que devient cette épargne en {s.projYears}&nbsp;ans ?</h2>
           <p>
             En épargnant {fmtEur(b.saving)} par mois à {fmtPct(s.projReturn)} net par an : <strong>{fmtEur(proj.finalValue)}</strong>, dont {fmtEur(proj.contributed)} versés
-            et {fmtEur(proj.gains)} de gains supposés. Pour affiner (inflation, frais, paliers), utilisez le <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link> ;
-            pour la réserve disponible en priorité, voir l'<Link to="/simulateurs/epargne-de-precaution">épargne de précaution</Link> ; pour l'effet des frais, <Link to="/simulateurs/frais">l'impact des frais</Link>.
+            et {fmtEur(proj.gains)} de gains supposés.
           </p>
-          <p className="muted small">Estimation purement arithmétique à partir de vos saisies ; elle ne tient compte ni des imprévus ni de l'évolution de vos revenus.</p>
+          <p className="muted small">
+            Estimation purement arithmétique à partir de vos saisies ; elle ne tient compte ni des imprévus ni de l'évolution de vos revenus. Pour ajouter
+            l'inflation, les frais ou des versements qui changent, utilisez le <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link>.
+          </p>
           <SavedSims simKey="budget" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <Disclaimer />
           <SimFaq slug="budget" />
