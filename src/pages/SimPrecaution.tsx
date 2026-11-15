@@ -5,7 +5,7 @@ import {
   PROFILE_MONTHS, precautionSegments, type PrecautionInput, type PrecautionSegment, type PrecautionProfile,
 } from '../lib/finance';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
-import { precautionTakeaway, precautionTargetSub } from '../lib/takeaways';
+import { precautionPlacementTakeaway, precautionTakeaway, precautionTargetSub } from '../lib/takeaways';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, ChoiceField, Sources, usePersistentState, JumpToResults, CoverageGauge, SimNotice } from '../components/ui';
 
 type State = PrecautionInput & { profile: PrecautionProfile; lep: 'oui' | 'non'; deadline: number };
@@ -29,8 +29,15 @@ export default function SimPrecaution() {
   const envelopes = useMemo(() => LIVRETS.filter((l) => s.lep === 'oui' || l.id !== 'lep'), [s.lep]);
   const alloc = useMemo(() => allocateEnvelopes(target, envelopes), [target, envelopes]);
   const bar = useMemo(() => precautionSegments(s), [s]);
+  const rows = envelopes.map((l, i) => ({ l, a: alloc.allocations[i] }));
+  const used = rows.filter((r) => r.a.amount > 0);
+  const unused = rows.filter((r) => !(r.a.amount > 0));
   const interestPart = bar?.segments.find((x) => x.key === 'interest');
   const interestShare = bar ? (interestPart ? interestPart.amount / bar.balance : 0) : null;
+  const placement = precautionPlacementTakeaway({
+    yearlyInterest: alloc.interest, blendedRate: alloc.blendedRate, overflow: alloc.overflow,
+    buildInterest: interestPart?.amount ?? null, buildMonths: bar?.month ?? null,
+  });
   const segHint: Record<PrecautionSegment['key'], string> = {
     start: ', déjà de côté',
     deposits: bar ? ` (${fmtEur(s.monthlySaving)} par mois pendant ${fmtMonths(bar.month)})` : '',
@@ -124,52 +131,53 @@ export default function SimPrecaution() {
                 </p>
               )}
               <p className="muted small">
-                Calcul simplifié : un versement chaque fin de mois, des intérêts ajoutés chaque mois. Les livrets, eux, comptent les intérêts
-                par quinzaine et les versent une fois par an, au 31 décembre (<Link to="/guides/livret-a-calcul-interets-quinzaines">comment ça marche</Link>).
+                Calcul simplifié, avec des intérêts ajoutés chaque mois. Les livrets, eux, les comptent par quinzaine
+                et les versent au 31 décembre (<Link to="/guides/livret-a-calcul-interets-quinzaines">comment ça marche</Link>).
               </p>
             </>
           )}
 
-          <h2>Une répartition possible du montant visé</h2>
+          <h2>Où placer le montant visé</h2>
           <p className="muted small">
-            On remplit d’abord le livret qui rapporte le plus, jusqu’à son plafond (la somme maximale que l’on peut y verser), puis le suivant.
-            Chaque personne ne peut avoir qu’un livret de chaque type. Taux {LIVRETS_PERIOD}, vérifiés au {LIVRETS_AS_OF}.
+            On remplit d’abord le livret le mieux rémunéré jusqu’à son plafond (la somme maximale que l’on peut y verser), puis le suivant ;
+            un seul livret de chaque type par personne. Taux {LIVRETS_PERIOD}, vérifiés au {LIVRETS_AS_OF}.
           </p>
-          <div className="table-wrap" tabIndex={0}>
-            <table>
-              <thead><tr><th>Support</th><th className="r">Taux</th><th className="r">Plafond</th><th className="r">Montant</th><th className="r">Intérêts par an</th></tr></thead>
-              <tbody>
-                {envelopes.map((l, i) => (
-                  <tr key={l.id}>
-                    <td><Link to={`/encyclopedie/${l.slug}`}>{l.name}</Link></td>
-                    <td className="r">{fmtPct(l.rate)}</td>
-                    <td className="r">{fmtEur(l.cap)}</td>
-                    <td className="r">{fmtEur(alloc.allocations[i].amount)}</td>
-                    <td className="r">{fmtEur(alloc.allocations[i].interest)}</td>
-                  </tr>
-                ))}
-                {alloc.overflow > 0 && (
-                  <tr>
-                    <td>Au-delà des plafonds</td>
-                    <td className="r">—</td>
-                    <td className="r">—</td>
-                    <td className="r">{fmtEur(alloc.overflow)}</td>
-                    <td className="r">non estimé</td>
-                  </tr>
-                )}
-                <tr style={{ fontWeight: 600 }}>
-                  <td>Total</td>
-                  <td className="r">{fmtPct(alloc.blendedRate)}</td>
-                  <td className="r"></td>
-                  <td className="r">{fmtEur(target)}</td>
-                  <td className="r">{fmtEur(alloc.interest)}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <ul className="env-list">
+            {used.map(({ l, a }) => {
+              const pct = l.cap > 0 ? Math.min(100, (a.amount / l.cap) * 100) : 0;
+              return (
+                <li key={l.id} className="env-item">
+                  <div className="env-head">
+                    <Link to={`/encyclopedie/${l.slug}`}>{l.name}</Link>
+                    <span className="env-rate">≈ {fmtEur(a.interest)} d’intérêts par an</span>
+                  </div>
+                  <div className="gauge-bar" role="img" aria-label={`${fmtEur(a.amount)} placés sur un plafond de ${fmtEur(l.cap)}${pct >= 100 ? ', livret rempli' : ''}`}>
+                    <span className={'gauge-fill' + (pct >= 100 ? ' done' : '')} style={{ width: `${pct}%` }} />
+                  </div>
+                  <div className="gauge-scale" aria-hidden="true">
+                    <span><strong>{fmtEur(a.amount)}</strong> placés à {fmtPct(l.rate)}</span>
+                    <span>{pct >= 100 ? 'plafond atteint' : `plafond ${fmtEur(l.cap)}`}</span>
+                  </div>
+                </li>
+              );
+            })}
+            {alloc.overflow > 0 && (
+              <li className="env-item env-over">
+                <div className="env-head"><span>Au-delà des plafonds</span></div>
+                <div className="env-figs">
+                  <span><strong>{fmtEur(alloc.overflow)}</strong> sur d’autres livrets bancaires, généralement imposables (intérêts non estimés)</span>
+                </div>
+              </li>
+            )}
+          </ul>
+          {unused.length > 0 && (
+            <p className="small muted">
+              Pas utilisé ici : {unused.map(({ l }) => `${l.name} (plafond ${fmtEur(l.cap)})`).join(', ')}. Le montant visé tient {used.length > 1 ? 'dans les livrets' : 'dans le livret'} ci-dessus.
+            </p>
+          )}
+          {placement && <p className="pf-why">{placement}</p>}
           <ul className="table-notes">
             <li><strong>Sans impôt :</strong> les intérêts de ces livrets sont exonérés d’impôt sur le revenu et de prélèvements sociaux.</li>
-            <li><strong>Au-delà des plafonds :</strong> d’autres livrets bancaires existent, généralement imposables.</li>
             <li><strong>Taux révisables :</strong> un taux réglementé peut changer au 1er février et au 1er août.</li>
           </ul>
           <h2>Sources</h2>
