@@ -3,8 +3,11 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { categoryById } from '../data/categories';
 import { investmentBySlug, investments } from '../data/investments';
 import { fmtEur, projectGrowth } from '../lib/finance';
-import { projectionSplit, totalContributed } from '../lib/calc/compareSummary';
-import { CheckedText, Disclaimer, LineChart, MeterRows, MetersLegend, NumberField, PageHead } from '../components/ui';
+import { monthCapExceeded, projectionSplit, totalContributed } from '../lib/calc/compareSummary';
+import { fmtMonths } from '../lib/calc/format';
+import { readingFromRefs, nextForComparator } from '../lib/relatedSims';
+import { REGULATED_RATES, VERSEMENT_CAPS } from '../data/versementCaps';
+import { CheckedText, Disclaimer, LineChart, MeterRows, MetersLegend, NumberField, PageHead, SimNext } from '../components/ui';
 
 /** Critères longs : repliés par ligne sur mobile (le tableau y est empilé), toujours ouverts sans JavaScript et en écran large. */
 export const CMP_FOLDED_ON_MOBILE = ['Capital nécessaire', 'Frais', 'Fiscalité', 'Avantages', 'Inconvénients'];
@@ -35,8 +38,10 @@ export default function Compare() {
   const items = ids.map((id) => investmentBySlug[id]);
   const setIds = (next: string[]) => setParams({ ids: next.join(',') }, { replace: true });
 
+  // Livrets réglementés : leur taux en vigueur, sans frais (données datées de `LIVRETS`) ; ailleurs, hypothèses d'illustration.
   const [hyp, setHyp] = useState<Record<string, { r: number; f: number }>>({
-    'livret-a': { r: 0.017, f: 0 }, 'assurance-vie': { r: 0.035, f: 0.006 }, 'etf-monde': { r: 0.06, f: 0.002 },
+    'livret-a': { r: REGULATED_RATES['livret-a'], f: 0 }, lep: { r: REGULATED_RATES.lep, f: 0 },
+    'assurance-vie': { r: 0.035, f: 0.006 }, 'etf-monde': { r: 0.06, f: 0.002 },
   });
   const [amount, setAmount] = useState(10000);
   const [monthly, setMonthly] = useState(200);
@@ -112,10 +117,10 @@ export default function Compare() {
       {items.length > 0 && <MetersLegend />}
 
       <h2>Projection selon vos hypothèses</h2>
-      <p className="muted">Les rendements pré-remplis sont des hypothèses d'illustration, pas des prévisions. Modifiez-les librement.</p>
-      <div className="grid cols-3 keep-2">
-        <NumberField label="Montant initial" unit="€" value={amount} onChange={setAmount} min={0} step={1000} />
-        <NumberField label="Versement mensuel" unit="€" value={monthly} onChange={setMonthly} min={0} step={50} />
+      <p className="muted">Livrets : taux en vigueur. Autres placements : rendements d'illustration, pas des prévisions. Tout se modifie.</p>
+      <div className="grid cols-3 cmp-base">
+        <NumberField label="Montant initial" shortLabel="Au départ" unit="€" value={amount} onChange={setAmount} min={0} step={1000} />
+        <NumberField label="Versement mensuel" shortLabel="Par mois" unit="€" value={monthly} onChange={setMonthly} min={0} step={50} />
         <NumberField label="Durée" unit="ans" value={years} onChange={setYears} min={1} max={50} />
       </div>
       {items.length > 0 && (
@@ -144,9 +149,9 @@ export default function Compare() {
               series={items.map((i, k) => ({ name: i.name, color: COLORS[k], values: proj[k].map((p) => p.value) }))}
             />
           </div>
-          <div className="small cmp-concretement">
+          <div className="takeaway cmp-concretement">
             <p>
-              <strong>Concrètement :</strong> vous versez <strong className="num">{fmtEur(totalContributed(amount, monthly, years))}</strong> de votre poche en {years}&nbsp;ans.
+              <strong>Concrètement.</strong> Vous versez <strong className="num">{fmtEur(totalContributed(amount, monthly, years))}</strong> de votre poche en {years}&nbsp;ans.
               Le reste de la valeur finale vient du rendement supposé, moins les frais :
             </p>
             <ul>
@@ -154,10 +159,23 @@ export default function Compare() {
                 <li key={i.slug}><i className="pt-dot" style={{ background: COLORS[k] }} aria-hidden="true" />{i.name} : {splitText(proj[k][years].value, amount, monthly, years)}</li>
               ))}
             </ul>
+            <p className="small muted">Projection avant impôts et sans à-coups des marchés : un placement risqué peut finir sous un placement sûr.</p>
           </div>
+          {items.map((i) => {
+            const c = VERSEMENT_CAPS[i.slug];
+            const month = c ? monthCapExceeded(amount, monthly, years, c.cap) : null;
+            if (!c || month === null) return null;
+            return (
+              <p key={i.slug} className="notice cmp-cap">
+                <strong>Plafond dépassé : {i.name}.</strong> On ne peut pas y verser plus de <span className="num">{fmtEur(c.cap)}</span>
+                {c.detail ? ` (${c.detail})` : ''}. Vos versements le dépassent {month === 0 ? 'dès le départ' : month === 1 ? 'dès le premier versement mensuel' : <>au bout de {fmtMonths(month)}</>} :
+                au-delà, sa courbe suppose des versements impossibles.
+              </p>
+            );
+          })}
         </>
       )}
-      <p className="small muted" style={{ marginTop: 12 }}>Projection avant fiscalité et sans volatilité : un placement risqué peut finir sous un placement sûr.</p>
+      <SimNext links={readingFromRefs(nextForComparator)} />
       <Disclaimer />
     </>
   );

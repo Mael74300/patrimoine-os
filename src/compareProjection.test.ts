@@ -40,4 +40,18 @@ describe('Comparateur : projection', () => {
     }
     expect(html).toContain(fmtEur(46000));
   });
+
+  it('signale le plafond du Livret A et du LDDS dépassé par les réglages par défaut (46 000 € versés)', () => {
+    const t = html.replace(/[\u00a0\u202f]/g, ' ');
+    expect(t).toContain('Plafond dépassé : Livret A et LDDS.');
+    expect(t).toContain('34 950 €');
+    expect(t).toContain('22 950 € sur le Livret A et 12 000 € sur le LDDS');
+    expect(t).toContain('au bout de 10 ans et 5 mois');
+    expect(t).not.toContain('Plafond dépassé : Assurance-vie');
+  });
+
+  it('ne s’arrête pas sur une impasse : pistes de lecture en bas de page', () => {
+    expect(html).toContain('Pour aller plus loin');
+    for (const to of ['/guides/choisir-son-enveloppe', '/simulateurs/frais']) expect(html).toContain(`href="${to}"`);
+  });
 });

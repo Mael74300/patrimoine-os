@@ -1353,3 +1353,18 @@ ul.points { margin: 0.9rem 0 0.5rem; gap: 8px; }
 .env-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-weight: 600; }
 .env-rate { font-size: .9rem; color: var(--ink-2); font-weight: 600; white-space: nowrap; }
 .env-over { border-style: dashed; background: var(--surface-2); }
+
+/* Comparateur : « Concrètement » au style commun, avertissement de plafond juste dessous */
+.takeaway.cmp-concretement { font-size: .95rem; }
+.takeaway.cmp-concretement .small { margin: 6px 0 0; }
+.cmp-cap { margin: -4px 0 16px; }
+/* Comparateur : départ, versement et durée sur une seule ligne, même sur mobile (libellés courts) */
+@media (max-width: 600px) {
+  .grid.cols-3.cmp-base { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 8px; }
+  .cmp-base .field-echo { display: none; }
+  /* Mêmes colonnes pour chaque placement : libellés visibles une fois, toujours lus par les lecteurs d'écran. */
+  .cmp-hyp-set + .cmp-hyp-set .field-label span[aria-hidden="true"] { display: none; }
+  .cmp-hyp-set + .cmp-hyp-set .field-label { margin: 0; }
+  .cmp-base .input-unit input { padding-left: 10px; padding-right: 34px; }
+  .cmp-base .input-unit span { right: 8px; }
+}
