@@ -481,6 +481,7 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 .ill-step-link:hover text.ill-step { text-decoration: underline; }
 .ill-step-link:focus { outline: none; }
 .ill-step-link:focus-visible .ill-step-card { stroke: var(--ink); }
+.ill-step-link:hover .ill-step-go circle, .ill-step-link:focus-visible .ill-step-go circle { stroke-width: 2.5px; }
 
 /* Blocs repliés sous 700 px seulement (comparateur, familles de l'accueil) */
 .mob-fold > summary { font-weight: 600; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; background: var(--surface); }
