@@ -2,11 +2,16 @@ import { fmtEur, fmtPct, HCSF } from '../../lib/finance';
 import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, cashflowParts, endettementParts, leviersEndettement, LEVIERS_EXAMPLE, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, petitsVersementsRows, precautionRows, PRECAUTION_EXAMPLE, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../../lib/illustrationData';
 import { W, BASE, TOP, BAR_W, pct, wrapLabel } from './outils';
 
-/** Schéma « boule de neige » : même capital, mêmes 5 %, intérêts simples ou réinvestis. Les hauteurs sont proportionnelles aux montants. */
+/** Schéma « boule de neige » : même capital, mêmes 5 %, intérêts simples ou réinvestis. Les hauteurs sont proportionnelles aux montants.
+ * ViewBox 340 : à 375 px, le dessin s'affiche presque à sa taille (textes ~12 à 14,5 px au lieu de ~11 px avec l'ancien viewBox 420). */
 export function SchemaInterets() {
   const groups = snowballGroups();
   const max = Math.max(...groups.map((g) => g.compound.total));
-  const h = (v: number) => (v / max) * (BASE - TOP);
+  const IW = 340;
+  const IBASE = 248;
+  const ITOP = 40;
+  const IBAR = 70;
+  const h = (v: number) => (v / max) * (IBASE - ITOP);
   const { initial, annualRate } = SNOWBALL_EXAMPLE;
   const alt = groups
     .map((g) => `Après ${g.year} ans : ${fmtEur(g.simple.total)} en intérêts simples, ${fmtEur(g.compound.total)} en intérêts composés.`)
@@ -18,40 +23,42 @@ export function SchemaInterets() {
     const compound = b.kind === 'compound';
     return (
       <g key={b.kind + x}>
-        <rect x={x} y={BASE - hc} width={BAR_W} height={hc} rx={4} fill="var(--primary)" />
-        <rect x={x} y={BASE - hc - hi} width={BAR_W} height={hi} rx={4} fill={compound ? 'var(--accent-soft)' : 'var(--warn-soft)'} stroke={compound ? 'var(--accent)' : 'var(--warn)'} strokeWidth={2} />
-        <text x={x + BAR_W / 2} y={BASE - hc - hi - 8} textAnchor="middle" className="ill-total">{fmtEur(b.total)}</text>
-        <text x={x + BAR_W / 2} y={BASE - hc - hi / 2 + 4} textAnchor="middle" className="ill-in">{`+ ${fmtEur(b.interest)}`}</text>
-        <text x={x + BAR_W / 2} y={BASE + 18} textAnchor="middle" className="ill-sub">{compound ? 'Composés' : 'Simples'}</text>
+        <rect x={x} y={IBASE - hc} width={IBAR} height={hc} rx={4} fill="var(--primary)" />
+        <rect x={x} y={IBASE - hc - hi} width={IBAR} height={hi} rx={4} fill={compound ? 'var(--accent-soft)' : 'var(--warn-soft)'} stroke={compound ? 'var(--accent)' : 'var(--warn)'} strokeWidth={2} />
+        <text x={x + IBAR / 2} y={IBASE - hc - hi - 8} textAnchor="middle" className="ill-total">{fmtEur(b.total)}</text>
+        <text x={x + IBAR / 2} y={IBASE - hc - hi / 2 + 4} textAnchor="middle" className="ill-in">{`+ ${fmtEur(b.interest)}`}</text>
+        <text x={x + IBAR / 2} y={IBASE + 18} textAnchor="middle" className="ill-sub">{compound ? 'Composés' : 'Simples'}</text>
       </g>
     );
   };
 
   return (
     <figure className="illustration">
-      <svg viewBox={`0 0 ${W} 352`} role="img" aria-labelledby="ill-int-t ill-int-d" className="ill-svg">
+      <svg viewBox={`0 0 ${IW} 356`} role="img" aria-labelledby="ill-int-t ill-int-d" className="ill-svg">
         <title id="ill-int-t">Intérêts simples et intérêts composés : l’écart se creuse avec le temps</title>
         <desc id="ill-int-d">{`Capital de ${fmtEur(initial)} placé à ${annualRate * 100} % par an, sans nouveau versement. ${alt}`}</desc>
-        <line x1={20} x2={W - 20} y1={BASE} y2={BASE} stroke="var(--line)" strokeWidth={2} />
+        <line x1={4} x2={IW - 4} y1={IBASE} y2={IBASE} stroke="var(--line)" strokeWidth={2} />
         {groups.map((g, i) => {
-          const cx = 110 + i * 200;
+          const cx = 84 + i * 172;
           return (
             <g key={g.year}>
-              {bar(g.simple, cx - BAR_W - 8)}
-              {bar(g.compound, cx + 8)}
-              <text x={cx} y={BASE + 42} textAnchor="middle" className="ill-year">{`Après ${g.year} ans`}</text>
+              {bar(g.simple, cx - IBAR - 4)}
+              {bar(g.compound, cx + 4)}
+              <text x={cx} y={IBASE + 42} textAnchor="middle" className="ill-year">{`Après ${g.year} ans`}</text>
             </g>
           );
         })}
-        <g transform={`translate(24 ${BASE + 60})`}>
+        <g transform={`translate(10 ${IBASE + 62})`}>
           <rect width={14} height={14} rx={3} fill="var(--primary)" />
           <text x={22} y={12} className="ill-sub" textAnchor="start">{`Capital de départ : ${fmtEur(initial)}`}</text>
-          <rect x={232} width={14} height={14} rx={3} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-          <text x={254} y={12} className="ill-sub" textAnchor="start">Intérêts gagnés</text>
+          <rect y={22} width={14} height={14} rx={3} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+          <text x={22} y={34} className="ill-sub" textAnchor="start">Intérêts simples</text>
+          <rect x={150} y={22} width={14} height={14} rx={3} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+          <text x={172} y={34} className="ill-sub" textAnchor="start">Intérêts composés</text>
         </g>
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : {fmtEur(initial)} placés à {annualRate * 100} % par an, sans nouveau versement, avant frais et impôts.
+        <strong>Illustration, exemple fictif</strong> : {fmtEur(initial)} placés à {annualRate * 100} % par an, sans nouveau versement, avant frais et impôts.
         Avec des intérêts simples, on touche chaque année la même somme. Avec des intérêts composés, les intérêts déjà gagnés rapportent à leur tour : l’écart s’agrandit avec la durée.
       </figcaption>
     </figure>
@@ -157,41 +164,53 @@ export function SchemaInflation() {
   );
 }
 
-/** Schéma « diversification » : même année, 10 000 € tout en actions ou 70 % en actions et 30 % en placement prudent. Les longueurs des barres de perte sont proportionnelles. */
+/** Schéma « diversification » : même année, 10 000 € tout en actions ou 70 % en actions et 30 % en placement prudent. Les longueurs des barres de perte sont proportionnelles.
+ * ViewBox 340 : à 375 px, le dessin s'affiche presque à sa taille (textes ~12 à 14 px au lieu de ~11 px avec l'ancien viewBox 420). */
 export function SchemaDiversification() {
   const rows = diversificationRows();
   const { capital, stocksReturn, safeReturn } = DIVERSIFICATION_EXAMPLE;
-  const X0 = 20;
-  const FULL = 380;
-  const len = (v: number) => (Math.abs(v) / Math.abs(stocksReturn)) * 280;
+  const X0 = 10;
+  const FULL = 320;
+  const len = (v: number) => (Math.abs(v) / Math.abs(stocksReturn)) * 230;
   const titles = rows.map((r) => (r.safe > 0 ? `${fmtEur(capital)} : ${fmtEur(capital * r.stocks)} en actions, ${fmtEur(capital * r.safe)} prudents` : `${fmtEur(capital)} tout en actions`));
   const signed = (v: number) => (v > 0 ? `+${fmtEur(v)}` : fmtEur(v));
   const alt = rows
     .map((r, i) => `${titles[i]} (${fmtEur(capital * r.stocks)} en actions${r.safe > 0 ? `, ${fmtEur(capital * r.safe)} en placement prudent` : ''}) : ${signed(r.totalEur)} sur l’année, soit ${pct(r.result)}.`)
     .join(' ');
+  let y = 0;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 292" role="img" aria-labelledby="ill-div-t ill-div-d" className="ill-svg">
+      <svg viewBox="0 0 340 310" role="img" aria-labelledby="ill-div-t ill-div-d" className="ill-svg">
         <title id="ill-div-t">Répartir son épargne entre plusieurs placements réduit la perte d’une année où les actions baissent</title>
         <desc id="ill-div-d">{`Une année fictive où les actions perdent ${pct(-stocksReturn)} et un placement prudent gagne ${pct(safeReturn)}. ${alt}`}</desc>
         {rows.map((r, i) => {
-          const y = 8 + i * 146;
+          const top = y + 8;
+          const extra = r.safe > 0 ? 18 : 0;
+          y = top + extra + 138;
+          const b = top + extra;
           const ws = r.stocks * FULL;
           return (
             <g key={titles[i]}>
-              <text x={X0} y={y + 14} className="ill-year" textAnchor="start">{titles[i]}</text>
-              <rect x={X0} y={y + 24} width={ws} height={30} rx={4} fill="var(--primary)" />
-              <text x={X0 + 10} y={y + 44} className="ill-on-dark ill-in" textAnchor="start">Actions</text>
+              {r.safe > 0 ? (
+                <>
+                  <text x={X0} y={top + 14} className="ill-year" textAnchor="start">{`${fmtEur(capital)} répartis :`}</text>
+                  <text x={X0} y={top + 32} className="ill-sub" textAnchor="start">{`${fmtEur(capital * r.stocks)} en actions, ${fmtEur(capital * r.safe)} prudents`}</text>
+                </>
+              ) : (
+                <text x={X0} y={top + 14} className="ill-year" textAnchor="start">{titles[i]}</text>
+              )}
+              <rect x={X0} y={b + 24} width={ws} height={30} rx={4} fill="var(--primary)" />
+              <text x={X0 + 10} y={b + 44} className="ill-on-dark ill-in" textAnchor="start">Actions</text>
               {r.safe > 0 && (
                 <>
-                  <rect x={X0 + ws} y={y + 24} width={FULL - ws} height={30} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-                  <text x={X0 + ws + 10} y={y + 44} className="ill-in" textAnchor="start">Prudent</text>
+                  <rect x={X0 + ws} y={b + 24} width={FULL - ws} height={30} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+                  <text x={X0 + ws + 10} y={b + 44} className="ill-in" textAnchor="start">Prudent</text>
                 </>
               )}
-              <text x={X0} y={y + 78} className="ill-sub" textAnchor="start">Résultat de l’année</text>
-              <rect x={X0} y={y + 86} width={len(r.result)} height={22} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-              <text x={X0 + len(r.result) + 10} y={y + 102} className="ill-total" textAnchor="start">{signed(r.totalEur)}</text>
-              <text x={X0} y={y + 126} className="ill-sub" textAnchor="start">
+              <text x={X0} y={b + 78} className="ill-sub" textAnchor="start">Résultat de l’année</text>
+              <rect x={X0} y={b + 86} width={len(r.result)} height={22} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+              <text x={X0 + len(r.result) + 10} y={b + 102} className="ill-total" textAnchor="start">{signed(r.totalEur)}</text>
+              <text x={X0} y={b + 126} className="ill-sub" textAnchor="start">
                 {r.safe > 0
                   ? `Actions ${signed(r.stocksEur)}, prudent ${signed(r.safeEur)} : ${pct(r.result)}`
                   : `Tout suit la baisse des actions : ${pct(r.result)}`}
@@ -207,42 +226,45 @@ export function SchemaDiversification() {
   );
 }
 
-/** Schéma « diversifier : principe » : un seul placement ou plusieurs, quand l’un d’eux baisse. Aucun chiffre ; reprend le texte du guide et La finance pour tous (les placements n’évoluent pas tous de la même manière). */
+/** Schéma « diversifier : principe » : un seul placement ou plusieurs, quand l’un d’eux baisse. Aucun chiffre ; reprend le texte du guide et La finance pour tous (les placements n’évoluent pas tous de la même manière).
+ * ViewBox 340 : deux colonnes, les quatre placements empilés pour que « Fonds en euros » tienne à 375 px. */
 export function SchemaDiversificationPrincipe() {
   const arrow = { fill: 'none', stroke: 'var(--warn)', strokeWidth: 2.5, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   const placements = ['Livret', 'Actions', 'Immobilier', 'Fonds en euros'];
+  const L = 82;
+  const R = 259;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 262" role="img" aria-labelledby="ill-divp-t ill-divp-d" className="ill-svg">
+      <svg viewBox="0 0 340 304" role="img" aria-labelledby="ill-divp-t ill-divp-d" className="ill-svg">
         <title id="ill-divp-t">Un seul placement ou plusieurs : ce qui se passe quand l’un baisse</title>
         <desc id="ill-divp-d">À gauche, toute l’épargne est dans un seul placement : s’il baisse, tout le patrimoine baisse avec lui. À droite, l’épargne est répartie entre un livret, des actions, de l’immobilier et un fonds en euros : si les actions baissent, les autres placements n’évoluent pas de la même manière, donc le patrimoine ne dépend plus d’un seul d’entre eux.</desc>
-        <text x={90} y={18} textAnchor="middle" className="ill-step">Tout au même endroit</text>
-        <rect x={0} y={34} width={180} height={84} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={90} y={82} textAnchor="middle" className="ill-step">Un seul placement</text>
-        <path d="M 90 118 V 152 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={90} y={178} textAnchor="middle" className="ill-in">Il baisse :</text>
-        <text x={90} y={198} textAnchor="middle" className="ill-in">tout votre patrimoine</text>
-        <text x={90} y={218} textAnchor="middle" className="ill-in">baisse avec lui</text>
-        <text x={307} y={18} textAnchor="middle" className="ill-step">Plusieurs placements</text>
+        <text x={L} y={18} textAnchor="middle" className="ill-step">Tout au même endroit</text>
+        <rect x={1} y={32} width={162} height={130} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={L} y={102} textAnchor="middle" className="ill-step">Un seul placement</text>
+        <path d="M 82 162 V 190 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={L} y={212} textAnchor="middle" className="ill-in">Il baisse :</text>
+        <text x={L} y={230} textAnchor="middle" className="ill-in">tout votre patrimoine</text>
+        <text x={L} y={248} textAnchor="middle" className="ill-in">baisse avec lui</text>
+        <text x={R} y={18} textAnchor="middle" className="ill-step">Plusieurs placements</text>
         {placements.map((n, i) => {
-          const x = 194 + (i % 2) * 116;
-          const y = 34 + Math.floor(i / 2) * 46;
+          const y = 32 + i * 34;
           const down = n === 'Actions';
           return (
             <g key={n}>
-              <rect x={x} y={y} width={110} height={38} rx={10} fill={down ? 'var(--warn-soft)' : 'var(--accent-soft)'} stroke={down ? 'var(--warn)' : 'var(--accent)'} strokeWidth={2} />
-              <text x={x + 55} y={y + 24} textAnchor="middle" className="ill-in">{n}</text>
+              <rect x={179} y={y} width={160} height={28} rx={9} fill={down ? 'var(--warn-soft)' : 'var(--accent-soft)'} stroke={down ? 'var(--warn)' : 'var(--accent)'} strokeWidth={2} />
+              <text x={R} y={y + 19} textAnchor="middle" className="ill-in">{down ? 'Actions : en baisse' : n}</text>
             </g>
           );
         })}
-        <path d="M 307 126 V 152 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={307} y={178} textAnchor="middle" className="ill-in">Un placement baisse :</text>
-        <text x={307} y={198} textAnchor="middle" className="ill-in">les autres n’évoluent pas</text>
-        <text x={307} y={218} textAnchor="middle" className="ill-in">de la même manière</text>
-        <text x={210} y={252} textAnchor="middle" className="ill-sub">Mais si tout baisse en même temps, rien n’amortit</text>
+        <path d="M 259 162 V 190 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={R} y={212} textAnchor="middle" className="ill-in">Un placement baisse :</text>
+        <text x={R} y={230} textAnchor="middle" className="ill-in">les autres n’évoluent</text>
+        <text x={R} y={248} textAnchor="middle" className="ill-in">pas de la même manière</text>
+        <text x={170} y={280} textAnchor="middle" className="ill-sub">Mais si tout baisse en même temps,</text>
+        <text x={170} y={297} textAnchor="middle" className="ill-sub">rien n’amortit</text>
       </svg>
       <figcaption>
-        <strong>Illustration, sans chiffre</strong> : le principe de la diversification. Répartir son épargne évite qu’un seul placement décide de tout ; cela ne garantit ni un gain ni l’absence de perte.
+        <strong>Illustration, sans chiffre</strong> : répartir son épargne évite qu’un seul placement décide de tout ; cela ne garantit ni un gain ni l’absence de perte.
       </figcaption>
     </figure>
   );

@@ -3,7 +3,7 @@ import { createElement } from 'react';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { SchemaDiversificationPrincipe, SchemaDonation, SchemaInterets, SchemaOr, SchemaPtz } from './components/Illustrations';
+import { SchemaDonation, SchemaOr, SchemaPtz } from './components/Illustrations';
 
 /**
  * Sur mobile (≤ 480 px), les petits textes des schémas larges (viewBox 420) sont agrandis de 12 à 13,2 unités
@@ -23,24 +23,8 @@ describe('textes des schémas agrandis sur mobile', () => {
     expect(css).toContain(`.ill-svg[viewBox^="0 0 420 "] .ill-sub { font-size: ${MOBILE_SUB}px; }`);
   });
 
-  it('diversification : « Fonds en euros » tient dans sa case', () => {
-    const s = svg(SchemaDiversificationPrincipe);
-    const cases = [...s.matchAll(/<rect x="(\d+)" y="\d+" width="(\d+)" height="38"/g)].map((m) => [Number(m[1]), Number(m[2])]);
-    expect(cases).toHaveLength(4);
-    for (const [x, w] of cases) {
-      expect(w).toBeGreaterThanOrEqual(110);
-      expect(x + w).toBeLessThanOrEqual(420);
-    }
-    expect(largeur('Fonds en euros', MOBILE_IN)).toBeLessThan(110 - 8);
-  });
-
-  it('intérêts composés : barres assez larges pour « + 16 533 € » et dans le cadre', () => {
-    const s = svg(SchemaInterets);
-    const barres = [...s.matchAll(/<rect x="([\d.]+)" y="[\d.]+" width="(\d+)"/g)].filter((m) => m[2] === '84');
-    expect(barres.length).toBeGreaterThanOrEqual(8);
-    for (const m of barres) expect(Number(m[1]) + 84).toBeLessThanOrEqual(420);
-    expect(s).toMatch(/\+ 16[\s\u202f\u00a0]533/);
-  });
+  // Diversification (principe et exemple) et intérêts composés : schémas redessinés en viewBox 340 le 2026-11-15,
+  // contrôlés par schemaGuidesMobile.test.ts.
 
   it('or : la phrase du bas est coupée en deux lignes, dans le cadre', () => {
     const s = svg(SchemaOr);
