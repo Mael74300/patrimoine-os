@@ -27,13 +27,16 @@ describe('schéma en escalier du guide « Par où commencer »', () => {
       expect(svg).toContain(`aria-label="Étape ${i + 1} : ${steps[i].replace('’', '’')}"`);
     });
     expect((svg.match(/<a /g) ?? []).length).toBe(steps.length);
+    // une flèche « aller plus bas » par case, décorative ; plus de chevron « ⌄ » qui évoquait un bloc dépliable
+    expect((svg.match(/class="ill-step-go" aria-hidden="true"/g) ?? []).length).toBe(steps.length);
+    expect(svg).not.toMatch(/l 5 5 l 5 -5/);
   });
 
   it('les libellés coupés tiennent dans leur case de 298 unités', () => {
     for (const s of guideBySlug['par-ou-commencer'].sections) {
       const lines = wrapLabel(s.heading, ESCALIER_MAX_CHARS);
       expect(lines.join(' ')).toBe(s.heading);
-      // 14 unités de marge à gauche, 36 à droite (chevron), 0,52 em par caractère à 14,5 unités
+      // 14 unités de marge à gauche, 36 à droite (flèche), 0,52 em par caractère à 14,5 unités
       for (const l of lines) expect(l.length * 0.52 * 14.5).toBeLessThan(298 - 14 - 36);
     }
   });

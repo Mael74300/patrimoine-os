@@ -313,7 +313,7 @@ export const ESCALIER_MAX_CHARS = 32;
 
 /**
  * Schéma « parcours » du guide « Par où commencer » : les étapes dans l'ordre, reliées par un fil qui descend vers le long terme,
- * en deux temps (bases solides, puis faire fructifier). Chaque case est un lien vers la rubrique du guide : sur mobile,
+ * en deux temps (bases solides, puis faire fructifier). Chaque case est un lien vers la rubrique du guide, signalé par une flèche vers le bas (pas un chevron, qui ferait croire à un bloc dépliable) : sur mobile,
  * où le sommaire latéral n'est pas affiché, le schéma sert de sommaire. Aucun chiffre ; libellés = titres des rubriques.
  */
 export function SchemaEscalier({ steps, targets, title, splitAt = 3 }: { steps: string[]; targets?: string[]; title: string; splitAt?: number }) {
@@ -355,7 +355,12 @@ export function SchemaEscalier({ steps, targets, title, splitAt = 3 }: { steps: 
               {lines.map((l, k) => (
                 <text key={l} x={CARD_X + 14} y={cy + 5 + (k - (lines.length - 1) / 2) * LINE} className="ill-step">{l}</text>
               ))}
-              {targets && <path d={`M ${CARD_X + CARD_W - 22} ${cy - 3} l 5 5 l 5 -5`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />}
+              {targets && (
+                <g className="ill-step-go" aria-hidden="true">
+                  <circle cx={CARD_X + CARD_W - 20} cy={cy} r={11} fill="var(--surface)" stroke={grow ? 'var(--accent)' : 'var(--primary)'} strokeWidth={1.5} />
+                  <path d={`M ${CARD_X + CARD_W - 20} ${cy - 5} V ${cy + 5} m -4 -4 l 4 4 l 4 -4`} fill="none" stroke={grow ? 'var(--accent)' : 'var(--primary)'} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                </g>
+              )}
             </>
           );
           return targets?.[i]
@@ -363,7 +368,7 @@ export function SchemaEscalier({ steps, targets, title, splitAt = 3 }: { steps: 
             : <g key={s}>{body}</g>;
         })}
       </svg>
-      {targets && <figcaption>Du plus urgent au plus long terme : choisissez une étape pour lire son explication.</figcaption>}
+      {targets && <figcaption>Du plus urgent au plus long terme. Chaque case mène à son explication, plus bas sur la page.</figcaption>}
     </figure>
   );
 }
