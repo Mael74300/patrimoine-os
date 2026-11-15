@@ -3,10 +3,10 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { categoryById } from '../data/categories';
 import { investmentBySlug, investments } from '../data/investments';
 import { fmtEur, projectGrowth } from '../lib/finance';
-import { monthCapExceeded, projectionSplit, totalContributed } from '../lib/calc/compareSummary';
+import { durationExceeded, monthCapExceeded, projectionSplit, totalContributed } from '../lib/calc/compareSummary';
 import { fmtMonths } from '../lib/calc/format';
 import { readingFromRefs, nextForComparator } from '../lib/relatedSims';
-import { REGULATED_RATES, VERSEMENT_CAPS } from '../data/versementCaps';
+import { DURATION_LIMITS, REGULATED_RATES, VERSEMENT_CAPS } from '../data/versementCaps';
 import { CheckedText, Disclaimer, LineChart, MeterRows, MetersLegend, NumberField, PageHead, SimNext } from '../components/ui';
 
 /** Critères longs : repliés par ligne sur mobile (le tableau y est empilé), toujours ouverts sans JavaScript et en écran large. */
@@ -38,9 +38,9 @@ export default function Compare() {
   const items = ids.map((id) => investmentBySlug[id]);
   const setIds = (next: string[]) => setParams({ ids: next.join(',') }, { replace: true });
 
-  // Livrets réglementés : leur taux en vigueur, sans frais (données datées de `LIVRETS`) ; ailleurs, hypothèses d'illustration.
+  // Livrets réglementés et PEL ouvert en 2026 : leur taux en vigueur, sans frais supposés (données datées de `LIVRETS`) ; ailleurs, hypothèses d'illustration.
   const [hyp, setHyp] = useState<Record<string, { r: number; f: number }>>({
-    'livret-a': { r: REGULATED_RATES['livret-a'], f: 0 }, lep: { r: REGULATED_RATES.lep, f: 0 },
+    'livret-a': { r: REGULATED_RATES['livret-a'], f: 0 }, lep: { r: REGULATED_RATES.lep, f: 0 }, pel: { r: REGULATED_RATES.pel, f: 0 },
     'assurance-vie': { r: 0.035, f: 0.006 }, 'etf-monde': { r: 0.06, f: 0.002 },
   });
   const [amount, setAmount] = useState(10000);
@@ -117,7 +117,7 @@ export default function Compare() {
       {items.length > 0 && <MetersLegend />}
 
       <h2>Projection selon vos hypothèses</h2>
-      <p className="muted">Livrets : taux en vigueur. Autres placements : rendements d'illustration, pas des prévisions. Tout se modifie.</p>
+      <p className="muted">Livrets et PEL ouvert en 2026 : taux en vigueur, sans frais supposés. Autres placements : rendements d'illustration, pas des prévisions. Tout se modifie.</p>
       <div className="grid cols-3 cmp-base">
         <NumberField label="Montant initial" shortLabel="Au départ" unit="€" value={amount} onChange={setAmount} min={0} step={1000} />
         <NumberField label="Versement mensuel" shortLabel="Par mois" unit="€" value={monthly} onChange={setMonthly} min={0} step={50} />
@@ -170,6 +170,18 @@ export default function Compare() {
                 <strong>Plafond dépassé : {i.name}.</strong> On ne peut pas y verser plus de <span className="num">{fmtEur(c.cap)}</span>
                 {c.detail ? ` (${c.detail})` : ''}. Vos versements le dépassent {month === 0 ? 'dès le départ' : month === 1 ? 'dès le premier versement mensuel' : <>au bout de {fmtMonths(month)}</>} :
                 au-delà, sa courbe suppose des versements impossibles.
+              </p>
+            );
+          })}
+          {items.map((i) => {
+            const d = DURATION_LIMITS[i.slug];
+            const over = d ? durationExceeded(monthly, years, d) : null;
+            if (!d || !over || (!over.deposits && !over.contract)) return null;
+            return (
+              <p key={i.slug} className="notice cmp-cap">
+                <strong>Durée dépassée : {i.name}.</strong>
+                {over.deposits && <> On ne peut plus y verser après {d.depositYears}&nbsp;ans : au-delà, sa courbe suppose des versements impossibles.</>}
+                {over.contract && <> Après {d.contractYears}&nbsp;ans, {d.afterContract} : la courbe garde un taux qui n’est plus garanti.</>}
               </p>
             );
           })}
