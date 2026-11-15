@@ -432,6 +432,18 @@ summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; 
 .faq summary, details.fold > summary { font-weight: 600; padding: 12px 14px; }
 .faq details > p { margin: 0; padding: 0 14px 14px; }
 details.fold > .table-wrap { margin: 0 8px 8px; }
+/* Détail d'un calcul, ligne par ligne (opération, libellé, montant), comme un ticket de caisse. */
+.calc-steps { list-style: none; margin: 0 14px; padding: 0; font-variant-numeric: tabular-nums; }
+.calc-steps li { display: grid; grid-template-columns: 1.2em 1fr auto; gap: 4px 10px; align-items: baseline; padding: 7px 0; border-top: 1px solid var(--line); }
+.calc-steps li:first-child { border-top: 0; }
+.calc-steps .cs-op { color: var(--ink-3); font-weight: 700; text-align: center; }
+.calc-steps .cs-label { color: var(--ink-2); font-size: 0.94rem; line-height: 1.4; }
+.calc-steps .cs-value { white-space: nowrap; font-weight: 600; color: var(--ink); }
+.calc-steps .is-sub .cs-label { color: var(--ink); font-weight: 600; }
+.calc-steps .is-total { border-top: 2px solid var(--ink-3); }
+.calc-steps .is-total .cs-label, .calc-steps .is-total .cs-value { color: var(--primary-deep); font-weight: 700; font-size: 1.02rem; }
+.calc-notes { margin: 6px 14px 14px; padding-left: 18px; color: var(--ink-3); font-size: 0.88rem; line-height: 1.45; }
+.calc-notes li + li { margin-top: 4px; }
 .fold-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); column-gap: 16px; align-items: start; }
 details.fold > .fold-form { padding: 4px 14px 6px; }
 .panel.fold-form { margin-bottom: 20px; }

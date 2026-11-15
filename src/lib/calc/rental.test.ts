@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { amortize } from './loan';
-import { ADVERSE, adverseScenario, capitalGainsTaxRealEstate, rentalAnalysis, rentalBalance, rentalProjection } from './rental';
+import { ADVERSE, adverseScenario, capitalGainsTaxRealEstate, rentalAnalysis, rentalBalance, rentalProjection, rentalTaxDetail } from './rental';
 
 import { RENTAL } from './fixtures';
 
@@ -116,5 +116,50 @@ describe('bilan à l’horizon (exemple fictif)', () => {
     const i = { ...RENTAL, downPayment: 1_000_000 };
     const b = rentalBalance(i);
     expect(b.downPayment).toBeCloseTo(rentalAnalysis(i).totalCost, 8);
+  });
+});
+
+describe('détail de l’impôt estimé (année 1)', () => {
+  const sum = (d: NonNullable<ReturnType<typeof rentalTaxDetail>>) => d.steps;
+  it('aucun détail si l’impôt n’est pas estimé', () => {
+    const i = { ...RENTAL, regime: 'aucune' as const };
+    expect(rentalTaxDetail(i, rentalProjection(i)[0])).toBeNull();
+  });
+  it('micro-foncier : loyers − abattement = base, × taux = impôt de la projection', () => {
+    const i = { ...RENTAL, regime: 'micro-foncier' as const, microAllowance: 0.3, marginalRate: 0.3, socialRate: 0.172 };
+    const y1 = rentalProjection(i)[0];
+    const d = rentalTaxDetail(i, y1)!;
+    const st = sum(d);
+    expect(st.map((x) => x.op).join('')).toBe('−=×=');
+    expect(st[0].amount).toBeCloseTo(8250, 6);
+    expect(st[1].amount).toBeCloseTo(2475, 6);
+    expect(st[1].label).toMatch(/30\s%/);
+    expect(st[2].amount).toBeCloseTo(5775, 6);
+    expect(st[3].rate).toBeCloseTo(0.472, 10);
+    expect(st[3].label).toMatch(/17,2\s%/);
+    expect(st[4].amount).toBeCloseTo(y1.tax, 8);
+    expect(st[4].amount).toBeCloseTo(5775 * 0.472, 6);
+    expect(d.deficitCarried).toBe(0);
+  });
+  it('réel foncier : les lignes se soustraient jusqu’au revenu imposable, déficit signalé', () => {
+    const i = { ...RENTAL, regime: 'reel-foncier' as const };
+    const y1 = rentalProjection(i)[0];
+    const d = rentalTaxDetail(i, y1)!;
+    const [rents, charges, credit, base, rate, tax] = d.steps;
+    const raw = rents.amount! - charges.amount! - credit.amount!;
+    expect(base.amount).toBeCloseTo(Math.max(0, raw), 6);
+    expect(d.deficitCarried).toBeCloseTo(Math.max(0, -raw), 6);
+    expect(tax.amount).toBeCloseTo(base.amount! * rate.rate!, 6);
+    expect(tax.amount).toBeCloseTo(y1.tax, 8);
+  });
+  it('LMNP au réel : l’amortissement déduit ne rend pas la base négative, le reste est reporté', () => {
+    const i = { ...RENTAL, regime: 'reel-bic' as const, monthlyRent: 1200, annualDepreciation: 50000 };
+    const y1 = rentalProjection(i)[0];
+    const d = rentalTaxDetail(i, y1)!;
+    const dep = d.steps.find((x) => x.label === 'Amortissement déduit')!;
+    expect(dep.amount).toBeCloseTo(y1.depreciationUsed, 8);
+    expect(d.depreciationCarried).toBeCloseTo(50000 - y1.depreciationUsed, 6);
+    expect(d.steps.at(-1)!.amount).toBeCloseTo(y1.tax, 8);
+    expect(d.steps.at(-2)!.rate).toBeGreaterThan(0);
   });
 });
