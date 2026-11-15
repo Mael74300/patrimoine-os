@@ -2,13 +2,14 @@ import { fmtEur } from '../../lib/finance';
 import { LEVERAGE_EXAMPLE, leverageBars } from '../../lib/illustrationData';
 import { pct } from './outils';
 
-/** Schéma « effet de levier » : première année du bien acheté à crédit, avec un bien qui rapporte 5 % ou 3 % de son prix net de charges. */
+/** Schéma « effet de levier » : première année du bien acheté à crédit, avec un bien qui rapporte 5 % ou 3 % de son prix net de charges.
+ * ViewBox 340 (chantier 112, étape 7, 2026-11-15) : à 375 px, les petits textes s'affichent vers 13 px au lieu de 11,2 px. */
 export function SchemaLevier() {
   const { interest, down, bars } = leverageBars();
   const { price } = LEVERAGE_EXAMPLE;
-  const BASE_Y = 250;
-  const TOP_Y = 56;
-  const BW = 92;
+  const BASE_Y = 226;
+  const TOP_Y = 32;
+  const BW = 84;
   const max = Math.max(...bars.map((b) => b.income));
   const h = (v: number) => (v / max) * (BASE_Y - TOP_Y);
   const pct = (v: number) => String(Math.round(v * 10) / 10).replace('.', ',');
@@ -19,12 +20,12 @@ export function SchemaLevier() {
     .join(' ');
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 350" role="img" aria-labelledby="ill-lev-t ill-lev-d" className="ill-svg">
+      <svg viewBox="0 0 340 328" role="img" aria-labelledby="ill-lev-t ill-lev-d" className="ill-svg">
         <title id="ill-lev-t">Effet de levier : le même crédit enrichit si le bien rapporte plus que les intérêts, et appauvrit sinon</title>
         <desc id="ill-lev-d">{`Bien de ${fmtEur(price)} acheté avec ${fmtEur(down)} d’apport, première année : ${fmtEur(interest)} d’intérêts à payer. ${alt}`}</desc>
-        <line x1={20} x2={400} y1={BASE_Y} y2={BASE_Y} stroke="var(--line)" strokeWidth={2} />
+        <line x1={6} x2={334} y1={BASE_Y} y2={BASE_Y} stroke="var(--line)" strokeWidth={2} />
         {bars.map((b, i) => {
-          const cx = 105 + i * 215;
+          const cx = 85 + i * 170;
           const x = cx - BW / 2;
           const hi = h(b.interestPaid);
           const hl = h(b.left);
@@ -34,17 +35,17 @@ export function SchemaLevier() {
               {hl > 0 && <rect x={x} y={BASE_Y - hi - hl} width={BW} height={hl} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />}
               {b.shortfall > 0 && <rect x={x} y={BASE_Y - h(interest)} width={BW} height={h(interest) - hi} rx={4} fill="none" stroke="var(--warn)" strokeWidth={2} strokeDasharray="5 4" />}
               <text x={cx} y={BASE_Y - h(Math.max(b.income, interest)) - 10} textAnchor="middle" className="ill-total">{b.shortfall > 0 ? `Manque ${fmtEur(b.shortfall)}` : `Reste ${fmtEur(b.left)}`}</text>
-              <text x={cx} y={BASE_Y - hi / 2 + 4} textAnchor="middle" className="ill-in">{fmtEur(b.interestPaid)}</text>
+              <text x={cx} y={BASE_Y - hi / 2 + 5} textAnchor="middle" className="ill-step">{fmtEur(b.interestPaid)}</text>
               <text x={cx} y={BASE_Y + 20} textAnchor="middle" className="ill-year">{`Rapporte ${pct(b.yieldPct)} %`}</text>
               <text x={cx} y={BASE_Y + 38} textAnchor="middle" className="ill-sub">{`${fmtEur(b.income)} par an`}</text>
             </g>
           );
         })}
-        <g transform="translate(24 306)">
+        <g transform="translate(6 280)">
           <rect width={14} height={14} rx={3} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
           <text x={22} y={12} className="ill-sub" textAnchor="start">Intérêts du crédit (année 1)</text>
-          <rect x={232} width={14} height={14} rx={3} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-          <text x={254} y={12} className="ill-sub" textAnchor="start">Ce qu’il reste</text>
+          <rect y={24} width={14} height={14} rx={3} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+          <text x={22} y={36} className="ill-sub" textAnchor="start">Ce qu’il reste</text>
         </g>
       </svg>
       <figcaption>
@@ -55,34 +56,41 @@ export function SchemaLevier() {
   );
 }
 
-/** Schéma « PEA : avant et après 5 ans » : frise du temps, la règle de retrait change à la cinquième année. Seul chiffre : « 5 ans » ; reprend le texte du guide. */
+/** Schéma « PEA : avant et après 5 ans » : frise du temps, la règle de retrait change à la cinquième année. Seul chiffre : « 5 ans » ; reprend le texte du guide.
+ * ViewBox 340 (chantier 112, étape 7, 2026-11-15) : à 375 px, les petits textes s'affichent vers 13 px au lieu de 10 à 11 px avec l'ancien viewBox 420. */
 export function SchemaPea() {
+  const L = 84; // centre de la colonne « avant »
+  const R = 256; // centre de la colonne « après »
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 280" role="img" aria-labelledby="ill-pea-t ill-pea-d" className="ill-svg">
+      <svg viewBox="0 0 340 318" role="img" aria-labelledby="ill-pea-t ill-pea-d" className="ill-svg">
         <title id="ill-pea-t">PEA : ce qui change avant et après 5 ans</title>
         <desc id="ill-pea-d">Avant 5 ans, un retrait entraîne en principe la clôture du plan, sauf exceptions prévues par la loi. Après 5 ans, un retrait partiel ne clôture pas le plan et les versements restent possibles (un retrait total le clôt) ; les gains sont exonérés d’impôt sur le revenu, mais les prélèvements sociaux restent dus.</desc>
-        <rect x={0} y={34} width={206} height={30} rx={15} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <rect x={214} y={34} width={206} height={30} rx={15} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={103} y={54} textAnchor="middle" className="ill-step">Avant 5 ans</text>
-        <text x={317} y={54} textAnchor="middle" className="ill-step">Après 5 ans</text>
-        <circle cx={210} cy={49} r={17} fill="var(--primary)" />
-        <text x={210} y={54} textAnchor="middle" className="ill-on-dark ill-num">5</text>
-        <text x={210} y={18} textAnchor="middle" className="ill-sub">Ouverture du PEA, puis 5 ans plus tard</text>
-        <path d="M 103 64 V 92 m -6 -7 l 6 7 l 6 -7 M 317 64 V 92 m -6 -7 l 6 7 l 6 -7" fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-        <rect x={0} y={100} width={206} height={118} rx={12} fill="var(--surface)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={103} y={128} textAnchor="middle" className="ill-step">Un retrait clôture</text>
-        <text x={103} y={148} textAnchor="middle" className="ill-step">le plan</text>
-        <text x={103} y={178} textAnchor="middle" className="ill-sub">en principe, sauf</text>
-        <text x={103} y={196} textAnchor="middle" className="ill-sub">exceptions prévues par la loi</text>
-        <rect x={214} y={100} width={206} height={118} rx={12} fill="var(--surface)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={317} y={128} textAnchor="middle" className="ill-step">Retrait partiel possible</text>
-        <text x={317} y={148} textAnchor="middle" className="ill-step">sans clôturer le plan</text>
-        <text x={317} y={172} textAnchor="middle" className="ill-sub">gains exonérés d’impôt</text>
-        <text x={317} y={188} textAnchor="middle" className="ill-sub">sur le revenu ;</text>
-        <text x={317} y={204} textAnchor="middle" className="ill-sub">prélèvements sociaux dus</text>
-        <text x={210} y={244} textAnchor="middle" className="ill-sub">Un retrait total clôture toujours le plan</text>
-        <text x={210} y={264} textAnchor="middle" className="ill-sub">Ouvrir tôt fait courir le délai de 5 ans</text>
+        <text x={170} y={16} textAnchor="middle" className="ill-sub">Ouverture du PEA, puis 5 ans plus tard</text>
+        <rect x={2} y={30} width={164} height={32} rx={16} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <rect x={174} y={30} width={164} height={32} rx={16} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={L - 8} y={51} textAnchor="middle" className="ill-step">Avant 5 ans</text>
+        <text x={R + 8} y={51} textAnchor="middle" className="ill-step">Après 5 ans</text>
+        <circle cx={170} cy={46} r={18} fill="var(--primary)" stroke="var(--surface)" strokeWidth={3} />
+        <text x={170} y={51} textAnchor="middle" className="ill-on-dark ill-num">5</text>
+        <path d={`M ${L} 62 V 88 m -6 -7 l 6 7 l 6 -7 M ${R} 62 V 88 m -6 -7 l 6 7 l 6 -7`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+        <rect x={2} y={96} width={164} height={150} rx={12} fill="var(--surface)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={L} y={124} textAnchor="middle" className="ill-step">Un retrait</text>
+        <text x={L} y={144} textAnchor="middle" className="ill-step">clôture le plan</text>
+        <line x1={22} x2={146} y1={162} y2={162} stroke="var(--line)" strokeWidth={1.5} />
+        <text x={L} y={193} textAnchor="middle" className="ill-sub">en principe, sauf</text>
+        <text x={L} y={211} textAnchor="middle" className="ill-sub">exceptions prévues</text>
+        <text x={L} y={229} textAnchor="middle" className="ill-sub">par la loi</text>
+        <rect x={174} y={96} width={164} height={150} rx={12} fill="var(--surface)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={R} y={124} textAnchor="middle" className="ill-step">Retrait partiel</text>
+        <text x={R} y={144} textAnchor="middle" className="ill-step">sans clôture</text>
+        <line x1={194} x2={318} y1={162} y2={162} stroke="var(--line)" strokeWidth={1.5} />
+        <text x={R} y={184} textAnchor="middle" className="ill-sub">gains exonérés d’impôt</text>
+        <text x={R} y={202} textAnchor="middle" className="ill-sub">sur le revenu ;</text>
+        <text x={R} y={220} textAnchor="middle" className="ill-sub">prélèvements</text>
+        <text x={R} y={238} textAnchor="middle" className="ill-sub">sociaux dus</text>
+        <text x={170} y={276} textAnchor="middle" className="ill-sub">Un retrait total clôture toujours le plan</text>
+        <text x={170} y={298} textAnchor="middle" className="ill-sub">Ouvrir tôt fait courir le délai de 5 ans</text>
       </svg>
     </figure>
   );
