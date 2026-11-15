@@ -21,10 +21,9 @@ export function useIsMobile(): boolean {
   return mobile;
 }
 
-function splitText(value: number, amount: number, monthly: number, years: number): string {
+function splitText(value: number, amount: number, monthly: number, years: number): ReactNode {
   const { gains } = projectionSplit(value, totalContributed(amount, monthly, years));
-  const g = fmtEur(Math.abs(gains));
-  return gains >= 0 ? `dont ${g} de gains` : `soit ${g} de moins que vos versements`;
+  return <><strong className="num">{fmtEur(Math.abs(gains))}</strong> {gains >= 0 ? 'de gains' : 'de moins que vos versements'}</>;
 }
 
 const COLORS = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)'];
@@ -120,37 +119,44 @@ export default function Compare() {
         <NumberField label="Durée" unit="ans" value={years} onChange={setYears} min={1} max={50} />
       </div>
       {items.length > 0 && (
-        <div className="panel" style={{ marginBottom: 16 }}>
-          <LineChart
-            title="Comparaison des projections"
-            showTitle
-            xLabels={proj[0].map((p) => `An ${p.year}`)}
-            format={fmtEur}
-            series={items.map((i, k) => ({ name: i.name, color: COLORS[k], values: proj[k].map((p) => p.value) }))}
-          />
-        </div>
-      )}
-      {items.length > 0 && (
-        <p className="small" style={{ marginBottom: 12 }}>
-          <strong>Concrètement :</strong> vous versez <strong className="num">{fmtEur(totalContributed(amount, monthly, years))}</strong> de votre poche en {years}&nbsp;ans.
-          Le reste de la valeur finale vient du rendement supposé (moins les frais), pas de vous.
-        </p>
-      )}
-      <div className="grid cols-3">
-        {items.map((i, k) => (
-          <div className="panel" key={i.slug}>
-            <strong><span style={{ color: COLORS[k] }} aria-hidden="true">●</span> {i.name}</strong>
-            <div className="field-pair" style={{ marginTop: 10 }}>
-              <NumberField label="Rendement brut supposé" unit="%" percent value={getH(i.slug).r} step={0.25} min={-10} max={20}
-                onChange={(v) => setHyp((h) => ({ ...h, [i.slug]: { ...getH(i.slug), r: v } }))} />
-              <NumberField label="Frais annuels" unit="%" percent value={getH(i.slug).f} step={0.1} min={0} max={5}
-                onChange={(v) => setHyp((h) => ({ ...h, [i.slug]: { ...getH(i.slug), f: v } }))} />
-            </div>
-            <div className="small">Valeur à {years}&nbsp;ans : <strong className="num">{fmtEur(proj[k][years].value)}</strong></div>
-            <div className="small muted" style={{ marginTop: 4 }}>{splitText(proj[k][years].value, amount, monthly, years)}</div>
+        <>
+          {/* Réglages par placement avant le graphique : on règle, puis on lit le résultat juste en dessous. */}
+          <p className="cmp-hyp-intro">Rendement et frais supposés, par placement :</p>
+          <div className="grid cols-3 cmp-hyp">
+            {items.map((i, k) => (
+              <fieldset className="cmp-hyp-set" key={i.slug}>
+                <legend><i className="pt-dot" style={{ background: COLORS[k] }} aria-hidden="true" />{i.name}</legend>
+                <div className="field-duo">
+                  <NumberField label={`Rendement brut supposé (${i.name})`} shortLabel="Rendement brut" unit="%" percent value={getH(i.slug).r} step={0.25} min={-10} max={20}
+                    onChange={(v) => setHyp((h) => ({ ...h, [i.slug]: { ...getH(i.slug), r: v } }))} />
+                  <NumberField label={`Frais annuels (${i.name})`} shortLabel="Frais par an" unit="%" percent value={getH(i.slug).f} step={0.1} min={0} max={5}
+                    onChange={(v) => setHyp((h) => ({ ...h, [i.slug]: { ...getH(i.slug), f: v } }))} />
+                </div>
+              </fieldset>
+            ))}
           </div>
-        ))}
-      </div>
+          <div className="panel" style={{ marginBottom: 16 }}>
+            <LineChart
+              title="Comparaison des projections"
+              showTitle
+              xLabels={proj[0].map((p) => `An ${p.year}`)}
+              format={fmtEur}
+              series={items.map((i, k) => ({ name: i.name, color: COLORS[k], values: proj[k].map((p) => p.value) }))}
+            />
+          </div>
+          <div className="small cmp-concretement">
+            <p>
+              <strong>Concrètement :</strong> vous versez <strong className="num">{fmtEur(totalContributed(amount, monthly, years))}</strong> de votre poche en {years}&nbsp;ans.
+              Le reste de la valeur finale vient du rendement supposé, moins les frais :
+            </p>
+            <ul>
+              {items.map((i, k) => (
+                <li key={i.slug}><i className="pt-dot" style={{ background: COLORS[k] }} aria-hidden="true" />{i.name} : {splitText(proj[k][years].value, amount, monthly, years)}</li>
+              ))}
+            </ul>
+          </div>
+        </>
+      )}
       <p className="small muted" style={{ marginTop: 12 }}>Projection avant fiscalité et sans volatilité : un placement risqué peut finir sous un placement sûr.</p>
       <Disclaimer />
     </>
