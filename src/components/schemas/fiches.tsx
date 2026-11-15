@@ -190,31 +190,33 @@ export function SchemaCapitalInvestissement() {
   );
 }
 
-/** Schéma « PER : déduire à l’entrée, bloqué, imposé à la sortie » : principe qualitatif (aucun chiffre), repris de Service-Public.fr (fiche F34982, consultée le 2026-11-05) : versements volontaires déductibles du revenu imposable ou non (renonciation possible), PER bloqué jusqu’à la retraite sauf accident de la vie et achat de la résidence principale, sortie en capital, en rente viagère ou partiellement en capital et en rente, versements déduits imposés au barème de l’impôt sur le revenu. */
+/** Schéma « PER : déduire à l’entrée, bloqué, imposé à la sortie » : principe qualitatif (aucun chiffre), repris de Service-Public.fr (fiche F34982, vérifiée le 12 octobre 2026, consultée le 2026-11-15) : versements volontaires déductibles du revenu imposable ou non (renonciation possible), PER bloqué jusqu’à la retraite sauf accident de la vie et achat de la résidence principale, sortie en capital, en rente viagère ou partiellement en capital et en rente, versements déduits imposés au barème de l’impôt sur le revenu.
+ * ViewBox 340 : à 375 px, le dessin s'affiche presque à sa taille (textes ~12 à 14,5 px au lieu de ~11 px avec l'ancien viewBox 420). */
 export function SchemaPer() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 372" role="img" aria-labelledby="ill-per-t ill-per-d" className="ill-svg">
+      <svg viewBox="0 0 340 368" role="img" aria-labelledby="ill-per-t ill-per-d" className="ill-svg">
         <title id="ill-per-t">PER : un impôt réduit à l’entrée, de l’argent bloqué, une sortie imposée</title>
         <desc id="ill-per-d">Pendant votre vie active, vous versez de l’argent sur votre PER. Ces versements peuvent être déduits de votre revenu imposable, ce qui réduit votre impôt de l’année ; vous pouvez aussi y renoncer. L’épargne reste ensuite bloquée jusqu’à la retraite, sauf cas prévus : accident de la vie ou achat de la résidence principale. À la retraite, vous récupérez l’épargne en capital, en rente viagère ou en partie des deux. La sortie est imposée : les versements déduits sont ajoutés à vos revenus imposables de l’année.</desc>
-        <rect x={0} y={2} width={420} height={80} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={210} y={28} textAnchor="middle" className="ill-step">1. Vous versez sur votre PER</text>
-        <text x={210} y={52} textAnchor="middle" className="ill-in">Versement déductible du revenu imposable</text>
-        <text x={210} y={70} textAnchor="middle" className="ill-sub">(vous pouvez aussi renoncer à la déduction)</text>
-        <path d="M 210 82 V 112 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={226} y={102} textAnchor="start" className="ill-in">impôt de l’année réduit</text>
-        <rect x={0} y={112} width={420} height={86} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={210} y={138} textAnchor="middle" className="ill-step">2. Jusqu’à la retraite : épargne bloquée</text>
-        <text x={210} y={162} textAnchor="middle" className="ill-sub">Sauf cas prévus : accident de la vie,</text>
-        <text x={210} y={180} textAnchor="middle" className="ill-sub">achat de la résidence principale</text>
-        <path d="M 210 198 V 228 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={226} y={218} textAnchor="start" className="ill-in">retraite</text>
-        <rect x={0} y={228} width={420} height={86} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={210} y={254} textAnchor="middle" className="ill-step">3. Vous récupérez l’épargne</text>
-        <text x={210} y={278} textAnchor="middle" className="ill-in">En capital, en rente viagère ou les deux</text>
-        <text x={210} y={298} textAnchor="middle" className="ill-sub">La sortie est imposée</text>
-        <text x={210} y={342} textAnchor="middle" className="ill-sub">Schéma de principe d’après Service-Public.fr</text>
+        <rect x={1} y={2} width={338} height={98} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={27} textAnchor="middle" className="ill-step">1. Vous versez sur votre PER</text>
+        <text x={170} y={51} textAnchor="middle" className="ill-in">Versement déductible du revenu imposable</text>
+        <text x={170} y={71} textAnchor="middle" className="ill-sub">votre impôt de l’année baisse</text>
+        <text x={170} y={88} textAnchor="middle" className="ill-sub">(vous pouvez aussi renoncer à la déduction)</text>
+        <path d="M 170 100 V 126 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={1} y={126} width={338} height={96} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={170} y={151} textAnchor="middle" className="ill-step">2. Jusqu’à la retraite :</text>
+        <text x={170} y={170} textAnchor="middle" className="ill-step">épargne bloquée</text>
+        <text x={170} y={194} textAnchor="middle" className="ill-sub">Sauf cas prévus : accident de la vie,</text>
+        <text x={170} y={211} textAnchor="middle" className="ill-sub">achat de la résidence principale</text>
+        <path d="M 170 222 V 248 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <text x={184} y={240} textAnchor="start" className="ill-sub">départ à la retraite</text>
+        <rect x={1} y={248} width={338} height={86} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={170} y={273} textAnchor="middle" className="ill-step">3. Vous récupérez l’épargne</text>
+        <text x={170} y={297} textAnchor="middle" className="ill-in">En capital, en rente viagère ou les deux</text>
+        <text x={170} y={319} textAnchor="middle" className="ill-sub">La sortie est imposée</text>
+        <text x={170} y={360} textAnchor="middle" className="ill-sub">Schéma de principe d’après Service-Public.fr</text>
       </svg>
     </figure>
   );
