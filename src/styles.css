@@ -213,11 +213,11 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
 tr:last-child td, tbody tr:last-child th { border-bottom: 0; }
 /* Tableaux qui défilent sur mobile : la première colonne (année, libellé) reste visible pendant le défilement */
 @media (max-width: 700px) {
-  .table-wrap:not(.stack-wrap):not(.cmp-wrap):not(.line-wrap) :is(th, td):first-child {
+  .table-wrap:not(.stack-wrap):not(.cmp-wrap):not(.line-wrap):not(.scn-wrap) :is(th, td):first-child {
     position: sticky; left: 0; z-index: 1; background: var(--surface);
     box-shadow: 1px 0 0 var(--line);
   }
-  .table-wrap:not(.stack-wrap):not(.cmp-wrap):not(.line-wrap) thead th:first-child { background: var(--surface-2); z-index: 2; }
+  .table-wrap:not(.stack-wrap):not(.cmp-wrap):not(.line-wrap):not(.scn-wrap) thead th:first-child { background: var(--surface-2); z-index: 2; }
 }
 @media (max-width: 520px) {
   th, td { padding: 8px 8px; }
@@ -883,6 +883,34 @@ h2.gloss-letter::before { content: none; }
 /* Tableaux de scénarios sur grand écran : la première colonne (« 20 ans ») ne se coupe pas */
 @media (min-width: 701px) {
   .stack-table .st-name { white-space: nowrap; }
+}
+
+/* Scénarios côte à côte (une ligne par indicateur, une colonne par scénario) :
+   les trois valeurs d'un même indicateur se lisent d'un coup d'œil, même à 375 px */
+.scn-table { font-variant-numeric: tabular-nums; }
+.scn-table :is(th, td) { padding-top: 8px; padding-bottom: 8px; }
+.scn-table thead th { white-space: nowrap; }
+.scn-dot { display: inline-block; width: 9px; height: 9px; margin-right: 6px; border-radius: 50%; vertical-align: 1px; }
+.scn-table tbody th { background: none; font-weight: 600; color: var(--ink); }
+.scn-hint::before { content: ' · ' / ''; }
+.scn-table tbody td { font-weight: 600; white-space: nowrap; }
+.scn-hint { font-size: .8rem; font-weight: 400; line-height: 1.35; color: var(--ink-2); }
+@media (max-width: 700px) {
+  .scn-wrap { overflow-x: visible; }
+  .scn-table, .scn-table thead, .scn-table tbody { display: block; }
+  .scn-table tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 8px; padding: 0 12px; }
+  .scn-table thead tr { padding-top: 10px; padding-bottom: 8px; background: var(--surface-2); border-bottom: 1px solid var(--line); }
+  .scn-table thead th:first-child { display: none; }
+  .scn-table thead th { padding: 0; border: 0; background: none; font-size: .82rem; }
+  .scn-table tbody tr:not(:last-child) { border-bottom: 1px solid var(--line); }
+  .scn-table tbody th { grid-column: 1 / -1; padding: 10px 0 2px; border: 0; font-size: .88rem; }
+  .scn-table tbody td { padding: 2px 0 10px; border: 0; font-size: .9rem; }
+  /* Montants trop longs pour trois colonnes : une ligne par scénario, nom à gauche, montant à droite */
+  .scn-long thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .scn-long tr { grid-template-columns: minmax(0, 1fr); }
+  .scn-long tbody td { display: flex; justify-content: space-between; gap: 12px; padding: 2px 0 4px; }
+  .scn-long tbody td:last-child { padding-bottom: 10px; }
+  .scn-long tbody td::before { content: attr(data-label); font-weight: 400; color: var(--ink-2); }
 }
 
 /* Glossaire sur mobile (une seule règle, placée après les styles de cartes communs qu'elle remplace) :
