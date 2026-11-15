@@ -11,7 +11,8 @@ describe('schéma « LMNP »', () => {
   it('reprend les règles de la fiche (abattement forfaitaire, charges réelles et amortissement)', () => {
     expect(fiche.howItWorks).toContain('abattement forfaitaire');
     expect(fiche.howItWorks).toContain('amortissement du logement et des meubles');
-    expect(svg).toContain('abattement forfaitaire');
+    expect(svg).toContain('>abattement<');
+    expect(svg).toContain('>forfaitaire<');
     expect(svg).toContain('amortissement');
     expect(svg).toContain('Micro-BIC');
   });
