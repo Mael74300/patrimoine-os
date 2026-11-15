@@ -26,3 +26,16 @@ export function monthCapExceeded(initial: number, monthly: number, years: number
   const month = Math.floor((cap - start) / perMonth) + 1;
   return month <= months ? month : null;
 }
+
+/**
+ * Ce qu'une durée de projection fait dépasser : des versements mensuels après la dernière année où l'on peut verser
+ * (`deposits`), et une durée au-delà de laquelle le taux du contrat ne s'applique plus (`contract`). Années pleines.
+ */
+export function durationExceeded(
+  monthly: number,
+  years: number,
+  limit: { depositYears: number; contractYears: number },
+): { deposits: boolean; contract: boolean } {
+  const y = Math.max(0, Math.floor(num(years)));
+  return { deposits: num(monthly) > 0 && y > limit.depositYears, contract: y > limit.contractYears };
+}

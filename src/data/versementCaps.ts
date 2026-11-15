@@ -23,8 +23,25 @@ export const VERSEMENT_CAPS: Record<string, VersementCap> = {
   pea: { cap: 150000 },
 };
 
-/** Taux réglementés des livrets, repris tels quels comme hypothèses pré-remplies du comparateur (sans frais). */
+/**
+ * Durées légales qui bornent une projection : plus de versement après `depositYears` années, puis rémunération
+ * au taux du contrat jusqu'à `contractYears` années. PEL ouvert depuis le 1er mars 2011 : versements jusqu'au
+ * 10e anniversaire au plus, intérêts au taux du contrat 5 ans de plus, livret ordinaire au taux fixé par la banque
+ * à 15 ans (Service-Public F16140, consulté le 15 novembre 2026). Mêmes bornes que la frise de la fiche PEL (test).
+ */
+export type DurationLimit = { depositYears: number; contractYears: number; afterContract: string };
+
+export const DURATION_LIMITS: Record<string, DurationLimit> = {
+  pel: { depositYears: 10, contractYears: 15, afterContract: 'il devient un livret ordinaire, rémunéré au taux fixé librement par la banque et non plus au taux du contrat' },
+};
+
+/**
+ * Taux réglementés repris tels quels comme hypothèses pré-remplies du comparateur (sans frais) : livrets (`LIVRETS`)
+ * et PEL ouvert à partir du 1er janvier 2026 (2,00 %, fixé pour toute la durée du plan ; Service-Public F16140,
+ * consulté le 15 novembre 2026 ; même chiffre que la fiche PEL, vérifié par test).
+ */
 export const REGULATED_RATES: Record<string, number> = {
   'livret-a': LIVRETS.find((l) => l.id === 'livretA')!.rate,
   lep: LIVRETS.find((l) => l.id === 'lep')!.rate,
+  pel: 0.02,
 };

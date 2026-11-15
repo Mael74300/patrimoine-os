@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { investmentBySlug } from './investments';
 import { LIVRETS } from './livrets';
-import { REGULATED_RATES, VERSEMENT_CAPS } from './versementCaps';
+import { DURATION_LIMITS, REGULATED_RATES, VERSEMENT_CAPS } from './versementCaps';
+import { PEL_LIVRET_AGE, PEL_PHASES } from '../components/schemas/fiches';
 import { fmtEur } from '../lib/finance';
-import { monthCapExceeded } from '../lib/calc/compareSummary';
+import { durationExceeded, monthCapExceeded } from '../lib/calc/compareSummary';
 
 const plain = (s: string) => s.replace(/[  ]/g, ' ');
 
@@ -17,10 +18,11 @@ describe('plafonds de versements du comparateur', () => {
     for (const slug of ['lep', 'pel', 'pea']) expect(fiche(slug), slug).toContain(plain(fmtEur(VERSEMENT_CAPS[slug].cap)));
   });
 
-  it('les taux pré-remplis des livrets sont ceux des livrets réglementés en vigueur', () => {
+  it('les taux pré-remplis des livrets et du PEL sont ceux en vigueur, cités par leurs fiches', () => {
     expect(REGULATED_RATES['livret-a']).toBe(LIVRETS.find((l) => l.id === 'livretA')!.rate);
     expect(REGULATED_RATES.lep).toBe(LIVRETS.find((l) => l.id === 'lep')!.rate);
-    for (const slug of ['livret-a', 'lep']) {
+    expect(REGULATED_RATES.pel).toBe(0.02);
+    for (const slug of ['livret-a', 'lep', 'pel']) {
       const pct = `${(REGULATED_RATES[slug] * 100).toFixed(2).replace('.', ',')} %`;
       expect(plain(investmentBySlug[slug].tax.text), slug).toContain(pct);
     }
@@ -41,5 +43,24 @@ describe('mois où les versements dépassent un plafond (exemples fictifs)', () 
     expect(monthCapExceeded(0, 1000, 1, 10000)).toBe(11);
     expect(monthCapExceeded(10000, 100, 1, 10000)).toBe(1);
     expect(monthCapExceeded(12000, 100, 5, 10000)).toBe(0);
+  });
+});
+
+describe('durée légale du PEL dans le comparateur', () => {
+  it('mêmes bornes que la frise de la fiche PEL et que le texte de la fiche', () => {
+    const d = DURATION_LIMITS.pel;
+    expect(d.depositYears).toBe(10);
+    expect(d.contractYears).toBe(15);
+    expect(PEL_PHASES.find((p) => p.label === 'Sans versement')).toMatchObject({ from: d.depositYears, to: d.contractYears });
+    expect(PEL_LIVRET_AGE).toBe(d.contractYears);
+    expect(plain(investmentBySlug.pel.tax.text)).toContain(`${d.depositYears} ans maximum`);
+  });
+  it('15 ans avec 200 € par mois : versements impossibles après 10 ans, taux du contrat encore garanti', () => {
+    expect(durationExceeded(200, 15, DURATION_LIMITS.pel)).toEqual({ deposits: true, contract: false });
+  });
+  it('sans versement mensuel, seule la sortie du taux du contrat après 15 ans est signalée', () => {
+    expect(durationExceeded(0, 20, DURATION_LIMITS.pel)).toEqual({ deposits: false, contract: true });
+    expect(durationExceeded(0, 15, DURATION_LIMITS.pel)).toEqual({ deposits: false, contract: false });
+    expect(durationExceeded(200, 10, DURATION_LIMITS.pel)).toEqual({ deposits: false, contract: false });
   });
 });
