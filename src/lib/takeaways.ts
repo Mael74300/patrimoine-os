@@ -120,21 +120,17 @@ export function prepayTakeaway(p: { lump: number; advantageInvest: number; inter
 export function rentalTakeaway(p: { totalCost: number; netYield: number; monthlyCashflow: number; monthlyCashflowAfterTax: number | null; horizon: number; netEquity: number; putIn?: number }): string {
   if (!(p.totalCost > 0) || !Number.isFinite(p.netYield)) return '';
   const mois = Math.round(p.monthlyCashflow);
+  const a = p.monthlyCashflowAfterTax === null ? null : Math.round(p.monthlyCashflowAfterTax);
+  // Après impôt, en une incise de la même phrase : « et » si le signe ne change pas, « mais » s'il s'inverse.
+  const apres = a === null ? ''
+    : `${(a < 0) === (mois < 0) ? ', et' : ', mais'}${a < 0 && mois >= 0 ? ' il faut ajouter' : a >= 0 && mois < 0 ? ' il reste' : ''} environ ${fmtEur(Math.abs(a))} après l'impôt estimé de la première année`;
   const tresorerie = mois >= 0
-    ? `Chaque mois, le loyer couvre la mensualité du crédit et les charges : il reste environ ${fmtEur(mois)} avant impôt.`
-    : `Chaque mois, le loyer ne couvre pas la mensualité du crédit et les charges : il faut sortir environ ${fmtEur(-mois)} de votre poche avant impôt.`;
-  let apres = '';
-  if (p.monthlyCashflowAfterTax !== null) {
-    const a = Math.round(p.monthlyCashflowAfterTax);
-    apres = a >= 0
-      ? `\nAprès l'impôt estimé de la première année, il reste environ ${fmtEur(a)} par mois.`
-      : `\nAprès l'impôt estimé de la première année, l'effort mensuel est d'environ ${fmtEur(-a)}.`;
-  }
-  const poche = p.putIn !== undefined && p.putIn > 0
-    ? `\nEn ${fmtAns(p.horizon)}, vous auriez sorti environ ${fmtEur(p.putIn)} de votre poche, apport compris. Crédit déduit, le bien représenterait alors`
-    : `\nÀ ${fmtAns(p.horizon)}, crédit déduit, le bien représenterait`;
-  const fin = `${poche} environ ${fmtEur(p.netEquity)} de patrimoine (estimation, si prix et loyers évoluent comme saisi).`;
-  return tresorerie + apres + fin;
+    ? `Chaque mois, le loyer couvre la mensualité du crédit et les charges : il reste environ ${fmtEur(mois)} avant impôt${apres}.`
+    : `Chaque mois, le loyer ne couvre pas la mensualité du crédit et les charges : il faut ajouter environ ${fmtEur(-mois)} de votre poche avant impôt${apres}.`;
+  const fin = p.putIn !== undefined && p.putIn > 0
+    ? `\nEn ${fmtAns(p.horizon)}, vous auriez sorti environ ${fmtEur(p.putIn)}, apport compris, pour un bien qui représenterait environ ${fmtEur(p.netEquity)} de patrimoine, crédit déduit (estimation, si prix et loyers évoluent comme saisi).`
+    : `\nÀ ${fmtAns(p.horizon)}, crédit déduit, le bien représenterait environ ${fmtEur(p.netEquity)} de patrimoine (estimation, si prix et loyers évoluent comme saisi).`;
+  return tresorerie + fin;
 }
 
 /**

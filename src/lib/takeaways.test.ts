@@ -193,6 +193,14 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(rentalCashflowSub(-0.4, false)).toBe("loyer et dépenses s'équilibrent, avant impôt");
     expect(rentalCashflowSub(Number.NaN, true)).toBe("loyer et dépenses s'équilibrent, après impôt");
   });
+  it('avant et après impôt dans une même phrase, « mais » quand le signe s’inverse', () => {
+    const c = { totalCost: 100000, netYield: 0.04, horizon: 20, netEquity: 50000 };
+    expect(digits(rentalTakeaway({ ...c, monthlyCashflow: -392.4, monthlyCashflowAfterTax: -619.2 }))).toContain(digits('il faut ajouter environ 392 € de votre poche avant impôt, et environ 619 € après l’impôt estimé').replace('’', "'"));
+    expect(rentalTakeaway({ ...c, monthlyCashflow: 120, monthlyCashflowAfterTax: -30 })).toContain(', mais il faut ajouter environ');
+    expect(rentalTakeaway({ ...c, monthlyCashflow: 120, monthlyCashflowAfterTax: 80 })).toContain('avant impôt, et environ');
+    expect(rentalTakeaway({ ...c, monthlyCashflow: -50, monthlyCashflowAfterTax: 20 })).toContain(', mais il reste environ');
+    expect(rentalTakeaway({ ...c, monthlyCashflow: -50, monthlyCashflowAfterTax: null }).split('\n')).toHaveLength(2);
+  });
   it('sans estimation d’impôt, aucune phrase sur l’impôt ; entrées vides : texte vide', () => {
     expect(rentalTakeaway({ ...args(base), monthlyCashflowAfterTax: null })).not.toContain('impôt estimé');
     expect(rentalTakeaway({ ...args(base), totalCost: 0 })).toBe('');

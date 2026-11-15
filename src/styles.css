@@ -1303,6 +1303,11 @@ ul.points { margin: 0.9rem 0 0.5rem; gap: 8px; }
 .rb-diff { margin: 0 0 10px; font-size: .9rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
 .rb-diff.pos strong { color: var(--accent); }
 .rb-diff.neg strong { color: var(--danger); }
+.rb-group:has(.rb-y1) { display: flex; flex-direction: column; }
+.rb-y1 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 14px; margin: auto 0 12px; padding-top: 10px; border-top: 1px solid var(--line); font-size: .88rem; font-variant-numeric: tabular-nums; }
+.rb-y1 dt { color: var(--ink-2); line-height: 1.3; }
+.rb-y1 dd { margin: 2px 0 0; font-weight: 600; color: var(--ink); line-height: 1.45; }
+.rb-y1-when { font-weight: 400; color: var(--ink-2); }
 .rb-chart { margin: 12px 0; }
 @media (min-width: 960px) { .rb-list { grid-template-columns: 1fr 1fr; } }
 

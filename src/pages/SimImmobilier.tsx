@@ -28,8 +28,17 @@ export const PS_OPTIONS = [
   { v: 0.186, label: '18,6 %', detail: 'taux général des revenus du patrimoine ; à confirmer pour le meublé' },
 ];
 
-/** Bilan d'un scénario : deux barres à la même échelle, « sorti de votre poche » et « détenu à la fin ». */
-function BalanceGroup({ title, b, scale }: { title: string; b: RentalBalance; scale: number }) {
+/** Première année d'un scénario : rendement net de charges et solde mensuel avant et après impôt. */
+type FirstYear = { netYield: number; monthly: number; monthlyAfterTax: number | null };
+
+/** Solde mensuel lu comme un montant à ajouter (« −392 € ») ou en plus (« +120 € »). */
+const signedEur = (n: number) => { const v = Math.round(n); return v > 0 ? `+${fmtEur(v)}` : fmtEur(v); };
+
+/**
+ * Bilan d'un scénario : deux barres à la même échelle, « sorti de votre poche » et « détenu à la fin »,
+ * puis la première année (rendement net de charges, solde mensuel) pour comparer les scénarios au même endroit.
+ */
+function BalanceGroup({ title, b, scale, y1 }: { title: string; b: RentalBalance; scale: number; y1: FirstYear }) {
   const w = (n: number) => `${scale > 0 ? (Math.max(0, n) / scale) * 100 : 0}%`;
   // Écart calculé sur les montants arrondis affichés, pour que la soustraction tombe juste à l'euro près.
   const diff = Math.round(b.got) - Math.round(b.putIn);
@@ -55,6 +64,16 @@ function BalanceGroup({ title, b, scale }: { title: string; b: RentalBalance; sc
           ? <>Écart : <strong>+{fmtEur(diff)}</strong> en votre faveur</>
           : <>Écart : <strong>{fmtEur(diff)}</strong>, vous auriez sorti plus que ce que vous détenez</>}
       </p>
+      <dl className="rb-y1">
+        <div><dt>Rendement net de charges</dt><dd>{fmtPct(y1.netYield)}</dd></div>
+        <div>
+          <dt>Solde mensuel, année&nbsp;1</dt>
+          <dd>
+            {signedEur(y1.monthly)} <span className="rb-y1-when">avant impôt</span>
+            {y1.monthlyAfterTax !== null && <><br />{signedEur(y1.monthlyAfterTax)} <span className="rb-y1-when">après impôt</span></>}
+          </dd>
+        </div>
+      </dl>
     </li>
   );
 }
@@ -99,6 +118,7 @@ export default function SimImmobilier() {
   const taxDetail = y1 ? rentalTaxDetail(s, y1) : null;
   const badEnd = badProj[badProj.length - 1];
   const isMicro = s.regime === 'micro-foncier' || s.regime === 'micro-bic';
+  const noTax = s.regime === 'aucune' || !y1;
   const bal = useMemo(() => rentalBalance(s, proj), [s, proj]);
   const badBal = useMemo(() => rentalBalance(bad, badProj), [bad, badProj]);
   const balScale = Math.max(bal.putIn, bal.got, badBal.putIn, badBal.got, 0);
@@ -181,14 +201,16 @@ export default function SimImmobilier() {
             <Kpi label="Solde mensuel après impôt, année 1" value={fmtEur((y1?.cashflowAfterTax ?? 0) / 12)} tone={(y1?.cashflowAfterTax ?? 0) >= 0 ? 'pos' : 'neg'} sub={rentalCashflowSub((y1?.cashflowAfterTax ?? 0) / 12, true)} />
           </div>
           {taxDetail && y1 && <TaxDetail detail={taxDetail} regime={s.regime} />}
-          <Takeaway>{rentalTakeaway({ totalCost: r.totalCost, netYield: r.netYield, monthlyCashflow: r.monthlyCashflow, monthlyCashflowAfterTax: s.regime === 'aucune' || !y1 ? null : y1.cashflowAfterTax / 12, horizon: s.horizon, netEquity: end?.netEquity ?? 0, putIn: bal.putIn })}</Takeaway>
+          <Takeaway>{rentalTakeaway({ totalCost: r.totalCost, netYield: r.netYield, monthlyCashflow: r.monthlyCashflow, monthlyCashflowAfterTax: noTax ? null : y1.cashflowAfterTax / 12, horizon: s.horizon, netEquity: end?.netEquity ?? 0, putIn: bal.putIn })}</Takeaway>
           {s.regime === 'micro-foncier' && r.annualRentCollected > 15000 && (
             <p className="notice small">Avec plus de 15 000 € de revenus fonciers bruts par an, le micro-foncier n'est pas applicable : choisissez le régime réel.</p>
           )}
 
           <h2>{`Bilan à ${s.horizon}\u00a0ans : ce que vous mettez, ce que vous gardez`}</h2>
           <p className="fb-intro">
-            Barres à la même échelle. Le scénario défavorable suppose moins de loyers, plus de charges et un prix qui monte moins (détail plus bas).
+            Barres à la même échelle. Le scénario défavorable reprend votre saisie avec {ADVERSE.extraVacancyMonths}&nbsp;mois de vacance en plus par an,
+            un loyer réduit de {Math.round((1 - ADVERSE.rentFactor) * 100)}&nbsp;%, une taxe foncière et des charges majorées de {Math.round((ADVERSE.chargesFactor - 1) * 100)}&nbsp;%
+            et un prix qui progresse de {Math.abs(ADVERSE.appreciationDelta * 100)}&nbsp;points de moins par an.
           </p>
           <figure className="fb">
             <ul className="fb-legend" aria-hidden="true">
@@ -198,30 +220,14 @@ export default function SimImmobilier() {
               {anyReceived && <li><i className="rb-cash" />Loyers en trop encaissés</li>}
             </ul>
             <ul className="fb-list rb-list">
-              <BalanceGroup title="Scénario central" b={bal} scale={balScale} />
-              <BalanceGroup title="Scénario défavorable" b={badBal} scale={balScale} />
+              <BalanceGroup title="Scénario central" b={bal} scale={balScale} y1={{ netYield: r.netYield, monthly: r.monthlyCashflow, monthlyAfterTax: noTax ? null : (y1?.cashflowAfterTax ?? 0) / 12 }} />
+              <BalanceGroup title="Scénario défavorable" b={badBal} scale={balScale} y1={{ netYield: badSnap.netYield, monthly: badSnap.monthlyCashflow, monthlyAfterTax: noTax ? null : (badProj[0]?.cashflowAfterTax ?? 0) / 12 }} />
             </ul>
           </figure>
           <p className="muted small">
             Sans les frais de revente ni l’impôt sur la plus-value, et sans compter ce que cet argent aurait pu rapporter placé ailleurs :
             le <Link to="/simulateurs/etf-immobilier">comparateur ETF / immobilier</Link> en tient compte. Estimation, si prix et loyers évoluent comme saisi.
           </p>
-
-          <h2>Scénario défavorable</h2>
-          <p className="muted">
-            Appliqué à votre saisie : {ADVERSE.extraVacancyMonths}&nbsp;mois de vacance en plus par an, loyer réduit de {Math.round((1 - ADVERSE.rentFactor) * 100)} %,
-            taxe foncière et charges majorées de {Math.round((ADVERSE.chargesFactor - 1) * 100)} %, évolution du prix du bien diminuée de {Math.abs(ADVERSE.appreciationDelta * 100)} points par an.
-          </p>
-          <div className="table-wrap" tabIndex={0}>
-            <table>
-              <thead><tr><th><span className="sr-only">Indicateur</span></th><th className="r">Central</th><th className="r">Défavorable</th></tr></thead>
-              <tbody>
-                <tr><td>Rendement net de charges</td><td className="r">{fmtPct(r.netYield)}</td><td className="r">{fmtPct(badSnap.netYield)}</td></tr>
-                <tr><td>Solde mensuel avant impôt</td><td className="r">{fmtEur(r.monthlyCashflow)}</td><td className="r">{fmtEur(badSnap.monthlyCashflow)}</td></tr>
-                <tr><td>Solde mensuel après impôt (estimation, année 1)</td><td className="r">{fmtEur((y1?.cashflowAfterTax ?? 0) / 12)}</td><td className="r">{fmtEur((badProj[0]?.cashflowAfterTax ?? 0) / 12)}</td></tr>
-              </tbody>
-            </table>
-          </div>
 
           <Fold title="Évolution année par année">
           <div className="panel rb-chart">
