@@ -57,17 +57,24 @@ export default function SimFrais() {
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
             <legend>Hypothèses</legend>
-            <NumberField label="Capital initial" unit="€" value={s.initial} onChange={up('initial')} min={0} step={1000} />
-            <NumberField label="Versement mensuel" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} />
+            <div className="field-duo">
+              <NumberField label="Capital initial" unit="€" value={s.initial} onChange={up('initial')} min={0} step={1000} />
+              <NumberField label="Versement mensuel" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} />
+            </div>
             <NumberField label="Rendement brut annuel" unit="%" percent value={s.annualReturn} onChange={up('annualReturn')} min={-20} max={30} step={0.5} hint="Avant frais. Hypothèse, jamais une garantie." />
-            <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={1} max={60} step={1} />
-            <NumberField label="Inflation annuelle" unit="%" percent value={s.inflation} onChange={up('inflation')} min={0} max={20} step={0.5} />
+            <div className="field-duo">
+              <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={1} max={60} step={1} />
+              <NumberField label="Inflation annuelle" unit="%" percent value={s.inflation} onChange={up('inflation')} min={0} max={20} step={0.5} />
+            </div>
           </fieldset>
           <fieldset>
             <legend>Trois niveaux de frais annuels</legend>
-            <NumberField label="Frais A" unit="%" percent value={s.feesA} onChange={up('feesA')} min={0} max={10} step={0.1} />
-            <NumberField label="Frais B" unit="%" percent value={s.feesB} onChange={up('feesB')} min={0} max={10} step={0.1} />
-            <NumberField label="Frais C" unit="%" percent value={s.feesC} onChange={up('feesC')} min={0} max={10} step={0.1} />
+            <p className="fees-intro">En % du capital, chaque année : trois hypothèses à comparer.</p>
+            <div className="field-trio fees-trio">
+              <NumberField label="Frais annuels A" shortLabel="Frais A" unit="%" percent value={s.feesA} onChange={up('feesA')} min={0} max={10} step={0.1} />
+              <NumberField label="Frais annuels B" shortLabel="Frais B" unit="%" percent value={s.feesB} onChange={up('feesB')} min={0} max={10} step={0.1} />
+              <NumberField label="Frais annuels C" shortLabel="Frais C" unit="%" percent value={s.feesC} onChange={up('feesC')} min={0} max={10} step={0.1} />
+            </div>
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
           <JumpToResults />
