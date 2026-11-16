@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
 import { businessTakeaway, businessZeroValueNote } from '../lib/takeaways';
-import { BUSINESS_SCENARIOS, fmtEur, fmtPct, lowestCash, projectBusiness, type BusinessInput } from '../lib/finance';
-import { Crumbs, Disclaimer, Fold, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, Tabs, usePersistentState, JumpToResults } from '../components/ui';
+import { BUSINESS_SCENARIOS, IS_RATES, fmtEur, fmtPct, lowestCash, projectBusiness, type BusinessInput } from '../lib/finance';
+import { fmtDate } from '../lib/dates';
+import { ChoiceField, Crumbs, Disclaimer, Fold, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, Tabs, usePersistentState, JumpToResults } from '../components/ui';
 
 const DEFAULTS: BusinessInput = {
   revenueY1: 120000, revenueGrowth: 0.1, grossMarginRate: 0.6, fixedCosts: 30000, fixedCostsGrowth: 0.02,
-  founderPay: 24000, socialRate: 0.45, corporateTaxRate: 0.25, receivableDays: 30,
+  founderPay: 24000, socialRate: 0.45, corporateTaxRate: IS_RATES.normal, smallBusinessRate: true, receivableDays: 30,
   initialCash: 15000, initialInvestment: 10000, valuationMultiple: 5, years: 5,
 };
 
@@ -30,6 +31,15 @@ export default function SimEntreprise() {
   ];
   // Montants très longs (plus de 10 caractères) : sur mobile, une ligne par scénario plutôt que trois colonnes trop étroites
   const longValues = scenarioRows.some((r) => r.values.some((v) => fmtEur(v).length > 10));
+  // Taux appliqués la dernière année : le taux réduit ne touche que les premiers 42 500 € de bénéfice
+  const reducedApplies = !!last && s.smallBusinessRate === true && last.revenue <= IS_RATES.maxTurnover && last.corporateTax > 0;
+  const taxSub = !last || last.corporateTax <= 0
+    ? 'aucun bénéfice imposable'
+    : reducedApplies
+      ? last.corporateTax > IS_RATES.reducedCap * IS_RATES.reduced + 0.005
+        ? `${fmtPct(IS_RATES.reduced)} jusqu’à ${fmtEur(IS_RATES.reducedCap)}, ${fmtPct(s.corporateTaxRate)} au-delà`
+        : `taux réduit de ${fmtPct(IS_RATES.reduced)}`
+      : `taux de ${fmtPct(s.corporateTaxRate)}`;
   const zeroValue = businessZeroValueNote({ multiple: s.valuationMultiple, scenarios: runs.map((r, i) => ({ label: LABELS[i], netResultLast: r[r.length - 1]?.netResult ?? 0 })) });
 
   return (
@@ -73,7 +83,13 @@ export default function SimEntreprise() {
                 <legend>Charges et impôt</legend>
                 <NumberField label="Évolution des charges fixes" unit="%/an" percent value={s.fixedCostsGrowth} onChange={up('fixedCostsGrowth')} step={0.5} min={-20} max={50} />
                 <NumberField label="Charges sociales" unit="% du net" percent value={s.socialRate} onChange={up('socialRate')} step={1} min={0} max={150} hint="Varie fortement selon le statut : à vérifier avec l'URSSAF." />
-                <NumberField label="Impôt sur les sociétés" unit="%" percent value={s.corporateTaxRate} onChange={up('corporateTaxRate')} step={1} min={0} max={50} hint="Taux normal 25 % ; un taux réduit existe sous conditions pour les PME (à vérifier)." />
+                <ChoiceField label="Impôt sur les sociétés" value={s.smallBusinessRate ? 1 : 0} onChange={(v) => up('smallBusinessRate')(v === 1)} columns={2}
+                  options={[
+                    { v: 1, label: 'Taux réduit PME', detail: `${fmtPct(IS_RATES.reduced)} jusqu’à ${fmtEur(IS_RATES.reducedCap)}` },
+                    { v: 0, label: 'Taux normal', detail: 'sur tout le bénéfice' },
+                  ]}
+                  hint={`Taux réduit si le chiffre d’affaires ne dépasse pas 10\u00a0millions d’euros et si le capital, entièrement libéré, est détenu à 75\u00a0% au moins par des personnes physiques (impots.gouv.fr, vérifié le ${fmtDate(IS_RATES.verifiedOn)}).`} />
+                <NumberField label="Taux normal de l’impôt sur les sociétés" unit="%" percent value={s.corporateTaxRate} onChange={up('corporateTaxRate')} step={1} min={0} max={50} hint={`Taux en vigueur : ${fmtPct(IS_RATES.normal)}. Avec le taux réduit, il ne touche que le bénéfice au-delà de ${fmtEur(IS_RATES.reducedCap)}.`} />
               </fieldset>
               <fieldset>
                 <legend>Trésorerie et valorisation</legend>
@@ -134,7 +150,7 @@ export default function SimEntreprise() {
             <div className="kpis">
               <Kpi label="Marge brute finale" value={fmtEur(last.grossMargin)} sub={fmtPct(last.revenue ? last.grossMargin / last.revenue : 0) + ' du chiffre d’affaires'} />
               <Kpi label="Coût de la rémunération" value={fmtEur(last.payrollCost)} sub="net + charges sociales" />
-              <Kpi label="Impôt sur les sociétés" value={fmtEur(last.corporateTax)} />
+              <Kpi label="Impôt sur les sociétés" value={fmtEur(last.corporateTax)} sub={taxSub} />
             </div>
           )}
           <Fold title="Tableau détaillé année par année">

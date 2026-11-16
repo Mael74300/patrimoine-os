@@ -17,13 +17,42 @@ export type BusinessInput = {
   fixedCostsGrowth: number;
   founderPay: number; // rémunération nette annuelle du dirigeant
   socialRate: number; // charges sociales en % de la rémunération nette
-  corporateTaxRate: number;
+  corporateTaxRate: number; // taux normal de l'impôt sur les sociétés
+  /** Taux réduit des PME (IS_RATES) sur la première tranche de bénéfice ; absent ou faux : taux normal sur tout le bénéfice. */
+  smallBusinessRate?: boolean;
   receivableDays: number; // délai moyen d'encaissement clients
   initialCash: number;
   initialInvestment: number;
   valuationMultiple: number; // multiple du résultat net
   years: number;
 };
+
+/**
+ * Impôt sur les sociétés (article 219 du CGI) : taux normal de 25 % ; taux réduit de 15 % sur la fraction du bénéfice
+ * n'excédant pas 42 500 € (exercices clos depuis le 31 décembre 2022, période de douze mois), réservé aux sociétés dont
+ * le chiffre d'affaires ne dépasse pas 10 M€ et dont le capital, entièrement libéré, est détenu pour 75 % au moins par
+ * des personnes physiques. Sources consultées le 16 novembre 2026 : impots.gouv.fr et BOFiP (BOI-IS-LIQ-20-20230621).
+ */
+export const IS_RATES = {
+  normal: 0.25,
+  reduced: 0.15,
+  reducedCap: 42500,
+  maxTurnover: 10_000_000,
+  source: { label: 'impots.gouv.fr — Impôt sur les sociétés', url: 'https://www.impots.gouv.fr/international-professionnel/impot-sur-les-societes' },
+  doctrine: { label: 'BOFiP — Taux réduit applicable au bénéfice des PME', url: 'https://bofip.impots.gouv.fr/bofip/2063-PGP.html/identifiant=BOI-IS-LIQ-20-20230621' },
+  verifiedOn: '2026-11-16',
+};
+
+/**
+ * Impôt sur un bénéfice imposable : taux réduit sur les premiers 42 500 € si la société y a droit
+ * (option choisie et chiffre d'affaires de l'année au plus égal à 10 M€), taux normal saisi au-delà.
+ */
+export function corporateTaxAmount(base: number, normalRate: number, smallBusiness: boolean, revenue = 0): number {
+  const b = Math.max(0, num(base));
+  if (!smallBusiness || revenue > IS_RATES.maxTurnover) return b * normalRate;
+  const low = Math.min(b, IS_RATES.reducedCap);
+  return low * IS_RATES.reduced + (b - low) * normalRate;
+}
 
 export type BusinessYear = {
   year: number;
@@ -70,7 +99,7 @@ export function projectBusiness(input: BusinessInput, adj: ScenarioAdjust = BUSI
       lossCarry = -base;
       base = 0;
     }
-    const corporateTax = base * tax;
+    const corporateTax = corporateTaxAmount(base, tax, input.smallBusinessRate === true, revenue);
     const netResult = operatingResult - corporateTax;
     const workingCapital = (revenue * days) / 365;
     const cashFlow = netResult - (workingCapital - prevWC);

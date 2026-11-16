@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BUSINESS_SCENARIOS, lowestCash, projectBusiness } from './business';
+import { BUSINESS_SCENARIOS, corporateTaxAmount, IS_RATES, lowestCash, projectBusiness } from './business';
 
 const B = {
   revenueY1: 120000, revenueGrowth: 0.1, grossMarginRate: 0.6, fixedCosts: 30000, fixedCostsGrowth: 0,
@@ -36,4 +36,20 @@ describe('calculateur entrepreneurial', () => {
     expect(c).toBeLessThan(o);
   });
   it('durée nulle', () => expect(projectBusiness({ ...B, years: 0 })).toHaveLength(0));
+  it('taux réduit des PME : 15 % jusqu’à 42 500 €, puis le taux normal (impots.gouv.fr, vérifié le 16 novembre 2026)', () => {
+    expect(IS_RATES).toMatchObject({ normal: 0.25, reduced: 0.15, reducedCap: 42500, maxTurnover: 10_000_000 });
+    expect(IS_RATES.verifiedOn).toBe('2026-11-16');
+    expect(corporateTaxAmount(30000, 0.25, true)).toBeCloseTo(4500, 8);
+    expect(corporateTaxAmount(50000, 0.25, true)).toBeCloseTo(42500 * 0.15 + 7500 * 0.25, 8); // 6 375 + 1 875 = 8 250
+    expect(corporateTaxAmount(50000, 0.25, false)).toBeCloseTo(12500, 8);
+    expect(corporateTaxAmount(50000, 0.25, true, 12_000_000)).toBeCloseTo(12500, 8); // chiffre d'affaires au-delà de 10 M€
+    expect(corporateTaxAmount(-1000, 0.25, true)).toBe(0);
+  });
+  it('le taux réduit s’applique dans la projection et allège l’impôt', () => {
+    const normal = projectBusiness(B).at(-1)!;
+    const reduced = projectBusiness({ ...B, smallBusinessRate: true }).at(-1)!;
+    expect(reduced.corporateTax).toBeCloseTo(corporateTaxAmount(normal.operatingResult, 0.25, true), 6);
+    expect(reduced.corporateTax).toBeLessThan(normal.corporateTax);
+    expect(reduced.netResult - normal.netResult).toBeCloseTo(normal.corporateTax - reduced.corporateTax, 6);
+  });
 });

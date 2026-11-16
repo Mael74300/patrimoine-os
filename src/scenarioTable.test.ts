@@ -11,7 +11,7 @@ import entreprise from './pages/SimEntreprise.tsx?raw';
 const css: string = readFileSync('src/styles.css', 'utf8');
 const DEFAULTS = {
   revenueY1: 120000, revenueGrowth: 0.1, grossMarginRate: 0.6, fixedCosts: 30000, fixedCostsGrowth: 0.02,
-  founderPay: 24000, socialRate: 0.45, corporateTaxRate: 0.25, receivableDays: 30,
+  founderPay: 24000, socialRate: 0.45, corporateTaxRate: 0.25, smallBusinessRate: true, receivableDays: 30,
   initialCash: 15000, initialInvestment: 10000, valuationMultiple: 5, years: 5,
 };
 
