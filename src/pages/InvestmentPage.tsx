@@ -5,6 +5,7 @@ import { categoryById } from '../data/categories';
 import { investmentBySlug } from '../data/investments';
 import { needsCheck } from '../data/types';
 import { guidesForInvestment, relatedSimulators, simsForInvestment, simulateTarget } from '../lib/relatedSims';
+import { FamilyIcon } from '../components/Icons';
 import { AdSlot, CheckedText, Crumbs, Fold, MeterRows, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
 import { interleave, splitNext } from '../lib/nextLinks';
@@ -78,7 +79,7 @@ export default function InvestmentPage() {
       ]} />
       <div className="fiche">
         <article className="prose">
-          <PageHead eyebrow={cat.name} title={inv.name}>{inv.summary}</PageHead>
+          <PageHead eyebrow={cat.name} icon={<FamilyIcon id={cat.id} size={20} />} title={inv.name}>{inv.summary}</PageHead>
 
           <div className="panel fiche-brief">
             <MeterRows risk={inv.risk} liquidity={inv.liquidity} effort={inv.effort} effortNote={inv.timeSkills} />
