@@ -185,14 +185,15 @@ export default function Methodologie() {
       </p>
 
       <h2>Contrôles automatiques, décision humaine</h2>
-      <SchemaVerification />
-      <p>Chaque semaine, des contrôles gratuits et automatiques :</p>
-      <ul>
-        <li>vérifient que les liens vers les sources fonctionnent ;</li>
-        <li>repèrent si une page officielle suivie a changé (le site compare une simple empreinte, sans copier son contenu, et respecte les règles d'accès de ces sites) ;</li>
-        <li>signalent les fiches dont la date de révision est dépassée ;</li>
-        <li>relancent les tests et vérifient que le site se construit.</li>
-      </ul>
+      <SchemaVerification>
+        <p>Chaque semaine, des contrôles gratuits et automatiques :</p>
+        <ul>
+          <li>vérifient que les liens vers les sources fonctionnent ;</li>
+          <li>repèrent si une page officielle suivie a changé (le site compare une simple empreinte, sans copier son contenu, et respecte les règles d'accès de ces sites) ;</li>
+          <li>signalent les fiches dont la date de révision est dépassée ;</li>
+          <li>relancent les tests et vérifient que le site se construit.</li>
+        </ul>
+      </SchemaVerification>
       <p>
         Quand un changement est repéré, une demande de révision est ouverte pour qu'une personne vérifie. Une règle fiscale n'est jamais modifiée
         automatiquement. Si une information ne peut pas être vérifiée de façon fiable, la version existante est conservée et signalée.

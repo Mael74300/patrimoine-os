@@ -44,7 +44,7 @@ describe('schémas sans chiffre en viewBox 340', () => {
   it('contrôle : chaque ligne tient dans sa carte', () => {
     const s = svg(SchemaVerification);
     expect(largeur('chaque semaine', 13)).toBeLessThan(118 - 8);
-    for (const t of ['officielle,', 'consultée', 'datée, avec', 'ses sources']) expect(largeur(t, 13)).toBeLessThan(100 - 8);
+    for (const t of ['officielle,', 'consultée', 'datée, avec', 'ses sources']) expect(largeur(t, 13)).toBeLessThan(98 - 8);
     expect(s).toContain('>et signalée « à vérifier »</text>');
   });
 

@@ -381,6 +381,9 @@ td.neg { color: var(--danger); }
 /* ---------- Illustrations maison (SVG) */
 .illustration { margin: 20px 0; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
 .illustration figcaption { font-size: 0.875rem; color: var(--ink-2); margin-top: 8px; }
+.illustration figcaption > p:first-child { margin-top: 0; }
+.illustration figcaption > ul { margin: 6px 0 0; padding-left: 1.2em; }
+.illustration figcaption > ul > li + li { margin-top: 4px; }
 .ill-svg { display: block; width: 100%; max-width: 440px; height: auto; margin: 0 auto; }
 .ill-svg text { font-family: var(--font-schema); fill: var(--ink); }
 .ill-total { font-size: 14px; font-weight: 700; }
