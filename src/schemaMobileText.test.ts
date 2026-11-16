@@ -3,7 +3,7 @@ import { createElement } from 'react';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { SchemaOr, SchemaPtz } from './components/Illustrations';
+import { SchemaPtz } from './components/Illustrations';
 
 /**
  * Sur mobile (≤ 480 px), les petits textes des schémas larges (viewBox 420) sont agrandis de 12 à 13,2 unités
@@ -26,12 +26,7 @@ describe('textes des schémas agrandis sur mobile', () => {
   // Diversification (principe et exemple) et intérêts composés : schémas redessinés en viewBox 340 le 2026-11-15,
   // contrôlés par schemaGuidesMobile.test.ts.
 
-  it('or : la phrase du bas est coupée en deux lignes, dans le cadre', () => {
-    const s = svg(SchemaOr);
-    expect(s).toContain('viewBox="0 0 420 228"');
-    expect(s).toContain('>Même taxe dans les deux cas :</text>');
-    expect(s).toMatch(/>11,5 % du prix de vente de [\d\s ]+€<\/text>/);
-  });
+  // Or : schéma redessiné en viewBox 340 le 2026-11-16, contrôlé par schemaFichesDernieres.test.ts.
 
   // Assurance-vie : schéma redessiné en viewBox 340 le 2026-11-15, contrôlé par schemaAssuranceVieMobile.test.ts.
 

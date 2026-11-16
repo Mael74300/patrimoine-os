@@ -584,33 +584,37 @@ export function orTaxe(prix: number): number {
   return Math.round(prix * 0.115 * 100) / 100;
 }
 
+/* ViewBox 340 (chantier 112, étape 12) : à 375 px, les textes s'affichent presque à leur taille (≈ 12,5 à 14 px au lieu de
+ * ≈ 11,2 px avec l'ancien viewBox 420). Mêmes chiffres et mêmes règles ; barres toujours proportionnelles aux montants. */
 export function SchemaOr() {
   const taxe = orTaxe(OR_EXAMPLE_PRICE);
   const reste = OR_EXAMPLE_PRICE - taxe;
-  const X0 = 14;
-  const W = 392;
+  const X0 = 6;
+  const W = 328;
   const wTaxe = (taxe / OR_EXAMPLE_PRICE) * W;
   const cas = [
-    { y: 34, titre: 'Cas A : pièce payée 1 900 €, gain de 100 €' },
-    { y: 126, titre: 'Cas B : pièce payée 1 000 €, gain de 1 000 €' },
+    { y: 0, titre: 'Cas A : pièce payée 1 900 €', gain: 'gain de 100 €' },
+    { y: 110, titre: 'Cas B : pièce payée 1 000 €', gain: 'gain de 1 000 €' },
   ];
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 228" role="img" aria-labelledby="ill-or-t ill-or-d" className="ill-svg">
+      <svg viewBox="0 0 340 280" role="img" aria-labelledby="ill-or-t ill-or-d" className="ill-svg">
         <title id="ill-or-t">{`Or physique : la taxe forfaitaire est de ${fmtEur(taxe)} sur une vente à ${fmtEur(OR_EXAMPLE_PRICE)}, quel que soit le gain`}</title>
         <desc id="ill-or-d">{`Exemple fictif : une pièce d’or revendue ${fmtEur(OR_EXAMPLE_PRICE)} sous le régime forfaitaire. La taxe est de 11 % du prix de vente plus 0,5 % de CRDS, soit ${fmtEur(taxe)}, que le gain soit de 100 € ou de 1 000 €. Il reste ${fmtEur(reste)} au vendeur.`}</desc>
         {cas.map((c) => (
           <g key={c.y}>
-            <text x={X0} y={c.y - 8} className="ill-step">{c.titre}</text>
-            <rect x={X0} y={c.y} width={W} height={36} fill="var(--accent)" />
-            <rect x={X0} y={c.y} width={wTaxe} height={36} fill="var(--warn)" />
-            <rect x={X0} y={c.y} width={W} height={36} rx={8} fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
-            <text x={X0 + wTaxe + (W - wTaxe) / 2} y={c.y + 23} textAnchor="middle" className="ill-on-dark ill-total">{fmtEur(reste)} pour vous</text>
-            <text x={X0} y={c.y + 54} className="ill-sub">Taxe : {fmtEur(taxe)} (à gauche, en orange)</text>
+            <text x={X0} y={c.y + 16} className="ill-step">{c.titre}</text>
+            <text x={X0 + W} y={c.y + 16} textAnchor="end" className="ill-sub">{c.gain}</text>
+            <rect x={X0} y={c.y + 28} width={W} height={38} fill="var(--accent)" />
+            <rect x={X0} y={c.y + 28} width={wTaxe} height={38} fill="var(--warn)" />
+            <rect x={X0} y={c.y + 28} width={W} height={38} rx={8} fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
+            <text x={X0 + wTaxe + (W - wTaxe) / 2} y={c.y + 52} textAnchor="middle" className="ill-on-dark ill-total">{fmtEur(reste)} pour vous</text>
+            <text x={X0} y={c.y + 86} className="ill-sub">Taxe : {fmtEur(taxe)} (à gauche, en orange)</text>
           </g>
         ))}
-        <text x={210} y={204} textAnchor="middle" className="ill-sub">Même taxe dans les deux cas :</text>
-        <text x={210} y={222} textAnchor="middle" className="ill-sub">11,5 % du prix de vente de {fmtEur(OR_EXAMPLE_PRICE)}</text>
+        <line x1={X0} y1={218} x2={X0 + W} y2={218} stroke="var(--line)" strokeWidth={1} />
+        <text x={170} y={244} textAnchor="middle" className="ill-sub">Même taxe dans les deux cas :</text>
+        <text x={170} y={264} textAnchor="middle" className="ill-sub">11,5 % du prix de vente de {fmtEur(OR_EXAMPLE_PRICE)}</text>
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : régime forfaitaire (11 % + 0,5 % de CRDS) calculé sur le prix de vente, pas sur le gain. Barres proportionnelles aux montants.
@@ -726,38 +730,41 @@ export function ucValeur(nombre: number, prixUnite: number): number {
   return Math.round(nombre * prixUnite * 100) / 100;
 }
 
-/** Fiche Unités de compte : le nombre d'unités est garanti, pas leur valeur (Service-Public F15274). */
+/** Fiche Unités de compte : le nombre d'unités est garanti, pas leur valeur (Service-Public F15274).
+ * ViewBox 340 (chantier 112, étape 12) : à 375 px, textes presque à leur taille au lieu de ≈ 11,2 px avec l'ancien viewBox 420.
+ * Mêmes montants et mêmes règles ; barres proportionnelles aux montants. */
 export function SchemaUniteDeCompte() {
   const cas = [
     { prix: 8, label: 'Les marchés baissent', fill: 'var(--warn)' },
     { prix: 10, label: 'Valeur inchangée', fill: 'var(--primary)' },
     { prix: 12, label: 'Les marchés montent', fill: 'var(--accent)' },
   ];
-  const X0 = 14;
-  const W = 392;
+  const X0 = 6;
+  const W = 328;
   const max = ucValeur(UC_NOMBRE, 12);
   const base = ucValeur(UC_NOMBRE, UC_PRIX_ACHAT);
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 262" role="img" aria-labelledby="ill-uc-t ill-uc-d" className="ill-svg">
+      <svg viewBox="0 0 340 296" role="img" aria-labelledby="ill-uc-t ill-uc-d" className="ill-svg">
         <title id="ill-uc-t">Unités de compte : le nombre d’unités reste le même, c’est leur valeur qui varie</title>
         <desc id="ill-uc-d">{`Exemple fictif : vous achetez ${UC_NOMBRE} unités de compte à ${fmtEur(UC_PRIX_ACHAT)} l’unité, soit ${fmtEur(base)}. Vous gardez ${UC_NOMBRE} unités quoi qu’il arrive. Si l’unité vaut ${fmtEur(8)}, votre épargne vaut ${fmtEur(ucValeur(UC_NOMBRE, 8))} ; si elle vaut ${fmtEur(10)}, ${fmtEur(base)} ; si elle vaut ${fmtEur(12)}, ${fmtEur(ucValeur(UC_NOMBRE, 12))}. L’assureur garantit le nombre d’unités, pas leur valeur.`}</desc>
-        <text x={X0} y={18} className="ill-step" fontWeight="700">{`Vous achetez ${UC_NOMBRE} unités à ${fmtEur(UC_PRIX_ACHAT)} = ${fmtEur(base)}`}</text>
-        <text x={X0} y={36} className="ill-sub">Plus tard, vous avez toujours {UC_NOMBRE} unités. Leur valeur, non :</text>
+        <text x={X0} y={18} className="ill-step">{`Vous achetez ${UC_NOMBRE} unités à ${fmtEur(UC_PRIX_ACHAT)}`}</text>
+        <text x={X0} y={40} className="ill-sub">{`soit ${fmtEur(base)}. Plus tard, vous avez toujours`}</text>
+        <text x={X0} y={58} className="ill-sub">{`${UC_NOMBRE} unités. Leur valeur, non :`}</text>
         {cas.map((c, i) => {
-          const y = 52 + i * 52;
+          const y = 70 + i * 54;
           const w = (ucValeur(UC_NOMBRE, c.prix) / max) * W;
           return (
             <g key={c.prix}>
-              <text x={X0} y={y + 10} className="ill-sub">{`${c.label} : l’unité vaut ${fmtEur(c.prix)}`}</text>
-              <rect x={X0} y={y + 16} width={w} height={26} rx={7} fill={c.fill} />
-              <text x={X0 + 10} y={y + 34} className="ill-on-dark ill-total" fontSize={13}>{`${UC_NOMBRE} unités = ${fmtEur(ucValeur(UC_NOMBRE, c.prix))}`}</text>
+              <text x={X0} y={y + 13} className="ill-sub">{`${c.label} : l’unité vaut ${fmtEur(c.prix)}`}</text>
+              <rect x={X0} y={y + 20} width={w} height={28} rx={7} fill={c.fill} />
+              <text x={X0 + 10} y={y + 39} className="ill-on-dark ill-total">{`${UC_NOMBRE} unités = ${fmtEur(ucValeur(UC_NOMBRE, c.prix))}`}</text>
             </g>
           );
         })}
-        <rect x={14} y={212} width={392} height={40} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
-        <text x={210} y={229} textAnchor="middle" className="ill-sub">L’assureur garantit le nombre d’unités,</text>
-        <text x={210} y={245} textAnchor="middle" className="ill-sub">pas leur valeur : perte possible en capital.</text>
+        <rect x={X0} y={240} width={W} height={50} rx={10} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
+        <text x={170} y={261} textAnchor="middle" className="ill-sub">L’assureur garantit le nombre d’unités,</text>
+        <text x={170} y={280} textAnchor="middle" className="ill-sub">pas leur valeur : perte possible en capital.</text>
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : les valeurs de l’unité sont inventées pour montrer le principe, ce n’est pas une prévision. Barres proportionnelles aux montants.
@@ -932,71 +939,73 @@ export function SchemaForet() {
 }
 
 /** Schéma « Objets d’art : la taxe dépend du prix de vente » : seuil 5 000 €, taux 6 % + CRDS 0,5 % = 6,5 % du prix de cession (BOFiP BOI-RPPM-PVBMC-20-10, consulté le 2026-11-09). */
+/* ViewBox 340 (chantier 112, étape 12) : à 375 px, textes presque à leur taille au lieu de ≈ 11,2 px avec l'ancien viewBox 420.
+ * Mêmes textes et mêmes règles, coupés autrement pour tenir dans des colonnes de 158 unités. */
 export function SchemaObjetsArt() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-art-t ill-art-d" className="ill-svg">
+      <svg viewBox="0 0 340 368" role="img" aria-labelledby="ill-art-t ill-art-d" className="ill-svg">
         <title id="ill-art-t">À la vente d’un objet d’art, la taxe dépend du prix de vente</title>
         <desc id="ill-art-d">Vous vendez un objet d’art, de collection ou une antiquité. Si le prix de vente est inférieur ou égal à 5 000 euros, il n’y a aucune taxe forfaitaire. Au-delà de 5 000 euros, la taxe forfaitaire est de 6 % du prix, plus 0,5 % de CRDS, soit 6,5 % du prix de vente et non du gain. En pratique, le seuil s’apprécie objet par objet.</desc>
-        <rect x={60} y={2} width={300} height={52} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={210} y={26} textAnchor="middle" className="ill-step">Vous vendez un objet d’art</text>
-        <text x={210} y={44} textAnchor="middle" className="ill-sub">ou de collection, ou une antiquité</text>
-        <path d="M 100 54 V 96 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <path d="M 320 54 V 96 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={96} width={200} height={58} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={100} y={122} textAnchor="middle" className="ill-in">Prix de vente</text>
-        <text x={100} y={144} textAnchor="middle" className="ill-step">5 000 € ou moins</text>
-        <rect x={220} y={96} width={200} height={58} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={320} y={122} textAnchor="middle" className="ill-in">Prix de vente</text>
-        <text x={320} y={144} textAnchor="middle" className="ill-step">plus de 5 000 €</text>
-        <path d="M 100 154 V 192 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <path d="M 320 154 V 192 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={192} width={200} height={76} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={100} y={224} textAnchor="middle" className="ill-step">Aucune taxe</text>
-        <text x={100} y={246} textAnchor="middle" className="ill-sub">forfaitaire</text>
-        <rect x={220} y={192} width={200} height={76} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={320} y={216} textAnchor="middle" className="ill-step">6,5 % du prix</text>
-        <text x={320} y={238} textAnchor="middle" className="ill-in">6 % + 0,5 % de CRDS</text>
-        <text x={320} y={257} textAnchor="middle" className="ill-sub">sur le prix, pas sur le gain</text>
-        <text x={210} y={292} textAnchor="middle" className="ill-in">En pratique, le seuil s’apprécie objet par objet.</text>
-        <text x={210} y={316} textAnchor="middle" className="ill-sub">Schéma de principe</text>
+        <rect x={20} y={2} width={300} height={54} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={26} textAnchor="middle" className="ill-step">Vous vendez un objet d’art</text>
+        <text x={170} y={45} textAnchor="middle" className="ill-sub">ou de collection, ou une antiquité</text>
+        <path d="M 83 56 V 94 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <path d="M 257 56 V 94 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={4} y={96} width={158} height={60} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={83} y={121} textAnchor="middle" className="ill-in">Prix de vente</text>
+        <text x={83} y={143} textAnchor="middle" className="ill-step">5 000 € ou moins</text>
+        <rect x={178} y={96} width={158} height={60} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={257} y={121} textAnchor="middle" className="ill-in">Prix de vente</text>
+        <text x={257} y={143} textAnchor="middle" className="ill-step">plus de 5 000 €</text>
+        <path d="M 83 156 V 194 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <path d="M 257 156 V 194 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={4} y={196} width={158} height={96} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={83} y={238} textAnchor="middle" className="ill-step">Aucune taxe</text>
+        <text x={83} y={258} textAnchor="middle" className="ill-sub">forfaitaire</text>
+        <rect x={178} y={196} width={158} height={96} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={257} y={222} textAnchor="middle" className="ill-step">6,5 % du prix</text>
+        <text x={257} y={243} textAnchor="middle" className="ill-in">6 % + 0,5 % de CRDS</text>
+        <text x={257} y={264} textAnchor="middle" className="ill-sub">sur le prix,</text>
+        <text x={257} y={281} textAnchor="middle" className="ill-sub">pas sur le gain</text>
+        <text x={170} y={316} textAnchor="middle" className="ill-in">En pratique, le seuil s’apprécie</text>
+        <text x={170} y={333} textAnchor="middle" className="ill-in">objet par objet.</text>
+        <text x={170} y={360} textAnchor="middle" className="ill-sub">Schéma de principe</text>
       </svg>
     </figure>
   );
 }
 
 /** Schéma « Formation : votre CPF vous suit » : principe qualitatif, sans chiffre (Service-Public F10705, vérifiée le 27 juin 2026, consultée le 2026-11-09). */
+/* ViewBox 340 (chantier 112, étape 12) : à 375 px, textes presque à leur taille au lieu de ≈ 11,2 px avec l'ancien viewBox 420.
+ * Les trois situations sont empilées (une ligne chacune) au lieu de trois colonnes trop étroites. Mêmes textes et mêmes règles. */
 export function SchemaCpf() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
-  const cols = [
-    { x: 0, a: 'Vous travaillez', b: 'chez un employeur' },
-    { x: 143, a: 'Vous changez', b: 'd’employeur' },
-    { x: 286, a: 'Vous perdez', b: 'votre emploi' },
-  ];
+  const situations = ['Vous travaillez chez un employeur', 'Vous changez d’employeur', 'Vous perdez votre emploi'];
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-cpf-t ill-cpf-d" className="ill-svg">
+      <svg viewBox="0 0 340 352" role="img" aria-labelledby="ill-cpf-t ill-cpf-d" className="ill-svg">
         <title id="ill-cpf-t">Votre compte personnel de formation vous suit</title>
         <desc id="ill-cpf-d">Quelle que soit votre situation (en poste, changement d’employeur, perte d’emploi), vous gardez vos droits sur votre compte personnel de formation. Si une formation coûte plus que le montant disponible, vous pouvez demander un complément à votre employeur, à l’Agefiph ou à la région.</desc>
-        {cols.map((c) => (
-          <g key={c.x}>
-            <rect x={c.x} y={2} width={134} height={58} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-            <text x={c.x + 67} y={28} textAnchor="middle" className="ill-in">{c.a}</text>
-            <text x={c.x + 67} y={48} textAnchor="middle" className="ill-in">{c.b}</text>
-            <path d={`M ${c.x + 67} 60 V 98 m -7 -8 l 7 8 l 7 -8`} {...arrow} />
+        {situations.map((t, i) => (
+          <g key={t}>
+            <rect x={20} y={2 + i * 38} width={300} height={32} rx={10} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+            <text x={170} y={23 + i * 38} textAnchor="middle" className="ill-in">{t}</text>
           </g>
         ))}
-        <rect x={0} y={98} width={420} height={64} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={210} y={124} textAnchor="middle" className="ill-step">Votre CPF vous suit</text>
-        <text x={210} y={146} textAnchor="middle" className="ill-sub">vous gardez vos droits</text>
-        <path d="M 210 162 V 200 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={226} y={186} textAnchor="start" className="ill-in">si la formation coûte plus</text>
-        <rect x={0} y={200} width={420} height={78} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={210} y={226} textAnchor="middle" className="ill-step">Un complément est possible</text>
-        <text x={210} y={250} textAnchor="middle" className="ill-in">demandé à votre employeur,</text>
-        <text x={210} y={268} textAnchor="middle" className="ill-in">à l’Agefiph ou à la région</text>
-        <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe</text>
+        <path d="M 170 110 V 138 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={4} y={140} width={332} height={60} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={165} textAnchor="middle" className="ill-step">Votre CPF vous suit</text>
+        <text x={170} y={187} textAnchor="middle" className="ill-sub">vous gardez vos droits</text>
+        <path d="M 170 200 V 210" {...arrow} />
+        <text x={170} y={227} textAnchor="middle" className="ill-in">si la formation coûte plus</text>
+        <path d="M 170 234 V 252 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={4} y={254} width={332} height={72} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={170} y={278} textAnchor="middle" className="ill-step">Un complément est possible</text>
+        <text x={170} y={299} textAnchor="middle" className="ill-in">demandé à votre employeur,</text>
+        <text x={170} y={316} textAnchor="middle" className="ill-in">à l’Agefiph ou à la région</text>
+        <text x={170} y={346} textAnchor="middle" className="ill-sub">Schéma de principe</text>
       </svg>
     </figure>
   );
