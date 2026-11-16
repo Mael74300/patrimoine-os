@@ -3,8 +3,9 @@ import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, cat
 import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio } from './finance';
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
+import { capacityForPayment } from './calc/debtRatio';
 import { precautionTarget } from './calc/precaution';
-import { rebalanceTakeaway, portfolioProjectionNote, businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, budgetGapPhrase, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionPlacementTakeaway, precautionTargetSub, prepayTakeaway, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { rebalanceTakeaway, portfolioProjectionNote, businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, budgetGapPhrase, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, capacityTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionPlacementTakeaway, precautionTargetSub, prepayTakeaway, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -16,6 +17,16 @@ describe('phrases « Concrètement »', () => {
   });
   it('crédit : vide si aucun emprunt', () => {
     expect(creditTakeaway({ principal: 0, years: 20, monthlyTotal: 0, totalCost: 0 })).toBe('');
+  });
+  it('capacité d’emprunt : d’où vient la mensualité maximale, et marge ou dépassement du projet', () => {
+    const cap = capacityForPayment(1400, 0.036, 20, 0.003);
+    const t = capacityTakeaway({ income: 4000, debtRatio: 0.35, years: 20, capacity: cap, principal: 200000 }).replace(/\u00a0/g, ' ');
+    expect(t).toContain('35 % de vos revenus');
+    expect(t).toContain('(20 ans)');
+    expect(t).toContain(`${Math.round(cap - 200000).toLocaleString('fr-FR').replace(/\s/g, ' ')} € de marge`);
+    const over = capacityTakeaway({ income: 4000, debtRatio: 0.35, years: 20, capacity: cap, principal: 300000 }).replace(/\u00a0/g, ' ');
+    expect(over).toContain(`le dépasse de ${Math.round(300000 - cap).toLocaleString('fr-FR').replace(/\s/g, ' ')} €`);
+    expect(capacityTakeaway({ income: 0, debtRatio: 0.35, years: 20, capacity: 0, principal: 200000 })).toBe('');
   });
   it('endettement : signale un reste à vivre négatif et un dépassement', () => {
     const t = debtRatioTakeaway({ income: 2000, ratioAfter: 0.5, remainingAfter: -100, withinRef: false, refLabel: '35 %' });

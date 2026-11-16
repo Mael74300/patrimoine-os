@@ -13,6 +13,17 @@ export function creditTakeaway(p: { principal: number; years: number; monthlyTot
   return `Vous recevez ${fmtEur(p.principal)} et vous rendez ${fmtEur(rendu)} en tout, soit ${fmtEur(p.monthlyTotal)} par mois pendant ${fmtAns(p.years)}. Le crédit vous coûte donc ${fmtEur(p.totalCost)} de plus que la somme reçue (environ ${par100} € pour 100 € empruntés).`;
 }
 
+/** Crédit : d'où vient la capacité d'emprunt, et le projet saisi comparé à cette limite. */
+export function capacityTakeaway(p: { income: number; debtRatio: number; years: number; capacity: number; principal: number }): string {
+  if (!(p.income > 0) || !(p.debtRatio > 0) || !(p.years > 0) || !(p.capacity > 0)) return '';
+  const base = `C'est le montant dont la mensualité, assurance comprise, atteint ${fmtPct(p.debtRatio)} de vos revenus, au taux et sur la durée saisis plus haut (${fmtAns(p.years)}).`;
+  if (!(p.principal > 0)) return base;
+  const ecart = p.capacity - p.principal;
+  return base + (ecart >= 0
+    ? ` Votre projet de ${fmtEur(p.principal)} reste en dessous, avec ${fmtEur(ecart)} de marge.`
+    : ` Votre projet de ${fmtEur(p.principal)} le dépasse de ${fmtEur(-ecart)} : il faudrait emprunter moins, par exemple grâce à un apport.`);
+}
+
 /** Taux d'endettement : la part des revenus prise par les crédits, et ce qui reste. */
 export function debtRatioTakeaway(p: { income: number; ratioAfter: number; remainingAfter: number; withinRef: boolean; refLabel: string }): string {
   if (!(p.income > 0)) return '';
