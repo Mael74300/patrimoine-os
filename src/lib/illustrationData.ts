@@ -330,3 +330,10 @@ export const SCPI_EXAMPLE = { amount: 10000, entryFeePct: 10, distributionPct: 5
  * consulté le 2026-11-14), revenus imposés dans la tranche à 30 % (Service-Public F1419, consulté le 2026-11-14).
  */
 export const LOCATION_NUE_EXAMPLE = { price: 150000, monthlyRent: 750, allowancePct: 30, ceiling: 15000, marginalRatePct: 30, socialPct: 17.2 };
+
+/**
+ * Fiche Racheter une entreprise : exemple fictif, une entreprise qui dégage 100 000 € de résultat par an, achetée 500 000 €
+ * dont 400 000 € empruntés sur 7 ans à un taux fictif de 4 %, puis le même remboursement si le résultat baisse de 30 %.
+ * Aucun chiffre réglementaire : tout est fictif, recalculé par `repriseDebtShare` (ficheExemples.test.ts).
+ */
+export const REPRISE_EXAMPLE = { profit: 100000, price: 500000, loan: 400000, years: 7, ratePct: 4, dropPct: 30 };

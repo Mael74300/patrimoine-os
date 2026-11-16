@@ -482,7 +482,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Activité déjà rentable dès le premier jour', 'Effet de levier'],
     cons: ['Montant élevé', 'Risque de surpayer'],
     timeSkills: 'Très élevé.',
-    example: 'Exemple fictif : une entreprise réalisant 100 000 € de résultat, achetée 500 000 € dont 400 000 € empruntés sur 7 ans.',
+    example: 'Exemple fictif : une entreprise qui dégage 100 000 € de résultat par an, achetée 500 000 € dont 400 000 € empruntés sur 7 ans à un taux fictif de 4 %. Le prêt coûte 5 468 € par mois, soit 65 610 € par an : 66 % du résultat. Il reste 34 390 € ; si le résultat baisse de 30 %, il ne reste que 4 390 €. Calcul simplifié, sans impôt sur les bénéfices ni assurance du prêt.',
     sources: [S.impotsFonds, S.impotsActes, S.bpi],
     alternatives: ['creation-entreprise'],
     tags: ['entrepreneuriat', 'levier'],
