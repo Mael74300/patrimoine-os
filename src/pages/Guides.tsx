@@ -5,6 +5,7 @@ import { investmentBySlug } from '../data/investments';
 import { guideBlurb } from '../lib/guideBlurbs';
 import { simBlurb } from '../lib/simThemes';
 import { guideSimulators } from '../lib/relatedSims';
+import { splitNext } from '../lib/nextLinks';
 import { NetWorthCalculator } from '../components/NetWorthCalculator';
 import { Crumbs, FaqSection, MobileFold, PageHead, Sources } from '../components/ui';
 import { ENVELOPE_CARDS, EnvelopeCards } from '../components/EnvelopeCards';
@@ -17,6 +18,17 @@ import { annotateJargon, splitLead, type JargonSegment } from '../lib/jargon';
 import { JargonText } from '../components/Jargon';
 import NotFound from './NotFound';
 import { fmtDate } from '../lib/dates';
+
+type NextItem = { kind: string; to: string; title: string; blurb: string };
+function NextList({ items }: { items: NextItem[] }) {
+  return (
+    <ul className="next-list">
+      {items.map((it) => (
+        <li key={it.to}><span className="next-kind">{it.kind}</span><Link to={it.to}>{it.title}</Link><span>{it.blurb}</span></li>
+      ))}
+    </ul>
+  );
+}
 
 /** Guide « Par où commencer » : pour chaque étape, la page du site qui permet d'aller plus loin (aucun chiffre). */
 export const etapesSuite: { to: string; label: string }[] = [
@@ -142,27 +154,36 @@ export function GuidePage() {
       {g.widget === 'patrimoine-net' && (<><h2>Calculer votre patrimoine net</h2><NetWorthCalculator /></>)}
       <div className="prose">
         {g.cta && <p style={{ marginTop: 24 }}><Link className="btn" to={g.cta.to}>{g.cta.label}</Link></p>}
-        {g.slug !== 'choisir-son-enveloppe' && (<>
+        {g.slug === 'par-ou-commencer' && (<>
           <h2>Pour aller plus loin</h2>
-          {/* Le classement du guide Types d’investissements renvoie déjà vers chaque fiche. */}
-          {g.slug !== 'types-investissements' && (<>
           <h3 className="next-sub">Fiches liées</h3>
           {/* « Par où commencer » : chaque étape a déjà son lien ; les fiches sont listées sans résumé pour garder la page courte. */}
-          <ul className={g.slug === 'par-ou-commencer' ? 'next-list next-list-compact' : 'next-list'}>
+          <ul className="next-list next-list-compact">
             {g.related.filter((r) => investmentBySlug[r]).map((r) => (
-              <li key={r}><Link to={`/encyclopedie/${r}`}>{investmentBySlug[r].name}</Link>{g.slug !== 'par-ou-commencer' && <span>{investmentBySlug[r].summary}</span>}</li>
-            ))}
-          </ul>
-          </>)}
-        </>)}
-        {g.slug !== 'par-ou-commencer' && sims.length > 0 && (<>
-          <h3 className="next-sub">Simulateurs liés</h3>
-          <ul className="next-list">
-            {sims.map((sim) => (
-              <li key={sim.slug}><Link to={`/simulateurs/${sim.slug}`}>{sim.title}</Link><span>{simBlurb(sim.slug)}</span></li>
+              <li key={r}><Link to={`/encyclopedie/${r}`}>{investmentBySlug[r].name}</Link></li>
             ))}
           </ul>
         </>)}
+        {g.slug !== 'par-ou-commencer' && (() => {
+          /* Une seule grille, simulateurs d'abord (comme en bas des fiches) ; chaque carte dit ce qu'elle est.
+             Au-delà de NEXT_VISIBLE cartes, la suite est repliée pour ne pas repousser les sources (chantier 143).
+             Le classement du guide Types d'investissements et les cartes du guide Choisir son enveloppe renvoient déjà vers chaque fiche. */
+          const simItems: NextItem[] = sims.map((sim) => ({ kind: 'Simulateur', to: `/simulateurs/${sim.slug}`, title: sim.title, blurb: simBlurb(sim.slug) }));
+          const ficheItems: NextItem[] = g.slug === 'types-investissements' || g.slug === 'choisir-son-enveloppe' ? []
+            : g.related.filter((r) => investmentBySlug[r]).map((r) => ({ kind: 'Fiche', to: `/encyclopedie/${r}`, title: investmentBySlug[r].name, blurb: investmentBySlug[r].summary }));
+          if (simItems.length + ficheItems.length === 0) return null;
+          const [shown, rest] = splitNext(simItems, ficheItems);
+          return (<>
+            <h2>Pour aller plus loin</h2>
+            <NextList items={shown} />
+            {rest.length > 0 && (
+              <details className="fold next-more">
+                <summary><span>{rest.length === 1 ? 'Une autre page liée' : `${rest.length} autres pages liées`}<span className="fold-hint">{rest.map((r) => r.title).join(' · ')}</span></span></summary>
+                <NextList items={rest} />
+              </details>
+            )}
+          </>);
+        })()}
         <h2>Sources</h2>
         <Sources list={g.sources} />
         {g.slug !== 'par-ou-commencer' && (<>

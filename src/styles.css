@@ -1456,3 +1456,11 @@ ul.points { margin: 0.9rem 0 0.5rem; gap: 8px; }
 .dv-axis .dv-track span:first-child { color: var(--accent); text-align: right; padding-right: 6px; }
 .dv-axis .dv-track span:last-child { color: var(--primary); padding-left: 6px; }
 .dv figcaption { grid-column: 1 / -1; margin-top: 8px; }
+
+/* Guides : cartes « Pour aller plus loin » au-delà des quatre premières, repliées (chantier 143). */
+details.fold.next-more { margin-top: 8px; }
+details.fold.next-more > summary { padding: 10px 14px; }
+.next-more .fold-hint { display: block; font-weight: 400; font-size: .85rem; color: var(--ink-3); margin-top: 2px; line-height: 1.35; }
+.next-more[open] .fold-hint { display: none; }
+.next-more:not([open]) > summary { align-items: flex-start; line-height: 1.35; }
+.prose details.next-more > ul.next-list { margin: 0 8px 8px; }
