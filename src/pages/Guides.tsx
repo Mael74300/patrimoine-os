@@ -115,8 +115,10 @@ export function GuidePage() {
             {cardsInstead(s) && <EnvelopeCards />}
             {!s.points && s.body.map((p, k) => !asCard(s, k) && (
               <Fragment key={p}>
-                <p><JargonText segs={jargon[jargonStart[i] + k]} /></p>
-                {g.slug === 'investir-a-credit' && s.heading === 'Un exemple fictif' && (k === 0 ? <SchemaMensualite /> : <SchemaLevier />)}
+                {/* Un paragraphe « Concrètement, … » traduit l'exemple en effet pour le lecteur : encadré comme la synthèse des simulateurs. */}
+                <p className={p.startsWith('Concrètement') ? 'takeaway' : undefined}><JargonText segs={jargon[jargonStart[i] + k]} /></p>
+                {g.slug === 'investir-a-credit' && s.heading === 'Un exemple fictif' && k === 0 && <SchemaMensualite />}
+                {g.slug === 'investir-a-credit' && s.heading === 'Un exemple fictif' && k === 1 && <SchemaLevier brief />}
                 {g.slug === 'combien-epargne-de-precaution' && s.heading === 'Où placer cette réserve' && k === 0 && <LivretsTable />}
                 {g.slug === 'comparer-les-frais' && s.heading === 'Les familles de frais' && k === 0 && <SchemaFamillesFrais />}
               </Fragment>

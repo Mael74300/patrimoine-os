@@ -125,7 +125,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Comment fonctionne un investissement à crédit',
     summary: 'L’effet de levier expliqué par un exemple chiffré : quand il enrichit, quand il appauvrit, et ce que la banque regarde.',
     readingMinutes: 3,
-    updatedOn: '2026-10-10',
+    updatedOn: '2026-11-16',
     sections: [
       {
         heading: 'Le principe',
@@ -136,8 +136,9 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       {
         heading: 'Un exemple fictif',
         body: [
-          'Un bien de 200 000 € est acheté avec 20 000 € d’apport et 180 000 € empruntés à 3,5 % sur 20 ans. La première année, les intérêts représentent environ 6 200 €.',
-          'S’il rapporte 10 000 € par an nets de charges (5 % de son prix), il reste environ 3 800 € avant impôt, soit près de 19 % de l’apport. S’il ne rapporte que 6 000 € (3 %), il manque environ 200 € pour couvrir les seuls intérêts. Dans les deux cas, il faut aussi rembourser le capital, ce qui pèse sur la trésorerie mensuelle.',
+          'Un bien de 200 000 € est acheté avec 20 000 € d’apport et 180 000 € empruntés à 3,5 % sur 20 ans : 1 044 € par mois hors assurance, soit 12 527 € par an. La première année, 6 199 € de cette somme paient les intérêts et 6 328 € remboursent le capital.',
+          'S’il rapporte 10 000 € par an nets de charges (5 % de son prix), il reste 3 801 € après les intérêts, avant impôt : 19 % de l’apport, c’est l’effet de levier. S’il ne rapporte que 6 000 € (3 %), il manque 199 € pour couvrir les seuls intérêts.',
+          'Concrètement, même dans le bon cas, les loyers ne paient pas tout, car le capital se rembourse aussi : il faut ajouter 2 527 € de votre poche la première année (environ 211 € par mois), avant impôt et hors assurance. Cet effort n’est pas perdu : il augmente la part du bien qui vous appartient. À 3 %, il monte à 6 527 € (environ 544 € par mois).',
         ],
       },
       {

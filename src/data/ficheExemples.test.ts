@@ -219,3 +219,34 @@ describe('fiche Investir à crédit : l’exemple chiffré reprend le schéma du
     expect(ex).not.toContain('6 200');
   });
 });
+
+describe('guide Investir à crédit : l’exemple reprend les schémas et chiffre l’effort de trésorerie', () => {
+  const g = guideBySlug['investir-a-credit']!;
+  const sec = g.sections.find((s) => s.heading === 'Un exemple fictif')!;
+  const text = norm(sec.body.join(' '));
+  const { principal, annualRate, years } = LOAN_EXAMPLE;
+  const loan = amortize({ principal, annualRate, years });
+  const yearly = loan.monthlyPayment * 12;
+  const { interest, down, bars } = leverageBars();
+  const first = loan.schedule[0]!;
+  // Effort de l'emprunteur la première année : annuités du crédit (hors assurance) moins loyers nets de charges, avant impôt.
+  const effort = bars.map((b) => yearly - b.income);
+
+  it('montants recalculés : 12 527 € par an, effort de 2 527 € (211 € par mois) à 5 % et 6 527 € (544 € par mois) à 3 %', () => {
+    expect(Math.round(yearly)).toBe(12527);
+    expect(effort.map(Math.round)).toEqual([2527, 6527]);
+    expect(effort.map((e) => Math.round(e / 12))).toEqual([211, 544]);
+    // À 5 %, l'effort est exactement le capital remboursé moins ce qui reste après les intérêts.
+    expect(Math.round(first.principalPaid - bars[0]!.left)).toBe(2527);
+  });
+  it('le texte cite les montants des deux schémas, sans arrondi qui les contredise', () => {
+    for (const v of [LEVERAGE_EXAMPLE.price, down, principal, 1044, 12527, Math.round(interest), Math.round(first.principalPaid), 3801, 199, 2527, 211, 6527, 544]) expect(text).toContain(eur(v));
+    expect(text).toContain(`${Math.round((bars[0]!.left / down) * 100)} % de l’apport`);
+    expect(text).toContain('avant impôt et hors assurance');
+    expect(text).not.toMatch(/6 200|3 800|environ 200 €/);
+  });
+  it('reste un exemple fictif, mis à jour', () => {
+    expect(sec.heading).toBe('Un exemple fictif');
+    expect(g.updatedOn).toBe('2026-11-16');
+  });
+});
