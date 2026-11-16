@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { splitNext } from './nextLinks';
+import { interleave, splitNext } from './nextLinks';
 
 describe('splitNext', () => {
   it('montre deux simulateurs et deux fiches quand les deux abondent', () => {
@@ -12,5 +12,13 @@ describe('splitNext', () => {
   it('ne replie rien sous le seuil et garde tous les éléments', () => {
     expect(splitNext(['s1', 's2'], ['f1'])).toEqual([['s1', 's2', 'f1'], []]);
     expect(splitNext([], [])).toEqual([[], []]);
+  });
+});
+
+describe('interleave', () => {
+  it('alterne les deux listes, la plus longue termine seule', () => {
+    expect(interleave(['s1', 's2', 's3'], ['g1'])).toEqual(['s1', 'g1', 's2', 's3']);
+    expect(interleave([], ['g1', 'g2'])).toEqual(['g1', 'g2']);
+    expect(interleave(['s1'], [])).toEqual(['s1']);
   });
 });
