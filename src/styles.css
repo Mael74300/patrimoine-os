@@ -670,7 +670,16 @@ th { background: var(--surface-2); color: var(--primary-deep); }
 .tiles span { display: block; color: var(--ink-2); font-size: 0.95rem; }
 .tiles em { display: block; margin-top: 12px; font-style: normal; font-weight: 700; font-size: 0.875rem; color: var(--accent); }
 .tiles em::after { content: ' →'; }
-@media (max-width: 760px) { .tiles { grid-template-columns: 1fr; gap: 10px; } .tiles a { display: grid; grid-template-columns: 52px 1fr; column-gap: 14px; padding: 16px; } .tile-icon { grid-row: 1 / span 3; margin: 0; } .tiles em { margin-top: 6px; } }
+/* Mobile : deux colonnes compactes (icône, titre, une phrase courte, nombre) plutôt qu'une longue pile de cartes. */
+@media (max-width: 760px) {
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tiles a { display: flex; flex-direction: column; padding: 14px; border-radius: 16px; }
+  .tile-icon { width: 40px; height: 40px; padding: 8px; border-radius: 12px; margin-bottom: 10px; }
+  .tiles strong { font-size: 1.05rem; margin-bottom: 2px; }
+  .tiles span { font-size: 0.875rem; line-height: 1.4; }
+  .tiles em { margin-top: auto; padding-top: 8px; font-size: 0.8125rem; }
+}
+@media (max-width: 340px) { .tiles { grid-template-columns: 1fr; } .tiles a { display: grid; grid-template-columns: 40px 1fr; column-gap: 12px; } .tile-icon { grid-row: 1 / span 3; margin: 0; } }
 
 .home-example { margin-top: 40px; display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px; align-items: center; border-top: 4px solid var(--gold); box-shadow: var(--shadow); padding: 28px; }
 .home-example h2.plain { margin: 0 0 10px; font-size: 1.4rem; }

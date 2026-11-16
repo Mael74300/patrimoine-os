@@ -16,12 +16,12 @@ const situations: { icon: SituationIconName; title: string; text: string; cta: s
 ];
 
 const tiles = [
-  { to: '/encyclopedie', title: 'Encyclopédie', text: 'Une fiche claire par placement : fonctionnement, risques, fiscalité.', icon: 'book' },
-  { to: '/simulateurs', title: 'Simulateurs', text: 'Testez vos chiffres : épargne, crédit, retraite, budget.', icon: 'calc' },
-  { to: '/comparateur', title: 'Comparateur', text: 'Mettez trois placements côte à côte, avec vos propres hypothèses.', icon: 'scale' },
-  { to: '/guides', title: 'Guides', text: 'Les bases expliquées simplement, étape par étape.', icon: 'map' },
-  { to: '/entrepreneuriat', title: 'Entrepreneuriat', text: 'Créer ou reprendre une activité : les voies, les risques, les fiches liées.', icon: 'bulb' },
-  { to: '/glossaire', title: 'Glossaire', text: 'Un mot de jargon vous arrête ? Chaque terme est défini simplement.', icon: 'abc' },
+  { to: '/encyclopedie', title: 'Encyclopédie', text: 'Une fiche par placement : risques, frais, fiscalité.', icon: 'book' },
+  { to: '/simulateurs', title: 'Simulateurs', text: 'Testez vos chiffres : épargne, crédit, retraite.', icon: 'calc' },
+  { to: '/comparateur', title: 'Comparateur', text: 'Trois placements côte à côte, à vos hypothèses.', icon: 'scale' },
+  { to: '/guides', title: 'Guides', text: 'Les bases, expliquées étape par étape.', icon: 'map' },
+  { to: '/entrepreneuriat', title: 'Entrepreneuriat', text: 'Créer ou reprendre une activité.', icon: 'bulb' },
+  { to: '/glossaire', title: 'Glossaire', text: 'Le jargon financier, défini simplement.', icon: 'abc' },
 ] as const;
 
 function TileIcon({ name }: { name: (typeof tiles)[number]['icon'] }) {
