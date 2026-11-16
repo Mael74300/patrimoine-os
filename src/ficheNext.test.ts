@@ -37,7 +37,8 @@ describe('Fiches : suites logiques', () => {
   it('la fiche montre « Pour aller plus loin » (simulateurs, guides, placements) avant les sources', () => {
     const html = render('credit-immobilier');
     const at = (s: string) => html.indexOf(s);
-    expect(html.match(/href="\/simulateurs\/credit"[^>]*>Simuler</g)?.length).toBe(2);
+    // Bouton « Simuler » : repères mobiles, « En bref » et sommaire qui suit la lecture (grand écran).
+    expect(html.match(/href="\/simulateurs\/credit"[^>]*>Simuler</g)?.length).toBe(3);
     expect(html).not.toContain('href="/simulateurs">Simuler<');
     expect(at('>Pour aller plus loin</h2>')).toBeGreaterThan(at('>Exemple chiffré</h2>'));
     expect(at('>Pour aller plus loin</h2>')).toBeLessThan(at('>Sources et vérification</h2>'));

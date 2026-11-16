@@ -19,6 +19,8 @@ import { guideBySlug } from '../data/guides';
 import { linkOnly } from '../lib/jargon';
 import { annotateFiche } from '../lib/ficheText';
 import { JargonText } from '../components/Jargon';
+import { PageToc } from '../components/PageToc';
+import { sectionId } from '../lib/toc';
 
 /** Une carte longue (plus de 280 caractères) à côté d'une carte au moins deux fois plus courte laisserait un grand vide : on les empile. */
 const unbalanced = (a: string, b: string) => Math.max(a.length, b.length) > 280 && Math.min(a.length, b.length) * 2 < Math.max(a.length, b.length);
@@ -44,6 +46,28 @@ export default function InvestmentPage() {
   const [jHow] = j.howItWorks;
   const jSteps = j.steps;
   const later = ficheRubricUpdate(inv);
+  // Simulateurs et guides alternés : les deux premières cartes sont le simulateur principal et le guide qui explique.
+  const outils: NextItem[] = interleave(
+    sims.map((s) => ({ kind: 'Simulateur', to: `/simulateurs/${s.slug}`, title: s.title, blurb: simBlurb(s.slug) })),
+    guidesLies.map((g) => ({ kind: 'Guide', to: `/guides/${g}`, title: guideBySlug[g].title })),
+  );
+  const fiches: NextItem[] = inv.alternatives.filter((a) => investmentBySlug[a])
+    .map((a) => ({ kind: 'Placement comparable', to: `/encyclopedie/${a}`, title: investmentBySlug[a].name, blurb: investmentBySlug[a].summary }));
+  const hasNext = outils.length + fiches.length > 0;
+  const compareTo = `/comparateur?ids=${[inv.slug, ...inv.alternatives.slice(0, 2)].join(',')}`;
+  const howToTitle = inv.howToTitle ?? 'Comment investir';
+  const howToId = sectionId(howToTitle);
+  // Sommaire de la colonne de droite (grand écran) : mêmes intitulés que les titres de la fiche.
+  const toc = [
+    { id: 'rub-definition', label: 'Définition' },
+    { id: 'rub-fonctionnement', label: 'Fonctionnement' },
+    { id: howToId, label: howToTitle },
+    { id: 'rub-en-pratique', label: 'En pratique : frais et fiscalité' },
+    { id: 'rub-avantages-et-inconvenients', label: 'Avantages et inconvénients' },
+    { id: 'rub-exemple-chiffre', label: 'Exemple chiffré' },
+    ...(hasNext ? [{ id: 'rub-pour-aller-plus-loin', label: 'Pour aller plus loin' }] : []),
+    { id: 'rub-sources-et-verification', label: 'Sources et vérification' },
+  ];
 
   return (
     <>
@@ -65,14 +89,14 @@ export default function InvestmentPage() {
               {needsCheck(inv.minCapital) && <span className="badge-unverified">à vérifier</span>}</span>
             </p>
             <div className="btn-row" style={{ marginTop: 12 }}>
-              <Link className="btn small" to={`/comparateur?ids=${[inv.slug, ...inv.alternatives.slice(0, 2)].join(',')}`}>Comparer</Link>
+              <Link className="btn small" to={compareTo}>Comparer</Link>
               <Link className="btn small secondary" to={sim.to} aria-label={sim.title ? `Simuler : ${sim.title}` : undefined}>Simuler</Link>
             </div>
           </div>
 
-          <h2>Définition</h2>
+          <h2 id="rub-definition">Définition</h2>
           <p><JargonText segs={jDef} /></p>
-          <h2>Fonctionnement</h2>
+          <h2 id="rub-fonctionnement">Fonctionnement</h2>
           <p><JargonText segs={jHow} /></p>
           {inv.slug === 'scpi' && <SchemaScpi />}
           {inv.slug === 'objets-d-art-collection' && <SchemaObjetsArt />}
@@ -104,10 +128,10 @@ export default function InvestmentPage() {
           {inv.slug === 'activite-numerique' && <SchemaActiviteNumerique />}
           {inv.slug === 'compte-a-terme' && <SchemaCompteATerme />}
           {inv.slug === 'credit-immobilier' && <SchemaLevier />}
-          <h2>{inv.howToTitle ?? 'Comment investir'}</h2>
+          <h2 id={howToId}>{howToTitle}</h2>
           <ul>{inv.howToInvest.map((s, i) => <li key={s}><JargonText segs={jSteps[i]} /></li>)}</ul>
 
-          <h2>En pratique</h2>
+          <h2 id="rub-en-pratique">En pratique</h2>
           {inv.slug === 'donation' && (
             <div className="table-wrap facts-table">
               <table>
@@ -124,13 +148,13 @@ export default function InvestmentPage() {
             <div className="panel"><h3>Fiscalité française</h3><CheckedText c={inv.tax} split path={`/encyclopedie/${inv.slug}`} segs={j.tax} /></div>
           </div>
 
-          <h2>Avantages et inconvénients</h2>
+          <h2 id="rub-avantages-et-inconvenients">Avantages et inconvénients</h2>
           <div className="proscons">
             <div className="panel pros"><h3 style={{ marginTop: 0, color: 'var(--accent)' }}>Avantages</h3><ul>{inv.pros.map((p, k) => <li key={p}><JargonText segs={j.pros[k]} /></li>)}</ul></div>
             <div className="panel cons"><h3 style={{ marginTop: 0, color: 'var(--danger)' }}>Inconvénients</h3><ul>{inv.cons.map((p, k) => <li key={p}><JargonText segs={j.cons[k]} /></li>)}</ul></div>
           </div>
 
-          <h2>Exemple chiffré</h2>
+          <h2 id="rub-exemple-chiffre">Exemple chiffré</h2>
           {(() => {
             const ex = <JargonText segs={linkOnly(inv.example, `/encyclopedie/${inv.slug}`)} />;
             if (inv.slug === 'per') return <SchemaPerBilan>{ex}</SchemaPerBilan>;
@@ -147,18 +171,10 @@ export default function InvestmentPage() {
           {/* Suites logiques avant les sources, comme sur les guides : une seule grille étiquetée (simulateur, guide,
               fiche d'un placement comparable). Au-delà de NEXT_VISIBLE cartes, la suite est repliée pour ne pas
               repousser les sources (chantier 144, même règle que les guides). */}
-          {(() => {
-            // Simulateurs et guides alternés : les deux premières cartes sont le simulateur principal et le guide qui explique.
-            const outils: NextItem[] = interleave(
-              sims.map((s) => ({ kind: 'Simulateur', to: `/simulateurs/${s.slug}`, title: s.title, blurb: simBlurb(s.slug) })),
-              guidesLies.map((g) => ({ kind: 'Guide', to: `/guides/${g}`, title: guideBySlug[g].title })),
-            );
-            const fiches: NextItem[] = inv.alternatives.filter((a) => investmentBySlug[a])
-              .map((a) => ({ kind: 'Placement comparable', to: `/encyclopedie/${a}`, title: investmentBySlug[a].name, blurb: investmentBySlug[a].summary }));
-            if (outils.length + fiches.length === 0) return null;
+          {hasNext && (() => {
             const [shown, rest] = splitNext(outils, fiches);
             return (<>
-              <h2>Pour aller plus loin</h2>
+              <h2 id="rub-pour-aller-plus-loin">Pour aller plus loin</h2>
               <NextList items={shown} />
               {rest.length > 0 && (
                 <details className="fold next-more">
@@ -169,7 +185,7 @@ export default function InvestmentPage() {
             </>);
           })()}
 
-          <h2>Sources et vérification</h2>
+          <h2 id="rub-sources-et-verification">Sources et vérification</h2>
           <Sources list={inv.sources} />
           {stale && <p className="notice small">La date de révision prévue est dépassée : certaines informations ont pu changer. Vérifiez-les auprès des sources officielles.</p>}
           {/* Une rubrique revérifiée après la relecture complète porte sa propre date : la ligne le dit, au lieu d'afficher une « dernière vérification » plus ancienne qu'elle. */}
@@ -211,10 +227,17 @@ export default function InvestmentPage() {
               <dd>{inv.tags.map((t) => <span className="tag" key={t}>{t}</span>)}</dd>
             </dl>
             <div className="btn-row" style={{ marginTop: 16 }}>
-              <Link className="btn small" to={`/comparateur?ids=${[inv.slug, ...inv.alternatives.slice(0, 2)].join(',')}`}>Comparer</Link>
+              <Link className="btn small" to={compareTo}>Comparer</Link>
               <Link className="btn small secondary" to={sim.to} aria-label={sim.title ? `Simuler : ${sim.title}` : undefined}>Simuler</Link>
             </div>
           </div>
+          {/* Le sommaire suit la lecture (« En bref » défile) : les boutons Comparer et Simuler y sont repris pour rester à portée de main. */}
+          <PageToc className="panel fiche-toc" items={toc}>
+            <div className="btn-row">
+              <Link className="btn small" to={compareTo}>Comparer</Link>
+              <Link className="btn small secondary" to={sim.to} aria-label={sim.title ? `Simuler : ${sim.title}` : undefined}>Simuler</Link>
+            </div>
+          </PageToc>
         </aside>
       </div>
     </>
