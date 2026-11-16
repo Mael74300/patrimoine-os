@@ -22,6 +22,11 @@ describe('intégrité des données éditoriales', () => {
     expect(i.example.toLowerCase()).toContain('fictif');
   });
 
+  it('avantages et inconvénients en mots simples : pas de jargon d’initié non expliqué', () => {
+    const jargon = /risque spécifique|biais comportement|empilement|illiquidit|dispersion des résultats|décorrél|actif tangible|ticket d.entrée|potentiel spéculatif|valeur intrinsèque|dessaisissement|non saisissable|surpayer|univers d.investissement|titres éligibles/i;
+    for (const i of investments) for (const t of [...i.pros, ...i.cons]) expect(t, `${i.slug} : « ${t} »`).not.toMatch(jargon);
+  });
+
   it('chaque guide figure dans un seul groupe de la page Guides', () => {
     const all = guideGroups.flatMap((g) => g.slugs);
     expect([...all].sort()).toEqual(guides.map((g) => g.slug).sort());
