@@ -51,7 +51,8 @@ export default function SimObjectif() {
   return (
     <>
       <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: 'Objectif d’épargne' }]} />
-      <PageHead eyebrow="Simulateur" title="Objectif d’épargne : combien verser par mois">
+      {/* Titre d’une seule ligne presque pleine largeur : la scène du thème le chevaucherait. */}
+      <PageHead eyebrow="Simulateur" title="Objectif d’épargne : combien verser par mois" art={null}>
         Apport, voyage, travaux, véhicule : indiquez le montant et l’échéance, le simulateur calcule le versement mensuel à prévoir.
       </PageHead>
       <SimNotice>
