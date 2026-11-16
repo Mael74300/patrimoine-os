@@ -67,3 +67,24 @@ export function drawdown(capital0: number, input: FireInput, maxYears = 60) {
 
 /** Taux d'épargne : part du revenu disponible épargnée. */
 export const savingsRate = (savings: number, income: number) => safeDiv(num(savings), num(income));
+
+/** Une barre « combien de temps tient le capital » : durée de tenue sur l'horizon, et capital restant s'il tient jusqu'au bout. */
+export type HoldBar = { nominalReturn: number; depletedAt: number | null; pct: number; remainingReal: number };
+
+/**
+ * Phase de retrait selon plusieurs rendements : pour chaque rendement, l'année d'épuisement (null s'il tient tout l'horizon),
+ * la longueur de barre en % de l'horizon (100 s'il tient) et le capital restant à l'horizon, en euros d'aujourd'hui.
+ */
+export function holdBars(capital0: number, input: FireInput, returns: number[], horizon = 60): HoldBar[] {
+  const h = Math.max(1, Math.round(num(horizon)));
+  return returns.map((r) => {
+    const d = drawdown(capital0, { ...input, nominalReturn: r }, h);
+    const last = d.series[d.series.length - 1];
+    return {
+      nominalReturn: r,
+      depletedAt: d.depletedAt,
+      pct: d.depletedAt === null ? 100 : (100 * d.depletedAt) / h,
+      remainingReal: d.depletedAt === null ? last.realCapital : 0,
+    };
+  });
+}

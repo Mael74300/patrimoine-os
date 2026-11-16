@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { drawdown, fireTarget, yearsToTarget } from './fire';
+import { drawdown, fireTarget, holdBars, yearsToTarget } from './fire';
 
 const F = { annualExpenses: 30000, currentWealth: 100000, recurringIncome: 6000, annualSavings: 20000, nominalReturn: 0.05, inflation: 0.02, withdrawalRate: 0.04 };
 
@@ -33,5 +33,26 @@ describe('indépendance financière', () => {
   it('inflation nulle : euros courants et d’aujourd’hui identiques', () => {
     const d = drawdown(240000, { ...F, nominalReturn: 0.03, inflation: 0 }, 10);
     d.series.forEach((p) => expect(p.realCapital).toBeCloseTo(p.capital, 9));
+  });
+  it('barres de tenue du capital : valeurs par défaut du simulateur (fictives)', () => {
+    const S = { annualExpenses: 30000, currentWealth: 80000, recurringIncome: 0, annualSavings: 15000, nominalReturn: 0.05, inflation: 0.02, withdrawalRate: 0.035 };
+    const t = fireTarget(S.annualExpenses, S.recurringIncome, S.withdrawalRate);
+    const bars = holdBars(t, S, [0.03, 0.05, 0.07], 60);
+    // Même calcul que la colonne « Capital tient » du tableau (drawdown sur 60 ans).
+    expect(bars[1].depletedAt).toBe(drawdown(t, S, 60).depletedAt);
+    expect(bars[0].depletedAt).toBe(drawdown(t, { ...S, nominalReturn: 0.03 }, 60).depletedAt);
+    bars.forEach((b) => {
+      if (b.depletedAt === null) {
+        expect(b.pct).toBe(100);
+        expect(b.remainingReal).toBeCloseTo(drawdown(t, { ...S, nominalReturn: b.nominalReturn }, 60).series[60].realCapital, 6);
+      } else {
+        expect(b.pct).toBeCloseTo((100 * b.depletedAt) / 60, 9);
+        expect(b.remainingReal).toBe(0);
+      }
+    });
+    // Plus le rendement est élevé, plus le capital tient longtemps.
+    expect(bars[0].pct).toBeLessThanOrEqual(bars[1].pct);
+    expect(bars[1].pct).toBeLessThanOrEqual(bars[2].pct);
+    expect(bars[2].depletedAt).toBeNull();
   });
 });
