@@ -75,3 +75,50 @@ export function capacityForPayment(maxPaymentWithInsurance: number, annualRate: 
 export function capacityAtHcsf(income: number, existingPayments: number, annualRate: number, years: number, insuranceRate: number): number {
   return capacityForPayment(num(income) * HCSF.maxRatio - Math.max(0, num(existingPayments)), annualRate, years, insuranceRate);
 }
+
+export type IncomePartKey = 'existing' | 'added' | 'living' | 'rest';
+export type IncomePart = {
+  key: IncomePartKey;
+  label: string;
+  value: number;
+  /** Part des revenus, entre 0 et 1 (peut dépasser 1 en cas de déficit). */
+  share: number;
+  /** Largeur dans la barre, en % de l'échelle (revenus, ou dépenses si elles les dépassent). */
+  width: number;
+};
+
+/**
+ * Où partent les revenus du mois : crédits en cours, nouvelle mensualité, autres charges, reste à vivre (s'il est positif).
+ * Les largeurs sont rapportées aux revenus, ou aux dépenses si elles dépassent les revenus ; `marker` place le repère de 35 %
+ * dans la même échelle ; `margin` est l'écart entre ce repère et les crédits (négatif si les crédits le dépassent).
+ */
+export function incomeBreakdown(input: Pick<DebtRatioInput, 'income' | 'existingPayments' | 'newPayment' | 'livingCosts'>) {
+  const income = Math.max(0, num(input.income));
+  const existing = Math.max(0, num(input.existingPayments));
+  const added = Math.max(0, num(input.newPayment));
+  const living = Math.max(0, num(input.livingCosts));
+  const spent = existing + added + living;
+  const rest = income - spent;
+  const scale = Math.max(income, spent);
+  const raw: { key: IncomePartKey; label: string; value: number }[] = [
+    { key: 'existing', label: 'Crédits déjà en cours', value: existing },
+    { key: 'added', label: 'Nouvelle mensualité', value: added },
+    { key: 'living', label: 'Autres charges', value: living },
+  ];
+  if (rest > 0) raw.push({ key: 'rest', label: 'Reste à vivre', value: rest });
+  const parts: IncomePart[] = raw
+    .filter((p) => p.value > 0)
+    .map((p) => ({ ...p, share: safeDiv(p.value, income), width: safeDiv(p.value, scale) * 100 }));
+  const limit = income * HCSF.maxRatio;
+  const credits = existing + added;
+  return {
+    income,
+    parts,
+    scale,
+    credits,
+    limit,
+    margin: limit - credits,
+    shortfall: Math.max(0, -rest),
+    marker: safeDiv(limit, scale) * 100,
+  };
+}

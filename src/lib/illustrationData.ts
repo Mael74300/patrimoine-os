@@ -287,28 +287,6 @@ export function precautionRows() {
   return months.map((m, i) => ({ months: m, label: labels[i], amount: monthly * m }));
 }
 
-export type MoisPart = { key: 'existing' | 'added' | 'living' | 'rest'; label: string; value: number };
-
-/**
- * Répartition d'un mois de revenus du foyer, d'après les saisies du simulateur d'endettement (données de l'utilisateur, pas un exemple).
- * `scale` est la longueur totale de la barre : les revenus, ou le total des dépenses si elles dépassent les revenus.
- */
-export function moisParts(input: { income: number; existingPayments: number; newPayment: number; livingCosts: number }) {
-  const income = Math.max(0, Number(input.income) || 0);
-  const existing = Math.max(0, Number(input.existingPayments) || 0);
-  const added = Math.max(0, Number(input.newPayment) || 0);
-  const living = Math.max(0, Number(input.livingCosts) || 0);
-  const spent = existing + added + living;
-  const rest = income - spent;
-  const parts: MoisPart[] = [
-    { key: 'existing', label: 'Crédits déjà en cours', value: existing },
-    { key: 'added', label: 'Nouvelle mensualité', value: added },
-    { key: 'living', label: 'Autres charges courantes', value: living },
-  ];
-  if (rest > 0) parts.push({ key: 'rest', label: 'Reste à vivre', value: rest });
-  return { income, parts, shortfall: Math.max(0, -rest), scale: Math.max(income, spent), limit: income * HCSF.maxRatio };
-}
-
 /**
  * Exemple fictif de la fiche PER : 3 000 € versés et déduits dans la tranche à 30 %, puis retirés en capital à la retraite
  * dans la tranche à 11 % ou toujours à 30 %. Tranches du barème 2026 (Service-Public F1419, consulté le 2026-11-13).
