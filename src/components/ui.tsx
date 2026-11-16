@@ -12,7 +12,7 @@ import { coveragePercent } from '../lib/coverage';
 import { fmtEur } from '../lib/finance';
 import { nextTabIndex } from '../lib/tabKeys';
 import { readingForSimulator, type ReadingLink } from '../lib/relatedSims';
-import { readableNumber } from '../lib/readableNumber';
+import { formatFr, liveFormatFr, parseFr, stepValue } from '../lib/frNumber';
 import { fmtDate } from '../lib/dates';
 import { sentenceLead } from '../lib/sentenceLead';
 import { checkedParts, leadOfSegments, splitSentences } from '../lib/ficheText';
@@ -38,44 +38,84 @@ type NumberFieldProps = {
   sliderMax?: number;
 };
 
+type NumInputProps = {
+  value: number;
+  onChange: (v: number) => void;
+  step?: number;
+  min?: number;
+  max?: number;
+  id?: string;
+  className?: string;
+  style?: CSSProperties;
+  'aria-label'?: string;
+  'aria-describedby'?: string;
+};
+
+/**
+ * Champ numérique au format français (« 200 000 », « 3,5 ») : milliers regroupés pendant la frappe,
+ * virgule décimale, flèches haut et bas pour avancer d'un pas. La valeur transmise reste un nombre borné.
+ */
+export function NumInput({ value, onChange, step = 1, min, max, className, ...rest }: NumInputProps) {
+  const [text, setText] = useState(formatFr(value));
+  const last = useRef(value);
+  useEffect(() => {
+    if (value !== last.current) {
+      setText(formatFr(value));
+      last.current = value;
+    }
+  }, [value]);
+  const commit = (n: number) => {
+    const clamped = Math.min(max ?? Infinity, Math.max(min ?? -Infinity, n));
+    last.current = clamped;
+    onChange(clamped);
+    return clamped;
+  };
+  return (
+    <input
+      {...rest}
+      className={className ? `num-input ${className}` : 'num-input'}
+      type="text"
+      inputMode="decimal"
+      autoComplete="off"
+      spellCheck={false}
+      value={text}
+      onChange={(e) => {
+        const atEnd = e.target.selectionStart === e.target.value.length;
+        const raw = e.target.value;
+        setText(atEnd ? liveFormatFr(raw) : raw);
+        const n = parseFr(raw);
+        if (Number.isFinite(n)) commit(n);
+      }}
+      onBlur={() => setText(formatFr(last.current))}
+      onKeyDown={(e) => {
+        if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return;
+        e.preventDefault();
+        const cur = parseFr(text);
+        const n = commit(stepValue(Number.isFinite(cur) ? cur : last.current, step, e.key === 'ArrowUp' ? 1 : -1, min, max));
+        setText(formatFr(n));
+      }}
+    />
+  );
+}
+
 export function NumberField({ label, shortLabel, value, onChange, unit, step = 1, min, max, hint, percent, sliderMax }: NumberFieldProps) {
   const id = useId();
   const shown = percent ? round(value * 100, 4) : value;
-  const [text, setText] = useState(String(shown));
-  const last = useRef(shown);
-  const echo = readableNumber(shown, unit);
-  useEffect(() => {
-    if (shown !== last.current) {
-      setText(String(shown));
-      last.current = shown;
-    }
-  }, [shown]);
   return (
     <div className="field">
       <div className="field-label">
         <label htmlFor={id}>
           {shortLabel ? (<><span aria-hidden="true">{shortLabel}</span><span className="sr-only">{label}</span></>) : label}
         </label>
-        {echo && <span className="field-echo" aria-hidden="true">{echo}</span>}
       </div>
       <div className="input-unit">
-        <input
+        <NumInput
           id={id}
-          type="number"
-          inputMode="decimal"
-          value={text}
+          value={shown}
           step={step}
           min={min}
           max={max}
-          onChange={(e) => {
-            setText(e.target.value);
-            const n = parseFloat(e.target.value.replace(',', '.'));
-            if (Number.isFinite(n)) {
-              const clamped = Math.min(max ?? Infinity, Math.max(min ?? -Infinity, n));
-              last.current = clamped;
-              onChange(percent ? clamped / 100 : clamped);
-            }
-          }}
+          onChange={(n) => onChange(percent ? n / 100 : n)}
           aria-describedby={hint ? id + '-h' : undefined}
         />
         {unit && <span aria-hidden="true">{unit}</span>}
@@ -92,8 +132,6 @@ export function NumberField({ label, shortLabel, value, onChange, unit, step = 1
           style={{ ['--pos' as string]: `${Math.min(100, Math.max(0, ((shown - Math.max(0, min ?? 0)) / (sliderMax - Math.max(0, min ?? 0))) * 100))}%` }}
           onChange={(e) => {
             const n = parseFloat(e.target.value);
-            setText(String(n));
-            last.current = n;
             onChange(percent ? n / 100 : n);
           }}
         />
@@ -768,11 +806,11 @@ export function RowsEditor({ title, rows, onChange, aLabel, bLabel, bUnit, addLa
         <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr auto', gap: 8, alignItems: 'end', marginBottom: 8 }}>
           <div>
             <label htmlFor={`${id}-a${i}`}>{aLabel}</label>
-            <input id={`${id}-a${i}`} type="number" min={1} max={60} value={r.a} onChange={(e) => onChange(rows.map((x, k) => (k === i ? { ...x, a: Math.max(1, Math.round(+e.target.value || 1)) } : x)))} />
+            <NumInput id={`${id}-a${i}`} min={1} max={60} value={r.a} onChange={(n) => onChange(rows.map((x, k) => (k === i ? { ...x, a: Math.round(n) } : x)))} />
           </div>
           <div>
             <label htmlFor={`${id}-b${i}`}>{bLabel} ({bUnit})</label>
-            <input id={`${id}-b${i}`} type="number" min={0} value={r.b} onChange={(e) => onChange(rows.map((x, k) => (k === i ? { ...x, b: Math.max(0, +e.target.value || 0) } : x)))} />
+            <NumInput id={`${id}-b${i}`} min={0} value={r.b} onChange={(n) => onChange(rows.map((x, k) => (k === i ? { ...x, b: n } : x)))} />
           </div>
           <button type="button" className="btn small secondary" aria-label={`Supprimer la ligne ${i + 1}`} onClick={() => onChange(rows.filter((_, k) => k !== i))}>×</button>
         </div>

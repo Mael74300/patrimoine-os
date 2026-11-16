@@ -133,10 +133,11 @@ input[type='text'], input[type='number'], input[type='search'], select {
 input:focus, select:focus { border-color: var(--accent); }
 .field { margin-bottom: 14px; }
 .field-label { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
-.field-echo { font-size: 0.85rem; font-weight: 600; color: var(--primary); white-space: nowrap; }
 .field .hint { font-size: 0.8rem; color: var(--ink-3); margin-top: 3px; }
 .input-unit { position: relative; }
 .input-unit input { padding-right: 44px; }
+.num-input { font-variant-numeric: tabular-nums; }
+.input-unit input.num-input { padding-right: 44px; }
 .input-unit span { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); color: var(--ink-3); font-size: 0.9rem; pointer-events: none; }
 fieldset { border: 0; padding: 0; margin: 0 0 8px; }
 legend { padding: 0; font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; }
@@ -149,9 +150,7 @@ legend { padding: 0; font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; 
 :is(.field-trio, .field-duo) .field-label { display: contents; }
 :is(.field-trio, .field-duo) label { grid-row: 1; font-size: 0.82rem; line-height: 1.25; }
 :is(.field-trio, .field-duo) .input-unit { grid-row: 2; }
-:is(.field-trio, .field-duo) .field-echo { grid-row: 3; align-self: start; font-size: 0.78rem; margin-top: 2px; }
 .field-trio .input-unit input { padding: 9px 22px 9px 9px; appearance: textfield; -moz-appearance: textfield; }
-.field-trio .input-unit input::-webkit-inner-spin-button, .field-trio .input-unit input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 .field-trio .input-unit span { right: 8px; }
 .fees-trio { margin-bottom: 14px; }
 .fees-intro { margin: -2px 0 8px; font-size: 0.85rem; color: var(--ink-2); line-height: 1.45; }
@@ -748,10 +747,10 @@ details.advanced[open] .fold-hint { display: none; }
   .line-table td { padding: 0; border: 0; text-align: left; }
   .line-table td::before { content: attr(data-label); display: block; font-weight: 600; font-size: .85rem; color: var(--ink-2); margin-bottom: 2px; }
   .line-table .lt-name { grid-column: 1 / -1; padding-right: 44px; }
-  .line-table td input[type=number] { padding-left: 8px; padding-right: 8px; }
+  .line-table td input.num-input { padding-left: 8px; padding-right: 8px; }
   .line-table .lt-name::before { display: none; }
   .line-table .lt-name input { width: calc(100% - 24px) !important; }
-  .line-table td input[type=number] { width: 100% !important; text-align: left !important; }
+  .line-table td input.num-input { width: 100% !important; text-align: left !important; }
   .line-table .lt-del { position: absolute; top: 10px; right: 10px; z-index: 1; }
   .line-table .lt-del::before { display: none; }
 }
@@ -1141,7 +1140,7 @@ h2.gloss-letter::before { content: none; }
 .nw-hint { margin: 2px 0 12px; font-size: 0.85rem; color: var(--ink-3); }
 .nw-row { display: grid; grid-template-columns: minmax(0, 1fr) 9.5rem 40px; gap: 8px; align-items: center; margin-bottom: 8px; }
 .nw-row input { width: 100%; min-width: 0; }
-.nw-row input[type="number"] { font-variant-numeric: tabular-nums; text-align: right; }
+.nw-row input.num-input { text-align: right; padding-right: 30px; }
 .nw-label { font-weight: 500; }
 .nw-del { width: 40px; height: 40px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink-3); font-size: 1.15rem; line-height: 1; cursor: pointer; }
 .nw-del:hover, .nw-del:focus-visible { color: var(--danger); border-color: var(--danger); }
@@ -1405,7 +1404,6 @@ ul.points { margin: 0.9rem 0 0.5rem; gap: 8px; }
 /* Comparateur : départ, versement et durée sur une seule ligne, même sur mobile (libellés courts) */
 @media (max-width: 600px) {
   .grid.cols-3.cmp-base { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 8px; }
-  .cmp-base .field-echo { display: none; }
   /* Mêmes colonnes pour chaque placement : libellés visibles une fois, toujours lus par les lecteurs d'écran. */
   .cmp-hyp-set + .cmp-hyp-set .field-label span[aria-hidden="true"] { display: none; }
   .cmp-hyp-set + .cmp-hyp-set .field-label { margin: 0; }
