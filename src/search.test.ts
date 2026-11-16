@@ -63,6 +63,21 @@ describe('recherche', () => {
     expect(top('taux livret a', 1)).toContain('/encyclopedie/livret-a');
     expect(top('flat tax', 1)[0]).toMatch(/^\/glossaire#/);
   });
+  it('mots courts en mot entier, expressions et synonymes (audit du 16 novembre 2026)', () => {
+    const top = (q: string, n = 3) => search(q).slice(0, n).map((h) => h.to);
+    // « or » ne trouve plus « Compte-titres ordinaire », « per » ne trouve plus « personne »
+    expect(top('or', 5)).toEqual(['/encyclopedie/or']);
+    expect(top('per', 1)).toContain('/encyclopedie/per');
+    // une expression tapée telle quelle passe devant les pages qui ont seulement ses mots épars
+    expect(top('frais de notaire', 1)).toContain('/simulateurs/louer-ou-acheter');
+    expect(top('frais de notaire', 5)).not.toContain('/encyclopedie/creation-entreprise');
+    expect(top('placement sans risque', 2)).toContain('/encyclopedie/livret-a');
+    // le futur acheteur trouve le calculateur de crédit
+    expect(top('prêt immobilier')).toContain('/simulateurs/credit');
+    // « préparer » ne fait plus remonter le PEL (« pensée pour préparer l’achat »)
+    expect(top('préparer sa retraite', 1)).toContain('/encyclopedie/per');
+    expect(top('préparer sa retraite', 3)).not.toContain('/encyclopedie/pel');
+  });
   it('sans page contenant tous les mots, montre les plus proches et le signale', () => {
     const r = searchDetailed('combien de temps durera mon capital');
     expect(r.partial).toBe(true);
