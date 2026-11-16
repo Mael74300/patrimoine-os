@@ -9,7 +9,7 @@ import { FamilyIcon } from '../components/Icons';
 import { AdSlot, CheckedText, Crumbs, Fold, MeterRows, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
 import { interleave, splitNext } from '../lib/nextLinks';
-import { NextList, type NextItem } from '../components/NextList';
+import { NextList, NextMore, type NextItem } from '../components/NextList';
 import { DONATION_ABATTEMENTS, fmtEuros } from '../data/donationAbattements';
 import { SchemaActions, SchemaForet, SchemaDonation, SchemaDonationBilan, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaScpi, SchemaScpiBilan, SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaUniteDeCompte, SchemaFondsEuros, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaRepriseBilan, SchemaActiviteNumerique } from '../components/schemas/fiches';
 import { SchemaPea, SchemaQuinzaines, SchemaLevier } from '../components/schemas/communs';
@@ -177,12 +177,7 @@ export default function InvestmentPage() {
             return (<>
               <h2 id="rub-pour-aller-plus-loin">Pour aller plus loin</h2>
               <NextList items={shown} />
-              {rest.length > 0 && (
-                <details className="fold next-more">
-                  <summary><span>{rest.length === 1 ? 'Une autre page liée' : `${rest.length} autres pages liées`}<span className="fold-hint">{rest.map((r) => r.title).join(' · ')}</span></span></summary>
-                  <NextList items={rest} />
-                </details>
-              )}
+              <NextMore items={rest} />
             </>);
           })()}
 

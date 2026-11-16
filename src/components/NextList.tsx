@@ -17,3 +17,14 @@ export function NextList({ items }: { items: NextItem[] }) {
     </ul>
   );
 }
+
+/** Suite repliée sous la grille : son résumé nomme les pages qu'elle contient, pour que rien ne disparaisse. */
+export function NextMore({ items }: { items: NextItem[] }) {
+  if (!items.length) return null;
+  return (
+    <details className="fold next-more">
+      <summary><span>{items.length === 1 ? 'Une autre page liée' : `${items.length} autres pages liées`}<span className="fold-hint">{items.map((r) => r.title).join(' · ')}</span></span></summary>
+      <NextList items={items} />
+    </details>
+  );
+}

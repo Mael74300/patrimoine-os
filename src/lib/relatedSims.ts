@@ -1,4 +1,5 @@
-import { guideTitles, investmentNames } from './readingTitles';
+import { guideTitles, investmentNames, investmentSummaries } from './readingTitles';
+import { simBlurbs } from './simBlurbs';
 import { simulators } from './simulatorsList';
 
 /** Simulateurs liés à chaque fiche (clé : slug de fiche) et à chaque guide (clé : slug de guide). Cohérence vérifiée par les tests. */
@@ -108,7 +109,8 @@ export function simulateTarget(ficheSlug: string): { to: string; title?: string 
   return main ? { to: `/simulateurs/${main.slug}`, title: main.title } : { to: '/simulateurs' };
 }
 
-export type ReadingLink = { to: string; title: string; kind: 'Guide' | 'Fiche' | 'Simulateur' };
+/** Une piste de lecture ; `blurb` dit en une phrase ce qu’est la fiche ou la question du simulateur (pas de résumé pour un guide, dont le titre suffit, comme en bas des fiches). */
+export type ReadingLink = { to: string; title: string; kind: 'Guide' | 'Fiche' | 'Simulateur'; blurb?: string };
 
 /**
  * « Pour aller plus loin » en bas de chaque simulateur, choisi à la main dans l'ordre d'utilité pour le visiteur :
@@ -147,8 +149,8 @@ export function readingFromRefs(refs: string[]): ReadingLink[] {
   return refs.flatMap((ref): ReadingLink[] => {
     const [k, id] = ref.split(':');
     if (k === 'g' && guideTitles[id]) return [{ to: `/guides/${id}`, title: guideTitles[id], kind: 'Guide' }];
-    if (k === 'f' && investmentNames[id]) return [{ to: `/encyclopedie/${id}`, title: investmentNames[id], kind: 'Fiche' }];
-    if (k === 's' && bySlug[id]) return [{ to: `/simulateurs/${id}`, title: bySlug[id].title, kind: 'Simulateur' }];
+    if (k === 'f' && investmentNames[id]) return [{ to: `/encyclopedie/${id}`, title: investmentNames[id], kind: 'Fiche', blurb: investmentSummaries[id] }];
+    if (k === 's' && bySlug[id]) return [{ to: `/simulateurs/${id}`, title: bySlug[id].title, kind: 'Simulateur', blurb: simBlurbs[id] }];
     return [];
   });
 }
