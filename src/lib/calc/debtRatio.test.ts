@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { capacityAtHcsf, debtRatio, HCSF } from './debtRatio';
+import { capacityAtHcsf, capacityForPayment, debtRatio, HCSF } from './debtRatio';
 import { amortize } from './loan';
 import { guides } from '../../data/guides';
 
@@ -38,6 +38,16 @@ describe('taux d’endettement', () => {
     const cap = capacityAtHcsf(4000, 300, 0.036, 20, 0.003);
     const l = amortize({ principal: cap, annualRate: 0.036, years: 20, insuranceRate: 0.003 });
     expect(l.monthlyPayment + l.monthlyInsurance).toBeCloseTo(4000 * 0.35 - 300, 4);
+  });
+
+  it('capacité pour une mensualité donnée : assurance comptée sur le capital empruntable, même résultat que le repère de 35 %', () => {
+    const cap = capacityForPayment(1400, 0.036, 20, 0.003);
+    const l = amortize({ principal: cap, annualRate: 0.036, years: 20, insuranceRate: 0.003 });
+    expect(l.monthlyPayment + l.monthlyInsurance).toBeCloseTo(1400, 4);
+    expect(cap).toBeCloseTo(capacityAtHcsf(4000, 0, 0.036, 20, 0.003), 6);
+    expect(capacityForPayment(1000, 0, 10, 0)).toBeCloseTo(120000, 6);
+    expect(capacityForPayment(-5, 0.03, 20, 0.003)).toBe(0);
+    expect(capacityForPayment(1000, 0.03, 0, 0.003)).toBe(0);
   });
 
   it('cohérence : le guide cite le même taux d’effort et la même durée que le repère', () => {

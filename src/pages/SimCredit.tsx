@@ -1,6 +1,7 @@
+import { Link } from 'react-router-dom';
 import { useMemo } from 'react';
-import { amortize, borrowingCapacity, loanSplit, fmtEur, fmtEur2, fmtMonths, prepayment } from '../lib/finance';
-import { creditTakeaway } from '../lib/takeaways';
+import { amortize, capacityForPayment, HCSF, loanSplit, fmtEur, fmtEur2, fmtMonths, prepayment } from '../lib/finance';
+import { capacityTakeaway, creditTakeaway } from '../lib/takeaways';
 import { SchemaMensualite } from '../components/schemas/SchemaMensualite';
 import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, ChoiceField, usePersistentState, JumpToResults } from '../components/ui';
 
@@ -10,7 +11,7 @@ type State = {
   prepayYear: number; prepayAmount: number; prepayMode: 'duree' | 'mensualite'; withPenalty: boolean;
 };
 const DEFAULTS: State = {
-  principal: 200000, annualRate: 0.036, years: 20, insuranceRate: 0.003, income: 4000, debtRatio: 0.35,
+  principal: 200000, annualRate: 0.036, years: 20, insuranceRate: 0.003, income: 4000, debtRatio: HCSF.maxRatio,
   prepayYear: 5, prepayAmount: 30000, prepayMode: 'duree', withPenalty: true,
 };
 
@@ -23,14 +24,15 @@ export default function SimCredit() {
     [s],
   );
   const maxMonthly = s.income * s.debtRatio;
-  const capacity = borrowingCapacity(Math.max(0, maxMonthly - res.monthlyInsurance), s.annualRate, s.years);
+  // Assurance comptée sur le capital empruntable lui-même, comme dans le simulateur Taux d'endettement.
+  const capacity = capacityForPayment(maxMonthly, s.annualRate, s.years, s.insuranceRate);
   const yearsAxis = Math.max(res.schedule.length, pre.schedule.length);
 
   return (
     <>
       <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: 'Crédit' }]} />
       <PageHead eyebrow="Calculateur" title="Calculateur de crédit">
-        Mensualité, coût des intérêts, tableau d'amortissement, capacité d'emprunt et simulation de remboursement anticipé.
+        Mensualité, coût total, capacité d'emprunt et remboursement anticipé.
       </PageHead>
       <div className="sim">
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
@@ -49,7 +51,6 @@ export default function SimCredit() {
             <Kpi label="Mensualité hors assurance" value={fmtEur2(res.monthlyPayment)} sub={`${fmtEur2(res.monthlyPayment + res.monthlyInsurance)} avec assurance`} />
             <Kpi label="Coût des intérêts" value={fmtEur(res.totalInterest)} tone="neg" />
             <Kpi label="Coût total du crédit" value={fmtEur(res.totalCost)} sub="intérêts + assurance" />
-            <Kpi label="Capacité d'emprunt indicative" value={fmtEur(capacity)} sub={`mensualité max. ${fmtEur(maxMonthly)} assurance comprise`} />
           </div>
 
           <Takeaway>{creditTakeaway({ principal: s.principal, years: s.years, monthlyTotal: res.monthlyPayment + res.monthlyInsurance, totalCost: res.totalCost })}</Takeaway>
@@ -61,12 +62,18 @@ export default function SimCredit() {
             </>
           )}
 
-          <Fold title="Régler la capacité d'emprunt (revenus, taux d'effort)">
-            <div className="fold-form">
+          <h2>Combien pourriez-vous emprunter ?</h2>
+          <div className="panel goal">
+            <div className="goal-grid goal-grid-3">
               <NumberField label="Revenus nets mensuels" unit="€" value={s.income} onChange={up('income')} min={0} step={100} />
-              <NumberField label="Taux d'effort maximal" unit="%" percent value={s.debtRatio} onChange={up('debtRatio')} step={1} min={0} max={60} hint="Recommandation du HCSF : 35 % des revenus, assurance comprise." />
+              <NumberField label="Taux d'effort maximal" unit="%" percent value={s.debtRatio} onChange={up('debtRatio')} step={1} min={0} max={60} hint={"Recommandation du HCSF : 35\u00a0% des revenus, assurance comprise."} />
+              <Kpi label="Capacité d'emprunt indicative" value={fmtEur(capacity)} sub={`${fmtEur(maxMonthly)} par mois au plus, assurance comprise`} />
             </div>
-          </Fold>
+            <p className="goal-text">
+              {capacityTakeaway({ income: s.income, debtRatio: s.debtRatio, years: s.years, capacity, principal: s.principal })}
+              {' '}D'autres crédits en cours ? Le <Link to="/simulateurs/endettement">simulateur de taux d'endettement</Link> les déduit.
+            </p>
+          </div>
 
           <h2>Remboursement anticipé</h2>
           <div className="panel fold-form">

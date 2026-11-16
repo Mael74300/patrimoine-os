@@ -60,11 +60,18 @@ export function debtRatio(input: DebtRatioInput): DebtRatioResult {
   };
 }
 
-/** Capital empruntable à la mensualité maximale compatible avec 35 %, assurance (taux annuel sur capital initial) comprise. */
-export function capacityAtHcsf(income: number, existingPayments: number, annualRate: number, years: number, insuranceRate: number): number {
-  const maxPay = Math.max(0, num(income) * HCSF.maxRatio - Math.max(0, num(existingPayments)));
+/**
+ * Capital empruntable pour une mensualité maximale assurance comprise, l'assurance étant un taux annuel sur le capital emprunté :
+ * mensualité = capital × (facteur de prêt + assurance mensuelle), d'où capital = mensualité ÷ (facteur + assurance).
+ */
+export function capacityForPayment(maxPaymentWithInsurance: number, annualRate: number, years: number, insuranceRate: number): number {
+  const maxPay = Math.max(0, num(maxPaymentWithInsurance));
   const ins = clamp(insuranceRate, 0, 0.1, 0) / 12;
-  // Mensualité = capital × (facteur de prêt + assurance) : on calcule la capacité hors assurance puis on la réduit en proportion.
   const unit = borrowingCapacity(1, annualRate, years);
   return unit > 0 ? maxPay / (1 / unit + ins) : 0;
+}
+
+/** Capital empruntable à la mensualité maximale compatible avec 35 %, assurance (taux annuel sur capital initial) comprise. */
+export function capacityAtHcsf(income: number, existingPayments: number, annualRate: number, years: number, insuranceRate: number): number {
+  return capacityForPayment(num(income) * HCSF.maxRatio - Math.max(0, num(existingPayments)), annualRate, years, insuranceRate);
 }
