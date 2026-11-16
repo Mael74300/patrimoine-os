@@ -70,3 +70,42 @@ export function repriseDebtShare(profit: number, loan: number, ratePct: number, 
   const droppedProfit = Math.round(profit * (1 - dropPct / 100));
   return { monthly, yearly, sharePct: Math.round((yearly / profit) * 100), left: profit - yearly, leftAfterDrop: droppedProfit - yearly, droppedProfit };
 }
+
+export interface BondCoupons { coupon: number; totalCoupons: number; received: number }
+
+/**
+ * Obligation détenue jusqu'à l'échéance : coupon annuel fixe de `ratePct` % du montant prêté, puis remboursement du montant
+ * prêté. Avant impôt et frais, si l'émetteur rembourse. Arrondis à l'euro.
+ */
+export function bondCoupons(amount: number, ratePct: number, years: number): BondCoupons {
+  const coupon = Math.round((amount * ratePct) / 100);
+  const totalCoupons = coupon * years;
+  return { coupon, totalCoupons, received: amount + totalCoupons };
+}
+
+export interface FundFees { yearly: number; total: number }
+
+/** Frais annuels exprimés en % des sommes souscrites (assiette fixe), cumulés sur la durée de blocage. Arrondis à l'euro. */
+export function fundFeesOnSubscribed(amount: number, feePct: number, years: number): FundFees {
+  const yearly = Math.round((amount * feePct) / 100);
+  return { yearly, total: yearly * years };
+}
+
+export interface YearlySavings { saved: number; withGrowth: number }
+
+/**
+ * Épargne de `yearly` € placée à la fin de chaque année pendant `years` ans à `ratePct` % par an (intérêts composés).
+ * `saved` : total versé ; `withGrowth` : valeur finale, arrondie à la centaine d'euros.
+ */
+export function yearlySavingsValue(yearly: number, ratePct: number, years: number): YearlySavings {
+  const r = ratePct / 100;
+  const fv = r === 0 ? yearly * years : yearly * ((Math.pow(1 + r, years) - 1) / r);
+  return { saved: yearly * years, withGrowth: Math.round(fv / 100) * 100 };
+}
+
+export interface ListedPropertyYear { afterDrop: number; dividends: number }
+
+/** Actions de foncières : valeur après une baisse de `dropPct` % du cours, et dividendes de `yieldPct` % du montant investi. */
+export function listedPropertyYear(amount: number, dropPct: number, yieldPct: number): ListedPropertyYear {
+  return { afterDrop: Math.round(amount * (1 - dropPct / 100)), dividends: Math.round((amount * yieldPct) / 100) };
+}

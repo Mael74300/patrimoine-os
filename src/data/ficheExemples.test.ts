@@ -2,7 +2,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { investmentBySlug } from './investments';
-import { crowdfundingScenario, microFoncierExample, repriseDebtShare, scpiFeesPayback } from '../lib/calc/ficheExemples';
+import { bondCoupons, crowdfundingScenario, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, yearlySavingsValue } from '../lib/calc/ficheExemples';
 import { amortize } from '../lib/calc/loan';
 import { CROWDFUNDING_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE } from '../lib/illustrationData';
 import { SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaRepriseBilan, SchemaScpiBilan } from '../components/schemas/fiches';
@@ -148,5 +148,50 @@ describe('fiche Racheter une entreprise : ce que le prêt prend sur le résultat
     expect(t).toContain('taux fictif');
     expect(svg).toContain('role="img"');
     expect(svg.length).toBeLessThan(15000);
+  });
+});
+
+/**
+ * Exemples fictifs complétés jusqu'au résultat (fiches Obligations, Capital-investissement, Créer son entreprise et
+ * Foncières cotées, 2026-11-16) : chaque montant du texte est recalculé ici. Aucun chiffre réglementaire n'est ajouté ;
+ * le taux de frais fictif du capital-investissement reste dans la fourchette sourcée de la rubrique Frais de la fiche.
+ */
+describe('fiches : exemples chiffrés menés jusqu’au résultat', () => {
+  const ex = (slug: string) => norm(investmentBySlug[slug]!.example);
+
+  it('Obligations : 1 000 € à 3 % pendant 5 ans → 30 € par an, 150 € en tout, puis 1 000 € remboursés', () => {
+    const r = bondCoupons(1000, 3, 5);
+    expect(r).toEqual({ coupon: 30, totalCoupons: 150, received: 1150 });
+    const t = ex('obligations');
+    expect(t).toMatch(/^Exemple fictif/);
+    for (const s of [`prêtez ${eur(1000)}`, 'pendant 5 ans', 'coupon de 3 % par an', `${eur(r.coupon)} chaque année`, `${eur(r.totalCoupons)} en tout`, `vos ${eur(1000)} à l’échéance`, 'avant impôt et frais']) expect(t).toContain(s);
+  });
+
+  it('Capital-investissement : 3 % par an de 5 000 € souscrits pendant 8 ans → 150 € par an, 1 200 € en tout', () => {
+    const r = fundFeesOnSubscribed(5000, 3, 8);
+    expect(r).toEqual({ yearly: 150, total: 1200 });
+    const t = ex('private-equity');
+    expect(t).toMatch(/^Exemple fictif/);
+    for (const s of [`${eur(5000)} souscrits`, 'bloqués 8 ans', 'frais de 3 % par an des sommes souscrites', `${eur(r.yearly)} par an`, `${eur(r.total)} sur 8 ans`, 'Rien n’est garanti']) expect(t).toContain(s);
+    // 3 % se situe entre les médianes sourcées de la rubrique Frais (FCPR 2,4 % à 2,5 %, FIP 3,5 %).
+    const fees = norm(investmentBySlug['private-equity']!.fees.text);
+    expect(fees).toContain('plus de 3,5 % par an des sommes souscrites');
+    expect(fees).toContain('plus de 2,4 % à 2,5 %');
+  });
+
+  it('Créer son entreprise : 10 000 € par an pendant 10 ans → 100 000 € versés, environ 120 100 € à 4 %', () => {
+    const r = yearlySavingsValue(10000, 4, 10);
+    expect(r).toEqual({ saved: 100000, withGrowth: 120100 });
+    const t = ex('creation-entreprise');
+    expect(t).toMatch(/^Exemple fictif/);
+    for (const s of [`${eur(30000)} de bénéfice par an`, `${eur(10000)} épargnés chaque année`, `${eur(r.saved)} mis de côté`, '4 % par an', `environ ${eur(r.withGrowth)}`, 'sans garantie']) expect(t).toContain(s);
+  });
+
+  it('Foncières cotées : 5 000 €, baisse de 10 % → 4 500 € ; 4 % de dividendes → 200 €', () => {
+    const r = listedPropertyYear(5000, 10, 4);
+    expect(r).toEqual({ afterDrop: 4500, dividends: 200 });
+    const t = ex('foncieres-cotees');
+    expect(t).toMatch(/^Exemple fictif/);
+    for (const s of [eur(5000), 'baisse de 10 %', `plus que ${eur(r.afterDrop)}`, '4 % de dividendes', `vous touchez ${eur(r.dividends)}`, 'avant impôt']) expect(t).toContain(s);
   });
 });
