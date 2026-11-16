@@ -342,7 +342,8 @@ export function Sources({ list }: { list: Source[] }) {
   );
 }
 
-export function PageHead({ eyebrow, title, children, art: artProp }: { eyebrow?: string; title: string; children?: ReactNode; art?: HeaderArtName | null }) {
+/** `icon` : petite icône décorative (famille d’une fiche, parcours d’un guide) placée dans la pastille du sur-titre. */
+export function PageHead({ eyebrow, title, children, art: artProp, icon }: { eyebrow?: string; title: string; children?: ReactNode; art?: HeaderArtName | null; icon?: ReactNode }) {
   // Page de simulateur : scène de son thème (épargne, crédit, budget…), affichée seulement sur grand écran.
   const { pathname } = useLocation();
   const theme = simThemeOfPath(pathname);
@@ -354,7 +355,7 @@ export function PageHead({ eyebrow, title, children, art: artProp }: { eyebrow?:
   return (
     <header className={art ? `page-head has-art${artProp ? '' : ' art-compact'}` : 'page-head'}>
       {art && <HeaderArt name={art} />}
-      {eyebrow && <div className="eyebrow">{eyebrow}</div>}
+      {eyebrow && <div className={icon ? 'eyebrow has-icon' : 'eyebrow'}>{icon && <span className="eyebrow-icon">{icon}</span>}{eyebrow}</div>}
       <h1>{title}</h1>
       {children && <div className="lede">{children}</div>}
     </header>

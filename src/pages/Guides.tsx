@@ -92,6 +92,8 @@ export function GuidePage() {
     : g.related.filter((r) => investmentBySlug[r]).map((r) => ({ kind: 'Fiche', to: `/encyclopedie/${r}`, title: investmentBySlug[r].name, blurb: investmentBySlug[r].summary }));
   const hasNext = g.slug === 'par-ou-commencer' || simItems.length + ficheItems.length > 0;
   // Sommaire : les rubriques du guide, puis les questions, les suites et les sources (repères pour vérifier).
+  // Parcours de lecture du guide (page « Guides ») : son nom et son icône dans le sur-titre ; la durée de lecture suit la date de mise à jour.
+  const groupIndex = guideGroups.findIndex((grp) => grp.slugs.includes(g.slug));
   const toc = [
     ...g.sections.map((s) => ({ id: sectionId(s.heading), label: s.heading })),
     ...(g.faq?.length ? [{ id: 'rub-questions-frequentes', label: 'Questions fréquentes' }] : []),
@@ -103,8 +105,8 @@ export function GuidePage() {
       <Crumbs items={[{ to: '/', label: 'Accueil' }, { to: '/guides', label: 'Guides' }, { label: g.title }]} />
       <div className="guide-layout">
       <div className="prose">
-        <PageHead eyebrow={`Guide · ${g.readingMinutes} min de lecture`} title={g.title}>{g.summary}</PageHead>
-        <p className="small muted">Mis à jour le {fmtDate(g.updatedOn)}</p>
+        <PageHead eyebrow={groupIndex >= 0 ? guideGroups[groupIndex].title : 'Guide'} icon={groupIndex >= 0 ? <GuideGroupIcon index={groupIndex} size={20} /> : undefined} title={g.title}>{g.summary}</PageHead>
+        <p className="small muted">Mis à jour le {fmtDate(g.updatedOn)} · {g.readingMinutes}&nbsp;min de lecture</p>
         {g.slug === 'par-ou-commencer' && <SchemaEscalier steps={g.sections.map((s) => s.heading)} targets={g.sections.map((s) => sectionId(s.heading))} title="Les cinq étapes pour construire son patrimoine, dans l’ordre" />}
         {g.sections.map((s, i) => (
           <section key={s.heading}>
