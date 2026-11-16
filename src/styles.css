@@ -1379,3 +1379,31 @@ ul.points { margin: 0.9rem 0 0.5rem; gap: 8px; }
   .cmp-base .input-unit input { padding-left: 10px; padding-right: 34px; }
   .cmp-base .input-unit span { right: 8px; }
 }
+
+/* Louer ou acheter : barres divergentes des scénarios, une ligne par scénario (gauche = louer, droite = acheter). */
+.dv { padding-bottom: 10px; display: grid; grid-template-columns: auto minmax(48px, 1fr) auto; column-gap: 8px; }
+.dv-group { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; font-size: .88rem; }
+.dv-group + .dv-group { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+.dv-group h3 { grid-column: 1 / -1; margin: 0 0 4px; font-size: 1rem; }
+.dv-group .fb-list { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; }
+.dv-row { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-items: center; padding: 3px 6px; margin: 0 -6px 2px; border-radius: 8px; }
+.dv-cur { background: var(--surface-2); font-weight: 700; }
+.dv-name { color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.dv-value { text-align: right; white-space: nowrap; font-weight: 600; font-variant-numeric: tabular-nums; }
+.dv-value.dv-tie { color: var(--ink-2); }
+.dv-value.dv-buy { color: var(--primary); }
+.dv-value.dv-rent { color: var(--accent); }
+.dv-amount { color: var(--ink); font-weight: 700; }
+.dv-track { display: grid; grid-template-columns: 1fr 1fr; height: 14px; }
+.dv-half { display: flex; background: var(--surface-2); }
+.dv-half:first-child { justify-content: flex-end; border-radius: 6px 0 0 6px; border-right: 2px solid var(--ink-3); }
+.dv-half:last-child { border-radius: 0 6px 6px 0; }
+.dv-cur .dv-half { background: var(--surface); }
+.dv-bar { display: block; height: 100%; }
+.dv-bar.dv-rent { background: var(--chart-2); border-radius: 6px 0 0 6px; }
+.dv-bar.dv-buy { background: var(--chart-1); border-radius: 0 6px 6px 0; }
+.dv-axis { margin-bottom: 0; font-size: .78rem; font-weight: 600; white-space: nowrap; }
+.dv-axis .dv-track { height: auto; }
+.dv-axis .dv-track span:first-child { color: var(--accent); text-align: right; padding-right: 6px; }
+.dv-axis .dv-track span:last-child { color: var(--primary); padding-left: 6px; }
+.dv figcaption { grid-column: 1 / -1; margin-top: 8px; }

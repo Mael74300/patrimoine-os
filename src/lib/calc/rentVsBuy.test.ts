@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { advantageByHorizon, advantageByPriceGrowth, breakEvenBand, rentVsBuy } from './rentVsBuy';
+import { advantageBars, advantageByHorizon, advantageByPriceGrowth, breakEvenBand, rentVsBuy, scenarioValues } from './rentVsBuy';
 
 // Exemple fictif.
 const B = { price: 250000, downPayment: 50000, acquisitionRate: 0.08, loanRate: 0.035, loanYears: 20, ownerCostRate: 0.015, priceGrowth: 0.02, sellingRate: 0.05, monthlyRent: 900, rentGrowth: 0.02, investReturn: 0.04, horizonYears: 20 };
@@ -77,5 +77,26 @@ describe('breakEvenBand (zone « l’achat l’emporte » du graphique)', () => 
     const first = Math.ceil(band!.from);
     for (let i = first; i < r.series.length; i++) expect(r.series[i].buyer).toBeGreaterThan(r.series[i].renter);
     if (first > 0) expect(r.series[first - 1].buyer).toBeLessThanOrEqual(r.series[first - 1].renter);
+  });
+
+  it('scénarios : la valeur saisie est ajoutée une seule fois, dans l’ordre, et seulement si elle est dans la plage', () => {
+    expect(scenarioValues([3, 5, 10, 15, 20], 15, 1, 50)).toEqual([3, 5, 10, 15, 20]);
+    expect(scenarioValues([3, 5, 10, 15, 20], 8, 1, 50)).toEqual([3, 5, 8, 10, 15, 20]);
+    expect(scenarioValues([3, 5, 10, 15, 20], 0, 1, 50)).toEqual([3, 5, 10, 15, 20]);
+    expect(scenarioValues([-0.01, 0, 0.02, 0.04], 0.02 + 1e-12, -0.1, 0.15)).toEqual([-0.01, 0, 0.02, 0.04]);
+    expect(scenarioValues([-0.01, 0, 0.02, 0.04], 0.03, -0.1, 0.15)).toEqual([-0.01, 0, 0.02, 0.03, 0.04]);
+  });
+
+  it('barres divergentes : côté gagnant, plus grand écart à 100 %, égalité sans barre', () => {
+    // Exemple fictif : écarts selon l'horizon avec les réglages par défaut du simulateur (horizon 15 ans).
+    const D = { ...B, horizonYears: 15 };
+    const t = advantageByHorizon(D, [3, 5, 10, 15, 20]);
+    const bars = advantageBars(t.map((d) => d.advantage));
+    expect(bars.map((b) => b.side)).toEqual(['rent', 'rent', 'rent', 'buy', 'buy']);
+    expect(bars[4].pct).toBeCloseTo(100, 6);
+    expect(bars[0].pct).toBeCloseTo((Math.abs(t[0].advantage) / t[4].advantage) * 100, 6);
+    expect(advantageBars([0.2, -50, 1000])).toEqual([{ side: 'tie', pct: 0 }, { side: 'rent', pct: 5 }, { side: 'buy', pct: 100 }]);
+    expect(advantageBars([1, 100000])[0]).toEqual({ side: 'buy', pct: 2 });
+    expect(advantageBars([0, NaN])).toEqual([{ side: 'tie', pct: 0 }, { side: 'tie', pct: 0 }]);
   });
 });

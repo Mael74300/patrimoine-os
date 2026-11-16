@@ -110,3 +110,26 @@ export function breakEvenBand(breakEvenMonth: number | null, points: number): { 
   const to = points - 1;
   return from < to ? { from, to } : null;
 }
+
+/**
+ * Liste de scénarios affichée sous les résultats : valeurs de référence plus la valeur saisie
+ * (si elle est dans [min, max]), sans doublon (à 1e-9 près), triées par ordre croissant.
+ */
+export function scenarioValues(base: number[], current: number, min: number, max: number): number[] {
+  const all = [...base];
+  if (Number.isFinite(current) && current >= min && current <= max && !all.some((v) => Math.abs(v - current) < 1e-9)) all.push(current);
+  return all.sort((a, b) => a - b);
+}
+
+/**
+ * Barres divergentes « acheter ou louer » : pour chaque écart (acheter − louer), le côté qui l'emporte
+ * et la longueur de la barre en % de la demi-piste (écart le plus grand en valeur absolue = 100 %).
+ * Un écart arrondi à l'euro nul est « égalité » (barre vide) ; un écart non nul garde au moins 2 %.
+ */
+export function advantageBars(advantages: number[]): { side: 'buy' | 'rent' | 'tie'; pct: number }[] {
+  const max = Math.max(0, ...advantages.map((a) => (Number.isFinite(a) ? Math.abs(a) : 0)));
+  return advantages.map((a) => {
+    if (!Number.isFinite(a) || Math.round(a) === 0 || max === 0) return { side: 'tie' as const, pct: 0 };
+    return { side: a > 0 ? ('buy' as const) : ('rent' as const), pct: Math.max(2, (Math.abs(a) / max) * 100) };
+  });
+}
