@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { investmentBySlug } from './investments';
 import { bondCoupons, crowdfundingScenario, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, yearlySavingsValue } from '../lib/calc/ficheExemples';
 import { amortize } from '../lib/calc/loan';
-import { CROWDFUNDING_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE } from '../lib/illustrationData';
+import { CROWDFUNDING_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, leverageBars } from '../lib/illustrationData';
 import { SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaRepriseBilan, SchemaScpiBilan } from '../components/schemas/fiches';
 import { guideBySlug } from './guides';
 
@@ -193,5 +193,29 @@ describe('fiches : exemples chiffrés menés jusqu’au résultat', () => {
     const t = ex('foncieres-cotees');
     expect(t).toMatch(/^Exemple fictif/);
     for (const s of [eur(5000), 'baisse de 10 %', `plus que ${eur(r.afterDrop)}`, '4 % de dividendes', `vous touchez ${eur(r.dividends)}`, 'avant impôt']) expect(t).toContain(s);
+  });
+});
+
+describe('fiche Investir à crédit : l’exemple chiffré reprend le schéma du levier', () => {
+  const ex = norm(investmentBySlug['credit-immobilier']!.example);
+  const { principal, annualRate, years } = LOAN_EXAMPLE;
+  const loan = amortize({ principal, annualRate, years });
+  const { interest, down, bars } = leverageBars();
+  const first = loan.schedule[0]!;
+
+  it('montants recalculés : 6 199 € d’intérêts, 3 801 € restants, 199 € manquants, 6 328 € de capital', () => {
+    expect(Math.round(interest)).toBe(6199);
+    expect(bars.map((b) => Math.round(b.left))).toEqual([3801, 0]);
+    expect(bars.map((b) => Math.round(b.shortfall))).toEqual([0, 199]);
+    expect(Math.round(first.principalPaid)).toBe(6328);
+    expect(Math.round(loan.monthlyPayment)).toBe(1044);
+    expect(Math.round((loan.monthlyPayment * years * 12 - principal) / 10) * 10).toBe(70540);
+  });
+  it('le texte de la fiche cite les mêmes montants que le schéma et reste marqué fictif', () => {
+    expect(ex).toMatch(/^Exemple fictif, celui du schéma/);
+    for (const v of [LEVERAGE_EXAMPLE.price, down, principal, 1044, 6199, ...bars.map((b) => b.income), 3801, 199, 6328, 70540]) expect(ex).toContain(eur(v));
+    expect(ex).toContain(`${norm((annualRate * 100).toLocaleString('fr-FR'))} %`);
+    expect(ex).toContain('avant impôt');
+    expect(ex).not.toContain('6 200');
   });
 });
