@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { advantageByHorizon, advantageByPriceGrowth, breakEvenBand, fmtEur, fmtMonths, fmtPct, rentVsBuy } from '../lib/finance';
+import { advantageBars, advantageByHorizon, advantageByPriceGrowth, breakEvenBand, fmtEur, fmtPct, rentVsBuy, scenarioValues } from '../lib/finance';
 import { rentVsBuyTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = {
   price: number; downPayment: number; acquisitionRate: number; loanRate: number; loanYears: number; ownerCostRate: number;
@@ -14,16 +14,46 @@ const DEFAULTS: State = {
   priceGrowth: 0.02, sellingRate: 0.05, monthlyRent: 900, rentGrowth: 0.02, investReturn: 0.04, horizonYears: 15,
 };
 
-function verdict(advantage: number): string {
-  if (Math.round(advantage) === 0) return 'À égalité';
-  return advantage > 0 ? 'Acheter' : 'Louer';
+type Scenario = { key: string; name: string; advantage: number; current: boolean };
+
+function growthName(g: number): string {
+  if (Math.abs(g) < 1e-9) return 'stable';
+  return `${g > 0 ? '+' : ''}${fmtPct(g)}\u00a0/\u00a0an`;
+}
+
+/** Barres divergentes, une ligne par scénario : à gauche, louer laisse plus riche ; à droite, acheter. */
+function ScenarioBars({ title, rows }: { title: string; rows: Scenario[] }) {
+  const bars = advantageBars(rows.map((r) => r.advantage));
+  return (
+    <div className="dv-group">
+      <h3>{title}</h3>
+      <div className="dv-row dv-axis" aria-hidden="true"><span /><span className="dv-track"><span>← louer</span><span>acheter →</span></span><span /></div>
+      <ul className="fb-list">
+        {rows.map((r, i) => {
+          const b = bars[i];
+          return (
+            <li key={r.key} className={'dv-row' + (r.current ? ' dv-cur' : '')}>
+              <span className="dv-name">{r.name}{r.current && <span className="sr-only"> (vos réglages)</span>}</span>
+              <span className="dv-track" aria-hidden="true">
+                <span className="dv-half">{b.side === 'rent' && <span className="dv-bar dv-rent" style={{ width: `${b.pct}%` }} />}</span>
+                <span className="dv-half">{b.side === 'buy' && <span className="dv-bar dv-buy" style={{ width: `${b.pct}%` }} />}</span>
+              </span>
+              <span className={'dv-value dv-' + b.side}>
+                {b.side === 'tie' ? 'Égalité' : <>{b.side === 'buy' ? 'Acheter' : 'Louer'} <span className="dv-amount">+{fmtEur(Math.abs(r.advantage))}</span></>}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
 }
 
 export default function SimLouerAcheter() {
   const [s, setS, up] = usePersistentState<State>('louer-acheter', DEFAULTS);
   const r = rentVsBuy(s);
-  const byGrowth = advantageByPriceGrowth(s, [-0.01, 0, 0.02, 0.04]);
-  const byHorizon = advantageByHorizon(s, [3, 5, 10, 15, 20]);
+  const byGrowth = advantageByPriceGrowth(s, scenarioValues([-0.01, 0, 0.02, 0.04], s.priceGrowth, -0.1, 0.15));
+  const byHorizon = advantageByHorizon(s, scenarioValues([3, 5, 10, 15, 20], Math.floor(s.horizonYears), 1, 50));
   const buyWins = r.advantage > 0;
   const band = breakEvenBand(r.breakEvenMonth, r.series.length);
 
@@ -69,9 +99,9 @@ export default function SimLouerAcheter() {
         </form>
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
-            <Kpi label="Patrimoine du propriétaire" value={fmtEur(r.buyerWealth)} sub={`bien ${fmtEur(r.finalValue)} après frais de revente, dette restante ${fmtEur(r.remainingDebt)}`} />
+            <Kpi label="Patrimoine du propriétaire" value={fmtEur(r.buyerWealth)} sub={r.remainingDebt > 0.5 ? `revente ${fmtEur(r.finalValue)} (frais déduits), moins ${fmtEur(r.remainingDebt)} de prêt restant` : `revente ${fmtEur(r.finalValue)} (frais déduits), prêt soldé`} />
             <Kpi label="Patrimoine du locataire" value={fmtEur(r.renterWealth)} sub="apport, frais et écarts mensuels placés" />
-            <Kpi label={buyWins ? 'Avantage à l’achat' : 'Avantage à la location'} value={fmtEur(Math.abs(r.advantage))} sub={r.breakEvenMonth !== null ? `l’achat l’emporte pour de bon au bout de ${fmtMonths(r.breakEvenMonth)}` : 'l’achat ne l’emporte pas à cet horizon'} />
+            <Kpi label={buyWins ? 'Avantage à l’achat' : 'Avantage à la location'} value={fmtEur(Math.abs(r.advantage))} sub={`écart entre les deux patrimoines au bout de ${Math.floor(s.horizonYears)}\u00a0ans`} />
           </div>
           <Takeaway>{rentVsBuyTakeaway({ horizonYears: Math.floor(s.horizonYears), advantage: r.advantage, breakEvenMonth: r.breakEvenMonth })}</Takeaway>
           {r.series.length > 1 && (
@@ -89,43 +119,28 @@ export default function SimLouerAcheter() {
               />
               <p className="muted small">
                 {band
-                  ? `Zone grisée : à partir de ${fmtMonths(r.breakEvenMonth!)}, le propriétaire reste plus riche. Avant, louer et placer la différence laisse davantage.`
-                  : 'Tant que la courbe pleine (propriétaire) reste sous la courbe en tirets (locataire), louer et placer la différence laisse davantage.'}
-                {' '}Le patrimoine du propriétaire est compté comme s’il revendait le bien à cette date, frais de revente déduits.
+                  ? 'Zone grisée : l’achat l’emporte pour de bon.'
+                  : 'Tant que la courbe pleine (propriétaire) reste sous la courbe en tirets (locataire), louer laisse davantage.'}
+                {' '}Le propriétaire rembourse {fmtEur(r.monthlyPayment)} par mois (hors assurance) et paie taxe foncière et entretien, le locataire paie son loyer :
+                chaque mois, celui qui dépense le moins place la différence.
               </p>
             </>
           )}
-          <p className="muted small">Mensualité du prêt hors assurance : {fmtEur(r.monthlyPayment)} sur un capital emprunté de {fmtEur(r.loanAmount)}.</p>
-          <h2>Si le prix du bien évolue autrement</h2>
-          <MobileFold label="Afficher le tableau selon la hausse du prix">
-          <div className="table-wrap" tabIndex={0}>
-            <table>
-              <thead><tr><th scope="col">Hausse annuelle du prix</th><th scope="col" className="r">Acheter − louer</th><th scope="col">Le plus avantageux</th></tr></thead>
-              <tbody>
-                {byGrowth.map((d) => (
-                  <tr key={d.growth}><th scope="row">{fmtPct(d.growth)}</th><td className="r">{fmtEur(d.advantage)}</td><td>{verdict(d.advantage)}</td></tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          </MobileFold>
-          <h2>Si l’on revend plus tôt ou plus tard</h2>
-          <MobileFold label="Afficher le tableau selon l’horizon de revente">
-          <div className="table-wrap" tabIndex={0}>
-            <table>
-              <thead><tr><th scope="col">Horizon</th><th scope="col" className="r">Acheter − louer</th><th scope="col">Le plus avantageux</th></tr></thead>
-              <tbody>
-                {byHorizon.map((d) => (
-                  <tr key={d.years}><th scope="row">{d.years}&nbsp;ans</th><td className="r">{fmtEur(d.advantage)}</td><td>{verdict(d.advantage)}</td></tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          </MobileFold>
-          <p className="muted small">
-            Un écart positif signifie que le propriétaire est plus riche à l’horizon. Les exemples ci-dessus sont fictifs. Le modèle ignore les impôts, l’assurance du prêt,
-            les travaux exceptionnels et la valeur d’usage (stabilité, liberté de déménager). Pour l’arbitrage rembourser ou investir, voir <Link to="/simulateurs/rembourser-ou-investir">rembourser ou investir</Link>.
-          </p>
+          <h2>Et si les hypothèses changent ?</h2>
+          <figure className="fb dv">
+            <ScenarioBars
+              title="Selon la durée avant de revendre"
+              rows={byHorizon.map((d) => ({ key: `h${d.years}`, name: `${d.years}\u00a0ans`, advantage: d.advantage, current: d.years === Math.floor(s.horizonYears) }))}
+            />
+            <ScenarioBars
+              title={`Selon la hausse du prix, à ${Math.floor(s.horizonYears)}\u00a0ans`}
+              rows={byGrowth.map((d) => ({ key: `g${d.growth}`, name: growthName(d.growth), advantage: d.advantage, current: Math.abs(d.growth - s.priceGrowth) < 1e-9 }))}
+            />
+            <figcaption className="muted small">
+              Une seule hypothèse change par ligne (surlignée : vos réglages) ; le montant est le patrimoine en plus de l’option gagnante.
+              Le modèle ignore les impôts, l’assurance du prêt, les travaux exceptionnels et la valeur d’usage (stabilité, liberté de déménager).
+            </figcaption>
+          </figure>
           <SavedSims simKey="louer-acheter" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <Disclaimer />
           <SimFaq slug="louer-ou-acheter" />

@@ -60,7 +60,7 @@ export function rentVsBuyTakeaway(p: { horizonYears: number; advantage: number; 
   if (!(p.horizonYears >= 1)) return '';
   const ans = fmtAns(p.horizonYears);
   const quand = p.breakEvenMonth !== null ? ` L'achat prend l'avantage pour de bon au bout de ${fmtMonths(p.breakEvenMonth)}.` : '';
-  const fin = ' Ce résultat vient uniquement des hypothèses saisies : changez le prix, le loyer ou le rendement et il peut s’inverser.';
+  const fin = ' Ce résultat vient uniquement de vos hypothèses : voyez plus bas ce qui peut le faire basculer.';
   if (Math.round(p.advantage) === 0) return `Au bout de ${ans}, acheter et louer vous laissent à peu près le même patrimoine avec ces hypothèses.${fin}`;
   return p.advantage > 0
     ? `Au bout de ${ans}, avec ces hypothèses, vous seriez plus riche de ${fmtEur(p.advantage)} en achetant qu’en louant.${quand}${fin}`
