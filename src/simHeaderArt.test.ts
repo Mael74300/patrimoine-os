@@ -1,3 +1,4 @@
+// @ts-expect-error les types de Node ne sont pas installés ; le module existe sous Vitest
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -26,6 +27,6 @@ describe('scènes des bandeaux de simulateur', () => {
     }
   });
   it('fichier des scènes léger (moins de 15 ko)', () => {
-    expect(readFileSync(new URL('./components/HeaderArt.tsx', import.meta.url)).length).toBeLessThan(15000);
+    expect((readFileSync('src/components/HeaderArt.tsx', 'utf8') as string).length).toBeLessThan(15000);
   });
 });
