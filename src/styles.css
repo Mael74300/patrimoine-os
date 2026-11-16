@@ -977,6 +977,30 @@ h2.gloss-letter::before { content: none; }
 .bb-list .bb-dot { margin: 0; }
 .bb-gap { display: block; color: var(--ink-2); font-size: .92rem; }
 @media (max-width: 480px) { .bb-row { grid-template-columns: 4.2rem 1fr; gap: 8px; } .bb-legend { margin-left: calc(4.2rem + 8px); } }
+/* Simulateur Taux d'endettement : où partent les revenus du mois, repère de 35 % en pointillé */
+.db { margin: 0 0 20px; padding: 16px 18px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+.db-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px; font-size: .92rem; color: var(--ink-2); }
+.db-head strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+.db-wrap { position: relative; }
+.db-brace { height: 1.7rem; margin-top: 2px; }
+.db-brace span { position: relative; display: block; height: 100%; border: 2px solid var(--primary); border-bottom: 0; border-radius: 6px 6px 0 0; transform: translateY(.6rem); }
+.db-brace b { position: absolute; left: 6px; top: -.75rem; padding: 0 6px; background: var(--surface); font-size: .84rem; color: var(--primary); white-space: nowrap; }
+.db-bar { height: 38px; }
+.db-existing { background: var(--primary); }
+.db-added { background: var(--accent); }
+.db-living { background: var(--gold); color: var(--ink); }
+.db-rest { background: repeating-linear-gradient(45deg, var(--surface-2) 0 6px, var(--line) 6px 12px); color: var(--ink-2); }
+.db-mark { position: absolute; top: -6px; bottom: -6px; width: 0; border-left: 3px dashed var(--ink); transform: translateX(-1.5px); }
+.db-scale { position: relative; height: 1.6rem; margin-top: 8px; }
+.db-scale span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; font-size: .84rem; font-weight: 700; color: var(--ink); }
+.db-list { list-style: none; margin: 6px 0 10px; padding: 0; display: grid; gap: 0 28px; }
+.db-list li { display: grid; grid-template-columns: 14px 1fr auto 3.6rem; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: .92rem; }
+.db-list .bb-dot { margin: 0; }
+.db-label { color: var(--ink); }
+.db-amount { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.db-share { text-align: right; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; font-size: .86rem; }
+.db figcaption { font-size: .88rem; color: var(--ink-2); line-height: 1.5; }
+@media (min-width: 900px) { .db-list { grid-template-columns: 1fr 1fr; } }
 /* Frise « quand chaque dette est soldée » (simulateur Rembourser plusieurs dettes) */
 .pt-intro { margin: 0 0 10px; color: var(--ink-2); font-size: .95rem; }
 .pt { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 0 0 14px; }

@@ -54,7 +54,6 @@ export default function SimEndettement() {
           <Takeaway>{debtRatioTakeaway({ income: s.income, ratioAfter: r.ratioAfter, remainingAfter: r.remainingAfter, withinRef: r.withinHcsf, refLabel: pct })}</Takeaway>
           <SchemaMois income={s.income} existingPayments={s.existingPayments} newPayment={s.newPayment} livingCosts={s.livingCosts} />
           <h2>Repères</h2>
-          <p><strong>Taux d’endettement</strong> : part de vos revenus nets consacrée à vos crédits (anciens et nouveau).</p>
           <div className="table-wrap" tabIndex={0}>
             <table>
               <tbody>
@@ -64,8 +63,7 @@ export default function SimEndettement() {
             </table>
           </div>
           <ul className="points">
-            <li><strong>Reste à vivre</strong> : aucun seuil officiel unique, il dépend de vos charges réelles.</li>
-            <li>Les banques regardent aussi l’apport, la stabilité des revenus et l’épargne.</li>
+            <li><strong>Reste à vivre</strong> : aucun seuil officiel unique, il dépend de vos charges réelles. Les banques regardent aussi l’apport, la stabilité des revenus et l’épargne.</li>
             <li>
               Avant d’emprunter : <Link to="/simulateurs/epargne-de-precaution">constituer une réserve</Link>, <Link to="/simulateurs/budget">répartir son budget</Link>.
             </li>
