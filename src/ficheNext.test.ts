@@ -41,10 +41,26 @@ describe('Fiches : suites logiques', () => {
     expect(html).not.toContain('href="/simulateurs">Simuler<');
     expect(at('>Pour aller plus loin</h2>')).toBeGreaterThan(at('>Exemple chiffré</h2>'));
     expect(at('>Pour aller plus loin</h2>')).toBeLessThan(at('>Sources et vérification</h2>'));
-    // Une seule grille : simulateurs d'abord, puis guides, chaque carte étiquetée ; puis les placements comparables.
+    // Une seule grille étiquetée : simulateur principal, guide qui explique, puis placements comparables.
     expect(at('>Simulateur</span>')).toBeGreaterThan(at('>Pour aller plus loin</h2>'));
     expect(html.search(/>Guide<\/span><a [^>]*href="\/guides\/investir-a-credit"/)).toBeGreaterThan(at('>Simulateur</span>'));
-    expect(at('>Placements comparables</h3>')).toBeGreaterThan(at('>Guide</span>'));
+    expect(at('>Placement comparable</span>')).toBeGreaterThan(at('>Guide</span>'));
+    expect(html).not.toContain('Placements comparables</h3>');
+  });
+  it('quatre cartes visibles au plus, la suite repliée, aucune suite perdue (chantier 144)', () => {
+    for (const inv of investments) {
+      const html = render(inv.slug);
+      const bloc = html.slice(html.indexOf('>Pour aller plus loin</h2>'), html.indexOf('>Sources et vérification</h2>'));
+      const avant = bloc.split('<details')[0];
+      expect((avant.match(/<li>/g) ?? []).length, inv.slug).toBeLessThanOrEqual(4);
+      expect((avant.match(/<li>/g) ?? []).length, inv.slug).toBeGreaterThan(0);
+      const cibles = [
+        ...(simsForInvestment[inv.slug] ?? []).map((s) => `/simulateurs/${s}`),
+        ...(guidesForInvestment[inv.slug] ?? []).map((g) => `/guides/${g}`),
+        ...inv.alternatives.filter((a) => investments.some((i) => i.slug === a)).map((a) => `/encyclopedie/${a}`),
+      ];
+      for (const c of cibles) expect(bloc, `${inv.slug} → ${c}`).toContain(`href="${c}"`);
+    }
   });
 });
 

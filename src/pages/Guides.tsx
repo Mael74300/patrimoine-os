@@ -6,6 +6,7 @@ import { guideBlurb } from '../lib/guideBlurbs';
 import { simBlurb } from '../lib/simThemes';
 import { guideSimulators } from '../lib/relatedSims';
 import { splitNext } from '../lib/nextLinks';
+import { NextList, type NextItem } from '../components/NextList';
 import { NetWorthCalculator } from '../components/NetWorthCalculator';
 import { Crumbs, FaqSection, MobileFold, PageHead, Sources } from '../components/ui';
 import { ENVELOPE_CARDS, EnvelopeCards } from '../components/EnvelopeCards';
@@ -18,17 +19,6 @@ import { annotateJargon, splitLead, type JargonSegment } from '../lib/jargon';
 import { JargonText } from '../components/Jargon';
 import NotFound from './NotFound';
 import { fmtDate } from '../lib/dates';
-
-type NextItem = { kind: string; to: string; title: string; blurb: string };
-function NextList({ items }: { items: NextItem[] }) {
-  return (
-    <ul className="next-list">
-      {items.map((it) => (
-        <li key={it.to}><span className="next-kind">{it.kind}</span><Link to={it.to}>{it.title}</Link><span>{it.blurb}</span></li>
-      ))}
-    </ul>
-  );
-}
 
 /** Guide « Par où commencer » : pour chaque étape, la page du site qui permet d'aller plus loin (aucun chiffre). */
 export const etapesSuite: { to: string; label: string }[] = [

@@ -7,6 +7,8 @@ import { needsCheck } from '../data/types';
 import { guidesForInvestment, relatedSimulators, simsForInvestment, simulateTarget } from '../lib/relatedSims';
 import { AdSlot, CheckedText, Crumbs, Fold, MeterRows, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
+import { interleave, splitNext } from '../lib/nextLinks';
+import { NextList, type NextItem } from '../components/NextList';
 import { DONATION_ABATTEMENTS, fmtEuros } from '../data/donationAbattements';
 import { SchemaActions, SchemaForet, SchemaDonation, SchemaDonationBilan, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaOr, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaScpi, SchemaScpiBilan, SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaUniteDeCompte, SchemaFondsEuros, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaRepriseBilan, SchemaActiviteNumerique } from '../components/schemas/fiches';
 import { SchemaPea, SchemaQuinzaines, SchemaLevier } from '../components/schemas/communs';
@@ -142,25 +144,30 @@ export default function InvestmentPage() {
 
           <AdSlot id={`fiche-${inv.slug}`} />
 
-          {/* Suites logiques avant les sources, comme sur les guides : simulateur, guide qui explique, placements voisins. */}
-          <h2>Pour aller plus loin</h2>
-          {/* Simulateurs puis guides dans une même grille, chaque carte dit ce qu'elle est (comme en bas des simulateurs). */}
-          {sims.length + guidesLies.length > 0 && (
-            <ul className="next-list">
-              {sims.map((s) => (
-                <li key={s.slug}><span className="next-kind">Simulateur</span><Link to={`/simulateurs/${s.slug}`}>{s.title}</Link><span>{simBlurb(s.slug)}</span></li>
-              ))}
-              {guidesLies.map((g) => (
-                <li key={g}><span className="next-kind">Guide</span><Link className="next-solo" to={`/guides/${g}`}>{guideBySlug[g].title}</Link></li>
-              ))}
-            </ul>
-          )}
-          <h3 className="next-sub">Placements comparables</h3>
-          <ul className="next-list">
-            {inv.alternatives.filter((a) => investmentBySlug[a]).map((a) => (
-              <li key={a}><Link to={`/encyclopedie/${a}`}>{investmentBySlug[a].name}</Link><span>{investmentBySlug[a].summary}</span></li>
-            ))}
-          </ul>
+          {/* Suites logiques avant les sources, comme sur les guides : une seule grille étiquetée (simulateur, guide,
+              fiche d'un placement comparable). Au-delà de NEXT_VISIBLE cartes, la suite est repliée pour ne pas
+              repousser les sources (chantier 144, même règle que les guides). */}
+          {(() => {
+            // Simulateurs et guides alternés : les deux premières cartes sont le simulateur principal et le guide qui explique.
+            const outils: NextItem[] = interleave(
+              sims.map((s) => ({ kind: 'Simulateur', to: `/simulateurs/${s.slug}`, title: s.title, blurb: simBlurb(s.slug) })),
+              guidesLies.map((g) => ({ kind: 'Guide', to: `/guides/${g}`, title: guideBySlug[g].title })),
+            );
+            const fiches: NextItem[] = inv.alternatives.filter((a) => investmentBySlug[a])
+              .map((a) => ({ kind: 'Placement comparable', to: `/encyclopedie/${a}`, title: investmentBySlug[a].name, blurb: investmentBySlug[a].summary }));
+            if (outils.length + fiches.length === 0) return null;
+            const [shown, rest] = splitNext(outils, fiches);
+            return (<>
+              <h2>Pour aller plus loin</h2>
+              <NextList items={shown} />
+              {rest.length > 0 && (
+                <details className="fold next-more">
+                  <summary><span>{rest.length === 1 ? 'Une autre page liée' : `${rest.length} autres pages liées`}<span className="fold-hint">{rest.map((r) => r.title).join(' · ')}</span></span></summary>
+                  <NextList items={rest} />
+                </details>
+              )}
+            </>);
+          })()}
 
           <h2>Sources et vérification</h2>
           <Sources list={inv.sources} />
