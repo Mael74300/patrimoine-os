@@ -8,8 +8,8 @@ export type SearchHit = { kind: 'Fiche' | 'Guide' | 'Simulateur' | 'Glossaire'; 
 import { simulators } from './simulatorsList';
 export { simulators };
 
-/** Minuscule, sans accents, pour une recherche tolérante. */
-export const norm = (s: string) => s.replace(/[\u00a0\u202f]/g, ' ').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+/** Minuscule, sans accents, apostrophe droite, pour une recherche tolérante. */
+export const norm = (s: string) => s.replace(/[\u00a0\u202f]/g, ' ').replace(/’/g, "'").toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 
 /**
  * Racine approximative d'un mot, pour que la forme tapée trouve ses voisines :
@@ -33,7 +33,7 @@ export const stem = (t: string) => {
 
 /** Petits mots d'une question (« comment placer mon argent », « meilleur placement ») ignorés par la recherche. */
 export const stopWords = new Set(
-  'le la les l de du des d un une et au aux en pour par sur dans avec sans mon ma mes ton ta tes son sa ses notre nos votre vos leur leurs je j tu il elle on nous vous ils elles me m se s ce c cet cette ces ca cela qui que qu quoi quel quelle quels quelles comment combien est sont suis faut peut puis dois doit ai as avoir etre faire fait y ne n pas quand ou si euro euros premier premiere premiers premieres meilleur meilleure meilleurs meilleures bon bonne bien mieux tres'.split(' '),
+  'le la les l de du des d un une et au aux en pour par sur dans avec mon ma mes ton ta tes son sa ses notre nos votre vos leur leurs je j tu il elle on nous vous ils elles me m se s ce c cet cette ces ca cela qui que qu quoi quel quelle quels quelles comment combien est sont suis faut peut puis dois doit ai as avoir etre faire fait y ne n pas quand ou si euro euros preparer prepare premier premiere premiers premieres meilleur meilleure meilleurs meilleures bon bonne bien mieux tres'.split(' '),
 );
 
 /** Mots utiles de la recherche, ramenés à leur racine (les petits mots sont gardés s'il n'y a qu'eux). */
@@ -97,7 +97,7 @@ export const searchAliases: Record<string, string[]> = {
   credit: ['credit', 'pret', 'emprunt'],
   argent: ['argent', 'epargn', 'placement'],
   economiser: ['econom', 'epargn'],
-  notaire: ['notaire', 'acquisition'],
+  notaire: ['notaire', "frais d'acquisition"],
 };
 
 /** Synonymes rangés par racine, pour retrouver « impôts », « acheter » ou « crédits » sous toutes leurs formes. */
@@ -106,8 +106,13 @@ for (const [k, v] of Object.entries(searchAliases)) aliasByStem[stem(k)] = [...n
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-/** Un mot de la recherche doit commencer un mot du texte (« bourse » ne trouve plus « rembourser »). */
-const wordStart = (text: string, term: string) => new RegExp(`(^|[^a-z0-9])${escapeRe(term)}`).test(text);
+/**
+ * Un mot de la recherche doit commencer un mot du texte (« bourse » ne trouve plus « rembourser »).
+ * Un mot de trois lettres au plus (« or », « pea », « per ») doit être un mot entier, au pluriel près :
+ * « or » ne trouve plus « ordinaire », « per » ne trouve plus « personne ».
+ */
+const wordStart = (text: string, term: string) =>
+  new RegExp(term.length <= 3 ? `(^|[^a-z0-9])${escapeRe(term)}[sx]?([^a-z0-9]|$)` : `(^|[^a-z0-9])${escapeRe(term)}`).test(text);
 
 export type SearchResult = { hits: SearchHit[]; partial: boolean };
 
@@ -120,9 +125,12 @@ export type SearchResult = { hits: SearchHit[]; partial: boolean };
 export function searchDetailed(query: string): SearchResult {
   const terms = searchTerms(query);
   if (!terms.length) return { hits: [], partial: false };
-  // Deux mots tapés côte à côte et présents tels quels dans le titre (« livret a », « flat tax ») : bonus.
-  const raw = norm(query).split(/[\s'’]+/).filter((w) => w && !stopWords.has(w));
+  // Deux mots tapés côte à côte et présents tels quels (« livret a », « flat tax », « frais de notaire ») :
+  // bonus de 3 dans le titre, de 2 dans le résumé ou les mots-clés, de 1 dans le texte.
+  // Les petits mots entre les deux (« de », « d’ ») sont ignorés de part et d’autre.
+  const raw = norm(query).split(/[\s'’]+/).map((w) => w.replace(/^[^a-z0-9]+|[^a-z0-9]+$/g, '')).filter((w) => w && !stopWords.has(w));
   const pairs = raw.slice(1).map((w, k) => `${raw[k]} ${w}`);
+  const bare = (text: string) => text.split(/[\s'’]+/).map((w) => w.replace(/^[^a-z0-9]+|[^a-z0-9]+$/g, '')).filter((w) => w && !stopWords.has(w)).join(' ');
   type Scored = SearchHit & { found: number };
   const all: Scored[] = [];
   const add = (kind: SearchHit['kind'], title: string, to: string, excerpt: string, lead: string, body: string, bonus: number) => {
@@ -132,13 +140,18 @@ export function searchDetailed(query: string): SearchResult {
     let s = 0;
     let found = 0;
     for (const term of terms) {
-      const variants = [term, ...(aliasByStem[term] ?? [])];
-      const w = variants.some((v) => wordStart(t, v)) ? 5 : variants.some((v) => wordStart(l, v)) ? 2 : variants.some((v) => wordStart(b, v)) ? 1 : 0;
+      // Le mot tapé lui-même compte davantage qu’un de ses synonymes (« notaire » plutôt qu’« acquisition »).
+      const syn = aliasByStem[term] ?? [];
+      const hit = (text: string) => (wordStart(text, term) ? 1 : syn.some((v) => wordStart(text, v)) ? 0.75 : 0);
+      const w = 5 * hit(t) || 2 * hit(l) || hit(b);
       if (w) found++;
       s += w;
     }
     if (!found) return;
-    for (const p of pairs) if (wordStart(t, p)) s += 3;
+    if (pairs.length) {
+      const [bt, bl, bb] = [bare(t), bare(l), bare(b)];
+      for (const p of pairs) s += wordStart(bt, p) ? 3 : wordStart(bl, p) ? 2 : wordStart(bb, p) ? 1 : 0;
+    }
     all.push({ kind, title, to, excerpt, score: s + bonus, found });
   };
   for (const i of investments) {
