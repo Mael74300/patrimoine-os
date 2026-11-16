@@ -1,15 +1,49 @@
 import { useMemo } from 'react';
-import { drawdown, fireTarget, fmtEur, fmtPct, fmtYears, realRate, yearsToTarget, type FireInput } from '../lib/finance';
+import { drawdown, fireTarget, fmtEur, fmtPct, fmtYears, holdBars, realRate, yearsToTarget, type FireInput, type HoldBar } from '../lib/finance';
 import { fireTakeaway } from '../lib/takeaways';
 import { SchemaCapitalVise } from '../components/schemas/SchemaCapitalVise';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 const DEFAULTS: FireInput = {
   annualExpenses: 30000, currentWealth: 80000, recurringIncome: 0, annualSavings: 15000,
   nominalReturn: 0.05, inflation: 0.02, withdrawalRate: 0.035,
 };
 const RATES = [0.03, 0.035, 0.04, 0.045];
-const COLORS = ['var(--chart-3)', 'var(--chart-1)', 'var(--chart-2)'];
+/** Écarts de rendement testés autour de l'hypothèse saisie, et horizon de la phase de retrait (le même que la colonne « Capital tient »). */
+const SPREAD = [-0.02, 0, 0.02];
+const HORIZON = 60;
+
+/** Combien de temps tient le capital selon le rendement : une barre par hypothèse, sur la même échelle de 60 ans. */
+function HoldFigure({ bars, current }: { bars: HoldBar[]; current: number }) {
+  return (
+    <figure className="fb hb">
+      <ul className="fb-list">
+        {bars.map((b) => {
+          const mine = b.nominalReturn === current;
+          const verdict = b.depletedAt === null ? `tient plus de ${HORIZON}\u00a0ans` : `épuisé en ${b.depletedAt}\u00a0ans`;
+          return (
+            <li className={`fb-row${mine ? ' hb-mine' : ''}`} key={b.nominalReturn}>
+              <div className="fb-head">
+                <span className="fb-name">Rendement {fmtPct(b.nominalReturn)}{mine && <span className="hb-tag">le vôtre</span>}</span>
+                <span className="fb-value">{verdict}</span>
+              </div>
+              <div className="fb-track" role="img" aria-label={`Rendement ${fmtPct(b.nominalReturn)} : ${verdict}`}>
+                <span className={b.depletedAt === null ? 'hb-long' : 'hb-short'} style={{ width: `${b.pct}%` }} />
+              </div>
+              {b.depletedAt === null && (
+                <p className="fb-sub">Il reste {fmtEur(b.remainingReal)} au bout de {HORIZON}&nbsp;ans, en euros d’aujourd’hui.</p>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+      <div className="hb-axis" aria-hidden="true">{[0, 20, 40, HORIZON].map((y) => <span key={y} style={{ left: `${(100 * y) / HORIZON}%` }}>{y ? `${y}\u00a0ans` : '0'}</span>)}</div>
+      <figcaption className="fb-sub hb-caption">
+        Rendement supposé constant : en réalité il varie, et de mauvaises années au début des retraits peuvent épuiser le capital plus vite. Montants par défaut fictifs.
+      </figcaption>
+    </figure>
+  );
+}
 
 export default function SimIndependance() {
   const [s, setS, up] = usePersistentState<FireInput>('independance', DEFAULTS);
@@ -17,8 +51,9 @@ export default function SimIndependance() {
   const yrs = useMemo(() => yearsToTarget(s), [s]);
   const rates = useMemo(() => Array.from(new Set([...RATES, s.withdrawalRate])).sort((a, b) => a - b), [s.withdrawalRate]);
   const startCapital = Number.isFinite(target) && target > 0 ? target : s.currentWealth;
-  const scenarios = useMemo(
-    () => [-0.02, 0, 0.02].map((d) => drawdown(startCapital, { ...s, nominalReturn: s.nominalReturn + d }, 50)),
+  const gap = Math.max(0, s.annualExpenses - s.recurringIncome);
+  const bars = useMemo(
+    () => holdBars(startCapital, s, SPREAD.map((d) => s.nominalReturn + d), HORIZON),
     [s, startCapital],
   );
 
@@ -43,8 +78,8 @@ export default function SimIndependance() {
           </fieldset>
           <fieldset>
             <legend>Hypothèses</legend>
-            <NumberField label="Rendement hypothétique nominal" unit="%" percent value={s.nominalReturn} onChange={up('nominalReturn')} step={0.25} min={-5} max={15} />
-            <NumberField label="Inflation hypothétique" unit="%" percent value={s.inflation} onChange={up('inflation')} step={0.25} min={-2} max={10} />
+            <NumberField label="Rendement annuel espéré" unit="%" percent value={s.nominalReturn} onChange={up('nominalReturn')} step={0.25} min={-5} max={15} hint="Avant inflation. Une hypothèse, jamais une garantie." />
+            <NumberField label="Inflation annuelle" unit="%" percent value={s.inflation} onChange={up('inflation')} step={0.25} min={-2} max={10} hint="Hausse moyenne des prix supposée chaque année." />
             <NumberField label="Taux de retrait" unit="%" percent value={s.withdrawalRate} onChange={up('withdrawalRate')} step={0.25} min={0.5} max={10} hint="Part du capital retirée la première année." />
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
@@ -53,7 +88,7 @@ export default function SimIndependance() {
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Capital visé" value={Number.isFinite(target) ? fmtEur(target) : '—'} sub={`en retirant ${fmtPct(s.withdrawalRate)} la première année`} />
-            <Kpi label="Délai estimé" value={fmtYears(yrs)} sub="en euros d’aujourd’hui" />
+            <Kpi label="Délai estimé" value={fmtYears(yrs)} sub="pour réunir ce capital" />
             <Kpi label="Rendement réel retenu" value={fmtPct(realRate(s.nominalReturn, s.inflation))} sub="rendement une fois l’inflation retirée" />
           </div>
           <Takeaway>{fireTakeaway({ gap: Math.max(0, s.annualExpenses - s.recurringIncome), withdrawalRate: s.withdrawalRate, target, currentWealth: s.currentWealth, annualSavings: s.annualSavings, years: yrs })}</Takeaway>
@@ -85,23 +120,15 @@ export default function SimIndependance() {
             </table>
           </div>
 
-          <h2>Phase de retrait : trois hypothèses de rendement</h2>
-          <p className="muted small">
-            Départ avec {fmtEur(startCapital)} ; retraits revalorisés de l’inflation chaque début d’année ; rendement constant.
-            Montants en euros d’aujourd’hui (inflation de {fmtPct(s.inflation)} retirée).
-          </p>
-          <div className="panel">
-            <LineChart
-              title="Capital restant pendant les retraits, en euros d’aujourd’hui"
-              xLabels={scenarios[0].series.map((p) => `An ${p.year}`)}
-              format={fmtEur}
-              series={scenarios.map((sc, i) => ({
-                name: `Rendement ${fmtPct(s.nominalReturn + [-0.02, 0, 0.02][i])}${sc.depletedAt ? ` — épuisé en ${sc.depletedAt}\u00a0ans` : ''}`,
-                color: COLORS[i],
-                values: sc.series.map((p) => p.realCapital),
-              }))}
-            />
-          </div>
+          <h2>Combien de temps tient le capital ?</h2>
+          {gap > 0 ? (<>
+            <p className="muted small">
+              Départ avec {fmtEur(startCapital)}, retrait de {fmtEur(gap)} la première année, augmenté ensuite de l’inflation ({fmtPct(s.inflation)} par an).
+            </p>
+            <HoldFigure bars={bars} current={s.nominalReturn} />
+          </>) : (
+            <p className="muted small">Vos revenus récurrents couvrent déjà vos dépenses : aucun retrait n’est nécessaire.</p>
+          )}
           <SavedSims simKey="independance" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <Disclaimer />
           <SimFaq slug="independance-financiere" />
