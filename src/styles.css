@@ -285,6 +285,7 @@ details.fold > p { margin-left: 14px; margin-right: 14px; }
 .facts-grid.facts-stack { grid-template-columns: 1fr; }
 .facts-grid h3 { margin: 0 0 6px; font-size: 1rem; }
 .facts-grid p { margin: 0; font-size: .95rem; }
+.facts-grid .inline-link { white-space: nowrap; } /* « fiche Compte-titres » reste sur une ligne */
 /* Marqueurs ✓ et ✕ : le sens ne repose pas sur la seule couleur */
 .proscons .pros li::marker { content: "✓  "; color: var(--accent); font-weight: 700; }
 .proscons .cons li::marker { content: "✕  "; color: var(--danger); font-weight: 700; }
