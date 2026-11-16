@@ -2,11 +2,12 @@ import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type K
 import { JargonText } from './Jargon';
 import { linkOnly, type JargonSegment } from '../lib/jargon';
 import { simFaq, type FaqItem } from '../data/simFaq';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { config } from '../config';
 import type { Checked, Level, Source } from '../data/types';
 import { load, save, type SavedSim } from '../lib/storage';
-import { HeaderArt, type HeaderArtName } from './HeaderArt';
+import { HeaderArt, SIM_THEME_ART, type HeaderArtName } from './HeaderArt';
+import { simThemeOfPath } from '../lib/simThemeList';
 import { summarizeSeries } from '../lib/chartSummary';
 import { coveragePercent } from '../lib/coverage';
 import { fmtEur } from '../lib/finance';
@@ -341,12 +342,17 @@ export function Sources({ list }: { list: Source[] }) {
   );
 }
 
-export function PageHead({ eyebrow, title, children, art }: { eyebrow?: string; title: string; children?: ReactNode; art?: HeaderArtName }) {
+export function PageHead({ eyebrow, title, children, art: artProp }: { eyebrow?: string; title: string; children?: ReactNode; art?: HeaderArtName | null }) {
+  // Page de simulateur : scène de son thème (épargne, crédit, budget…), affichée seulement sur grand écran.
+  const { pathname } = useLocation();
+  const theme = simThemeOfPath(pathname);
+  // `art={null}` : pas de scène (titre trop long pour lui laisser la place sans allonger la page).
+  const art = artProp === null ? undefined : artProp ?? (theme ? SIM_THEME_ART[theme] : undefined);
   useEffect(() => {
     document.title = `${title} · ${config.siteName}`;
   }, [title]);
   return (
-    <header className={art ? 'page-head has-art' : 'page-head'}>
+    <header className={art ? `page-head has-art${artProp ? '' : ' art-compact'}` : 'page-head'}>
       {art && <HeaderArt name={art} />}
       {eyebrow && <div className="eyebrow">{eyebrow}</div>}
       <h1>{title}</h1>

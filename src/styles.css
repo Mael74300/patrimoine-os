@@ -761,6 +761,13 @@ details.advanced[open] .fold-hint { display: none; }
   .page-head.has-art { padding-right: 300px; min-height: 170px; }
   .page-head.has-art .header-art { display: block; position: absolute; right: 24px; top: 50%; transform: translateY(-50%); width: 240px; height: 150px; z-index: 1; }
 }
+/* Simulateurs : petite scène du thème en bas à droite, dans l'espace que laisse le chapeau (limité en largeur) ;
+   le titre garde toute sa ligne, la page n'est pas plus haute. Masquée sous 1 100 px, où la place manque. */
+.page-head.has-art.art-compact .header-art { display: none; }
+@media (min-width: 761px) { .page-head.has-art.art-compact { padding-right: 28px; min-height: 0; } }
+@media (min-width: 1100px) {
+  .page-head.has-art.art-compact .header-art { display: block; top: auto; bottom: 14px; transform: none; right: 22px; width: 160px; height: 100px; }
+}
 h2.gloss-letter { margin: 0; }
 h2.gloss-letter::before { content: none; }
 
