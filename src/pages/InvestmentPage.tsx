@@ -3,10 +3,9 @@ import { Link, useParams } from 'react-router-dom';
 import { config } from '../config';
 import { categoryById } from '../data/categories';
 import { investmentBySlug } from '../data/investments';
-import { needsCheck } from '../data/types';
 import { guidesForInvestment, relatedSimulators, simsForInvestment, simulateTarget } from '../lib/relatedSims';
 import { FamilyIcon } from '../components/Icons';
-import { AdSlot, CheckedText, Crumbs, Fold, MeterRows, MetersLegend, PageHead, Sources } from '../components/ui';
+import { AdSlot, CapitalFact, CheckedText, Crumbs, Fold, MeterRows, MetersLegend, PageHead, Sources } from '../components/ui';
 import { simBlurb } from '../lib/simThemes';
 import { interleave, splitNext } from '../lib/nextLinks';
 import { NextList, NextMore, type NextItem } from '../components/NextList';
@@ -86,8 +85,7 @@ export default function InvestmentPage() {
             <MetersLegend />
             <p className="small fiche-facts" style={{ margin: '10px 0 0' }}>
               <span><strong>Horizon :</strong> {inv.horizon}.</span>{' '}
-              <span><strong>Capital :</strong> {inv.minCapital.text}{' '}
-              {needsCheck(inv.minCapital) && <span className="badge-unverified">à vérifier</span>}</span>
+              <span><strong>Capital :</strong> <CapitalFact c={inv.minCapital} /></span>
             </p>
             <div className="btn-row" style={{ marginTop: 12 }}>
               <Link className="btn small" to={compareTo}>Comparer</Link>
@@ -218,7 +216,7 @@ export default function InvestmentPage() {
             <dl className="facts">
               <dt>Horizon</dt><dd>{inv.horizon}</dd>
               <dt>Capital nécessaire</dt>
-              <dd>{inv.minCapital.text} {needsCheck(inv.minCapital) && <span className="badge-unverified">à vérifier</span>}</dd>
+              <dd><CapitalFact c={inv.minCapital} /></dd>
               <dt>Mots-clés</dt>
               <dd>{inv.tags.map((t) => <span className="tag" key={t}>{t}</span>)}</dd>
             </dl>
