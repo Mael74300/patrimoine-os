@@ -2,9 +2,10 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { investmentBySlug } from './investments';
-import { crowdfundingScenario, microFoncierExample, scpiFeesPayback } from '../lib/calc/ficheExemples';
-import { CROWDFUNDING_EXAMPLE, LOCATION_NUE_EXAMPLE, SCPI_EXAMPLE } from '../lib/illustrationData';
-import { SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaScpiBilan } from '../components/schemas/fiches';
+import { crowdfundingScenario, microFoncierExample, repriseDebtShare, scpiFeesPayback } from '../lib/calc/ficheExemples';
+import { amortize } from '../lib/calc/loan';
+import { CROWDFUNDING_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE } from '../lib/illustrationData';
+import { SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaRepriseBilan, SchemaScpiBilan } from '../components/schemas/fiches';
 import { guideBySlug } from './guides';
 
 /**
@@ -116,6 +117,35 @@ describe('fiche Location nue : ce que le micro-foncier impose', () => {
     expect(t).toContain(`Impôt dans la tranche à ${pctFr(marginalRatePct)}`);
     expect(t).toContain(`soit ${pctFr(r.incomeTaxPctOfRents)} des loyers`);
     expect(t).toContain(`plus ${pctFr(socialPct)} de prélèvements sociaux`);
+    expect(svg).toContain('role="img"');
+    expect(svg.length).toBeLessThan(15000);
+  });
+});
+
+describe('fiche Racheter une entreprise : ce que le prêt prend sur le résultat', () => {
+  const { profit, price, loan, years, ratePct, dropPct } = REPRISE_EXAMPLE;
+  const r = repriseDebtShare(profit, loan, ratePct, years, dropPct);
+  const ex = norm(investmentBySlug['reprise-entreprise']!.example);
+
+  it('montants recalculés : 5 468 € par mois, 65 610 € par an, 66 % du résultat, 34 390 € puis 4 390 € restants', () => {
+    expect(r).toEqual({ monthly: 5468, yearly: 65610, sharePct: 66, left: 34390, leftAfterDrop: 4390, droppedProfit: 70000 });
+    expect(Math.round(amortize({ principal: loan, annualRate: ratePct / 100, years }).monthlyPayment)).toBe(r.monthly);
+  });
+  it('le texte de la fiche cite les mêmes montants, le taux est dit fictif', () => {
+    expect(ex).toMatch(/^Exemple fictif/);
+    for (const v of [profit, price, loan, r.monthly, r.yearly, r.left, r.leftAfterDrop]) expect(ex).toContain(eur(v));
+    expect(ex).toContain(`taux fictif de ${ratePct} %`);
+    expect(ex).toContain(`${r.sharePct} % du résultat`);
+    expect(ex).toContain(`baisse de ${dropPct} %`);
+    expect(ex).toContain(`${years} ans`);
+    expect(ex).toContain('sans impôt sur les bénéfices ni assurance du prêt');
+  });
+  it('le schéma montre les mêmes montants, barres proportionnelles', () => {
+    const svg = renderToStaticMarkup(createElement(SchemaRepriseBilan, null, 'légende'));
+    const t = plain(svg);
+    for (const v of [profit, r.yearly, r.left, r.leftAfterDrop, r.droppedProfit, r.monthly]) expect(t).toContain(eur(v));
+    expect(t).toContain(`Le prêt prend ${r.sharePct} % du résultat`);
+    expect(t).toContain('taux fictif');
     expect(svg).toContain('role="img"');
     expect(svg.length).toBeLessThan(15000);
   });

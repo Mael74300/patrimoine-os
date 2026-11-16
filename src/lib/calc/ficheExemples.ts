@@ -1,3 +1,5 @@
+import { loanPayment } from './loan';
+
 /**
  * Calculs des exemples fictifs des fiches Financement participatif et SCPI.
  * Purs, arrondis à l'euro ; recalculés par `ficheExemples.test.ts` et repris par les schémas des fiches.
@@ -53,4 +55,18 @@ export function microFoncierExample(monthlyRent: number, allowancePct: number, m
   const taxable = rents - allowance;
   const incomeTax = Math.round((taxable * marginalRatePct) / 100);
   return { rents, allowance, taxable, incomeTax, incomeTaxPctOfRents: Math.round((incomeTax / rents) * 1000) / 10 };
+}
+
+export interface RepriseDebt { monthly: number; yearly: number; sharePct: number; left: number; leftAfterDrop: number; droppedProfit: number }
+
+/**
+ * Racheter une entreprise : `loan` € empruntés sur `years` ans au taux fictif `ratePct` %, remboursés par mensualités
+ * constantes (même formule que le simulateur de crédit, sans assurance). Compare le remboursement annuel au résultat annuel
+ * `profit`, puis au résultat diminué de `dropPct` %. Calcul simplifié : ni impôt sur les bénéfices ni assurance. Arrondis à l'euro.
+ */
+export function repriseDebtShare(profit: number, loan: number, ratePct: number, years: number, dropPct: number): RepriseDebt {
+  const monthly = Math.round(loanPayment(loan, ratePct / 100, years));
+  const yearly = Math.round(loanPayment(loan, ratePct / 100, years) * 12);
+  const droppedProfit = Math.round(profit * (1 - dropPct / 100));
+  return { monthly, yearly, sharePct: Math.round((yearly / profit) * 100), left: profit - yearly, leftAfterDrop: droppedProfit - yearly, droppedProfit };
 }

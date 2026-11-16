@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 import { fmtEur } from '../../lib/finance';
 import { pfuSplit } from '../../lib/calc/pfu';
 import { perDeductionBalance } from '../../lib/calc/per';
-import { CROWDFUNDING_EXAMPLE, LOCATION_NUE_EXAMPLE, PER_EXAMPLE, SCPI_EXAMPLE } from '../../lib/illustrationData';
-import { crowdfundingScenario, microFoncierExample, scpiFeesPayback } from '../../lib/calc/ficheExemples';
+import { CROWDFUNDING_EXAMPLE, LOCATION_NUE_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE } from '../../lib/illustrationData';
+import { crowdfundingScenario, microFoncierExample, repriseDebtShare, scpiFeesPayback } from '../../lib/calc/ficheExemples';
 import { W } from './outils';
 
 /** Schéma « Comment fonctionne une SCPI » : principe qualitatif (aucun chiffre), repris du texte de la fiche et de La finance pour tous. */
@@ -1002,32 +1002,34 @@ export function SchemaCpf() {
   );
 }
 
+/* ViewBox 340 (chantier 112, étape 11) : à 375 px, textes presque à leur taille au lieu de 11,2 px avec l'ancien viewBox 420.
+ * Mêmes textes et mêmes principes. */
 /** Schéma « Créer son entreprise : deux sources de valeur » : principe qualitatif, sans chiffre (reprend le texte « Fonctionnement » de la fiche). */
 export function SchemaCreationEntreprise() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-ce-t ill-ce-d" className="ill-svg">
+      <svg viewBox="0 0 340 320" role="img" aria-labelledby="ill-ce-t ill-ce-d" className="ill-svg">
         <title id="ill-ce-t">Créer son entreprise : deux sources de valeur, un risque réel</title>
         <desc id="ill-ce-d">Le patrimoine se construit de deux façons : les bénéfices accumulés année après année, et la valeur de l’entreprise lors d’une cession. Le risque de perdre toute la mise est réel.</desc>
-        <rect x={0} y={2} width={200} height={72} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={100} y={30} textAnchor="middle" className="ill-step">Les bénéfices</text>
-        <text x={100} y={52} textAnchor="middle" className="ill-in">accumulés au fil</text>
-        <text x={100} y={67} textAnchor="middle" className="ill-in">des années</text>
-        <rect x={220} y={2} width={200} height={72} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={320} y={30} textAnchor="middle" className="ill-step">La revente</text>
-        <text x={320} y={52} textAnchor="middle" className="ill-in">valeur de l’entreprise</text>
-        <text x={320} y={67} textAnchor="middle" className="ill-in">lors d’une cession</text>
-        <path d="M 100 74 V 112 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <path d="M 320 74 V 112 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={112} width={420} height={64} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={210} y={138} textAnchor="middle" className="ill-step">Votre patrimoine</text>
-        <text x={210} y={160} textAnchor="middle" className="ill-sub">si l’activité trouve ses clients</text>
-        <rect x={0} y={198} width={420} height={78} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={210} y={226} textAnchor="middle" className="ill-step">Sinon, la mise peut être perdue</text>
-        <text x={210} y={250} textAnchor="middle" className="ill-in">le risque de perte totale</text>
-        <text x={210} y={268} textAnchor="middle" className="ill-in">est réel</text>
-        <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe</text>
+        <rect x={1} y={2} width={160} height={76} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={81} y={28} textAnchor="middle" className="ill-step">Les bénéfices</text>
+        <text x={81} y={50} textAnchor="middle" className="ill-in">accumulés au fil</text>
+        <text x={81} y={66} textAnchor="middle" className="ill-in">des années</text>
+        <rect x={179} y={2} width={160} height={76} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={259} y={28} textAnchor="middle" className="ill-step">La revente</text>
+        <text x={259} y={50} textAnchor="middle" className="ill-in">valeur de l’entreprise</text>
+        <text x={259} y={66} textAnchor="middle" className="ill-in">lors d’une cession</text>
+        <path d="M 81 78 V 114 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <path d="M 259 78 V 114 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={1} y={114} width={338} height={62} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={140} textAnchor="middle" className="ill-step">Votre patrimoine</text>
+        <text x={170} y={162} textAnchor="middle" className="ill-sub">si l’activité trouve ses clients</text>
+        <rect x={1} y={196} width={338} height={84} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={170} y={224} textAnchor="middle" className="ill-step">Sinon, la mise peut être perdue</text>
+        <text x={170} y={248} textAnchor="middle" className="ill-in">le risque de perte totale</text>
+        <text x={170} y={266} textAnchor="middle" className="ill-in">est réel</text>
+        <text x={170} y={308} textAnchor="middle" className="ill-sub">Schéma de principe</text>
       </svg>
     </figure>
   );
@@ -1038,28 +1040,65 @@ export function SchemaRepriseEntreprise() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-re-t ill-re-d" className="ill-svg">
+      <svg viewBox="0 0 340 320" role="img" aria-labelledby="ill-re-t ill-re-d" className="ill-svg">
         <title id="ill-re-t">Racheter une entreprise : les bénéfices remboursent la dette</title>
         <desc id="ill-re-d">On rachète une entreprise en s’endettant. Ses bénéfices servent à rembourser la dette d’acquisition. Le risque porte sur le prix payé (la valorisation) et sur la continuité de l’activité.</desc>
-        <rect x={0} y={2} width={200} height={72} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={100} y={30} textAnchor="middle" className="ill-step">1. Le rachat</text>
-        <text x={100} y={52} textAnchor="middle" className="ill-in">financé en partie</text>
-        <text x={100} y={67} textAnchor="middle" className="ill-in">par un emprunt</text>
-        <rect x={220} y={2} width={200} height={72} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={320} y={30} textAnchor="middle" className="ill-step">2. L’activité</text>
-        <text x={320} y={52} textAnchor="middle" className="ill-in">dégage des bénéfices</text>
-        <text x={320} y={67} textAnchor="middle" className="ill-in">qui remboursent la dette</text>
-        <path d="M 200 38 H 214 m -6 -6 l 6 6 l -6 6" {...arrow} />
-        <path d="M 320 74 V 112 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={112} width={420} height={64} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={210} y={138} textAnchor="middle" className="ill-step">Une fois la dette remboursée</text>
-        <text x={210} y={160} textAnchor="middle" className="ill-sub">l’entreprise est à vous</text>
-        <rect x={0} y={198} width={420} height={78} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={210} y={226} textAnchor="middle" className="ill-step">Deux risques</text>
-        <text x={210} y={250} textAnchor="middle" className="ill-in">le prix payé était trop élevé (valorisation)</text>
-        <text x={210} y={268} textAnchor="middle" className="ill-in">ou l’activité ne continue pas (continuité)</text>
-        <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe</text>
+        <rect x={1} y={2} width={156} height={76} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={79} y={28} textAnchor="middle" className="ill-step">1. Le rachat</text>
+        <text x={79} y={50} textAnchor="middle" className="ill-in">financé en partie</text>
+        <text x={79} y={66} textAnchor="middle" className="ill-in">par un emprunt</text>
+        <rect x={183} y={2} width={156} height={76} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={261} y={28} textAnchor="middle" className="ill-step">2. L’activité</text>
+        <text x={261} y={50} textAnchor="middle" className="ill-in">ses bénéfices</text>
+        <text x={261} y={66} textAnchor="middle" className="ill-in">remboursent la dette</text>
+        <path d="M 160 40 H 179 m -6 -6 l 6 6 l -6 6" {...arrow} />
+        <path d="M 261 78 V 114 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={1} y={114} width={338} height={62} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={140} textAnchor="middle" className="ill-step">Une fois la dette remboursée</text>
+        <text x={170} y={162} textAnchor="middle" className="ill-sub">l’entreprise est à vous</text>
+        <rect x={1} y={196} width={338} height={84} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={170} y={224} textAnchor="middle" className="ill-step">Deux risques</text>
+        <text x={170} y={248} textAnchor="middle" className="ill-in">le prix payé était trop élevé (valorisation)</text>
+        <text x={170} y={266} textAnchor="middle" className="ill-in">ou l’activité ne continue pas (continuité)</text>
+        <text x={170} y={308} textAnchor="middle" className="ill-sub">Schéma de principe</text>
       </svg>
+    </figure>
+  );
+}
+
+/**
+ * Schéma « Racheter une entreprise : ce que le prêt prend sur le résultat » (exemple fictif de la fiche, montants recalculés
+ * par `repriseDebtShare`). Barres proportionnelles : le même remboursement face au résultat, puis au résultat diminué.
+ */
+export function SchemaRepriseBilan({ children }: { children: ReactNode }) {
+  const { profit, loan, years, ratePct, dropPct } = REPRISE_EXAMPLE;
+  const r = repriseDebtShare(profit, loan, ratePct, years, dropPct);
+  const k = 338 / profit;
+  const xr = 1 + r.yearly * k;
+  const pct = (n: number) => `${n.toLocaleString('fr-FR')} %`;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 206" role="img" aria-labelledby="ill-reb-t ill-reb-d" className="ill-svg">
+        <title id="ill-reb-t">Racheter une entreprise : ce que le prêt prend sur le résultat</title>
+        <desc id="ill-reb-d">{`Exemple fictif : ${fmtEur(loan)} empruntés sur ${years} ans à un taux fictif de ${pct(ratePct)}, soit ${fmtEur(r.monthly)} par mois et ${fmtEur(r.yearly)} par an. Sur un résultat de ${fmtEur(profit)} par an, le prêt en prend ${pct(r.sharePct)} et il reste ${fmtEur(r.left)}. Si le résultat baisse de ${pct(dropPct)}, à ${fmtEur(r.droppedProfit)}, il ne reste que ${fmtEur(r.leftAfterDrop)}. Sans impôt sur les bénéfices ni assurance du prêt.`}</desc>
+        <text x={0} y={16} className="ill-year" textAnchor="start">{`Résultat : ${fmtEur(profit)} par an`}</text>
+        <rect x={1} y={26} width={r.yearly * k - 2} height={28} rx={4} fill="var(--primary)" />
+        <text x={(1 + xr) / 2} y={45} className="ill-in ill-on-dark" textAnchor="middle">{fmtEur(r.yearly)}</text>
+        <rect x={xr + 1} y={27} width={339 - xr - 2} height={26} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={(xr + 339) / 2} y={45} className="ill-in" textAnchor="middle">{fmtEur(r.left)}</text>
+        <text x={1} y={72} className="ill-sub" textAnchor="start">remboursement du prêt</text>
+        <text x={xr + 1} y={72} className="ill-sub" textAnchor="start">il reste</text>
+
+        <text x={0} y={106} className="ill-year" textAnchor="start">{`Résultat en baisse de ${pct(dropPct)} : ${fmtEur(r.droppedProfit)}`}</text>
+        <rect x={1} y={116} width={r.yearly * k - 2} height={28} rx={4} fill="var(--primary)" />
+        <text x={(1 + xr) / 2} y={135} className="ill-in ill-on-dark" textAnchor="middle">{fmtEur(r.yearly)}</text>
+        <rect x={xr + 1} y={117} width={r.leftAfterDrop * k - 2} height={26} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={xr + r.leftAfterDrop * k + 8} y={135} className="ill-in" textAnchor="start">{`reste ${fmtEur(r.leftAfterDrop)}`}</text>
+
+        <text x={0} y={178} className="ill-total" textAnchor="start">{`Le prêt prend ${pct(r.sharePct)} du résultat`}</text>
+        <text x={0} y={198} className="ill-sub" textAnchor="start">{`${fmtEur(r.monthly)} par mois, ${years} ans, taux fictif de ${pct(ratePct)}`}</text>
+      </svg>
+      <figcaption>{children}</figcaption>
     </figure>
   );
 }
@@ -1069,21 +1108,21 @@ export function SchemaActiviteNumerique() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 420 330" role="img" aria-labelledby="ill-an-t ill-an-d" className="ill-svg">
+      <svg viewBox="0 0 340 320" role="img" aria-labelledby="ill-an-t ill-an-d" className="ill-svg">
         <title id="ill-an-t">Activité numérique : un revenu récurrent, mais fragile</title>
         <desc id="ill-an-d">La valeur d’une activité en ligne repose sur son revenu récurrent et sa croissance, et l’activité peut se revendre. Mais ce revenu peut s’effondrer : concurrence, dépendance à une plateforme.</desc>
-        <rect x={0} y={2} width={420} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={210} y={30} textAnchor="middle" className="ill-step">Un revenu récurrent</text>
-        <text x={210} y={52} textAnchor="middle" className="ill-in">abonnements, ventes, contenus</text>
-        <path d="M 210 66 V 100 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <rect x={0} y={100} width={420} height={64} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={210} y={128} textAnchor="middle" className="ill-step">La valeur de l’activité</text>
-        <text x={210} y={150} textAnchor="middle" className="ill-sub">elle peut se revendre</text>
-        <rect x={0} y={186} width={420} height={90} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={210} y={214} textAnchor="middle" className="ill-step">Mais le revenu peut s’effondrer</text>
-        <text x={210} y={238} textAnchor="middle" className="ill-in">concurrence,</text>
-        <text x={210} y={256} textAnchor="middle" className="ill-in">dépendance à une plateforme</text>
-        <text x={210} y={314} textAnchor="middle" className="ill-sub">Schéma de principe</text>
+        <rect x={1} y={2} width={338} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={170} y={30} textAnchor="middle" className="ill-step">Un revenu récurrent</text>
+        <text x={170} y={52} textAnchor="middle" className="ill-in">abonnements, ventes, contenus</text>
+        <path d="M 170 66 V 100 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={1} y={100} width={338} height={64} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={128} textAnchor="middle" className="ill-step">La valeur de l’activité</text>
+        <text x={170} y={150} textAnchor="middle" className="ill-sub">elle peut se revendre</text>
+        <rect x={1} y={186} width={338} height={90} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={170} y={214} textAnchor="middle" className="ill-step">Mais le revenu peut s’effondrer</text>
+        <text x={170} y={238} textAnchor="middle" className="ill-in">concurrence,</text>
+        <text x={170} y={256} textAnchor="middle" className="ill-in">dépendance à une plateforme</text>
+        <text x={170} y={308} textAnchor="middle" className="ill-sub">Schéma de principe</text>
       </svg>
     </figure>
   );
