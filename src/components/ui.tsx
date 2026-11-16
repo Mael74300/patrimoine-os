@@ -928,7 +928,7 @@ export function FaqSection({ items }: { items: FaqItem[] }) {
   if (!items.length) return null;
   return (
     <section aria-label="Questions fréquentes" style={{ marginTop: 32 }}>
-      <h2>Questions fréquentes</h2>
+      <h2 id="rub-questions-frequentes">Questions fréquentes</h2>
       <div className="faq">
         {items.map((f) => (
           <details key={f.q}>

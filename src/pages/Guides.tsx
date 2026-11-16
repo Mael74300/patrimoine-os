@@ -19,6 +19,8 @@ import { annotateJargon, splitLead, type JargonSegment } from '../lib/jargon';
 import { JargonText } from '../components/Jargon';
 import NotFound from './NotFound';
 import { fmtDate } from '../lib/dates';
+import { sectionId } from '../lib/toc';
+import { PageToc } from '../components/PageToc';
 
 /** Guide « Par où commencer » : pour chaque étape, la page du site qui permet d'aller plus loin (aucun chiffre). */
 export const etapesSuite: { to: string; label: string }[] = [
@@ -67,10 +69,7 @@ function PointText({ segs }: { segs: JargonSegment[] }) {
   return <><strong><JargonText segs={parts.lead} /></strong><JargonText segs={parts.rest} /></>;
 }
 
-/** Identifiant d’ancre stable d’une rubrique de guide (sans accents). */
-export function sectionId(heading: string): string {
-  return 'rub-' + heading.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-}
+export { sectionId } from '../lib/toc';
 
 export function GuidePage() {
   const { slug = '' } = useParams();
@@ -85,6 +84,20 @@ export function GuidePage() {
   const asCard = (s: { heading: string }, k: number) => cardsInstead(s) && k < ENVELOPE_CARDS.length;
   const jargon = annotateJargon(g.sections.flatMap((s) => s.body.map((p, k) => (asCard(s, k) ? '' : p))), { path: `/guides/${g.slug}`, title: g.title });
   const jargonStart = g.sections.map((_, i) => g.sections.slice(0, i).reduce((n, s) => n + s.body.length, 0));
+  /* « Pour aller plus loin » : une seule grille, simulateurs d'abord (comme en bas des fiches) ; chaque carte dit ce qu'elle est.
+     Au-delà de NEXT_VISIBLE cartes, la suite est repliée pour ne pas repousser les sources (chantier 143).
+     Le classement du guide Types d'investissements et les cartes du guide Choisir son enveloppe renvoient déjà vers chaque fiche. */
+  const simItems: NextItem[] = sims.map((sim) => ({ kind: 'Simulateur', to: `/simulateurs/${sim.slug}`, title: sim.title, blurb: simBlurb(sim.slug) }));
+  const ficheItems: NextItem[] = g.slug === 'types-investissements' || g.slug === 'choisir-son-enveloppe' ? []
+    : g.related.filter((r) => investmentBySlug[r]).map((r) => ({ kind: 'Fiche', to: `/encyclopedie/${r}`, title: investmentBySlug[r].name, blurb: investmentBySlug[r].summary }));
+  const hasNext = g.slug === 'par-ou-commencer' || simItems.length + ficheItems.length > 0;
+  // Sommaire : les rubriques du guide, puis les questions, les suites et les sources (repères pour vérifier).
+  const toc = [
+    ...g.sections.map((s) => ({ id: sectionId(s.heading), label: s.heading })),
+    ...(g.faq?.length ? [{ id: 'rub-questions-frequentes', label: 'Questions fréquentes' }] : []),
+    ...(hasNext ? [{ id: 'rub-pour-aller-plus-loin', label: 'Pour aller plus loin' }] : []),
+    { id: 'rub-sources', label: 'Sources' },
+  ];
   return (
     <article>
       <Crumbs items={[{ to: '/', label: 'Accueil' }, { to: '/guides', label: 'Guides' }, { label: g.title }]} />
@@ -134,18 +147,13 @@ export function GuidePage() {
         ))}
         <FaqSection items={g.faq ?? []} />
       </div>
-      {g.sections.length > 2 && (
-        <nav className="guide-toc" aria-label="Sur cette page">
-          <p className="guide-toc-title">Sur cette page</p>
-          <ol>{g.sections.map((s) => <li key={s.heading}><a href={`#${sectionId(s.heading)}`}>{s.heading}</a></li>)}</ol>
-        </nav>
-      )}
+      <PageToc className="guide-toc" items={toc} />
       </div>
       {g.widget === 'patrimoine-net' && (<><h2>Calculer votre patrimoine net</h2><NetWorthCalculator /></>)}
       <div className="prose">
         {g.cta && <p style={{ marginTop: 24 }}><Link className="btn" to={g.cta.to}>{g.cta.label}</Link></p>}
         {g.slug === 'par-ou-commencer' && (<>
-          <h2>Pour aller plus loin</h2>
+          <h2 id="rub-pour-aller-plus-loin">Pour aller plus loin</h2>
           <h3 className="next-sub">Fiches liées</h3>
           {/* « Par où commencer » : chaque étape a déjà son lien ; les fiches sont listées sans résumé pour garder la page courte. */}
           <ul className="next-list next-list-compact">
@@ -154,17 +162,10 @@ export function GuidePage() {
             ))}
           </ul>
         </>)}
-        {g.slug !== 'par-ou-commencer' && (() => {
-          /* Une seule grille, simulateurs d'abord (comme en bas des fiches) ; chaque carte dit ce qu'elle est.
-             Au-delà de NEXT_VISIBLE cartes, la suite est repliée pour ne pas repousser les sources (chantier 143).
-             Le classement du guide Types d'investissements et les cartes du guide Choisir son enveloppe renvoient déjà vers chaque fiche. */
-          const simItems: NextItem[] = sims.map((sim) => ({ kind: 'Simulateur', to: `/simulateurs/${sim.slug}`, title: sim.title, blurb: simBlurb(sim.slug) }));
-          const ficheItems: NextItem[] = g.slug === 'types-investissements' || g.slug === 'choisir-son-enveloppe' ? []
-            : g.related.filter((r) => investmentBySlug[r]).map((r) => ({ kind: 'Fiche', to: `/encyclopedie/${r}`, title: investmentBySlug[r].name, blurb: investmentBySlug[r].summary }));
-          if (simItems.length + ficheItems.length === 0) return null;
+        {g.slug !== 'par-ou-commencer' && hasNext && (() => {
           const [shown, rest] = splitNext(simItems, ficheItems);
           return (<>
-            <h2>Pour aller plus loin</h2>
+            <h2 id="rub-pour-aller-plus-loin">Pour aller plus loin</h2>
             <NextList items={shown} />
             {rest.length > 0 && (
               <details className="fold next-more">
@@ -174,7 +175,7 @@ export function GuidePage() {
             )}
           </>);
         })()}
-        <h2>Sources</h2>
+        <h2 id="rub-sources">Sources</h2>
         <Sources list={g.sources} />
         {g.slug !== 'par-ou-commencer' && (<>
           <MobileFold label="Autres guides" hint={others.map((o) => o.title).join(' · ')}>
