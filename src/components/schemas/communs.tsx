@@ -4,7 +4,7 @@ import { pct } from './outils';
 
 /** Schéma « effet de levier » : première année du bien acheté à crédit, avec un bien qui rapporte 5 % ou 3 % de son prix net de charges.
  * ViewBox 340 (chantier 112, étape 7, 2026-11-15) : à 375 px, les petits textes s'affichent vers 13 px au lieu de 11,2 px. */
-export function SchemaLevier() {
+export function SchemaLevier({ brief = false }: { brief?: boolean } = {}) {
   const { interest, down, bars } = leverageBars();
   const { price } = LEVERAGE_EXAMPLE;
   const BASE_Y = 226;
@@ -48,10 +48,17 @@ export function SchemaLevier() {
           <text x={22} y={36} className="ill-sub" textAnchor="start">Ce qu’il reste</text>
         </g>
       </svg>
-      <figcaption>
-        <strong>Illustration, exemple fictif</strong> : bien de {fmtEur(price)} acheté avec {fmtEur(down)} d’apport, avant impôt. Les loyers nets de charges servent d’abord à payer les intérêts ({fmtEur(interest)} la première année).
-        Le crédit reste le même dans les deux cas : c’est le rendement du bien qui décide si le levier enrichit ou appauvrit. Le remboursement du capital, en plus, pèse sur la trésorerie.
-      </figcaption>
+      {brief ? (
+        // Guide « Investir à crédit » : le texte autour du schéma détaille déjà l'exemple ; la légende ne le répète pas.
+        <figcaption>
+          <strong>Illustration, exemple fictif</strong> : première année, avant impôt. Même crédit dans les deux cas : c’est le rendement du bien qui décide si le levier enrichit ou appauvrit.
+        </figcaption>
+      ) : (
+        <figcaption>
+          <strong>Illustration, exemple fictif</strong> : bien de {fmtEur(price)} acheté avec {fmtEur(down)} d’apport, avant impôt. Les loyers nets de charges servent d’abord à payer les intérêts ({fmtEur(interest)} la première année).
+          Le crédit reste le même dans les deux cas : c’est le rendement du bien qui décide si le levier enrichit ou appauvrit. Le remboursement du capital, en plus, pèse sur la trésorerie.
+        </figcaption>
+      )}
     </figure>
   );
 }

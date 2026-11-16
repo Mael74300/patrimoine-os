@@ -191,7 +191,7 @@ describe('les exemples chiffrés des guides sont exacts', () => {
     expect(Math.round(r.advantageInvest / 50) * 50).toBe(-2600);
     expect(Math.round(r.breakEvenReturn! * 1000) / 10).toBe(5.4);
   });
-  it('crédit : 180 000 € à 3,5 % → ≈ 6 200 € d’intérêts la première année', () => {
+  it('crédit : 180 000 € à 3,5 % → 6 199 € d’intérêts la première année', () => {
     expect(amortize({ principal: 180000, annualRate: 0.035, years: 20 }).schedule[0].interest).toBeCloseTo(6200, -2);
   });
 });

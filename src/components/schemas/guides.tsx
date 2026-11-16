@@ -108,8 +108,8 @@ export function SchemaMensualite() {
         </g>
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : {fmtEur(principal)} empruntés à {ratePct} % sur {years} ans, hors assurance, soit {fmtEur(monthly)} par mois.
-        Chaque année, on rembourse la même somme ({fmtEur(monthly * 12)}), mais au début elle sert surtout à payer les intérêts. Le capital emprunté diminue peu au départ, puis de plus en plus vite.
+        {/* Le texte du guide, juste au-dessus, donne déjà le montant emprunté, le taux, la durée et la mensualité. */}
+        <strong>Illustration, exemple fictif</strong>, hors assurance : la même somme chaque année ({fmtEur(monthly * 12)}), qui paie surtout des intérêts au début ; le capital diminue ensuite de plus en plus vite.
       </figcaption>
     </figure>
   );

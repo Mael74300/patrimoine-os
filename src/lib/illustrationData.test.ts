@@ -16,7 +16,7 @@ describe('schéma « que contient une mensualité »', () => {
   it('retrouve les chiffres du guide (180 000 € à 3,5 % sur 20 ans)', () => {
     const { monthly, slices } = loanSlices();
     expect(Math.round(monthly)).toBe(1044);
-    expect(Math.round(slices[0].interest)).toBe(6199); // « environ 6 200 € » dans le guide
+    expect(Math.round(slices[0].interest)).toBe(6199); // « 6 199 € » dans le guide
     expect(Math.round(slices[0].principal)).toBe(6328);
     expect(Math.round(slices[1].interest)).toBe(3860);
     expect(Math.round(slices[2].interest)).toBe(234);
@@ -57,12 +57,12 @@ describe('schéma diversification', () => {
 describe('schéma « effet de levier »', () => {
   it('retrouve les chiffres du guide (200 000 € dont 20 000 € d’apport, loyers nets de 5 % ou 3 %)', () => {
     const { interest, down, bars } = leverageBars();
-    expect(Math.round(interest)).toBe(6199); // « environ 6 200 € »
+    expect(Math.round(interest)).toBe(6199); // « 6 199 € » dans le guide et la fiche
     expect(bars[0].income).toBe(10000);
-    expect(Math.round(bars[0].left)).toBe(3801); // « environ 3 800 € »
-    expect(Math.round((bars[0].left / down) * 100)).toBe(19); // « près de 19 % de l’apport »
+    expect(Math.round(bars[0].left)).toBe(3801); // « 3 801 € »
+    expect(Math.round((bars[0].left / down) * 100)).toBe(19); // « 19 % de l’apport »
     expect(bars[1].income).toBe(6000);
-    expect(Math.round(bars[1].shortfall)).toBe(199); // « environ 200 € »
+    expect(Math.round(bars[1].shortfall)).toBe(199); // « 199 € »
     expect(bars[1].left).toBe(0);
   });
 });
