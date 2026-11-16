@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { portfolioProjectionNote, portfolioTakeaway, rebalanceTakeaway } from '../lib/takeaways';
 import { fmtEur, fmtPct, projectGrowth, rebalance, summarizePortfolio, type PortfolioLine } from '../lib/finance';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, NumInput, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type Line = PortfolioLine & { target: number };
 type State = { lines: Line[]; monthly: number; years: number };
@@ -51,8 +51,7 @@ export default function SimPortefeuille() {
           <tbody>
             {s.lines.map((l, idx) => {
               const num = (v: number, f: (n: number) => void, step = 1, label = '') => (
-                <input type="number" aria-label={`${label} ${l.label}`} step={step} value={v} style={{ width: 90, textAlign: 'right' }}
-                  onChange={(e) => { const n = parseFloat(e.target.value); if (Number.isFinite(n)) f(n); }} />
+                <NumInput aria-label={`${label} ${l.label}`} step={step} value={v} style={{ width: 90, textAlign: 'right' }} onChange={f} />
               );
               return (
                 <tr key={l.id}>

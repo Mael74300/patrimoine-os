@@ -1,7 +1,7 @@
 import { fmtEur, netWorth, type NetWorthItem } from '../lib/finance';
 import { netWorthTakeaway, debtShareLabel } from '../lib/takeaways';
 import { NW_DEFAULT } from '../lib/illustrationData';
-import { Takeaway, usePersistentState } from './ui';
+import { NumInput, Takeaway, usePersistentState } from './ui';
 
 /**
  * Calculateur du guide « Comment calculer son patrimoine net ».
@@ -21,7 +21,7 @@ export function NetWorthCalculator() {
         <div key={i.id} className="nw-row">
           <input type="text" className="nw-label" aria-label={`Nom de la ligne (${title.toLowerCase()})`} placeholder={placeholder} value={i.label} onChange={(e) => setItem(i.id, { label: e.target.value })} />
           <div className="input-unit">
-            <input type="number" inputMode="decimal" aria-label={`Montant en euros : ${i.label || placeholder}`} min={0} step={1000} value={i.amount} onChange={(e) => setItem(i.id, { amount: Math.max(0, +e.target.value || 0) })} />
+            <NumInput aria-label={`Montant en euros : ${i.label || placeholder}`} min={0} step={1000} value={i.amount} onChange={(n) => setItem(i.id, { amount: n })} />
             <span aria-hidden="true">€</span>
           </div>
           <button type="button" className="nw-del" aria-label={`Supprimer la ligne ${i.label || placeholder}`} onClick={() => setSt((x) => ({ items: x.items.filter((y) => y.id !== i.id) }))}>×</button>
