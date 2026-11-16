@@ -44,7 +44,7 @@ export const FORMULAS: [string, string[]][] = [
     'Patrimoine net : ETF après imposition des gains ; immobilier après frais de revente, impôt sur la plus-value et remboursement du capital restant dû.',
   ]],
   ['Entreprise', [
-    'Résultat avant impôt = marge brute − charges fixes − rémunération chargée. Impôt sur les sociétés après report des pertes.',
+    'Résultat avant impôt = marge brute − charges fixes − rémunération chargée. Impôt sur les sociétés après report des pertes : 15\u00a0% jusqu’à 42\u00a0500\u00a0€ de bénéfice si le taux réduit des PME est retenu, taux normal saisi (25\u00a0% par défaut) au-delà.',
     'Flux de trésorerie = résultat net − variation du besoin en fonds de roulement (CA × délai clients / 365). Valeur = résultat net positif × multiple.',
   ]],
   ['Rendement réel d’un placement', [
