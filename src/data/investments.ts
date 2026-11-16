@@ -438,7 +438,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Patrimoine construit avec l’argent de la banque', 'Inflation favorable à l’emprunteur à taux fixe'],
     cons: ['Engagement long', 'Risque en cas de vacance prolongée ou de baisse des prix'],
     timeSkills: 'Élevé.',
-    example: 'Exemple fictif, celui du schéma : 180 000 € empruntés à 3,5 % sur 20 ans pour un bien de 200 000 € (20 000 € d’apport). Mensualité d’environ 1 044 € hors assurance ; environ 70 540 € d’intérêts en tout, dont 6 200 € la première année.',
+    example: 'Exemple fictif, celui du schéma : 180 000 € empruntés à 3,5 % sur 20 ans (bien de 200 000 €, 20 000 € d’apport), soit environ 1 044 € par mois hors assurance. Première année : 6 199 € d’intérêts et 6 328 € de capital remboursé. Si le bien rapporte 10 000 € par an nets de charges, il reste 3 801 € après les intérêts, avant impôt ; s’il rapporte 6 000 €, il manque 199 €. Environ 70 540 € d’intérêts sur les 20 ans.',
     sources: [S.creditImmo, S.lfptLevier, S.assuranceEmprunteur, S.taeg, S.anil],
     alternatives: ['location-nue', 'scpi'],
     tags: ['levier', 'crédit', 'immobilier'],
