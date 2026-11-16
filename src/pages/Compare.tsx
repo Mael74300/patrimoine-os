@@ -7,7 +7,7 @@ import { durationExceeded, monthCapExceeded, projectionSplit, totalContributed }
 import { fmtMonths } from '../lib/calc/format';
 import { readingFromRefs, nextForComparator } from '../lib/relatedSims';
 import { DURATION_LIMITS, REGULATED_RATES, VERSEMENT_CAPS } from '../data/versementCaps';
-import { CheckedText, Disclaimer, LineChart, MeterRows, MetersLegend, NumberField, PageHead, SimNext } from '../components/ui';
+import { CapitalFact, CheckedText, Disclaimer, LineChart, MeterRows, MetersLegend, NumberField, PageHead, SimNext } from '../components/ui';
 
 /** Critères longs : repliés par ligne sur mobile (le tableau y est empilé), toujours ouverts sans JavaScript et en écran large. */
 export const CMP_FOLDED_ON_MOBILE = ['Capital nécessaire', 'Frais', 'Fiscalité', 'Avantages', 'Inconvénients'];
@@ -64,7 +64,7 @@ export default function Compare() {
     // on lit un placement d'un coup d'œil, et la page mobile perd deux blocs empilés.
     ['Repères', (i) => <MeterRows risk={i.risk} liquidity={i.liquidity} effort={i.effort} effortNote={i.timeSkills} noNote />],
     ['Horizon', (i) => i.horizon],
-    ['Capital nécessaire', (i) => <CheckedText c={i.minCapital} split />],
+    ['Capital nécessaire', (i) => (i.minCapital.advice ? <p><CapitalFact c={i.minCapital} /></p> : <CheckedText c={i.minCapital} split />)],
     ['Frais', (i) => <CheckedText c={i.fees} split />],
     ['Fiscalité', (i) => <CheckedText c={i.tax} split />],
     ['Avantages', (i) => <ul className="cmp-list">{i.pros.map((x) => <li key={x}>{x}</li>)}</ul>],

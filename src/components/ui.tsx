@@ -292,6 +292,32 @@ export { splitSentences };
 /** Texte d'une rubrique où les pages citées par leur nom (« fiche PEA ») deviennent des liens. */
 const Linked = ({ text, path }: { text: string; path?: string }) => <JargonText segs={linkOnly(text, path)} />;
 
+/** Petite ampoule du « Conseil » : même trait arrondi que les icônes du site, couleur du texte qui l'entoure. */
+function TipIcon() {
+  return (
+    <svg viewBox="0 0 16 16" width={13} height={13} aria-hidden="true" focusable="false" className="fact-advice-icon">
+      <path d="M5.6 10.6C4.4 9.8 3.6 8.4 3.6 6.9a4.4 4.4 0 0 1 8.8 0c0 1.5-.8 2.9-2 3.7v1.1H5.6z" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+      <path d="M6.2 14h3.6" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+/**
+ * Valeur de « Capital nécessaire ». Un montant s'affiche tel quel (avec son badge s'il reste à vérifier) ;
+ * un simple conseil (`advice`, pas de montant à donner) porte la pastille « Conseil » et un style de note,
+ * pour ne pas être lu comme un chiffre.
+ */
+export function CapitalFact({ c }: { c: Checked }) {
+  if (c.advice) {
+    return (
+      <span className="fact-advice">
+        <span className="fact-advice-k"><TipIcon />Conseil</span> {c.text}
+      </span>
+    );
+  }
+  return <>{c.text}{!c.verified && <> <span className="badge-unverified">à vérifier</span></>}</>;
+}
+
 /**
  * Rubrique vérifiable (Frais, Fiscalité…). `segs` : texte déjà annoté par la page (jargon expliqué sur place),
  * un tableau par morceau de `checkedParts` ; sans lui, seules les pages citées par leur nom deviennent des liens.

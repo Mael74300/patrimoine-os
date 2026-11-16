@@ -1469,3 +1469,14 @@ details.fold.next-more > summary { padding: 10px 14px; }
 .next-more[open] .fold-hint { display: none; }
 .next-more:not([open]) > summary { align-items: flex-start; line-height: 1.35; }
 .prose details.next-more > ul.next-list, .sim-next details.next-more > ul.next-list { margin: 0 8px 8px; }
+
+/* « Capital nécessaire » quand il n'y a pas de montant à donner : un conseil, pas un chiffre.
+   Pastille « Conseil » (ampoule) et texte au poids normal, au lieu du gras réservé aux valeurs. */
+.fact-advice { font-weight: 400; color: var(--ink-2); }
+.facts dd .fact-advice { display: block; font-size: 0.92rem; line-height: 1.45; }
+.fact-advice-k {
+  display: inline-flex; align-items: center; gap: 4px; margin-right: 4px; padding: 1px 8px 1px 6px;
+  border-radius: 999px; background: var(--accent-soft); color: var(--accent);
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; vertical-align: 1px; white-space: nowrap;
+}
+.fact-advice-icon { flex: none; }
