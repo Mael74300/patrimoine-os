@@ -16,7 +16,9 @@ describe('schéma « comment une information est contrôlée »', () => {
   it('décrit un processus réel : contrôle hebdomadaire et page Méthode', () => {
     expect(maintenance).toMatch(/cron: '[^']* \* \* 1'/);
     const page = methodePage;
-    expect(page).toContain('<SchemaVerification />');
+    expect(page).toContain('<SchemaVerification>');
+    // Liste des contrôles en légende du schéma (chantier 141) : à droite du dessin sur grand écran.
+    expect(page).toMatch(/<SchemaVerification>\s*<p>Chaque semaine/);
     expect(page).toContain('Une règle fiscale n\'est jamais modifiée');
   });
 });
