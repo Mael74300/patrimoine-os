@@ -6,7 +6,7 @@ import { guideBlurb } from '../lib/guideBlurbs';
 import { simBlurb } from '../lib/simThemes';
 import { guideSimulators } from '../lib/relatedSims';
 import { splitNext } from '../lib/nextLinks';
-import { NextList, type NextItem } from '../components/NextList';
+import { NextList, NextMore, type NextItem } from '../components/NextList';
 import { NetWorthCalculator } from '../components/NetWorthCalculator';
 import { Crumbs, FaqSection, MobileFold, PageHead, Sources } from '../components/ui';
 import { ENVELOPE_CARDS, EnvelopeCards } from '../components/EnvelopeCards';
@@ -171,12 +171,7 @@ export function GuidePage() {
           return (<>
             <h2 id="rub-pour-aller-plus-loin">Pour aller plus loin</h2>
             <NextList items={shown} />
-            {rest.length > 0 && (
-              <details className="fold next-more">
-                <summary><span>{rest.length === 1 ? 'Une autre page liée' : `${rest.length} autres pages liées`}<span className="fold-hint">{rest.map((r) => r.title).join(' · ')}</span></span></summary>
-                <NextList items={rest} />
-              </details>
-            )}
+            <NextMore items={rest} />
           </>);
         })()}
         <h2 id="rub-sources">Sources</h2>

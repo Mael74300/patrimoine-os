@@ -1,5 +1,6 @@
 import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import { JargonText } from './Jargon';
+import { NextList, NextMore } from './NextList';
 import { linkOnly, type JargonSegment } from '../lib/jargon';
 import { simFaq, type FaqItem } from '../data/simFaq';
 import { Link, useLocation } from 'react-router-dom';
@@ -942,19 +943,22 @@ export function FaqSection({ items }: { items: FaqItem[] }) {
   );
 }
 
-/** « Pour aller plus loin » : évite l'impasse en bas d'un simulateur (guide, étape suivante, fiche ; carte entièrement cliquable). */
+/** Pistes visibles d'emblée en bas d'un simulateur (la page est déjà longue : formulaire, résultats, questions). */
+export const SIM_NEXT_VISIBLE = 2;
+
+/**
+ * « Pour aller plus loin » : évite l'impasse en bas d'un simulateur (guide, étape suivante, fiche). Même titre de rubrique
+ * et même grille de cartes que les fiches et les guides (chantier 149) : chaque carte dit ce qu'elle est ; une fiche ou un
+ * simulateur a sa phrase de résumé (le titre d'un guide suffit). Les deux premières pistes, dans l'ordre d'utilité choisi à la main (relatedSims.ts), restent visibles ;
+ * les autres sont repliées, leurs titres affichés dans le résumé du repli, pour ne pas allonger la page.
+ */
 export function SimNext({ slug, links = readingForSimulator(slug ?? '') }: { slug?: string; links?: ReadingLink[] }) {
   if (!links.length) return null;
   return (
-    <nav className="sim-next" aria-label="Pour aller plus loin">
-      <h3>Pour aller plus loin</h3>
-      <ul>
-        {links.map((l) => (
-          <li key={l.to}>
-            <Link to={l.to}><span className="sim-next-kind">{l.kind}</span><span className="sim-next-title">{l.title}</span></Link>
-          </li>
-        ))}
-      </ul>
+    <nav className="sim-next" aria-labelledby="rub-pour-aller-plus-loin">
+      <h2 id="rub-pour-aller-plus-loin">Pour aller plus loin</h2>
+      <NextList items={links.slice(0, SIM_NEXT_VISIBLE)} />
+      <NextMore items={links.slice(SIM_NEXT_VISIBLE)} />
     </nav>
   );
 }
