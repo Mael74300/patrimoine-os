@@ -1,4 +1,4 @@
-import { droitsDonationLigneDirecte, BAREME_LIGNE_DIRECTE } from '../lib/calc/donation';
+import { detailDroitsLigneDirecte, droitsDonationLigneDirecte, BAREME_LIGNE_DIRECTE } from '../lib/calc/donation';
 import { DONATION_ABATTEMENTS } from './donationAbattements';
 import { describe, expect, it } from 'vitest';
 import { categoryById } from './categories';
@@ -7,7 +7,7 @@ import { simFaq } from './simFaq';
 import { investmentBySlug, investments } from './investments';
 import { splitSentences } from '../components/ui';
 import { loanPayment, projectGrowth } from '../lib/finance';
-import { LEVERAGE_EXAMPLE, LOAN_EXAMPLE, loanSlices } from '../lib/illustrationData';
+import { DONATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, loanSlices } from '../lib/illustrationData';
 
 describe('intégrité des données éditoriales', () => {
   it('slugs uniques', () => {
@@ -303,7 +303,8 @@ describe('fiche donation : cohérence des montants', () => {
     expect(ex).toContain('100 000 €');
     expect(droitsDonationLigneDirecte(200_000 - abattementEnfant)).toBe(18_194);
     expect(ex).toContain('18 194 €');
-    expect(ex).toContain('8 072 €');
+    expect(detailDroitsLigneDirecte(DONATION_EXAMPLE.value - abattementEnfant).map((t) => t.droits)).toEqual([403.6, 403.7, 573.45, 16_813.6]);
+    expect(DONATION_EXAMPLE.value).toBe(200_000);
     expect(BAREME_LIGNE_DIRECTE[0].jusqua).toBe(8_072);
     expect(f.review.data.join(' ').replace(/\u00a0/g, ' ')).toContain('18 194 €');
     expect(f.tax.text.replace(/\u00a0/g, ' ')).toContain('131 865');

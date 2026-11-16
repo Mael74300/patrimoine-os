@@ -709,7 +709,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Réduction des droits de succession', 'Aide aux proches au bon moment'],
     cons: ['Dessaisissement définitif', 'Règles civiles complexes'],
     timeSkills: 'Modéré, avec un notaire.',
-    example: 'Exemple fictif : un parent donne à son enfant un appartement estimé à 200 000 €. Après l’abattement de 100 000 €, les droits portent sur 100 000 € : 18 194 € selon le barème (5 % sur les premiers 8 072 €, puis 10 %, 15 % et 20 %), hors frais de notaire. Le don familial de 31 865 € ne joue pas : il vise les sommes d’argent.',
+    example: 'Exemple fictif : un parent donne à son enfant un appartement estimé à 200 000 €. Après l’abattement de 100 000 €, les droits portent sur les 100 000 € restants : 18 194 € au barème, hors frais de notaire. Le don familial de 31 865 € ne joue pas : il vise les sommes d’argent.',
     sources: [S.donation, S.donationDroits, S.donationArgent, S.notaires],
     alternatives: ['assurance-vie'],
     tags: ['transmission'],

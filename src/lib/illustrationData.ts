@@ -314,4 +314,11 @@ export const LOCATION_NUE_EXAMPLE = { price: 150000, monthlyRent: 750, allowance
  * dont 400 000 € empruntés sur 7 ans à un taux fictif de 4 %, puis le même remboursement si le résultat baisse de 30 %.
  * Aucun chiffre réglementaire : tout est fictif, recalculé par `repriseDebtShare` (ficheExemples.test.ts).
  */
+/**
+ * Fiche Donation : exemple fictif, un appartement estimé à 200 000 € donné par un parent à son enfant (abattement de
+ * 100 000 €, puis barème en ligne directe : Service-Public F14203, vérifiée le 13 mai 2026, consultée le 2026-11-16).
+ * Droits recalculés tranche par tranche par `detailDroitsLigneDirecte` (donation.test.ts, data.test.ts).
+ */
+export const DONATION_EXAMPLE = { value: 200000 };
+
 export const REPRISE_EXAMPLE = { profit: 100000, price: 500000, loan: 400000, years: 7, ratePct: 4, dropPct: 30 };

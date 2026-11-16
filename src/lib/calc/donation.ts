@@ -27,3 +27,23 @@ export function droitsDonationLigneDirecte(partTaxable: number): number {
   }
   return Math.round(droits);
 }
+
+export interface TrancheDonation { base: number; taux: number; droits: number }
+
+/**
+ * Détail des droits tranche par tranche, comme dans l'exemple de Service-Public F14203 (droits au centime près, non arrondis) :
+ * chaque taux ne s'applique qu'à la part comprise dans sa tranche. Seules les tranches atteintes sont renvoyées.
+ */
+export function detailDroitsLigneDirecte(partTaxable: number): TrancheDonation[] {
+  let reste = Math.max(0, partTaxable);
+  let bas = 0;
+  const out: TrancheDonation[] = [];
+  for (const t of BAREME_LIGNE_DIRECTE) {
+    const base = Math.min(reste, t.jusqua - bas);
+    if (base <= 0) break;
+    out.push({ base, taux: t.taux, droits: Math.round(base * t.taux * 100) / 100 });
+    reste -= base;
+    bas = t.jusqua;
+  }
+  return out;
+}
