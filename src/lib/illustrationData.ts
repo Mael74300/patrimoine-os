@@ -303,6 +303,13 @@ export const CROWDFUNDING_EXAMPLE = { projects: 20, ticket: 100, ratePct: 9, def
 export const SCPI_EXAMPLE = { amount: 10000, entryFeePct: 10, distributionPct: 5 };
 
 /**
+ * Fiche Obligations : exemple fictif, 1 000 € prêtés pendant 5 ans avec un coupon de 3 % par an (coupon versé chaque
+ * année, capital rendu à l'échéance : La finance pour tous, « Qu'est-ce qu'une obligation ? », consulté le 2026-11-17),
+ * puis un fonds de sensibilité 5 face à une hausse brutale des taux de 1 point (« Les risques obligataires », même date).
+ */
+export const OBLIGATION_EXAMPLE = { amount: 1000, ratePct: 3, years: 5, sensitivity: 5, rateRisePoints: 1 };
+
+/**
  * Fiche Location nue : exemple fictif, le bien de 150 000 € loué 750 € par mois toute l'année (même cas que le guide
  * Rentabilité locative), au micro-foncier (abattement de 30 %, loyers jusqu'à 15 000 € par an : Service-Public F1991,
  * consulté le 2026-11-14), revenus imposés dans la tranche à 30 % (Service-Public F1419, consulté le 2026-11-14).
