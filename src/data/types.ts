@@ -71,6 +71,6 @@ export type Guide = {
   faq?: { q: string; a: string }[];
   /** Outil intégré à la page. */
   widget?: 'patrimoine-net';
-  /** Simulateur ou page à mettre en avant. */
-  cta?: { to: string; label: string };
+  /** Simulateur ou page à mettre en avant. Le bouton suit la rubrique `after` (titre exact), sinon la dernière rubrique, avant les questions fréquentes. */
+  cta?: { to: string; label: string; after?: string };
 };
