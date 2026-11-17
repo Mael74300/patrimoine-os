@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { investments } from './data/investments';
 import { MeterRows } from './components/ui';
-import { effortLevelsFromText, effortParts, meterWord } from './lib/meters';
+import { dotsClass, effortLevelsFromText, effortParts, meterWord, riskBand } from './lib/meters';
 
 describe('repères des fiches en un mot', () => {
   it('lit le nombre de points, de 1 à 5', () => {
@@ -52,5 +52,22 @@ describe('repères des fiches en un mot', () => {
     expect(html).toContain('Si l’on investit en ETF.');
     expect((html.match(/class="on"/g) ?? []).length).toBe(4 + 3 + 2);
     expect(html).toContain('aria-hidden="true"');
+  });
+});
+
+describe('couleur des points du risque', () => {
+  it('suit les tranches du classement du guide : 1-2 faible, 3 moyen, 4-5 élevé', () => {
+    expect([1, 2, 3, 4, 5].map((l) => riskBand(l as 1 | 2 | 3 | 4 | 5))).toEqual(['faible', 'faible', 'modere', 'eleve', 'eleve']);
+  });
+  it('un risque très faible ne reçoit pas la couleur du risque élevé', () => {
+    expect(dotsClass('risk', 1)).toBe('dots risk rb-faible');
+    expect(dotsClass('risk', 5)).toBe('dots risk rb-eleve');
+    expect(dotsClass('liq', 1)).toBe('dots liq');
+    expect(dotsClass('effort', 3)).toBe('dots');
+  });
+  it('la fiche Livret A affiche ses points de risque en vert', () => {
+    const livret = investments.find((i) => i.slug === 'livret-a')!;
+    const html = renderToStaticMarkup(createElement(MeterRows, { risk: livret.risk, liquidity: livret.liquidity, effort: livret.effort, effortNote: livret.timeSkills }));
+    expect(html).toContain('dots risk rb-faible');
   });
 });

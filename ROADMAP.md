@@ -54,14 +54,13 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 
 ## Constats
 
-- 2026-11-17 (dixième audit du jour, visiteurs futur acheteur, épargnant et arrivée par Google : guides Livret A et quinzaines, Taux d’endettement, Rembourser ou investir, fiches Compte à terme, Fonds en euros, LEP et Cryptomonnaies, simulateurs Endettement, Dettes et Inflation, Encyclopédie, Glossaire, Comparateur, accueil, 375 px et 1 280 px : aucune erreur de console ni débordement) : seule PR ouverte : mise à jour Dependabot (hors feature/*), aucune fiche à réviser. Gêne principale : sur téléphone, les cartes de résultat des 21 simulateurs, deux par rangée de 160 px, coupaient les libellés sur trois ou quatre lignes (« Montant pour garder le même pouvoir d’achat ») et laissaient une carte seule pleine largeur en dessous. Traité (chantier 170, voir « Fait »).
-- 2026-11-17 : fiches, repère « Risque » toujours en rouge, même « très faible » (Livret A, Compte à terme) : un débutant peut y lire une alerte ; envisager une couleur neutre ou graduée, en gardant la cohérence avec le Comparateur et l’Encyclopédie.
-- 2026-11-17 : fiches Compte à terme, Livret A et Fonds en euros, exemple chiffré d’une seule ligne (piste du chantier 7).
+- 2026-11-17 (onzième audit du jour, visiteurs débutant, épargnant, proche de la retraite et arrivée par Google : accueil, Encyclopédie, fiches Livret A et Assurance-vie, simulateur Retraits réguliers, guides Par où commencer et Types d’investissements, Comparateur, 375 px et 1 280 px : aucune erreur de console ni débordement) : seule PR ouverte : mise à jour Dependabot (hors feature/*), aucune fiche à réviser. Gêne principale : sur les 29 fiches, l’Encyclopédie et le Comparateur, les points du repère « Risque » étaient toujours rouges, même pour le Livret A ou le LEP (« très faible ») : un débutant y lisait une alerte, et le guide Types d’investissements utilisait déjà vert, orange et rouge pour les mêmes tranches. Traité (chantier 171, voir « Fait »).
+- 2026-11-17 : fiches Livret A, Compte à terme et Fonds en euros, exemple chiffré d’une seule ligne (piste du chantier 7).
 - 2026-11-17 : schéma du PTZ à 375 px, cadres collés aux bords (x = 1) et petits textes « Rien à payer, 2 ans au minimum » ; marge intérieure à harmoniser avec les autres schémas.
 - 2026-11-17 : Encyclopédie en écran large, grand vide entre « Filtrer par risque et liquidité » et « Comment lire ces repères ? » ; à resserrer.
-- 2026-11-17 : Glossaire à 375 px, page très longue (10 459 px), mais l’index des lettres, la recherche et les liens « ↑ Lettres » suffisent pour s’y retrouver ; rien de bloquant.
 - 2026-11-17 : Comparateur à 1 280 px, ligne Fiscalité de l’assurance-vie très haute (huit puces) : le tableau s’étire pour une seule colonne.
-- 2026-11-17 : accueil, guide Livret A (schéma des quinzaines), simulateur Taux d’endettement (barre « Où partent vos revenus ») clairs et bien enchaînés ; rien de bloquant.
+- 2026-11-17 : Glossaire à 375 px, page très longue (10 459 px), mais l’index des lettres, la recherche et les liens « ↑ Lettres » suffisent pour s’y retrouver ; rien de bloquant.
+- 2026-11-17 : simulateur Retraits réguliers à 375 px, résultats en lignes, phrase « Concrètement » et graphique clairs ; accueil et guide Par où commencer bien enchaînés ; rien de bloquant.
 
 ## À faire
 
@@ -234,10 +233,12 @@ Choix du chantier : privilégier ce qui touche le plus de visiteurs et les pages
 167. [x] **Simulateur Louer ou acheter : chapeau au vouvoiement** : fait le 2026-11-17 avec le chantier 169, voir « Fait ».
 169. [x] **Simulateur Louer ou acheter : d’où viennent les deux patrimoines** : fait le 2026-11-17, voir « Fait ».
 170. [x] **Cartes de résultat lisibles sur téléphone** : fait le 2026-11-17, voir « Fait ».
-171. [ ] **Repère « Risque » sans rouge pour un risque très faible** (constat du 2026-11-17) : sur les fiches, l’Encyclopédie et le Comparateur, les carrés du risque sont toujours rouges ; étudier une teinte neutre ou graduée (contraste accessible, légende « Comment lire ces repères ? » à adapter).
+171. [x] **Repère « Risque » sans rouge pour un risque très faible** : fait le 2026-11-17, voir « Fait ».
 168. [ ] **Schéma du PTZ : marge intérieure** (constat du 2026-11-17) : cadres à x = 1 collés au bord à 375 px ; décaler le dessin comme les autres schémas en viewBox 340 et agrandir les petites mentions.
 
 ## Fait
+
+- [x] **Repère « Risque » coloré selon sa tranche** (2026-11-17, PR « Repère Risque : vert, orange ou rouge selon le niveau ») : chantier 171, esthétique et vulgarisation, aucun chiffre ni règle modifié (les notes de 1 à 5 restent celles des fiches). Les points du risque prennent la couleur de la tranche déjà utilisée par le classement du guide Types d’investissements : vert pour 1 ou 2, orange pour 3, rouge pour 4 ou 5 (`riskBand` et `dotsClass` dans `src/lib/meters.ts`, variables `--risk-low`, `--risk-mid`, `--risk-high` partagées avec ce classement, contraste au moins 3:1 sur fond blanc). Appliqué partout où les repères s’affichent : 29 fiches, Encyclopédie, Comparateur, explication « Comment lire ces repères ? » (une phrase ajoutée sur les couleurs). Tests ajoutés. Hauteurs inchangées (Encyclopédie 2 976 px et 4 338 px, fiche Livret A 2 995 px et 4 804 px, Comparateur 3 372 px et 4 659 px, à 1 280 px et 375 px).
 
 - [x] **Cartes de résultat lisibles sur téléphone** (2026-11-17, PR « Simulateurs : les résultats en lignes sur téléphone ») : chantier 170, esthétique et ergonomie, aucun chiffre ni règle modifié. Sous 480 px, les cartes `.kpis` des 21 simulateurs passent d’une grille de deux cartes de 160 px (libellés coupés sur trois ou quatre lignes, une carte seule en dessous) à une ligne par résultat : libellé à gauche, montant à droite, précision sous les deux, trait de couleur à gauche (bleu, vert pour un résultat favorable, rouge pour un résultat défavorable). Style commun repris du calculateur de patrimoine net, dont la règle propre est supprimée. Écran large inchangé. Test `src/kpiRows.test.ts` complété. Hauteur des pages à 375 px : 19 simulateurs sur 21 raccourcis (− 34 px en moyenne, par exemple Crédit 4 772 → 4 694 px, Objectif d’épargne 4 481 → 4 403 px, Inflation 4 333 → 4 295 px) ; Comparer des crédits 4 319 → 4 356 px, Investir d’un coup ou progressivement 4 376 → 4 406 px et Épargne de précaution 5 329 → 5 338 px (quatre ou deux cartes désormais l’une sous l’autre) ; 1 280 px : aucune hauteur modifiée.
 

@@ -1,4 +1,5 @@
 import type { Level } from '../data/types';
+import { RISK_BANDS } from './riskMap';
 
 /**
  * Repères de 1 à 5 des fiches (Risque, Liquidité, Effort) traduits en un mot, pour qu'un visiteur
@@ -56,4 +57,19 @@ export function effortParts(text: string, level: Level): { word: string; note: s
   const word = found[0];
   const rest = text.trim().slice(word.length).replace(/^[\s:.,;]+/, '').trim();
   return { word, note: rest ? rest.charAt(0).toUpperCase() + rest.slice(1) : '' };
+}
+
+/**
+ * Tranche de risque d'un repère de 1 à 5, la même que celle du classement du guide « Types d’investissements »
+ * (1-2 faible, 3 moyen, 4-5 élevé). Donne la couleur des points du risque : vert, orange, rouge.
+ * Un risque très faible ne s'affiche donc plus en rouge, ce qui pouvait se lire comme une alerte.
+ */
+export function riskBand(level: Level): (typeof RISK_BANDS)[number]['id'] {
+  return RISK_BANDS.find((b) => level >= b.min && level <= b.max)!.id;
+}
+
+/** Classes CSS des points d'un repère : `dots risk rb-faible`, `dots liq`, `dots`. */
+export function dotsClass(kind: MeterKind | undefined, level: Level): string {
+  if (kind === 'risk') return `dots risk rb-${riskBand(level)}`;
+  return kind === 'liq' ? 'dots liq' : 'dots';
 }

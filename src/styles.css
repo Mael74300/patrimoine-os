@@ -15,6 +15,10 @@
   --warn: #8a5300;
   --warn-soft: #fff3d2;
   --danger: #b0261c;
+  /* Tranches de risque (repères des fiches, classement du guide Types d’investissements) : contraste ≥ 3:1 sur fond blanc. */
+  --risk-low: var(--accent);
+  --risk-mid: #b7791f;
+  --risk-high: #c2452f;
   --chart-1: #17358a;
   --chart-2: #12a37f;
   --chart-3: #e8a61c;
@@ -247,7 +251,9 @@ tr:last-child td, tbody tr:last-child th { border-bottom: 0; }
 .dots { display: flex; gap: 3px; }
 .dots i { width: 9px; height: 9px; border-radius: 2px; background: var(--line); display: block; }
 .dots i.on { background: var(--primary); }
-.dots.risk i.on { background: #c2452f; }
+.dots.risk i.on { background: var(--risk-high); }
+.dots.risk.rb-faible i.on { background: var(--risk-low); }
+.dots.risk.rb-modere i.on { background: var(--risk-mid); }
 .dots.liq i.on { background: var(--accent); }
 .meter-rows, .prose .meter-rows { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 9px; }
 .meter-rows li { display: grid; grid-template-columns: 5.2rem auto minmax(0, 1fr); align-items: center; column-gap: 12px; row-gap: 2px; }
@@ -1335,9 +1341,9 @@ a.term:hover { color: var(--primary); text-decoration-style: solid; }
 .rm-corner span { display: block; }
 .rm-table tbody tr:last-child > * { border-bottom: 0; }
 .rm-table tbody th { border-left: 5px solid var(--rm-c); background: color-mix(in srgb, var(--rm-c) 9%, var(--surface)); }
-.rm-faible { --rm-c: var(--accent); }
-.rm-modere { --rm-c: var(--gold); }
-.rm-eleve { --rm-c: #c2452f; }
+.rm-faible { --rm-c: var(--risk-low); }
+.rm-modere { --rm-c: var(--risk-mid); }
+.rm-eleve { --rm-c: var(--risk-high); }
 .rm-risk { display: block; font-weight: 700; color: var(--ink); }
 .rm-hint { display: block; font-weight: 400; font-size: .8rem; color: var(--ink-2); }
 .rm-table ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
