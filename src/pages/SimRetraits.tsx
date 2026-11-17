@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import { withdrawal, withdrawalSeries, fmtEur, fmtMonths } from '../lib/finance';
-import { withdrawalTakeaway } from '../lib/takeaways';
+import { withdrawalChartNote, withdrawalTakeaway } from '../lib/takeaways';
 import { SchemaRetraits } from '../components/schemas/SchemaRetraits';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice, type Series } from '../components/ui';
 
 type State = { capital: number; monthly: number; ret: number; idx: number; years: number };
 
@@ -16,12 +16,19 @@ export default function SimRetraits() {
   const durLabel = dur === null ? `Au-delà de ${s.years}\u00a0ans` : fmtMonths(dur);
 
   const series = withdrawalSeries({ capital: s.capital, monthly: s.monthly, annualReturn: s.ret, indexation: s.idx, years: s.years });
+  // Seconde courbe : le même capital avec le retrait tenable, quand il diffère du retrait saisi (exemple fictif).
+  const chartNote = withdrawalChartNote({ monthly: s.monthly, years: s.years, sustainable: r.sustainable });
+  const chartSeries: Series[] = [{ name: chartNote ? `Votre retrait (${fmtEur(s.monthly)} par mois)` : 'Capital restant', color: 'var(--chart-1)', values: series }];
+  if (chartNote) {
+    const alt = withdrawalSeries({ capital: s.capital, monthly: r.sustainable, annualReturn: s.ret, indexation: s.idx, years: s.years });
+    chartSeries.push({ name: `Retrait tenable (${fmtEur(r.sustainable)} par mois)`, color: 'var(--chart-2)', values: alt, dashed: true });
+  }
 
   return (
     <>
       <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: 'Retraits réguliers et durée du capital' }]} />
       <PageHead eyebrow="Simulateur" title="Retraits réguliers : combien de temps le capital tient-il ?">
-        Calcule la durée avant épuisement d’un capital dont vous retirez une somme chaque mois, le capital restant à l’horizon choisi et le retrait mensuel tenable.
+        Vous puisez chaque mois dans un capital : indiquez son montant et le retrait voulu, le simulateur calcule combien de temps il dure, ce qu’il en reste à l’horizon choisi et le retrait mensuel tenable.
       </PageHead>
       <SimNotice>
         Résultat entièrement fondé sur vos hypothèses (rendement et revalorisation supposés constants), sans chiffre réglementaire ni prévision, avant frais et impôts.
@@ -62,11 +69,11 @@ export default function SimRetraits() {
             title="Capital restant à la fin de chaque année de retraits"
             xLabels={series.map((_, i) => `An ${i}`)}
             format={fmtEur}
-            series={[{ name: 'Capital restant', color: 'var(--chart-1)', values: series }]}
+            series={chartSeries}
           />
           <p className="muted small">
-            Le rendement est appliqué chaque mois, puis le retrait est prélevé en fin de mois ; le retrait est revalorisé chaque année du taux saisi.
-            Total retiré sur la période : {fmtEur(r.totalWithdrawn)}. Les exemples ci-dessus sont fictifs.
+            {chartNote && <>{chartNote} </>}
+            Rendement appliqué chaque mois, retrait prélevé en fin de mois et revalorisé chaque année. Exemple fictif.
           </p>
           <SavedSims simKey="retraits" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <Disclaimer />

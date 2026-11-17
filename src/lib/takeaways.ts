@@ -87,6 +87,18 @@ export function withdrawalTakeaway(p: { capital: number; monthly: number; years:
   return `En retirant ${fmtEur(p.monthly)} le premier mois sur un capital de ${fmtEur(p.capital)}, vous avez encore ${fmtEur(p.remaining)} au bout de ${ans}, après ${fmtEur(p.totalWithdrawn)} retirés en tout. Le premier retrait pourrait aller jusqu'à ${fmtEur(p.sustainable)} par mois sans épuiser le capital avant ${ans}. Tout repose sur le rendement supposé : s'il est plus faible, le capital dure moins longtemps.`;
 }
 
+/**
+ * Retraits : légende du graphique quand la courbe du retrait tenable s'ajoute à celle du retrait saisi.
+ * Chaîne vide quand les deux retraits s'affichent pareil (la seconde courbe n'apporterait rien).
+ */
+export function withdrawalChartNote(p: { monthly: number; years: number; sustainable: number }): string {
+  if (!(p.monthly > 0) || !(p.sustainable > 0) || !(p.years >= 1) || fmtEur(p.sustainable) === fmtEur(p.monthly)) return '';
+  const ans = fmtAns(p.years);
+  return p.sustainable < p.monthly
+    ? `Pointillés : en commençant à ${fmtEur(p.sustainable)} par mois, le capital dure les ${ans}, presque entièrement dépensé à la fin.`
+    : `Pointillés : le premier retrait pourrait monter jusqu'à ${fmtEur(p.sustainable)} par mois ; le capital durerait alors les ${ans}, presque entièrement dépensé à la fin.`;
+}
+
 /** Épargne de précaution : montant à réunir, ce qui manque et en combien de temps avec le versement saisi. */
 export function precautionTakeaway(p: { target: number; savings: number; monthlySaving: number; reachedAt: number | null }): string {
   if (!(p.target > 0)) return '';
