@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { advantageBars, advantageByHorizon, advantageByPriceGrowth, breakEvenBand, rentVsBuy, scenarioValues } from './rentVsBuy';
+import { advantageBars, advantageByHorizon, advantageByPriceGrowth, breakEvenBand, rentVsBuy, scenarioValues, wealthBars } from './rentVsBuy';
 
 // Exemple fictif.
 const B = { price: 250000, downPayment: 50000, acquisitionRate: 0.08, loanRate: 0.035, loanYears: 20, ownerCostRate: 0.015, priceGrowth: 0.02, sellingRate: 0.05, monthlyRent: 900, rentGrowth: 0.02, investReturn: 0.04, horizonYears: 20 };
@@ -98,5 +98,50 @@ describe('breakEvenBand (zone « l’achat l’emporte » du graphique)', () => 
     expect(advantageBars([0.2, -50, 1000])).toEqual([{ side: 'tie', pct: 0 }, { side: 'rent', pct: 5 }, { side: 'buy', pct: 100 }]);
     expect(advantageBars([1, 100000])[0]).toEqual({ side: 'buy', pct: 2 });
     expect(advantageBars([0, NaN])).toEqual([{ side: 'tie', pct: 0 }, { side: 'tie', pct: 0 }]);
+  });
+});
+
+describe('Détail des patrimoines (« Ce que possède chacun »)', () => {
+  it('les parts additionnées redonnent les patrimoines', () => {
+    for (const h of [0, 5, 15, 20, 30]) {
+      const r = rentVsBuy({ ...B, horizonYears: h });
+      expect(r.netSaleValue - r.remainingDebt + r.buyerSavings).toBeCloseTo(r.buyerWealth, 6);
+      expect(r.renterFromStart + r.renterFromMonthly).toBeCloseTo(r.renterWealth, 6);
+    }
+  });
+
+  it('mise de départ du locataire = (apport + frais d’achat) × (1 + rendement) sur la durée', () => {
+    const r = rentVsBuy({ ...B, horizonYears: 15 });
+    expect(r.renterFromStart).toBeCloseTo((50000 + 250000 * 0.08) * Math.pow(1.04, 15), 4);
+    expect(r.netSaleValue).toBeCloseTo(r.finalValue * 0.95, 6);
+  });
+
+  it('dépense du premier mois = mensualité + charges de 1,5 % par an de la valeur', () => {
+    const r = rentVsBuy(B);
+    expect(r.firstOwnerOutflow).toBeCloseTo(r.monthlyPayment + 250000 * 0.015 / 12, 6);
+  });
+
+  it('exemple par défaut du simulateur (fictif, 15 ans) : le propriétaire n’épargne rien, le locataire place chaque mois', () => {
+    const r = rentVsBuy({ ...B, horizonYears: 15 });
+    expect(r.buyerSavings).toBe(0);
+    expect(r.renterFromMonthly).toBeGreaterThan(0);
+    expect(r.remainingDebt).toBeGreaterThan(0);
+  });
+
+  it('barres : même échelle, la plus longue à 100 %', () => {
+    const r = rentVsBuy({ ...B, horizonYears: 15 });
+    const b = wealthBars(r);
+    const owner = b.owned + b.owed + b.savings;
+    const renter = b.start + b.monthly;
+    expect(Math.max(owner, renter)).toBeCloseTo(100, 6);
+    expect(b.owed / (b.owned + b.owed)).toBeCloseTo(r.remainingDebt / r.netSaleValue, 6);
+  });
+
+  it('barres : prêt restant supérieur à la revente, tout le logement est dû ; valeurs nulles ou invalides sans NaN', () => {
+    const b = wealthBars({ netSaleValue: 100, remainingDebt: 150, buyerSavings: 0, renterFromStart: 50, renterFromMonthly: 0 });
+    expect(b.owned).toBe(0);
+    expect(b.owed).toBeCloseTo(100, 6);
+    const z = wealthBars({ netSaleValue: 0, remainingDebt: 0, buyerSavings: NaN, renterFromStart: 0, renterFromMonthly: 0 });
+    expect(Object.values(z).every((v) => v === 0)).toBe(true);
   });
 });
