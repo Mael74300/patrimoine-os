@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 import { fmtEur } from '../../lib/finance';
 import { pfuSplit } from '../../lib/calc/pfu';
 import { perDeductionBalance } from '../../lib/calc/per';
-import { CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, LOCATION_NUE_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE } from '../../lib/illustrationData';
-import { crowdfundingScenario, microFoncierExample, repriseDebtShare, scpiFeesPayback } from '../../lib/calc/ficheExemples';
+import { CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE } from '../../lib/illustrationData';
+import { bondCoupons, crowdfundingScenario, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
 import { fmtEur2 } from '../../lib/calc/format';
 import { W } from './outils';
@@ -460,6 +460,58 @@ export function SchemaObligation() {
         <text x={258} y={284} textAnchor="middle" className="ill-step">le prix monte</text>
         <text x={170} y={322} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
       </svg>
+    </figure>
+  );
+}
+
+/**
+ * Schéma « Obligation : ce que vous recevez, et ce que vous risquez en revendant avant » (exemple fictif de la fiche,
+ * constat du 2026-11-17 : le paragraphe de l'exemple restait abstrait). Coupons et remboursement recalculés par
+ * `bondCoupons`, perte du fonds par `sensitivityChangePct` (sources : `OBLIGATION_EXAMPLE`). Les deux barres du bas sont
+ * proportionnelles à la valeur du fonds.
+ */
+export function SchemaObligationBilan({ children }: { children: ReactNode }) {
+  const { amount, ratePct, years, sensitivity, rateRisePoints } = OBLIGATION_EXAMPLE;
+  const { coupon, totalCoupons, received } = bondCoupons(amount, ratePct, years);
+  const change = sensitivityChangePct(sensitivity, rateRisePoints);
+  const after = 100 + change;
+  const pct = (n: number) => `${n.toLocaleString('fr-FR')}\u00a0%`;
+  const kept = (338 * after) / 100;
+  const ans = Array.from({ length: years }, (_, k) => k + 1);
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 356" role="img" aria-labelledby="ill-obb-t ill-obb-d" className="ill-svg">
+        <title id="ill-obb-t">Obligation : ce que vous recevez, et ce que vous risquez en revendant avant</title>
+        <desc id="ill-obb-d">{`Exemple fictif. Gardée jusqu’à l’échéance, une obligation de ${fmtEur(amount)} à ${ratePct} % sur ${years} ans verse ${fmtEur(coupon)} chaque année, puis rend les ${fmtEur(amount)} la dernière année : ${fmtEur(received)} reçus au total, dont ${fmtEur(totalCoupons)} d’intérêts, si l’émetteur rembourse, avant impôt et frais. Revendu avant l’échéance, un fonds obligataire de sensibilité ${sensitivity} perd environ ${pct(-change)} de sa valeur si les taux montent brutalement de ${rateRisePoints} point : il ne vaut plus qu’environ ${pct(after)} de sa valeur d’avant.`}</desc>
+        <text x={0} y={16} className="ill-year" textAnchor="start">Gardée jusqu’à l’échéance</text>
+        <text x={339} y={16} className="ill-sub" textAnchor="end">un coupon par an</text>
+        {ans.map((a) => {
+          const x = 1 + (a - 1) * 68;
+          return (
+            <g key={a}>
+              <rect x={x} y={28} width={62} height={30} rx={8} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+              <text x={x + 31} y={48} className="ill-in" textAnchor="middle">{fmtEur(coupon)}</text>
+              <text x={x + 31} y={76} className="ill-sub" textAnchor="middle">{`an ${a}`}</text>
+            </g>
+          );
+        })}
+        <rect x={1} y={88} width={338} height={34} rx={8} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={170} y={110} className="ill-step" textAnchor="middle">{`an ${years} : vos ${fmtEur(amount)} vous sont rendus`}</text>
+        <text x={0} y={150} className="ill-total" textAnchor="start" style={{ fill: 'var(--accent)' }}>{`Reçu au total : ${fmtEur(received)}`}</text>
+        <text x={0} y={170} className="ill-sub" textAnchor="start">{`pour ${fmtEur(amount)} prêtés, si l’émetteur rembourse`}</text>
+        <text x={0} y={188} className="ill-sub" textAnchor="start">avant impôt et frais</text>
+        <line x1={1} y1={204} x2={339} y2={204} stroke="var(--line)" strokeWidth={2} strokeDasharray="4 6" />
+        <text x={0} y={228} className="ill-year" textAnchor="start">{`Revendu avant : un fonds de sensibilité ${sensitivity}`}</text>
+        <text x={0} y={248} className="ill-sub" textAnchor="start">{`les taux montent brutalement de ${rateRisePoints}\u00a0point`}</text>
+        <rect x={1} y={260} width={338} height={28} rx={6} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={10} y={279} className="ill-in" textAnchor="start">{`valeur du fonds avant : ${pct(100)}`}</text>
+        <rect x={1} y={298} width={kept} height={28} rx={6} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <rect x={1 + kept} y={298} width={338 - kept} height={28} rx={4} fill="var(--danger)" />
+        <text x={10} y={317} className="ill-in" textAnchor="start">{`après : environ ${pct(after)}`}</text>
+        <text x={0} y={348} className="ill-sub" textAnchor="start">si vous vendez à ce moment</text>
+        <text x={339} y={348} className="ill-loss" textAnchor="end">{`environ \u2212${pct(-change)}`}</text>
+      </svg>
+      <figcaption>{children}</figcaption>
     </figure>
   );
 }

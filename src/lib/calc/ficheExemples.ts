@@ -83,6 +83,16 @@ export function bondCoupons(amount: number, ratePct: number, years: number): Bon
   return { coupon, totalCoupons, received: amount + totalCoupons };
 }
 
+/**
+ * Sensibilité d'un fonds obligataire : variation approximative de sa valeur, en %, pour une variation brutale des taux
+ * exprimée en points (La finance pour tous, « Les risques obligataires », consulté le 2026-11-17 : « une sensibilité de 7
+ * veut dire que toute hausse brutale de 1 % des taux […] provoque une diminution de la valeur de 7 % »).
+ * Approximation linéaire, valable pour de petites variations.
+ */
+export function sensitivityChangePct(sensitivity: number, rateRisePoints: number): number {
+  return -sensitivity * rateRisePoints;
+}
+
 export interface FundFees { yearly: number; total: number }
 
 /** Frais annuels exprimés en % des sommes souscrites (assiette fixe), cumulés sur la durée de blocage. Arrondis à l'euro. */
