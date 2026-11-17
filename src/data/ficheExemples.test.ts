@@ -2,7 +2,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { investmentBySlug } from './investments';
-import { bondCoupons, fondsEurosGrowth, livretQuinzaines, concentrationLoss, crowdfundingScenario, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, subscriptionChurn, trainingPayoff, yearlySavingsValue } from '../lib/calc/ficheExemples';
+import { bondCoupons, fondsEurosGrowth, livretQuinzaines, concentrationLoss, crowdfundingScenario, lepVsLivretA, pelVsLivretA, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, subscriptionChurn, trainingPayoff, yearlySavingsValue } from '../lib/calc/ficheExemples';
 import { amortize } from '../lib/calc/loan';
 import { CROWDFUNDING_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, leverageBars } from '../lib/illustrationData';
 import { SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaRepriseBilan, SchemaScpiBilan } from '../components/schemas/fiches';
@@ -362,5 +362,47 @@ describe('fiche Livret A : la date de dépôt compte, par quinzaine', () => {
       expect(v.quinzaines).toBe(q);
       expect(ex).toContain(`${q} quinzaines, soit ${cents(v.interest)}`);
     }
+  });
+});
+
+/**
+ * Fiches PEL et LEP : ce que rapporte une année, comparé au Livret A. PEL ouverts en 2026 : 2,00 %, intérêts soumis au
+ * prélèvement forfaitaire unique de 30 % (Service-Public F16140) ; Livret A 1,7 %, exonéré (F2365) ; LEP 2,50 %, exonéré,
+ * plafond de 10 000 € au-delà duquel aucun versement n'est possible (F2367). Sources consultées le 2026-11-17.
+ */
+describe('fiches PEL et LEP : une année comparée au Livret A', () => {
+  const pct = (n: number) => `${norm(n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }))} %`;
+  const livretA = LIVRETS.find((l) => l.id === 'livretA')!;
+  const lepLivret = LIVRETS.find((l) => l.id === 'lep')!;
+
+  it('PEL : 200 € bruts, 60 € de prélèvement, 140 € nets, contre 170 € au Livret A ; seuil à 1,40 %', () => {
+    expect(pelVsLivretA(10000, 2, 30, 1.7)).toEqual({ gross: 200, tax: 60, net: 140, livret: 170, breakEvenPct: 1.4 });
+  });
+  it('PEL : texte de la fiche aligné sur sa rubrique Fiscalité et sur le taux du Livret A', () => {
+    const fiche = investmentBySlug['pel']!;
+    const ex = norm(fiche.example);
+    const tax = norm(fiche.tax.text);
+    expect(tax).toContain('Taux de 2,00 % pour les PEL ouverts à partir du 1er janvier 2026');
+    expect(tax).toContain('prélèvement forfaitaire unique de 30 %');
+    const r = pelVsLivretA(10000, 2, 30, livretA.rate * 100);
+    expect(ex).toMatch(/^Exemple fictif/);
+    expect(ex).toContain(`${eur(10000)} sur un PEL ouvert en 2026, à ${pct(2)}, rapportent ${eur(r.gross)}`);
+    expect(ex).toContain(`de 30 % en retient ${eur(r.tax)} : il reste ${eur(r.net)}`);
+    expect(ex).toContain(`Livret A à ${pct(livretA.rate * 100)}`);
+    expect(ex).toContain(`rapporterait ${eur(r.livret)}`);
+    expect(ex).toContain(`descend sous ${pct(r.breakEvenPct)}`);
+    expect(r.net).toBeLessThan(r.livret);
+  });
+  it('LEP : 250 € contre 170 €, soit 80 € de plus, au plafond de 10 000 €', () => {
+    const fiche = investmentBySlug['lep']!;
+    const ex = norm(fiche.example);
+    expect(lepVsLivretA(10000, 2.5, 1.7)).toEqual({ lep: 250, livret: 170, gap: 80 });
+    const r = lepVsLivretA(lepLivret.cap, lepLivret.rate * 100, livretA.rate * 100);
+    expect(ex).toMatch(/^Exemple fictif/);
+    expect(ex).toContain(`${eur(lepLivret.cap)} à ${pct(lepLivret.rate * 100)} (le plafond du livret)`);
+    expect(ex).toContain(`rapportent ${eur(r.lep)} d’intérêts, sans impôt`);
+    expect(ex).toContain(`Livret A à ${pct(livretA.rate * 100)}, la même somme rapporterait ${eur(r.livret)}`);
+    expect(ex).toContain(`${eur(r.gap)} de plus par an`);
+    expect(norm(fiche.tax.text)).toContain(`Taux : ${pct(lepLivret.rate * 100)}`);
   });
 });
