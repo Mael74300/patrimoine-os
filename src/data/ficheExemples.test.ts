@@ -2,11 +2,12 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { investmentBySlug } from './investments';
-import { bondCoupons, concentrationLoss, crowdfundingScenario, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, subscriptionChurn, trainingPayoff, yearlySavingsValue } from '../lib/calc/ficheExemples';
+import { bondCoupons, fondsEurosGrowth, livretQuinzaines, concentrationLoss, crowdfundingScenario, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, subscriptionChurn, trainingPayoff, yearlySavingsValue } from '../lib/calc/ficheExemples';
 import { amortize } from '../lib/calc/loan';
 import { CROWDFUNDING_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, leverageBars } from '../lib/illustrationData';
 import { SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaRepriseBilan, SchemaScpiBilan } from '../components/schemas/fiches';
 import { guideBySlug } from './guides';
+import { LIVRETS } from './livrets';
 
 /**
  * Exemples fictifs des fiches Financement participatif et SCPI : montants recalculés, cohérents entre le texte de la fiche
@@ -323,5 +324,43 @@ describe('fiche SaaS, e-commerce et produits numériques : un revenu récurrent 
     expect(ex).toContain('Si 5 % résilient chaque mois sans nouveaux venus');
     expect(ex).toContain(`environ ${r.clientsLeft} au bout d’un an : ${eur(r.revenueLeft)} par mois`);
     expect(ex).toContain(`demande donc ${r.lostFirstMonth} nouveaux clients chaque mois`);
+  });
+});
+
+describe('fiche Fonds en euros : des intérêts qui rapportent, des frais qui comptent', () => {
+  const ex = norm(investmentBySlug['fonds-euros']!.example);
+  const r = fondsEurosGrowth(20000, 2.5, 5, 0.5);
+
+  it('montants recalculés : 22 630 €, 500 € puis 552 € d’intérêts, 22 080 € avec 0,5 point de frais de plus', () => {
+    expect(r).toEqual({ final: 22630, firstYearInterest: 500, lastYearInterest: 552, finalWithMoreFees: 22080, gap: 550 });
+  });
+  it('le texte de la fiche cite les mêmes montants et reste marqué fictif', () => {
+    expect(ex).toMatch(/^Exemple fictif/);
+    expect(ex).toContain(`${eur(20000)} à 2,5 % net de frais pendant 5 ans deviennent environ ${eur(r.final)}`);
+    expect(ex).toContain(`La première année rapporte ${eur(r.firstYearInterest)} ; la cinquième, ${eur(r.lastYearInterest)}`);
+    expect(ex).toContain(`0,5 point de frais de plus chaque année (2 % net)`);
+    expect(ex).toContain(`environ ${eur(r.finalWithMoreFees)}, soit environ ${eur(r.gap)} de moins`);
+  });
+});
+
+describe('fiche Livret A : la date de dépôt compte, par quinzaine', () => {
+  const ex = norm(investmentBySlug['livret-a']!.example);
+  const rate = LIVRETS.find((l) => l.id === 'livretA')!.rate * 100;
+  const cents = (n: number) => `${norm(n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))} €`;
+
+  it('quinzaines : un dépôt le 15 mars compte dès le 16 (19 quinzaines), le 16 mars à partir du 1er avril (18)', () => {
+    expect(livretQuinzaines(10000, 1.7, 15, 3)).toEqual({ quinzaines: 19, interest: 134.58 });
+    expect(livretQuinzaines(10000, 1.7, 16, 3)).toEqual({ quinzaines: 18, interest: 127.5 });
+    expect(livretQuinzaines(10000, 1.7, 16, 12)).toEqual({ quinzaines: 0, interest: 0 });
+  });
+  it('le texte de la fiche reprend le taux en vigueur (LIVRETS) et les mêmes montants', () => {
+    expect(ex).toMatch(/^Exemple fictif/);
+    expect(ex).toContain(`si le taux restait à ${norm(rate.toLocaleString('fr-FR', { minimumFractionDigits: 2 }))} %`);
+    expect(ex).toContain(`rapportent ${eur(Math.round(10000 * rate) / 100)} d'intérêts nets`);
+    for (const [day, q] of [[15, 19], [16, 18]] as const) {
+      const v = livretQuinzaines(10000, rate, day, 3);
+      expect(v.quinzaines).toBe(q);
+      expect(ex).toContain(`${q} quinzaines, soit ${cents(v.interest)}`);
+    }
   });
 });
