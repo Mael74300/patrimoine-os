@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { categoryById } from '../data/categories';
 import { investmentBySlug, investments } from '../data/investments';
 import { fmtEur, projectGrowth } from '../lib/finance';
-import { durationExceeded, monthCapExceeded, projectionSplit, totalContributed } from '../lib/calc/compareSummary';
+import { durationExceeded, impossibleFromYear, monthCapExceeded, projectionSplit, totalContributed } from '../lib/calc/compareSummary';
 import { fmtMonths } from '../lib/calc/format';
 import { readingFromRefs, nextForComparator } from '../lib/relatedSims';
 import { DURATION_LIMITS, REGULATED_RATES, VERSEMENT_CAPS } from '../data/versementCaps';
@@ -44,7 +44,9 @@ export default function Compare() {
     'assurance-vie': { r: 0.035, f: 0.006 }, 'etf-monde': { r: 0.06, f: 0.002 },
   });
   const [amount, setAmount] = useState(10000);
-  const [monthly, setMonthly] = useState(200);
+  // Exemple de départ réalisable sur chaque placement proposé par défaut : 28 000 € versés en 15 ans, sous le
+  // plafond cumulé du Livret A et du LDDS (un exemple par défaut ne doit pas afficher d'alerte « Plafond dépassé »).
+  const [monthly, setMonthly] = useState(100);
   const [years, setYears] = useState(15);
   const getH = (id: string) => hyp[id] ?? { r: 0.03, f: 0.005 };
 
@@ -52,6 +54,18 @@ export default function Compare() {
     () => items.map((i) => projectGrowth({ initial: amount, monthly, annualReturn: getH(i.slug).r, annualFees: getH(i.slug).f, years, inflation: 0 })),
     [ids.join(), hyp, amount, monthly, years],
   );
+
+  // Zone grisée du graphique : à partir du premier moment où une courbe suppose des versements impossibles.
+  const impossible = items
+    .map((i) => {
+      const cap = VERSEMENT_CAPS[i.slug]?.cap;
+      const from = impossibleFromYear(amount, monthly, years, cap, DURATION_LIMITS[i.slug]);
+      if (from === null) return null;
+      const capMonth = cap === undefined ? null : monthCapExceeded(amount, monthly, years, cap);
+      return { from, label: capMonth !== null && capMonth / 12 === from ? 'Plafond dépassé' : 'Fin des versements' };
+    })
+    .filter((b): b is { from: number; label: string } => b !== null)
+    .sort((a, b) => a.from - b.from)[0];
 
   const mobile = useIsMobile();
   const [closed, setClosed] = useState<string[]>([]);
@@ -147,6 +161,7 @@ export default function Compare() {
               xLabels={proj[0].map((p) => `An ${p.year}`)}
               format={fmtEur}
               series={items.map((i, k) => ({ name: i.name, color: COLORS[k], values: proj[k].map((p) => p.value) }))}
+              band={impossible && impossible.from < years ? { from: impossible.from, to: years, label: impossible.label } : undefined}
             />
           </div>
           <div className="takeaway cmp-concretement">
@@ -169,7 +184,7 @@ export default function Compare() {
               <p key={i.slug} className="notice cmp-cap">
                 <strong>Plafond dépassé : {i.name}.</strong> On ne peut pas y verser plus de <span className="num">{fmtEur(c.cap)}</span>
                 {c.detail ? ` (${c.detail})` : ''}. Vos versements le dépassent {month === 0 ? 'dès le départ' : month === 1 ? 'dès le premier versement mensuel' : <>au bout de {fmtMonths(month)}</>} :
-                au-delà, sa courbe suppose des versements impossibles.
+                au-delà (zone grisée du graphique), sa courbe suppose des versements impossibles.
               </p>
             );
           })}
@@ -180,7 +195,7 @@ export default function Compare() {
             return (
               <p key={i.slug} className="notice cmp-cap">
                 <strong>Durée dépassée : {i.name}.</strong>
-                {over.deposits && <> On ne peut plus y verser après {d.depositYears}&nbsp;ans : au-delà, sa courbe suppose des versements impossibles.</>}
+                {over.deposits && <> On ne peut plus y verser après {d.depositYears}&nbsp;ans : au-delà (zone grisée du graphique), sa courbe suppose des versements impossibles.</>}
                 {over.contract && <> Après {d.contractYears}&nbsp;ans, {d.afterContract} : la courbe garde un taux qui n’est plus garanti.</>}
               </p>
             );
