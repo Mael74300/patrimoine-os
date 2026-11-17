@@ -119,3 +119,29 @@ export interface ListedPropertyYear { afterDrop: number; dividends: number }
 export function listedPropertyYear(amount: number, dropPct: number, yieldPct: number): ListedPropertyYear {
   return { afterDrop: Math.round(amount * (1 - dropPct / 100)), dividends: Math.round((amount * yieldPct) / 100) };
 }
+
+export interface Concentration { lines: number; perLine: number; maxLossPct: number }
+
+/**
+ * Actions en direct : un capital `total` réparti à parts égales sur `lines` lignes. Une entreprise défaillante fait perdre
+ * au plus sa ligne (`perLine`), soit `maxLossPct` % du total, arrondi au dixième.
+ */
+export function concentrationLoss(total: number, lines: number): Concentration {
+  const perLine = Math.round(total / lines);
+  return { lines, perLine, maxLossPct: Math.round(1000 / lines) / 10 };
+}
+
+export interface Recovery { afterDrop: number; recoveryPct: number; sameRiseValue: number }
+
+/**
+ * Après une baisse de `dropPct` %, la hausse nécessaire pour revenir au montant de départ (`recoveryPct`, arrondie à
+ * l'unité) et la valeur obtenue si le cours remontait seulement du même pourcentage (`sameRiseValue`).
+ */
+export function recoveryAfterDrop(amount: number, dropPct: number): Recovery {
+  const afterDrop = Math.round(amount * (1 - dropPct / 100));
+  return {
+    afterDrop,
+    recoveryPct: Math.round((amount / afterDrop - 1) * 100),
+    sameRiseValue: Math.round(afterDrop * (1 + dropPct / 100)),
+  };
+}
