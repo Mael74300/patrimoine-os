@@ -1,5 +1,5 @@
 import { fmtEur, fmtPct, HCSF } from '../../lib/finance';
-import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, cashflowParts, endettementParts, leviersEndettement, LEVIERS_EXAMPLE, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, petitsVersementsRows, precautionRows, PRECAUTION_EXAMPLE, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../../lib/illustrationData';
+import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, cashflowParts, endettementParts, leviersEndettement, LEVIERS_EXAMPLE, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, FRAIS_OFFRES, fraisOffresTotals, petitsVersementsRows, precautionRows, PRECAUTION_EXAMPLE, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../../lib/illustrationData';
 import { W, BASE, TOP, BAR_W, pct, wrapLabel } from './outils';
 
 /** Schéma « boule de neige » : même capital, mêmes 5 %, intérêts simples ou réinvestis. Les hauteurs sont proportionnelles aux montants.
@@ -818,8 +818,51 @@ export function SchemaFrais() {
         })}
         <text x={X0} y="244" className="ill-sub">{`Pointillés : ce que les frais retirent.`}</text>
       </svg>
+      <figcaption className="fig-short">
+        <strong>Illustration, exemple fictif</strong> : sans versement ni impôt. Barres proportionnelles aux montants.
+      </figcaption>
+    </figure>
+  );
+}
+
+/** Schéma « additionner les frais » (guide « Comparer les frais ») : pour chaque offre fictive, les frais annuels de l'enveloppe
+ * et du support s'additionnent en un coût total par an ; ces deux totaux sont ceux de l'exemple sur 25 ans (SchemaFrais).
+ * ViewBox 340 : lisible à 375 px. En bleu, comme dans le schéma des familles de frais : des frais prélevés chaque année. */
+export function SchemaAdditionFrais() {
+  const totals = fraisOffresTotals();
+  const pct = (v: number) => `${(v * 100).toLocaleString('fr-FR', { maximumFractionDigits: 2 })}\u00a0%`;
+  const chip = (x: number, y: number, label: string, value: string) => (
+    <g>
+      <rect x={x} y={y} width={92} height={48} rx={10} fill="var(--surface-2)" stroke="var(--primary)" strokeWidth={1.5} />
+      <text x={x + 46} y={y + 19} textAnchor="middle" className="ill-in ill-fee">{label}</text>
+      <text x={x + 46} y={y + 38} textAnchor="middle" className="ill-total">{value}</text>
+    </g>
+  );
+  const sign = (x: number, y: number, c: string) => <text x={x} y={y + 31} textAnchor="middle" className="ill-total ill-sign">{c}</text>;
+  const alt = FRAIS_OFFRES.map((o, i) => `${o.name} : ${o.parts.map((p) => `${p.label.toLowerCase()} ${pct(p.rate)}`).join(' + ')} = ${pct(totals[i])} par an`).join(' ; ');
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 172" role="img" aria-labelledby="ill-af-t ill-af-d" className="ill-svg">
+        <title id="ill-af-t">Additionner les frais annuels pour comparer deux offres</title>
+        <desc id="ill-af-d">{`Exemple fictif. ${alt}. Ce sont les deux totaux de l’exemple sur 25 ans.`}</desc>
+        {FRAIS_OFFRES.map((o, i) => {
+          const y = 24 + i * 88;
+          return (
+            <g key={o.name}>
+              <text x={6} y={y - 8} className="ill-step">{o.name}</text>
+              {chip(6, y, o.parts[0].label, pct(o.parts[0].rate))}
+              {sign(111, y, '+')}
+              {chip(124, y, o.parts[1].label, pct(o.parts[1].rate))}
+              {sign(229, y, '=')}
+              <rect x={242} y={y} width={92} height={48} rx={10} fill="var(--primary)" />
+              <text x={288} y={y + 19} textAnchor="middle" className="ill-in ill-on-dark">Total par an</text>
+              <text x={288} y={y + 38} textAnchor="middle" className="ill-total ill-on-dark">{pct(totals[i])}</text>
+            </g>
+          );
+        })}
+      </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : {fmtEur(initial)} placés {years} ans à {pct(annualReturn)} brut supposé, sans versement ni impôt. Barres proportionnelles aux montants.
+        <strong>Exemple fictif</strong>, taux choisis pour l’illustration ; le courtage, payé à chaque ordre, est ramené à un pourcentage par an.
       </figcaption>
     </figure>
   );

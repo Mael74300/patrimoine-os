@@ -231,7 +231,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Comment comparer les frais d’investissement',
     summary: 'Les différents frais, comment les additionner et pourquoi un écart d’un point pèse lourd sur 25 ans.',
     readingMinutes: 3,
-    updatedOn: '2026-10-10',
+    updatedOn: '2026-11-17',
     sections: [
       {
         heading: 'Les familles de frais',
@@ -243,21 +243,20 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       {
         heading: 'Additionner pour comparer',
         body: [
-          'Pour une assurance-vie investie en fonds : frais de gestion du contrat + frais courants du fonds. Pour un PEA : frais courants de l’ETF, plus les frais de courtage rapportés à vos montants investis chaque année.',
-          'Comparez toujours le coût total annuel, en pourcentage, à montant et durée identiques.',
+          'Pour une assurance-vie investie en fonds : frais de gestion du contrat + frais courants du fonds. Pour un PEA : frais courants de l’ETF, plus les frais de courtage rapportés à vos montants investis chaque année. Comparez toujours le coût total annuel, en pourcentage, à montant et durée identiques.',
         ],
       },
       {
         heading: 'L’effet sur le long terme',
         body: [
-          'Exemple fictif : 10 000 € placés 25 ans avec un rendement brut supposé de 6 % deviennent environ 40 800 € avec 0,2 % de frais annuels, mais environ 29 400 € avec 1,5 %. L’écart dépasse le montant investi au départ.',
+          'Exemple fictif : avec les deux offres ci-dessus, 10 000 € placés 25 ans à un rendement brut supposé de 6 % deviennent environ 40 800 € avec 0,2 % de frais annuels, mais environ 29 400 € avec 1,5 %. L’écart dépasse le montant investi au départ.',
           'Des frais élevés peuvent se justifier par un service réel, comme une gestion conseillée. Ils doivent alors être connus et acceptés.',
         ],
       },
     ],
     related: ['etf-monde', 'unites-de-compte', 'assurance-vie'],
     sources: [AMF, IFP],
-    cta: { to: '/comparateur', label: 'Comparer des placements' },
+    cta: { to: '/simulateurs/frais', label: 'Calculer l’effet de mes frais' },
   },
   {
     slug: 'epargne-limitee',

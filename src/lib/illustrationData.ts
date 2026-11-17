@@ -237,6 +237,18 @@ export function epargneMoisRows() {
 /** Schéma « effet des frais » : 10 000 € placés 25 ans à 6 % brut supposé, trois niveaux de frais annuels (exemple fictif, mêmes chiffres que le guide). */
 export const FRAIS_EXAMPLE = { initial: 10000, annualReturn: 0.06, years: 25, levels: [0, 0.002, 0.015] as const };
 
+/** Schéma « additionner les frais » (guide « Comparer les frais ») : deux offres fictives dont les frais annuels s'additionnent
+ * pour donner les deux totaux de l'exemple sur 25 ans (0,2 % et 1,5 %). Taux choisis pour l'illustration, pas des taux de marché. */
+export const FRAIS_OFFRES = [
+  { name: 'Offre 1 : assurance-vie, un fonds', parts: [{ label: 'Contrat', rate: 0.007 }, { label: 'Fonds', rate: 0.008 }] },
+  { name: 'Offre 2 : PEA, un ETF', parts: [{ label: 'ETF', rate: 0.0015 }, { label: 'Courtage', rate: 0.0005 }] },
+] as const;
+
+/** Total annuel de chaque offre, arrondi au centième de point pour éviter les restes de virgule flottante. */
+export function fraisOffresTotals() {
+  return FRAIS_OFFRES.map((o) => Math.round(o.parts.reduce((t, p) => t + p.rate, 0) * 10000) / 10000);
+}
+
 /** Montants arrondis à 100 € (le guide dit « environ »). */
 export function fraisRows() {
   const { initial, annualReturn, years, levels } = FRAIS_EXAMPLE;

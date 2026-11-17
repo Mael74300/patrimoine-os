@@ -13,7 +13,7 @@ import { ENVELOPE_CARDS, EnvelopeCards } from '../components/EnvelopeCards';
 import { LivretsTable } from '../components/LivretsTable';
 import { RiskMap } from '../components/RiskMap';
 import { GuideGroupIcon } from '../components/Icons';
-import { SchemaEnveloppe, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaLeviers, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaFamillesFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz, SchemaCashflow } from '../components/schemas/guides';
+import { SchemaEnveloppe, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaLeviers, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaFamillesFrais, SchemaAdditionFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz, SchemaCashflow } from '../components/schemas/guides';
 import { SchemaPea, SchemaQuinzaines, SchemaLevier } from '../components/schemas/communs';
 import { annotateJargon, splitLead, type JargonSegment } from '../lib/jargon';
 import { JargonText } from '../components/Jargon';
@@ -131,6 +131,7 @@ export function GuidePage() {
                 {g.slug === 'investir-a-credit' && s.heading === 'Un exemple fictif' && k === 1 && <SchemaLevier brief />}
                 {g.slug === 'combien-epargne-de-precaution' && s.heading === 'Où placer cette réserve' && k === 0 && <LivretsTable />}
                 {g.slug === 'comparer-les-frais' && s.heading === 'Les familles de frais' && k === 0 && <SchemaFamillesFrais />}
+                {g.slug === 'comparer-les-frais' && s.heading === 'Additionner pour comparer' && k === 0 && <SchemaAdditionFrais />}
               </Fragment>
             ))}
             {g.slug === 'taux-endettement-capacite-emprunt' && s.heading === 'Le repère de 35 %' && <SchemaEndettement />}
