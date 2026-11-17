@@ -61,3 +61,16 @@ describe('Retraits réguliers : courbe du capital', () => {
     expect(s[25]).toBeCloseTo(withdrawal(i).remaining, 6);
   });
 });
+
+describe('Retraits réguliers : courbe du retrait tenable', () => {
+  it('avec le retrait tenable, le capital dure tout l’horizon et finit presque à 0', () => {
+    const i = { capital: 200000, monthly: 1000, annualReturn: 0.03, indexation: 0.02, years: 25 };
+    const r = withdrawal(i);
+    const s = withdrawalSeries({ ...i, monthly: r.sustainable });
+    expect(s).toHaveLength(26);
+    expect(s.slice(0, 25).every((v) => v > 0)).toBe(true);
+    expect(s[25]).toBeGreaterThanOrEqual(0);
+    expect(s[25]).toBeLessThan(1);
+    expect(withdrawal({ ...i, monthly: r.sustainable }).monthsUntilEmpty).toBeNull();
+  });
+});

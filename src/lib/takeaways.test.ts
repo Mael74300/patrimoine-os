@@ -6,7 +6,7 @@ import { comparePayoff } from './calc/debtPayoff';
 import { capacityForPayment } from './calc/debtRatio';
 import { prepayment } from './calc/loan';
 import { precautionTarget } from './calc/precaution';
-import { rebalanceTakeaway, portfolioProjectionNote, businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, budgetGapPhrase, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, capacityTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionPlacementTakeaway, precautionTargetSub, prepayTakeaway, prepaySummary, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { rebalanceTakeaway, portfolioProjectionNote, businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, budgetGapPhrase, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, capacityTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionPlacementTakeaway, precautionTargetSub, prepayTakeaway, prepaySummary, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalChartNote, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -111,6 +111,19 @@ describe('phrases « Concrètement »', () => {
     expect(fireTakeaway({ gap: 30000, withdrawalRate: 0.035, target, currentWealth: 0, annualSavings: 0, years: null }).replace(/\u00a0/g, ' ')).toContain('100 ans');
     expect(fireTakeaway({ gap: 0, withdrawalRate: 0.035, target: 0, currentWealth: 0, annualSavings: 0, years: 0 })).toContain('aucun capital');
     expect(fireTakeaway({ gap: 30000, withdrawalRate: 0, target: Infinity, currentWealth: 0, annualSavings: 0, years: null })).toBe('');
+  });
+  it('retraits : légende du graphique à deux courbes issue du calcul', () => {
+    const base = { capital: 200000, monthly: 1000, annualReturn: 0.03, indexation: 0.02, years: 25 };
+    const ko = withdrawal(base);
+    const t = withdrawalChartNote({ monthly: 1000, years: 25, ...ko });
+    expect(t).toContain('25\u00a0ans');
+    expect(t).toContain(fmtEur(ko.sustainable));
+    expect(t).toContain('Pointillés');
+    const ok = withdrawal({ ...base, monthly: 500 });
+    const t2 = withdrawalChartNote({ monthly: 500, years: 25, ...ok });
+    expect(t2).toContain('pourrait monter');
+    expect(withdrawalChartNote({ monthly: ko.sustainable, years: 25, ...ko })).toBe('');
+    expect(withdrawalChartNote({ monthly: 0, years: 25, ...ko })).toBe('');
   });
   it('retraits : durée, capital restant et retrait tenable issus du calcul', () => {
     const base = { capital: 200000, monthly: 1000, annualReturn: 0.03, indexation: 0.02, years: 25 };
