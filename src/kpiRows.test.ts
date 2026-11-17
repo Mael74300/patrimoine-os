@@ -77,3 +77,17 @@ describe('cartes de résultat : rangées équilibrées', () => {
     expect(css).toMatch(/\.kpis \{ display: flex; flex-wrap: wrap; gap: 12px;/);
   });
 });
+
+describe('cartes de résultat sur téléphone (2026-11-17)', () => {
+  const mobile = /@media \(max-width: 479px\) \{\s*\.kpis \{ display: grid; grid-template-columns: minmax\(0, 1fr\);[^}]*\}\s*\.kpis > \.kpi \{ display: grid; grid-template-columns: minmax\(0, 1fr\) auto;/;
+  it('une ligne « libellé … montant » par résultat, pour tous les simulateurs', () => {
+    expect(css).toMatch(mobile);
+  });
+  it('le trait de couleur des résultats positifs et négatifs suit la carte', () => {
+    expect(css).toContain('.kpis > .kpi.pos { border-left-color: var(--accent); }');
+    expect(css).toContain('.kpis > .kpi.neg { border-left-color: var(--danger); }');
+  });
+  it('plus de règle propre au calculateur de patrimoine net', () => {
+    expect(css).not.toMatch(/\.nw-kpis > \.kpi \{/);
+  });
+});

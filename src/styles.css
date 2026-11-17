@@ -620,6 +620,17 @@ h2::before { content: ''; display: block; width: 36px; height: 4px; border-radiu
 .kpi.pos { border-top-color: var(--accent); }
 .kpi.neg { border-top-color: var(--danger); }
 .kpi .k-value { color: var(--primary-deep); }
+/* Téléphone : chaque résultat sur une ligne « libellé … montant », le trait de couleur passe à gauche.
+   Deux cartes côte à côte de 160 px coupaient les libellés sur trois ou quatre lignes. */
+@media (max-width: 479px) {
+  .kpis { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .kpis > .kpi { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 12px; row-gap: 2px; padding: 10px 14px; border-top-width: 1px; border-top-color: var(--line); border-left: 4px solid var(--primary); }
+  .kpis > .kpi.pos { border-left-color: var(--accent); }
+  .kpis > .kpi.neg { border-left-color: var(--danger); }
+  .kpis .k-label { font-size: 0.9rem; line-height: 1.35; color: var(--ink-2); }
+  .kpis .k-value { font-size: 1.25rem; line-height: 1.2; text-align: right; }
+  .kpis .k-sub { grid-column: 1 / -1; font-size: 0.82rem; line-height: 1.4; }
+}
 
 input[type='text'], input[type='number'], input[type='search'], select { border: 1.5px solid #c5d2e4; border-radius: 10px; padding: 10px 12px; color: var(--primary); transition: border-color .15s, box-shadow .15s; }
 input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(23, 53, 138, 0.14); outline: none; }
@@ -1191,12 +1202,7 @@ h2.gloss-letter::before { content: none; }
 @media (max-width: 479px) {
   .nw-row { grid-template-columns: minmax(0, 1fr) 40px; row-gap: 6px; margin-bottom: 14px; }
   .nw-row > .nw-label { grid-column: 1 / -1; }
-  /* Résultats en trois lignes « libellé … montant » : moins haut que trois cartes empilées */
-  .nw-kpis { gap: 8px; }
-  .nw-kpis > .kpi { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 12px; padding: 10px 14px; }
-  .nw-kpis .k-label { font-size: 0.9rem; color: var(--ink-2); }
-  .nw-kpis .k-value { font-size: 1.2rem; }
-  .nw-kpis .k-sub { grid-column: 1 / -1; }
+  /* Résultats en lignes « libellé … montant » : style commun des .kpis sur téléphone */
   .nw-hint { margin-bottom: 10px; }
 }
 
