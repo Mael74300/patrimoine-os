@@ -1,6 +1,10 @@
 /** Schéma « séparer l’entreprise et le patrimoine » : une partie des bénéfices part vers une épargne personnelle diversifiée. Aucun chiffre ; reprend le texte de la page Entrepreneuriat.
  * ViewBox 340 (2026-11-15) : textes à 12 px et plus à 375 px (contre ~11 px avec l'ancien viewBox 420). */
-export function SchemaSeparer() {
+import type { ReactNode } from 'react';
+
+/** `children` (facultatif) : texte de la page placé en légende. Sur grand écran, il se range à droite du dessin
+ * (même présentation que les légendes des schémas des guides) au lieu de laisser un cadre pleine largeur presque vide. */
+export function SchemaSeparer({ children }: { children?: ReactNode } = {}) {
   const savings = ['Livrets', 'PEA', 'Assurance-vie'];
   return (
     <figure className="illustration">
@@ -23,6 +27,7 @@ export function SchemaSeparer() {
         <text x={170} y={234} textAnchor="middle" className="ill-sub">diversifiée, hors de la société</text>
         <text x={170} y={282} textAnchor="middle" className="ill-sub">Moins de dépendance à une seule activité</text>
       </svg>
+      {children && <figcaption className="fig-text">{children}</figcaption>}
     </figure>
   );
 }

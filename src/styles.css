@@ -384,6 +384,9 @@ td.neg { color: var(--danger); }
 .illustration figcaption > p:first-child { margin-top: 0; }
 .illustration figcaption > ul { margin: 6px 0 0; padding-left: 1.2em; }
 .illustration figcaption > ul > li + li { margin-top: 4px; }
+/* Légende qui porte le texte même de la page (page Entrepreneuriat) : taille et couleur du corps de texte, pas d'une note. */
+.illustration figcaption.fig-text { font-size: 1rem; color: var(--ink); max-width: 44rem; }
+.illustration figcaption.fig-text > p:last-child { margin-bottom: 0; }
 .ill-svg { display: block; width: 100%; max-width: 440px; height: auto; margin: 0 auto; }
 .ill-svg text { font-family: var(--font-schema); fill: var(--ink); }
 .ill-total { font-size: 14px; font-weight: 700; }
