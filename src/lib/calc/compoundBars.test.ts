@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { compoundRow, compoundScale, compoundSplit, delayRows, dureeRow, placerRow, rendementRow, simpleCompoundRows, stepUpRows } from './compoundBars';
+import { compoundRow, compoundScale, compoundSplit, delayRows, doublerSteps, dureeRow, placerRow, rendementRow, simpleCompoundRows, stepUpRows } from './compoundBars';
+import { doubling } from './doubling';
 import { presentValue } from './presentValue';
 import { timeToTarget } from './timeToTarget';
 import { requiredReturn, futureValue } from './requiredReturn';
@@ -89,5 +90,37 @@ describe('compoundBars', () => {
     const row = compoundRow(NaN, NaN, NaN);
     expect(compoundScale([row])).toBe(0);
     expect(sum(compoundSplit(row, 0))).toBe(0);
+  });
+});
+
+// Exemples fictifs.
+describe('Barres de l’onglet Doubler son capital', () => {
+  it('doubler 10 000 € à 6 % : trois paliers de même durée, gain qui double à chaque palier', () => {
+    const r = doubling({ initial: 10000, annualReturn: 0.06, inflation: 0.02, multiple: 2 });
+    const steps = doublerSteps(r, 10000)!;
+    expect(steps.map((s) => Math.round(s.row.final))).toEqual([10000, 20000, 40000, 80000]);
+    expect(steps.map((s) => Math.round(s.stepGain))).toEqual([0, 10000, 20000, 40000]);
+    expect(steps[1].years).toBeCloseTo(r.exactYears as number, 12);
+    expect(steps[3].years).toBeCloseTo(3 * (r.exactYears as number), 12);
+    // Le capital placé à 6 % pendant la durée du palier vaut bien la valeur affichée.
+    expect(10000 * Math.pow(1.06, steps[2].years)).toBeCloseTo(40000, 6);
+    // Chaque barre : capital de départ + intérêts accumulés.
+    expect(steps[3].row.start).toBe(10000);
+    expect(steps[3].row.interest).toBeCloseTo(70000, 9);
+  });
+
+  it('grand multiple ou longue durée : paliers limités, jamais moins du premier', () => {
+    expect(doublerSteps(doubling({ initial: 1000, annualReturn: 0.05, inflation: 0, multiple: 4 }), 1000)!.length).toBe(3);
+    expect(doublerSteps(doubling({ initial: 1000, annualReturn: 0.05, inflation: 0, multiple: 10 }), 1000)!.length).toBe(2);
+    const slow = doublerSteps(doubling({ initial: 1000, annualReturn: 0.01, inflation: 0, multiple: 2 }), 1000)!;
+    expect(slow.length).toBe(2); // 69,7 ans, puis 139 ans : au-delà de 100 ans
+    expect(slow.every((s) => s.years <= 100)).toBe(true);
+  });
+
+  it('rendement nul ou négatif, capital nul ou multiple 1 : pas de barres', () => {
+    expect(doublerSteps(doubling({ initial: 1000, annualReturn: 0, inflation: 0, multiple: 2 }), 1000)).toBeNull();
+    expect(doublerSteps(doubling({ initial: 1000, annualReturn: -0.03, inflation: 0, multiple: 2 }), 1000)).toBeNull();
+    expect(doublerSteps(doubling({ initial: 0, annualReturn: 0.05, inflation: 0, multiple: 2 }), 0)).toBeNull();
+    expect(doublerSteps(doubling({ initial: 1000, annualReturn: 0.05, inflation: 0, multiple: 1 }), 1000)).toBeNull();
   });
 });

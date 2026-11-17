@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, fmtAns, fmtEur, fmtMonths, fmtNum, fmtPct, fmtPts } from '../lib/finance';
-import { compoundScale, compoundSplit, delayRows, dureeRow, placerRow, rendementRow, simpleCompoundRows, stepUpRows, type CompoundBarRow } from '../lib/finance';
+import { compoundScale, compoundSplit, delayRows, doublerSteps, dureeRow, placerRow, rendementRow, simpleCompoundRows, stepUpRows, type CompoundBarRow } from '../lib/finance';
 import { delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway } from '../lib/takeaways';
 import { interetsComposesFaq } from '../data/simFaq';
 import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, ChoiceField, Takeaway, usePersistentState, JumpToResults, SimNotice, Tabs, Fold } from '../components/ui';
@@ -35,7 +35,7 @@ function Layout({ form, children, reset }: { form: ReactNode; children: ReactNod
   );
 }
 
-type BarLine = { name: string; row: CompoundBarRow };
+type BarLine = { name: string; row: CompoundBarRow; /** Texte sous la barre à la place du détail des montants. */ sub?: string };
 type PartKey = 'start' | 'deposits' | 'interest' | 'extra';
 type BarLabels = Partial<Record<PartKey, string>>;
 const LONG: Record<PartKey, string> = { start: 'Capital de départ', deposits: 'Versements', interest: 'Intérêts', extra: 'Intérêts des intérêts' };
@@ -78,7 +78,7 @@ function CapitalBars({ title, lines, labels = {}, short = {} }: { title: string;
                   {KEYS.map((k) => b[k] > 0 && <span key={k} className={CLS[k]} style={{ width: `${b[k]}%` }} />)}
                   {b.lost > 0 && <span className="fb-lost" style={{ width: `${b.lost}%` }} />}
                 </div>
-                {!single && <p className="fb-sub">{parts(l.row, (k) => short[k] ?? SHORT[k]).join(' · ')}</p>}
+                {!single && <p className="fb-sub">{l.sub ?? parts(l.row, (k) => short[k] ?? SHORT[k]).join(' · ')}</p>}
               </li>
             );
           })}
@@ -214,6 +214,7 @@ const DOUBLER: DoublerState = { initial: 10000, annualReturn: 6, inflation: 2, m
 function Doubler() {
   const [s, setS, up] = usePersistentState<DoublerState>('doubler', DOUBLER);
   const r = doubling({ initial: s.initial, annualReturn: s.annualReturn / 100, inflation: s.inflation / 100, multiple: s.multiple });
+  const steps = doublerSteps(r, s.initial);
   return (
     <Layout
       reset={() => setS(DOUBLER)}
@@ -239,9 +240,20 @@ function Doubler() {
         <Kpi label="Durée en pouvoir d’achat" value={years(r.realYears)} sub="pour multiplier la valeur réelle du capital" />
       </div>
       <Takeaway>{doublingTakeaway({ multiple: s.multiple, exactYears: r.exactYears, realYears: r.realYears, realReturn: r.realReturn })}</Takeaway>
+      {steps && r.exactYears !== null && (
+        <CapitalBars
+          title="Le capital, palier après palier"
+          lines={steps.slice(1).map((st) => ({
+            name: `Après ${fmtAns(st.years)}`,
+            row: st.row,
+            sub: `+${fmtEur(st.stepGain)} en ${fmtAns(r.exactYears as number)}${st.step > 1 ? ' de plus' : ''}`,
+          }))}
+          labels={{ interest: 'Intérêts accumulés' }}
+        />
+      )}
       <p className="muted small">
-        La durée exacte est calculée sans approximation (détail sur la page <Link to="/methodologie">Méthode</Link>). La règle de 72 divise 72 par le rendement en % : c’est une approximation de tête, proche du résultat pour des rendements de quelques pour cent, moins précise aux taux très faibles ou très élevés.
-        Si le rendement n’est pas positif, le capital n’atteint jamais le multiple. Les exemples ci-dessus sont fictifs.
+        {steps ? 'Chaque palier dure le même temps mais rapporte plus que le précédent : les intérêts déjà gagnés rapportent à leur tour (sans versement, avant inflation). ' : 'Si le rendement n’est pas positif, le capital n’atteint jamais le multiple. '}
+        La règle de 72 (72 divisé par le rendement en %) est une approximation de tête, moins précise aux taux très faibles ou très élevés ; calcul exact sur la page <Link to="/methodologie">Méthode</Link>. Exemples fictifs.
       </p>
       <SavedSims simKey="doubler" current={s} onLoad={(d) => setS({ ...DOUBLER, ...d })} />
     </Layout>

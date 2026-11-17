@@ -6,6 +6,7 @@ import type { RequiredReturnResult } from './requiredReturn';
 import type { SimpleVsCompoundResult } from './simpleVsCompound';
 import type { DelayResult } from './delay';
 import type { StepUpResult } from './stepUp';
+import type { DoublingResult } from './doubling';
 
 /**
  * Barres « d'où vient le capital » du simulateur Intérêts composés : capital de départ, versements, intérêts,
@@ -96,4 +97,34 @@ export function delayRows(r: DelayResult): { now: CompoundBarRow; later: Compoun
 /** Onglet « Épargne qui augmente » : versement constant ou qui augmente. */
 export function stepUpRows(r: StepUpResult): { flat: CompoundBarRow; stepped: CompoundBarRow } {
   return { flat: compoundRow(0, r.flatInvested, r.flatCapital - r.flatInvested), stepped: compoundRow(0, r.steppedInvested, r.steppedCapital - r.steppedInvested) };
+}
+
+export type DoublerStep = {
+  /** Rang du palier : 0 = aujourd'hui, 1 = premier multiple atteint, etc. */
+  step: number;
+  /** Années écoulées depuis le départ (rang × durée exacte d'un palier). */
+  years: number;
+  /** Gain du seul palier (capital du palier − capital du palier précédent). */
+  stepGain: number;
+  row: CompoundBarRow;
+};
+
+/**
+ * Onglet « Doubler son capital » : le capital palier après palier (aujourd'hui, puis chaque fois que le multiple est
+ * atteint). Chaque palier dure la même durée exacte, mais rapporte plus que le précédent. Sans versement, en euros
+ * courants. Au plus trois paliers, tant que le dernier ne dépasse pas 30 fois le départ (barre du départ lisible)
+ * et 100 ans ; toujours au moins le premier. Null si le capital ou le rendement ne permettent pas d'atteindre le multiple.
+ */
+export function doublerSteps(r: DoublingResult, initial: number): DoublerStep[] | null {
+  const start = pos(initial);
+  if (!(start > 0) || r.exactYears === null || !(r.multiple > 1)) return null;
+  const steps: DoublerStep[] = [{ step: 0, years: 0, stepGain: 0, row: compoundRow(start, 0, 0) }];
+  for (let k = 1; k <= 3; k++) {
+    const factor = Math.pow(r.multiple, k);
+    const years = k * r.exactYears;
+    if (k > 1 && (factor > 30 || years > 100)) break;
+    const value = start * factor;
+    steps.push({ step: k, years, stepGain: value - steps[k - 1].row.final, row: compoundRow(start, 0, value - start) });
+  }
+  return steps;
 }
