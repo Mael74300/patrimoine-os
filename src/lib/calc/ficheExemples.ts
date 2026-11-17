@@ -1,4 +1,5 @@
 import { loanPayment } from './loan';
+import { projectGrowth } from './growth';
 
 /**
  * Calculs des exemples fictifs des fiches Financement participatif et SCPI.
@@ -144,4 +145,34 @@ export function recoveryAfterDrop(amount: number, dropPct: number): Recovery {
     recoveryPct: Math.round((amount / afterDrop - 1) * 100),
     sameRiseValue: Math.round(afterDrop * (1 + dropPct / 100)),
   };
+}
+
+export interface TrainingPayoff { paybackMonths: number; saved: { years: number; contributed: number; value: number }[] }
+
+/**
+ * Formation et compétences : une formation payée `cost` € qui procure une hausse de salaire de `monthlyRaise` € nets par
+ * mois. `paybackMonths` = mois de hausse nécessaires pour couvrir la dépense ; `saved` = valeur de la hausse épargnée chaque
+ * mois à `ratePct` % par an pendant chacune des `horizons` (même moteur que le simulateur de patrimoine, taux mensuel
+ * équivalent), arrondie à 500 €. Avant impôt.
+ */
+export function trainingPayoff(cost: number, monthlyRaise: number, ratePct: number, horizons: number[]): TrainingPayoff {
+  return {
+    paybackMonths: Math.ceil(cost / monthlyRaise),
+    saved: horizons.map((years) => {
+      const last = projectGrowth({ initial: 0, monthly: monthlyRaise, annualReturn: ratePct / 100, annualFees: 0, years, inflation: 0 }).at(-1)!;
+      return { years, contributed: Math.round(last.contributed), value: Math.round(last.value / 500) * 500 };
+    }),
+  };
+}
+
+export interface SubscriptionChurn { revenue: number; lostFirstMonth: number; clientsLeft: number; revenueLeft: number }
+
+/**
+ * Activité numérique par abonnement : `clients` abonnés à `price` € par mois, dont `churnPct` % résilient chaque mois, sans
+ * nouveau client. `lostFirstMonth` = départs du premier mois (autant de nouveaux clients à trouver pour rester au même
+ * niveau au départ) ; `clientsLeft` et `revenueLeft` après `months` mois, arrondis à l'unité.
+ */
+export function subscriptionChurn(clients: number, price: number, churnPct: number, months: number): SubscriptionChurn {
+  const clientsLeft = Math.round(clients * Math.pow(1 - churnPct / 100, months));
+  return { revenue: clients * price, lostFirstMonth: Math.round((clients * churnPct) / 100), clientsLeft, revenueLeft: clientsLeft * price };
 }

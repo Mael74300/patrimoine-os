@@ -47,10 +47,6 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
     const v = projectGrowth({ initial: 0, monthly: 200, annualReturn: 0.06, annualFees: 0, years: 20, inflation: 0 }).at(-1)!.value;
     expect(Math.abs(v - 92000)).toBeLessThan(1500);
   });
-  it('Capital humain : 200 €/mois, 20 ans, 5 % ≈ 82 000 €', () => {
-    const v = projectGrowth({ initial: 0, monthly: 200, annualReturn: 0.05, annualFees: 0, years: 20, inflation: 0 }).at(-1)!.value;
-    expect(Math.abs(v - 82000)).toBeLessThan(1500);
-  });
   it('Fonds euros : 20 000 € à 2,5 % sur 5 ans ≈ 22 630 €', () => {
     expect(20000 * Math.pow(1.025, 5)).toBeCloseTo(22628, -1);
   });

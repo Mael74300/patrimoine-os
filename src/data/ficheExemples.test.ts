@@ -2,7 +2,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { investmentBySlug } from './investments';
-import { bondCoupons, concentrationLoss, crowdfundingScenario, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, yearlySavingsValue } from '../lib/calc/ficheExemples';
+import { bondCoupons, concentrationLoss, crowdfundingScenario, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, subscriptionChurn, trainingPayoff, yearlySavingsValue } from '../lib/calc/ficheExemples';
 import { amortize } from '../lib/calc/loan';
 import { CROWDFUNDING_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, leverageBars } from '../lib/illustrationData';
 import { SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaRepriseBilan, SchemaScpiBilan } from '../components/schemas/fiches';
@@ -287,5 +287,41 @@ describe('fiche Cryptomonnaies : remonter après une forte baisse', () => {
     expect(ex).toContain(`il faut ${r.recoveryPct} % de hausse`);
     expect(ex).toContain('baisse de 70 %');
     expect(norm(investmentBySlug['cryptomonnaies']!.howItWorks)).toContain('supérieures à 70 %');
+  });
+});
+
+describe('fiche Formation et compétences : ce qu’une hausse de salaire rapporte', () => {
+  const ex = norm(investmentBySlug['capital-humain']!.example);
+  const r = trainingPayoff(1000, 200, 5, [10, 20]);
+
+  it('montants recalculés avec le moteur du simulateur : 5 mois, 31 000 € en 10 ans, 81 500 € en 20 ans', () => {
+    expect(r).toEqual({ paybackMonths: 5, saved: [{ years: 10, contributed: 24000, value: 31000 }, { years: 20, contributed: 48000, value: 81500 }] });
+  });
+  it('le texte de la fiche cite les mêmes montants, reste marqué fictif et reprend l’hypothèse du suivi', () => {
+    expect(ex).toMatch(/^Exemple fictif/);
+    expect(ex).toContain(`formation à ${eur(1000)}`);
+    expect(ex).toContain(`hausse de salaire de ${eur(200)} nets par mois`);
+    expect(ex).toContain(`remboursée en ${r.paybackMonths} mois`);
+    for (const s of r.saved) {
+      expect(ex).toContain(`${eur(s.value)} en ${s.years} ans (${eur(s.contributed)} versés)`);
+    }
+    expect(ex).toContain('5 % par an');
+    expect(norm(investmentBySlug['capital-humain']!.review.assumptions!.join(' '))).toContain('5 % par an');
+  });
+});
+
+describe('fiche SaaS, e-commerce et produits numériques : un revenu récurrent qui s’use', () => {
+  const ex = norm(investmentBySlug['activite-numerique']!.example);
+  const r = subscriptionChurn(200, 15, 5, 12);
+
+  it('montants recalculés : 3 000 € par mois, 10 départs le premier mois, 108 clients et 1 620 € après un an', () => {
+    expect(r).toEqual({ revenue: 3000, lostFirstMonth: 10, clientsLeft: 108, revenueLeft: 1620 });
+  });
+  it('le texte de la fiche cite les mêmes montants et reste marqué fictif', () => {
+    expect(ex).toMatch(/^Exemple fictif/);
+    expect(ex).toContain(`200 abonnés à ${eur(15)} par mois rapportent ${eur(r.revenue)} par mois`);
+    expect(ex).toContain('Si 5 % résilient chaque mois sans nouveaux venus');
+    expect(ex).toContain(`environ ${r.clientsLeft} au bout d’un an : ${eur(r.revenueLeft)} par mois`);
+    expect(ex).toContain(`demande donc ${r.lostFirstMonth} nouveaux clients chaque mois`);
   });
 });
