@@ -7,6 +7,7 @@ import type { SimpleVsCompoundResult } from './simpleVsCompound';
 import type { DelayResult } from './delay';
 import type { StepUpResult } from './stepUp';
 import type { DoublingResult } from './doubling';
+import type { RateConversionResult } from './rateConversion';
 
 /**
  * Barres « d'où vient le capital » du simulateur Intérêts composés : capital de départ, versements, intérêts,
@@ -127,4 +128,23 @@ export function doublerSteps(r: DoublingResult, initial: number): DoublerStep[] 
     steps.push({ step: k, years, stepGain: value - steps[k - 1].row.final, row: compoundRow(start, 0, value - start) });
   }
   return steps;
+}
+
+/**
+ * Onglet « Taux annuel → mensuel » : les intérêts d'un capital fictif placé un an, période après période, avec le
+ * taux équivalent puis avec le taux proportionnel (taux annuel divisé par le nombre de périodes). Chaque barre est
+ * découpée en intérêts calculés sur le capital seul (taux par période × nombre de périodes × capital) et en intérêts
+ * produits par les intérêts déjà gagnés. Avec le taux équivalent, le total redonne exactement le taux annuel ; avec le
+ * taux proportionnel, il le dépasse. Null si le capital ou le taux ne sont pas positifs.
+ */
+export function tauxRows(r: RateConversionResult, capital: number): { equivalent: CompoundBarRow; proportional: CompoundBarRow } | null {
+  const c = pos(capital);
+  if (!(c > 0) || !(r.equivalentRate > 0) || !(r.periods >= 1)) return null;
+  const annual = Math.pow(1 + r.equivalentRate, r.periods) - 1;
+  const equivalentSimple = c * r.nominalRate;
+  const proportionalSimple = c * r.proportionalRate * r.periods;
+  return {
+    equivalent: compoundRow(0, 0, equivalentSimple, c * annual - equivalentSimple),
+    proportional: compoundRow(0, 0, proportionalSimple, c * r.effectiveFromProportional - proportionalSimple),
+  };
 }
