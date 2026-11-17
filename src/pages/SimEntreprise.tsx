@@ -46,7 +46,7 @@ export default function SimEntreprise() {
     <>
       <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: 'Entreprise' }]} />
       <PageHead eyebrow="Calculateur" title="Calculateur entrepreneurial">
-        Chiffre d'affaires, marge, charges, rémunération, trésorerie et valorisation sur plusieurs années, en trois scénarios.
+        Ventes, charges, rémunération, trésorerie et valeur de l’entreprise sur plusieurs années, en trois scénarios. Quatre réglages suffisent : les autres sont facultatifs.
       </PageHead>
 
       <div style={{ marginBottom: 24 }}>
@@ -67,18 +67,21 @@ export default function SimEntreprise() {
       <div className="sim">
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
-            <legend>Votre activité</legend>
+            <legend>L'essentiel : 4 réglages</legend>
             <NumberField label="Chiffre d'affaires, année 1" unit="€" value={s.revenueY1} onChange={up('revenueY1')} min={0} step={5000} sliderMax={1000000} hint="Le total des ventes prévues la première année." />
-            <NumberField label="Croissance annuelle des ventes" unit="%" percent value={s.revenueGrowth} onChange={up('revenueGrowth')} step={1} min={-50} max={300} sliderMax={50} hint="De combien les ventes augmentent chaque année." />
             <NumberField label="Marge brute" unit="% des ventes" percent value={s.grossMarginRate} onChange={up('grossMarginRate')} step={1} min={0} max={100} sliderMax={100} hint="Ventes moins achats et coûts directs." />
             <NumberField label="Charges fixes annuelles" unit="€" value={s.fixedCosts} onChange={up('fixedCosts')} min={0} step={1000} sliderMax={300000} hint="Loyer, abonnements, assurances… ce que vous payez même sans vente." />
             <NumberField label="Rémunération nette du dirigeant" unit="€/an" value={s.founderPay} onChange={up('founderPay')} min={0} step={1000} sliderMax={120000} />
-            <NumberField label="Trésorerie de départ" unit="€" value={s.initialCash} onChange={up('initialCash')} step={1000} sliderMax={200000} hint="L'argent disponible au lancement." />
           </fieldset>
           <details className="fold advanced">
             <summary>Réglages avancés (facultatif)</summary>
             <div className="advanced-body">
               <p className="small muted">Déjà remplis avec des valeurs d'exemple. Si vous ne savez pas, laissez-les telles quelles.</p>
+              <fieldset>
+                <legend>Croissance et trésorerie de départ</legend>
+                <NumberField label="Croissance annuelle des ventes" unit="%" percent value={s.revenueGrowth} onChange={up('revenueGrowth')} step={1} min={-50} max={300} hint="De combien les ventes augmentent chaque année." />
+                <NumberField label="Trésorerie de départ" unit="€" value={s.initialCash} onChange={up('initialCash')} step={1000} hint="L'argent disponible au lancement." />
+              </fieldset>
               <fieldset>
                 <legend>Charges et impôt</legend>
                 <NumberField label="Évolution des charges fixes" unit="%/an" percent value={s.fixedCostsGrowth} onChange={up('fixedCostsGrowth')} step={0.5} min={-20} max={50} />
