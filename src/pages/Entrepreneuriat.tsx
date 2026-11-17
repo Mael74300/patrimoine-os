@@ -56,13 +56,14 @@ export default function Entrepreneuriat() {
       </p>
 
       <h2>Séparer l'entreprise et le patrimoine</h2>
-      <SchemaSeparer />
-      <div className="prose">
+      <SchemaSeparer>
         <p>
           Un entrepreneur concentre souvent l'essentiel de son patrimoine dans sa société. Constituer en parallèle une épargne personnelle diversifiée
           (livrets, PEA, assurance-vie) réduit la dépendance à une seule activité. Le <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link> permet
           d'estimer ce que représenterait l'investissement régulier d'une partie des bénéfices.
         </p>
+      </SchemaSeparer>
+      <div className="prose">
         <p className="notice small">
           Statuts, plafonds de la micro-entreprise et taux de cotisations changent régulièrement : vérifiez-les sur le site de l'URSSAF et de Bpifrance Création
           avant toute décision.

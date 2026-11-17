@@ -11,4 +11,9 @@ describe('schéma « séparer l’entreprise et le patrimoine »', () => {
     expect(svg).toContain('role="img"');
     expect(svg.length).toBeLessThan(15000);
   });
+  it('place le texte de la page en légende quand il est fourni, et seulement alors', () => {
+    expect(svg).not.toContain('<figcaption');
+    const avec = renderToStaticMarkup(createElement(SchemaSeparer, null, createElement('p', null, 'Texte de la page')));
+    expect(avec).toContain('<figcaption class="fig-text"><p>Texte de la page</p></figcaption>');
+  });
 });
