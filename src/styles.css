@@ -1062,6 +1062,21 @@ h2.gloss-letter::before { content: none; }
 .fb-track .fb-kept + .fb-lost { border-left: 2px solid var(--surface); }
 .fb-sub { margin: 4px 0 0; font-size: .84rem; color: var(--ink-3); font-variant-numeric: tabular-nums; }
 .fb-sub strong { color: var(--danger); font-weight: 600; }
+/* Louer ou acheter : ce que possède chacun (logement à soi, dû à la banque, sommes placées). */
+.ra-owned { background: var(--chart-1); }
+.ra-owed { background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--chart-1) 55%, var(--surface)) 0 4px, color-mix(in srgb, var(--chart-1) 14%, var(--surface)) 4px 7px); }
+.ra-saved { background: var(--chart-3); }
+.ra-start { background: color-mix(in srgb, var(--chart-2) 40%, var(--surface)); }
+.ra-monthly { background: var(--chart-2); }
+.fb-track .ra-owned + .ra-owed, .fb-track .ra-owed + .ra-saved, .fb-track .ra-owned + .ra-saved, .fb-track .ra-start + .ra-monthly { border-left: 2px solid var(--surface); }
+.ra-parts { list-style: none; margin: 6px 0 0; padding: 0; font-size: .86rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.ra-parts li { margin: 2px 0; padding-left: 20px; position: relative; }
+.ra-parts li.ra-total { padding-left: 0; }
+.ra-parts li.ra-total ~ li { margin-left: 4px; }
+.ra-parts i { position: absolute; left: 0; top: .3em; width: 12px; height: 12px; border-radius: 3px; }
+.ra-parts strong { color: var(--ink); font-weight: 600; white-space: nowrap; }
+.fb.ra .fb-row { margin-bottom: 16px; }
+.fb.ra figcaption { margin: 0 0 10px; }
 /* Indépendance financière : combien de temps tient le capital, une barre par rendement sur la même échelle. */
 .hb .fb-row { padding: 6px 10px; margin: 0 -10px 2px; border-radius: 10px; }
 .hb .hb-mine { background: color-mix(in srgb, var(--primary) 6%, var(--surface)); }

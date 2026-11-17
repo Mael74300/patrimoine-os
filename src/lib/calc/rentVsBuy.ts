@@ -37,6 +37,16 @@ export type RentVsBuyResult = {
   advantage: number;
   finalValue: number;
   remainingDebt: number;
+  /** Valeur de revente, frais de revente déduits (finalValue × (1 − frais de revente)). */
+  netSaleValue: number;
+  /** Épargne du propriétaire : mois où il dépense moins que le loyer, différence placée. */
+  buyerSavings: number;
+  /** Part du patrimoine du locataire venant de l'apport et des frais d'achat placés dès le départ (gains compris). */
+  renterFromStart: number;
+  /** Part du patrimoine du locataire venant des économies mensuelles placées (gains compris). */
+  renterFromMonthly: number;
+  /** Dépense du propriétaire le premier mois : mensualité et charges (taxe foncière, entretien). */
+  firstOwnerOutflow: number;
   /** Premier mois où acheter l'emporte durablement jusqu'à l'horizon, ou null. */
   breakEvenMonth: number | null;
   /** Écart annuel (fin d'année 1..n). */
@@ -63,6 +73,8 @@ export function rentVsBuy(input: RentVsBuyInput): RentVsBuyResult {
   let rent = Math.max(0, num(input.monthlyRent));
   let debt = loanAmount;
   let renterPf = down + price * acq;
+  let renterStart = renterPf;
+  let firstOwnerOutflow = 0;
   let buyerPf = 0;
   const wealth = (): [number, number] => [value * (1 - sell) - debt + buyerPf, renterPf];
   const series: RentVsBuyResult['series'] = [];
@@ -72,8 +84,10 @@ export function rentVsBuy(input: RentVsBuyInput): RentVsBuyResult {
     const due = m <= loanYears * 12 && debt > 1e-9 ? Math.min(payment, debt + interest) : 0;
     debt = Math.max(0, debt - (due - interest));
     const buyerOutflow = due + value * ownerRate;
+    if (m === 1) firstOwnerOutflow = buyerOutflow;
     const d = buyerOutflow - rent;
     renterPf *= 1 + rI;
+    renterStart *= 1 + rI;
     buyerPf *= 1 + rI;
     if (d > 0) renterPf += d;
     else buyerPf += -d;
@@ -86,7 +100,10 @@ export function rentVsBuy(input: RentVsBuyInput): RentVsBuyResult {
   const [buyerWealth, renterWealth] = wealth();
   let breakEvenMonth: number | null = null;
   for (let i = diffs.length - 1; i >= 0 && diffs[i] > 0; i--) breakEvenMonth = i + 1;
-  return { months, loanAmount, monthlyPayment: payment, buyerWealth, renterWealth, advantage: buyerWealth - renterWealth, finalValue: value, remainingDebt: debt, breakEvenMonth, series };
+  return {
+    months, loanAmount, monthlyPayment: payment, buyerWealth, renterWealth, advantage: buyerWealth - renterWealth, finalValue: value, remainingDebt: debt,
+    netSaleValue: value * (1 - sell), buyerSavings: buyerPf, renterFromStart: renterStart, renterFromMonthly: renterPf - renterStart, firstOwnerOutflow, breakEvenMonth, series,
+  };
 }
 
 /** Écart (acheter − louer) pour plusieurs hypothèses de hausse annuelle du prix du bien. */
@@ -132,4 +149,26 @@ export function advantageBars(advantages: number[]): { side: 'buy' | 'rent' | 't
     if (!Number.isFinite(a) || Math.round(a) === 0 || max === 0) return { side: 'tie' as const, pct: 0 };
     return { side: a > 0 ? ('buy' as const) : ('rent' as const), pct: Math.max(2, (Math.abs(a) / max) * 100) };
   });
+}
+
+/**
+ * Barres « ce que possède chacun » à l'horizon, en % d'une même échelle (la plus longue des deux barres = 100 %).
+ * Propriétaire : logement revendu (frais déduits) découpé en part à lui et part encore due à la banque, plus son
+ * épargne éventuelle. Locataire : mise de départ placée, puis économies mensuelles placées.
+ * Si le prêt restant dépasse la valeur de revente, toute la barre du logement est due à la banque.
+ */
+export function wealthBars(r: Pick<RentVsBuyResult, 'netSaleValue' | 'remainingDebt' | 'buyerSavings' | 'renterFromStart' | 'renterFromMonthly'>): {
+  owned: number; owed: number; savings: number; start: number; monthly: number;
+} {
+  const pos = (x: number) => (Number.isFinite(x) ? Math.max(0, x) : 0);
+  const sale = pos(r.netSaleValue);
+  const owed = Math.min(sale, pos(r.remainingDebt));
+  const owned = sale - owed;
+  const savings = pos(r.buyerSavings);
+  const start = pos(r.renterFromStart);
+  const monthly = pos(r.renterFromMonthly);
+  const max = Math.max(sale + savings, start + monthly);
+  if (!(max > 0)) return { owned: 0, owed: 0, savings: 0, start: 0, monthly: 0 };
+  const pct = (x: number) => (x / max) * 100;
+  return { owned: pct(owned), owed: pct(owed), savings: pct(savings), start: pct(start), monthly: pct(monthly) };
 }

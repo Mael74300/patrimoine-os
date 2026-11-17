@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { advantageBars, advantageByHorizon, advantageByPriceGrowth, breakEvenBand, fmtEur, fmtPct, rentVsBuy, scenarioValues } from '../lib/finance';
+import { advantageBars, advantageByHorizon, advantageByPriceGrowth, breakEvenBand, fmtEur, fmtPct, rentVsBuy, scenarioValues, wealthBars, type RentVsBuyResult } from '../lib/finance';
 import { rentVsBuyTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice, Fold } from '../components/ui';
 
 type State = {
   price: number; downPayment: number; acquisitionRate: number; loanRate: number; loanYears: number; ownerCostRate: number;
@@ -49,6 +49,64 @@ function ScenarioBars({ title, rows }: { title: string; rows: Scenario[] }) {
   );
 }
 
+/**
+ * Ce que possède chacun à l'horizon : le logement du propriétaire (part à lui, part encore due à la banque)
+ * et l'argent placé par le locataire (mise de départ, économies de chaque mois), sur une même échelle.
+ */
+function WealthSplit({ r, rent, years }: { r: RentVsBuyResult; rent: number; years: number }) {
+  const b = wealthBars(r);
+  const owner = Math.round(r.firstOwnerOutflow);
+  const tenant = Math.round(Math.max(0, rent));
+  const gap = owner - tenant;
+  const loan = Math.round(r.monthlyPayment);
+  const spent = <>{fmtEur(owner)}{loan > 0 && loan < owner ? <> (prêt {fmtEur(loan)} hors assurance, taxe foncière et entretien {fmtEur(owner - loan)})</> : ' (prêt et charges)'}</>;
+  const ans = `${years}\u00a0ans`;
+  return (
+    <>
+      <h2>Ce que possède chacun au bout de {ans}</h2>
+      <figure className="fb ra">
+        <ul className="fb-list">
+          <li className="fb-row">
+            <div className="fb-head"><span className="fb-name">Propriétaire</span><span className="fb-value">{fmtEur(r.buyerWealth)}</span></div>
+            <div className="fb-track" aria-hidden="true">
+              {b.owned > 0 && <span className="ra-owned" style={{ width: `${b.owned}%` }} />}
+              {b.owed > 0 && <span className="ra-owed" style={{ width: `${b.owed}%` }} />}
+              {b.savings > 0 && <span className="ra-saved" style={{ width: `${b.savings}%` }} />}
+            </div>
+            <ul className="ra-parts">
+              {r.remainingDebt > 0.5
+                ? <li className="ra-total">Logement revendu {fmtEur(r.netSaleValue)}, frais de revente déduits, dont :</li>
+                : <li><i className="ra-owned" aria-hidden="true" />Logement revendu, frais de revente déduits, prêt soldé : <strong>{fmtEur(r.netSaleValue)}</strong></li>}
+              {r.remainingDebt > 0.5 && <li><i className="ra-owned" aria-hidden="true" />part qui lui revient : <strong>{fmtEur(Math.max(0, r.netSaleValue - r.remainingDebt))}</strong></li>}
+              {r.remainingDebt > 0.5 && <li><i className="ra-owed" aria-hidden="true" />encore due à la banque : <strong>{fmtEur(r.remainingDebt)}</strong></li>}
+              {r.buyerSavings > 0.5 && <li><i className="ra-saved" aria-hidden="true" />Économies placées, les mois où il dépense moins que le loyer : <strong>{fmtEur(r.buyerSavings)}</strong></li>}
+            </ul>
+          </li>
+          <li className="fb-row">
+            <div className="fb-head"><span className="fb-name">Locataire</span><span className="fb-value">{fmtEur(r.renterWealth)}</span></div>
+            <div className="fb-track" aria-hidden="true">
+              {b.start > 0 && <span className="ra-start" style={{ width: `${b.start}%` }} />}
+              {b.monthly > 0 && <span className="ra-monthly" style={{ width: `${b.monthly}%` }} />}
+            </div>
+            <ul className="ra-parts">
+              <li><i className="ra-start" aria-hidden="true" />Apport et frais d’achat, placés dès le départ : <strong>{fmtEur(r.renterFromStart)}</strong></li>
+              {r.renterFromMonthly > 0.5 && <li><i className="ra-monthly" aria-hidden="true" />Économies placées chaque mois : <strong>{fmtEur(r.renterFromMonthly)}</strong></li>}
+            </ul>
+          </li>
+        </ul>
+        <figcaption className="muted small">
+          {gap > 0
+            ? <>Le 1er mois, le propriétaire dépense {spent}, le locataire {fmtEur(tenant)} de loyer : le locataire place les {fmtEur(gap)} d’écart, et ainsi chaque mois.</>
+            : gap < 0
+              ? <>Le 1er mois, le propriétaire dépense {spent}, le locataire {fmtEur(tenant)} de loyer : le propriétaire place les {fmtEur(-gap)} d’écart, et ainsi chaque mois.</>
+              : <>Chaque mois, celui qui dépense le moins place la différence.</>}
+          {' '}Placements au rendement choisi, avant impôt.
+        </figcaption>
+      </figure>
+    </>
+  );
+}
+
 export default function SimLouerAcheter() {
   const [s, setS, up] = usePersistentState<State>('louer-acheter', DEFAULTS);
   const r = rentVsBuy(s);
@@ -61,7 +119,7 @@ export default function SimLouerAcheter() {
     <>
       <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: 'Louer ou acheter' }]} />
       <PageHead eyebrow="Simulateur" title="Louer ou acheter sa résidence principale : comparer les patrimoines">
-        Compare, à l’horizon choisi, le patrimoine d’un propriétaire (bien revendu, dette remboursée) et celui d’un locataire qui place l’apport, les frais et l’écart de budget mensuel.
+        Au bout de la durée choisie, qui est le plus riche ? Celui qui achète son logement à crédit, ou celui qui reste locataire et place l’argent qu’il n’a pas mis dans l’achat.
       </PageHead>
       <SimNotice>
         Résultat entièrement fondé sur vos hypothèses (prix, loyer, hausses, rendement, frais) : modifiez-les, l’issue peut s’inverser. Le plus souvent, ce sont la durée de détention
@@ -99,14 +157,12 @@ export default function SimLouerAcheter() {
         </form>
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
-            <Kpi label="Patrimoine du propriétaire" value={fmtEur(r.buyerWealth)} sub={r.remainingDebt > 0.5 ? `revente ${fmtEur(r.finalValue)} (frais déduits), moins ${fmtEur(r.remainingDebt)} de prêt restant` : `revente ${fmtEur(r.finalValue)} (frais déduits), prêt soldé`} />
-            <Kpi label="Patrimoine du locataire" value={fmtEur(r.renterWealth)} sub="apport, frais et écarts mensuels placés" />
             <Kpi label={buyWins ? 'Avantage à l’achat' : 'Avantage à la location'} value={fmtEur(Math.abs(r.advantage))} sub={`écart entre les deux patrimoines au bout de ${Math.floor(s.horizonYears)}\u00a0ans`} />
           </div>
           <Takeaway>{rentVsBuyTakeaway({ horizonYears: Math.floor(s.horizonYears), advantage: r.advantage, breakEvenMonth: r.breakEvenMonth })}</Takeaway>
+          {r.months > 0 && <WealthSplit r={r} rent={s.monthlyRent} years={Math.floor(s.horizonYears)} />}
           {r.series.length > 1 && (
-            <>
-              <h2>Qui est le plus riche, année après année ?</h2>
+            <Fold title="Qui est le plus riche, année après année ?">
               <LineChart
                 title="Patrimoine du propriétaire et du locataire à la fin de chaque année"
                 xLabels={r.series.map((p) => `An ${p.year}`)}
@@ -121,10 +177,8 @@ export default function SimLouerAcheter() {
                 {band
                   ? 'Zone grisée : l’achat l’emporte pour de bon.'
                   : 'Tant que la courbe pleine (propriétaire) reste sous la courbe en tirets (locataire), louer laisse davantage.'}
-                {' '}Le propriétaire rembourse {fmtEur(r.monthlyPayment)} par mois (hors assurance) et paie taxe foncière et entretien, le locataire paie son loyer :
-                chaque mois, celui qui dépense le moins place la différence.
               </p>
-            </>
+            </Fold>
           )}
           <h2>Et si les hypothèses changent ?</h2>
           <figure className="fb dv">
