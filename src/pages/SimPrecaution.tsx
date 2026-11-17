@@ -6,7 +6,7 @@ import {
 } from '../lib/finance';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
 import { precautionPlacementTakeaway, precautionTakeaway, precautionTargetSub } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, ChoiceField, Sources, usePersistentState, JumpToResults, CoverageGauge, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, ChoiceField, Fold, Sources, usePersistentState, JumpToResults, CoverageGauge, SimNotice } from '../components/ui';
 
 type State = PrecautionInput & { profile: PrecautionProfile; lep: 'oui' | 'non'; deadline: number };
 
@@ -180,8 +180,9 @@ export default function SimPrecaution() {
             <li><strong>Sans impôt :</strong> les intérêts de ces livrets sont exonérés d’impôt sur le revenu et de prélèvements sociaux.</li>
             <li><strong>Taux révisables :</strong> un taux réglementé peut changer au 1er février et au 1er août.</li>
           </ul>
-          <h2>Sources</h2>
-          <Sources list={LIVRETS.map((l) => ({ ...l.source, official: true }))} />
+          <Fold title="Sources des taux et des plafonds">
+            <Sources list={LIVRETS.map((l) => ({ ...l.source, official: true }))} />
+          </Fold>
           <SavedSims simKey="precaution" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
           <SimFaq slug="epargne-de-precaution" />
           <Disclaimer kind="reserve" />
