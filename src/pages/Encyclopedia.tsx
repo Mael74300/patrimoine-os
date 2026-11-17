@@ -4,7 +4,7 @@ import { categories, categoryById } from '../data/categories';
 import { investments } from '../data/investments';
 import { norm } from '../lib/search';
 import { FamilyIcon } from '../components/Icons';
-import { Dots, MetersLegend, MobileFold, PageHead } from '../components/ui';
+import { Dots, MetersLegend, PageHead } from '../components/ui';
 
 export default function Encyclopedia() {
   const [params, setParams] = useSearchParams();
@@ -42,8 +42,6 @@ export default function Encyclopedia() {
     return out;
   }, [list]);
 
-  // Sans filtre, les familles de plusieurs fiches sont repliées sur mobile ; dès qu'on filtre, tout reste visible.
-  const unfiltered = !q && !cat && maxRisk === 5 && minLiq === 1;
   const rows = (items: typeof list) => (
     <ul className="inv-list inv-list--compact">
       {items.map((i) => (
@@ -65,6 +63,7 @@ export default function Encyclopedia() {
   );
 
   const currentCat = cat ? categoryById[cat] : null;
+  const filtered = Boolean(q || cat) || maxRisk !== 5 || minLiq !== 1;
 
   return (
     <>
@@ -72,10 +71,10 @@ export default function Encyclopedia() {
         {currentCat ? currentCat.short : `${investments.length} fiches structurées, avec fiscalité datée et sources.`}
       </PageHead>
 
-      <div className="filters" role="group" aria-label="Filtres">
+      <div className="filters filters-main" role="group" aria-label="Filtres">
         <div>
           <label htmlFor="f-q">Recherche</label>
-          <input id="f-q" type="search" value={q} placeholder="ex. immobilier, retraite…" onChange={(e) => set('q', e.target.value)} />
+          <input id="f-q" type="search" value={q} placeholder="ex. retraite" onChange={(e) => set('q', e.target.value)} />
         </div>
         <div>
           <label htmlFor="f-cat">Famille</label>
@@ -104,10 +103,15 @@ export default function Encyclopedia() {
         </div>
       </details>
 
-      <p className="small muted" aria-live="polite">{list.length} résultat{list.length > 1 ? 's' : ''}</p>
+      {/* Sans filtre, le nombre de fiches est déjà dans le bandeau : le compteur n'apparaît qu'une fois la liste filtrée
+          (il reste annoncé aux lecteurs d'écran). */}
+      <p className={filtered ? 'small muted' : 'sr-only'} aria-live="polite">{list.length} résultat{list.length > 1 ? 's' : ''}</p>
       {currentCat && list.length === 0 && !q && (
         <p className="notice info">Les fiches de cette famille sont en préparation. Elles seront publiées une fois leurs informations vérifiées.</p>
       )}
+      {/* Sur mobile, chaque fiche tient en deux lignes (nom, résumé) : les repères de risque, liquidité
+          et effort restent dans le filtre ci-dessus et en tête de chaque fiche, avec leur niveau en mots. */}
+      <div className="enc-list">
       <MetersLegend />
       {/* Écran large : familles sur deux colonnes (comme le catalogue des guides), repères sous chaque fiche. */}
       <div className={groups.length > 1 ? 'inv-groups' : undefined}>
@@ -117,9 +121,12 @@ export default function Encyclopedia() {
             <FamilyIcon id={g.cat.id} size={30} />
             {g.cat.name} <span>{g.items.length}</span>
           </h2>
-          {unfiltered && g.items.length > 1 ? <MobileFold quietOnDesktop label={`Voir les ${g.items.length} fiches`} hint={g.items.map((i) => i.name).join(' · ')}>{rows(g.items)}</MobileFold> : rows(g.items)}
+          {/* Toutes les familles se présentent de la même façon, sur mobile comme en écran large :
+              aucune fiche cachée derrière un bouton, quelle que soit la taille de sa famille. */}
+          {rows(g.items)}
         </section>
       ))}
+      </div>
       </div>
     </>
   );
