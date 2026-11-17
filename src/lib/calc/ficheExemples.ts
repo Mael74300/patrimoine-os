@@ -234,3 +234,23 @@ export function lepVsLivretA(amount: number, lepPct: number, livretPct: number) 
   const livret = Math.round((amount * livretPct) / 100);
   return { lep, livret, gap: lep - livret };
 }
+
+export interface EtfMilestone { year: number; contributed: number; value: number; gains: number }
+
+/**
+ * ETF : versement mensuel constant `monthly` €, rendement supposé `ratePct` % par an net de frais (même calcul que le
+ * simulateur de patrimoine, `projectGrowth`), valeur tous les `step` ans jusqu'à `years`, arrondie à la centaine.
+ * `lastStepShare` : part des gains finaux apparue pendant le dernier palier ; `afterDrop` : valeur finale après une
+ * baisse de `dropPct` % juste avant la sortie (arrondie à la centaine). Avant impôt.
+ */
+export function etfMilestones(monthly: number, ratePct: number, years: number, step: number, dropPct: number) {
+  const pts = projectGrowth({ initial: 0, monthly, annualReturn: ratePct / 100, annualFees: 0, years, inflation: 0 });
+  const r100 = (n: number) => Math.round(n / 100) * 100;
+  const milestones: EtfMilestone[] = pts
+    .filter((p) => p.year > 0 && p.year % step === 0)
+    .map((p) => ({ year: p.year, contributed: Math.round(p.contributed), value: r100(p.value), gains: r100(p.value) - Math.round(p.contributed) }));
+  const last = pts[years];
+  const before = pts[years - step];
+  const lastStepShare = (last.gains - before.gains) / last.gains;
+  return { milestones, lastStepShare, afterDrop: r100(last.value * (1 - dropPct / 100)) };
+}

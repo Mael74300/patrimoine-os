@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 import { fmtEur } from '../../lib/finance';
 import { pfuSplit } from '../../lib/calc/pfu';
 import { perDeductionBalance } from '../../lib/calc/per';
-import { CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE } from '../../lib/illustrationData';
-import { bondCoupons, crowdfundingScenario, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
+import { CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE } from '../../lib/illustrationData';
+import { bondCoupons, crowdfundingScenario, etfMilestones, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
 import { fmtEur2 } from '../../lib/calc/format';
 import { W } from './outils';
@@ -510,6 +510,59 @@ export function SchemaObligationBilan({ children }: { children: ReactNode }) {
         <text x={10} y={317} className="ill-in" textAnchor="start">{`après : environ ${pct(after)}`}</text>
         <text x={0} y={348} className="ill-sub" textAnchor="start">si vous vendez à ce moment</text>
         <text x={339} y={348} className="ill-loss" textAnchor="end">{`environ \u2212${pct(-change)}`}</text>
+      </svg>
+      <figcaption>{children}</figcaption>
+    </figure>
+  );
+}
+
+/**
+ * Schéma « ETF : ce que deviennent 200 € par mois » (exemple fictif de la fiche, constat du 2026-11-17 : l'exemple tenait
+ * en une ligne, sans dessin, sur une fiche d'entrée). Valeurs recalculées par `etfMilestones` (sources : `ETF_EXAMPLE`).
+ * Chaque barre est proportionnelle à la valeur : versements à gauche, gains à droite ; la dernière barre montre la même
+ * valeur après une baisse supposée, part perdue en rouge, et la ligne pointillée marque les sommes versées.
+ */
+export function SchemaEtfBilan({ children }: { children: ReactNode }) {
+  const { monthly, ratePct, years, step, dropPct } = ETF_EXAMPLE;
+  const { milestones, afterDrop } = etfMilestones(monthly, ratePct, years, step, dropPct);
+  const last = milestones[milestones.length - 1];
+  const X = 40;
+  const scale = 230 / last.value;
+  const versedX = X + last.contributed * scale;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 356" role="img" aria-labelledby="ill-etfb-t ill-etfb-d" className="ill-svg">
+        <title id="ill-etfb-t">{`ETF : ce que deviennent ${fmtEur(monthly)} par mois en ${years} ans`}</title>
+        <desc id="ill-etfb-d">{`Exemple fictif, à ${ratePct} % par an nets de frais, avant impôt. ${milestones.map((m) => `Après ${m.year} ans : ${fmtEur(m.contributed)} versés, environ ${fmtEur(m.value)}`).join(' ; ')}. Les gains, environ ${fmtEur(last.gains)}, arrivent surtout à la fin. Si la Bourse baisse de ${dropPct} % l’année ${years}, il reste environ ${fmtEur(afterDrop)}, plus que les ${fmtEur(last.contributed)} versés.`}</desc>
+        <text x={0} y={16} className="ill-year" textAnchor="start">{`${fmtEur(monthly)} par mois, ${ratePct} % par an`}</text>
+        <rect x={1} y={27} width={14} height={14} rx={3} fill="var(--surface-2)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={21} y={39} className="ill-sub" textAnchor="start">vos versements</text>
+        <rect x={151} y={27} width={14} height={14} rx={3} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={171} y={39} className="ill-sub" textAnchor="start">les gains</text>
+        {milestones.map((m, i) => {
+          const y = 54 + i * 38;
+          const wc = m.contributed * scale;
+          const wg = m.gains * scale;
+          return (
+            <g key={m.year}>
+              <text x={0} y={y + 16} className="ill-sub" textAnchor="start">{`an ${m.year}`}</text>
+              <rect x={X} y={y} width={wc} height={22} rx={4} fill="var(--surface-2)" stroke="var(--primary)" strokeWidth={2} />
+              <rect x={X + wc} y={y} width={wg} height={22} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+              <text x={339} y={y + 16} className="ill-in" textAnchor="end">{fmtEur(m.value)}</text>
+            </g>
+          );
+        })}
+        <text x={0} y={216} className="ill-total" textAnchor="start" style={{ fill: 'var(--accent)' }}>{`Gains en ${years} ans : ${fmtEur(last.gains)}`}</text>
+        <text x={0} y={236} className="ill-sub" textAnchor="start">{`presque la moitié pendant les ${step} dernières années`}</text>
+        <line x1={1} y1={252} x2={339} y2={252} stroke="var(--line)" strokeWidth={2} strokeDasharray="4 6" />
+        <text x={0} y={276} className="ill-year" textAnchor="start">{`Si la Bourse baisse de ${dropPct} % l’année ${years}`}</text>
+        <text x={0} y={304} className="ill-sub" textAnchor="start">{`an ${years}`}</text>
+        <rect x={X} y={288} width={afterDrop * scale} height={22} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <rect x={X + afterDrop * scale} y={288} width={(last.value - afterDrop) * scale} height={22} rx={4} fill="var(--danger)" />
+        <text x={339} y={304} className="ill-in" textAnchor="end">{fmtEur(afterDrop)}</text>
+        <path d={`M ${versedX} 284 V 318`} stroke="var(--ink-2)" strokeWidth={1.5} strokeDasharray="4 3" />
+        <text x={versedX} y={332} className="ill-sub" textAnchor="middle">{`${fmtEur(last.contributed)} versés`}</text>
+        <text x={0} y={352} className="ill-sub" textAnchor="start">moins qu’espéré, mais plus que le versé</text>
       </svg>
       <figcaption>{children}</figcaption>
     </figure>
