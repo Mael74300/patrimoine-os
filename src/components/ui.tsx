@@ -19,7 +19,7 @@ import { fmtDate } from '../lib/dates';
 import { sentenceLead } from '../lib/sentenceLead';
 import { checkedParts, leadOfSegments, splitSentences } from '../lib/ficheText';
 import { buildExport, mergeSims, parseExport } from '../lib/simExport';
-import { effortParts, meterWord, type MeterKind } from '../lib/meters';
+import { dotsClass, effortParts, meterWord, type MeterKind } from '../lib/meters';
 
 // ------------------------------------------------------------ Champs
 
@@ -222,7 +222,7 @@ export function Dots({ level, kind, label }: { level: Level; kind?: 'risk' | 'li
   return (
     <div className="meter" aria-label={`${label} : ${level} sur 5`} role="img">
       <span>{label}</span>
-      <div className={'dots ' + (kind ?? '')}>
+      <div className={dotsClass(kind, level)}>
         {[1, 2, 3, 4, 5].map((i) => (
           <i key={i} className={i <= level ? 'on' : ''} />
         ))}
@@ -248,7 +248,7 @@ export function MeterRows({ risk, liquidity, effort, effortNote, noNote = false 
       {rows.map((r) => (
         <li key={r.label}>
           <span className="mr-label">{r.label}</span>
-          <span className={'dots ' + (r.kind === 'effort' ? '' : r.kind)} aria-hidden="true">
+          <span className={dotsClass(r.kind, r.level)} aria-hidden="true">
             {[1, 2, 3, 4, 5].map((i) => <i key={i} className={i <= r.level ? 'on' : ''} />)}
           </span>
           <span className="mr-word">{r.kind === 'effort' ? effort_.word : meterWord(r.kind, r.level)}<span className="sr-only"> ({r.level} sur 5)</span></span>
@@ -260,7 +260,7 @@ export function MeterRows({ risk, liquidity, effort, effortNote, noNote = false 
 }
 
 const METER_HELP:{ label: string; kind?: 'risk' | 'liq'; level: Level; text: string }[] = [
-  { label: 'Risque', kind: 'risk', level: 4, text: 'plus c’est rempli, plus on peut perdre une partie de son argent.' },
+  { label: 'Risque', kind: 'risk', level: 4, text: 'plus c’est rempli, plus on peut perdre une partie de son argent. Vert : risque faible, orange : moyen, rouge : élevé.' },
   { label: 'Liquidité', kind: 'liq', level: 4, text: 'plus c’est rempli, plus on récupère son argent vite et sans perte.' },
   { label: 'Effort', level: 4, text: 'plus c’est rempli, plus il faut de temps, de suivi et de connaissances.' },
 ];
@@ -273,7 +273,7 @@ export function MetersLegend() {
       <ul>
         {METER_HELP.map((m) => (
           <li key={m.label}>
-            <div className={'dots ' + (m.kind ?? '')} aria-hidden="true">
+            <div className={dotsClass(m.kind, m.level)} aria-hidden="true">
               {[1, 2, 3, 4, 5].map((i) => (
                 <i key={i} className={i <= m.level ? 'on' : ''} />
               ))}
