@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, fmtAns, fmtEur, fmtMonths, fmtNum, fmtPct, fmtPts } from '../lib/finance';
-import { compoundScale, compoundSplit, delayRows, doublerSteps, dureeRow, placerRow, rendementRow, simpleCompoundRows, stepUpRows, type CompoundBarRow } from '../lib/finance';
+import { compoundScale, compoundSplit, delayRows, doublerSteps, dureeRow, placerRow, rendementRow, simpleCompoundRows, stepUpRows, tauxRows, type CompoundBarRow } from '../lib/finance';
 import { delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway } from '../lib/takeaways';
 import { interetsComposesFaq } from '../data/simFaq';
 import { Crumbs, Disclaimer, SimFaq, Kpi, NumberField, PageHead, SavedSims, ChoiceField, Takeaway, usePersistentState, JumpToResults, SimNotice, Tabs, Fold } from '../components/ui';
@@ -417,11 +417,15 @@ function Progressif() {
 /* ---------- Convertir un taux annuel en taux mensuel */
 type TauxState = { annualRate: number; periods: number };
 const TAUX: TauxState = { annualRate: 5, periods: 12 };
+/** Capital fictif de la figure « placés un an ». */
+const TAUX_CAPITAL = 10000;
+const PERIOD_NOUN: Record<number, string> = { 12: 'mois', 4: 'trimestre', 2: 'semestre' };
 
 function Taux() {
   const [s, setS, up] = usePersistentState<TauxState>('conversion-taux', TAUX);
   const r = rateConversion({ annualRate: s.annualRate / 100, periods: s.periods });
   const label = s.periods === 12 ? 'mensuel' : s.periods === 4 ? 'trimestriel' : s.periods === 2 ? 'semestriel' : 'par période';
+  const rows = tauxRows(r, TAUX_CAPITAL);
   return (
     <Layout
       reset={() => setS(TAUX)}
@@ -437,13 +441,22 @@ function Taux() {
     >
       <div className="kpis">
         <Kpi label={`Taux ${label} équivalent`} value={fmtRate(r.equivalentRate)} sub="capitalisé sur l’année, redonne exactement le taux annuel" />
-        <Kpi label={`Taux ${label} proportionnel`} value={fmtRate(r.proportionalRate)} sub="taux annuel divisé par le nombre de périodes" />
-        <Kpi label="Taux annuel nominal équivalent" value={fmtRate(r.nominalRate)} sub="taux équivalent multiplié par le nombre de périodes" />
-        <Kpi label="Taux annuel réel du taux proportionnel" value={fmtRate(r.effectiveFromProportional)} sub={`écart de ${fmtPts(r.gap, 4)} avec le taux saisi`} />
+        <Kpi label={`Taux ${label} proportionnel`} value={fmtRate(r.proportionalRate)} sub={`le taux annuel divisé par ${r.periods} : donne ${fmtRate(r.effectiveFromProportional)} sur l’année`} />
       </div>
       <Takeaway>{rateConversionTakeaway({ annualRate: s.annualRate / 100, periods: s.periods, equivalentRate: r.equivalentRate, proportionalRate: r.proportionalRate, gap: r.gap })}</Takeaway>
+      {rows && (
+        <CapitalBars
+          title={`Pourquoi diviser par ${r.periods} donne trop : ${fmtEur(TAUX_CAPITAL)} placés un an`}
+          lines={[
+            { name: `Taux ${label} équivalent, ${fmtRate(r.equivalentRate)}`, row: rows.equivalent, sub: `${fmtEur(rows.equivalent.interest)} d’intérêts sur les ${fmtEur(TAUX_CAPITAL)} + ${fmtEur(rows.equivalent.extra)} d’intérêts des intérêts : ${fmtPct(s.annualRate / 100)} sur l’année, comme voulu` },
+            { name: `Taux divisé par ${r.periods}, ${fmtRate(r.proportionalRate)}`, row: rows.proportional, sub: `${fmtEur(rows.proportional.interest)} d’intérêts sur les ${fmtEur(TAUX_CAPITAL)} + ${fmtEur(rows.proportional.extra)} d’intérêts des intérêts : ${fmtRate(r.effectiveFromProportional)} sur l’année, ${fmtPts(r.gap, 4)} de trop` },
+          ]}
+          labels={{ interest: `Intérêts sur les ${fmtEur(TAUX_CAPITAL)}`, extra: 'Intérêts des intérêts' }}
+        />
+      )}
       <p className="muted small">
-        Les montants par défaut sont fictifs ; le détail du calcul est sur la page <Link to="/methodologie">Méthode</Link>.
+        {rows ? `Chaque ${PERIOD_NOUN[r.periods] ?? 'période'}, les intérêts déjà gagnés rapportent à leur tour : ${r.periods} fois le taux divisé par ${r.periods} dépasse donc le taux annuel. Le taux ${label} équivalent est plus petit pour compenser. ` : ''}
+        Taux annuel nominal équivalent : {fmtRate(r.nominalRate)} (le taux {label} équivalent multiplié par {r.periods}). Exemple fictif ; détail du calcul sur la page <Link to="/methodologie">Méthode</Link>.
       </p>
       <SavedSims simKey="conversion-taux" current={s} onLoad={(d) => setS({ ...TAUX, ...d })} />
     </Layout>

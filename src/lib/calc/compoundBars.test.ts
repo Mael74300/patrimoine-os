@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { compoundRow, compoundScale, compoundSplit, delayRows, doublerSteps, dureeRow, placerRow, rendementRow, simpleCompoundRows, stepUpRows } from './compoundBars';
+import { compoundRow, compoundScale, compoundSplit, delayRows, doublerSteps, dureeRow, placerRow, rendementRow, simpleCompoundRows, stepUpRows, tauxRows } from './compoundBars';
+import { rateConversion } from './rateConversion';
 import { doubling } from './doubling';
 import { presentValue } from './presentValue';
 import { timeToTarget } from './timeToTarget';
@@ -122,5 +123,33 @@ describe('Barres de l’onglet Doubler son capital', () => {
     expect(doublerSteps(doubling({ initial: 1000, annualReturn: -0.03, inflation: 0, multiple: 2 }), 1000)).toBeNull();
     expect(doublerSteps(doubling({ initial: 0, annualReturn: 0.05, inflation: 0, multiple: 2 }), 0)).toBeNull();
     expect(doublerSteps(doubling({ initial: 1000, annualReturn: 0.05, inflation: 0, multiple: 1 }), 1000)).toBeNull();
+  });
+});
+
+describe('tauxRows (onglet Taux annuel → mensuel)', () => {
+  it('10 000 € à 5 % : 500 € pile avec le taux équivalent, 511,62 € avec le taux divisé par 12', () => {
+    const rows = tauxRows(rateConversion({ annualRate: 0.05, periods: 12 }), 10000)!;
+    expect(rows.equivalent.start).toBe(0);
+    expect(rows.equivalent.deposits).toBe(0);
+    expect(rows.equivalent.final).toBeCloseTo(500, 8);
+    expect(rows.equivalent.interest).toBeCloseTo(488.89, 2);
+    expect(rows.equivalent.extra).toBeCloseTo(11.11, 2);
+    expect(rows.proportional.interest).toBeCloseTo(500, 8);
+    expect(rows.proportional.extra).toBeCloseTo(11.62, 2);
+    expect(rows.proportional.final).toBeCloseTo(511.62, 2);
+  });
+  it('trimestriel et semestriel : le taux proportionnel dépasse toujours le taux annuel', () => {
+    for (const periods of [2, 4]) {
+      const rows = tauxRows(rateConversion({ annualRate: 0.03, periods }), 1000)!;
+      expect(rows.equivalent.final).toBeCloseTo(30, 8);
+      expect(rows.proportional.interest).toBeCloseTo(30, 8);
+      expect(rows.proportional.final).toBeGreaterThan(30);
+      expect(rows.equivalent.extra).toBeGreaterThan(0);
+    }
+  });
+  it('rien à dessiner sans taux ou sans capital positif', () => {
+    expect(tauxRows(rateConversion({ annualRate: 0, periods: 12 }), 10000)).toBeNull();
+    expect(tauxRows(rateConversion({ annualRate: -0.02, periods: 12 }), 10000)).toBeNull();
+    expect(tauxRows(rateConversion({ annualRate: 0.05, periods: 12 }), 0)).toBeNull();
   });
 });
