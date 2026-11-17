@@ -1267,7 +1267,8 @@ export function SchemaLocationNueBilan({ children }: { children: ReactNode }) {
  * Schéma « Donation : le barème, tranche par tranche » (exemple fictif de la fiche). Abattement de 100 000 € d'un parent à un
  * enfant et barème en ligne directe : Service-Public F14203 (vérifiée le 13 mai 2026, consultée le 2026-11-16), qui détaille
  * le même calcul (403,60 €, 403,70 €, 573,45 €, 16 813,60 €, total 18 194 €). Montants recalculés par
- * `detailDroitsLigneDirecte` ; la hauteur des marches est proportionnelle au taux, pas au montant.
+ * `detailDroitsLigneDirecte`. La barre des sommes taxées est découpée à la vraie taille de chaque tranche (constat du
+ * 2026-11-17) : on voit que l'essentiel est taxé au dernier taux atteint, et pourquoi le taux moyen reste en dessous.
  */
 export function SchemaDonationBilan({ children }: { children: ReactNode }) {
   const { value } = DONATION_EXAMPLE;
@@ -1276,16 +1277,29 @@ export function SchemaDonationBilan({ children }: { children: ReactNode }) {
   const total = Math.round(tranches.reduce((s, t) => s + t.droits, 0));
   const rate = (t: number) => `${Math.round(t * 100)}\u00a0%`;
   const xa = 1 + (DONATION_ABATTEMENT / value) * 338;
-  const colW = 338 / tranches.length;
-  const maxRate = Math.max(...tranches.map((t) => t.taux));
-  const base = 232;
   const last = tranches[tranches.length - 1];
+  const small = tranches.slice(0, -1);
+  const smallSum = small.reduce((s, t) => s + t.base, 0);
   const avg = Math.round((total / taxable) * 1000) / 10;
+  // Barre des sommes taxées : 338 unités pour la part taxable ; couleur plus soutenue quand le taux monte.
+  const W = 338;
+  const shade = (i: number) => 0.18 + (0.62 * (i + 1)) / tranches.length;
+  let cursor = 1;
+  const segs = tranches.map((t, i) => {
+    const w = (t.base / taxable) * W;
+    const seg = { x: cursor, w, t, i };
+    cursor += w;
+    return seg;
+  });
+  const lastSeg = segs[segs.length - 1];
+  const smallEnd = lastSeg.x;
+  const rowY = (i: number) => 204 + i * 22;
+  const lineY = rowY(tranches.length - 1) + 12;
   return (
     <figure className="illustration">
       <svg viewBox="0 0 340 352" role="img" aria-labelledby="ill-donb-t ill-donb-d" className="ill-svg">
         <title id="ill-donb-t">Donation : les droits se calculent tranche par tranche</title>
-        <desc id="ill-donb-d">{`Exemple fictif : un appartement de ${fmtEur(value)} donné par un parent à son enfant. Les ${fmtEur(DONATION_ABATTEMENT)} de l’abattement sont sans droits ; les ${fmtEur(taxable)} restants sont taxés par tranches : ${tranches.map((t) => `${rate(t.taux)} sur ${fmtEur(t.base)}, soit ${fmtEur2(t.droits)}`).join(' ; ')}. Total : ${fmtEur(total)} de droits, environ ${avg.toLocaleString('fr-FR')} % des ${fmtEur(taxable)} taxés. Le taux de ${rate(last.taux)} ne touche que la dernière tranche.`}</desc>
+        <desc id="ill-donb-d">{`Exemple fictif : un appartement de ${fmtEur(value)} donné par un parent à son enfant. Les ${fmtEur(DONATION_ABATTEMENT)} de l’abattement sont sans droits ; les ${fmtEur(taxable)} restants sont taxés par tranches, dessinées à leur vraie taille : ${tranches.map((t) => `${rate(t.taux)} sur ${fmtEur(t.base)}, soit ${fmtEur2(t.droits)}`).join(' ; ')}. Les ${fmtEur(last.base)} de la dernière tranche forment l’essentiel de la somme taxée. Total : ${fmtEur(total)} de droits, environ ${avg.toLocaleString('fr-FR')} % des ${fmtEur(taxable)} taxés, car les premières tranches sont taxées moins fort.`}</desc>
         <text x={0} y={16} className="ill-year" textAnchor="start">{`Appartement donné : ${fmtEur(value)}`}</text>
         <rect x={1} y={26} width={xa - 4} height={26} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
         <text x={(1 + xa - 4) / 2} y={44} className="ill-in" textAnchor="middle">{fmtEur(DONATION_ABATTEMENT)}</text>
@@ -1294,24 +1308,34 @@ export function SchemaDonationBilan({ children }: { children: ReactNode }) {
         <text x={1} y={70} className="ill-sub" textAnchor="start">abattement : sans droits</text>
         <text x={xa} y={70} className="ill-sub" textAnchor="start">taxés au barème</text>
 
-        <text x={0} y={106} className="ill-year" textAnchor="start">{`Les ${fmtEur(taxable)} taxés, par tranches`}</text>
+        <text x={0} y={98} className="ill-year" textAnchor="start">{`Les ${fmtEur(taxable)} taxés, à leur vraie taille`}</text>
+        <rect x={1} y={110} width={W} height={34} rx={4} fill="var(--warn-soft)" />
+        {segs.map((s) => (
+          <rect key={s.t.taux} x={s.x} y={110} width={s.w} height={34} fill="var(--warn)" fillOpacity={shade(s.i)} />
+        ))}
+        {segs.slice(1).map((s) => (
+          <line key={s.t.taux} x1={s.x} x2={s.x} y1={110} y2={144} stroke="var(--surface)" strokeWidth={1.5} />
+        ))}
+        <rect x={1} y={110} width={W} height={34} rx={4} fill="none" stroke="var(--warn)" strokeWidth={2} />
+        <text x={(lastSeg.x + 339) / 2} y={132} className="ill-in ill-on-dark" textAnchor="middle">{`${fmtEur(last.base)} à ${rate(last.taux)}`}</text>
+        <path d={`M2 152 v6 H${smallEnd - 1} v-6`} fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
+        <text x={1} y={176} className="ill-sub" textAnchor="start">{`${fmtEur(smallSum)} seulement à ${small.map((t) => Math.round(t.taux * 100)).join(', ').replace(/, (\d+)$/, ' et $1')}\u00a0%`}</text>
+
         {tranches.map((t, i) => {
-          const x = 1 + i * colW;
-          const h = 26 + (t.taux / maxRate) * 74;
-          const cx = x + (colW - 4) / 2;
+          const y = rowY(i);
+          const isLast = i === tranches.length - 1;
           return (
             <g key={t.taux}>
-              <rect x={x} y={base - h} width={colW - 4} height={h} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-              <text x={cx} y={base - 8} className="ill-step" textAnchor="middle">{rate(t.taux)}</text>
-              <text x={cx} y={base + 20} className="ill-sub" textAnchor="middle">{`sur ${fmtEur(t.base)}`}</text>
-              <text x={cx} y={base + 40} className="ill-in" textAnchor="middle">{fmtEur2(t.droits)}</text>
+              <rect x={1} y={y - 12} width={14} height={14} rx={3} fill="var(--warn)" fillOpacity={shade(i)} stroke="var(--warn)" strokeWidth={1} />
+              <text x={24} y={y} className={isLast ? 'ill-step' : 'ill-sub'} textAnchor="start">{`${rate(t.taux)} sur ${fmtEur(t.base)}`}</text>
+              <text x={339} y={y} className={isLast ? 'ill-step' : 'ill-in'} textAnchor="end">{fmtEur2(t.droits)}</text>
             </g>
           );
         })}
-        <line x1={0} x2={340} y1={base + 56} y2={base + 56} stroke="var(--line)" strokeWidth={1} />
-        <text x={0} y={base + 80} className="ill-total" textAnchor="start" style={{ fill: 'var(--danger)' }}>{`Droits à payer : ${fmtEur(total)}`}</text>
-        <text x={0} y={base + 100} className="ill-sub" textAnchor="start">{`environ ${avg.toLocaleString('fr-FR')}\u00a0% des ${fmtEur(taxable)} taxés : le taux de ${rate(last.taux)}`}</text>
-        <text x={0} y={base + 118} className="ill-sub" textAnchor="start">ne s’applique qu’à la dernière tranche</text>
+        <line x1={0} x2={340} y1={lineY} y2={lineY} stroke="var(--line)" strokeWidth={1} />
+        <text x={0} y={lineY + 22} className="ill-total" textAnchor="start" style={{ fill: 'var(--danger)' }}>{`Droits à payer : ${fmtEur(total)}`}</text>
+        <text x={0} y={lineY + 42} className="ill-sub" textAnchor="start">{`environ ${avg.toLocaleString('fr-FR')}\u00a0% des ${fmtEur(taxable)} taxés, pas ${rate(last.taux)} :`}</text>
+        <text x={0} y={lineY + 60} className="ill-sub" textAnchor="start">les premiers euros sont taxés moins fort</text>
       </svg>
       <figcaption>{children}</figcaption>
     </figure>

@@ -2,6 +2,8 @@ import { createElement } from 'react';
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { SchemaCto, SchemaDonation } from './components/Illustrations';
+import { SchemaDonationBilan } from './components/schemas/fiches';
+import { detailDroitsLigneDirecte } from './lib/calc/donation';
 
 /**
  * Fiches Donation et Compte-titres : schémas redessinés en viewBox 340 (chantier 112, étape 6, constat du 2026-11-15) :
@@ -75,6 +77,31 @@ describe('fiches Donation et Compte-titres : schémas lisibles à 375 px', () =>
       expect(d, t.contenu).toBeLessThanOrEqual(334);
       // Colonne de gauche sous la barre : ne déborde pas sur la colonne de droite.
       if (!t.centre && t.x < col2 && t.y > 100) expect(d, t.contenu).toBeLessThanOrEqual(col2 - 8);
+    }
+  });
+});
+
+describe('fiche Donation : les tranches dessinées à leur vraie taille (constat du 2026-11-17)', () => {
+  const svg = renderToStaticMarkup(createElement(SchemaDonationBilan, null, 'Exemple fictif')).replace(/[  ]/g, ' ');
+  it('la barre des sommes taxées est découpée selon les montants du barème', () => {
+    const tranches = detailDroitsLigneDirecte(100000);
+    const segs = [...svg.matchAll(/<rect x="([\d.]+)" y="110" width="([\d.]+)" height="34" fill="var\(--warn\)"/g)].map((m) => Number(m[2]));
+    expect(segs.length).toBe(tranches.length);
+    expect(segs.reduce((s, w) => s + w, 0)).toBeCloseTo(338, 6);
+    tranches.forEach((t, i) => expect(segs[i]).toBeCloseTo((t.base / 100000) * 338, 6));
+  });
+  it('mêmes chiffres que l’exemple sourcé, textes dans le dessin, fichier léger', () => {
+    for (const v of ['84 068 € à 20 %', '15 932 € seulement à 5, 10 et 15 %', '403,60 €', '403,70 €', '573,45 €', '16 813,60 €', 'Droits à payer : 18 194 €', 'environ 18,2 %']) expect(svg).toContain(v);
+    expect(svg).toMatch(/viewBox="0 0 340 352"/);
+    expect(svg.length).toBeLessThan(15000);
+    const subs = [...svg.matchAll(/<text x="([\d.]+)" y="[\d.]+" class="ill-sub" text-anchor="(start|end|middle)">([^<]+)<\/text>/g)];
+    expect(subs.length).toBe(8);
+    for (const m of subs) {
+      const x = Number(m[1]);
+      const l = m[3].length * 0.52 * 13;
+      const [g, d] = m[2] === 'end' ? [x - l, x] : m[2] === 'middle' ? [x - l / 2, x + l / 2] : [x, x + l];
+      expect(g, m[3]).toBeGreaterThanOrEqual(0);
+      expect(d, m[3]).toBeLessThanOrEqual(340);
     }
   });
 });
