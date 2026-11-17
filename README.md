@@ -36,7 +36,7 @@ Plateforme française et gratuite consacrée à la construction du patrimoine : 
 | Rendement nécessaire pour atteindre un objectif | Rendement annuel exigé par un capital visé, une durée, un capital de départ et un versement mensuel (hypothèses saisies uniquement, aucun chiffre réglementaire) |
 | Capital à placer aujourd’hui | Somme à placer dès maintenant pour atteindre un capital visé, selon un rendement supposé et un versement mensuel (hypothèses saisies uniquement, aucun chiffre réglementaire) |
 | Renégocier son crédit | Mensualités, intérêts évités, gain net après frais et point mort d’un nouveau prêt sur le capital restant dû (hypothèses saisies uniquement, aucun chiffre réglementaire) |
-| Portefeuille, comparateur de fiches | Allocation, frais pondérés, rééquilibrage ; jusqu'à 3 fiches côte à côte, avec signalement des plafonds de versements dépassés (livrets, PEL, PEA) |
+| Portefeuille, comparateur de fiches | Allocation, frais pondérés, rééquilibrage ; jusqu'à 3 fiches côte à côte, avec signalement des plafonds de versements dépassés (livrets, PEL, PEA), période grisée sur le graphique |
 | Guides | 20 guides, chacun répondant à une intention de recherche précise (patrimoine net, rentabilité locative, PEA, frais…) |
 | Liens internes | Chaque fiche et chaque guide renvoie vers ses simulateurs liés (table `src/lib/relatedSims.ts`, cohérence testée : cibles existantes, aucun simulateur sans lien entrant) |
 | Glossaire | 42 notions expliquées, avec liens vers simulateurs, fiches et guides (liens vérifiés par les tests). Dans les fiches et les guides, la première apparition d’une notion (six au plus par page) est soulignée en pointillé et ouvre sa définition en bulle, sans quitter la page (`src/lib/jargon.ts`, `src/components/Jargon.tsx`) |

@@ -39,3 +39,24 @@ export function durationExceeded(
   const y = Math.max(0, Math.floor(num(years)));
   return { deposits: num(monthly) > 0 && y > limit.depositYears, contract: y > limit.contractYears };
 }
+
+/**
+ * Début de la période où une projection suppose des versements impossibles, en années (fraction possible) depuis
+ * le départ : mois du dépassement d'un plafond (`monthCapExceeded`) ou fin de la période de versements
+ * (`durationExceeded`). Le plus tôt des deux ; null si la projection reste réalisable sur toute la durée.
+ */
+export function impossibleFromYear(
+  initial: number,
+  monthly: number,
+  years: number,
+  cap?: number,
+  limit?: { depositYears: number; contractYears: number },
+): number | null {
+  const starts: number[] = [];
+  if (cap !== undefined) {
+    const m = monthCapExceeded(initial, monthly, years, cap);
+    if (m !== null) starts.push(m / 12);
+  }
+  if (limit && durationExceeded(monthly, years, limit).deposits) starts.push(limit.depositYears);
+  return starts.length ? Math.min(...starts) : null;
+}
