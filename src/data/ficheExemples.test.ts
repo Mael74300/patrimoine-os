@@ -2,7 +2,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { investmentBySlug } from './investments';
-import { bondCoupons, crowdfundingScenario, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, yearlySavingsValue } from '../lib/calc/ficheExemples';
+import { bondCoupons, concentrationLoss, crowdfundingScenario, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, yearlySavingsValue } from '../lib/calc/ficheExemples';
 import { amortize } from '../lib/calc/loan';
 import { CROWDFUNDING_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, leverageBars } from '../lib/illustrationData';
 import { SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaRepriseBilan, SchemaScpiBilan } from '../components/schemas/fiches';
@@ -248,5 +248,44 @@ describe('guide Investir à crédit : l’exemple reprend les schémas et chiffr
   it('reste un exemple fictif, mis à jour', () => {
     expect(sec.heading).toBe('Un exemple fictif');
     expect(g.updatedOn).toBe('2026-11-16');
+  });
+});
+
+describe('fiche Actions en direct : peu de lignes, une chute pèse lourd', () => {
+  const ex = norm(investmentBySlug['actions-individuelles']!.example);
+  const quinze = concentrationLoss(15000, 15);
+  const trois = concentrationLoss(15000, 3);
+
+  it('montants recalculés : 6,7 % avec 15 lignes, 33,3 % avec 3, 4 € de taxe sur 1 000 €', () => {
+    expect(quinze).toEqual({ lines: 15, perLine: 1000, maxLossPct: 6.7 });
+    expect(trois).toEqual({ lines: 3, perLine: 5000, maxLossPct: 33.3 });
+    expect((1000 * 0.4) / 100).toBe(4);
+  });
+  it('le texte de la fiche cite les mêmes montants, reste marqué fictif et reprend le taux de la rubrique Frais', () => {
+    expect(ex).toMatch(/^Exemple fictif/);
+    expect(ex).toContain(`15 lignes de ${eur(1000)}`);
+    expect(ex).toContain(`au plus 6,7 % du total`);
+    expect(ex).toContain(`3 lignes de ${eur(5000)}`);
+    expect(ex).toContain(`mêmes ${eur(15000)} sur 3 lignes`);
+    expect(ex).toContain(`jusqu’à ${eur(5000)}, soit 33,3 %`);
+    expect(ex).toContain(`comptez ${eur(4)} de taxe`);
+    expect(norm(investmentBySlug['actions-individuelles']!.fees.text)).toContain('taxe de 0,4 % du prix');
+    expect(ex).toContain('de 0,4 %');
+  });
+});
+
+describe('fiche Cryptomonnaies : remonter après une forte baisse', () => {
+  const ex = norm(investmentBySlug['cryptomonnaies']!.example);
+  const r = recoveryAfterDrop(1000, 70);
+
+  it('montants recalculés : 300 €, 510 € après +70 %, +233 % pour revenir à 1 000 €', () => {
+    expect(r).toEqual({ afterDrop: 300, recoveryPct: 233, sameRiseValue: 510 });
+  });
+  it('le texte de la fiche cite les mêmes montants, reste marqué fictif et cohérent avec « Fonctionnement »', () => {
+    expect(ex).toMatch(/^Exemple fictif/);
+    for (const v of [1000, r.afterDrop, r.sameRiseValue]) expect(ex).toContain(eur(v));
+    expect(ex).toContain(`il faut ${r.recoveryPct} % de hausse`);
+    expect(ex).toContain('baisse de 70 %');
+    expect(norm(investmentBySlug['cryptomonnaies']!.howItWorks)).toContain('supérieures à 70 %');
   });
 });
