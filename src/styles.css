@@ -408,10 +408,14 @@ td.neg { color: var(--danger); }
      la légende se place à droite du dessin au lieu de laisser deux bandes vides de part et d'autre
      (dessin de 360 px dans un cadre de 704 px). Si la place manque (360 + 24 + 260 px), la légende repasse
      dessous, dessin centré, comme avant. Navigateurs sans :has() : présentation inchangée. */
-  .illustration:has(> .ill-svg[viewBox^="0 0 340 "]) { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; }
-  .illustration:has(> .ill-svg[viewBox^="0 0 340 "]) > .ill-svg { flex: 0 1 360px; margin: 0 auto; }
-  .illustration:has(> .ill-svg[viewBox^="0 0 340 "]) > figcaption { flex: 1 1 260px; margin-top: 0; }
+  .illustration:has(> .ill-svg[viewBox^="0 0 340 "]):not(:has(> .fig-short)) { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; }
+  .illustration:has(> .ill-svg[viewBox^="0 0 340 "]):not(:has(> .fig-short)) > .ill-svg { flex: 0 1 360px; margin: 0 auto; }
+  .illustration:has(> .ill-svg[viewBox^="0 0 340 "]):not(:has(> .fig-short)) > figcaption { flex: 1 1 260px; margin-top: 0; }
 }
+/* Légende courte (une à trois lignes, classe `fig-short`) : elle reste sous le dessin, centrée et de la même largeur que lui,
+   comme une légende de figure. Placée à droite d'un dessin haut, elle flottait seule au milieu d'une grande zone vide
+   (constat du 2026-11-17). Les légendes longues gardent la présentation côte à côte ci-dessus. */
+.illustration figcaption.fig-short { max-width: 360px; margin: 10px auto 0; text-align: center; text-wrap: balance; }
 /* Mobile : le cadre du schéma déborde de la marge de page (16 px de chaque côté) et occupe toute la largeur de l'écran,
    ce qui garde le dessin grand (~85 % de sa taille). Une marge intérieure de 10 px empêche le dessin de toucher
    les bords de l'écran (avant : 4 px, cadres coupés visuellement) ; la légende reste alignée sur le texte (16 px). */

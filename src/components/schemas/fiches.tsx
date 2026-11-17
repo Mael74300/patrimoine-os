@@ -624,7 +624,7 @@ export function SchemaDonation() {
         <text x={170} y={283} textAnchor="middle" className="ill-sub">Abattements renouvelés tous les 15 ans.</text>
         <text x={170} y={302} textAnchor="middle" className="ill-sub">Parents de moins de 80 ans, enfant majeur.</text>
       </svg>
-      <figcaption>
+      <figcaption className="fig-short">
         <strong>Illustration, exemple fictif</strong> : montants en vigueur à la date de vérification de la fiche.
       </figcaption>
     </figure>
@@ -728,7 +728,7 @@ export function SchemaPel() {
         <text x={X0} y={292} className="ill-sub"><tspan className="ill-step" style={{ fill: 'var(--ink)' }}>À 15 ans</tspan> : le PEL devient un livret</text>
         <text x={X0} y={310} className="ill-sub">ordinaire, au taux fixé par la banque.</text>
       </svg>
-      <figcaption>
+      <figcaption className="fig-short">
         <strong>Illustration</strong> : PEL ouverts depuis 2018, durées proportionnelles aux années.
       </figcaption>
     </figure>
@@ -899,7 +899,7 @@ export function SchemaCompteATerme() {
         <text x={170} y={378} textAnchor="middle" className="ill-step">Retrait avant l’échéance :</text>
         <text x={170} y={398} textAnchor="middle" className="ill-sub">pénalité sur les intérêts</text>
       </svg>
-      <figcaption>Courbes : le taux au fil du temps, sans échelle.</figcaption>
+      <figcaption className="fig-short">Courbes : le taux au fil du temps, sans échelle.</figcaption>
     </figure>
   );
 }

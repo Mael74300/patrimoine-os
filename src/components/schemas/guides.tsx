@@ -370,7 +370,7 @@ export function SchemaEscalier({ steps, targets, title, splitAt = 3 }: { steps: 
             : <g key={s}>{body}</g>;
         })}
       </svg>
-      {targets && <figcaption>Du plus urgent au plus long terme. Chaque case mène à son explication, plus bas sur la page.</figcaption>}
+      {targets && <figcaption className="fig-short">Du plus urgent au plus long terme. Chaque case mène à son explication, plus bas sur la page.</figcaption>}
     </figure>
   );
 }
@@ -586,7 +586,7 @@ export function SchemaPatrimoineNet() {
           </g>
         ))}
       </svg>
-      <figcaption>
+      <figcaption className="fig-short">
         <strong>Illustration, exemple fictif</strong> : {fmtEur(p.assets)} − {fmtEur(p.debt)} = {fmtEur(p.net)}. Largeurs proportionnelles aux montants.
       </figcaption>
     </figure>
@@ -606,7 +606,7 @@ export function SchemaRembourser() {
   ];
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 340 210" role="img" aria-labelledby="ill-rb-t ill-rb-d" className="ill-svg">
+      <svg viewBox="0 0 340 192" role="img" aria-labelledby="ill-rb-t ill-rb-d" className="ill-svg">
         <title id="ill-rb-t">Rembourser ou investir : le patrimoine net obtenu dans chaque cas</title>
         <desc id="ill-rb-d">{`Exemple fictif : ${fmtEur(p.lump)} disponibles, crédit de ${fmtEur(p.balance)} à ${pctFr(p.annualRate)} sur ${p.remainingYears} ans restants. Au bout de ${p.remainingYears} ans, patrimoine net d’environ ${fmtEur(p.wealthPrepay)} en remboursant, contre environ ${fmtEur(p.wealthInvest)} en investissant : écart d’environ ${fmtEur(p.gap)}. Au-delà d’environ ${p.breakEvenReturn === null ? '—' : pctFr(p.breakEvenReturn)} brut par an de rendement, investir gagnerait.`}</desc>
         <text x={X0} y="16" className="ill-step">{`Patrimoine net après ${p.remainingYears} ans (environ)`}</text>
@@ -619,7 +619,7 @@ export function SchemaRembourser() {
           </g>
         ))}
       </svg>
-      <figcaption>
+      <figcaption className="fig-short">
         <strong>Illustration, exemple fictif</strong> : barres proportionnelles aux montants.
       </figcaption>
     </figure>
@@ -661,7 +661,7 @@ export function SchemaImmoEtf() {
         <text x={170} y={330} textAnchor="middle" className="ill-step">les deux patrimoines</text>
         <text x={170} y={350} textAnchor="middle" className="ill-sub">après frais, impôts et frais de revente</text>
       </svg>
-      <figcaption>
+      <figcaption className="fig-short">
         <strong>Schéma sans chiffres</strong> : on compare le patrimoine final à effort égal, pas le rendement brut.
       </figcaption>
     </figure>
