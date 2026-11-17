@@ -1483,3 +1483,8 @@ details.fold.next-more > summary { padding: 10px 14px; }
   font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; vertical-align: 1px; white-space: nowrap;
 }
 .fact-advice-icon { flex: none; }
+
+/* Bouton principal d'un guide : à la suite de la rubrique qui en parle (chantier 156). */
+.guide-cta { margin: 18px 0 4px; }
+@media (max-width: 520px) { .guide-cta .btn { width: 100%; justify-content: center; } }
+@media print { .guide-cta { display: none; } }

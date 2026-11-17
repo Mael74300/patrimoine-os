@@ -71,6 +71,12 @@ function PointText({ segs }: { segs: JargonSegment[] }) {
 
 export { sectionId } from '../lib/toc';
 
+/** Rubrique après laquelle s'affiche le bouton principal du guide : `cta.after` si indiqué, sinon la dernière rubrique. */
+export function guideCtaIndex(g: { sections: { heading: string }[]; cta?: { after?: string } }): number {
+  const i = g.cta?.after ? g.sections.findIndex((s) => s.heading === g.cta?.after) : -1;
+  return i >= 0 ? i : g.sections.length - 1;
+}
+
 export function GuidePage() {
   const { slug = '' } = useParams();
   const g = guideBySlug[slug];
@@ -93,6 +99,8 @@ export function GuidePage() {
   const hasNext = g.slug === 'par-ou-commencer' || simItems.length + ficheItems.length > 0;
   // Sommaire : les rubriques du guide, puis les questions, les suites et les sources (repères pour vérifier).
   // Parcours de lecture du guide (page « Guides ») : son nom et son icône dans le sur-titre ; la durée de lecture suit la date de mise à jour.
+  // Action principale (chantier 156) : juste après la rubrique qui en parle, et non plus après les questions fréquentes.
+  const ctaIndex = guideCtaIndex(g);
   const groupIndex = guideGroups.findIndex((grp) => grp.slugs.includes(g.slug));
   const toc = [
     ...g.sections.map((s) => ({ id: sectionId(s.heading), label: s.heading })),
@@ -147,6 +155,7 @@ export function GuidePage() {
             {g.slug === 'diversification-placements' && s.heading === 'Un exemple fictif chiffré' && <SchemaDiversification />}
             {g.slug === 'pret-a-taux-zero-ptz' && s.heading === 'Comment il se rembourse' && <SchemaPtz />}
             {g.slug === 'par-ou-commencer' && etapesSuite[i] && <p className="step-more"><Link to={etapesSuite[i].to}>{etapesSuite[i].label}</Link></p>}
+            {g.cta && !g.widget && i === ctaIndex && <p className="guide-cta"><Link className="btn" to={g.cta.to}>{g.cta.label}</Link></p>}
           </section>
         ))}
         <FaqSection items={g.faq ?? []} />
@@ -155,7 +164,8 @@ export function GuidePage() {
       </div>
       {g.widget === 'patrimoine-net' && (<><h2>Calculer votre patrimoine net</h2><NetWorthCalculator /></>)}
       <div className="prose">
-        {g.cta && <p style={{ marginTop: 24 }}><Link className="btn" to={g.cta.to}>{g.cta.label}</Link></p>}
+        {/* Guide avec un outil intégré : l'action principale vient après l'outil. */}
+        {g.cta && g.widget && <p className="guide-cta"><Link className="btn" to={g.cta.to}>{g.cta.label}</Link></p>}
         {g.slug === 'par-ou-commencer' && (<>
           <h2 id="rub-pour-aller-plus-loin">Pour aller plus loin</h2>
           <h3 className="next-sub">Fiches liées</h3>

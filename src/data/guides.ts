@@ -441,7 +441,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       { q: 'Le taux d’endettement maximal est-il de 35 % ?', a: 'C’est le repère recommandé par le HCSF, assurance comprise, appliqué par les banques avec une marge de dérogation limitée. Ce n’est pas une loi : chaque banque apprécie le dossier.' },
       { q: 'Qu’est-ce que le reste à vivre ?', a: 'C’est ce qu’il vous reste chaque mois après les crédits et les charges courantes, souvent rapporté au nombre de personnes du foyer. Il complète le taux d’endettement pour juger si une mensualité est supportable.' },
     ],
-    cta: { to: '/simulateurs/endettement', label: 'Calculer mon taux d’endettement' },
+    cta: { to: '/simulateurs/endettement', label: 'Calculer mon taux d’endettement', after: 'Le calcul' },
   },
   {
     slug: 'pret-a-taux-zero-ptz',
