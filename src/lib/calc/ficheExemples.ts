@@ -210,3 +210,27 @@ export function livretQuinzaines(amount: number, ratePct: number, day: number, m
   const quinzaines = Math.max(0, 24 - start);
   return { quinzaines, interest: Math.round(((amount * ratePct) / 100) * (quinzaines / 24) * 100) / 100 };
 }
+
+/**
+ * PEL ou Livret A, sur une année et à taux supposés constants : intérêts bruts du PEL, part retenue par le prélèvement
+ * forfaitaire unique (`pfuPct`, 30 % pour les PEL ouverts depuis 2018 : Service-Public F16140, consulté le 2026-11-17),
+ * intérêts nets, intérêts du Livret A (exonérés : F2365) et taux du Livret A sous lequel le PEL rapporte davantage net.
+ */
+export function pelVsLivretA(amount: number, pelPct: number, pfuPct: number, livretPct: number) {
+  const gross = Math.round((amount * pelPct) / 100);
+  const tax = Math.round((gross * pfuPct) / 100);
+  return {
+    gross,
+    tax,
+    net: gross - tax,
+    livret: Math.round((amount * livretPct) / 100),
+    breakEvenPct: Math.round(pelPct * (100 - pfuPct)) / 100,
+  };
+}
+
+/** LEP ou Livret A, sur une année pleine à taux constants : intérêts de chacun (tous deux exonérés) et écart. */
+export function lepVsLivretA(amount: number, lepPct: number, livretPct: number) {
+  const lep = Math.round((amount * lepPct) / 100);
+  const livret = Math.round((amount * livretPct) / 100);
+  return { lep, livret, gap: lep - livret };
+}
