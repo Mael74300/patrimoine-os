@@ -154,6 +154,8 @@ legend { padding: 0; font-weight: 700; margin-bottom: 10px; font-size: 0.95rem; 
 :is(.field-trio, .field-duo) .field-label { display: contents; }
 :is(.field-trio, .field-duo) label { grid-row: 1; font-size: 0.82rem; line-height: 1.25; }
 :is(.field-trio, .field-duo) .input-unit { grid-row: 2; }
+/* Aide courte sous un champ groupé : en haut de la troisième ligne, même si la voisine n'en a pas. */
+:is(.field-trio, .field-duo) .hint { grid-row: 3; align-self: start; }
 .field-trio .input-unit input { padding: 9px 22px 9px 9px; appearance: textfield; -moz-appearance: textfield; }
 .field-trio .input-unit span { right: 8px; }
 .fees-trio { margin-bottom: 14px; }

@@ -71,15 +71,19 @@ export default function SimIndependance() {
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
             <legend>Situation</legend>
-            <NumberField label="Dépenses annuelles" unit="€" value={s.annualExpenses} onChange={up('annualExpenses')} min={0} step={1000} />
+            <div className="field-duo">
+              <NumberField label="Dépenses annuelles" unit="€" value={s.annualExpenses} onChange={up('annualExpenses')} min={0} step={1000} />
+              <NumberField label="Épargne annuelle" unit="€" value={s.annualSavings} onChange={up('annualSavings')} min={0} step={1000} />
+            </div>
             <NumberField label="Patrimoine disponible" unit="€" value={s.currentWealth} onChange={up('currentWealth')} min={0} step={5000} hint="Placements mobilisables, hors résidence principale." />
             <NumberField label="Revenus récurrents" unit="€/an" value={s.recurringIncome} onChange={up('recurringIncome')} min={0} step={1000} hint="Loyers nets, pension, autres revenus hors travail." />
-            <NumberField label="Épargne annuelle" unit="€" value={s.annualSavings} onChange={up('annualSavings')} min={0} step={1000} />
           </fieldset>
           <fieldset>
             <legend>Hypothèses</legend>
-            <NumberField label="Rendement annuel espéré" unit="%" percent value={s.nominalReturn} onChange={up('nominalReturn')} step={0.25} min={-5} max={15} hint="Avant inflation. Une hypothèse, jamais une garantie." />
-            <NumberField label="Inflation annuelle" unit="%" percent value={s.inflation} onChange={up('inflation')} step={0.25} min={-2} max={10} hint="Hausse moyenne des prix supposée chaque année." />
+            <div className="field-duo">
+              <NumberField label="Rendement annuel espéré" unit="%" percent value={s.nominalReturn} onChange={up('nominalReturn')} step={0.25} min={-5} max={15} hint="Avant inflation, jamais garanti." />
+              <NumberField label="Inflation annuelle" unit="%" percent value={s.inflation} onChange={up('inflation')} step={0.25} min={-2} max={10} hint="Hausse moyenne des prix." />
+            </div>
             <NumberField label="Taux de retrait" unit="%" percent value={s.withdrawalRate} onChange={up('withdrawalRate')} step={0.25} min={0.5} max={10} hint="Part du capital retirée la première année." />
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>

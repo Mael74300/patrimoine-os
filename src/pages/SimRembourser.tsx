@@ -29,14 +29,18 @@ export default function SimRembourser() {
           <fieldset>
             <legend>Crédit en cours</legend>
             <NumberField label="Capital restant dû" unit="€" value={s.balance} onChange={up('balance')} min={0} step={5000} />
-            <NumberField label="Taux nominal annuel" unit="%" percent value={s.annualRate} onChange={up('annualRate')} min={0} max={20} step={0.1} hint="Hors assurance." />
-            <NumberField label="Durée restante" unit="ans" value={s.remainingYears} onChange={up('remainingYears')} min={1} max={40} step={1} />
+            <div className="field-duo">
+              <NumberField label="Taux nominal annuel" unit="%" percent value={s.annualRate} onChange={up('annualRate')} min={0} max={20} step={0.1} hint="Hors assurance." />
+              <NumberField label="Durée restante" unit="ans" value={s.remainingYears} onChange={up('remainingYears')} min={1} max={40} step={1} />
+            </div>
           </fieldset>
           <fieldset>
             <legend>Somme disponible et placement</legend>
             <NumberField label="Somme à affecter" unit="€" value={s.lump} onChange={up('lump')} min={0} step={1000} hint="Plafonnée au capital restant dû." />
-            <NumberField label="Rendement brut annuel du placement" unit="%" percent value={s.annualReturn} onChange={up('annualReturn')} min={-20} max={30} step={0.5} hint="Hypothèse avant frais." />
-            <NumberField label="Frais annuels du placement" unit="%" percent value={s.annualFees} onChange={up('annualFees')} min={0} max={10} step={0.1} />
+            <div className="field-duo">
+              <NumberField label="Rendement brut annuel du placement" unit="%" percent value={s.annualReturn} onChange={up('annualReturn')} min={-20} max={30} step={0.5} hint="Hypothèse avant frais." />
+              <NumberField label="Frais annuels du placement" unit="%" percent value={s.annualFees} onChange={up('annualFees')} min={0} max={10} step={0.1} />
+            </div>
             <NumberField label="Imposition des gains" unit="%" percent value={s.taxRate} onChange={up('taxRate')} min={0} max={60} step={0.5} hint="Taux unique appliqué aux gains à l'horizon." />
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
