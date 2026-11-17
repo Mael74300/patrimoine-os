@@ -176,3 +176,37 @@ export function subscriptionChurn(clients: number, price: number, churnPct: numb
   const clientsLeft = Math.round(clients * Math.pow(1 - churnPct / 100, months));
   return { revenue: clients * price, lostFirstMonth: Math.round((clients * churnPct) / 100), clientsLeft, revenueLeft: clientsLeft * price };
 }
+
+export interface FondsEurosGrowth { final: number; firstYearInterest: number; lastYearInterest: number; finalWithMoreFees: number; gap: number }
+
+/**
+ * Fonds en euros : `capital` € placés `years` ans à `netPct` % par an, net de frais ; les intérêts de chaque année
+ * s'ajoutent au capital et produisent à leur tour des intérêts (Service-Public F15274, consulté le 2026-11-17).
+ * `firstYearInterest` et `lastYearInterest` : intérêts de la première et de la dernière année, à l'euro. `finalWithMoreFees` :
+ * même placement avec `extraFeesPts` point(s) de frais de plus par an, retirés du rendement net. Capitaux et écart arrondis à 10 €.
+ */
+export function fondsEurosGrowth(capital: number, netPct: number, years: number, extraFeesPts: number): FondsEurosGrowth {
+  const r = netPct / 100;
+  const final = capital * Math.pow(1 + r, years);
+  const withFees = capital * Math.pow(1 + r - extraFeesPts / 100, years);
+  const to10 = (v: number) => Math.round(v / 10) * 10;
+  return {
+    final: to10(final),
+    firstYearInterest: Math.round(capital * r),
+    lastYearInterest: Math.round(capital * Math.pow(1 + r, years - 1) * r),
+    finalWithMoreFees: to10(withFees),
+    gap: to10(final - withFees),
+  };
+}
+
+/**
+ * Livret A : intérêts d'une année civile pour `amount` € déposés le `day` du mois `month` (1 à 12), à `ratePct` % supposé
+ * constant toute l'année. Calcul par quinzaines entières : un dépôt fait jusqu'au 15 rapporte à partir du 16, un dépôt
+ * fait à partir du 16 rapporte à partir du 1er du mois suivant (Service-Public F2365, consulté le 2026-11-17).
+ * Renvoie le nombre de quinzaines rémunérées jusqu'au 31 décembre et les intérêts, arrondis au centime.
+ */
+export function livretQuinzaines(amount: number, ratePct: number, day: number, month: number): { quinzaines: number; interest: number } {
+  const start = day <= 15 ? 2 * (month - 1) + 1 : 2 * month;
+  const quinzaines = Math.max(0, 24 - start);
+  return { quinzaines, interest: Math.round(((amount * ratePct) / 100) * (quinzaines / 24) * 100) / 100 };
+}
