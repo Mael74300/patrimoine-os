@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { amortize, capacityForPayment, HCSF, loanSplit, fmtEur, fmtEur2, fmtMonths, prepayment } from '../lib/finance';
-import { capacityTakeaway, creditTakeaway } from '../lib/takeaways';
+import { capacityTakeaway, creditTakeaway, prepaySummary } from '../lib/takeaways';
 import { SchemaMensualite } from '../components/schemas/SchemaMensualite';
 import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, ChoiceField, usePersistentState, JumpToResults } from '../components/ui';
 
@@ -27,6 +27,13 @@ export default function SimCredit() {
   // Assurance comptée sur le capital empruntable lui-même, comme dans le simulateur Taux d'endettement.
   const capacity = capacityForPayment(maxMonthly, s.annualRate, s.years, s.insuranceRate);
   const yearsAxis = Math.max(res.schedule.length, pre.schedule.length);
+  // Bloc replié par défaut ; rouvert si l'on revient avec un remboursement anticipé déjà réglé.
+  const prepayRef = useRef<HTMLDetailsElement>(null);
+  const prepayTouched = s.prepayYear !== DEFAULTS.prepayYear || s.prepayAmount !== DEFAULTS.prepayAmount
+    || s.prepayMode !== DEFAULTS.prepayMode || s.withPenalty !== DEFAULTS.withPenalty;
+  useEffect(() => {
+    if (prepayTouched && prepayRef.current) prepayRef.current.open = true;
+  }, [prepayTouched]);
 
   return (
     <>
@@ -76,7 +83,14 @@ export default function SimCredit() {
           </div>
 
           <h2>Remboursement anticipé</h2>
-          <div className="panel fold-form">
+          <details ref={prepayRef} className="fold advanced prepay-fold">
+            <summary>
+              <span>Simuler un remboursement anticipé
+                <span className="fold-hint">{prepaySummary({ year: s.prepayYear, prepaid: pre.prepaid, mode: s.prepayMode, netSaving: pre.netSaving, monthsSaved: pre.monthsSaved, newMonthlyPayment: pre.newMonthlyPayment })}</span>
+              </span>
+            </summary>
+            <div className="advanced-body">
+          <div className="fold-form">
             <NumberField label="À la fin de l'année" unit="an" value={s.prepayYear} onChange={up('prepayYear')} min={0} max={30} />
             <NumberField label="Montant remboursé" unit="€" value={s.prepayAmount} onChange={up('prepayAmount')} min={0} step={1000} hint={`Restant dû à cette date : ${fmtEur(pre.remainingBefore)}${pre.prepaid < s.prepayAmount ? ', le maximum remboursable' : ''}.`} />
             <ChoiceField label="Effet" value={s.prepayMode} onChange={up('prepayMode')}
@@ -106,8 +120,10 @@ export default function SimCredit() {
             />
           </div>
           <p className="small muted">
-            Avant de rembourser par anticipation, comparez le taux du crédit au rendement net que l'épargne obtiendrait ailleurs, et gardez une épargne de précaution.
+            Avant de rembourser par anticipation, comparez le taux du crédit au rendement net que l'épargne obtiendrait ailleurs (<Link to="/simulateurs/rembourser-ou-investir">simulateur Rembourser ou investir</Link>), et gardez une épargne de précaution.
           </p>
+            </div>
+          </details>
 
           <Fold title="Tableau d'amortissement annuel">
           <div className="table-wrap" tabIndex={0}>
