@@ -529,3 +529,17 @@ export function lumpGradualPathsSummary(rows: { name: string; advantageGradual: 
   const tail = loses.length ? ` ; investir d’un coup gagne avec ${list(loses)}` : '';
   return `Avec ces hypothèses, l’étalement ne finit au-dessus qu’avec ${list(wins)}${tail}. Personne ne sait à l’avance quel parcours le prix suivra.`;
 }
+
+/**
+ * Crédit : résumé du remboursement anticipé, affiché sous le titre du bloc replié.
+ * Reformule seulement les résultats de `prepayment` (aucun chiffre réglementaire ici).
+ */
+export function prepaySummary(p: { year: number; prepaid: number; mode: 'duree' | 'mensualite'; netSaving: number; monthsSaved: number; newMonthlyPayment: number }): string {
+  if (!(p.prepaid > 0)) return 'Indiquez une somme à rembourser avant la fin du prêt.';
+  const quand = p.year > 0 ? `à la fin de l'année ${p.year}` : 'dès le départ';
+  const effet = p.mode === 'duree'
+    ? (p.monthsSaved > 0 ? `, ${fmtMonths(p.monthsSaved)} de moins` : '')
+    : (p.newMonthlyPayment > 0 ? `, mensualité ramenée à ${fmtEur(p.newMonthlyPayment)}` : ', prêt soldé');
+  const gain = p.netSaving >= 0 ? `gain net de ${fmtEur(p.netSaving)}` : `perte nette de ${fmtEur(-p.netSaving)}`;
+  return `${fmtEur(p.prepaid)} remboursés ${quand} : ${gain}${effet}.`;
+}

@@ -4,8 +4,9 @@ import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio } f
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
 import { capacityForPayment } from './calc/debtRatio';
+import { prepayment } from './calc/loan';
 import { precautionTarget } from './calc/precaution';
-import { rebalanceTakeaway, portfolioProjectionNote, businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, budgetGapPhrase, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, capacityTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionPlacementTakeaway, precautionTargetSub, prepayTakeaway, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
+import { rebalanceTakeaway, portfolioProjectionNote, businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, budgetGapPhrase, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, capacityTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionPlacementTakeaway, precautionTargetSub, prepayTakeaway, prepaySummary, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -14,6 +15,19 @@ describe('phrases « Concrètement »', () => {
     const rendu = Math.round(200000 + res.totalCost).toLocaleString('fr-FR');
     expect(t.replace(/\s/g, '')).toContain(rendu.replace(/\s/g, ''));
     expect(t).toContain('20\u00a0ans');
+  });
+  it('crédit : le résumé du remboursement anticipé reprend les résultats de prepayment', () => {
+    const base = { principal: 200000, annualRate: 0.036, years: 20, insuranceRate: 0.003, atMonth: 60, amount: 30000, withPenalty: true };
+    const d = prepayment({ ...base, mode: 'duree' });
+    const t = prepaySummary({ year: 5, prepaid: d.prepaid, mode: 'duree', netSaving: d.netSaving, monthsSaved: d.monthsSaved, newMonthlyPayment: d.newMonthlyPayment });
+    expect(t.startsWith(`${fmtEur(30000)} remboursés à la fin de l'année 5 : gain net de ${fmtEur(d.netSaving)}`)).toBe(true);
+    expect(d.monthsSaved).toBeGreaterThan(0);
+    expect(t).toContain('de moins');
+    const m = prepayment({ ...base, mode: 'mensualite' });
+    const tm = prepaySummary({ year: 5, prepaid: m.prepaid, mode: 'mensualite', netSaving: m.netSaving, monthsSaved: m.monthsSaved, newMonthlyPayment: m.newMonthlyPayment });
+    expect(tm).toContain(`mensualité ramenée à ${fmtEur(m.newMonthlyPayment)}`);
+    expect(prepaySummary({ year: 5, prepaid: 0, mode: 'duree', netSaving: 0, monthsSaved: 0, newMonthlyPayment: 0 })).toMatch(/^Indiquez/);
+    expect(prepaySummary({ year: 5, prepaid: 1000, mode: 'duree', netSaving: -20, monthsSaved: 0, newMonthlyPayment: 900 })).toContain('perte nette');
   });
   it('crédit : vide si aucun emprunt', () => {
     expect(creditTakeaway({ principal: 0, years: 20, monthlyTotal: 0, totalCost: 0 })).toBe('');
