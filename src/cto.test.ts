@@ -20,6 +20,18 @@ describe('schéma « CTO : sur un gain, ce qui reste »', () => {
     for (const v of ['128 €', '186 €', '314 €', '686 €', '1 000 €']) expect(svg).toContain(v);
     expect(svg).toContain('fictif');
   });
+  it('l’exemple chiffré de la fiche reprend le schéma, jusqu’au montant qui reste', () => {
+    const ex = investmentBySlug['compte-titres'].example.replace(/[\u00a0\u202f]/g, ' ');
+    const { ir, ps, total, net } = pfuSplit(CTO_EXAMPLE_GAIN);
+    expect(ex).toContain('fictif');
+    for (const v of [CTO_EXAMPLE_GAIN, ir, ps, total, net]) expect(ex).toContain(`${v.toLocaleString('fr-FR').replace(/[\u00a0\u202f]/g, ' ')} €`);
+    expect(ex).toContain(`${String(PFU_TOTAL_PCT).replace('.', ',')} %`);
+  });
+  it('avantages et fiscalité sans jargon d’initié', () => {
+    const f = investmentBySlug['compte-titres'];
+    const text = [...f.pros, ...f.cons, f.tax.text, f.howItWorks].join(' ');
+    expect(text).not.toMatch(/purge|imputable|perception/i);
+  });
   it('reste léger et accessible', () => {
     expect(svg).toContain('role="img"');
     expect(svg.length).toBeLessThan(15000);
