@@ -227,6 +227,8 @@ tr:last-child td, tbody tr:last-child th { border-bottom: 0; }
 /* ---------- Encyclopédie */
 .filters { display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
 @media (max-width: 760px) { .filters { grid-template-columns: 1fr 1fr; } .filters > :first-child { grid-column: 1 / -1; } }
+/* Encyclopédie mobile : recherche et famille côte à côte, la liste des fiches commence plus haut. */
+@media (max-width: 760px) { .filters-main { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); } .filters-main > :first-child { grid-column: auto; } .filters-main select, .filters-main input { width: 100%; min-width: 0; height: 46px; } }
 .inv-list { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--line); }
 .inv-list li { border-bottom: 1px solid var(--line); }
 .inv-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; padding: 16px 4px; text-decoration: none; color: inherit; }
@@ -1241,12 +1243,16 @@ h2.gloss-letter::before { content: none; }
   .inv-groups .inv-row .meters { gap: 18px; }
   .inv-groups .meter { flex-direction: row; align-items: center; gap: 6px; min-width: 0; }
 }
-/* Encyclopédie mobile : familles plus serrées (même contenu) */
+/* Encyclopédie mobile : toutes les fiches visibles, quelle que soit la taille de leur famille,
+   chacune en deux lignes courtes (nom, résumé). Les repères en points restent en écran large ;
+   sur mobile, ils sont sur chaque fiche (avec leur niveau en mots) et dans le filtre « risque et liquidité ». */
 @media (max-width: 600px) {
   .inv-group { margin-top: 14px; }
-  .inv-group-title { margin-bottom: 4px; font-size: 1.08rem; }
-  .inv-group .inv-row { padding: 8px 4px; gap: 6px; }
-  .inv-group .inv-row h3 { margin-bottom: 2px; }
+  .inv-group-title { margin-bottom: 2px; font-size: 1.08rem; }
+  .inv-group .inv-row { padding: 6px 4px; gap: 0; }
+  .inv-group .inv-row h3 { margin-bottom: 1px; font-size: 1rem; }
+  .inv-group .inv-row p { font-size: 0.88rem; line-height: 1.45; }
+  .enc-list .inv-row .meters, .enc-list .meters-legend { display: none; }
 }
 
 /* Choix en boutons (ChoiceField) : remplace un menu déroulant quand il y a peu d'options.

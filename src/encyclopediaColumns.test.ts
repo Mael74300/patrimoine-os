@@ -19,3 +19,17 @@ describe('Encyclopédie : familles sur deux colonnes en écran large', () => {
     expect(html).toContain('inv-row');
   });
 });
+
+describe('Encyclopédie : toutes les familles présentées de la même façon (chantier 165)', () => {
+  it('aucune fiche repliée derrière « Voir les N fiches », même pour les familles nombreuses', () => {
+    const html = render('/encyclopedie');
+    expect(html).not.toMatch(/Voir les \d+ fiches/);
+    expect(html).not.toContain('mob-fold');
+    for (const i of investments) expect(html).toContain(`href="/encyclopedie/${i.slug}"`);
+  });
+  it('le compteur ne s’affiche qu’une fois la liste filtrée, et reste annoncé', () => {
+    const plain = (h: string) => h.replace(/<!-- -->/g, '');
+    expect(plain(render('/encyclopedie'))).toContain(`<p class="sr-only" aria-live="polite">${investments.length} résultats</p>`);
+    expect(plain(render('/encyclopedie?q=livret'))).toMatch(/<p class="small muted" aria-live="polite">\d+ résultats?<\/p>/);
+  });
+});
