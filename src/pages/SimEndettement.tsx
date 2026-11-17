@@ -30,16 +30,20 @@ export default function SimEndettement() {
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
             <legend>Situation du foyer</legend>
-            <NumberField label="Revenus nets mensuels" unit="€" value={s.income} onChange={up('income')} min={0} step={100} />
-            <NumberField label="Mensualités de crédits en cours" unit="€" value={s.existingPayments} onChange={up('existingPayments')} min={0} step={50} />
+            <div className="field-duo">
+              <NumberField label="Revenus nets mensuels" unit="€" value={s.income} onChange={up('income')} min={0} step={100} />
+              <NumberField label="Mensualités de crédits en cours" unit="€" value={s.existingPayments} onChange={up('existingPayments')} min={0} step={50} />
+            </div>
             <NumberField label="Autres charges courantes mensuelles" unit="€" value={s.livingCosts} onChange={up('livingCosts')} min={0} step={50} hint="Logement hors crédit, énergie, transports, alimentation…" />
             <NumberField label="Personnes dans le foyer" unit="" value={s.householdSize} onChange={up('householdSize')} min={1} max={20} step={1} />
           </fieldset>
           <fieldset>
             <legend>Nouveau crédit</legend>
             <NumberField label="Mensualité, assurance comprise" unit="€" value={s.newPayment} onChange={up('newPayment')} min={0} step={50} />
-            <NumberField label="Taux nominal (pour la capacité)" unit="%" percent value={s.rate} onChange={up('rate')} min={0} max={20} step={0.1} hint="Hypothèse modifiable." />
-            <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={1} max={40} step={1} />
+            <div className="field-duo">
+              <NumberField label="Taux nominal (pour la capacité)" unit="%" percent value={s.rate} onChange={up('rate')} min={0} max={20} step={0.1} hint="Hypothèse modifiable." />
+              <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={1} max={40} step={1} />
+            </div>
             <NumberField label="Assurance emprunteur (sur capital initial)" unit="%" percent value={s.insuranceRate} onChange={up('insuranceRate')} min={0} max={2} step={0.05} />
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
