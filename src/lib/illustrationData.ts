@@ -341,3 +341,10 @@ export const LOCATION_NUE_EXAMPLE = { price: 150000, monthlyRent: 750, allowance
 export const DONATION_EXAMPLE = { value: 200000 };
 
 export const REPRISE_EXAMPLE = { profit: 100000, price: 500000, loan: 400000, years: 7, ratePct: 4, dropPct: 30 };
+
+/**
+ * Fiche ETF actions diversifiés : exemple fictif, 200 € par mois pendant 20 ans à 6 % par an nets de frais (hypothèse,
+ * aucun chiffre réglementaire), valeur tous les 5 ans, puis une baisse de 30 % juste avant la sortie (dans la fourchette
+ * « −30 % à −50 % lors de crises passées » de la rubrique Inconvénients de la fiche). Recalculé par `etfMilestones`.
+ */
+export const ETF_EXAMPLE = { monthly: 200, ratePct: 6, years: 20, step: 5, dropPct: 30 };
