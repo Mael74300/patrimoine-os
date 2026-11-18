@@ -45,3 +45,14 @@ export const fmtMonths = (months: number) => {
   const mois = m || !y ? `${m}\u00a0mois` : '';
   return [ans, mois].filter(Boolean).join(' et ');
 };
+/**
+ * Une durée calculée en années décimales, dite en années et mois, au mois le plus proche :
+ * 11,896 → « 11 ans et 11 mois », 35,003 → « 35 ans ». « 11,9 ans » se lit trop souvent
+ * « 11 ans et 9 mois ». À réserver aux durées calculées (pas à l'écho d'une durée saisie).
+ */
+export const fmtDuree = (years: number) => {
+  if (!Number.isFinite(years)) return '—';
+  const m = Math.round(years * 12);
+  if (m === 0 && years > 0) return 'moins d’un mois';
+  return fmtMonths(m);
+};

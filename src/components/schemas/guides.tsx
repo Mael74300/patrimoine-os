@@ -1,4 +1,4 @@
-import { fmtEur, fmtPct, HCSF } from '../../lib/finance';
+import { fmtDuree, fmtEur, fmtPct, HCSF } from '../../lib/finance';
 import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, cashflowParts, endettementParts, leviersEndettement, LEVIERS_EXAMPLE, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, FRAIS_OFFRES, fraisOffresTotals, petitsVersementsRows, precautionRows, PRECAUTION_EXAMPLE, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../../lib/illustrationData';
 import { W, BASE, TOP, BAR_W, pct, wrapLabel } from './outils';
 
@@ -714,9 +714,8 @@ export function SchemaRegle72() {
   const X0 = 52;
   const BW = 215;
   const max = Math.max(...rows.map((r) => r.rule));
-  const f1 = (v: number) => v.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const f0 = (v: number) => v.toLocaleString('fr-FR', { maximumFractionDigits: 0 });
-  const alt = rows.map((r) => `à ${f0(r.rate * 100)} %, ${f1(r.exact)} ans en calcul exact et ${f0(r.rule)} ans par la règle de 72`).join(' ; ');
+  const alt = rows.map((r) => `à ${f0(r.rate * 100)} %, ${fmtDuree(r.exact)} en calcul exact et ${f0(r.rule)} ans par la règle de 72`).join(' ; ');
   return (
     <figure className="illustration">
       <svg viewBox="0 0 340 330" role="img" aria-labelledby="ill-72-t ill-72-d" className="ill-svg">
@@ -728,7 +727,7 @@ export function SchemaRegle72() {
             <g key={r.rate}>
               <text x="8" y={y + 24} className="ill-step">{`${f0(r.rate * 100)} %`}</text>
               <rect x={X0} y={y} width={(r.exact / max) * BW} height="20" rx="5" fill="var(--primary)" />
-              <text x={X0 + (r.exact / max) * BW + 6} y={y + 15} className="ill-sub">{`${f1(r.exact)} ans`}</text>
+              <text x={X0 + (r.exact / max) * BW + 6} y={y + 15} className="ill-sub">{fmtDuree(r.exact)}</text>
               <rect x={X0} y={y + 26} width={(r.rule / max) * BW} height="20" rx="5" fill="var(--accent)" />
               <text x={X0 + (r.rule / max) * BW + 6} y={y + 41} className="ill-sub">{`${f0(r.rule)} ans`}</text>
             </g>
@@ -740,7 +739,7 @@ export function SchemaRegle72() {
         <text x="188" y="327" className="ill-sub">règle de 72</text>
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : années nécessaires pour doubler un capital à cinq rendements annuels supposés, sans frais, impôts ni inflation. Barres proportionnelles aux durées.
+        <strong>Illustration, exemple fictif</strong> : durée nécessaire pour doubler un capital à cinq rendements annuels supposés, sans frais, impôts ni inflation, arrondie au mois. Barres proportionnelles aux durées.
       </figcaption>
     </figure>
   );
