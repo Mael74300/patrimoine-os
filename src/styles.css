@@ -1391,7 +1391,8 @@ ul.points { margin: 0.9rem 0 0.5rem; gap: 8px; }
 .ill-svg text.ill-sign { font-size: 20px; fill: var(--ink-2); }
 /* Simulateur Rendement réel : barre « D'où vient la valeur actuelle ». */
 .pf-initial { background: var(--primary); }
-.pf-monthly { background: var(--chart-4); }
+/* Versements mensuels : même bleu que le versement initial, en plus clair (comme les barres d'Objectif d'épargne). */
+.pf-monthly { background: color-mix(in srgb, var(--primary) 55%, var(--surface)); }
 .pf-gain { background: var(--accent); }
 .pf-value { background: var(--primary); }
 .pf-loss { background: repeating-linear-gradient(45deg, var(--danger) 0 6px, var(--surface) 6px 10px); }

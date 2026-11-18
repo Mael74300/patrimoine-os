@@ -62,7 +62,7 @@ export default function SimDettes() {
     <>
       <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: 'Rembourser plusieurs dettes' }]} />
       <PageHead eyebrow="Simulateur" title="Rembourser plusieurs dettes : avalanche ou boule de neige">
-        Compare deux ordres de remboursement pour un même budget : le taux le plus élevé d’abord (avalanche) ou le plus petit solde d’abord (boule de neige).
+        Comparez deux ordres de remboursement pour un même budget : le taux le plus élevé d’abord (avalanche) ou le plus petit solde d’abord (boule de neige).
       </PageHead>
       <SimNotice>
         Résultat entièrement fondé sur les soldes, taux et mensualités que vous saisissez ; aucun chiffre réglementaire. Vérifiez sur vos contrats les éventuelles indemnités de
