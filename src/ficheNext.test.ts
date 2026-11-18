@@ -4,7 +4,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { guideBySlug } from './data/guides';
 import { investments } from './data/investments';
-import { guidesForInvestment, simsForInvestment, simulateTarget } from './lib/relatedSims';
+import { guidesForInvestment, inPageTools, simsForInvestment, simulateTarget } from './lib/relatedSims';
 import InvestmentPage from './pages/InvestmentPage';
 
 const render = (slug: string) => renderToString(createElement(MemoryRouter, { initialEntries: [`/encyclopedie/${slug}`] },
@@ -15,12 +15,15 @@ describe('Fiches : suites logiques', () => {
     for (const inv of investments) {
       const t = simulateTarget(inv.slug);
       const main = simsForInvestment[inv.slug]?.[0];
+      if (inPageTools[inv.slug]) { expect(t.to, inv.slug).toMatch(/^#/); continue; }
       expect(t.to, inv.slug).toBe(main ? `/simulateurs/${main}` : '/simulateurs');
     }
     expect(simulateTarget('credit-immobilier').to).toBe('/simulateurs/credit');
     expect(simulateTarget('livret-a').to).toBe('/simulateurs/epargne-de-precaution');
-    // Seule la fiche Donation n’a pas de simulateur adapté.
-    expect(investments.filter((i) => simulateTarget(i.slug).to === '/simulateurs').map((i) => i.slug)).toEqual(['donation']);
+    // Plus aucune fiche ne renvoie au catalogue : la fiche Donation ouvre son calcul intégré.
+    expect(investments.filter((i) => simulateTarget(i.slug).to === '/simulateurs').map((i) => i.slug)).toEqual([]);
+    expect(simulateTarget('donation').to).toBe('#calcul-donation');
+    expect(render('donation')).toContain('id="calcul-donation"');
   });
   it('trois simulateurs, deux guides et quatre cartes au plus par fiche, existants et sans doublon', () => {
     for (const [slug, list] of Object.entries(simsForInvestment)) {

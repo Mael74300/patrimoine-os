@@ -13,6 +13,7 @@ import { DONATION_ABATTEMENTS, fmtEuros } from '../data/donationAbattements';
 import { SchemaActions, SchemaForet, SchemaDonation, SchemaDonationBilan, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaObligationBilan, SchemaEtfBilan, SchemaAssuranceVieBilan, SchemaOr, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaScpi, SchemaScpiBilan, SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaUniteDeCompte, SchemaFondsEuros, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaRepriseBilan, SchemaActiviteNumerique, SchemaPee } from '../components/schemas/fiches';
 import { SchemaPea, SchemaQuinzaines, SchemaLevier } from '../components/schemas/communs';
 import NotFound from './NotFound';
+import { DonationCalculator } from '../components/DonationCalculator';
 import { fmtDate } from '../lib/dates';
 import { ficheRubricUpdate } from '../lib/ficheDates';
 import { guideBySlug } from '../data/guides';
@@ -24,6 +25,13 @@ import { sectionId } from '../lib/toc';
 
 /** Une carte longue (plus de 280 caractères) à côté d'une carte au moins deux fois plus courte laisserait un grand vide : on les empile. */
 const unbalanced = (a: string, b: string) => Math.max(a.length, b.length) > 280 && Math.min(a.length, b.length) * 2 < Math.max(a.length, b.length);
+
+/** Bouton « Simuler » : lien vers le simulateur principal, ou ancre native (défilement et ouverture) vers un calcul intégré à la fiche. */
+function SimButton({ sim }: { sim: { to: string; title?: string } }) {
+  const label = sim.title ? `Simuler : ${sim.title}` : undefined;
+  if (sim.to.startsWith('#')) return <a className="btn small secondary" href={sim.to} aria-label={label}>Simuler</a>;
+  return <Link className="btn small secondary" to={sim.to} aria-label={label}>Simuler</Link>;
+}
 
 export default function InvestmentPage() {
   const { slug = '' } = useParams();
@@ -89,7 +97,7 @@ export default function InvestmentPage() {
             </p>
             <div className="btn-row" style={{ marginTop: 12 }}>
               <Link className="btn small" to={compareTo}>Comparer</Link>
-              <Link className="btn small secondary" to={sim.to} aria-label={sim.title ? `Simuler : ${sim.title}` : undefined}>Simuler</Link>
+              <SimButton sim={sim} />
             </div>
           </div>
 
@@ -161,7 +169,7 @@ export default function InvestmentPage() {
             if (inv.slug === 'crowdfunding') return <SchemaCrowdfundingBilan>{ex}</SchemaCrowdfundingBilan>;
             if (inv.slug === 'scpi') return <SchemaScpiBilan>{ex}</SchemaScpiBilan>;
             if (inv.slug === 'location-nue') return <SchemaLocationNueBilan>{ex}</SchemaLocationNueBilan>;
-            if (inv.slug === 'donation') return <SchemaDonationBilan>{ex}</SchemaDonationBilan>;
+            if (inv.slug === 'donation') return <><SchemaDonationBilan>{ex}</SchemaDonationBilan><DonationCalculator /></>;
             if (inv.slug === 'obligations') return <SchemaObligationBilan>{ex}</SchemaObligationBilan>;
             if (inv.slug === 'etf-monde') return <SchemaEtfBilan>{ex}</SchemaEtfBilan>;
             if (inv.slug === 'assurance-vie') return <SchemaAssuranceVieBilan>{ex}</SchemaAssuranceVieBilan>;
@@ -226,14 +234,14 @@ export default function InvestmentPage() {
             </dl>
             <div className="btn-row" style={{ marginTop: 16 }}>
               <Link className="btn small" to={compareTo}>Comparer</Link>
-              <Link className="btn small secondary" to={sim.to} aria-label={sim.title ? `Simuler : ${sim.title}` : undefined}>Simuler</Link>
+              <SimButton sim={sim} />
             </div>
           </div>
           {/* Le sommaire suit la lecture (« En bref » défile) : les boutons Comparer et Simuler y sont repris pour rester à portée de main. */}
           <PageToc className="panel fiche-toc" items={toc}>
             <div className="btn-row">
               <Link className="btn small" to={compareTo}>Comparer</Link>
-              <Link className="btn small secondary" to={sim.to} aria-label={sim.title ? `Simuler : ${sim.title}` : undefined}>Simuler</Link>
+              <SimButton sim={sim} />
             </div>
           </PageToc>
         </aside>

@@ -35,6 +35,14 @@ export const simsForInvestment: Record<string, string[]> = {
   per: ['patrimoine', 'independance-financiere', 'retraits-reguliers-duree-du-capital'],
   pee: ['patrimoine', 'frais'],
   'capital-humain': ['independance-financiere'],
+  // Donation : aucun simulateur ne calcule les droits ; « Simuler » ouvre le calcul intégré à la fiche (voir `inPageTools`).
+  // Retraits réguliers : avant de donner, vérifier que le capital gardé suffit.
+  donation: ['retraits-reguliers-duree-du-capital'],
+};
+
+/** Calcul intégré à une fiche : le bouton « Simuler » y mène (ancre de la page) au lieu d'un simulateur. */
+export const inPageTools: Record<string, { to: string; title: string }> = {
+  donation: { to: '#calcul-donation', title: 'Calculer les droits sur un don' },
 };
 
 /**
@@ -107,6 +115,7 @@ export function guideSimulators(guideSlug: string, ctaTo?: string) {
 
 /** Cible du bouton « Simuler » d’une fiche : son simulateur principal, sinon le catalogue. */
 export function simulateTarget(ficheSlug: string): { to: string; title?: string } {
+  if (inPageTools[ficheSlug]) return inPageTools[ficheSlug];
   const main = relatedSimulators(simsForInvestment[ficheSlug])[0];
   return main ? { to: `/simulateurs/${main.slug}`, title: main.title } : { to: '/simulateurs' };
 }
