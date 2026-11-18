@@ -2,8 +2,8 @@ import type { ReactNode } from 'react';
 import { fmtEur } from '../../lib/finance';
 import { pfuSplit } from '../../lib/calc/pfu';
 import { perDeductionBalance } from '../../lib/calc/per';
-import { CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE } from '../../lib/illustrationData';
-import { bondCoupons, crowdfundingScenario, etfMilestones, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
+import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE } from '../../lib/illustrationData';
+import { assuranceVieRetrait, bondCoupons, crowdfundingScenario, etfMilestones, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
 import { fmtEur2 } from '../../lib/calc/format';
 import { W } from './outils';
@@ -563,6 +563,50 @@ export function SchemaEtfBilan({ children }: { children: ReactNode }) {
         <path d={`M ${versedX} 284 V 318`} stroke="var(--ink-2)" strokeWidth={1.5} strokeDasharray="4 3" />
         <text x={versedX} y={332} className="ill-sub" textAnchor="middle">{`${fmtEur(last.contributed)} versés`}</text>
         <text x={0} y={352} className="ill-sub" textAnchor="start">moins qu’espéré, mais plus que le versé</text>
+      </svg>
+      <figcaption>{children}</figcaption>
+    </figure>
+  );
+}
+
+/**
+ * Schéma « Assurance-vie : sur un retrait, seuls les gains sont imposés » (exemple fictif de la fiche, constat du
+ * 2026-11-18 : seule grande fiche d'enveloppe dont l'exemple restait un paragraphe). Valeurs de `ASSURANCE_VIE_EXAMPLE`,
+ * recalculées par `assuranceVieRetrait` ; barre du haut proportionnelle aux montants, jauge proportionnelle à
+ * l'abattement. Aucun chiffre réglementaire nouveau : 4 600 € et 17,2 % viennent de la rubrique Fiscalité de la fiche.
+ */
+export function SchemaAssuranceVieBilan({ children }: { children: ReactNode }) {
+  const { paid, value, allowance, socialPct } = ASSURANCE_VIE_EXAMPLE;
+  const r = assuranceVieRetrait(paid, value, allowance, socialPct);
+  const X0 = 10;
+  const W = 320;
+  const wPaid = (paid / value) * W;
+  const wUsed = (Math.min(r.gains, allowance) / allowance) * W;
+  const pct = String(socialPct).replace('.', ',');
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 316" role="img" aria-labelledby="ill-avb-t ill-avb-d" className="ill-svg">
+        <title id="ill-avb-t">{`Assurance-vie : sur un retrait de ${fmtEur(value)}, seuls les ${fmtEur(r.gains)} de gains sont imposés`}</title>
+        <desc id="ill-avb-d">{`Exemple fictif : ${fmtEur(paid)} versés il y a plus de 8 ans valent ${fmtEur(value)}, retirés en totalité. Les ${fmtEur(paid)} de versements reviennent sans impôt. Les ${fmtEur(r.gains)} de gains restent sous l’abattement annuel de ${fmtEur(allowance)} : pas d’impôt sur le revenu. Les prélèvements sociaux de ${pct} % prennent ${fmtEur(r.social)}. Il reste ${fmtEur(r.net)}.`}</desc>
+        <text x={X0} y={20} className="ill-step">{`Vous retirez ${fmtEur(value)} (exemple fictif)`}</text>
+        <rect x={X0} y={32} width={wPaid} height={44} rx={6} fill="var(--surface-2)" stroke="var(--primary)" strokeWidth={2} />
+        <rect x={X0 + wPaid} y={32} width={W - wPaid} height={44} rx={6} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={X0 + wPaid / 2} y={59} textAnchor="middle" className="ill-total">{`${fmtEur(paid)} versés`}</text>
+        <text x={X0 + wPaid + (W - wPaid) / 2} y={59} textAnchor="middle" className="ill-total">{fmtEur(r.gains)}</text>
+        <text x={X0} y={96} className="ill-sub" textAnchor="start">versements : rendus sans impôt</text>
+        <text x={X0 + W} y={96} className="ill-sub" textAnchor="end">gains : imposés</text>
+        <line x1={X0} y1={112} x2={X0 + W} y2={112} stroke="var(--line)" strokeWidth={1} />
+        <text x={X0} y={136} className="ill-step">{`Impôt sur le revenu : ${fmtEur(r.overAllowance)}`}</text>
+        <rect x={X0} y={148} width={W} height={16} rx={8} fill="var(--surface-2)" stroke="var(--line)" strokeWidth={1.5} />
+        <rect x={X0} y={148} width={wUsed} height={16} rx={8} fill="var(--accent)" />
+        <text x={X0} y={184} className="ill-sub" textAnchor="start">{`${fmtEur(r.gains)} de gains`}</text>
+        <text x={X0 + W} y={184} className="ill-sub" textAnchor="end">{`${fmtEur(allowance)} exonérés`}</text>
+        <text x={X0} y={202} className="ill-sub" textAnchor="start">abattement annuel après 8 ans, personne seule</text>
+        <line x1={X0} y1={218} x2={X0 + W} y2={218} stroke="var(--line)" strokeWidth={1} />
+        <text x={X0} y={242} className="ill-step">{`Prélèvements sociaux : ${fmtEur(r.social)}`}</text>
+        <text x={X0} y={260} className="ill-sub" textAnchor="start">{`${pct} % des ${fmtEur(r.gains)} de gains`}</text>
+        <line x1={X0} y1={276} x2={X0 + W} y2={276} stroke="var(--line)" strokeWidth={1} />
+        <text x={X0} y={302} className="ill-total" textAnchor="start" style={{ fill: 'var(--accent)' }}>{`Il vous reste ${fmtEur(r.net)} sur ${fmtEur(value)}`}</text>
       </svg>
       <figcaption>{children}</figcaption>
     </figure>

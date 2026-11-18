@@ -297,3 +297,17 @@ export function forestCredit(amount: number, capEur: number, ratePct: number) {
   const credit = Math.round(retained * ratePct) / 100;
   return { retained, credit, effectivePct: Math.round((credit / amount) * 1000) / 10, netCost: Math.round((amount - credit) * 100) / 100 };
 }
+
+export interface AssuranceVieRetrait { gains: number; overAllowance: number; allowanceLeft: number; social: number; net: number }
+
+/**
+ * Assurance-vie, retrait total d'un contrat de plus de 8 ans : `paid` € versés, `value` € de valeur au retrait.
+ * Seuls les gains (`value − paid`) sont imposables ; `overAllowance` : part des gains au-delà de l'abattement annuel
+ * `allowance` (0 si les gains restent dessous), `allowanceLeft` : abattement non utilisé ; `social` : prélèvements
+ * sociaux de `socialPct` % sur les gains, arrondis à l'euro ; `net` : retrait moins ces prélèvements.
+ */
+export function assuranceVieRetrait(paid: number, value: number, allowance: number, socialPct: number): AssuranceVieRetrait {
+  const gains = Math.max(0, value - paid);
+  const social = Math.round((gains * socialPct) / 100);
+  return { gains, overAllowance: Math.max(0, gains - allowance), allowanceLeft: Math.max(0, allowance - gains), social, net: value - social };
+}
