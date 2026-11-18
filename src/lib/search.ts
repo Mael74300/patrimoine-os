@@ -114,6 +114,7 @@ export const searchShortcuts: { queries: string[]; to: string[] }[] = [
   { queries: ['mensualité', 'mensualités', 'mensualité crédit', 'calculer mensualité', 'assurance emprunteur'], to: ['/simulateurs/credit'] },
   { queries: ['où placer mon argent', 'placer son argent', 'investir son argent', 'investir'], to: ['/guides/par-ou-commencer', '/guides/choisir-son-enveloppe'] },
   { queries: ['épargne', 'épargner'], to: ['/guides/par-ou-commencer', '/simulateurs/objectif-epargne'] },
+  { queries: ['épargne salariale', 'PEE', 'plan d’épargne entreprise', 'intéressement', 'prime d’intéressement', 'participation', 'abondement'], to: ['/encyclopedie/pee'] },
   { queries: ['vivre de ses rentes', 'vivre de ses placements', 'rentier', 'rente'], to: ['/simulateurs/independance-financiere', '/simulateurs/retraits-reguliers-duree-du-capital'] },
 ];
 

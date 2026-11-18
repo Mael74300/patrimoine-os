@@ -5,7 +5,7 @@ import { investmentBySlug } from './investments';
 import { bondCoupons, fondsEurosGrowth, livretQuinzaines, concentrationLoss, crowdfundingScenario, lepVsLivretA, pelVsLivretA, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, subscriptionChurn, trainingPayoff, yearlySavingsValue, termDepositVsLivretA, ucFeesDrag, forestCredit } from '../lib/calc/ficheExemples';
 import { amortize } from '../lib/calc/loan';
 import { CROWDFUNDING_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, leverageBars } from '../lib/illustrationData';
-import { SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaRepriseBilan, SchemaScpiBilan } from '../components/schemas/fiches';
+import { SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaPee, SchemaRepriseBilan, SchemaScpiBilan } from '../components/schemas/fiches';
 import { guideBySlug } from './guides';
 import { LIVRETS } from './livrets';
 
@@ -459,5 +459,26 @@ describe('fiches Compte à terme, Unités de compte et Forêt : exemples recalcu
     expect(ex).toContain(`coûtent donc ${cents(seul.netCost)}, hors frais`);
     expect(ex).toContain(`(plafond de ${eur(12500)})`);
     expect(ex).toContain(`${eur(couple.credit)} de crédit`);
+  });
+
+  it('PEE : 500 € versés + 500 € d’abondement = 1 000 € placés, dans les plafonds de 2026 (Service-Public F2142 et F2140, consultées le 2026-11-18)', () => {
+    const PLAFOND_ABONDEMENT = 3844.8;
+    const PLAFOND_INTERESSEMENT = 36045;
+    const verse = 500;
+    const abondement = verse * 1; // abondement de 100 %, choisi pour l’exemple
+    expect(abondement).toBeLessThanOrEqual(3 * verse);
+    expect(abondement).toBeLessThanOrEqual(PLAFOND_ABONDEMENT);
+    const fiche = investmentBySlug['pee']!;
+    const ex = norm(fiche.example);
+    expect(ex).toMatch(/^Exemple fictif/);
+    expect(ex).toContain(`vous versez ${eur(verse)} et le règlement prévoit un abondement de 100 % : l’entreprise ajoute ${eur(abondement)}`);
+    expect(ex).toContain(`${eur(verse + abondement)} sont placés pour ${eur(verse)} sortis de votre poche`);
+    const tax = norm(fiche.tax.text);
+    expect(tax).toContain(`${eur(PLAFOND_INTERESSEMENT)} par an en 2026`);
+    expect(tax).toContain('3 844,80 €');
+    expect(norm(fiche.minCapital.text)).toContain('160 €');
+    const svg = plain(renderToStaticMarkup(createElement(SchemaPee)));
+    expect(svg).toContain('jusqu’à 3 fois');
+    expect(svg).toContain('bloqué au moins 5 ans');
   });
 });

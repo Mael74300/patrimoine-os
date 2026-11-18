@@ -48,6 +48,7 @@ export const investmentNames: Record<string, string> = {
   "reprise-entreprise": "Racheter une entreprise",
   "activite-numerique": "SaaS, e-commerce et produits numériques",
   "per": "Plan d'épargne retraite (PER)",
+  "pee": "Plan d'épargne entreprise (PEE)",
   "capital-humain": "Formation et compétences",
   "donation": "Donation et transmission",
   "crowdfunding": "Financement participatif",
