@@ -49,7 +49,7 @@ describe('Jargon expliqué sur place (fiches et guides)', () => {
     expect(terms('/encyclopedie/assurance-vie')).not.toContain('Assurance-vie');
     expect(terms('/guides/combien-epargne-de-precaution')).not.toContain('Épargne de précaution');
     expect(terms('/guides/inflation-pouvoir-d-achat-epargne')).not.toContain('Inflation');
-    expect(terms('/encyclopedie/credit-immobilier')).toEqual(['Effet de levier', 'Rendement brut et net', 'Taux d’endettement', 'Capacité d’emprunt', 'Inflation']);
+    expect(terms('/encyclopedie/credit-immobilier')).toEqual(['Effet de levier', 'Taux d’endettement', 'Capacité d’emprunt', 'Inflation']);
   });
 
   it('respecte les mots entiers et la casse des sigles', () => {
