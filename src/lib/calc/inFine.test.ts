@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { inFine } from './inFine';
+import { inFine, inFineBars } from './inFine';
+import { amortize } from './loan';
 
 // Exemples fictifs.
 const base = { principal: 200000, annualRate: 0.03, years: 20, savingsReturn: 0.03 };
@@ -49,5 +50,47 @@ describe('Crédit in fine ou amortissable', () => {
 
   it('entrées invalides : jamais NaN', () => {
     for (const v of Object.values(inFine({ principal: NaN, annualRate: Infinity, years: NaN, savingsReturn: NaN }))) expect(Number.isFinite(v)).toBe(true);
+  });
+
+  describe('barres', () => {
+    const ex = { ...base, savingsReturn: 0.02, insuranceRate: 0.003 }; // exemple par défaut du simulateur, fictif
+
+    it('coût : l\'échelle est le plus grand montant, la barre in fine se partage entre net et regagné', () => {
+      const r = inFine(ex);
+      const b = inFineBars(ex);
+      expect(r.inFineCost).toBeCloseTo(132000, 6);
+      expect(b.cost.inFineNet + b.cost.inFineRegained).toBeCloseTo(100, 8);
+      expect(b.cost.inFineNet).toBeCloseTo((100 * r.inFineNetCost) / r.inFineCost, 8);
+      expect(b.cost.amortizing).toBeCloseTo((100 * r.amortizingCost) / r.inFineCost, 8);
+      expect(b.cost.inFineLost).toBe(0);
+    });
+
+    it('mi-parcours : capital remboursé = capital − restant dû de l\'échéancier, épargne versée avec ses gains', () => {
+      const b = inFineBars(ex);
+      expect(b.midMonth).toBe(120);
+      const remainingAfter10 = amortize(ex).schedule[9].remaining;
+      expect(b.amortizingRepaid).toBeCloseTo(200000 - remainingAfter10, 4);
+      const r = inFine(ex);
+      const m = Math.pow(1.02, 1 / 12) - 1;
+      let cap = 0;
+      for (let k = 0; k < 120; k++) cap = cap * (1 + m) + r.monthlySaving;
+      expect(b.inFineSaved).toBeCloseTo(cap, 4);
+      expect(b.inFineSavedPct).toBeCloseTo((100 * cap) / 200000, 8);
+    });
+
+    it('rendement négatif : la perte de l\'épargne s\'ajoute au bout de la barre', () => {
+      const b = inFineBars({ ...ex, savingsReturn: -0.01 });
+      expect(b.cost.inFineRegained).toBe(0);
+      expect(b.cost.inFineLost).toBeGreaterThan(0);
+      expect(b.cost.inFineNet + b.cost.inFineLost).toBeCloseTo(100, 8);
+    });
+
+    it('taux nul et entrées invalides : jamais NaN', () => {
+      const z = inFineBars({ ...ex, annualRate: 0, insuranceRate: 0, savingsReturn: 0 });
+      expect(z.amortizingRepaidPct).toBeCloseTo(50, 8);
+      expect(z.inFineSavedPct).toBeCloseTo(50, 8);
+      const bad = inFineBars({ principal: NaN, annualRate: NaN, years: NaN, savingsReturn: NaN });
+      for (const v of [bad.midMonth, bad.amortizingRepaid, bad.inFineSaved, ...Object.values(bad.cost)]) expect(Number.isFinite(v)).toBe(true);
+    });
   });
 });
