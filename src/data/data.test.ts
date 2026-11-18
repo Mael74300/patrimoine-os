@@ -431,3 +431,12 @@ describe('fiche PEA : frais présentés poste par poste', () => {
     for (const l of lignes) expect(l.length).toBeLessThan(230);
   });
 });
+
+describe('rubrique « Fonctionnement » des fiches', () => {
+  it('est rédigée en phrases complètes, pas en mots-clés', () => {
+    for (const inv of investments) {
+      expect(inv.howItWorks.length, inv.slug).toBeGreaterThanOrEqual(120);
+      expect(inv.howItWorks.trim(), inv.slug).toMatch(/^[A-ZÀ-Ý].*[.)…]$/s);
+    }
+  });
+});
