@@ -348,3 +348,10 @@ export const REPRISE_EXAMPLE = { profit: 100000, price: 500000, loan: 400000, ye
  * « −30 % à −50 % lors de crises passées » de la rubrique Inconvénients de la fiche). Recalculé par `etfMilestones`.
  */
 export const ETF_EXAMPLE = { monthly: 200, ratePct: 6, years: 20, step: 5, dropPct: 30 };
+
+/**
+ * Fiche Assurance-vie : exemple fictif de la fiche, 7 000 € versés il y a plus de 8 ans valant 10 000 €, retirés en
+ * totalité. Abattement annuel de 4 600 € (personne seule) et prélèvements sociaux de 17,2 % : mêmes valeurs que la
+ * rubrique Fiscalité de la fiche (vérifiée le 14 novembre 2026). Recalculé par `assuranceVieRetrait`.
+ */
+export const ASSURANCE_VIE_EXAMPLE = { paid: 7000, value: 10000, allowance: 4600, socialPct: 17.2 };
