@@ -63,25 +63,25 @@ export default function Entrepreneuriat() {
           d'estimer ce que représenterait l'investissement régulier d'une partie des bénéfices.
         </p>
       </SchemaSeparer>
-      <div className="prose">
-        <p className="notice small">
-          Statuts, plafonds de la micro-entreprise et taux de cotisations changent régulièrement : vérifiez-les sur le site de l'URSSAF et de Bpifrance Création
-          avant toute décision.
-        </p>
-      </div>
-
       <h2>Avant de vous lancer</h2>
-      <Link className="panel path-before" to={`/encyclopedie/${competences.slug}`}>
-        <strong>{competences.name} →</strong>
-        <span>{competences.summary}</span>
-      </Link>
-
-      <h2>Ressources publiques gratuites</h2>
-      <ul>
-        <li><a href="https://bpifrance-creation.fr" target="_blank" rel="noopener noreferrer">Bpifrance Création</a> — choix du statut, financement, guides.</li>
-        <li><a href="https://www.autoentrepreneur.urssaf.fr" target="_blank" rel="noopener noreferrer">URSSAF — Micro-entrepreneur</a> — déclaration et cotisations.</li>
-        <li><a href="https://formalites.entreprises.gouv.fr" target="_blank" rel="noopener noreferrer">Guichet unique des formalités d'entreprises</a> — création et modifications.</li>
-      </ul>
+      <div className="path-prep">
+        <Link className="panel path-before" to={`/encyclopedie/${competences.slug}`}>
+          <strong>{competences.name} →</strong>
+          <span>{competences.summary}</span>
+        </Link>
+        <div className="panel">
+          <h3>Ressources publiques gratuites</h3>
+          <ul className="small">
+            <li><a href="https://bpifrance-creation.fr" target="_blank" rel="noopener noreferrer">Bpifrance Création</a> — choix du statut, financement, guides.</li>
+            <li><a href="https://www.autoentrepreneur.urssaf.fr" target="_blank" rel="noopener noreferrer">URSSAF — Micro-entrepreneur</a> — déclaration et cotisations.</li>
+            <li><a href="https://formalites.entreprises.gouv.fr" target="_blank" rel="noopener noreferrer">Guichet unique des formalités d'entreprises</a> — création et modifications.</li>
+          </ul>
+        </div>
+      </div>
+      <p className="notice small">
+        Statuts, plafonds de la micro-entreprise et taux de cotisations changent régulièrement : vérifiez-les sur le site de l'URSSAF et de Bpifrance Création
+        avant toute décision.
+      </p>
     </>
   );
 }
