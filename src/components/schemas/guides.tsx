@@ -554,40 +554,38 @@ export function SchemaLeviers() {
   );
 }
 
-/** Schéma « Patrimoine net = ce que l’on possède − ce que l’on doit » sur l’exemple fictif du guide. */
+/** Schéma « Patrimoine net = ce que l’on possède − ce que l’on doit » sur l’exemple fictif du guide.
+ * Deux barres de même longueur : la première additionne ce que l’on possède, la seconde partage ce même total
+ * entre le crédit restant dû et le patrimoine net (ce qui reste à soi). Montants écrits sur les barres, sans légende à part. */
 export function SchemaPatrimoineNet() {
   const p = patrimoineParts();
   const X0 = 14;
   const BW = 312;
+  const XE = X0 + BW;
   const x = (v: number) => X0 + (v / p.assets) * BW;
-  const rows = [
-    { fill: 'var(--primary)', label: `${fmtEur(p.home)} : logement (valeur estimée)` },
-    { fill: 'var(--gold)', label: `${fmtEur(p.savings)} : épargne` },
-    { fill: 'var(--surface-2)', label: `${fmtEur(p.debt)} : crédit restant dû`, stroke: true },
-    { fill: 'var(--accent)', label: `${fmtEur(p.net)} : patrimoine net` },
-  ];
+  const mid = (a: number, b: number) => (x(a) + x(b)) / 2;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 340 226" role="img" aria-labelledby="ill-pn-t ill-pn-d" className="ill-svg">
+      <svg viewBox="0 0 340 196" role="img" aria-labelledby="ill-pn-t ill-pn-d" className="ill-svg">
         <title id="ill-pn-t">Patrimoine net : ce que l’on possède moins ce que l’on doit</title>
-        <desc id="ill-pn-d">{`Exemple fictif : ${rows.slice(0, 3).map((r) => r.label).join(' ; ')}. Ce que l’on possède (${fmtEur(p.assets)}) moins ce que l’on doit (${fmtEur(p.debt)}) donne un patrimoine net de ${fmtEur(p.net)}.`}</desc>
+        <desc id="ill-pn-d">{`Exemple fictif. Ce que l’on possède : ${fmtEur(p.home)} de logement (valeur estimée) et ${fmtEur(p.savings)} d’épargne, soit ${fmtEur(p.assets)}. Ce même total se partage en deux : ${fmtEur(p.debt)} de crédit restant dû à la banque, et ${fmtEur(p.net)} qui restent à soi, le patrimoine net.`}</desc>
         <text x={X0} y="16" className="ill-step">{`Ce que l’on possède : ${fmtEur(p.assets)}`}</text>
-        <rect x={X0} y="24" width={BW} height="30" rx="8" fill="var(--primary)" />
-        <rect x={x(p.home)} y="24" width={x(p.assets) - x(p.home)} height="30" rx="8" fill="var(--gold)" />
-        <rect x={x(p.home) - 8} y="24" width="8" height="30" fill="var(--primary)" />
-        <text x={X0} y="80" className="ill-step">{`Ce que l’on doit : ${fmtEur(p.debt)}`}</text>
-        <rect x={X0} y="88" width={BW} height="30" rx="8" fill="var(--accent)" />
-        <rect x={X0} y="88" width={x(p.debt) - X0} height="30" rx="8" fill="var(--surface-2)" stroke="var(--line)" />
-        <rect x={x(p.debt) - 8} y="88" width="8" height="30" fill="var(--surface-2)" />
-        {rows.map((r, i) => (
-          <g key={r.label}>
-            <rect x={X0} y={134 + i * 24} width="16" height="16" rx="4" fill={r.fill} stroke={r.stroke ? 'var(--line)' : 'none'} />
-            <text x={X0 + 26} y={147 + i * 24} className="ill-step">{r.label}</text>
-          </g>
-        ))}
+        <rect x={X0} y="26" width={x(p.home) - X0 - 2} height="32" rx="8" fill="var(--primary)" />
+        <rect x={x(p.home) + 2} y="26" width={XE - x(p.home) - 2} height="32" rx="7" fill="var(--gold)" />
+        <text x={mid(0, p.home)} y="47" textAnchor="middle" className="ill-total ill-on-dark">{fmtEur(p.home)}</text>
+        <text x={X0} y="76" className="ill-sub">logement (valeur estimée)</text>
+        <text x={XE} y="76" textAnchor="end" className="ill-sub">{`+ ${fmtEur(p.savings)} d’épargne`}</text>
+        <text x={X0} y="114" className="ill-step">Le même total, partagé en deux</text>
+        <rect x={X0 + 0.75} y="124.75" width={x(p.debt) - X0 - 3.5} height="30.5" rx="8" fill="var(--surface-2)" stroke="var(--line)" strokeWidth="1.5" />
+        <rect x={x(p.debt) + 2} y="124" width={XE - x(p.debt) - 2} height="32" rx="8" fill="var(--accent)" />
+        <text x={mid(0, p.debt)} y="145" textAnchor="middle" className="ill-total">{fmtEur(p.debt)}</text>
+        <text x={mid(p.debt, p.assets)} y="145" textAnchor="middle" className="ill-total ill-on-dark">{fmtEur(p.net)}</text>
+        <text x={X0} y="176" className="ill-sub">crédit restant dû</text>
+        <text x={XE} y="176" textAnchor="end" className="ill-step">patrimoine net</text>
+        <text x={XE} y="192" textAnchor="end" className="ill-sub">ce qui reste à soi</text>
       </svg>
-      <figcaption className="fig-short">
-        <strong>Illustration, exemple fictif</strong> : {fmtEur(p.assets)} − {fmtEur(p.debt)} = {fmtEur(p.net)}. Largeurs proportionnelles aux montants.
+      <figcaption>
+        <strong>Illustration, exemple fictif.</strong> Une part de ce que l’on possède irait rembourser le crédit ; le reste est à vous : {fmtEur(p.assets)} − {fmtEur(p.debt)} = {fmtEur(p.net)}. Largeurs proportionnelles aux montants.
       </figcaption>
     </figure>
   );

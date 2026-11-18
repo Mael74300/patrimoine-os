@@ -26,6 +26,13 @@ describe('schéma « patrimoine net »', () => {
     expect(html).toContain('85 000');
     expect(html.length).toBeLessThan(15000);
   });
+  it('partage le même total entre crédit et patrimoine net, sans barre « Ce que l’on doit » qui contiendrait le patrimoine net (constat du 2026-11-18)', () => {
+    const html = renderToStaticMarkup(createElement(SchemaPatrimoineNet)).replace(/[\u00a0\u202f]/g, ' ');
+    expect(html).toContain('Ce que l’on possède : 265 000 €');
+    expect(html).toContain('Le même total, partagé en deux');
+    expect(html).not.toContain('Ce que l’on doit');
+    for (const k of ['250 000 €', '15 000 €', '180 000 €', '85 000 €', 'crédit restant dû', 'patrimoine net', '265 000 € − 180 000 € = 85 000 €']) expect(html).toContain(k);
+  });
 });
 
 describe('calculateur « patrimoine net » du guide', () => {
