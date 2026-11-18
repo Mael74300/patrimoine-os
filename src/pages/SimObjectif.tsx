@@ -64,10 +64,14 @@ export default function SimObjectif() {
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
             <legend>Votre projet</legend>
-            <NumberField label="Montant à atteindre" unit="€" value={s.target} onChange={up('target')} min={0} step={500} />
-            <NumberField label="Épargne déjà mise de côté" unit="€" value={s.current} onChange={up('current')} min={0} step={500} />
-            <NumberField label="Échéance" unit="ans" value={s.years} onChange={up('years')} min={0} max={60} step={1} />
-            <NumberField label="Rendement annuel net" unit="%" percent value={s.annualRate} onChange={up('annualRate')} min={-5} max={20} step={0.1} hint={`Hypothèse. Livret A : ${fmtPct(LIVRET_A.rate)} ${LIVRETS_PERIOD}.`} />
+            <div className="field-duo">
+              <NumberField label="Montant à atteindre" unit="€" value={s.target} onChange={up('target')} min={0} step={500} />
+              <NumberField label="Épargne déjà mise de côté" unit="€" value={s.current} onChange={up('current')} min={0} step={500} />
+            </div>
+            <div className="field-duo">
+              <NumberField label="Échéance" unit="ans" value={s.years} onChange={up('years')} min={0} max={60} step={1} />
+              <NumberField label="Rendement annuel net" unit="%" percent value={s.annualRate} onChange={up('annualRate')} min={-5} max={20} step={0.1} hint={`Hypothèse. Livret A : ${fmtPct(LIVRET_A.rate)} ${LIVRETS_PERIOD}.`} />
+            </div>
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
           <JumpToResults />

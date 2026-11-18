@@ -91,8 +91,10 @@ function Duree() {
           <fieldset>
             <legend>Votre crédit</legend>
             <NumberField label="Capital emprunté" unit="€" value={s.principal} onChange={up('principal')} min={0} max={5000000} step={1000} />
-            <NumberField label="Taux nominal annuel" unit="%" percent value={s.annualRate} onChange={up('annualRate')} step={0.05} min={0} max={20} />
-            <NumberField label="Assurance emprunteur" unit="%" percent value={s.insuranceRate} onChange={up('insuranceRate')} step={0.05} min={0} max={2} />
+            <div className="field-duo">
+              <NumberField label="Taux nominal annuel" unit="%" percent value={s.annualRate} onChange={up('annualRate')} step={0.05} min={0} max={20} />
+              <NumberField label="Assurance emprunteur" unit="%" percent value={s.insuranceRate} onChange={up('insuranceRate')} step={0.05} min={0} max={2} />
+            </div>
           </fieldset>
         )}
       >
@@ -203,8 +205,10 @@ function Taeg() {
           <fieldset>
             <legend>L’offre de prêt</legend>
             <NumberField label="Capital emprunté" unit="€" value={s.principal} onChange={up('principal')} min={0} step={5000} />
-            <NumberField label="Taux nominal annuel" unit="%" percent value={s.annualRate} onChange={up('annualRate')} min={0} max={20} step={0.05} />
-            <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={0} max={50} step={1} />
+            <div className="field-duo">
+              <NumberField label="Taux nominal annuel" unit="%" percent value={s.annualRate} onChange={up('annualRate')} min={0} max={20} step={0.05} />
+              <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={0} max={50} step={1} />
+            </div>
             <NumberField label="Assurance emprunteur (taux annuel sur le capital initial)" unit="%" percent value={s.insuranceRate} onChange={up('insuranceRate')} min={0} max={10} step={0.05} />
             <NumberField label="Frais de dossier, garantie et autres frais payés au départ" unit="€" value={s.fees} onChange={up('fees')} min={0} step={100} />
           </fieldset>
@@ -306,8 +310,10 @@ function InFine() {
             <fieldset>
               <legend>Le crédit</legend>
               <NumberField label="Capital emprunté" unit="€" value={s.principal} onChange={up('principal')} min={0} max={5000000} step={1000} />
-              <NumberField label="Taux nominal annuel" unit="%" percent value={s.annualRate} onChange={up('annualRate')} step={0.05} min={0} max={20} />
-              <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={1} max={50} step={1} />
+              <div className="field-duo">
+                <NumberField label="Taux nominal annuel" unit="%" percent value={s.annualRate} onChange={up('annualRate')} step={0.05} min={0} max={20} />
+                <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={1} max={50} step={1} />
+              </div>
               <NumberField label="Assurance emprunteur" unit="%" percent value={s.insuranceRate} onChange={up('insuranceRate')} step={0.05} min={0} max={2} />
             </fieldset>
             <fieldset>
@@ -392,13 +398,17 @@ function Renegocier() {
             <fieldset>
               <legend>Prêt actuel</legend>
               <NumberField label="Capital restant dû" unit="€" value={s.remaining} onChange={up('remaining')} min={0} step={1000} />
-              <NumberField label="Taux nominal actuel" unit="%" value={s.currentRate} onChange={up('currentRate')} min={0} max={20} step={0.05} />
-              <NumberField label="Durée restante" unit="ans" value={s.currentYearsLeft} onChange={up('currentYearsLeft')} min={0} max={50} step={1} />
+              <div className="field-duo">
+                <NumberField label="Taux nominal actuel" unit="%" value={s.currentRate} onChange={up('currentRate')} min={0} max={20} step={0.05} />
+                <NumberField label="Durée restante" unit="ans" value={s.currentYearsLeft} onChange={up('currentYearsLeft')} min={0} max={50} step={1} />
+              </div>
             </fieldset>
             <fieldset>
               <legend>Nouveau prêt</legend>
-              <NumberField label="Nouveau taux nominal" unit="%" value={s.newRate} onChange={up('newRate')} min={0} max={20} step={0.05} />
-              <NumberField label="Durée du nouveau prêt" unit="ans" value={s.newYears} onChange={up('newYears')} min={0} max={50} step={1} />
+              <div className="field-duo">
+                <NumberField label="Nouveau taux nominal" unit="%" value={s.newRate} onChange={up('newRate')} min={0} max={20} step={0.05} />
+                <NumberField label="Durée du nouveau prêt" unit="ans" value={s.newYears} onChange={up('newYears')} min={0} max={50} step={1} />
+              </div>
               <NumberField label="Frais ponctuels de l’opération" unit="€" value={s.fees} onChange={up('fees')} min={0} step={100} />
             </fieldset>
           </>

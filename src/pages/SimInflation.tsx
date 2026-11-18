@@ -30,10 +30,14 @@ export default function SimInflation() {
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
             <legend>Hypothèses</legend>
-            <NumberField label="Somme" unit="€" value={s.amount} onChange={up('amount')} min={0} step={1000} />
-            <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={0} max={80} step={1} />
-            <NumberField label="Inflation annuelle" unit="%" percent value={s.inflation} onChange={up('inflation')} min={-5} max={30} step={0.5} hint="Hypothèse moyenne sur la durée." />
-            <NumberField label="Rendement annuel net de frais du placement" unit="%" percent value={s.annualReturn} onChange={up('annualReturn')} min={-20} max={30} step={0.5} hint="Hypothèse, jamais une garantie. Avant impôt." />
+            <div className="field-duo">
+              <NumberField label="Somme" unit="€" value={s.amount} onChange={up('amount')} min={0} step={1000} />
+              <NumberField label="Durée" unit="ans" value={s.years} onChange={up('years')} min={0} max={80} step={1} />
+            </div>
+            <div className="field-duo">
+              <NumberField label="Inflation annuelle" unit="%" percent value={s.inflation} onChange={up('inflation')} min={-5} max={30} step={0.5} hint="Hypothèse moyenne sur la durée." />
+              <NumberField label="Rendement annuel net de frais du placement" unit="%" percent value={s.annualReturn} onChange={up('annualReturn')} min={-20} max={30} step={0.5} hint="Hypothèse, jamais une garantie. Avant impôt." />
+            </div>
           </fieldset>
           <button type="button" className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
           <JumpToResults />

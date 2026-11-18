@@ -127,22 +127,30 @@ export default function SimEtfImmobilier() {
           </button>
           <fieldset>
             <legend>Commun</legend>
-            <NumberField label="Horizon" unit="ans" value={st.horizon} onChange={set('horizon')} min={1} max={40} />
-            <NumberField label="Inflation hypothétique" unit="%" percent value={st.inflation} onChange={set('inflation')} step={0.25} min={-2} max={15} />
+            <div className="field-duo">
+              <NumberField label="Horizon" unit="ans" value={st.horizon} onChange={set('horizon')} min={1} max={40} />
+              <NumberField label="Inflation hypothétique" unit="%" percent value={st.inflation} onChange={set('inflation')} step={0.25} min={-2} max={15} />
+            </div>
           </fieldset>
           <fieldset>
             <legend>ETF</legend>
-            <NumberField label="Rendement hypothétique brut" unit="%" percent value={st.etfReturn} onChange={set('etfReturn')} step={0.25} min={-10} max={20} />
-            <NumberField label="Frais annuels" unit="%" percent value={st.etfFees} onChange={set('etfFees')} step={0.05} min={0} max={5} />
+            <div className="field-duo">
+              <NumberField label="Rendement hypothétique brut" unit="%" percent value={st.etfReturn} onChange={set('etfReturn')} step={0.25} min={-10} max={20} />
+              <NumberField label="Frais annuels" unit="%" percent value={st.etfFees} onChange={set('etfFees')} step={0.05} min={0} max={5} />
+            </div>
             <ChoiceField label="Fiscalité des gains à la sortie" value={st.etfTax} options={ETF_TAX} columns={2} onChange={set('etfTax')} />
           </fieldset>
           <fieldset>
             <legend>Immobilier</legend>
-            <NumberField label="Prix du bien" unit="€" value={R.price} onChange={setR('price')} min={0} step={5000} />
-            <NumberField label="Apport (capital initial)" unit="€" value={R.downPayment} onChange={setR('downPayment')} min={0} step={1000} />
+            <div className="field-duo">
+              <NumberField label="Prix du bien" unit="€" value={R.price} onChange={setR('price')} min={0} step={5000} />
+              <NumberField label="Apport (capital initial)" unit="€" value={R.downPayment} onChange={setR('downPayment')} min={0} step={1000} />
+            </div>
             <NumberField label="Loyer mensuel" unit="€" value={R.monthlyRent} onChange={setR('monthlyRent')} min={0} step={25} />
-            <NumberField label="Taux du crédit" unit="%" percent value={R.loanRate} onChange={setR('loanRate')} step={0.05} min={0} max={15} />
-            <NumberField label="Durée du crédit" unit="ans" value={R.loanYears} onChange={setR('loanYears')} min={0} max={30} />
+            <div className="field-duo">
+              <NumberField label="Taux du crédit" unit="%" percent value={R.loanRate} onChange={setR('loanRate')} step={0.05} min={0} max={15} />
+              <NumberField label="Durée du crédit" unit="ans" value={R.loanYears} onChange={setR('loanYears')} min={0} max={30} />
+            </div>
           </fieldset>
           <details className="fold advanced">
             <summary>
@@ -154,18 +162,26 @@ export default function SimEtfImmobilier() {
           <p className="small muted">Déjà remplis avec des valeurs d'exemple. Si vous ne savez pas, laissez-les telles quelles.</p>
           <fieldset>
             <legend>Immobilier : détails</legend>
-            <NumberField label="Frais d'acquisition" unit="%" percent value={R.notaryRate} onChange={setR('notaryRate')} step={0.5} min={0} max={20} />
-            <NumberField label="Travaux" unit="€" value={R.works} onChange={setR('works')} min={0} step={1000} />
+            <div className="field-duo">
+              <NumberField label="Frais d'acquisition" unit="%" percent value={R.notaryRate} onChange={setR('notaryRate')} step={0.5} min={0} max={20} />
+              <NumberField label="Travaux" unit="€" value={R.works} onChange={setR('works')} min={0} step={1000} />
+            </div>
             <NumberField label="Vacance" unit="mois/an" value={R.vacancyMonths} onChange={setR('vacancyMonths')} min={0} max={12} step={0.5} />
-            <NumberField label="Taxe foncière" unit="€/an" value={R.propertyTax} onChange={setR('propertyTax')} min={0} step={50} />
-            <NumberField label="Autres charges" unit="€/an" value={R.coOwnership} onChange={setR('coOwnership')} min={0} step={50} />
+            <div className="field-duo">
+              <NumberField label="Taxe foncière" unit="€/an" value={R.propertyTax} onChange={setR('propertyTax')} min={0} step={50} />
+              <NumberField label="Autres charges" unit="€/an" value={R.coOwnership} onChange={setR('coOwnership')} min={0} step={50} />
+            </div>
             <ChoiceField label="Régime fiscal" value={R.regime} options={REGIMES} columns={2} onChange={(v) => setSt((x) => ({ ...x, rental: { ...x.rental, regime: v, microAllowance: REGIMES.find((g) => g.v === v)?.allowance ?? x.rental.microAllowance } }))} />
             <ChoiceField label="Tranche marginale" value={R.marginalRate} options={TMI_OPTIONS} onChange={setR('marginalRate')} compact />
             <ChoiceField label="Prélèvements sociaux" value={R.socialRate} options={PS_OPTIONS} columns={1} onChange={setR('socialRate')} />
-            <NumberField label="Évolution du prix du bien" unit="%/an" percent value={R.appreciation} onChange={setR('appreciation')} step={0.25} min={-10} max={10} />
-            <NumberField label="Indexation loyers et charges" unit="%/an" percent value={R.indexation} onChange={setR('indexation')} step={0.25} min={-5} max={10} />
-            <NumberField label="Frais de revente" unit="%" percent value={st.saleCostRate} onChange={set('saleCostRate')} step={0.5} min={0} max={15} />
-            <NumberField label="Placement des excédents" unit="%/an" percent value={st.cashRate} onChange={set('cashRate')} step={0.1} min={0} max={10} />
+            <div className="field-duo">
+              <NumberField label="Évolution du prix du bien" unit="%/an" percent value={R.appreciation} onChange={setR('appreciation')} step={0.25} min={-10} max={10} />
+              <NumberField label="Indexation loyers et charges" unit="%/an" percent value={R.indexation} onChange={setR('indexation')} step={0.25} min={-5} max={10} />
+            </div>
+            <div className="field-duo">
+              <NumberField label="Frais de revente" unit="%" percent value={st.saleCostRate} onChange={set('saleCostRate')} step={0.5} min={0} max={15} />
+              <NumberField label="Placement des excédents" unit="%/an" percent value={st.cashRate} onChange={set('cashRate')} step={0.1} min={0} max={10} />
+            </div>
           </fieldset>
             </div>
           </details>

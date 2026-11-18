@@ -35,8 +35,10 @@ export default function SimRendement() {
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
             <legend>Ce que vous avez versé</legend>
-            <NumberField label="Versement initial" unit="€" value={s.initial} onChange={up('initial')} min={0} step={500} />
-            <NumberField label="Versement mensuel" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} />
+            <div className="field-duo">
+              <NumberField label="Versement initial" unit="€" value={s.initial} onChange={up('initial')} min={0} step={500} />
+              <NumberField label="Versement mensuel" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} />
+            </div>
             <NumberField label="Durée écoulée" unit="ans" value={s.years} onChange={up('years')} min={0} max={80} step={0.5} />
           </fieldset>
           <fieldset>
