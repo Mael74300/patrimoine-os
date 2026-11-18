@@ -31,6 +31,16 @@ export const etapesSuite: { to: string; label: string }[] = [
   { to: '/guides/epargne-limitee', label: 'Investir quand on épargne peu' },
 ];
 
+// « Par où commencer » : les fiches du guide rattachées à l’étape qui les cite, plutôt qu’en liste à part en bas de page.
+// Libellés courts, pour que les pastilles tiennent sur une ligne à 375 px ; le nom complet est sur la fiche.
+export const etapesFiches: { slug: string; label: string }[][] = [
+  [],
+  [{ slug: 'lep', label: 'LEP' }, { slug: 'livret-a', label: 'Livret A et LDDS' }],
+  [],
+  [{ slug: 'pea', label: 'PEA' }, { slug: 'assurance-vie', label: 'Assurance-vie' }],
+  [{ slug: 'etf-monde', label: 'ETF actions diversifiés' }],
+];
+
 export { fmtDate } from '../lib/dates';
 
 export function GuideList() {
@@ -96,7 +106,7 @@ export function GuidePage() {
   const simItems: NextItem[] = sims.map((sim) => ({ kind: 'Simulateur', to: `/simulateurs/${sim.slug}`, title: sim.title, blurb: simBlurb(sim.slug) }));
   const ficheItems: NextItem[] = g.slug === 'types-investissements' || g.slug === 'choisir-son-enveloppe' ? []
     : g.related.filter((r) => investmentBySlug[r]).map((r) => ({ kind: 'Fiche', to: `/encyclopedie/${r}`, title: investmentBySlug[r].name, blurb: investmentBySlug[r].summary }));
-  const hasNext = g.slug === 'par-ou-commencer' || simItems.length + ficheItems.length > 0;
+  const hasNext = g.slug !== 'par-ou-commencer' && simItems.length + ficheItems.length > 0;
   // Sommaire : les rubriques du guide, puis les questions, les suites et les sources (repères pour vérifier).
   // Parcours de lecture du guide (page « Guides ») : son nom et son icône dans le sur-titre ; la durée de lecture suit la date de mise à jour.
   // Action principale (chantier 156) : juste après la rubrique qui en parle, et non plus après les questions fréquentes.
@@ -155,7 +165,14 @@ export function GuidePage() {
             {g.slug === 'diversification-placements' && s.heading === 'Le principe' && <SchemaDiversificationPrincipe />}
             {g.slug === 'diversification-placements' && s.heading === 'Un exemple fictif chiffré' && <SchemaDiversification />}
             {g.slug === 'pret-a-taux-zero-ptz' && s.heading === 'Comment il se rembourse' && <SchemaPtz />}
-            {g.slug === 'par-ou-commencer' && etapesSuite[i] && <p className="step-more"><Link to={etapesSuite[i].to}>{etapesSuite[i].label}</Link></p>}
+            {g.slug === 'par-ou-commencer' && etapesSuite[i] && (
+              <p className="step-more">
+                <Link to={etapesSuite[i].to}>{etapesSuite[i].label}</Link>
+                {etapesFiches[i].filter((f) => investmentBySlug[f.slug]).map((f) => (
+                  <Link key={f.slug} className="step-fiche" to={`/encyclopedie/${f.slug}`}><span className="step-kind">Fiche</span> {f.label}</Link>
+                ))}
+              </p>
+            )}
             {g.cta && !g.widget && i === ctaIndex && <p className="guide-cta"><Link className="btn" to={g.cta.to}>{g.cta.label}</Link></p>}
           </section>
         ))}
@@ -167,17 +184,7 @@ export function GuidePage() {
       <div className="prose">
         {/* Guide avec un outil intégré : l'action principale vient après l'outil. */}
         {g.cta && g.widget && <p className="guide-cta"><Link className="btn" to={g.cta.to}>{g.cta.label}</Link></p>}
-        {g.slug === 'par-ou-commencer' && (<>
-          <h2 id="rub-pour-aller-plus-loin">Pour aller plus loin</h2>
-          <h3 className="next-sub">Fiches liées</h3>
-          {/* « Par où commencer » : chaque étape a déjà son lien ; les fiches sont listées sans résumé pour garder la page courte. */}
-          <ul className="next-list next-list-compact">
-            {g.related.filter((r) => investmentBySlug[r]).map((r) => (
-              <li key={r}><Link to={`/encyclopedie/${r}`}>{investmentBySlug[r].name}</Link></li>
-            ))}
-          </ul>
-        </>)}
-        {g.slug !== 'par-ou-commencer' && hasNext && (() => {
+        {hasNext && (() => {
           const [shown, rest] = splitNext(simItems, ficheItems);
           return (<>
             <h2 id="rub-pour-aller-plus-loin">Pour aller plus loin</h2>

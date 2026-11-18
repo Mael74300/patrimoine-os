@@ -54,3 +54,22 @@ describe('liens « pour aller plus loin » du guide « Par où commencer »', ()
     });
   });
 });
+
+describe('fiches rattachées aux étapes du guide « Par où commencer »', () => {
+  it('une liste par étape, toutes les fiches liées du guide présentes une fois, vers une fiche existante', async () => {
+    const { etapesFiches } = await import('./pages/Guides');
+    const { investmentBySlug } = await import('./data/investments');
+    const g = guideBySlug['par-ou-commencer'];
+    expect(etapesFiches).toHaveLength(g.sections.length);
+    const slugs = etapesFiches.flat().map((f) => f.slug);
+    expect([...slugs].sort()).toEqual([...g.related].sort());
+    slugs.forEach((s) => expect(investmentBySlug[s], s).toBeTruthy());
+  });
+
+  it('chaque fiche apparaît dans l’étape dont le texte la cite', async () => {
+    const { etapesFiches } = await import('./pages/Guides');
+    const g = guideBySlug['par-ou-commencer'];
+    const cite: Record<string, string> = { lep: 'LEP', 'livret-a': 'Livret A', pea: 'PEA', 'assurance-vie': 'assurance-vie', 'etf-monde': 'horizon long' };
+    etapesFiches.forEach((fs, i) => fs.forEach((f) => expect(g.sections[i].body.join(' '), f.slug).toContain(cite[f.slug])));
+  });
+});
