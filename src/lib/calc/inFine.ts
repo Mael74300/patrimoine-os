@@ -68,3 +68,60 @@ export function inFine(input: InFineInput): InFineResult {
     netCostGap: inFineNetCost - a.totalCost,
   };
 }
+
+/** Barres de l'onglet in fine : coût de chaque crédit et part du capital couverte à mi-parcours (pourcentages de 0 à 100). */
+export type InFineBars = {
+  /** Coût : longueurs sur une échelle commune aux deux crédits. */
+  cost: {
+    amortizing: number;
+    /** In fine : part nette (intérêts + assurance − gains de l'épargne). */
+    inFineNet: number;
+    /** In fine : part regagnée par l'épargne (gains positifs). */
+    inFineRegained: number;
+    /** In fine : pertes de l'épargne (rendement négatif), au-delà des intérêts + assurance. */
+    inFineLost: number;
+  };
+  /** Mi-parcours, en mois entiers (moitié de la durée, arrondie vers le bas). */
+  midMonth: number;
+  /** Amortissable : capital déjà remboursé au mi-parcours, en euros. */
+  amortizingRepaid: number;
+  /** In fine : épargne déjà constituée au mi-parcours, en euros. */
+  inFineSaved: number;
+  /** Mêmes montants en pourcentage du capital emprunté. */
+  amortizingRepaidPct: number;
+  inFineSavedPct: number;
+};
+
+export function inFineBars(input: InFineInput): InFineBars {
+  const r = inFine(input);
+  const principal = clamp(input.principal, 0, 1e9, 0);
+  const annualRate = clamp(input.annualRate, 0, 1, 0);
+  const savingsReturn = clamp(input.savingsReturn, -0.5, 1, 0);
+  const pct = (v: number, scale: number) => (scale > 0 ? clamp((100 * v) / scale, 0, 100, 0) : 0);
+
+  const gain = r.savingsGain;
+  const scale = Math.max(r.amortizingCost, r.inFineCost, r.inFineNetCost, 0);
+  const inFineNet = pct(gain >= 0 ? r.inFineNetCost : r.inFineCost, scale);
+  const inFineRegained = gain > 0 ? Math.min(pct(gain, scale), 100 - inFineNet) : 0;
+  const inFineLost = gain < 0 ? Math.min(pct(-gain, scale), 100 - inFineNet) : 0;
+
+  const midMonth = Math.floor(r.months / 2);
+  // Amortissable : capital restant dû après midMonth mensualités (taux mensuel = taux nominal ÷ 12, comme le calculateur de crédit).
+  const i = annualRate / 12;
+  const remaining = i === 0
+    ? principal - r.amortizingPayment * midMonth
+    : principal * Math.pow(1 + i, midMonth) - (r.amortizingPayment * (Math.pow(1 + i, midMonth) - 1)) / i;
+  const amortizingRepaid = clamp(principal - remaining, 0, principal, 0);
+  // In fine : épargne versée en fin de mois, au taux mensuel équivalent au rendement annuel.
+  const m = monthlyRate(savingsReturn);
+  const saved = Math.abs(m) < 1e-12 ? r.monthlySaving * midMonth : (r.monthlySaving * (Math.pow(1 + m, midMonth) - 1)) / m;
+  const inFineSaved = clamp(saved, 0, principal, 0);
+  return {
+    cost: { amortizing: pct(r.amortizingCost, scale), inFineNet, inFineRegained, inFineLost },
+    midMonth,
+    amortizingRepaid,
+    inFineSaved,
+    amortizingRepaidPct: pct(amortizingRepaid, principal),
+    inFineSavedPct: pct(inFineSaved, principal),
+  };
+}

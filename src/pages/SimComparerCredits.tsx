@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { fmtEur, fmtEur2, fmtMonths, fmtNum, fmtPct, fmtPts, inFine, loanDuration, loanDurationBars, renegotiation, type LoanDurationRow, renegotiationBars, taeg, taegBars, taegByFees, taegByInsurance, taegLevels, type TaegBar } from '../lib/finance';
+import { fmtEur, fmtEur2, fmtMonths, fmtNum, fmtPct, fmtPts, inFine, inFineBars, type InFineInput, loanDuration, loanDurationBars, renegotiation, type LoanDurationRow, renegotiationBars, taeg, taegBars, taegByFees, taegByInsurance, taegLevels, type TaegBar } from '../lib/finance';
 import { loanDurationTakeaway, taegTakeaway, inFineTakeaway, renegoTakeaway } from '../lib/takeaways';
 import { comparerCreditsFaq } from '../data/simFaq';
 import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, Tabs } from '../components/ui';
@@ -224,6 +224,69 @@ function Taeg() {
 }
 
 /* ---------- Crédit in fine ou amortissable */
+/**
+ * Deux groupes de barres : ce que coûte chaque crédit (l’in fine partagé entre coût net et part regagnée par l’épargne),
+ * puis la part du capital déjà réglée (amortissable) ou mise de côté (in fine) à mi-parcours.
+ */
+function InFineFigure({ s, r }: { s: InFineInput; r: ReturnType<typeof inFine> }) {
+  if (!(s.principal > 0) || !(r.months > 0)) return null;
+  const b = inFineBars(s);
+  const years = r.months / 12;
+  const midYears = b.midMonth / 12;
+  const midLabel = Number.isInteger(midYears) ? `${fmtNum(midYears)}\u00a0ans` : fmtMonths(b.midMonth);
+  const gain = r.savingsGain;
+  return (
+    <>
+      <h2>Comparaison sur {fmtNum(years)}&nbsp;ans</h2>
+      <figure className="fb ifb">
+        <div className="ifb-g">
+        <p className="tb-group">Ce que coûte chaque crédit <span>(intérêts et assurance, hors capital)</span></p>
+        <ul className="fb-legend" aria-hidden="true">
+          <li><i className="rb-int" />Coût net</li>
+          {gain > 0.5 && <li><i className="rb-saved" />Regagné par l’épargne</li>}
+          {gain < -0.5 && <li><i className="rb-fees" />Perdu par l’épargne</li>}
+        </ul>
+        <ul className="fb-list">
+          <li className="fb-row">
+            <div className="fb-head"><span className="fb-name">Amortissable</span><span className="fb-value">{fmtEur(r.amortizingCost)}</span></div>
+            <div className="fb-track" aria-hidden="true"><span className="rb-int" style={{ width: `${b.cost.amortizing}%` }} /></div>
+          </li>
+          <li className="fb-row">
+            <div className="fb-head"><span className="fb-name">In fine</span><span className="fb-value">{fmtEur(r.inFineNetCost)}</span></div>
+            <div className="fb-track" aria-hidden="true">
+              <span className="rb-int" style={{ width: `${b.cost.inFineNet}%` }} />
+              {b.cost.inFineRegained > 0 && <span className="rb-saved" style={{ width: `${b.cost.inFineRegained}%` }} />}
+              {b.cost.inFineLost > 0 && <span className="rb-fees" style={{ width: `${b.cost.inFineLost}%` }} />}
+            </div>
+            <p className="fb-sub">
+              {fmtEur(r.inFineCost)} d’intérêts et d’assurance{gain > 0.5 ? `, moins ${fmtEur(gain)} gagnés par l’épargne` : gain < -0.5 ? `, plus ${fmtEur(-gain)} perdus par l’épargne` : ''}
+            </p>
+          </li>
+        </ul>
+        </div>
+        <div className="ifb-g">
+        <p className="tb-group">Capital déjà couvert après {midLabel} <span>(sur {fmtEur(s.principal)})</span></p>
+        <ul className="fb-list">
+          <li className="fb-row">
+            <div className="fb-head"><span className="fb-name">Amortissable</span><span className="fb-value">{fmtEur(b.amortizingRepaid)}</span></div>
+            <div className="fb-track" aria-hidden="true"><span className="ifb-cov" style={{ width: `${b.amortizingRepaidPct}%` }} /></div>
+            <p className="fb-sub">remboursés : il reste {fmtEur(s.principal - b.amortizingRepaid)} à devoir</p>
+          </li>
+          <li className="fb-row">
+            <div className="fb-head"><span className="fb-name">In fine</span><span className="fb-value">{fmtEur(b.inFineSaved)}</span></div>
+            <div className="fb-track" aria-hidden="true"><span className="ifb-cov" style={{ width: `${b.inFineSavedPct}%` }} /></div>
+            <p className="fb-sub">épargnés : vous devez toujours {fmtEur(s.principal)}</p>
+          </li>
+        </ul>
+        </div>
+      </figure>
+      <p className="muted small">
+        Montants par défaut fictifs ; détail du calcul sur la page <Link to="/methodologie">Méthode</Link>.
+      </p>
+    </>
+  );
+}
+
 type InFineState = { principal: number; annualRate: number; years: number; insuranceRate: number; savingsReturn: number };
 const IN_FINE: InFineState = { principal: 200000, annualRate: 0.03, years: 20, insuranceRate: 0.003, savingsReturn: 0.02 };
 
@@ -233,9 +296,8 @@ function InFine() {
   return (
     <>
       <p className="notice" role="note">
-        Dans un crédit in fine, on ne paie que les intérêts pendant la durée et on rembourse le capital d’un coup à la fin, avec une épargne constituée à côté.
-        Calcul fondé uniquement sur les hypothèses que vous saisissez (taux fixe, assurance sur le capital initial, rendement net constant de l’épargne), sans chiffre
-        réglementaire ni fiscalité. Pour un crédit classique, voir le <Link to="/simulateurs/credit">calculateur de crédit</Link>.
+        Crédit in fine : vous ne payez que les intérêts, puis remboursez le capital en une fois à la fin, grâce à une épargne placée à côté.
+        Calcul selon vos seules hypothèses (taux fixe, assurance sur le capital initial, rendement constant), hors fiscalité.
       </p>
       <Layout
         reset={() => setS(IN_FINE)}
@@ -262,22 +324,7 @@ function InFine() {
           <Kpi label="Coût net, in fine" value={fmtEur(r.inFineNetCost)} sub={r.netCostGap >= 0 ? `${fmtEur(r.netCostGap)} de plus` : `${fmtEur(-r.netCostGap)} de moins`} />
         </div>
         <Takeaway>{inFineTakeaway({ principal: s.principal, years: s.years, savingsReturn: s.savingsReturn, annualRate: s.annualRate, amortizingMonthly: r.amortizingMonthlyTotal, inFineMonthly: r.inFineMonthlyTotal, monthlySaving: r.monthlySaving, netCostGap: r.netCostGap })}</Takeaway>
-        <h2>Comparaison sur {r.months / 12}&nbsp;ans</h2>
-        <div className="table-wrap" tabIndex={0}>
-          <table>
-            <thead><tr><th>Poste</th><th className="r">Amortissable</th><th className="r">In fine</th></tr></thead>
-            <tbody>
-              <tr><td>Intérêts + assurance</td><td className="r">{fmtEur(r.amortizingCost)}</td><td className="r">{fmtEur(r.inFineCost)}</td></tr>
-              <tr><td>Moins les gains de l’épargne</td><td className="r">—</td><td className="r">− {fmtEur(r.savingsGain)}</td></tr>
-              <tr><td>Coût net</td><td className="r">{fmtEur(r.amortizingCost)}</td><td className="r">{fmtEur(r.inFineNetCost)}</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p className="muted small">
-          En in fine, le capital dû ne baisse jamais : chaque mois, vous payez les intérêts sur la totalité de la somme empruntée, et vous mettez de côté le montant qui, avec ses gains,
-          reconstitue le capital à la fin. Si l’épargne rapporte moins que le taux du crédit, l’in fine coûte plus cher ; sinon, il coûte moins, sans garantie de rendement.
-          Les montants par défaut sont fictifs ; le détail du calcul est sur la page <Link to="/methodologie">Méthode</Link>.
-        </p>
+        <InFineFigure s={s} r={r} />
         <SavedSims simKey="credit-in-fine" current={s} onLoad={(d) => setS({ ...IN_FINE, ...d })} />
       </Layout>
     </>
