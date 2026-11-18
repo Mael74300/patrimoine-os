@@ -3,7 +3,21 @@ import { categories } from '../data/categories';
 import { guides } from '../data/guides';
 import { investments } from '../data/investments';
 import { simulators } from '../lib/search';
+import { guidePlanGroups, simulatorGroups, type PlanGroup } from '../lib/planGroups';
 import { Crumbs, MobileFold, PageHead } from '../components/ui';
+
+function PlanGroups({ groups }: { groups: PlanGroup[] }) {
+  return (
+    <div className="sitemap-families">
+      {groups.map((g) => (
+        <section key={g.title} className="sitemap-family">
+          <h3>{g.title}</h3>
+          <ul className="sitemap-list">{g.links.map((l) => <li key={l.to}><Link to={l.to}>{l.label}</Link></li>)}</ul>
+        </section>
+      ))}
+    </div>
+  );
+}
 
 export default function PlanDuSite() {
   const fiches = [...investments].sort((a, b) => a.name.localeCompare(b.name, 'fr'));
@@ -18,7 +32,6 @@ export default function PlanDuSite() {
         <a href="#plan-simulateurs">Simulateurs</a>
         <a href="#plan-guides">Guides</a>
         <a href="#plan-fiches">Fiches</a>
-        <a href="#plan-legal">Informations légales</a>
       </nav>
 
       <h2>Pages principales</h2>
@@ -30,20 +43,18 @@ export default function PlanDuSite() {
         <li><Link to="/glossaire">Glossaire</Link></li>
         <li><Link to="/entrepreneuriat">Entrepreneuriat</Link></li>
         <li><Link to="/methodologie">Méthode, formules et sources</Link></li>
+        <li><Link to="/confidentialite">Politique de confidentialité</Link></li>
+        <li><Link to="/mentions-legales">Mentions légales</Link></li>
       </ul>
 
       <h2 id="plan-simulateurs">Simulateurs</h2>
       <MobileFold label={`Voir les ${simulators.length} simulateurs`} quietOnDesktop>
-        <ul className="sitemap-list">
-          {simulators.map((s) => <li key={s.slug}><Link to={`/simulateurs/${s.slug}`}>{s.title}</Link></li>)}
-        </ul>
+        <PlanGroups groups={simulatorGroups()} />
       </MobileFold>
 
       <h2 id="plan-guides">Guides</h2>
       <MobileFold label={`Voir les ${guides.length} guides`} quietOnDesktop>
-        <ul className="sitemap-list">
-          {guides.map((g) => <li key={g.slug}><Link to={`/guides/${g.slug}`}>{g.title}</Link></li>)}
-        </ul>
+        <PlanGroups groups={guidePlanGroups()} />
       </MobileFold>
 
       <h2 id="plan-fiches">Fiches de l’encyclopédie</h2>
@@ -61,12 +72,6 @@ export default function PlanDuSite() {
           })}
         </div>
       </MobileFold>
-
-      <h2 id="plan-legal">Informations légales</h2>
-      <ul className="sitemap-list">
-        <li><Link to="/confidentialite">Politique de confidentialité</Link></li>
-        <li><Link to="/mentions-legales">Mentions légales</Link></li>
-      </ul>
     </div>
   );
 }

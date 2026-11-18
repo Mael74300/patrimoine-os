@@ -820,7 +820,7 @@ h2.gloss-letter::before { content: none; }
 .sitemap-jump a:hover { border-color: var(--primary); }
 .prose h2[id^="plan-"] { scroll-margin-top: 80px; }
 .prose ul.sitemap-list li { margin: 0; }
-@media (min-width: 701px) { .prose:has(.sitemap-jump) { max-width: 60rem; } .prose ul.sitemap-list:not(section ul) { columns: 2; column-gap: 2rem; } .prose ul.sitemap-list li { break-inside: avoid; } }
+@media (min-width: 701px) { .prose:has(.sitemap-jump) { max-width: 70rem; } .prose ul.sitemap-list:not(section ul) { columns: 2; column-gap: 2rem; } .prose ul.sitemap-list li { break-inside: avoid; } }
 /* Familles de fiches : petits blocs répartis en colonnes sur grand écran (plutôt qu'une longue colonne) */
 .prose .sitemap-family h3 { font-size: 1rem; margin: 1.1rem 0 .3rem; }
 .prose .sitemap-family ul.sitemap-list { margin-top: 0; }
@@ -829,7 +829,7 @@ h2.gloss-letter::before { content: none; }
   .sitemap-family { break-inside: avoid; padding-top: .1px; }
   .prose .sitemap-family h3 { margin-top: .9rem; }
 }
-@media (min-width: 960px) { .sitemap-families { columns: 3; } }
+@media (min-width: 960px) { .sitemap-families { columns: 3; } .prose ul.sitemap-list:not(section ul) { columns: 3; } }
 
 /* Cartes « enveloppes » du guide « choisir son enveloppe » */
 .prose ul.env-cards { padding-left: 0; }
