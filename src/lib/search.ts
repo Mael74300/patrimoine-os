@@ -21,6 +21,9 @@ export const stem = (t: string) => {
   if (t.length <= 3) return t;
   let s = t.replace(/[sx]$/, '');
   if (s.length >= 6) {
+    // « locatif » et « locative » : même racine « locati », sans rejoindre « location ».
+    if (/[^aeiou]if$/.test(s)) return s.slice(0, -1);
+    if (/[^aeiou]ive$/.test(s)) return s.slice(0, -2);
     for (const end of ['issement', 'ement', 'er', 'ir', 'ez', 'ee', 'e']) {
       if (s.endsWith(end) && s.length - end.length >= 4) {
         s = s.slice(0, -end.length);
@@ -100,6 +103,24 @@ export const searchAliases: Record<string, string[]> = {
   notaire: ['notaire', "frais d'acquisition"],
 };
 
+/**
+ * Raccourcis : pour quelques questions très fréquentes dont la meilleure réponse ne ressortait pas en tête
+ * (audit du 18 novembre 2026), les pages indiquées passent devant, dans cet ordre. Les autres résultats suivent.
+ * Une requête déclenche un raccourci seulement si ses mots utiles sont exactement ceux d’un exemple
+ * (« épargne salariale » ne déclenche pas le raccourci « épargne »). Simple aiguillage, sans information factuelle.
+ */
+export const searchShortcuts: { queries: string[]; to: string[] }[] = [
+  { queries: ['investissement locatif', 'investir dans locatif', 'rendement locatif', 'rentabilité locative', 'louer son appartement'], to: ['/guides/rentabilite-locative', '/simulateurs/immobilier'] },
+  { queries: ['mensualité', 'mensualités', 'mensualité crédit', 'calculer mensualité', 'assurance emprunteur'], to: ['/simulateurs/credit'] },
+  { queries: ['où placer mon argent', 'placer son argent', 'investir son argent', 'investir'], to: ['/guides/par-ou-commencer', '/guides/choisir-son-enveloppe'] },
+  { queries: ['épargne', 'épargner'], to: ['/guides/par-ou-commencer', '/simulateurs/objectif-epargne'] },
+  { queries: ['vivre de ses rentes', 'vivre de ses placements', 'rentier', 'rente'], to: ['/simulateurs/independance-financiere', '/simulateurs/retraits-reguliers-duree-du-capital'] },
+];
+
+const shortcutKey = (q: string) => searchTerms(q).slice().sort().join(' ');
+const shortcutByKey = new Map<string, string[]>();
+for (const sc of searchShortcuts) for (const q of sc.queries) shortcutByKey.set(shortcutKey(q), sc.to);
+
 /** Synonymes rangés par racine, pour retrouver « impôts », « acheter » ou « crédits » sous toutes leurs formes. */
 const aliasByStem: Record<string, string[]> = {};
 for (const [k, v] of Object.entries(searchAliases)) aliasByStem[stem(k)] = [...new Set([...(aliasByStem[stem(k)] ?? []), ...v])];
@@ -131,6 +152,7 @@ export function searchDetailed(query: string): SearchResult {
   const raw = norm(query).split(/[\s'’]+/).map((w) => w.replace(/^[^a-z0-9]+|[^a-z0-9]+$/g, '')).filter((w) => w && !stopWords.has(w));
   const pairs = raw.slice(1).map((w, k) => `${raw[k]} ${w}`);
   const bare = (text: string) => text.split(/[\s'’]+/).map((w) => w.replace(/^[^a-z0-9]+|[^a-z0-9]+$/g, '')).filter((w) => w && !stopWords.has(w)).join(' ');
+  const shortcut = shortcutByKey.get(shortcutKey(query)) ?? [];
   type Scored = SearchHit & { found: number };
   const all: Scored[] = [];
   const add = (kind: SearchHit['kind'], title: string, to: string, excerpt: string, lead: string, body: string, bonus: number) => {
@@ -146,6 +168,12 @@ export function searchDetailed(query: string): SearchResult {
       const w = 5 * hit(t) || 2 * hit(l) || hit(b);
       if (w) found++;
       s += w;
+    }
+    const rank = shortcut.indexOf(to);
+    if (rank >= 0) {
+      // Page d’un raccourci : en tête, dans l’ordre du raccourci, même si les mots tapés n’y figurent pas.
+      found = terms.length + 1;
+      s = 1000 - rank;
     }
     if (!found) return;
     if (pairs.length) {
@@ -166,7 +194,7 @@ export function searchDetailed(query: string): SearchResult {
   for (const sim of simulators) add('Simulateur', sim.title, `/simulateurs/${sim.slug}`, sim.excerpt, `simulateur calculateur ${sim.excerpt} ${sim.keywords}`, '', 0);
   for (const t of glossary) add('Glossaire', t.term, `/glossaire#${glossaryId(t.term)}`, t.definition, '', t.definition, -0.5);
   const byRank = (a: Scored, b: Scored) => b.found - a.found || b.score - a.score;
-  const complete = all.filter((h) => h.found === terms.length);
+  const complete = all.filter((h) => h.found >= terms.length);
   // Peu de pages contiennent tous les mots : on ajoute à la suite celles qui en contiennent au moins la moitié.
   const kept = complete.length >= 5 ? complete : all.filter((h) => h.found >= Math.ceil(terms.length / 2));
   return { hits: kept.sort(byRank).map(({ found: _f, ...h }) => h), partial: !complete.length && kept.length > 0 };

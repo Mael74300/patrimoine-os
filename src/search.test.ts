@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { search, searchDetailed, searchSuggestions, searchTerms, stem } from './lib/search';
+import { search, searchDetailed, searchShortcuts, searchSuggestions, searchTerms, stem } from './lib/search';
 import { guides } from './data/guides';
 import { investments } from './data/investments';
 import { simulators } from './lib/search';
@@ -77,6 +77,39 @@ describe('recherche', () => {
     // « préparer » ne fait plus remonter le PEL (« pensée pour préparer l’achat »)
     expect(top('préparer sa retraite', 1)).toContain('/encyclopedie/per');
     expect(top('préparer sa retraite', 3)).not.toContain('/encyclopedie/pel');
+  });
+  it('raccourcis des questions fréquentes (audit du 18 novembre 2026)', () => {
+    const ok = new Set([
+      ...guides.map((g) => `/guides/${g.slug}`),
+      ...investments.map((i) => `/encyclopedie/${i.slug}`),
+      ...simulators.map((s) => `/simulateurs/${s.slug}`),
+    ]);
+    // chaque raccourci mène à des pages existantes, dans l’ordre annoncé, en tête des résultats
+    // un même exemple (après racine) ne mène pas à deux raccourcis différents
+    const owner = new Map<string, number>();
+    searchShortcuts.forEach((sc, k) => sc.queries.forEach((q) => {
+      const key = searchTerms(q).sort().join(' ');
+      expect(owner.get(key) ?? k, q).toBe(k);
+      owner.set(key, k);
+    }));
+    for (const sc of searchShortcuts) {
+      for (const to of sc.to) expect(ok.has(to), to).toBe(true);
+      for (const q of sc.queries) expect(search(q).slice(0, sc.to.length).map((h) => h.to), q).toEqual(sc.to);
+    }
+    const first = (q: string) => search(q)[0].to;
+    expect(first('investissement locatif')).toBe('/guides/rentabilite-locative');
+    expect(first('Mensualité')).toBe('/simulateurs/credit');
+    expect(first('assurance emprunteur')).toBe('/simulateurs/credit');
+    expect(first('Où placer mon argent ?')).toBe('/guides/par-ou-commencer');
+    expect(first('vivre de ses rentes')).toBe('/simulateurs/independance-financiere');
+    // seuls les mots exacts d’un exemple déclenchent un raccourci
+    expect(first('épargne logement')).not.toBe('/guides/par-ou-commencer');
+  });
+  it('« locatif » et « locative » se trouvent l’un l’autre, sans rejoindre « location »', () => {
+    expect(stem('locatif')).toBe('locati');
+    expect(stem('locative')).toBe('locati');
+    expect(stem('locatives')).toBe('locati');
+    expect(search('rentabilité locatif').some((h) => h.to === '/guides/rentabilite-locative')).toBe(true);
   });
   it('sans page contenant tous les mots, montre les plus proches et le signale', () => {
     const r = searchDetailed('combien de temps durera mon capital');
