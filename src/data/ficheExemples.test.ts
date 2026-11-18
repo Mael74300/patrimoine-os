@@ -2,7 +2,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { investmentBySlug } from './investments';
-import { bondCoupons, fondsEurosGrowth, livretQuinzaines, concentrationLoss, crowdfundingScenario, lepVsLivretA, pelVsLivretA, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, subscriptionChurn, trainingPayoff, yearlySavingsValue, termDepositVsLivretA, ucFeesDrag, forestCredit } from '../lib/calc/ficheExemples';
+import { bondCoupons, fondsEurosGrowth, livretQuinzaines, concentrationLoss, crowdfundingScenario, lepVsLivretA, pelVsLivretA, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, subscriptionChurn, trainingPayoff, yearlySavingsValue, termDepositVsLivretA, ucFeesDrag, forestCredit, artResale } from '../lib/calc/ficheExemples';
 import { amortize } from '../lib/calc/loan';
 import { CROWDFUNDING_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, leverageBars } from '../lib/illustrationData';
 import { SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaPee, SchemaRepriseBilan, SchemaScpiBilan } from '../components/schemas/fiches';
@@ -480,5 +480,30 @@ describe('fiches Compte à terme, Unités de compte et Forêt : exemples recalcu
     const svg = plain(renderToStaticMarkup(createElement(SchemaPee)));
     expect(svg).toContain('jusqu’à 3 fois');
     expect(svg).toContain('bloqué au moins 5 ans');
+  });
+});
+
+describe('fiche Objets d’art : la taxe porte sur le prix, pas sur le gain', () => {
+  const r = artResale(5000, 20, 6.5, 5000, [8000, 6000, 5000]);
+  const fiche = investmentBySlug['objets-d-art-collection']!;
+  const ex = norm(fiche.example);
+
+  it('montants recalculés : 6 000 € déboursés, 520 € et 390 € de taxe, rien à 5 000 €', () => {
+    expect(r.cost).toBe(6000);
+    expect(r.sales.map((x) => x.tax)).toEqual([520, 390, 0]);
+    expect(r.sales.map((x) => x.net)).toEqual([7480, 5610, 5000]);
+    expect(r.sales[0]!.vsCost).toBe(1480);
+    expect(r.sales[1]!.vsCost).toBe(-390);
+  });
+  it('le texte cite les mêmes montants, reste fictif et reprend les taux de la rubrique Fiscalité et Frais', () => {
+    expect(ex).toMatch(/^Exemple fictif/);
+    for (const v of [5000, r.cost, 8000, 520, 7480, 1480, 6000, 390]) expect(ex).toContain(eur(v));
+    expect(ex).toContain('6,5 %');
+    expect(ex).toContain('22 ans');
+    expect(norm(fiche.tax.text)).toContain('6,5 %');
+    expect(norm(fiche.tax.text)).toContain('5 000 €');
+    expect(norm(fiche.tax.text)).toContain('exonéré après 22 ans');
+    expect(norm(fiche.fees.text)).toContain('de l’ordre de 20 %');
+    expect(ex).toContain('de l’ordre de 20 %');
   });
 });

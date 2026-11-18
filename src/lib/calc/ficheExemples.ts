@@ -311,3 +311,21 @@ export function assuranceVieRetrait(paid: number, value: number, allowance: numb
   const social = Math.round((gains * socialPct) / 100);
   return { gains, overAllowance: Math.max(0, gains - allowance), allowanceLeft: Math.max(0, allowance - gains), social, net: value - social };
 }
+
+export interface ArtSale { price: number; tax: number; net: number; vsCost: number }
+export interface ArtResale { buyerFees: number; cost: number; sales: ArtSale[] }
+/**
+ * Objets d'art : prix adjugé plus frais d'acheteur aux enchères (de l'ordre de 20 %, La finance pour tous), puis
+ * revente soumise à la taxe forfaitaire de 6 % + 0,5 % de CRDS du prix de cession, sans taxe jusqu'à 5 000 €
+ * (BOFiP BOI-RPPM-PVBMC-20-10, consulté le 2026-11-18). Avant assurance, conservation et frais de revente.
+ */
+export function artResale(hammer: number, buyerFeesPct: number, taxPct: number, thresholdEur: number, prices: number[]): ArtResale {
+  const buyerFees = Math.round(hammer * buyerFeesPct) / 100;
+  const cost = hammer + buyerFees;
+  const sales = prices.map((price) => {
+    const tax = price <= thresholdEur ? 0 : Math.round(price * taxPct) / 100;
+    const net = price - tax;
+    return { price, tax, net, vsCost: net - cost };
+  });
+  return { buyerFees, cost, sales };
+}
