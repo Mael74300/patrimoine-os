@@ -18,7 +18,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Tous les types d’investissements accessibles aux particuliers',
     summary: 'Panorama des familles de placements ouvertes à un particulier en France, classées par risque, horizon et effort.',
     readingMinutes: 3,
-    updatedOn: '2026-10-10',
+    updatedOn: '2026-11-18',
     sections: [
       {
         heading: 'Trois questions pour s’y retrouver',
@@ -30,7 +30,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       {
         heading: 'Placement et enveloppe : ne pas confondre',
         body: [
-          'Un même ETF peut être logé dans un PEA, un compte-titres, une assurance-vie ou un PER. Le placement détermine le risque ; l’enveloppe détermine la fiscalité, la disponibilité et la transmission. Dans le classement ci-dessous, les enveloppes sont donc à part.',
+          'Un même ETF peut être logé dans un PEA, un compte-titres, une assurance-vie ou un PER. Le placement détermine le risque ; l’enveloppe détermine la fiscalité, la disponibilité et la transmission. Dans le classement ci-dessous, les enveloppes sont donc à part ; le guide Choisir son enveloppe les compare et montre comment les combiner.',
         ],
       },
       {
@@ -783,8 +783,8 @@ export const guideGroups: { title: string; intro: string; slugs: string[] }[] = 
 ];
 
 /** Autres guides proposés en bas d’un guide : ceux du même groupe d’abord, puis le reste. */
-export function otherGuides(slug: string, n = 3) {
+export function otherGuides(slug: string, n = 3, exclude: string[] = []) {
   const group = guideGroups.find((g) => g.slugs.includes(slug))?.slugs ?? [];
   const order = [...group, ...guides.map((g) => g.slug)];
-  return [...new Set(order)].filter((s) => s !== slug).slice(0, n).map((s) => guideBySlug[s]);
+  return [...new Set(order)].filter((s) => s !== slug && !exclude.includes(s)).slice(0, n).map((s) => guideBySlug[s]);
 }
