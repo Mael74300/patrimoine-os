@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, fmtAns, fmtEur, fmtMonths, fmtNum, fmtPct, fmtPts } from '../lib/finance';
+import { delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, fmtAns, fmtDuree, fmtEur, fmtMonths, fmtNum, fmtPct, fmtPts } from '../lib/finance';
 import { compoundScale, compoundSplit, delayRows, doublerSteps, dureeRow, placerRow, rendementRow, simpleCompoundRows, stepUpRows, tauxRows, type CompoundBarRow } from '../lib/finance';
 import { delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway } from '../lib/takeaways';
 import { interetsComposesFaq } from '../data/simFaq';
@@ -20,7 +20,8 @@ const TABS = [
 ] as const;
 type TabId = (typeof TABS)[number]['id'];
 
-const years = (n: number | null) => (n === null ? 'jamais' : fmtAns(n));
+/** Durée calculée (années décimales) dite en années et mois. */
+const duree = (n: number | null) => (n === null ? 'jamais' : fmtDuree(n));
 
 function Layout({ form, children, reset }: { form: ReactNode; children: ReactNode; reset: () => void }) {
   return (
@@ -215,6 +216,8 @@ function Doubler() {
   const [s, setS, up] = usePersistentState<DoublerState>('doubler', DOUBLER);
   const r = doubling({ initial: s.initial, annualReturn: s.annualReturn / 100, inflation: s.inflation / 100, multiple: s.multiple });
   const steps = doublerSteps(r, s.initial);
+  /* Paliers en mois entiers : chaque palier dure le même temps affiché, et les durées s'additionnent (écart au calcul exact inférieur à un mois). */
+  const stepMonths = r.exactYears === null ? 0 : Math.round(r.exactYears * 12);
   return (
     <Layout
       reset={() => setS(DOUBLER)}
@@ -234,19 +237,19 @@ function Doubler() {
       )}
     >
       <div className="kpis">
-        <Kpi label="Durée exacte" value={years(r.exactYears)} sub={`pour passer à ${fmtEur(r.target)}`} />
-        <Kpi label="Règle de 72" value={years(r.rule72Years)} sub={r.rule72Gap === null ? 'rendement positif requis' : `écart de ${fmtAns(Math.abs(r.rule72Gap))} avec le calcul exact`} />
+        <Kpi label="Durée exacte" value={duree(r.exactYears)} sub={`pour passer à ${fmtEur(r.target)}`} />
+        <Kpi label="Règle de 72" value={duree(r.rule72Years)} sub={r.rule72Gap === null ? 'rendement positif requis' : `écart de ${fmtDuree(Math.abs(r.rule72Gap))} avec le calcul exact`} />
         <Kpi label="Rendement réel" value={fmtPct(r.realReturn)} sub="par an, après inflation supposée" />
-        <Kpi label="Durée en pouvoir d’achat" value={years(r.realYears)} sub="pour multiplier la valeur réelle du capital" />
+        <Kpi label="Durée en pouvoir d’achat" value={duree(r.realYears)} sub="pour multiplier la valeur réelle du capital" />
       </div>
       <Takeaway>{doublingTakeaway({ multiple: s.multiple, exactYears: r.exactYears, realYears: r.realYears, realReturn: r.realReturn })}</Takeaway>
       {steps && r.exactYears !== null && (
         <CapitalBars
           title="Le capital, palier après palier"
           lines={steps.slice(1).map((st) => ({
-            name: `Après ${fmtAns(st.years)}`,
+            name: `Après ${fmtMonths(st.step * stepMonths)}`,
             row: st.row,
-            sub: `+${fmtEur(st.stepGain)} en ${fmtAns(r.exactYears as number)}${st.step > 1 ? ' de plus' : ''}`,
+            sub: `+${fmtEur(st.stepGain)} en ${fmtMonths(stepMonths)}${st.step > 1 ? ' de plus' : ''}`,
           }))}
           labels={{ interest: 'Intérêts accumulés' }}
         />

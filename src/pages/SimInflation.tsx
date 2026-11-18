@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { fmtAns, fmtEur, fmtPct, purchasingPower } from '../lib/finance';
+import { fmtAns, fmtDuree, fmtEur, fmtPct, purchasingPower } from '../lib/finance';
 import { inflationTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
@@ -7,7 +7,8 @@ type State = { amount: number; years: number; inflation: number; annualReturn: n
 
 const DEFAULTS: State = { amount: 10000, years: 20, inflation: 0.02, annualReturn: 0.03 };
 
-const fmtYears = (y: number | null) => (y === null ? 'jamais' : fmtAns(y));
+/** Durée calculée, dite en années et mois (23,4 ans → « 23 ans et 5 mois »). */
+const fmtYears = (y: number | null) => (y === null ? 'jamais' : fmtDuree(y));
 
 export default function SimInflation() {
   const [s, setS, up] = usePersistentState<State>('inflation', DEFAULTS);

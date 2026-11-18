@@ -275,7 +275,8 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
   it('intérêts composés : doubler son capital, en euros puis en pouvoir d’achat', () => {
     const r = doubling({ initial: 10000, annualReturn: 0.06, inflation: 0.02, multiple: 2 });
     const t = doublingTakeaway({ multiple: 2, exactYears: r.exactYears, realYears: r.realYears, realReturn: r.realReturn });
-    expect(t).toContain(`${(Math.round((r.exactYears as number) * 10) / 10).toString().replace('.', ',')}\u00a0ans`);
+    expect(t.replace(/\u00a0/g, " ")).toContain("environ 11 ans et 11 mois pour doubler");
+    expect(t).not.toMatch(/\d,\d+[\s\u00a0]ans/);
     expect(t).toContain('inflation');
     const flat = doubling({ initial: 10000, annualReturn: 0.02, inflation: 0.03, multiple: 2 });
     expect(doublingTakeaway({ multiple: 2, exactYears: flat.exactYears, realYears: flat.realYears, realReturn: flat.realReturn })).toContain('pouvoir d\'achat n\'augmente pas');

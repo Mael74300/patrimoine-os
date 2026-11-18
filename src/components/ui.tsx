@@ -191,7 +191,7 @@ export function Kpi({ label, value, sub, tone }: { label: string; value: string;
   return (
     <div className={'kpi ' + (tone ?? '')}>
       <div className="k-label">{label}</div>
-      <div className={duration ? 'k-value k-duration' : 'k-value'}>
+      <div className={duration ? `k-value k-duration${duration.filter((d) => !d.unit).length > 1 ? ' k-long' : ''}` : 'k-value'}>
         {duration ? duration.map((d, i) => (d.unit ? <span key={i} className="k-unit">{d.text}</span> : d.text)) : gluedUnits(value)}
       </div>
       {sub && <div className="k-sub">{sub}</div>}

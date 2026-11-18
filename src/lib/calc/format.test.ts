@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { MINUS, fmtAns, fmtEur, fmtEur2, fmtMonths, fmtNum, fmtPct, fmtPts, fmtYears } from './format';
+import { MINUS, fmtAns, fmtDuree, fmtEur, fmtEur2, fmtMonths, fmtNum, fmtPct, fmtPts, fmtYears } from './format';
 
 describe('Formatage : signe moins typographique', () => {
   it('écrit les nombres négatifs avec « − » (U+2212), jamais avec le trait d’union', () => {
@@ -50,5 +50,18 @@ describe('Formatage : durées dites en années et mois', () => {
     expect(fmtAns(18)).toBe(`18${N}ans`);
     expect(fmtYears(null)).toBe(`non atteint en 100${N}ans`);
     expect(fmtYears(0)).toBe('déjà atteint');
+  });
+});
+
+describe('Formatage : durée calculée en années, dite en années et mois', () => {
+  const N = ' ';
+  it('arrondit au mois le plus proche (11,9 ans ne se lit plus « 11 ans et 9 mois »)', () => {
+    expect(fmtDuree(Math.log(2) / Math.log(1.06))).toBe(`11${N}ans et 11${N}mois`);
+    expect(fmtDuree(Math.log(2) / Math.log(1.02))).toBe(`35${N}ans`);
+    expect(fmtDuree(Math.log(2) / Math.log(1.12))).toBe(`6${N}ans et 1${N}mois`);
+    expect(fmtDuree(0.104)).toBe(`1${N}mois`);
+    expect(fmtDuree(0.01)).toBe('moins d’un mois');
+    expect(fmtDuree(0)).toBe(`0${N}mois`);
+    expect(fmtDuree(NaN)).toBe('—');
   });
 });

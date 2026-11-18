@@ -193,6 +193,8 @@ h2[id^="rub-"] { scroll-margin-top: 84px; }
 .kpi .k-sub { font-size: 0.8rem; color: var(--ink-3); }
 /* Durée : chiffres en grand, mots (« ans », « et », « mois ») plus petits, pour tenir sur une ligne comme un montant. */
 .kpi .k-unit { font-size: 0.6em; font-weight: 600; }
+/* Durée en années et mois (« 11 ans et 11 mois ») : un cran plus petite, pour tenir sur une ligne dans une carte sur quatre. */
+@media (min-width: 480px) { .kpi .k-value.k-long { font-size: 1.3rem; } }
 .kpi.pos .k-value { color: var(--accent); }
 .kpi.neg .k-value { color: var(--danger); }
 

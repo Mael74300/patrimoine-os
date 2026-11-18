@@ -1,4 +1,4 @@
-import { fmtAns, fmtEur, fmtMonths, fmtNum, fmtPct } from './finance';
+import { fmtAns, fmtDuree, fmtEur, fmtMonths, fmtNum, fmtPct } from './finance';
 
 /**
  * Phrases « Concrètement » affichées sous les résultats des simulateurs.
@@ -202,10 +202,10 @@ export function doublingTakeaway(p: { multiple: number; exactYears: number | nul
   if (!(p.multiple > 1)) return '';
   const quoi = p.multiple === 2 ? 'doubler' : `multiplier par ${fmtNum(p.multiple)}`;
   if (p.exactYears === null) return `Avec ce rendement, le capital ne peut pas être multiplié par ${fmtNum(p.multiple)} : il ne progresse pas.`;
-  const exact = `Avec ces hypothèses, il faut environ ${fmtAns(p.exactYears)} pour ${quoi} le nombre d'euros du compte.`;
+  const exact = `Avec ces hypothèses, il faut environ ${fmtDuree(p.exactYears)} pour ${quoi} le nombre d'euros du compte.`;
   const reel = p.realYears === null
     ? ` Mais une fois l'inflation retirée, le pouvoir d'achat n'augmente pas : vous avez plus d'euros, pas plus de choses à acheter.`
-    : ` En tenant compte de l'inflation, il faut environ ${fmtAns(p.realYears)} pour ${quoi} ce que l'on peut réellement acheter.`;
+    : ` En tenant compte de l'inflation, il faut environ ${fmtDuree(p.realYears)} pour ${quoi} ce que l'on peut réellement acheter.`;
   return exact + reel;
 }
 
