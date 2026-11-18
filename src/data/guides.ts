@@ -307,16 +307,16 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Par où commencer pour construire son patrimoine',
     summary: 'Un ordre de priorité simple, de l’épargne de précaution aux investissements de long terme.',
     readingMinutes: 2,
-    updatedOn: '2026-10-10',
+    updatedOn: '2026-11-18',
     sections: [
       { heading: 'Connaître sa capacité d’épargne', body: ['Listez vos revenus nets et vos dépenses fixes sur trois mois. Passer de 100 € à 300 € d’épargne mensuelle a souvent plus d’effet que gagner un point de rendement.'] },
       { heading: 'Constituer une épargne de précaution', body: ['Un repère courant est de trois à six mois de dépenses, à adapter à la stabilité de vos revenus. Les livrets réglementés (LEP si vous êtes éligible, puis Livret A et LDDS) sont les supports naturels de cette réserve.'] },
       { heading: 'Rembourser les dettes coûteuses', body: ['Un crédit à la consommation à taux élevé coûte souvent plus que ce que rapporterait un placement. Le rembourser est un gain certain.'] },
-      { heading: 'Ouvrir les bonnes enveloppes tôt', body: ['PEA et assurance-vie bénéficient d’avantages fiscaux qui dépendent de leur ancienneté (5 et 8 ans). Les ouvrir tôt, même avec un petit versement, fait courir ces délais.'] },
+      { heading: 'Ouvrir les bonnes enveloppes tôt', body: ['PEA et assurance-vie bénéficient d’avantages fiscaux qui dépendent de leur ancienneté (5 et 8 ans). Les ouvrir tôt, même avec un petit versement, fait courir ces délais.', 'Salarié ? Si votre entreprise a un plan d’épargne entreprise (PEE), elle peut y compléter vos versements (l’abondement) ; l’argent y est bloqué 5 ans, sauf cas de déblocage anticipé.'] },
       { heading: 'Investir régulièrement selon son horizon', body: ['L’argent nécessaire dans moins de trois ans n’a pas sa place en actions. Pour un horizon long, une allocation diversifiée et peu coûteuse, alimentée chaque mois, est une approche robuste.'] },
     ],
-    related: ['livret-a', 'lep', 'pea', 'assurance-vie', 'etf-monde'],
-    sources: [IFP, AMF],
+    related: ['livret-a', 'lep', 'pea', 'assurance-vie', 'pee', 'etf-monde'],
+    sources: [IFP, AMF, SP('Plan d’épargne entreprise (PEE)', 'F2142')],
     cta: { to: '/simulateurs/patrimoine', label: 'Voir ce que deviendra mon épargne' },
   },
   {
@@ -348,10 +348,10 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     sections: [
       { heading: 'Placement et enveloppe', body: ['Le support détermine le risque ; l’enveloppe détermine la fiscalité, la disponibilité et la transmission.'] },
       { heading: 'Les grandes différences', body: ['PEA : pour garder longtemps des actions d’entreprises européennes. Versements : jusqu’à 150 000 €. Retraits : un retrait avant 5 ans ferme en principe le plan. Impôts : après 5 ans, pas d’impôt sur le revenu sur les gains (prélèvements sociaux dus).', 'Assurance-vie : pour diversifier son épargne et la transmettre. Versements : aucun plafond. Retraits : possibles, en tout ou en partie (on parle de « rachat ») ; les gains retirés sont imposables. Impôts : après 8 ans, abattement annuel de 4 600 € (9 200 € pour un couple) sur les gains ; prélèvements sociaux dus.', 'PER : pour préparer sa retraite en réduisant ses impôts, surtout dans une tranche d’imposition élevée. Versements : aucun plafond, mais la déduction fiscale est plafonnée. Retraits : argent bloqué jusqu’à la retraite, sauf déblocage anticipé (achat de la résidence principale, « accident de la vie »). Impôts : versements déductibles du revenu imposable avant 70 ans ; ce qui a été déduit est imposé à la sortie.', 'Compte-titres : pour placer sans plafond, partout dans le monde, avec une fiscalité standard. Versements : aucune limite. Retraits : aucune limite. Impôts : prélèvement forfaitaire unique (PFU, ou « flat tax ») de 31,4 % en 2026 (12,8 % d’impôt et 18,6 % de prélèvements sociaux).'] },
-      { heading: 'Comment les combiner', body: ['Chaque enveloppe a son horloge : certaines sont disponibles tout de suite, d’autres deviennent plus avantageuses avec les années ou restent bloquées jusqu’à la retraite. On répartit donc souvent son épargne selon le moment où l’on aura besoin de l’argent.', 'Avant tout, gardez une épargne de précaution sur des livrets. Les 5 ans du PEA comptent à partir du premier versement : l’ouvrir tôt, même avec une petite somme, fait courir ce délai. Ce n’est pas un ordre obligatoire : vos impôts, vos projets et votre besoin de disponibilité peuvent justifier d’autres choix.'] },
+      { heading: 'Comment les combiner', body: ['Chaque enveloppe a son horloge : certaines sont disponibles tout de suite, d’autres deviennent plus avantageuses avec les années ou restent bloquées jusqu’à la retraite. On répartit donc souvent son épargne selon le moment où l’on aura besoin de l’argent.', 'Avant tout, gardez une épargne de précaution sur des livrets. Salarié ? Un plan d’épargne entreprise (fiche PEE) permet à l’employeur de compléter vos versements, contre 5 ans de blocage, sauf cas de déblocage anticipé. Les 5 ans du PEA comptent à partir du premier versement : l’ouvrir tôt, même avec une petite somme, fait courir ce délai. Ce n’est pas un ordre obligatoire : vos impôts, vos projets et votre besoin de disponibilité peuvent justifier d’autres choix.'] },
     ],
     related: ['pea', 'assurance-vie', 'per', 'compte-titres'],
-    sources: [SP('PEA', 'F2385'), SP('Assurance-vie', 'F22414'), SP('Assurance-vie : versements et disponibilité', 'F15274'), SP('PER', 'F34982'), SP('Plus-values sur valeurs mobilières (PFU)', 'F21618'), SP('Livret A', 'F2365')],
+    sources: [SP('PEA', 'F2385'), SP('Assurance-vie', 'F22414'), SP('Assurance-vie : versements et disponibilité', 'F15274'), SP('PER', 'F34982'), SP('Plus-values sur valeurs mobilières (PFU)', 'F21618'), SP('Livret A', 'F2365'), SP('Plan d’épargne entreprise (PEE)', 'F2142')],
   },
   {
     slug: 'combien-epargne-de-precaution',

@@ -19,6 +19,7 @@ const fiche = (slug: string, label: string): GlossaryLink => ({ label, to: `/enc
 const guide = (slug: string, label: string): GlossaryLink => ({ label, to: `/guides/${slug}` });
 
 export const glossary: GlossaryTerm[] = [
+  { term: 'Abondement', definition: 'Somme que l’entreprise ajoute à ce que le salarié verse lui-même sur son plan d’épargne entreprise (PEE). Elle est facultative : le règlement du plan dit si l’entreprise abonde, et de combien.', links: [fiche('pee', 'Plan d’épargne entreprise (PEE)')] },
   { term: 'Allocation d’actifs', definition: 'Répartition d’un patrimoine entre grandes familles de placements (liquidités, obligations, actions, immobilier…). Elle explique l’essentiel du risque pris, davantage que le choix d’un produit précis.', links: [sim('portefeuille', 'Calculateur de portefeuille'), guide('types-investissements', 'Types d’investissements')] },
   { term: 'Amortissement (crédit)', definition: 'Remboursement progressif du capital emprunté. Au début d’un crédit à mensualité constante, la part d’intérêts est élevée ; le capital remboursé augmente ensuite.', links: [sim('credit', 'Calculateur de crédit'), fiche('credit-immobilier', 'Crédit immobilier')] },
   { term: 'Capacité d’emprunt', definition: 'Montant maximal qu’un ménage peut emprunter pour une mensualité, un taux et une durée donnés. Elle dépend aussi des critères de la banque.', links: [sim('credit', 'Calculateur de crédit')] },

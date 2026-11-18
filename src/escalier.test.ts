@@ -69,7 +69,7 @@ describe('fiches rattachées aux étapes du guide « Par où commencer »', () =
   it('chaque fiche apparaît dans l’étape dont le texte la cite', async () => {
     const { etapesFiches } = await import('./pages/Guides');
     const g = guideBySlug['par-ou-commencer'];
-    const cite: Record<string, string> = { lep: 'LEP', 'livret-a': 'Livret A', pea: 'PEA', 'assurance-vie': 'assurance-vie', 'etf-monde': 'horizon long' };
+    const cite: Record<string, string> = { lep: 'LEP', 'livret-a': 'Livret A', pea: 'PEA', 'assurance-vie': 'assurance-vie', pee: 'PEE', 'etf-monde': 'horizon long' };
     etapesFiches.forEach((fs, i) => fs.forEach((f) => expect(g.sections[i].body.join(' '), f.slug).toContain(cite[f.slug])));
   });
 });

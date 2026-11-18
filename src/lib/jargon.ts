@@ -11,6 +11,7 @@ import { INLINE_LINKS, linkRegExp, pathOf } from './inlineLinks';
 
 /** Expressions repérées dans le texte, par notion du glossaire (premier mot exact du glossaire). */
 export const JARGON_PATTERNS: Record<string, string[]> = {
+  'Abondement': ['abondements?'],
   'Allocation d’actifs': ['allocation d[’\']actifs'],
   'Capacité d’emprunt': ['capacité d[’\']emprunt'],
   'Cash-flow (flux de trésorerie)': ['cash-flow', 'flux de trésorerie'],
