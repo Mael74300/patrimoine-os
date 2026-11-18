@@ -1578,3 +1578,11 @@ details.fold.next-more > summary { padding: 10px 14px; }
 .guide-cta { margin: 18px 0 4px; }
 @media (max-width: 520px) { .guide-cta .btn { width: 100%; justify-content: center; } }
 @media print { .guide-cta { display: none; } }
+
+/* Calcul des droits de la fiche Donation (replié sous l'exemple chiffré) */
+.don-calc { scroll-margin-top: 80px; }
+.don-calc-body { padding: 4px 14px 12px; }
+.don-calc-form { display: grid; grid-template-columns: 1fr; column-gap: 16px; align-items: start; }
+@media (min-width: 560px) { .don-calc-form { grid-template-columns: 1fr 1fr; } .don-calc-form > :nth-child(3) { grid-column: 1 / -1; } .don-calc-form > :nth-child(3) .choice-opts { max-width: calc(50% - 8px); } }
+.don-calc-kpis { margin: 4px 0 12px; }
+.don-calc-note { margin: 10px 0 0; }

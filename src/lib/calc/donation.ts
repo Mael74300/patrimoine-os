@@ -47,3 +47,35 @@ export function detailDroitsLigneDirecte(partTaxable: number): TrancheDonation[]
   }
   return out;
 }
+
+export interface DonationEstimate {
+  /** Montant donné (négatif ramené à 0). */
+  montant: number;
+  /** Part couverte par le don familial d'argent (0 s'il ne s'applique pas). */
+  donFamilial: number;
+  /** Part couverte par l'abattement lié au lien de parenté. */
+  abattement: number;
+  /** Total reçu sans droits (don familial + abattement). */
+  sansDroits: number;
+  /** Part taxée au barème en ligne directe. */
+  taxable: number;
+  /** Droits à payer, arrondis à l'euro. */
+  droits: number;
+  /** Droits rapportés au montant donné (0 à 1). */
+  tauxMoyen: number;
+}
+
+/**
+ * Droits d'une donation en ligne directe (parent → enfant, grand-parent → petit-enfant), pour un premier don
+ * du même donateur au même bénéficiaire depuis 15 ans : le don familial d'argent (s'il s'applique) et l'abattement
+ * sont retirés du montant, le reste est taxé au barème. Les montants d'abattement sont passés en paramètres
+ * (données vérifiées de `src/data/donationAbattements.ts` et de la fiche).
+ */
+export function estimerDonation(montant: number, abattement: number, donFamilial: number): DonationEstimate {
+  const m = Math.max(0, Number.isFinite(montant) ? montant : 0);
+  const fam = Math.min(m, Math.max(0, donFamilial));
+  const abat = Math.min(m - fam, Math.max(0, abattement));
+  const taxable = m - fam - abat;
+  const droits = droitsDonationLigneDirecte(taxable);
+  return { montant: m, donFamilial: fam, abattement: abat, sansDroits: fam + abat, taxable, droits, tauxMoyen: m > 0 ? droits / m : 0 };
+}
