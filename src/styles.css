@@ -878,7 +878,12 @@ h2.gloss-letter::before { content: none; }
 @media print { .back-top { display: none; } }
 
 /* Guide « Par où commencer » : lien vers la suite, sous chaque étape */
-.prose p.step-more { margin: 0.5rem 0 0; }
+.prose p.step-more { margin: 0.5rem 0 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+/* Fiches de l’étape : à côté du lien principal, plus discrètes (pas de gras, fond teinté, flèche retirée). */
+.step-more a.step-fiche { font-weight: 600; background: var(--surface-2); border-color: transparent; color: var(--ink); }
+.step-more a.step-fiche::after { content: none; }
+.step-more a.step-fiche:hover { border-color: var(--accent); }
+.step-kind { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-3); margin-right: 2px; }
 .step-more a { display: inline-block; min-height: 24px; padding: 10px 16px; border: 1px solid var(--line); border-radius: 22px; line-height: 1.35; background: var(--surface); font-weight: 700; font-size: 0.95rem; text-decoration: none; }
 .step-more a::after { content: " →"; white-space: pre; }
 .step-more a:hover { border-color: var(--accent); }
