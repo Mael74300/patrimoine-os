@@ -136,10 +136,14 @@ export default function SimImmobilier() {
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
             <legend>Votre projet</legend>
-            <NumberField label="Prix du bien" unit="€" value={s.price} onChange={up('price')} min={0} step={5000} sliderMax={1000000} />
-            <NumberField label="Apport" unit="€" value={s.downPayment} onChange={up('downPayment')} min={0} step={1000} sliderMax={300000} hint="La somme que vous payez de votre poche ; le reste est emprunté." />
-            <NumberField label="Taux du crédit (hors assurance)" unit="%" percent value={s.loanRate} onChange={up('loanRate')} step={0.05} min={0} max={15} sliderMax={8} hint="Le taux figure dans l'offre de votre banque ; la valeur proposée n'est qu'un exemple." />
-            <NumberField label="Durée du crédit" unit="ans" value={s.loanYears} onChange={up('loanYears')} min={0} max={30} sliderMax={30} />
+            <div className="field-duo">
+              <NumberField label="Prix du bien" unit="€" value={s.price} onChange={up('price')} min={0} step={5000} sliderMax={1000000} />
+              <NumberField label="Apport" unit="€" value={s.downPayment} onChange={up('downPayment')} min={0} step={1000} sliderMax={300000} hint="Payé de votre poche ; le reste est emprunté." />
+            </div>
+            <div className="field-duo">
+              <NumberField label="Taux du crédit (hors assurance)" unit="%" percent value={s.loanRate} onChange={up('loanRate')} step={0.05} min={0} max={15} sliderMax={8} hint="Voir l’offre de votre banque ; ici, un exemple." />
+              <NumberField label="Durée du crédit" unit="ans" value={s.loanYears} onChange={up('loanYears')} min={0} max={30} sliderMax={30} />
+            </div>
             <NumberField label="Loyer mensuel hors charges" unit="€" value={s.monthlyRent} onChange={up('monthlyRent')} min={0} step={25} sliderMax={3000} />
           </fieldset>
           <details className="fold advanced">

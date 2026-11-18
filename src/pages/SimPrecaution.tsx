@@ -71,8 +71,10 @@ export default function SimPrecaution() {
             />
             <NumberField label="Dépenses mensuelles incompressibles" unit="€" value={s.monthlyExpenses} onChange={up('monthlyExpenses')} min={0} step={100} sliderMax={6000} hint="Logement, alimentation, énergie, transport, assurances, remboursements de crédit." />
             <NumberField label="Épargne disponible aujourd'hui" unit="€" value={s.currentSavings} onChange={up('currentSavings')} min={0} step={500} sliderMax={50000} hint="Sommes mobilisables sans délai ni perte." />
-            <NumberField label="Versement mensuel" unit="€" value={s.monthlySaving} onChange={up('monthlySaving')} min={0} step={50} sliderMax={2000} />
-            <NumberField label="Délai souhaité" unit="mois" value={s.deadline} onChange={up('deadline')} min={1} max={120} step={1} sliderMax={60} />
+            <div className="field-duo">
+              <NumberField label="Versement mensuel" unit="€" value={s.monthlySaving} onChange={up('monthlySaving')} min={0} step={50} sliderMax={2000} />
+              <NumberField label="Délai souhaité" unit="mois" value={s.deadline} onChange={up('deadline')} min={1} max={120} step={1} sliderMax={60} />
+            </div>
           </fieldset>
           <details className="fold advanced">
             <summary>Réglages avancés (facultatif)</summary>
