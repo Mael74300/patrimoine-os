@@ -2,7 +2,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { investmentBySlug } from './investments';
-import { bondCoupons, fondsEurosGrowth, livretQuinzaines, concentrationLoss, crowdfundingScenario, lepVsLivretA, pelVsLivretA, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, subscriptionChurn, trainingPayoff, yearlySavingsValue } from '../lib/calc/ficheExemples';
+import { bondCoupons, fondsEurosGrowth, livretQuinzaines, concentrationLoss, crowdfundingScenario, lepVsLivretA, pelVsLivretA, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, subscriptionChurn, trainingPayoff, yearlySavingsValue, termDepositVsLivretA, ucFeesDrag, forestCredit } from '../lib/calc/ficheExemples';
 import { amortize } from '../lib/calc/loan';
 import { CROWDFUNDING_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, leverageBars } from '../lib/illustrationData';
 import { SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaRepriseBilan, SchemaScpiBilan } from '../components/schemas/fiches';
@@ -404,5 +404,60 @@ describe('fiches PEL et LEP : une année comparée au Livret A', () => {
     expect(ex).toContain(`Livret A à ${pct(livretA.rate * 100)}, la même somme rapporterait ${eur(r.livret)}`);
     expect(ex).toContain(`${eur(r.gap)} de plus par an`);
     expect(norm(fiche.tax.text)).toContain(`Taux : ${pct(lepLivret.rate * 100)}`);
+  });
+});
+
+/**
+ * Fiches Compte à terme, Unités de compte et Forêt : des exemples qui apprennent quelque chose. PFU de 31,4 % sur les
+ * revenus de 2026 (Service-Public F2329), Livret A à 1,7 % exonéré (F2365) ; crédit d'impôt forestier de 25 %, sommes
+ * retenues dans la limite de 6 250 € (personne seule) ou 12 500 € (couple soumis à imposition commune) : BOFiP
+ * BOI-IR-RICI-60-20-20. Sources consultées le 2026-11-18.
+ */
+describe('fiches Compte à terme, Unités de compte et Forêt : exemples recalculés', () => {
+  const pct = (n: number, d = 2) => `${norm(n.toLocaleString('fr-FR', { minimumFractionDigits: d }))} %`;
+  const cents = (n: number) => `${norm(n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }))} €`;
+  const livretA = LIVRETS.find((l) => l.id === 'livretA')!;
+
+  it('Compte à terme : 300 € bruts, 94,20 € retenus, 205,80 € nets, contre 170 € au Livret A ; seuil à 2,48 %', () => {
+    const r = termDepositVsLivretA(10000, 3, 31.4, livretA.rate * 100);
+    expect(r).toEqual({ gross: 300, tax: 94.2, net: 205.8, netPct: 2.06, livret: 170, breakEvenPct: 2.48 });
+    const fiche = investmentBySlug['compte-a-terme']!;
+    const ex = norm(fiche.example);
+    expect(norm(fiche.tax.text)).toContain('prélèvement forfaitaire unique de 31,4 %');
+    expect(ex).toMatch(/^Exemple fictif/);
+    expect(ex).toContain(`${eur(10000)} à 3 % brut rapportent ${eur(r.gross)}`);
+    expect(ex).toContain(`31,4 % en retient ${cents(r.tax)} : il reste ${cents(r.net)}, soit ${pct(r.netPct)} net`);
+    expect(ex).toContain(`Livret A à ${pct(livretA.rate * 100)}`);
+    expect(ex).toContain(`rapporterait ${eur(r.livret)}`);
+    expect(ex).toContain(`dépasse ${pct(r.breakEvenPct)}`);
+  });
+
+  it('Unités de compte : 6 % moins 1,5 % de frais par an, environ 4,4 % ; 23 700 € au lieu de 32 100 € en 20 ans', () => {
+    const r = ucFeesDrag(10000, 6, 1.5, 20);
+    expect(r).toEqual({ netPct: 4.4, withoutFees: 32100, withFees: 23700, cost: 8400 });
+    expect(r.cost / r.withoutFees).toBeGreaterThan(0.25);
+    const ex = norm(investmentBySlug['unites-de-compte']!.example);
+    expect(ex).toMatch(/^Exemple fictif/);
+    expect(ex).toContain(`${eur(10000)} placés 20 ans, avec une hypothèse de 6 % par an avant frais`);
+    expect(ex).toContain(`1,5 % de frais cumulés`);
+    expect(ex).toContain(`environ ${pct(r.netPct, 1)}`);
+    expect(ex).toContain(`environ ${eur(r.withFees)} au lieu de ${eur(r.withoutFees)}, soit ${eur(r.cost)} de moins, plus du quart`);
+  });
+
+  it('Forêt : 1 562,50 € de crédit pour 10 000 € versés seul (15,6 %), 2 500 € pour un couple', () => {
+    const seul = forestCredit(10000, 6250, 25);
+    const couple = forestCredit(10000, 12500, 25);
+    expect(seul).toEqual({ retained: 6250, credit: 1562.5, effectivePct: 15.6, netCost: 8437.5 });
+    expect(couple.credit).toBe(2500);
+    const fiche = investmentBySlug['groupements-forestiers']!;
+    const tax = norm(fiche.tax.text);
+    for (const m of ['Crédit d’impôt de 25 %', 'plafonnées à 6 250 € pour une personne seule et 12 500 € pour un couple']) expect(tax).toContain(m);
+    const ex = norm(fiche.example);
+    expect(ex).toMatch(/^Exemple fictif/);
+    expect(ex).toContain(`Seuls ${eur(seul.retained)} sont retenus`);
+    expect(ex).toContain(`soit ${cents(seul.credit)} : ${pct(seul.effectivePct, 1)} de la somme versée`);
+    expect(ex).toContain(`coûtent donc ${cents(seul.netCost)}, hors frais`);
+    expect(ex).toContain(`(plafond de ${eur(12500)})`);
+    expect(ex).toContain(`${eur(couple.credit)} de crédit`);
   });
 });

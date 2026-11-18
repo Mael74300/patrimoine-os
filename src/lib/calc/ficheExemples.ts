@@ -254,3 +254,46 @@ export function etfMilestones(monthly: number, ratePct: number, years: number, s
   const lastStepShare = (last.gains - before.gains) / last.gains;
   return { milestones, lastStepShare, afterDrop: r100(last.value * (1 - dropPct / 100)) };
 }
+
+/**
+ * Compte à terme ou Livret A, sur une année et à taux supposés constants : intérêts bruts du compte à terme, part retenue
+ * par le prélèvement forfaitaire unique (`pfuPct`, 31,4 % sur les revenus de 2026 : Service-Public F2329, consulté le
+ * 2026-11-18), intérêts nets (au centime), taux net, intérêts du Livret A (exonérés : F2365) et taux brut au-dessus duquel
+ * le compte à terme rapporte davantage après impôt.
+ */
+export function termDepositVsLivretA(amount: number, grossPct: number, pfuPct: number, livretPct: number) {
+  const gross = Math.round(amount * grossPct) / 100;
+  const tax = Math.round(gross * pfuPct) / 100;
+  const net = Math.round((gross - tax) * 100) / 100;
+  return {
+    gross,
+    tax,
+    net,
+    netPct: Math.round((net / amount) * 10000) / 100,
+    livret: Math.round((amount * livretPct) / 100),
+    breakEvenPct: Math.round((livretPct / (1 - pfuPct / 100)) * 100) / 100,
+  };
+}
+
+/**
+ * Unités de compte : `amount` € placés `years` ans, rendement supposé `grossPct` % par an avant frais, frais cumulés de
+ * `feePct` % prélevés chaque année sur la valeur atteinte. Valeurs finales arrondies à la centaine, avant impôt.
+ */
+export function ucFeesDrag(amount: number, grossPct: number, feePct: number, years: number) {
+  const netFactor = (1 + grossPct / 100) * (1 - feePct / 100);
+  const withoutFees = Math.round((amount * Math.pow(1 + grossPct / 100, years)) / 100) * 100;
+  const withFees = Math.round((amount * Math.pow(netFactor, years)) / 100) * 100;
+  return { netPct: Math.round((netFactor - 1) * 1000) / 10, withoutFees, withFees, cost: withoutFees - withFees };
+}
+
+/**
+ * Forêt : crédit d'impôt de `ratePct` % sur les sommes versées pour des parts de groupement forestier, retenues dans la
+ * limite de `capEur` € (6 250 € pour une personne seule, 12 500 € pour un couple soumis à imposition commune : BOFiP
+ * BOI-IR-RICI-60-20-20, consulté le 2026-11-18). Renvoie la somme retenue, le crédit, ce qu'il représente de la somme
+ * versée et le coût des parts une fois le crédit déduit (hors frais du groupement).
+ */
+export function forestCredit(amount: number, capEur: number, ratePct: number) {
+  const retained = Math.min(amount, capEur);
+  const credit = Math.round(retained * ratePct) / 100;
+  return { retained, credit, effectivePct: Math.round((credit / amount) * 1000) / 10, netCost: Math.round((amount - credit) * 100) / 100 };
+}
