@@ -79,6 +79,14 @@ export const guidesForInvestment: Record<string, string[]> = {
   'capital-humain': ['par-ou-commencer'],
 };
 
+/**
+ * Guides proposés en suite d'un guide, quand le parcours a une étape suivante naturelle (chantier 200).
+ * Le guide d'entrée « Types d'investissements » mène au choix de l'enveloppe.
+ */
+export const guidesForGuide: Record<string, string[]> = {
+  'types-investissements': ['choisir-son-enveloppe'],
+};
+
 export const simsForGuide: Record<string, string[]> = {
   'types-investissements': ['portefeuille'],
   'patrimoine-net': ['patrimoine', 'budget'],

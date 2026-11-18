@@ -4,8 +4,8 @@ import { guideBySlug, guideGroups, guides, otherGuides } from '../data/guides';
 import { investmentBySlug } from '../data/investments';
 import { guideBlurb } from '../lib/guideBlurbs';
 import { simBlurb } from '../lib/simThemes';
-import { guideSimulators } from '../lib/relatedSims';
-import { splitNext } from '../lib/nextLinks';
+import { guideSimulators, guidesForGuide } from '../lib/relatedSims';
+import { interleave, splitNext } from '../lib/nextLinks';
 import { NextList, NextMore, type NextItem } from '../components/NextList';
 import { NetWorthCalculator } from '../components/NetWorthCalculator';
 import { Crumbs, FaqSection, MobileFold, PageHead, Sources } from '../components/ui';
@@ -91,7 +91,6 @@ export function GuidePage() {
   const { slug = '' } = useParams();
   const g = guideBySlug[slug];
   if (!g) return <NotFound />;
-  const others = otherGuides(g.slug);
   // Le simulateur ouvert par le bouton principal n’est pas répété dans « Simulateurs liés ».
   const sims = guideSimulators(g.slug, g.cta?.to);
   // Jargon expliqué sur place : première apparition de chaque notion du glossaire dans le guide.
@@ -104,9 +103,18 @@ export function GuidePage() {
      Au-delà de NEXT_VISIBLE cartes, la suite est repliée pour ne pas repousser les sources (chantier 143).
      Le classement du guide Types d'investissements et les cartes du guide Choisir son enveloppe renvoient déjà vers chaque fiche. */
   const simItems: NextItem[] = sims.map((sim) => ({ kind: 'Simulateur', to: `/simulateurs/${sim.slug}`, title: sim.title, blurb: simBlurb(sim.slug) }));
+  /* Guide d'entrée « Types d'investissements » : la suite du parcours (guides suivants, comparateur) passe avant le simulateur (chantier 200). */
+  const guideItems: NextItem[] = (guidesForGuide[g.slug] ?? []).filter((x) => guideBySlug[x])
+    .map((x) => ({ kind: 'Guide', to: `/guides/${x}`, title: guideBySlug[x].title, blurb: guideBlurb(x) }));
+  const toolItems: NextItem[] = g.slug === 'types-investissements'
+    ? [{ kind: 'Outil', to: '/comparateur', title: 'Comparateur de placements', blurb: 'Trois placements côte à côte, à vos hypothèses.' }, ...simItems]
+    : simItems;
+  const leadItems = interleave(guideItems, toolItems);
+  // « Autres guides » ne répète pas un guide déjà proposé en carte juste au-dessus.
+  const others = otherGuides(g.slug, 3, guidesForGuide[g.slug] ?? []);
   const ficheItems: NextItem[] = g.slug === 'types-investissements' || g.slug === 'choisir-son-enveloppe' ? []
     : g.related.filter((r) => investmentBySlug[r]).map((r) => ({ kind: 'Fiche', to: `/encyclopedie/${r}`, title: investmentBySlug[r].name, blurb: investmentBySlug[r].summary }));
-  const hasNext = g.slug !== 'par-ou-commencer' && simItems.length + ficheItems.length > 0;
+  const hasNext = g.slug !== 'par-ou-commencer' && leadItems.length + ficheItems.length > 0;
   // Sommaire : les rubriques du guide, puis les questions, les suites et les sources (repères pour vérifier).
   // Parcours de lecture du guide (page « Guides ») : son nom et son icône dans le sur-titre ; la durée de lecture suit la date de mise à jour.
   // Action principale (chantier 156) : juste après la rubrique qui en parle, et non plus après les questions fréquentes.
@@ -157,7 +165,8 @@ export function GuidePage() {
             {g.slug === 'comparer-les-frais' && s.heading.startsWith('L’effet') && <SchemaFrais />}
             {g.slug === 'patrimoine-net' && s.heading === 'La définition' && <SchemaPatrimoineNet />}
             {g.slug === 'types-investissements' && s.heading === 'Le classement' && <RiskMap />}
-            {(g.slug === 'types-investissements' || g.slug === 'choisir-son-enveloppe') && s.heading.startsWith('Placement et enveloppe') && <SchemaEnveloppe />}
+            {/* Le schéma « placement et enveloppe » n'est dessiné qu'une fois, dans le guide qui compare les enveloppes ; Types d'investissements y renvoie. */}
+            {g.slug === 'choisir-son-enveloppe' && s.heading.startsWith('Placement et enveloppe') && <SchemaEnveloppe />}
             {g.slug === 'fonctionnement-pea' && s.heading === 'Retraits et fiscalité' && <SchemaPea />}
             {g.slug === 'livret-a-calcul-interets-quinzaines' && s.heading === 'Des intérêts calculés par quinzaines' && <SchemaQuinzaines />}
             {g.slug === 'rentabilite-locative' && s.heading === 'Le rendement net de charges' && <SchemaRendement />}
@@ -187,7 +196,7 @@ export function GuidePage() {
         {/* Guide avec un outil intégré : l'action principale vient après l'outil. */}
         {g.cta && g.widget && <p className="guide-cta"><Link className="btn" to={g.cta.to}>{g.cta.label}</Link></p>}
         {hasNext && (() => {
-          const [shown, rest] = splitNext(simItems, ficheItems);
+          const [shown, rest] = splitNext(leadItems, ficheItems);
           return (<>
             <h2 id="rub-pour-aller-plus-loin">Pour aller plus loin</h2>
             <NextList items={shown} />
