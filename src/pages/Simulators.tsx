@@ -7,11 +7,11 @@ import { SimThemeIcon } from '../components/Icons';
 
 /** Simulateurs d'entrée, dans l'ordre où un débutant en a besoin (aucun chiffre : seulement des renvois). */
 export const startSims: { slug: string; label: string }[] = [
-  { slug: 'epargne-de-precaution', label: 'Je veux une réserve pour les imprévus' },
-  { slug: 'objectif-epargne', label: 'Je veux épargner pour un projet' },
+  { slug: 'epargne-de-precaution', label: 'J’épargne pour les imprévus' },
+  { slug: 'objectif-epargne', label: 'J’épargne pour un projet' },
   { slug: 'endettement', label: 'Je prépare un emprunt' },
-  { slug: 'budget', label: 'Je veux savoir où part mon argent' },
-  { slug: 'inflation', label: 'Je crains que les prix grignotent mon épargne' },
+  { slug: 'budget', label: 'Je fais mon budget' },
+  { slug: 'inflation', label: 'Je crains la hausse des prix' },
   { slug: 'retraits-reguliers-duree-du-capital', label: 'Je prépare ma retraite' },
 ];
 
@@ -49,7 +49,7 @@ export default function Simulators() {
       )}
       {q && <p className="small muted" role="status">{shown} simulateur{shown > 1 ? 's' : ''} sur {simulators.length}</p>}
       {!q && <p className="small sim-themes-label">Ou parcourez les simulateurs par thème :</p>}
-      <nav aria-label="Thèmes" className="theme-nav">
+      <nav aria-label="Thèmes" className="theme-nav theme-nav--grid">
         {groups.map((t) => (
           <a key={t.id} href={`#${t.id}`}><SimThemeIcon id={t.id} size={24} />{t.title} <span aria-hidden="true">{t.slugs.length}</span></a>
         ))}
