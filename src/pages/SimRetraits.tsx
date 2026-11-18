@@ -38,8 +38,10 @@ export default function SimRetraits() {
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
             <legend>Capital et retraits</legend>
-            <NumberField label="Capital de départ" unit="€" value={s.capital} onChange={up('capital')} min={0} step={1000} sliderMax={1000000} />
-            <NumberField label="Premier retrait mensuel" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} sliderMax={5000} />
+            <div className="field-duo">
+              <NumberField label="Capital de départ" unit="€" value={s.capital} onChange={up('capital')} min={0} step={1000} sliderMax={1000000} />
+              <NumberField label="Premier retrait mensuel" unit="€" value={s.monthly} onChange={up('monthly')} min={0} step={50} sliderMax={5000} />
+            </div>
             <NumberField label="Horizon d’observation" unit="ans" value={s.years} onChange={up('years')} min={1} max={80} step={1} sliderMax={50} />
           </fieldset>
           <details className="fold advanced">

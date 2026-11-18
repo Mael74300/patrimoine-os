@@ -130,15 +130,21 @@ export default function SimLouerAcheter() {
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
             <legend>Achat</legend>
-            <NumberField label="Prix du bien" unit="€" value={s.price} onChange={up('price')} min={0} step={5000} sliderMax={1000000} />
-            <NumberField label="Apport" unit="€" value={s.downPayment} onChange={up('downPayment')} min={0} step={5000} sliderMax={500000} />
-            <NumberField label="Taux du prêt" unit="%" percent value={s.loanRate} onChange={up('loanRate')} min={0} max={20} step={0.05} sliderMax={8} />
-            <NumberField label="Durée du prêt" unit="ans" value={s.loanYears} onChange={up('loanYears')} min={0} max={50} step={1} sliderMax={30} />
+            <div className="field-duo">
+              <NumberField label="Prix du bien" unit="€" value={s.price} onChange={up('price')} min={0} step={5000} sliderMax={1000000} />
+              <NumberField label="Apport" unit="€" value={s.downPayment} onChange={up('downPayment')} min={0} step={5000} sliderMax={500000} />
+            </div>
+            <div className="field-duo">
+              <NumberField label="Taux du prêt" unit="%" percent value={s.loanRate} onChange={up('loanRate')} min={0} max={20} step={0.05} sliderMax={8} />
+              <NumberField label="Durée du prêt" unit="ans" value={s.loanYears} onChange={up('loanYears')} min={0} max={50} step={1} sliderMax={30} />
+            </div>
           </fieldset>
           <fieldset>
             <legend>Location et horizon</legend>
-            <NumberField label="Loyer mensuel charges comprises" unit="€" value={s.monthlyRent} onChange={up('monthlyRent')} min={0} step={50} sliderMax={3000} />
-            <NumberField label="Horizon de comparaison" unit="ans" value={s.horizonYears} onChange={up('horizonYears')} min={0} max={50} step={1} sliderMax={30} />
+            <div className="field-duo">
+              <NumberField label="Loyer mensuel charges comprises" unit="€" value={s.monthlyRent} onChange={up('monthlyRent')} min={0} step={50} sliderMax={3000} />
+              <NumberField label="Horizon de comparaison" unit="ans" value={s.horizonYears} onChange={up('horizonYears')} min={0} max={50} step={1} sliderMax={30} />
+            </div>
           </fieldset>
           <details className="fold advanced">
             <summary>Réglages avancés (facultatif)</summary>
