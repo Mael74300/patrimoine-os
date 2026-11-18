@@ -16,7 +16,7 @@ export const categories: Category[] = [
   { id: 'collection', order: 13, name: 'Actifs de collection', short: 'Art, montres, vins : marchés peu liquides.' },
   { id: 'terres', order: 14, name: 'Terres agricoles et forêts', short: 'Foncier rural, groupements forestiers.' },
   { id: 'energie', order: 15, name: 'Énergies renouvelables et actifs réels', short: 'Infrastructures, production d’énergie.' },
-  { id: 'retraite', order: 16, name: 'Retraite et enveloppes fiscales', short: 'PER et dispositifs de long terme.' },
+  { id: 'retraite', order: 16, name: 'Retraite et enveloppes fiscales', short: 'PER, épargne salariale et dispositifs de long terme.' },
   { id: 'levier', order: 17, name: 'Crédit et effet de levier', short: 'Emprunter pour investir : mécanique et risques.' },
   { id: 'capital-humain', order: 18, name: 'Développement du capital humain', short: 'Compétences et formation : le premier actif.' },
   { id: 'transmission', order: 19, name: 'Transmission et structuration', short: 'Donations, démembrement, sociétés.' },

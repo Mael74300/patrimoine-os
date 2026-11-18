@@ -102,6 +102,9 @@ describe('recherche', () => {
     expect(first('assurance emprunteur')).toBe('/simulateurs/credit');
     expect(first('Où placer mon argent ?')).toBe('/guides/par-ou-commencer');
     expect(first('vivre de ses rentes')).toBe('/simulateurs/independance-financiere');
+    expect(first('épargne salariale')).toBe('/encyclopedie/pee');
+    expect(first('intéressement')).toBe('/encyclopedie/pee');
+    expect(first('plan épargne entreprise')).toBe('/encyclopedie/pee');
     // seuls les mots exacts d’un exemple déclenchent un raccourci
     expect(first('épargne logement')).not.toBe('/guides/par-ou-commencer');
   });

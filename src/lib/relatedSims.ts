@@ -33,6 +33,7 @@ export const simsForInvestment: Record<string, string[]> = {
   'groupements-forestiers': ['portefeuille'],
   cryptomonnaies: ['portefeuille'],
   per: ['patrimoine', 'independance-financiere', 'retraits-reguliers-duree-du-capital'],
+  pee: ['patrimoine', 'frais'],
   'capital-humain': ['independance-financiere'],
 };
 
@@ -66,6 +67,7 @@ export const guidesForInvestment: Record<string, string[]> = {
   'groupements-forestiers': ['diversification-placements'],
   cryptomonnaies: ['diversification-placements'],
   per: ['choisir-son-enveloppe'],
+  pee: ['choisir-son-enveloppe', 'combien-epargne-de-precaution'],
   'capital-humain': ['par-ou-commencer'],
 };
 

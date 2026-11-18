@@ -1446,3 +1446,44 @@ export function SchemaDonationBilan({ children }: { children: ReactNode }) {
     </figure>
   );
 }
+
+/**
+ * Schéma « PEE : ce qui l’alimente, combien de temps c’est bloqué, ce qui est imposé » (schéma de principe, sans montant).
+ * Règles : Service-Public F2142 (vérifiée le 1er janvier 2026) et F2140, consultées le 2026-11-18.
+ */
+export function SchemaPee() {
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 384" role="img" aria-labelledby="ill-pee-t ill-pee-d" className="ill-svg">
+        <title id="ill-pee-t">PEE : vos sommes, le complément de l’entreprise, 5 ans de blocage</title>
+        <desc id="ill-pee-d">Deux sources alimentent le plan d’épargne entreprise. D’un côté, vous : votre prime d’intéressement ou de participation, et vos versements volontaires. De l’autre, l’entreprise, qui peut compléter vos versements : c’est l’abondement, jusqu’à 3 fois ce que vous versez. L’ensemble est placé sur le PEE et bloqué au moins 5 ans, sauf cas de déblocage anticipé : mariage ou Pacs, troisième enfant, achat de la résidence principale, départ de l’entreprise, entre autres. À la sortie, les gains ne sont pas soumis à l’impôt sur le revenu, mais les prélèvements sociaux sont dus.</desc>
+        <rect x={1} y={2} width={150} height={96} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={76} y={26} textAnchor="middle" className="ill-step">Vous</text>
+        <text x={76} y={50} textAnchor="middle" className="ill-sub">intéressement,</text>
+        <text x={76} y={68} textAnchor="middle" className="ill-sub">participation,</text>
+        <text x={76} y={86} textAnchor="middle" className="ill-sub">vos versements</text>
+        <text x={170} y={57} textAnchor="middle" className="ill-step">+</text>
+        <rect x={189} y={2} width={150} height={96} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={264} y={26} textAnchor="middle" className="ill-step">L’entreprise</text>
+        <text x={264} y={50} textAnchor="middle" className="ill-in">abondement</text>
+        <text x={264} y={68} textAnchor="middle" className="ill-sub">jusqu’à 3 fois</text>
+        <text x={264} y={86} textAnchor="middle" className="ill-sub">vos versements</text>
+        <path d="M 76 98 V 112 Q 76 120 84 120 H 162 Q 170 120 170 128 V 140 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <path d="M 264 98 V 112 Q 264 120 256 120 H 178 Q 170 120 170 128" {...arrow} />
+        <rect x={1} y={140} width={338} height={118} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={170} y={166} textAnchor="middle" className="ill-step">Votre PEE : bloqué au moins 5 ans</text>
+        <text x={170} y={190} textAnchor="middle" className="ill-in">placé dans les fonds choisis</text>
+        <text x={170} y={214} textAnchor="middle" className="ill-sub">Sauf cas prévus : mariage ou Pacs,</text>
+        <text x={170} y={232} textAnchor="middle" className="ill-sub">3e enfant, achat de la résidence</text>
+        <text x={170} y={250} textAnchor="middle" className="ill-sub">principale, départ de l’entreprise…</text>
+        <path d="M 170 258 V 284 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <rect x={1} y={284} width={338} height={72} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={170} y={309} textAnchor="middle" className="ill-step">À la sortie</text>
+        <text x={170} y={331} textAnchor="middle" className="ill-in">gains sans impôt sur le revenu</text>
+        <text x={170} y={348} textAnchor="middle" className="ill-sub">prélèvements sociaux dus</text>
+        <text x={170} y={378} textAnchor="middle" className="ill-sub">Schéma de principe d’après Service-Public.fr</text>
+      </svg>
+    </figure>
+  );
+}
