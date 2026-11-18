@@ -25,7 +25,7 @@ export default function SimRendement() {
     <>
       <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: 'Rendement réel de mon placement' }]} />
       <PageHead eyebrow="Simulateur" title="Rendement réel de mon placement : quel taux annuel ai-je obtenu ?">
-        À partir de ce que vous avez versé et de la valeur actuelle, calcule le rendement annuel équivalent (taux de rendement interne), en tenant compte de la date de chaque versement.
+        Indiquez ce que vous avez versé et ce que vaut votre placement aujourd’hui : voici ce qu’il vous a rapporté en moyenne par an.
       </PageHead>
       <SimNotice>
         Calcul fondé uniquement sur les montants que vous saisissez, sans chiffre réglementaire ni prévision. Le résultat est un rendement passé, avant impôt sauf si la valeur saisie est déjà nette.

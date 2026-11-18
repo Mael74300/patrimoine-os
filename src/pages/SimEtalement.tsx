@@ -45,7 +45,7 @@ export default function SimEtalement() {
     <>
       <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: 'Investir d’un coup ou progressivement' }]} />
       <PageHead eyebrow="Simulateur" title="Investir d’un coup ou progressivement">
-        Compare un capital placé en une seule fois et le même capital placé en tranches égales sur plusieurs mois, selon le parcours de prix que vous supposez.
+        Comparez un capital placé en une seule fois et le même capital placé en tranches égales sur plusieurs mois, selon le parcours de prix que vous supposez.
       </PageHead>
       <SimNotice>
         Résultat entièrement fondé sur vos hypothèses, sans aucun chiffre réglementaire et sans prévision : l’étalement ne gagne que si le prix baisse pendant la période,
