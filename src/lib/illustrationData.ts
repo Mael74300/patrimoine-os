@@ -257,6 +257,21 @@ export function fraisRows() {
   return res.map((x) => ({ fees: x.fees, final: r100(x.finalValue), cost: r100(x.cost) }));
 }
 
+/** Schéma « l’écart dû aux frais se creuse » (guide « Comprendre les intérêts composés ») : 10 000 € placés en une fois à 5 % par an,
+ * sans frais ou avec 1 % de frais par an, vus après 5, 15 et 25 ans (exemple fictif, mêmes chiffres que le texte du guide). */
+export const FRAIS_CUMUL_EXAMPLE = { initial: 10000, annualReturn: 0.05, fees: 0.01, years: [5, 15, 25] as const };
+
+/** Montants arrondis à l’euro ; l’écart est calculé sur les montants arrondis, pour que l’addition affichée tombe juste. */
+export function fraisCumulRows() {
+  const { initial, annualReturn, fees, years } = FRAIS_CUMUL_EXAMPLE;
+  return years.map((y) => {
+    const [sans, avec] = feeImpact({ initial, monthly: 0, annualReturn, years: y, inflation: 0 }, [0, fees]);
+    const gross = Math.round(sans.finalValue);
+    const net = Math.round(avec.finalValue);
+    return { years: y, gross, net, cost: gross - net };
+  });
+}
+
 /** Schéma « petits versements » : 50 € par mois pendant 30 ans à 4 % par an supposé, avec ou sans hausse des versements (exemple fictif, mêmes chiffres que le guide « épargne limitée »). */
 export const PETITS_VERSEMENTS_EXAMPLE = {
   years: 30,

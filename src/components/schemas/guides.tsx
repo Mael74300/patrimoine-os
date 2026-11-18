@@ -1,5 +1,5 @@
 import { fmtDuree, fmtEur, fmtPct, HCSF } from '../../lib/finance';
-import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, cashflowParts, endettementParts, leviersEndettement, LEVIERS_EXAMPLE, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, FRAIS_OFFRES, fraisOffresTotals, petitsVersementsRows, precautionRows, PRECAUTION_EXAMPLE, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../../lib/illustrationData';
+import { DIVERSIFICATION_EXAMPLE, INFLATION_EXAMPLE, LOAN_EXAMPLE, SNOWBALL_EXAMPLE, diversificationRows, inflationBars, loanSlices, snowballGroups, rendementSteps, RENDEMENT_EXAMPLE, cashflowParts, endettementParts, leviersEndettement, LEVIERS_EXAMPLE, patrimoineParts, rembourserParts, regle72Rows, epargneMoisRows, EPARGNE_MOIS_EXAMPLE, fraisRows, FRAIS_EXAMPLE, fraisCumulRows, FRAIS_CUMUL_EXAMPLE, FRAIS_OFFRES, fraisOffresTotals, petitsVersementsRows, precautionRows, PRECAUTION_EXAMPLE, PETITS_VERSEMENTS_EXAMPLE, type SnowballBar } from '../../lib/illustrationData';
 import { W, BASE, TOP, BAR_W, pct, wrapLabel } from './outils';
 
 /** Schéma « boule de neige » : même capital, mêmes 5 %, intérêts simples ou réinvestis. Les hauteurs sont proportionnelles aux montants.
@@ -59,7 +59,7 @@ export function SchemaInterets() {
       </svg>
       <figcaption>
         <strong>Illustration, exemple fictif</strong> : {fmtEur(initial)} placés à {annualRate * 100} % par an, sans nouveau versement, avant frais et impôts.
-        Avec des intérêts simples, on touche chaque année la même somme. Avec des intérêts composés, les intérêts déjà gagnés rapportent à leur tour : l’écart s’agrandit avec la durée.
+        Avec des intérêts composés, les intérêts déjà gagnés rapportent à leur tour : l’écart s’agrandit avec la durée.
       </figcaption>
     </figure>
   );
@@ -856,6 +856,55 @@ export function SchemaFrais() {
           );
         })}
         <text x={X0} y="244" className="ill-sub">{`Pointillés : ce que les frais retirent.`}</text>
+      </svg>
+      <figcaption className="fig-short">
+        <strong>Illustration, exemple fictif</strong> : sans versement ni impôt. Barres proportionnelles aux montants.
+      </figcaption>
+    </figure>
+  );
+}
+
+/** Schéma « l’écart dû aux frais se creuse » (guide « Comprendre les intérêts composés ») : le même placement vu après 5, 15 et 25 ans,
+ * sans frais (longueur totale de la barre) et avec 1 % de frais par an (partie pleine). Les pointillés rouges, ce que les frais retirent,
+ * s’allongent d’une ligne à l’autre. Même langage visuel que le schéma des frais du guide « Comparer les frais ». ViewBox 340 : lisible à 375 px. */
+export function SchemaFraisCumul() {
+  const rows = fraisCumulRows();
+  const { initial, annualReturn, fees } = FRAIS_CUMUL_EXAMPLE;
+  const X0 = 14;
+  const BW = 236;
+  const max = rows[rows.length - 1].gross;
+  const pct = (v: number) => `${(v * 100).toLocaleString('fr-FR')}\u00a0%`;
+  const alt = rows.map((r) => `après ${r.years} ans, ${fmtEur(r.gross)} sans frais et ${fmtEur(r.net)} avec frais, soit ${fmtEur(r.cost)} de moins`).join(' ; ');
+  const LEG = 46 + rows.length * 52;
+  return (
+    <figure className="illustration">
+      <svg viewBox={`0 0 340 ${LEG + 44}`} role="img" aria-labelledby="ill-fc-t ill-fc-d" className="ill-svg">
+        <title id="ill-fc-t">Avec des frais annuels, l’écart se creuse avec le temps</title>
+        <desc id="ill-fc-d">{`Exemple fictif : ${fmtEur(initial)} placés en une fois à ${pct(annualReturn)} par an, sans frais ou avec ${pct(fees)} de frais par an. ${alt}.`}</desc>
+        <text x={X0} y="16" className="ill-step">Capital selon la durée (environ)</text>
+        {rows.map((r, i) => {
+          const y = 52 + i * 52;
+          const wg = (r.gross / max) * BW;
+          const wn = (r.net / max) * BW;
+          return (
+            <g key={r.years}>
+              <text x={X0} y={y - 8} className="ill-in">
+                {`Après ${r.years} ans`}
+                <tspan className="ill-sub" dx="8">{`sans frais : ${fmtEur(r.gross)}`}</tspan>
+              </text>
+              <rect x={X0 + wn} y={y} width={wg - wn} height="24" rx="6" fill="none" stroke="var(--danger)" strokeWidth="1.5" strokeDasharray="4 3" />
+              <rect x={X0} y={y} width={wn} height="24" rx="6" fill="var(--primary)" />
+              <text x={X0 + 8} y={y + 17} className="ill-in ill-on-dark">{fmtEur(r.net)}</text>
+              <text x={X0 + wg + 8} y={y + 17} className="ill-loss">{`− ${fmtEur(r.cost)}`}</text>
+            </g>
+          );
+        })}
+        <g transform={`translate(${X0} ${LEG})`}>
+          <rect width={14} height={14} rx={3} fill="var(--primary)" />
+          <text x={22} y={12} className="ill-sub">{`Avec ${pct(fees)} de frais par an`}</text>
+          <rect y={22} width={14} height={14} rx={3} fill="none" stroke="var(--danger)" strokeWidth="1.5" strokeDasharray="4 3" />
+          <text x={22} y={34} className="ill-sub">Ce que les frais retirent</text>
+        </g>
       </svg>
       <figcaption className="fig-short">
         <strong>Illustration, exemple fictif</strong> : sans versement ni impôt. Barres proportionnelles aux montants.
