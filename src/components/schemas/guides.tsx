@@ -409,6 +409,48 @@ export function SchemaEnveloppe() {
   );
 }
 
+/** Les horloges des enveloppes : quand l'argent de chaque enveloppe devient disponible ou avantageux.
+ * Aucun chiffre en euros ; les durées (5 et 8 ans) et les règles reprennent le texte du guide et les cartes (testé, chantier 185). */
+export const ENVELOPE_CLOCK = [
+  { when: 'Tout de suite', name: 'Livrets réglementés', rule: 'Retraits possibles à tout moment', tone: 'accent' },
+  { when: 'Après 5 ans', name: 'PEA', rule: 'Gains sans impôt sur le revenu', tone: 'primary' },
+  { when: 'Après 8 ans', name: 'Assurance-vie', rule: 'Abattement annuel sur les gains', tone: 'primary' },
+  { when: 'À la retraite', name: 'PER', rule: 'Bloqué jusque-là, sauf cas prévus', tone: 'warn' },
+] as const;
+
+export function SchemaHorlogesEnveloppes() {
+  const ROW = 74;
+  const H = 66;
+  const X = 44;
+  const fill = { accent: 'var(--accent-soft)', primary: 'var(--surface)', warn: 'var(--warn-soft)' } as const;
+  const last = 8 + (ENVELOPE_CLOCK.length - 1) * ROW + H / 2;
+  return (
+    <figure className="illustration">
+      <svg viewBox={`0 0 340 ${16 + ENVELOPE_CLOCK.length * ROW}`} role="img" aria-labelledby="ill-horl-t ill-horl-d" className="ill-svg">
+        <title id="ill-horl-t">Chaque enveloppe a son horloge</title>
+        <desc id="ill-horl-d">{ENVELOPE_CLOCK.map((r) => `${r.when} : ${r.name}, ${r.rule.charAt(0).toLowerCase()}${r.rule.slice(1)}`).join('. ') + '.'}</desc>
+        <path d={`M 20 ${8 + H / 2} V ${last + 20}`} fill="none" stroke="var(--line)" strokeWidth={3} strokeLinecap="round" />
+        <path d={`M 14 ${last + 15} l 6 7 l 6 -7`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+        {ENVELOPE_CLOCK.map((r, i) => {
+          const y = 8 + i * ROW;
+          const c = `var(--${r.tone})`;
+          return (
+            <g key={r.name}>
+              <path d={`M 27 ${y + H / 2} H ${X}`} fill="none" stroke={c} strokeWidth={2} />
+              <circle cx={20} cy={y + H / 2} r={7} fill={c} stroke="var(--surface)" strokeWidth={2} />
+              <rect x={X} y={y} width={340 - X - 1} height={H} rx={12} fill={fill[r.tone]} stroke={c} strokeWidth={2} />
+              <text x={X + 14} y={y + 20} className="ill-phase" style={{ fill: c }}>{r.when}</text>
+              <text x={X + 14} y={y + 39} className="ill-step">{r.name}</text>
+              <text x={X + 14} y={y + 57} className="ill-sub">{r.rule}</text>
+            </g>
+          );
+        })}
+      </svg>
+      <figcaption className="fig-short">Plus on descend, plus l’argent reste longtemps placé. Le compte-titres, lui, n’a ni plafond ni délai.</figcaption>
+    </figure>
+  );
+}
+
 /** Schéma « De 6 % à 3,6 % » : le rendement brut d’une annonce fond quand on compte les frais, la vacance et les charges. Exemple fictif calculé (illustrationData). */
 export function SchemaRendement() {
   const steps = rendementSteps();
