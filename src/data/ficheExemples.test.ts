@@ -219,6 +219,20 @@ describe('fiche Investir à crédit : l’exemple chiffré reprend le schéma du
     expect(ex).toContain('avant impôt');
     expect(ex).not.toContain('6 200');
   });
+  it('dit ce que coûte chaque mois : 527 € de capital, 211 € ou 544 € à ajouter de sa poche', () => {
+    const yearly = loan.monthlyPayment * 12;
+    expect(Math.round(first.principalPaid / 12)).toBe(527);
+    expect(bars.map((b) => Math.round((yearly - b.income) / 12))).toEqual([211, 544]);
+    expect(ex).toContain(`capital remboursé (environ ${eur(527)} par mois)`);
+    expect(ex).toContain(`vous ajoutez environ ${eur(211)} par mois, avant impôt`);
+    expect(ex).toContain(`environ ${eur(544)} par mois en tout`);
+    expect(ex).toContain('n’est pas perdu');
+  });
+  it('les hypothèses affichées dans « Détail du suivi » citent le même taux que l’exemple', () => {
+    const hyp = norm(investmentBySlug['credit-immobilier']!.review.assumptions.join(' '));
+    expect(hyp).toContain(`Taux de ${norm((annualRate * 100).toLocaleString('fr-FR'))} % sur ${years} ans`);
+    expect(hyp).toContain(eur(principal));
+  });
 });
 
 describe('guide Investir à crédit : l’exemple reprend les schémas et chiffre l’effort de trésorerie', () => {

@@ -55,8 +55,7 @@ export function SchemaLevier({ brief = false }: { brief?: boolean } = {}) {
         </figcaption>
       ) : (
         <figcaption>
-          <strong>Illustration, exemple fictif</strong> : bien de {fmtEur(price)} acheté avec {fmtEur(down)} d’apport, avant impôt. Les loyers nets de charges servent d’abord à payer les intérêts ({fmtEur(interest)} la première année).
-          Le crédit reste le même dans les deux cas : c’est le rendement du bien qui décide si le levier enrichit ou appauvrit. Le remboursement du capital, en plus, pèse sur la trésorerie.
+          <strong>Illustration, exemple fictif</strong> : bien de {fmtEur(price)} acheté avec {fmtEur(down)} d’apport, première année, avant impôt. Les loyers nets de charges paient d’abord les intérêts : c’est le rendement du bien qui décide si le levier enrichit ou appauvrit.
         </figcaption>
       )}
     </figure>
