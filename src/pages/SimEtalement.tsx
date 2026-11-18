@@ -55,14 +55,18 @@ export default function SimEtalement() {
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
           <fieldset>
             <legend>Capital et durée</legend>
-            <NumberField label="Capital à investir" unit="€" value={s.amount} onChange={up('amount')} min={0} step={500} />
-            <NumberField label="Durée d’étalement" unit="mois" value={s.spread} onChange={up('spread')} min={1} max={120} step={1} />
+            <div className="field-duo">
+              <NumberField label="Capital à investir" unit="€" value={s.amount} onChange={up('amount')} min={0} step={500} />
+              <NumberField label="Durée d’étalement" unit="mois" value={s.spread} onChange={up('spread')} min={1} max={120} step={1} />
+            </div>
             <NumberField label="Horizon d’évaluation" unit="ans" value={s.years} onChange={up('years')} min={0} max={50} step={1} />
           </fieldset>
           <fieldset>
             <legend>Hypothèses de marché</legend>
-            <NumberField label="Rendement annuel du placement" unit="%" percent value={s.ret} onChange={up('ret')} min={-50} max={100} step={0.5} />
-            <NumberField label="Rendement annuel de la part non investie" unit="%" percent value={s.cash} onChange={up('cash')} min={-50} max={100} step={0.5} />
+            <div className="field-duo">
+              <NumberField label="Rendement annuel du placement" unit="%" percent value={s.ret} onChange={up('ret')} min={-50} max={100} step={0.5} />
+              <NumberField label="Rendement annuel de la part non investie" unit="%" percent value={s.cash} onChange={up('cash')} min={-50} max={100} step={0.5} />
+            </div>
             <ChoiceField label="Parcours de prix pendant l’étalement" value={s.path} options={PATHS} onChange={up('path')} compact />
             <NumberField label="Ampleur de la baisse ou de la hausse" unit="%" percent value={s.move} onChange={up('move')} min={0} max={90} step={5} />
           </fieldset>
