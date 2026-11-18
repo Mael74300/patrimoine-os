@@ -14,6 +14,7 @@ export const INLINE_LINKS: InlineLink[] = [
   { phrase: 'fiche Compte-titres', to: '/encyclopedie/compte-titres' },
   { phrase: 'fiche Assurance-vie', to: '/encyclopedie/assurance-vie' },
   { phrase: 'fiche PER', to: '/encyclopedie/per' },
+  { phrase: 'fiche PEE', to: '/encyclopedie/pee' },
   { phrase: 'fiche Location nue', to: '/encyclopedie/location-nue' },
   { phrase: 'fiche Créer son entreprise', to: '/encyclopedie/creation-entreprise' },
   { phrase: 'simulateur de budget', to: '/simulateurs/budget' },

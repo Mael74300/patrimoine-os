@@ -37,7 +37,7 @@ export const etapesFiches: { slug: string; label: string }[][] = [
   [],
   [{ slug: 'lep', label: 'LEP' }, { slug: 'livret-a', label: 'Livret A et LDDS' }],
   [],
-  [{ slug: 'pea', label: 'PEA' }, { slug: 'assurance-vie', label: 'Assurance-vie' }],
+  [{ slug: 'pea', label: 'PEA' }, { slug: 'assurance-vie', label: 'Assurance-vie' }, { slug: 'pee', label: 'PEE' }],
   [{ slug: 'etf-monde', label: 'ETF actions diversifiés' }],
 ];
 
