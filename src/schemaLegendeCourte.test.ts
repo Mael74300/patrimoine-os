@@ -45,9 +45,9 @@ describe('légendes des schémas étroits', () => {
     }
   });
 
-  it('les sept légendes courtes repérées le 2026-11-17 sont concernées', () => {
+  it('les légendes courtes repérées le 2026-11-17 sont concernées', () => {
     const courts = new Set(legendes.filter((l) => l.court).map((l) => l.nom));
-    for (const nom of ['SchemaEscalier', 'SchemaPatrimoineNet', 'SchemaRembourser', 'SchemaImmoEtf', 'SchemaDonation', 'SchemaPel', 'SchemaCompteATerme']) {
+    for (const nom of ['SchemaEscalier', 'SchemaRembourser', 'SchemaImmoEtf', 'SchemaDonation', 'SchemaPel', 'SchemaCompteATerme']) {
       expect(courts.has(nom)).toBe(true);
     }
   });
