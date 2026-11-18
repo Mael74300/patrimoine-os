@@ -24,4 +24,13 @@ describe('Comparateur', () => {
   it('ne replie sur mobile que des critères longs', () => {
     expect(CMP_FOLDED_ON_MOBILE).toEqual(['Capital nécessaire', 'Frais', 'Fiscalité', 'Avantages', 'Inconvénients']);
   });
+  it('donne à chaque placement la même couleur dans le choix, le tableau, les réglages et le graphique', () => {
+    const colors = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)'];
+    for (const c of colors) {
+      // Choix du placement, en-tête du tableau, réglages et « Concrètement » : un point de la couleur de la courbe.
+      expect(html.split(`class="pt-dot" style="background:${c}"`).length - 1).toBeGreaterThanOrEqual(4);
+      // Cases du tableau (filet et point sur téléphone) : huit critères par placement.
+      expect(html.split(`style="--cmp-c:${c}"`).length - 1).toBe(8);
+    }
+  });
 });

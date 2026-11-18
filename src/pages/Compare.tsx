@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { categoryById } from '../data/categories';
 import { investmentBySlug, investments } from '../data/investments';
@@ -91,10 +91,11 @@ export default function Compare() {
         Choisissez jusqu'à trois placements, comparez leurs caractéristiques, puis projetez-les avec vos propres hypothèses.
       </PageHead>
 
-      <div className="grid cols-3">
+      {/* Chaque placement garde sa couleur partout : choix, tableau, réglages, graphique et « Concrètement ». */}
+      <div className="grid cols-3 cmp-pick">
         {[0, 1, 2].map((k) => (
           <div key={k} className="field">
-            <label htmlFor={`cmp-${k}`}>Placement {k + 1}</label>
+            <label htmlFor={`cmp-${k}`}><i className="pt-dot" style={{ background: ids[k] ? COLORS[k] : 'var(--line)' }} aria-hidden="true" />Placement {k + 1}</label>
             <select id={`cmp-${k}`} value={ids[k] ?? ''} onChange={(e) => {
               const next = [...ids];
               if (e.target.value) next[k] = e.target.value; else next.splice(k, 1);
@@ -111,7 +112,7 @@ export default function Compare() {
         <div className="table-wrap cmp-wrap" tabIndex={0}>
           <table className="cmp-table">
             <thead>
-              <tr><th style={{ width: 150 }}><span className="sr-only">Critère</span></th>{items.map((i) => <th key={i.slug}><Link to={`/encyclopedie/${i.slug}`}>{i.name}</Link></th>)}</tr>
+              <tr><th style={{ width: 150 }}><span className="sr-only">Critère</span></th>{items.map((i, k) => <th key={i.slug}><i className="pt-dot" style={{ background: COLORS[k] }} aria-hidden="true" /><Link to={`/encyclopedie/${i.slug}`}>{i.name}</Link></th>)}</tr>
             </thead>
             <tbody>
               {rows.map(([label, render]) => (
@@ -121,7 +122,7 @@ export default function Compare() {
                       <button type="button" className="cmp-toggle" aria-expanded={!closed.includes(label)} onClick={() => toggle(label)}>{label}</button>
                     ) : label}
                   </th>
-                  {items.map((i) => <td key={i.slug} data-label={i.name} className={label === 'Repères' ? 'cmp-meter' : undefined}>{render(i)}</td>)}
+                  {items.map((i, k) => <td key={i.slug} data-label={i.name} style={{ '--cmp-c': COLORS[k] } as CSSProperties} className={label === 'Repères' ? 'cmp-meter' : undefined}>{render(i)}</td>)}
                 </tr>
               ))}
             </tbody>

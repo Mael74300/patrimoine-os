@@ -532,17 +532,20 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
   .cmp-table thead th { padding: 0; border: 0; background: none; }
   .cmp-table thead th:first-child { display: none; }
   .cmp-table tbody th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 0; padding: 12px 12px 2px; background: var(--surface); }
-  .cmp-table tbody tr:not(:last-child) td:last-child { border-bottom: 1px solid var(--line); }
+  .cmp-table tbody tr:not(:last-child) { border-bottom: 1px solid var(--line); padding-bottom: 2px; }
+  .cmp-table tbody tr.cmp-closed { padding-bottom: 0; }
   .cmp-table tbody td { padding: 4px 12px; border-bottom: 0; }
   .cmp-toggle { display: flex; justify-content: space-between; align-items: center; width: 100%; min-height: 40px; padding: 0; background: none; border: 0; font: inherit; text-transform: inherit; letter-spacing: inherit; color: var(--primary); cursor: pointer; text-align: left; }
   .cmp-toggle::after { content: '−'; font-size: 1.25rem; line-height: 1; }
   .cmp-toggle[aria-expanded='false']::after { content: '+'; }
   .cmp-toggle:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
   .cmp-closed td { display: none; }
-  .cmp-closed th { border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+  .cmp-closed th { padding-bottom: 4px; }
   .cmp-table tbody td::before { content: attr(data-label); display: block; font-weight: 600; font-size: 0.85rem; color: var(--ink-2); }
+  /* Chaque placement porte sa couleur (celle du graphique) : un point devant son nom, un filet à gauche de son bloc. */
+  .cmp-table tbody td { margin: 10px 12px; padding: 1px 0 1px 10px; border-left: 3px solid var(--cmp-c, var(--line)); }
+  .cmp-table tbody td::before { padding-left: 16px; background: radial-gradient(circle at 5px 50%, var(--cmp-c, var(--line)) 4.5px, transparent 5px) no-repeat; }
   /* Repères : nom du placement, puis ses trois lignes Risque, Liquidité, Effort. */
-  .cmp-table tbody td.cmp-meter { padding-bottom: 10px; }
   .cmp-table tbody td.cmp-meter::before { margin-bottom: 6px; }
 }
 
@@ -1484,7 +1487,14 @@ ul.points { margin: 0.9rem 0 0.5rem; gap: 8px; }
 .cmp-hyp-set legend { float: left; width: 100%; margin-bottom: 8px; font-size: 0.92rem; }
 .cmp-hyp-set legend + * { clear: both; }
 .cmp-hyp-set .field-duo { margin-bottom: 0; }
-.cmp-hyp-set .pt-dot, .cmp-concretement .pt-dot { border-radius: 50%; }
+.cmp-hyp-set .pt-dot, .cmp-concretement .pt-dot, .cmp-pick .pt-dot, .cmp-table .pt-dot { border-radius: 50%; }
+.cmp-table thead th .pt-dot { margin-right: 7px; }
+/* Sur téléphone, les trois choix tiennent chacun sur une ligne : l'étiquette à gauche, la liste à droite. */
+@media (max-width: 600px) {
+  .grid.cols-3.cmp-pick { gap: 0; margin-bottom: 6px; }
+  .cmp-pick .field { display: grid; grid-template-columns: 7.4rem minmax(0, 1fr); align-items: center; margin-bottom: 8px; }
+  .cmp-pick label { margin: 0; white-space: nowrap; }
+}
 .cmp-concretement p { margin: 0 0 6px; }
 .cmp-concretement ul { list-style: none; margin: 0 0 4px; padding: 0; display: grid; gap: 2px; }
 @media (max-width: 600px) { .cmp-hyp-set:last-child { border-bottom: 1px solid var(--line); } }
