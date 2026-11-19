@@ -1054,9 +1054,9 @@ export function SimNotice({ children }: { children?: ReactNode }) {
     if (window.matchMedia('(max-width: 700px)').matches && ref.current) ref.current.open = false;
   }, []);
   return (
-    <details ref={ref} open className="notice sim-notice" role="note">
+    <details ref={ref} open className="notice sim-notice">
       <summary>À savoir avant de simuler</summary>
-      <p>{children}</p>
+      <p role="note">{children}</p>
     </details>
   );
 }
