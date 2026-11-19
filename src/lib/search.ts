@@ -42,7 +42,8 @@ export const stopWords = new Set(
 /** Mots utiles de la recherche, ramenés à leur racine (les petits mots sont gardés s'il n'y a qu'eux). */
 export function searchTerms(query: string): string[] {
   const words = norm(query).split(/[\s'’]+/).map((w) => w.replace(/^[^a-z0-9]+|[^a-z0-9]+$/g, '')).filter((t) => t.length > 1);
-  const useful = words.filter((w) => !stopWords.has(w));
+  // Un montant tapé (« placer 10000 euros ») n’apparaît dans aucun titre : on l’ignore s’il reste d’autres mots.
+  const useful = words.filter((w) => !stopWords.has(w) && !/^\d+$/.test(w));
   return [...new Set((useful.length ? useful : words).map(stem))];
 }
 
@@ -112,9 +113,17 @@ export const searchAliases: Record<string, string[]> = {
 export const searchShortcuts: { queries: string[]; to: string[] }[] = [
   { queries: ['investissement locatif', 'investir dans locatif', 'rendement locatif', 'rentabilité locative', 'louer son appartement'], to: ['/guides/rentabilite-locative', '/simulateurs/immobilier'] },
   { queries: ['mensualité', 'mensualités', 'mensualité crédit', 'calculer mensualité', 'assurance emprunteur'], to: ['/simulateurs/credit'] },
-  { queries: ['où placer mon argent', 'placer son argent', 'investir son argent', 'investir'], to: ['/guides/par-ou-commencer', '/guides/choisir-son-enveloppe'] },
+  { queries: ['où placer mon argent', 'placer son argent', 'investir son argent', 'investir', 'placement', 'placements', 'meilleur placement', 'placer 10 000 euros'], to: ['/guides/par-ou-commencer', '/guides/choisir-son-enveloppe'] },
   { queries: ['épargne', 'épargner'], to: ['/guides/par-ou-commencer', '/simulateurs/objectif-epargne'] },
   { queries: ['épargne salariale', 'PEE', 'plan d’épargne entreprise', 'intéressement', 'prime d’intéressement', 'participation', 'abondement'], to: ['/encyclopedie/pee'] },
+  // Audit du 19 novembre 2026 : « prêt » ou « crédit » menaient d’abord à l’investissement à crédit, « fonds euros » aux obligations,
+  // « investir en bourse » au capital-investissement, « placement sans risque » aux cryptomonnaies en troisième position.
+  { queries: ['prêt', 'crédit', 'prêt immobilier', 'crédit immobilier', 'emprunt immobilier', 'simulateur prêt', 'simulateur crédit', 'calcul prêt', 'calcul crédit'], to: ['/simulateurs/credit', '/guides/taux-endettement-capacite-emprunt'] },
+  { queries: ['emprunter', 'combien emprunter', 'combien puis-je emprunter', 'capacité d’emprunt', 'capacité d’endettement'], to: ['/simulateurs/endettement', '/guides/taux-endettement-capacite-emprunt'] },
+  { queries: ['placement sans risque', 'placement garanti', 'placement sécurisé', 'épargne sans risque', 'épargne garantie', 'sans risque'], to: ['/encyclopedie/livret-a', '/encyclopedie/lep', '/encyclopedie/fonds-euros'] },
+  { queries: ['fonds euros', 'fonds en euros', 'fonds euro'], to: ['/encyclopedie/fonds-euros'] },
+  { queries: ['investir en bourse', 'placer en bourse', 'bourse', 'acheter des actions'], to: ['/encyclopedie/etf-monde', '/encyclopedie/actions-individuelles'] },
+  { queries: ['payer moins d’impôts', 'payer moins d’impôt', 'réduire ses impôts', 'réduire impôts', 'baisser ses impôts', 'défiscaliser', 'défiscalisation'], to: ['/guides/choisir-son-enveloppe', '/encyclopedie/per'] },
   { queries: ['vivre de ses rentes', 'vivre de ses placements', 'rentier', 'rente'], to: ['/simulateurs/independance-financiere', '/simulateurs/retraits-reguliers-duree-du-capital'] },
 ];
 
@@ -173,8 +182,9 @@ export function searchDetailed(query: string): SearchResult {
     const rank = shortcut.indexOf(to);
     if (rank >= 0) {
       // Page d’un raccourci : en tête, dans l’ordre du raccourci, même si les mots tapés n’y figurent pas.
-      found = terms.length + 1;
-      s = 1000 - rank;
+      // Score fixe, sans les bonus ci-dessous, pour que l’ordre du raccourci soit toujours respecté.
+      all.push({ kind, title, to, excerpt, score: 1000 - rank, found: terms.length + 1 });
+      return;
     }
     if (!found) return;
     if (pairs.length) {
@@ -183,7 +193,11 @@ export function searchDetailed(query: string): SearchResult {
     }
     all.push({ kind, title, to, excerpt, score: s + bonus, found });
   };
+  // « placement sans risque », « épargne garantie » : les fiches au repère de risque élevé ou très élevé
+  // (cryptomonnaies, actions…) ne sont pas proposées, même si leur texte contient « sans » ou « garantie ».
+  const wantsSafe = /(^|[^a-z])(sans risque|garanti|securis)/.test(norm(query));
   for (const i of investments) {
+    if (wantsSafe && i.risk >= 4) continue;
     const lead = ['fiche', i.summary, i.tags.join(' '), categoryById[i.category]?.name].join(' ');
     const body = [i.definition, i.howItWorks, i.howToInvest.join(' '), i.minCapital.text, i.fees.text, i.tax.text, i.pros.join(' '), i.cons.join(' '), i.timeSkills].join(' ');
     add('Fiche', i.name, `/encyclopedie/${i.slug}`, i.summary, lead, body, 1);
