@@ -15,6 +15,16 @@ describe('schéma « petits versements »', () => {
     expect(texte).toContain('environ 34 400 € pour 18 000 € versés');
     expect(texte).toContain('environ 78 200 € pour 45 000 € versés');
   });
+  it('ses paliers couvrent les 30 ans et redonnent les sommes versées', () => {
+    for (const r of petitsVersementsRows()) {
+      expect(r.phases.reduce((a, p) => a + p.years, 0)).toBe(30);
+      expect(r.phases.reduce((a, p) => a + p.years * 12 * p.monthly, 0)).toBe(r.paid);
+    }
+    expect(petitsVersementsRows()[1].phases).toEqual([{ monthly: 50, years: 5 }, { monthly: 100, years: 5 }, { monthly: 150, years: 20 }]);
+    const html = renderToStaticMarkup(createElement(SchemaPetitsVersements)).replace(/[\u00a0\u202f]/g, ' ');
+    expect(html).toContain('5 ans à 50 €, 5 ans à 100 €, 20 ans à 150 €');
+    expect(html).toContain('30 ans à 50 € par mois');
+  });
   it('est accessible, léger et marqué « exemple fictif »', () => {
     const html = renderToStaticMarkup(createElement(SchemaPetitsVersements));
     expect(html).toContain('role="img"');

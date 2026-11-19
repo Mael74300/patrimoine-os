@@ -293,9 +293,16 @@ export function petitsVersementsRows() {
     return { paid, total, gains: total - paid };
   };
   return [
-    { label: '50 € par mois, toujours', ...end() },
-    { label: '50, puis 100, puis 150 €', ...end(raises) },
+    { label: 'Le même versement', phases: petitsVersementsPhases([]), ...end() },
+    { label: 'Un versement qui augmente', phases: petitsVersementsPhases(raises), ...end(raises) },
   ];
+}
+
+/** Paliers de versement mensuel (montant et nombre d'années) sur la durée de l'exemple, déduits des hausses. */
+export function petitsVersementsPhases(raises: readonly { fromYear: number; monthly: number }[]) {
+  const { years, monthly } = PETITS_VERSEMENTS_EXAMPLE;
+  const starts = [{ fromYear: 1, monthly }, ...raises];
+  return starts.map((s, i) => ({ monthly: s.monthly, years: (starts[i + 1]?.fromYear ?? years + 1) - s.fromYear }));
 }
 
 /** Schéma « capital visé » : 30 000 € de dépenses par an sans autre revenu, à trois taux de retrait supposés (exemple fictif, calcul du simulateur). */

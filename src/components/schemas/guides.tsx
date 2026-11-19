@@ -829,45 +829,54 @@ export function SchemaHorizons() {
   );
 }
 
-/** Schéma « petits versements » : versé et gains après 30 ans, 50 € par mois constants ou augmentés (exemple fictif, 4 % par an supposé). */
+/** Schéma « petits versements » : versé et gains après 30 ans, 50 € par mois constants ou augmentés (exemple fictif, 4 % par an supposé).
+ *  Chaque ligne : le total en tête, les paliers de versement en clair, puis la barre versé + gains (proportionnelle aux montants). */
 export function SchemaPetitsVersements() {
   const rows = petitsVersementsRows();
   const { years, annualReturn } = PETITS_VERSEMENTS_EXAMPLE;
   const X0 = 14;
-  const BW = 312;
+  const X1 = 326;
+  const BW = X1 - X0;
   const max = Math.max(...rows.map((r) => r.total));
-  const alt = rows.map((r) => `${r.label} : ${fmtEur(r.paid)} versés et ${fmtEur(r.gains)} de gains, soit environ ${fmtEur(r.total)}`).join(' ; ');
+  const paliers = (r: (typeof rows)[number]) =>
+    r.phases.length === 1
+      ? `${r.phases[0].years} ans à ${fmtEur(r.phases[0].monthly)} par mois`
+      : r.phases.map((p) => `${p.years} ans à ${fmtEur(p.monthly)}`).join(', ');
+  const alt = rows.map((r) => `${r.label.toLowerCase()} (${paliers(r)}) : ${fmtEur(r.paid)} versés et ${fmtEur(r.gains)} de gains, soit environ ${fmtEur(r.total)}`).join(' ; ');
+  const ROW = 96;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 340 222" role="img" aria-labelledby="ill-pv-t ill-pv-d" className="ill-svg">
+      <svg viewBox="0 0 340 212" role="img" aria-labelledby="ill-pv-t ill-pv-d" className="ill-svg">
         <title id="ill-pv-t">Ce que deviennent de petits versements après 30 ans</title>
         <desc id="ill-pv-d">{`Exemple fictif, ${(annualReturn * 100).toLocaleString('fr-FR')} % par an supposé, avant impôt, sur ${years} ans. ${alt}.`}</desc>
         {rows.map((r, i) => {
-          const y = 30 + i * 78;
+          const y = 4 + i * ROW;
           const wp = (r.paid / max) * BW;
           const wg = (r.gains / max) * BW;
           return (
             <g key={r.label}>
-              <text x={X0} y={y - 10} className="ill-in">{r.label}</text>
-              <rect x={X0} y={y} width={wp} height="28" rx="7" fill="var(--primary)" />
-              <rect x={X0 + wp} y={y} width={wg} height="28" rx="7" fill="var(--accent)" />
-              <text x={X0 + 8} y={y + 19} className="ill-in ill-on-dark">{fmtEur(r.paid)}</text>
+              {i > 0 && <line x1={X0} x2={X1} y1={y - 12} y2={y - 12} stroke="var(--line)" strokeWidth="1" />}
+              <text x={X0} y={y + 14} className="ill-step">{r.label}</text>
+              <text x={X1} y={y + 14} textAnchor="end" className="ill-total">{`≈ ${fmtEur(r.total)}`}</text>
+              <text x={X0} y={y + 33} className="ill-sub">{paliers(r)}</text>
+              <rect x={X0} y={y + 44} width={wp} height="28" rx="7" fill="var(--primary)" />
+              <rect x={X0 + wp + 2} y={y + 44} width={wg - 2} height="28" rx="7" fill="var(--accent)" />
+              <text x={X0 + 8} y={y + 63} className="ill-in ill-on-dark">{fmtEur(r.paid)}</text>
               {wg > 90 ? (
-                <text x={X0 + wp + 8} y={y + 19} className="ill-in ill-on-dark">{`+ ${fmtEur(r.gains)}`}</text>
+                <text x={X0 + wp + 10} y={y + 63} className="ill-in ill-on-dark">{`+ ${fmtEur(r.gains)}`}</text>
               ) : (
-                <text x={X0 + wp + wg + 6} y={y + 19} className="ill-in">{`+ ${fmtEur(r.gains)}`}</text>
+                <text x={X0 + wp + wg + 6} y={y + 63} className="ill-in">{`+ ${fmtEur(r.gains)}`}</text>
               )}
-              <text x={X0} y={y + 46} className="ill-sub">{`Total : environ ${fmtEur(r.total)}, dont ${fmtEur(r.gains)} de gains`}</text>
             </g>
           );
         })}
-        <rect x={X0} y="194" width="12" height="9" rx="2" fill="var(--primary)" />
-        <text x={X0 + 18} y="203" className="ill-sub">versé</text>
-        <rect x={X0 + 78} y="194" width="12" height="9" rx="2" fill="var(--accent)" />
-        <text x={X0 + 96} y="203" className="ill-sub">gains supposés</text>
+        <rect x={X0} y="192" width="12" height="9" rx="2" fill="var(--primary)" />
+        <text x={X0 + 18} y="201" className="ill-sub">versé</text>
+        <rect x={X0 + 78} y="192" width="12" height="9" rx="2" fill="var(--accent)" />
+        <text x={X0 + 96} y="201" className="ill-sub">gains supposés</text>
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : {years} ans à {(annualReturn * 100).toLocaleString('fr-FR')} % par an supposé, avant impôt, versements en début de mois. Les hausses interviennent après 5 ans (100 €) puis 10 ans (150 €). Barres proportionnelles aux montants.
+        <strong>Illustration, exemple fictif</strong> : {years} ans à {(annualReturn * 100).toLocaleString('fr-FR')} % par an supposé, avant impôt, versements en début de mois. Barres proportionnelles aux montants.
       </figcaption>
     </figure>
   );
@@ -1005,32 +1014,48 @@ export function SchemaAdditionFrais() {
 
 export function SchemaPrecaution() {
   const rows = precautionRows();
+  const { monthly } = PRECAUTION_EXAMPLE;
   const X0 = 14;
-  const BW = 180;
-  const max = Math.max(...rows.map((r) => r.amount));
+  const X1 = 326;
+  const n = Math.max(...rows.map((r) => r.months));
+  const GAP = 4;
+  const CW = (X1 - X0 - GAP * (n - 1)) / n;
   const f0 = (v: number) => v.toLocaleString('fr-FR', { maximumFractionDigits: 0 });
   const eur = (v: number) => `${f0(v)}\u00a0€`;
-  const alt = rows.map((r) => `${r.months} mois (${r.label.toLowerCase()}) : ${eur(r.amount)}`).join(' ; ');
+  const alt = rows.map((r) => `${r.months} mois (${r.label.toLowerCase()}) : ${r.months} cases, ${eur(r.amount)}`).join(' ; ');
+  const ROW = 60;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 340 190" role="img" aria-labelledby="ill-pre-t ill-pre-d" className="ill-svg">
+      <svg viewBox="0 0 340 212" role="img" aria-labelledby="ill-pre-t ill-pre-d" className="ill-svg">
         <title id="ill-pre-t">Réserve de précaution pour 3, 6 ou 9 mois de dépenses</title>
-        <desc id="ill-pre-d">{`Exemple fictif : ${eur(PRECAUTION_EXAMPLE.monthly)} de dépenses par mois. ${alt}. Plus la situation est incertaine, plus le repère est haut.`}</desc>
-        <text x="8" y="18" className="ill-sub">{`Dépenses : ${eur(PRECAUTION_EXAMPLE.monthly)} par mois × nombre de mois`}</text>
+        <desc id="ill-pre-d">{`Exemple fictif : ${eur(monthly)} de dépenses par mois ; chaque case représente un mois de dépenses. ${alt}. Plus la situation est incertaine, plus le repère est haut.`}</desc>
+        <rect x={X0} y="6" width="20" height="16" rx="4" fill="var(--primary)" />
+        <text x={X0 + 28} y="19" className="ill-sub">{`1 case = 1 mois de dépenses, soit ${eur(monthly)}`}</text>
         {rows.map((r, i) => {
-          const y = 32 + i * 50;
-          const w = (r.amount / max) * BW;
+          const y = 38 + i * ROW;
           return (
             <g key={r.months}>
-              <text x={X0} y={y + 10} className="ill-sub">{`${r.months} mois · ${r.label}`}</text>
-              <rect x={X0} y={y + 16} width={w} height="22" rx="6" fill="var(--primary)" />
-              <text x={X0 + w + 6} y={y + 33} className="ill-step">{eur(r.amount)}</text>
+              <text x={X0} y={y + 14} className="ill-in">{`${r.months} mois · ${r.label}`}</text>
+              <text x={X1} y={y + 14} textAnchor="end" className="ill-total">{eur(r.amount)}</text>
+              {Array.from({ length: n }, (_, k) => (
+                <rect
+                  key={k}
+                  x={X0 + k * (CW + GAP)}
+                  y={y + 22}
+                  width={CW}
+                  height="22"
+                  rx="5"
+                  fill={k < r.months ? 'var(--primary)' : 'var(--surface-2)'}
+                  stroke={k < r.months ? 'none' : 'var(--line)'}
+                  strokeWidth="1"
+                />
+              ))}
             </g>
           );
         })}
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : réserve correspondant aux trois repères courants pour 2 000 € de dépenses par mois. Barres proportionnelles aux montants. Ce sont des repères pédagogiques, pas une règle officielle.
+        <strong>Illustration, exemple fictif</strong> : les trois repères courants pour {eur(monthly)} de dépenses par mois. Des repères pédagogiques, pas une règle officielle.
       </figcaption>
     </figure>
   );
