@@ -431,6 +431,16 @@ td.neg { color: var(--danger); }
    comme une légende de figure. Placée à droite d'un dessin haut, elle flottait seule au milieu d'une grande zone vide
    (constat du 2026-11-17). Les légendes longues gardent la présentation côte à côte ci-dessus. */
 .illustration figcaption.fig-short { max-width: 360px; margin: 10px auto 0; text-align: center; text-wrap: balance; }
+/* Deux schémas étroits qui se répondent (fiche Assurance-vie : pendant le contrat, puis au décès) : côte à côte dès que
+   la colonne dépasse ~676 px, au lieu de deux grands cadres empilés où chaque dessin n'occupait que la moitié de la largeur
+   (constat du 2026-11-19). Plus étroit (téléphone, tablette en portrait) : l'un sous l'autre, comme avant.
+   Marge intérieure réduite à 12 px pour garder le dessin à ~94 % de sa taille (textes de 11,3 à 13,6 px). */
+.fig-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 16px; margin: 20px 0; }
+.fig-pair > .illustration { margin-top: 0; margin-bottom: 0; }
+@media (min-width: 481px) {
+  .fig-pair > .illustration { padding: 12px; }
+  .fig-pair > .illustration > .ill-svg { align-self: flex-start; }
+}
 /* Mobile : le cadre du schéma déborde de la marge de page (16 px de chaque côté) et occupe toute la largeur de l'écran,
    ce qui garde le dessin grand (~85 % de sa taille). Une marge intérieure de 10 px empêche le dessin de toucher
    les bords de l'écran (avant : 4 px, cadres coupés visuellement) ; la légende reste alignée sur le texte (16 px). */

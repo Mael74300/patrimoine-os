@@ -110,8 +110,12 @@ export default function InvestmentPage() {
           {inv.slug === 'groupements-forestiers' && <SchemaForet />}
           {inv.slug === 'foncieres-cotees' && <SchemaFonciereCotee />}
           {inv.slug === 'obligations' && <SchemaObligation />}
-          {inv.slug === 'assurance-vie' && <SchemaAssuranceVie />}
-          {inv.slug === 'assurance-vie' && <SchemaAssuranceVieDeces />}
+          {inv.slug === 'assurance-vie' && (
+            <div className="fig-pair">
+              <SchemaAssuranceVie />
+              <SchemaAssuranceVieDeces />
+            </div>
+          )}
           {inv.slug === 'crowdfunding' && <SchemaCrowdfunding />}
           {inv.slug === 'private-equity' && <SchemaCapitalInvestissement />}
           {inv.slug === 'per' && <SchemaPer />}
