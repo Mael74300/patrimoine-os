@@ -28,6 +28,13 @@ describe('TAEG', () => {
     expect(pv).toBeCloseTo(r.netReceived, 3);
   });
 
+  it('forme de l’équation légale (annexe à l’article R314-3) : chaque mensualité actualisée à (1 + TAEG)^(−mois/12)', () => {
+    const r = taeg({ ...B, fees: 2500, insuranceRate: 0.0025 });
+    let pv = 0;
+    for (let l = 1; l <= r.months; l++) pv += r.monthlyTotal * Math.pow(1 + r.taeg, -l / 12);
+    expect(pv).toBeCloseTo(r.netReceived, 3);
+  });
+
   it('coût total = intérêts + assurance + frais', () => {
     const r = taeg({ ...B, fees: 2500, insuranceRate: 0.0025 });
     expect(r.totalCost).toBeCloseTo(r.totalInterest + r.totalInsurance + 2500, 4);
