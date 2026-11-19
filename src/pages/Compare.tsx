@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { categoryById } from '../data/categories';
 import { investmentBySlug, investments } from '../data/investments';
 import { fmtEur, projectGrowth } from '../lib/finance';
 import { durationExceeded, impossibleFromYear, monthCapExceeded, projectionSplit, totalContributed } from '../lib/calc/compareSummary';
@@ -9,8 +8,9 @@ import { readingFromRefs, nextForComparator } from '../lib/relatedSims';
 import { DURATION_LIMITS, REGULATED_RATES, VERSEMENT_CAPS } from '../data/versementCaps';
 import { CapitalFact, CheckedText, Disclaimer, LineChart, MeterRows, MetersLegend, NumberField, PageHead, SimNext } from '../components/ui';
 
-/** Critères longs : repliés par ligne sur mobile (le tableau y est empilé), toujours ouverts sans JavaScript et en écran large. */
-export const CMP_FOLDED_ON_MOBILE = ['Capital nécessaire', 'Frais', 'Fiscalité', 'Avantages', 'Inconvénients'];
+/** Critères longs et chiffrés : repliés par ligne sur mobile (le tableau y est empilé), toujours ouverts sans JavaScript et en écran large.
+ *  Restent ouverts sur mobile les repères, l'horizon et les avantages et inconvénients : de quoi comparer d'un coup d'œil. */
+export const CMP_FOLDED_ON_MOBILE = ['Capital nécessaire', 'Frais', 'Fiscalité'];
 
 export function useIsMobile(): boolean {
   const [mobile, setMobile] = useState(false);
@@ -73,16 +73,23 @@ export default function Compare() {
   const toggle = (label: string) => setClosed((c) => (c.includes(label) ? c.filter((x) => x !== label) : [...c, label]));
 
   const rows: [string, (i: (typeof items)[number]) => ReactNode][] = [
-    ['Famille', (i) => categoryById[i.category].name],
     // Les trois repères dans une seule case, en points et en mots, comme le cadre « En bref » des fiches :
     // on lit un placement d'un coup d'œil, et la page mobile perd deux blocs empilés.
     ['Repères', (i) => <MeterRows risk={i.risk} liquidity={i.liquidity} effort={i.effort} effortNote={i.timeSkills} noNote />],
     ['Horizon', (i) => i.horizon],
+    // Avantages et inconvénients dans une seule case, marqués ✓ et ✕ comme sur les fiches :
+    // sur téléphone, le bloc reste ouvert sans allonger la page d'un second titre et de trois étiquettes.
+    ['Avantages et inconvénients', (i) => (
+      <>
+        <span className="sr-only">Avantages :</span>
+        <ul className="cmp-list cmp-pros">{i.pros.map((x) => <li key={x}>{x}</li>)}</ul>
+        <span className="sr-only">Inconvénients :</span>
+        <ul className="cmp-list cmp-cons">{i.cons.map((x) => <li key={x}>{x}</li>)}</ul>
+      </>
+    )],
     ['Capital nécessaire', (i) => (i.minCapital.advice ? <p><CapitalFact c={i.minCapital} /></p> : <CheckedText c={i.minCapital} split />)],
     ['Frais', (i) => <CheckedText c={i.fees} split />],
     ['Fiscalité', (i) => <CheckedText c={i.tax} split />],
-    ['Avantages', (i) => <ul className="cmp-list">{i.pros.map((x) => <li key={x}>{x}</li>)}</ul>],
-    ['Inconvénients', (i) => <ul className="cmp-list">{i.cons.map((x) => <li key={x}>{x}</li>)}</ul>],
   ];
 
   return (
