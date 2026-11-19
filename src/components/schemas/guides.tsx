@@ -782,6 +782,53 @@ export function SchemaEpargneMois() {
   );
 }
 
+/**
+ * Les trois horizons de placement du guide « Combien épargner par mois » (repères de La finance pour tous,
+ * consultés le 2026-11-19 ; la Banque de France situe le long terme au-delà de 10 ans) :
+ * aucun chiffre réglementaire, uniquement des limites approximatives et des familles de supports.
+ */
+export const HORIZONS_EPARGNE = [
+  { when: 'Moins de 3 ans', term: 'court terme', name: 'Sans risque et disponible', rule: 'Livrets réglementés, dans leurs plafonds', tone: 'accent' },
+  { when: 'De 3 à 8 ans environ', term: 'moyen terme', name: 'Un risque mesuré', rule: 'Obligations, fonds prudents ou équilibrés', tone: 'primary' },
+  { when: 'Au-delà de 8 à 10 ans', term: 'long terme', name: 'Actions envisageables', rule: 'Pour l’argent inutile avant 10 ans au moins', tone: 'warn' },
+] as const;
+
+/** Schéma « où placer selon l'échéance » : trois horizons sur une frise verticale, dans le style des horloges d'enveloppes. */
+export function SchemaHorizons() {
+  const ROW = 82;
+  const H = 72;
+  const X = 44;
+  const fill = { accent: 'var(--accent-soft)', primary: 'var(--surface)', warn: 'var(--warn-soft)' } as const;
+  const last = 8 + (HORIZONS_EPARGNE.length - 1) * ROW + H / 2;
+  return (
+    <figure className="illustration">
+      <svg viewBox={`0 0 340 ${16 + HORIZONS_EPARGNE.length * ROW}`} role="img" aria-labelledby="ill-hor-t ill-hor-d" className="ill-svg">
+        <title id="ill-hor-t">Où placer l’argent d’un projet selon son échéance</title>
+        <desc id="ill-hor-d">{HORIZONS_EPARGNE.map((r) => `${r.when} (${r.term}) : ${r.name.toLowerCase()}, ${r.rule.charAt(0).toLowerCase()}${r.rule.slice(1)}`).join('. ') + '.'}</desc>
+        <path d={`M 20 ${8 + H / 2} V ${last + 20}`} fill="none" stroke="var(--line)" strokeWidth={3} strokeLinecap="round" />
+        <path d={`M 14 ${last + 15} l 6 7 l 6 -7`} fill="none" stroke="var(--ink-2)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+        {HORIZONS_EPARGNE.map((r, i) => {
+          const y = 8 + i * ROW;
+          const c = `var(--${r.tone})`;
+          return (
+            <g key={r.when}>
+              <path d={`M 27 ${y + H / 2} H ${X}`} fill="none" stroke={c} strokeWidth={2} />
+              <circle cx={20} cy={y + H / 2} r={7} fill={c} stroke="var(--surface)" strokeWidth={2} />
+              <rect x={X} y={y} width={340 - X - 1} height={H} rx={12} fill={fill[r.tone]} stroke={c} strokeWidth={2} />
+              <text x={X + 14} y={y + 21} className="ill-phase" style={{ fill: c }}>{r.when}</text>
+              <text x={X + 14} y={y + 42} className="ill-step">{r.name}</text>
+              <text x={X + 14} y={y + 61} className="ill-sub">{r.rule}</text>
+            </g>
+          );
+        })}
+      </svg>
+      <figcaption>
+        <strong>Repères, pas des règles</strong> : plus l’échéance est lointaine, plus un risque devient acceptable. Limites approximatives (La finance pour tous) ; la Banque de France place le long terme au-delà de 10 ans.
+      </figcaption>
+    </figure>
+  );
+}
+
 /** Schéma « petits versements » : versé et gains après 30 ans, 50 € par mois constants ou augmentés (exemple fictif, 4 % par an supposé). */
 export function SchemaPetitsVersements() {
   const rows = petitsVersementsRows();
