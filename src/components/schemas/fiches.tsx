@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
 import { fmtEur } from '../../lib/finance';
-import { pfuSplit } from '../../lib/calc/pfu';
+import { pfuSplit, PFU_IR_PCT, PFU_PS_PCT, PFU_TOTAL_PCT } from '../../lib/calc/pfu';
 import { perDeductionBalance } from '../../lib/calc/per';
 import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
 import { LIVRETS } from '../../data/livrets';
-import { assuranceVieRetrait, bondCoupons, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
+import { assuranceVieRetrait, bondCoupons, forestCredit, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
 import { fmtEur2 } from '../../lib/calc/format';
 import { W } from './outils';
@@ -1630,6 +1630,133 @@ export function SchemaLivretBilan({ kind, children }: { kind: LivretBilanKind; c
         <text x={0} y={sepY + 24} className="ill-total" textAnchor="start" style={{ fill: ahead ? 'var(--accent)' : 'var(--ink)' }}>{lines[0]}</text>
         <text x={0} y={sepY + 44} className="ill-sub" textAnchor="start">{lines[1]}</text>
         <text x={0} y={sepY + 63} className="ill-sub" textAnchor="start">{lines[2]}</text>
+      </svg>
+      <figcaption>{children}</figcaption>
+    </figure>
+  );
+}
+
+const pctFr = (n: number) => `${String(n).replace('.', ',')} %`;
+/** Montant à l'euro s'il est rond (« 2 500 € »), au centime sinon (« 1 562,50 € »), comme dans le texte des fiches. */
+const eurExact = (n: number) => (Number.isInteger(n) ? fmtEur(n) : fmtEur2(n));
+
+/** Exemple fictif de la fiche PEA : gains retirés après 8 ans, en compte-titres puis en PEA (taux du cas général 2026). */
+export const PEA_EXAMPLE = { gain: 20000, years: 8 };
+
+/**
+ * Schéma « PEA : sur 20 000 € de gains, ce qui vous reste » (exemple fictif de la fiche, constat du 2026-11-19 : l'exemple
+ * de la fiche PEA, page d'entrée de l'épargnant, restait un paragraphe de quatre montants). Deux barres de même longueur,
+ * proportionnelles aux montants : ce qui reste (à gauche), prélèvements sociaux, puis impôt sur le revenu. En PEA après
+ * 5 ans, seul l'impôt sur le revenu disparaît : l'écart entre les deux barres vertes est exactement ce morceau.
+ * Taux de `pfu.ts` (Service-Public F21618 et F2329, consultées le 2026-11-19) ; aucun chiffre nouveau.
+ */
+export function SchemaPeaBilan({ children }: { children: ReactNode }) {
+  const { gain, years } = PEA_EXAMPLE;
+  const cto = pfuSplit(gain);
+  const peaTax = cto.ps;
+  const peaNet = gain - peaTax;
+  const X0 = 10;
+  const W = 320;
+  const s = W / gain;
+  const ctoNetEnd = X0 + cto.net * s;
+  const peaNetEnd = X0 + peaNet * s;
+  const bar = (y: number, segs: { w: number; fill: string }[]) => {
+    let x = X0;
+    const id = `ill-peab-c${y}`;
+    return (
+      <>
+        <clipPath id={id}><rect x={X0} y={y} width={W} height={40} rx={8} /></clipPath>
+        <g clipPath={`url(#${id})`}>
+          {segs.map((g, i) => {
+            const r = <rect key={i} x={x} y={y} width={g.w} height={40} fill={g.fill} />;
+            x += g.w;
+            return r;
+          })}
+        </g>
+        <rect x={X0} y={y} width={W} height={40} rx={8} fill="none" stroke="var(--ink-2)" strokeWidth={1.5} />
+      </>
+    );
+  };
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 330" role="img" aria-labelledby="ill-peab-t ill-peab-d" className="ill-svg">
+        <title id="ill-peab-t">{`PEA ou compte-titres : sur ${fmtEur(gain)} de gains, ce qui vous reste`}</title>
+        <desc id="ill-peab-d">{`Exemple fictif : ${fmtEur(gain)} de gains retirés après ${years} ans. En compte-titres, le prélèvement forfaitaire unique de ${pctFr(PFU_TOTAL_PCT)} prend ${fmtEur(cto.total)} : ${fmtEur(cto.ir)} d’impôt sur le revenu et ${fmtEur(cto.ps)} de prélèvements sociaux ; il vous reste ${fmtEur(cto.net)}. En PEA de plus de 5 ans, seuls les prélèvements sociaux de ${pctFr(PFU_PS_PCT)} sont dus, soit ${fmtEur(peaTax)} ; il vous reste ${fmtEur(peaNet)}, ${fmtEur(peaNet - cto.net)} de plus : l’impôt sur le revenu évité.`}</desc>
+        <text x={X0} y={20} className="ill-step">{`${fmtEur(gain)} de gains retirés après ${years} ans`}</text>
+        <rect x={X0} y={34} width={14} height={14} rx={3} fill="var(--accent)" />
+        <text x={X0 + 20} y={46} className="ill-sub">pour vous</text>
+        <rect x={X0 + 100} y={34} width={14} height={14} rx={3} fill="var(--primary)" />
+        <text x={X0 + 120} y={46} className="ill-sub">prélèvements sociaux</text>
+        <rect x={X0} y={56} width={14} height={14} rx={3} fill="var(--warn)" />
+        <text x={X0 + 20} y={68} className="ill-sub">{`impôt sur le revenu (${pctFr(PFU_IR_PCT)})`}</text>
+
+        <text x={X0} y={102} className="ill-step">Compte-titres</text>
+        <text x={X0 + W} y={102} className="ill-sub" textAnchor="end">{`impôt : ${fmtEur(cto.total)}`}</text>
+        {bar(112, [{ w: cto.net * s, fill: 'var(--accent)' }, { w: cto.ps * s, fill: 'var(--primary)' }, { w: cto.ir * s, fill: 'var(--warn)' }])}
+        <text x={X0 + 12} y={137} className="ill-on-dark ill-total">{`${fmtEur(cto.net)} pour vous`}</text>
+
+        <text x={X0} y={186} className="ill-step">{`PEA de plus de 5 ans`}</text>
+        <text x={X0 + W} y={186} className="ill-sub" textAnchor="end">{`impôt : ${fmtEur(peaTax)}`}</text>
+        {bar(196, [{ w: peaNet * s, fill: 'var(--accent)' }, { w: peaTax * s, fill: 'var(--primary)' }])}
+        <text x={X0 + 12} y={221} className="ill-on-dark ill-total">{`${fmtEur(peaNet)} pour vous`}</text>
+
+        <path d={`M ${ctoNetEnd} 106 V 242`} stroke="var(--ink-2)" strokeWidth={1.5} strokeDasharray="4 3" />
+        <path d={`M ${ctoNetEnd} 248 V 254 H ${peaNetEnd} V 248`} fill="none" stroke="var(--accent)" strokeWidth={2} strokeLinejoin="round" />
+        <text x={X0 + W} y={272} className="ill-total" textAnchor="end" style={{ fill: 'var(--accent)' }}>{`+${fmtEur(peaNet - cto.net)} en PEA`}</text>
+        <line x1={X0} y1={286} x2={X0 + W} y2={286} stroke="var(--line)" strokeWidth={1} />
+        <text x={X0} y={306} className="ill-sub">{`Après 5 ans, le PEA évite l’impôt sur le revenu ;`}</text>
+        <text x={X0} y={324} className="ill-sub">{`les prélèvements sociaux restent dus.`}</text>
+      </svg>
+      <figcaption>{children}</figcaption>
+    </figure>
+  );
+}
+
+/** Exemple fictif de la fiche Forêt : 10 000 € de parts, crédit de 25 %, plafond d'une personne seule puis d'un couple. */
+export const FOREST_EXAMPLE = { amount: 10000, ratePct: 25, caps: [{ label: 'Personne seule', cap: 6250 }, { label: 'Couple marié ou pacsé', cap: 12500 }] };
+
+/**
+ * Schéma « Forêt : ce que coûtent vraiment 10 000 € de parts » (exemple fictif de la fiche, constat du 2026-11-18 :
+ * l'exemple restait un paragraphe dense de cinq montants). Une barre par foyer, proportionnelle aux montants : ce que
+ * les parts coûtent une fois le crédit d'impôt déduit, puis le crédit. Valeurs recalculées par `forestCredit` ; taux et
+ * plafonds de la rubrique Fiscalité (BOFiP BOI-IR-RICI-60-20-20, reconsulté le 2026-11-19), aucun chiffre nouveau.
+ */
+export function SchemaForetBilan({ children }: { children: ReactNode }) {
+  const { amount, ratePct, caps } = FOREST_EXAMPLE;
+  const rows = caps.map((c) => ({ ...c, ...forestCredit(amount, c.cap, ratePct) }));
+  const X0 = 10;
+  const W = 320;
+  const s = W / amount;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 300" role="img" aria-labelledby="ill-forb-t ill-forb-d" className="ill-svg">
+        <title id="ill-forb-t">{`Forêt : ce que coûtent vraiment ${fmtEur(amount)} de parts`}</title>
+        <desc id="ill-forb-d">{`Exemple fictif : ${fmtEur(amount)} versés pour des parts de groupement forestier, crédit d’impôt de ${ratePct} % des sommes retenues. ${rows.map((r) => `${r.label} : ${fmtEur(r.retained)} retenus, ${eurExact(r.credit)} de crédit (${pctFr(r.effectivePct)} de la somme versée), les parts coûtent ${eurExact(r.netCost)}`).join(' ; ')}. Hors frais du groupement.`}</desc>
+        <text x={X0} y={20} className="ill-step">{`${fmtEur(amount)} de parts achetées`}</text>
+        <rect x={X0} y={34} width={14} height={14} rx={3} fill="var(--surface-2)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={X0 + 20} y={46} className="ill-sub">votre coût</text>
+        <rect x={X0 + 110} y={34} width={14} height={14} rx={3} fill="var(--accent)" />
+        <text x={X0 + 130} y={46} className="ill-sub">{`crédit d’impôt (${ratePct} %)`}</text>
+        {rows.map((r, i) => {
+          const y = 80 + i * 96;
+          const wCost = r.netCost * s;
+          return (
+            <g key={r.label}>
+              <text x={X0} y={y} className="ill-step">{r.label}</text>
+              <text x={X0 + W} y={y} className="ill-sub" textAnchor="end">{`crédit : ${eurExact(r.credit)}`}</text>
+              <rect x={X0} y={y + 10} width={wCost} height={40} rx={8} fill="var(--surface-2)" stroke="var(--primary)" strokeWidth={2} />
+              <rect x={X0 + wCost} y={y + 10} width={W - wCost} height={40} rx={8} fill="var(--accent)" />
+              <text x={X0 + 12} y={y + 35} className="ill-total">{`coût : ${eurExact(r.netCost)}`}</text>
+              <text x={X0} y={y + 70} className="ill-sub">
+                {r.retained < amount
+                  ? `plafond : ${fmtEur(r.retained)} retenus, soit ${pctFr(r.effectivePct)} des ${fmtEur(amount)}`
+                  : `${fmtEur(r.retained)} retenus en entier, soit ${pctFr(r.effectivePct)}`}
+              </text>
+            </g>
+          );
+        })}
+        <line x1={X0} y1={262} x2={X0 + W} y2={262} stroke="var(--line)" strokeWidth={1} />
+        <text x={X0} y={286} className="ill-sub">Hors frais du groupement ; barres à l’échelle.</text>
       </svg>
       <figcaption>{children}</figcaption>
     </figure>
