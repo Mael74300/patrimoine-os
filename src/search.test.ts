@@ -105,8 +105,25 @@ describe('recherche', () => {
     expect(first('épargne salariale')).toBe('/encyclopedie/pee');
     expect(first('intéressement')).toBe('/encyclopedie/pee');
     expect(first('plan épargne entreprise')).toBe('/encyclopedie/pee');
+    // audit du 19 novembre 2026
+    expect(first('prêt')).toBe('/simulateurs/credit');
+    expect(first('Crédit immobilier')).toBe('/simulateurs/credit');
+    expect(first('Combien puis-je emprunter ?')).toBe('/simulateurs/endettement');
+    expect(first('fonds euros')).toBe('/encyclopedie/fonds-euros');
+    expect(first('investir en bourse')).toBe('/encyclopedie/etf-monde');
+    expect(first('Payer moins d’impôts')).toBe('/guides/choisir-son-enveloppe');
+    expect(first('placer 10 000 €')).toBe('/guides/par-ou-commencer');
+    const safe = search('placement sans risque').slice(0, 5).map((h) => h.to);
+    expect(safe.slice(0, 3)).toEqual(['/encyclopedie/livret-a', '/encyclopedie/lep', '/encyclopedie/fonds-euros']);
+    expect(safe).not.toContain('/encyclopedie/cryptomonnaies');
+    expect(search('placement garanti').some((h) => h.to === '/encyclopedie/actions-individuelles')).toBe(false);
+    expect(search('risque').some((h) => h.to === '/encyclopedie/actions-individuelles')).toBe(true);
     // seuls les mots exacts d’un exemple déclenchent un raccourci
     expect(first('épargne logement')).not.toBe('/guides/par-ou-commencer');
+  });
+  it('un montant tapé ne compte pas comme un mot, sauf s’il est seul', () => {
+    expect(searchTerms('placer 10000 euros')).toEqual(['plac']);
+    expect(searchTerms('72')).toEqual(['72']);
   });
   it('« locatif » et « locative » se trouvent l’un l’autre, sans rejoindre « location »', () => {
     expect(stem('locatif')).toBe('locati');
