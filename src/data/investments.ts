@@ -440,7 +440,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Patrimoine construit avec l’argent de la banque', 'À taux fixe, la mensualité pèse moins si vos revenus suivent l’inflation'],
     cons: ['Engagement long', 'Risque en cas de vacance prolongée ou de baisse des prix'],
     timeSkills: 'Élevé.',
-    example: 'Exemple fictif, celui du schéma : 180 000 € empruntés à 3,5 % sur 20 ans pour un bien de 200 000 € (20 000 € d’apport), soit environ 1 044 € par mois hors assurance. La première année, cela fait 6 199 € d’intérêts et 6 328 € de capital remboursé (environ 527 € par mois). Avec 10 000 € de loyers nets de charges par an, il reste 3 801 € après les intérêts, pas assez pour le capital : vous ajoutez environ 211 € par mois, avant impôt. Avec 6 000 €, il manque 199 € rien que pour les intérêts, et environ 544 € par mois en tout. Ce capital remboursé n’est pas perdu : c’est la part du bien qui devient la vôtre. Sur les 20 ans, environ 70 540 € d’intérêts.',
+    example: 'Exemple fictif, celui du schéma : 180 000 € empruntés à 3,5 % sur 20 ans pour un bien de 200 000 € (20 000 € d’apport), soit environ 1 044 € par mois hors assurance. Si le bien rapporte 10 000 € par an nets de charges, vous ajoutez environ 211 € par mois de votre poche, avant impôt ; s’il rapporte 6 000 €, environ 544 €. Ce n’est pas perdu : la première année, environ 527 € de chaque mensualité remboursent le capital, la part du bien qui devient la vôtre. Sur les 20 ans, le crédit coûte environ 70 540 € d’intérêts.',
     sources: [S.creditImmo, S.lfptLevier, S.assuranceEmprunteur, S.taeg, S.anil],
     alternatives: ['location-nue', 'scpi'],
     tags: ['levier', 'crédit', 'immobilier'],
