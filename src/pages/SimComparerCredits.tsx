@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { fmtEur, fmtEur2, fmtMonths, fmtNum, fmtPct, fmtPts, inFine, inFineBars, type InFineInput, loanDuration, loanDurationBars, renegotiation, type LoanDurationRow, renegotiationBars, taeg, taegBars, taegByFees, taegByInsurance, taegLevels, type TaegBar } from '../lib/finance';
+import { fmtEur, fmtEur2, fmtMonths, fmtNum, fmtPct, fmtPts, inFine, inFineBars, type InFineInput, loanDuration, loanDurationBars, renegotiation, type LoanDurationRow, renegotiationBars, renegotiationTimeline, type RenegotiationPhase, type RenegotiationTimeline, taeg, taegBars, taegByFees, taegByInsurance, taegLevels, type TaegBar } from '../lib/finance';
 import { loanDurationTakeaway, taegTakeaway, inFineTakeaway, renegoTakeaway } from '../lib/takeaways';
 import { comparerCreditsFaq } from '../data/simFaq';
 import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, Tabs } from '../components/ui';
@@ -339,7 +339,7 @@ function InFine() {
 
 /* ---------- Renégocier ou racheter son crédit */
 /** Deux barres sur la même échelle : ce qu'il reste à payer en gardant le prêt, ou en renégociant (nouveaux intérêts + frais). L'écart est le gain net. */
-function RenegoBars({ r, fees }: { r: ReturnType<typeof renegotiation>; fees: number }) {
+function RenegoBars({ r, fees, children }: { r: ReturnType<typeof renegotiation>; fees: number; children?: ReactNode }) {
   const b = renegotiationBars(r, fees);
   if (b.current === 0 && b.newInterest === 0 && b.fees === 0) return null;
   const costNew = r.newInterest + Math.max(0, fees);
@@ -370,11 +370,12 @@ function RenegoBars({ r, fees }: { r: ReturnType<typeof renegotiation>; fees: nu
             <p className="fb-sub">nouveaux intérêts {fmtEur(r.newInterest)}{fees > 0.5 ? ` + frais ${fmtEur(fees)}` : ''}</p>
           </li>
         </ul>
-        <figcaption className={'rb-total' + (lose ? ' rb-lose' : '')}>
+        <p className={'rb-total' + (lose ? ' rb-lose' : '')}>
           {win && <>Écart : <strong>{fmtEur(r.netGain)}</strong> de moins à payer en renégociant, c’est le gain net.</>}
           {lose && <>Écart : <strong>{fmtEur(-r.netGain)}</strong> de plus à payer en renégociant : l’opération coûte plus qu’elle ne rapporte.</>}
           {!win && !lose && <>Les deux options coûtent à peu près la même chose : aucun gain net.</>}
-        </figcaption>
+        </p>
+        {children}
       </figure>
     </>
   );
@@ -382,9 +383,53 @@ function RenegoBars({ r, fees }: { r: ReturnType<typeof renegotiation>; fees: nu
 type RenegoState = { remaining: number; currentRate: number; currentYearsLeft: number; newRate: number; newYears: number; fees: number };
 const RENEGO: RenegoState = { remaining: 150000, currentRate: 4.5, currentYearsLeft: 20, newRate: 3.5, newYears: 20, fees: 3000 };
 
+/**
+ * Frise « mois après mois » : la baisse de mensualité rembourse d'abord les frais (jusqu'au point mort),
+ * puis reste dans la poche de l'emprunteur ; selon les durées, une dernière période où la nouvelle mensualité
+ * reste due, ou où toute l'ancienne mensualité est économisée. Aucun chiffre réglementaire.
+ */
+function RenegoTimeline({ r, s, t }: { r: ReturnType<typeof renegotiation>; s: RenegoState; t: RenegotiationTimeline }) {
+  const gain = fmtEur(r.monthlyGain);
+  const hasExtra = t.phases.some((p) => p.kind === 'extra');
+  const when = (p: RenegotiationPhase) => (p.from < 1e-9 ? `Pendant ${fmtMonths(p.to)}` : `De ${fmtMonths(p.from)} à ${fmtMonths(p.to)}`);
+  const what: Record<RenegotiationPhase['kind'], string> = {
+    fees: `les ${gain} économisés chaque mois remboursent les ${fmtEur(s.fees)} de frais.`,
+    gain: `les ${gain} par mois restent dans votre poche${hasExtra ? ', pour l’instant' : ''}.`,
+    freed: `le nouveau prêt est fini : vous ne payez plus les ${fmtEur(r.currentMonthly)} de l’ancienne mensualité.`,
+    extra: `le prêt actuel aurait été fini, mais vous payez encore ${fmtEur(r.newMonthly)} par mois.`,
+  };
+  const left = t.breakEvenPct < 50;
+  return (
+    <div className="rt">
+      <p className="rt-title">Mois après mois</p>
+      <div className="rt-chart" aria-hidden="true">
+        {t.breakEven > 0 && (
+          <p className={'rt-mark' + (left ? '' : ' rt-mark-end')} style={left ? { left: `${t.breakEvenPct}%` } : { right: `${100 - t.breakEvenPct}%` }}>
+            Point mort : <strong>{fmtMonths(t.breakEven)}</strong>
+          </p>
+        )}
+        <div className="fb-track rt-track">
+          {t.phases.map((p) => <span key={p.kind} className={`rt-${p.kind}`} style={{ width: `${p.pct}%` }} />)}
+        </div>
+        {t.breakEven > 0 && <i className="rt-tick" style={{ left: `${t.breakEvenPct}%` }} />}
+      </div>
+      <ul className="rt-keys">
+        {t.phases.map((p) => (
+          <li key={p.kind}><i className={`rt-${p.kind}`} aria-hidden="true" /><span><strong>{when(p)}</strong> : {what[p.kind]}</span></li>
+        ))}
+      </ul>
+      <p className="fb-sub rt-caption">
+        {t.breakEven > 0 && 'Revendre ou solder le prêt avant le point mort : l’opération ne se rentabilise pas. '}
+        {hasExtra && 'Les mensualités en plus à la fin réduisent le gain, voire l’effacent : lisez l’écart ci-dessus. '}
+        Exemples fictifs ; calcul sur la page <Link to="/methodologie">Méthode</Link>.
+      </p>
+    </div>
+  );
+}
 function Renegocier() {
   const [s, setS, up] = usePersistentState<RenegoState>('renegociation', RENEGO);
   const r = renegotiation({ ...s, currentRate: s.currentRate / 100, newRate: s.newRate / 100 });
+  const timeline = renegotiationTimeline({ currentYearsLeft: s.currentYearsLeft, newYears: s.newYears, monthlyGain: r.monthlyGain, breakEvenMonths: r.breakEvenMonths });
   return (
     <>
       <p className="notice" role="note">
@@ -418,17 +463,18 @@ function Renegocier() {
           <Kpi label="Mensualité actuelle" value={fmtEur(r.currentMonthly)} sub="hors assurance" />
           <Kpi label="Nouvelle mensualité" value={fmtEur(r.newMonthly)} sub={`${r.monthlyGain >= 0 ? 'économie' : 'surcoût'} de ${fmtEur(Math.abs(r.monthlyGain))} par mois`} />
           <Kpi label="Gain net sur le coût total" value={fmtEur(r.netGain)} sub="intérêts évités moins frais" />
-          <Kpi label="Point mort" value={r.breakEvenMonths === null ? 'aucun' : fmtMonths(r.breakEvenMonths)} sub={r.breakEvenMonths === null ? 'la mensualité ne baisse pas' : 'd’économie de mensualité pour couvrir les frais'} />
         </div>
         <Takeaway>{renegoTakeaway({ monthlyGain: r.monthlyGain, netGain: r.netGain, breakEvenMonths: r.breakEvenMonths, longer: r.longer, fees: s.fees })}</Takeaway>
         {r.longer && (
           <p className="notice" role="note">Le nouveau prêt dure plus longtemps que le prêt actuel : la mensualité peut baisser tout en augmentant le coût total. Lisez le gain net, pas seulement la mensualité.</p>
         )}
-        <RenegoBars r={r} fees={s.fees} />
-        <p className="muted small">
-          Le point mort est le temps qu’il faut pour que la baisse de mensualité rembourse les frais. Si vous pensez revendre le bien ou solder le prêt avant, l’opération ne se rentabilise pas.
-          Les exemples ci-dessus sont fictifs ; le détail du calcul est sur la page <Link to="/methodologie">Méthode</Link>.
-        </p>
+        <RenegoBars r={r} fees={s.fees}>{timeline && <RenegoTimeline r={r} s={s} t={timeline} />}</RenegoBars>
+        {!timeline && (
+            <p className="muted small">
+              Le point mort est le temps qu’il faut pour que la baisse de mensualité rembourse les frais. Si vous pensez revendre le bien ou solder le prêt avant, l’opération ne se rentabilise pas.
+              Les exemples ci-dessus sont fictifs ; le détail du calcul est sur la page <Link to="/methodologie">Méthode</Link>.
+            </p>
+          )}
         <SavedSims simKey="renegociation" current={s} onLoad={(d) => setS({ ...RENEGO, ...d })} />
       </Layout>
     </>

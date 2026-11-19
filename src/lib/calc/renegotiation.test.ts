@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { renegotiation, renegotiationBars } from './renegotiation';
+import { renegotiation, renegotiationBars, renegotiationTimeline } from './renegotiation';
 import { loanPayment } from './loan';
 
 // Exemples fictifs.
@@ -72,5 +72,56 @@ describe('Barres de la renégociation', () => {
     expect(renegotiationBars({ currentRemainingInterest: 0, newInterest: 0 }, 0)).toEqual({ current: 0, newInterest: 0, fees: 0, saved: 0 });
     const b = renegotiationBars({ currentRemainingInterest: NaN, newInterest: NaN }, NaN);
     expect(Object.values(b).every((v) => Number.isFinite(v))).toBe(true);
+  });
+});
+
+// Exemples fictifs : frise « mois après mois » du simulateur.
+describe('Frise de la renégociation', () => {
+  const base = { remaining: 150000, currentRate: 0.045, currentYearsLeft: 20, newRate: 0.035, newYears: 20, fees: 3000 };
+  const tl = (i: typeof base) => {
+    const r = renegotiation(i);
+    return { r, t: renegotiationTimeline({ ...i, monthlyGain: r.monthlyGain, breakEvenMonths: r.breakEvenMonths }) };
+  };
+
+  it('même durée : frais puis gain, et le gain de la frise est exactement le gain net', () => {
+    const { r, t } = tl(base);
+    expect(t).not.toBeNull();
+    expect(t!.span).toBe(240);
+    expect(t!.phases.map((p) => p.kind)).toEqual(['fees', 'gain']);
+    expect(t!.breakEven).toBeCloseTo(3000 / r.monthlyGain, 9);
+    expect(t!.phases.reduce((s, p) => s + p.pct, 0)).toBeCloseTo(100, 9);
+    const gain = t!.phases[1];
+    expect(r.monthlyGain * (gain.to - gain.from)).toBeCloseTo(r.netGain, 6);
+    // Valeurs par défaut du simulateur : 79 € par mois, point mort vers 38 mois (3 ans et 2 mois).
+    expect(Math.round(r.monthlyGain)).toBe(79);
+    expect(Math.round(t!.breakEven)).toBe(38);
+  });
+
+  it('nouveau prêt plus long : une dernière période où la nouvelle mensualité reste due', () => {
+    const { t } = tl({ ...base, newYears: 25, newRate: 0.04 });
+    expect(t!.span).toBe(300);
+    expect(t!.phases.map((p) => p.kind)).toEqual(['fees', 'gain', 'extra']);
+    expect(t!.phases[2]).toMatchObject({ from: 240, to: 300 });
+    expect(t!.phases[2].pct).toBeCloseTo(20, 9);
+  });
+
+  it('nouveau prêt plus court : une période où toute l’ancienne mensualité est économisée', () => {
+    const { t } = tl({ ...base, newYears: 15, newRate: 0.01 });
+    expect(t!.phases.map((p) => p.kind)).toEqual(['fees', 'gain', 'freed']);
+    expect(t!.phases[2]).toMatchObject({ from: 180, to: 240 });
+  });
+
+  it('sans frais : pas de période de frais, point mort à zéro', () => {
+    const { t } = tl({ ...base, fees: 0 });
+    expect(t!.phases.map((p) => p.kind)).toEqual(['gain']);
+    expect(t!.breakEvenPct).toBe(0);
+  });
+
+  it('pas de frise si la mensualité ne baisse pas, si une durée est nulle ou si les frais ne sont jamais couverts', () => {
+    expect(tl({ ...base, newRate: 0.045 }).t).toBeNull();
+    expect(tl({ ...base, newRate: 0.05 }).t).toBeNull();
+    expect(tl({ ...base, fees: 1e7 }).t).toBeNull();
+    expect(renegotiationTimeline({ currentYearsLeft: 0, newYears: 20, monthlyGain: 10, breakEvenMonths: 3 })).toBeNull();
+    expect(renegotiationTimeline({ currentYearsLeft: 20, newYears: 20, monthlyGain: NaN, breakEvenMonths: NaN })).toBeNull();
   });
 });

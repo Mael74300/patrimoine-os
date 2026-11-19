@@ -85,3 +85,52 @@ export function renegotiationBars(r: Pick<RenegotiationResult, 'currentRemaining
   const saved = Math.max(0, current - newInterest - feesPct);
   return { current, newInterest, fees: feesPct, saved };
 }
+
+/** Une période de la frise « mois après mois » de la renégociation. */
+export type RenegotiationPhase = {
+  /**
+   * fees : la baisse de mensualité rembourse les frais (avant le point mort) ;
+   * gain : la baisse de mensualité est économisée ;
+   * freed : le nouveau prêt est fini, toute l'ancienne mensualité est économisée ;
+   * extra : le prêt actuel serait fini, mais la nouvelle mensualité reste à payer.
+   */
+  kind: 'fees' | 'gain' | 'freed' | 'extra';
+  /** Début et fin de la période, en mois depuis l'opération. */
+  from: number;
+  to: number;
+  /** Largeur de la période sur la frise, en % de la durée totale représentée. */
+  pct: number;
+};
+
+export type RenegotiationTimeline = {
+  /** Durée totale représentée, en mois : la plus longue des deux durées. */
+  span: number;
+  /** Point mort en mois (0 sans frais), position en % de la frise. */
+  breakEven: number;
+  breakEvenPct: number;
+  phases: RenegotiationPhase[];
+};
+
+/**
+ * Frise « mois après mois » : ce que devient chaque mois l'écart de mensualité, de l'opération à la fin du plus long des deux prêts.
+ * Mêmes conventions que `renegotiation` (durées arrondies au mois, point mort = frais / baisse de mensualité).
+ * Renvoie null si la mensualité ne baisse pas, si une durée est nulle, ou si les frais ne sont pas couverts
+ * avant la fin du plus court des deux prêts (le point mort simple n'a alors plus de sens).
+ */
+export function renegotiationTimeline(p: { currentYearsLeft: number; newYears: number; monthlyGain: number; breakEvenMonths: number | null }): RenegotiationTimeline | null {
+  const nOld = Math.round(clamp(p.currentYearsLeft, 0, 50) * 12);
+  const nNew = Math.round(clamp(p.newYears, 0, 50) * 12);
+  const be = p.breakEvenMonths;
+  if (!(num(p.monthlyGain) > 1e-9) || be === null || !Number.isFinite(be) || be < 0 || nOld === 0 || nNew === 0) return null;
+  const common = Math.min(nOld, nNew);
+  if (be >= common) return null;
+  const span = Math.max(nOld, nNew);
+  const pct = (m: number) => (100 * m) / span;
+  const phases: RenegotiationPhase[] = [];
+  const add = (kind: RenegotiationPhase['kind'], from: number, to: number) => { if (to - from > 1e-9) phases.push({ kind, from, to, pct: pct(to - from) }); };
+  add('fees', 0, be);
+  add('gain', be, common);
+  if (nNew < nOld) add('freed', nNew, nOld);
+  if (nNew > nOld) add('extra', nOld, nNew);
+  return { span, breakEven: be, breakEvenPct: pct(be), phases };
+}
