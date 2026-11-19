@@ -96,7 +96,7 @@ function TaxDetail({ detail, regime }: { detail: RentalTaxDetail; regime: TaxReg
       <ul className="calc-notes">
         {isMicro && <li>En régime micro, aucune charge n’est déduite : l’abattement les remplace.{regime === 'micro-foncier' ? ' Il s’applique si vos loyers bruts ne dépassent pas 15\u00a0000\u00a0€ par an.' : ''}</li>}
         {detail.deficitCarried > 0 && <li>Les charges dépassent les loyers : {fmtEur(detail.deficitCarried)} de déficit, que ce calcul reporte sur les loyers des années suivantes.</li>}
-        {regime === 'reel-foncier' && <li>En location nue, la part d’un déficit qui ne vient pas des intérêts d’emprunt peut aussi réduire votre revenu global, dans une limite fixée par la loi : ce calcul ne le fait pas.</li>}
+        {regime === 'reel-foncier' && <li>En location nue, la part d’un déficit qui ne vient pas des intérêts d’emprunt peut aussi réduire vos autres revenus (salaires, pensions…), dans une limite annuelle : c’est le <Link to="/glossaire#deficit-foncier">déficit foncier</Link>, détaillé dans la fiche location nue. Ce calcul ne le fait pas.</li>}
         {regime === 'reel-bic' && <li>En location meublée non professionnelle, un déficit ne réduit que vos revenus de location meublée, de l’année et des 10 années suivantes.</li>}
         {detail.depreciationCarried > 0 && <li>Amortissement non utilisé cette année : {fmtEur(detail.depreciationCarried)}, que ce calcul reporte sur les années suivantes.</li>}
         <li>Estimation simplifiée. Pour les règles complètes, voir les fiches <Link to="/encyclopedie/location-nue">location nue</Link> et <Link to="/encyclopedie/lmnp">LMNP</Link>.</li>
