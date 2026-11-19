@@ -200,6 +200,20 @@ export function fondsEurosGrowth(capital: number, netPct: number, years: number,
 }
 
 /**
+ * Fonds en euros : intérêts de chaque année pour `capital` € à `netPct` % net, intérêts laissés sur le contrat. Chaque
+ * année se partage entre les intérêts sur le capital versé (toujours `capital` × taux) et ceux que rapportent les
+ * intérêts déjà gagnés. Montants à l'euro (le total de l'année est arrondi séparément, comme dans le texte de la fiche).
+ */
+export function fondsEurosYearlyInterest(capital: number, netPct: number, years: number) {
+  const r = netPct / 100;
+  return Array.from({ length: years }, (_, i) => {
+    const exact = capital * Math.pow(1 + r, i) * r;
+    const onCapital = capital * r;
+    return { year: i + 1, onCapital: Math.round(onCapital), onInterest: Math.round(exact - onCapital), total: Math.round(exact) };
+  });
+}
+
+/**
  * Livret A : intérêts d'une année civile pour `amount` € déposés le `day` du mois `month` (1 à 12), à `ratePct` % supposé
  * constant toute l'année. Calcul par quinzaines entières : un dépôt fait jusqu'au 15 rapporte à partir du 16, un dépôt
  * fait à partir du 16 rapporte à partir du 1er du mois suivant (Service-Public F2365, consulté le 2026-11-17).
