@@ -132,6 +132,7 @@ export const FORMULAS: [string, string[]][] = [
   ]],
   ['TAEG d’un crédit', [
     'Le TAEG est le taux annuel i qui égalise le capital réellement reçu (capital − frais payés au départ) et la valeur actuelle des sorties mensuelles : capital − frais = (mensualité + assurance) × (1 − (1 + j)^−n) / j, avec j le taux mensuel et n le nombre de mois ; TAEG = (1 + j)^12 − 1. Résolution par dichotomie.',
+    'C’est la méthode du Code de la consommation (article R314-3 et son annexe, vérifiés le 19 novembre 2026, y compris dans leur version applicable à partir du 20 novembre 2026) : calcul actuariel selon la méthode des intérêts composés, durées comptées en années et fractions d’année, un mois normalisé valant un douzième d’année. Pour des échéances mensuelles, cela revient à la formule ci-dessus.',
     'Hypothèses : échéances constantes, assurance en pourcentage annuel du capital initial, frais payés à la signature, sans garantie à restituer ni indemnité de sortie. Estimation pédagogique : seul le TAEG de l’offre de prêt fait foi.',
   ]],
   ['Taux d’endettement et reste à vivre', [
