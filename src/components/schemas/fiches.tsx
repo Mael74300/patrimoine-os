@@ -2,8 +2,9 @@ import type { ReactNode } from 'react';
 import { fmtEur } from '../../lib/finance';
 import { pfuSplit } from '../../lib/calc/pfu';
 import { perDeductionBalance } from '../../lib/calc/per';
-import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE } from '../../lib/illustrationData';
-import { assuranceVieRetrait, bondCoupons, crowdfundingScenario, etfMilestones, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
+import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
+import { LIVRETS } from '../../data/livrets';
+import { assuranceVieRetrait, bondCoupons, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
 import { fmtEur2 } from '../../lib/calc/format';
 import { W } from './outils';
@@ -1528,6 +1529,109 @@ export function SchemaPee() {
         <text x={170} y={348} textAnchor="middle" className="ill-sub">prélèvements sociaux dus</text>
         <text x={170} y={378} textAnchor="middle" className="ill-sub">Schéma de principe d’après Service-Public.fr</text>
       </svg>
+    </figure>
+  );
+}
+
+/**
+ * Schéma « ce que rapportent 10 000 € en un an », commun aux fiches Compte à terme, PEL et LEP : le placement face au
+ * Livret A, à la même échelle, avec la part retenue par l'impôt. Exemples fictifs des fiches (`TERM_DEPOSIT_EXAMPLE`,
+ * `PEL_EXAMPLE`, LEP au plafond), taux des livrets pris dans `LIVRETS` ; montants recalculés par
+ * `src/data/ficheExemples.test.ts`. Longueurs des barres proportionnelles aux montants.
+ */
+export type LivretBilanKind = 'compte-a-terme' | 'pel' | 'lep';
+
+const pct2 = (n: number) => `${n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(/[  ]/g, ' ')} %`;
+const eurAuto = (n: number) => (Number.isInteger(n) ? fmtEur(n) : fmtEur2(n));
+
+export function livretBilan(kind: LivretBilanKind) {
+  const livretA = LIVRETS.find((l) => l.id === 'livretA')!;
+  const lep = LIVRETS.find((l) => l.id === 'lep')!;
+  const livretPct = livretA.rate * 100;
+  const livretRow = { label: `Livret A à ${pct2(livretPct)}`, net: 0, tax: 0, gross: 0 };
+  if (kind === 'compte-a-terme') {
+    const { amount, grossPct, pfuPct } = TERM_DEPOSIT_EXAMPLE;
+    const r = termDepositVsLivretA(amount, grossPct, pfuPct, livretPct);
+    const gap = Math.round((r.net - r.livret) * 100) / 100;
+    return {
+      amount, pfuPct, name: 'Compte à terme',
+      rows: [{ label: `Compte à terme à ${grossPct} % brut`, gross: r.gross, tax: r.tax, net: r.net }, { ...livretRow, gross: r.livret, net: r.livret }],
+      ahead: gap > 0,
+      lines: [`Après impôt : ${eurAuto(gap)} de plus`, `seulement si le taux brut dépasse ${pct2(r.breakEvenPct)} ;`, 'le Livret A reste disponible à tout moment'],
+    };
+  }
+  if (kind === 'pel') {
+    const { amount, ratePct, pfuPct } = PEL_EXAMPLE;
+    const r = pelVsLivretA(amount, ratePct, pfuPct, livretPct);
+    return {
+      amount, pfuPct, name: 'PEL',
+      rows: [{ label: `PEL ouvert en 2026, à ${pct2(ratePct)}`, gross: r.gross, tax: r.tax, net: r.net }, { ...livretRow, gross: r.livret, net: r.livret }],
+      ahead: r.net > r.livret,
+      lines: [`Après impôt : ${eurAuto(r.livret - r.net)} de moins`, 'le PEL ne passe devant que si le taux', `du Livret A descend sous ${pct2(r.breakEvenPct)}`],
+    };
+  }
+  const r = lepVsLivretA(lep.cap, lep.rate * 100, livretPct);
+  return {
+    amount: lep.cap, pfuPct: 0, name: 'LEP',
+    rows: [{ label: `LEP à ${pct2(lep.rate * 100)}`, gross: r.lep, tax: 0, net: r.lep }, { ...livretRow, gross: r.livret, net: r.livret }],
+    ahead: r.gap > 0,
+    lines: [`${fmtEur(r.gap)} de plus par an au LEP`, 'tous deux sans impôt ; le LEP est réservé', 'aux foyers sous un plafond de revenus'],
+  };
+}
+
+export function SchemaLivretBilan({ kind, children }: { kind: LivretBilanKind; children: ReactNode }) {
+  const { amount, pfuPct, name, rows, lines, ahead } = livretBilan(kind);
+  const BAR = 206;
+  const s = BAR / Math.max(...rows.map((r) => r.gross));
+  const taxed = rows.some((r) => r.tax > 0);
+  const ROW = 72;
+  const legendY = rows.length * ROW + 4;
+  const sepY = legendY + (taxed ? 32 : 0);
+  const H = sepY + 74;
+  const id = `ill-livb-${kind}`;
+  const desc = `Exemple fictif : ${fmtEur(amount)} placés pendant un an. `
+    + rows.map((r) => (r.tax > 0
+      ? `${r.label} : ${eurAuto(r.gross)} d’intérêts, dont ${eurAuto(r.tax)} retenus par l’impôt (${pfuPct.toLocaleString('fr-FR')} %), il reste ${eurAuto(r.net)}.`
+      : `${r.label} : ${eurAuto(r.net)} d’intérêts, sans impôt.`)).join(' ')
+    + ` ${lines[0]}, ${lines[1]} ${lines[2]}.`;
+  return (
+    <figure className="illustration">
+      <svg viewBox={`0 0 340 ${H}`} role="img" aria-labelledby={`${id}-t ${id}-d`} className="ill-svg">
+        <title id={`${id}-t`}>{`${name} ou Livret A : ce que rapportent ${fmtEur(amount)} en un an`}</title>
+        <desc id={`${id}-d`}>{desc}</desc>
+        {rows.map((r, i) => {
+          const y = i * ROW;
+          const wNet = r.net * s;
+          const wTax = r.tax * s;
+          return (
+            <g key={r.label}>
+              <text x={0} y={y + 16} className="ill-step" textAnchor="start">{r.label}</text>
+              <rect x={1} y={y + 26} width={wNet} height={30} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+              <text x={1 + wNet / 2} y={y + 46} className="ill-in" textAnchor="middle">{eurAuto(r.net)}</text>
+              {r.tax > 0 && (
+                <>
+                  <rect x={1 + wNet} y={y + 26} width={wTax} height={30} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+                  <text x={1 + wNet + wTax / 2} y={y + 46} className="ill-in" textAnchor="middle">{eurAuto(r.tax)}</text>
+                </>
+              )}
+              <text x={1 + wNet + wTax + 10} y={y + 46} className="ill-sub" textAnchor="start">{r.tax > 0 ? `${eurAuto(r.gross)} bruts` : 'sans impôt'}</text>
+            </g>
+          );
+        })}
+        {taxed && (
+          <g transform={`translate(1 ${legendY})`}>
+            <rect width={14} height={14} rx={3} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+            <text x={22} y={12} className="ill-sub" textAnchor="start">Ce qui vous reste</text>
+            <rect x={164} width={14} height={14} rx={3} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+            <text x={186} y={12} className="ill-sub" textAnchor="start">{`Impôt : ${pfuPct.toLocaleString('fr-FR')} %`}</text>
+          </g>
+        )}
+        <line x1={1} x2={339} y1={sepY} y2={sepY} stroke="var(--line)" strokeWidth={1.5} />
+        <text x={0} y={sepY + 24} className="ill-total" textAnchor="start" style={{ fill: ahead ? 'var(--accent)' : 'var(--ink)' }}>{lines[0]}</text>
+        <text x={0} y={sepY + 44} className="ill-sub" textAnchor="start">{lines[1]}</text>
+        <text x={0} y={sepY + 63} className="ill-sub" textAnchor="start">{lines[2]}</text>
+      </svg>
+      <figcaption>{children}</figcaption>
     </figure>
   );
 }

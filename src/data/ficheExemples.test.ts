@@ -5,7 +5,7 @@ import { investmentBySlug } from './investments';
 import { bondCoupons, fondsEurosGrowth, livretQuinzaines, concentrationLoss, crowdfundingScenario, lepVsLivretA, pelVsLivretA, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, subscriptionChurn, trainingPayoff, yearlySavingsValue, termDepositVsLivretA, ucFeesDrag, forestCredit, artResale } from '../lib/calc/ficheExemples';
 import { amortize } from '../lib/calc/loan';
 import { CROWDFUNDING_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, leverageBars } from '../lib/illustrationData';
-import { SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaPee, SchemaRepriseBilan, SchemaScpiBilan } from '../components/schemas/fiches';
+import { SchemaCrowdfundingBilan, SchemaLivretBilan, SchemaLocationNueBilan, SchemaPee, SchemaRepriseBilan, SchemaScpiBilan, livretBilan } from '../components/schemas/fiches';
 import { guideBySlug } from './guides';
 import { LIVRETS } from './livrets';
 
@@ -519,5 +519,55 @@ describe('fiche Objets d’art : la taxe porte sur le prix, pas sur le gain', ()
     expect(norm(fiche.tax.text)).toContain('exonéré après 22 ans');
     expect(norm(fiche.fees.text)).toContain('de l’ordre de 20 %');
     expect(ex).toContain('de l’ordre de 20 %');
+  });
+});
+
+/**
+ * Schéma commun « ce que rapportent 10 000 € en un an » (fiches Compte à terme, PEL et LEP) : mêmes montants que le
+ * texte de chaque fiche, taux des livrets pris dans `LIVRETS`, barres proportionnelles, fichier léger.
+ */
+describe('fiches Compte à terme, PEL et LEP : schéma face au Livret A', () => {
+  const kinds = ['compte-a-terme', 'pel', 'lep'] as const;
+  const render = (kind: (typeof kinds)[number]) => renderToStaticMarkup(createElement(SchemaLivretBilan, { kind, children: 'légende' }));
+
+  it('chaque montant du schéma figure dans le texte de la fiche', () => {
+    for (const kind of kinds) {
+      const ex = norm(investmentBySlug[kind]!.example);
+      const { rows } = livretBilan(kind);
+      for (const r of rows) {
+        const show = (n: number) => norm(Number.isInteger(n) ? n.toLocaleString('fr-FR') : n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }));
+        expect(ex).toContain(`${show(r.net)} €`);
+        if (r.tax > 0) { expect(ex).toContain(`${show(r.tax)} €`); expect(ex).toContain(`${show(r.gross)} €`); }
+      }
+    }
+  });
+  it('compte à terme : 205,80 € + 94,20 € contre 170 €, seuil à 2,48 %', () => {
+    const t = plain(render('compte-a-terme'));
+    for (const v of ['205,80 €', '94,20 €', '300 € bruts', '170 €', 'Impôt : 31,4 %', '35,80 € de plus', '2,48 %', 'Livret A à 1,70 %']) expect(t).toContain(v);
+    expect(norm(investmentBySlug['compte-a-terme']!.example)).toContain('dépasse 2,48 %');
+  });
+  it('PEL : 140 € + 60 € contre 170 €, seuil à 1,40 %, bilan non présenté comme un gain', () => {
+    const svg = render('pel');
+    const t = plain(svg);
+    for (const v of ['140 €', '60 €', '200 € bruts', '170 €', 'Impôt : 30 %', '30 € de moins', '1,40 %']) expect(t).toContain(v);
+    expect(livretBilan('pel').ahead).toBe(false);
+    expect(norm(investmentBySlug['pel']!.example)).toContain('descend sous 1,40 %');
+  });
+  it('LEP : 250 € contre 170 €, 80 € de plus, sans légende d’impôt', () => {
+    const t = plain(render('lep'));
+    for (const v of ['LEP à 2,50 %', '250 €', '170 €', '80 € de plus']) expect(t).toContain(v);
+    expect(t).not.toContain('Impôt :');
+  });
+  it('barres proportionnelles aux montants, schéma accessible et léger', () => {
+    for (const kind of kinds) {
+      const svg = render(kind);
+      const widths = [...svg.matchAll(/<rect x="1" y="\d+" width="([\d.]+)"/g)].map((m) => Number(m[1]));
+      const { rows } = livretBilan(kind);
+      expect(widths.length).toBe(rows.length);
+      expect(widths[0]! / widths[1]!).toBeCloseTo(rows[0]!.net / rows[1]!.net, 5);
+      expect(svg).toContain('role="img"');
+      expect(svg).toContain('<desc');
+      expect(svg.length).toBeLessThan(15000);
+    }
   });
 });
