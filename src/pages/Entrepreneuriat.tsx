@@ -6,21 +6,33 @@ import { SchemaSeparer } from '../components/schemas/SchemaSeparer';
 const PATHS = [
   {
     title: 'Créer à partir de ses compétences',
-    body: "Prestations de services, conseil, artisanat. Peu de capital, revenu rapide si la demande existe, mais le revenu dépend de votre temps.",
+    body: "Services, conseil, artisanat. Peu d'argent pour démarrer, des revenus rapides s'il y a des clients, mais vous ne gagnez que quand vous travaillez.",
     fiche: { slug: 'creation-entreprise', label: 'la fiche Créer son entreprise' },
-    steps: ['Tester la demande avec quelques clients avant de se déclarer à grande échelle.', 'Choisir un statut simple pour démarrer.', 'Fixer un prix qui couvre cotisations, impôts et périodes creuses.'],
+    steps: [
+      'Trouver quelques premiers clients avant de tout miser dessus.',
+      'Démarrer avec un statut simple (Bpifrance Création aide à choisir).',
+      'Fixer un prix qui paie aussi cotisations, impôts et mois sans clients.',
+    ],
   },
   {
     title: 'Construire un produit',
-    body: "Logiciel, e-commerce, contenu. Le revenu peut se détacher de votre temps, mais l'échec est fréquent et la mise en route longue.",
+    body: "Logiciel, boutique en ligne, formation en vidéo. Le produit peut se vendre sans vous, mais beaucoup de projets échouent et les ventes tardent souvent.",
     fiche: { slug: 'activite-numerique', label: 'la fiche SaaS, e-commerce et produits numériques' },
-    steps: ['Résoudre un problème précis pour une cible précise.', 'Mesurer le revenu récurrent et le taux de désabonnement.', 'Limiter la dépendance à une seule plateforme.'],
+    steps: [
+      'Partir d’un problème précis, vécu par un public précis.',
+      'Suivre les abonnements et la part des clients qui s’en vont.',
+      'Ne pas dépendre d’un seul site pour vendre.',
+    ],
   },
   {
     title: 'Racheter une activité existante',
-    body: "Plus coûteux, mais l'activité dégage déjà des résultats. Le principal risque est de surpayer ou de mal évaluer la dépendance au cédant.",
+    body: "Plus cher au départ, mais l'activité gagne déjà de l'argent. Les grands risques : payer trop cher, ou voir les clients partir avec l'ancien propriétaire.",
     fiche: { slug: 'reprise-entreprise', label: 'la fiche Racheter une entreprise' },
-    steps: ['Faire auditer comptes, contrats et salariés.', 'Valoriser à partir des résultats récurrents, pas des promesses.', 'Négocier une période d’accompagnement.'],
+    steps: [
+      'Faire vérifier comptes, contrats et salariés par un professionnel.',
+      'Payer d’après ce que l’activité gagne vraiment, pas d’après des promesses.',
+      'Obtenir que l’ancien propriétaire vous accompagne quelques mois.',
+    ],
   },
 ];
 
@@ -30,7 +42,7 @@ export default function Entrepreneuriat() {
   return (
     <>
       <PageHead art="entrepreneuriat" eyebrow="Entrepreneuriat" title="Créer de la richesse par l'entreprise">
-        L'entreprise est à la fois une source de revenus à épargner et un actif qui peut se revendre. C'est aussi la voie la plus risquée et la plus exigeante.
+        Une entreprise peut rapporter des revenus à épargner, puis se revendre. C'est aussi la voie la plus risquée et la plus exigeante.
       </PageHead>
 
       <h2>Trois façons d'entreprendre</h2>
@@ -50,17 +62,20 @@ export default function Entrepreneuriat() {
       </div>
       <MetersLegend />
 
-      <p className="notice info" style={{ marginTop: 24 }}>
-        Testez vos hypothèses de chiffre d'affaires, de marge, de rémunération et de trésorerie dans le{' '}
-        <Link to="/simulateurs/entreprise">calculateur entrepreneurial</Link>, en trois scénarios.
-      </p>
+      <div className="panel path-cta">
+        <p>
+          <strong>Votre projet en chiffres :</strong> ventes, charges, ce que vous pourrez vous verser et l’argent disponible, en scénario pessimiste,
+          central et optimiste.
+        </p>
+        <Link className="btn" to="/simulateurs/entreprise">Chiffrer mon projet</Link>
+      </div>
 
       <h2>Séparer l'entreprise et le patrimoine</h2>
       <SchemaSeparer>
         <p>
-          Un entrepreneur concentre souvent l'essentiel de son patrimoine dans sa société. Constituer en parallèle une épargne personnelle diversifiée
-          (livrets, PEA, assurance-vie) réduit la dépendance à une seule activité. Le <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link> permet
-          d'estimer ce que représenterait l'investissement régulier d'une partie des bénéfices.
+          Un entrepreneur a souvent presque tout son patrimoine dans sa société. Une épargne personnelle à côté (livrets, PEA, assurance-vie) limite la
+          casse si l'activité s'arrête. Le <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link> estime ce que donnerait le placement régulier
+          d'une partie des bénéfices.
         </p>
       </SchemaSeparer>
       <h2>Avant de vous lancer</h2>
@@ -76,12 +91,9 @@ export default function Entrepreneuriat() {
             <li><a href="https://www.autoentrepreneur.urssaf.fr" target="_blank" rel="noopener noreferrer">URSSAF — Micro-entrepreneur</a> — déclaration et cotisations.</li>
             <li><a href="https://formalites.entreprises.gouv.fr" target="_blank" rel="noopener noreferrer">Guichet unique des formalités d'entreprises</a> — création et modifications.</li>
           </ul>
+          <p className="small path-warn">Statuts, plafonds et taux de cotisations changent souvent : vérifiez-les sur ces sites avant de décider.</p>
         </div>
       </div>
-      <p className="notice small">
-        Statuts, plafonds de la micro-entreprise et taux de cotisations changent régulièrement : vérifiez-les sur le site de l'URSSAF et de Bpifrance Création
-        avant toute décision.
-      </p>
     </>
   );
 }
