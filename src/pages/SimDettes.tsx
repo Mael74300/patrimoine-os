@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { comparePayoff, fmtEur, fmtMonths, fmtPct, payoffTimeline, type Debt, type PayoffBar } from '../lib/finance';
 import { debtsTakeaway } from '../lib/takeaways';
-import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
+import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = {
   b1: number; r1: number; m1: number;
@@ -102,23 +102,24 @@ export default function SimDettes() {
             />
           </div>
           <Takeaway>{debtsTakeaway({ extra: s.extra, minimum: c.minimum, avalanche: c.avalanche, snowball: c.snowball, interestSavedByAvalanche: c.interestSavedByAvalanche })}</Takeaway>
-          <h2>Comparaison des trois approches</h2>
-          <div className="table-wrap" tabIndex={0}>
-            <table>
-              <thead><tr><th scope="col">Approche</th><th scope="col" className="r">Durée</th><th scope="col" className="r">Intérêts</th><th scope="col" className="r">Total payé</th></tr></thead>
-              <tbody>
-                {rows.map((x) => (
-                  <tr key={x.label}><th scope="row">{x.label}</th><td className="r">{fmtDuration(x.r.months)}</td><td className="r">{fmtEur(x.r.totalInterest)}</td><td className="r">{fmtEur(x.r.totalPaid)}</td></tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
           <h2>Quand chaque dette est soldée</h2>
           <p className="pt-intro">Chaque barre s’arrête le mois où la dette est entièrement remboursée.</p>
           <figure className="pt">
             <PayoffTrack title="Avalanche" hint="taux le plus élevé d’abord" bars={t.avalanche} debts={debts} />
             <PayoffTrack title="Boule de neige" hint="plus petit solde d’abord" bars={t.snowball} debts={debts} />
           </figure>
+          <Fold title="Le détail chiffré : durée, intérêts et total payé">
+            <div className="table-wrap" tabIndex={0}>
+              <table>
+                <thead><tr><th scope="col">Approche</th><th scope="col" className="r">Durée</th><th scope="col" className="r">Intérêts</th><th scope="col" className="r">Total payé</th></tr></thead>
+                <tbody>
+                  {rows.map((x) => (
+                    <tr key={x.label}><th scope="row">{x.label}</th><td className="r">{fmtDuration(x.r.months)}</td><td className="r">{fmtEur(x.r.totalInterest)}</td><td className="r">{fmtEur(x.r.totalPaid)}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Fold>
           <p className="muted small">
             Même budget pour les deux méthodes (détails dans les questions fréquentes). Une mensualité inférieure aux intérêts du mois ne solde jamais la dette.
             Les exemples ci-dessus sont fictifs. Voir aussi <Link to="/simulateurs/rembourser-ou-investir">rembourser ou investir</Link>.

@@ -289,22 +289,52 @@ export function inflationTakeaway(p: { amount: number; years: number; inflation:
   return rien + place;
 }
 
-/** Plusieurs dettes : durée et intérêts avec l'avalanche, comparés aux seules mensualités minimales. */
-export function debtsTakeaway(p: { extra: number; minimum: { months: number | null; totalInterest: number }; avalanche: { months: number | null; totalInterest: number }; snowball: { months: number | null; totalInterest: number }; interestSavedByAvalanche: number | null }): string {
+/** Mois où la première dette est soldée (la plus tôt), parmi celles qui restaient dues. */
+function firstPayoff(months: (number | null)[]): number | null {
+  const done = months.filter((m): m is number => m !== null && m > 0);
+  return done.length ? Math.min(...done) : null;
+}
+
+/**
+ * Plusieurs dettes, en trois lignes courtes : le point de départ (mensualités minimales seules), ce que fait
+ * l'avalanche, puis l'arbitrage de la boule de neige (une première dette soldée plus tôt, contre des intérêts en plus).
+ * Tous les montants et durées viennent de `comparePayoff`.
+ */
+export function debtsTakeaway(p: {
+  extra: number;
+  minimum: { months: number | null; totalInterest: number };
+  avalanche: { months: number | null; totalInterest: number; payoffMonths?: (number | null)[] };
+  snowball: { months: number | null; totalInterest: number; payoffMonths?: (number | null)[] };
+  interestSavedByAvalanche: number | null;
+}): string {
   const { minimum: min, avalanche: av, snowball: sn } = p;
-  if (av.months === null) return 'Avec ce budget, les dettes ne sont pas soldées en 50 ans : les mensualités ne couvrent pas les intérêts. Augmentez les mensualités ou le versement supplémentaire.';
+  if (av.months === null) return 'Avec ce budget, les dettes ne sont pas soldées en 50 ans : les mensualités ne couvrent pas les intérêts. Augmentez les mensualités ou le versement supplémentaire.';
   if (av.months === 0) return '';
-  const ajout = p.extra > 0 ? `En ajoutant ${fmtEur(p.extra)} par mois à vos mensualités minimales, ` : 'Avec vos mensualités minimales, ';
-  const duree = `vous êtes libéré de toutes vos dettes en ${fmtMonths(av.months)} avec l'avalanche (${fmtEur(av.totalInterest)} d'intérêts)`;
-  const vs = p.extra > 0 && min.months !== null
-    ? `, contre ${fmtMonths(min.months)} et ${fmtEur(min.totalInterest)} d'intérêts sans versement supplémentaire`
-    : '';
-  const boule = sn.months !== null && p.interestSavedByAvalanche !== null
-    ? p.interestSavedByAvalanche > 0.5
-      ? ` La boule de neige coûterait ${fmtEur(p.interestSavedByAvalanche)} d'intérêts de plus pour une durée de ${fmtMonths(sn.months)}.`
-      : ' La boule de neige donne ici le même résultat.'
-    : '';
-  return `${ajout}${duree}${vs}.${boule}`;
+  const lignes: string[] = [];
+  if (p.extra > 0) {
+    if (min.months !== null) lignes.push(`Sans rien ajouter, vos dettes seraient soldées en ${fmtMonths(min.months)}, avec ${fmtEur(min.totalInterest)} d'intérêts.`);
+    lignes.push(`En ajoutant ${fmtEur(p.extra)} par mois, l'avalanche les solde toutes en ${fmtMonths(av.months)}, avec ${fmtEur(av.totalInterest)} d'intérêts.`);
+  } else {
+    lignes.push(`Avec vos seules mensualités minimales, l'avalanche solde toutes vos dettes en ${fmtMonths(av.months)}, avec ${fmtEur(av.totalInterest)} d'intérêts.`);
+  }
+  const saved = p.interestSavedByAvalanche;
+  if (sn.months !== null && saved !== null) {
+    const fa = firstPayoff(av.payoffMonths ?? []);
+    const fs = firstPayoff(sn.payoffMonths ?? []);
+    const plusTot = fa !== null && fs !== null && fs < fa;
+    if (saved > 0.5 && plusTot) {
+      lignes.push(`La boule de neige solde une première dette au bout de ${fmtMonths(fs as number)}, contre ${fmtMonths(fa as number)} avec l'avalanche : sa mensualité se libère plus tôt, ce qui peut aider à tenir. En échange, elle coûte ${fmtEur(saved)} d'intérêts de plus.`);
+    } else if (saved > 0.5) {
+      lignes.push(`La boule de neige coûterait ${fmtEur(saved)} d'intérêts de plus, pour une durée totale de ${fmtMonths(sn.months)}.`);
+    } else if (saved < -0.5) {
+      lignes.push(`Ici, la boule de neige coûte même ${fmtEur(-saved)} d'intérêts de moins, pour une durée totale de ${fmtMonths(sn.months)}.`);
+    } else if (plusTot) {
+      lignes.push(`La boule de neige solde une première dette au bout de ${fmtMonths(fs as number)}, contre ${fmtMonths(fa as number)} avec l'avalanche, pour les mêmes intérêts.`);
+    } else {
+      lignes.push('La boule de neige donne ici le même résultat.');
+    }
+  }
+  return lignes.join('\n');
 }
 
 /**
