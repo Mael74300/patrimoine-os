@@ -18,5 +18,8 @@ describe('schéma « 3, 6 ou 9 mois de dépenses »', () => {
     expect(html).toContain('role="img"');
     expect(html).toContain('exemple fictif');
     expect(html.length).toBeLessThan(15000);
+    // une case par mois de dépenses, remplie selon le repère (3 + 6 + 9 cases pleines sur 3 × 9)
+    expect(html.match(/fill="var\(--primary\)"/g)!.length).toBe(1 + 3 + 6 + 9);
+    expect(html.replace(/[\u00a0\u202f]/g, ' ')).toContain('1 case = 1 mois de dépenses, soit 2 000 €');
   });
 });
