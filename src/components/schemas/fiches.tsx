@@ -4,7 +4,7 @@ import { pfuSplit, PFU_IR_PCT, PFU_PS_PCT, PFU_TOTAL_PCT } from '../../lib/calc/
 import { perDeductionBalance } from '../../lib/calc/per';
 import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
 import { LIVRETS } from '../../data/livrets';
-import { assuranceVieRetrait, bondCoupons, forestCredit, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
+import { assuranceVieRetrait, bondCoupons, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
 import { fmtEur2 } from '../../lib/calc/format';
 import { W } from './outils';
@@ -1757,6 +1757,123 @@ export function SchemaForetBilan({ children }: { children: ReactNode }) {
         })}
         <line x1={X0} y1={262} x2={X0 + W} y2={262} stroke="var(--line)" strokeWidth={1} />
         <text x={X0} y={286} className="ill-sub">Hors frais du groupement ; barres à l’échelle.</text>
+      </svg>
+      <figcaption>{children}</figcaption>
+    </figure>
+  );
+}
+
+/** Exemples fictifs des fiches Fonds en euros et Unités de compte (mêmes hypothèses que le texte, recalculées par les tests). */
+export const FONDS_EUROS_EXAMPLE = { capital: 20000, netPct: 2.5, years: 5, extraFeesPts: 0.5 };
+export const UC_EXAMPLE = { amount: 10000, grossPct: 6, feePct: 1.5, years: 20 };
+
+type FraisBilanKind = 'fonds-euros' | 'unites-de-compte';
+
+/** Données du schéma, calculées par les fonctions des exemples chiffrés (aucun chiffre saisi à la main). */
+export function fraisBilan(kind: FraisBilanKind) {
+  if (kind === 'fonds-euros') {
+    const { capital, netPct, years, extraFeesPts } = FONDS_EUROS_EXAMPLE;
+    const g = fondsEurosGrowth(capital, netPct, years, extraFeesPts);
+    const lowNet = netPct - extraFeesPts;
+    return {
+      title: `Fonds en euros : ${fmtEur(capital)} pendant ${years} ans, et ce que coûtent 0,5 point de frais`,
+      head: `En ${years} ans, les gains de ${fmtEur(capital)}`,
+      years: fondsEurosYearlyInterest(capital, netPct, years),
+      capital,
+      rows: [
+        { label: `À ${pctFr(netPct)} net de frais`, gains: g.final - capital },
+        { label: `Avec ${pctFr(extraFeesPts).replace(' %', '')} point de frais de plus (${pctFr(lowNet)} net)`, gains: g.finalWithMoreFees - capital },
+      ],
+      gap: g.gap,
+      note: [`${pctFr(extraFeesPts).replace(' %', '')} point de frais par an : environ ${fmtEur(g.gap)} de gains`, `en moins en ${years} ans, plus d’un cinquième.`],
+    };
+  }
+  const { amount, grossPct, feePct, years } = UC_EXAMPLE;
+  const u = ucFeesDrag(amount, grossPct, feePct, years);
+  return {
+    title: `Unités de compte : ce que ${pctFr(feePct)} de frais par an coûtent en ${years} ans`,
+    head: `En ${years} ans, les gains de ${fmtEur(amount)} (avant impôt)`,
+    years: [],
+    capital: amount,
+    rows: [
+      { label: `Sans frais : ${pctFr(grossPct)} par an (hypothèse)`, gains: u.withoutFees - amount },
+      { label: `Avec ${pctFr(feePct)} de frais par an : environ ${pctFr(u.netPct)}`, gains: u.withFees - amount },
+    ],
+    gap: u.cost,
+    note: [`Les frais coûtent ${fmtEur(u.cost)} : plus du quart`, `des ${fmtEur(u.withoutFees)} atteints sans frais.`],
+  };
+}
+
+/**
+ * Schéma de l'exemple chiffré des fiches Fonds en euros et Unités de compte (constat du 2026-11-19 : deux exemples restés
+ * en paragraphe de cinq ou six montants). Fonds en euros : les intérêts de chaque année, partagés entre ceux du capital
+ * versé et ceux des intérêts déjà gagnés, puis les gains avec ou sans 0,5 point de frais. Unités de compte : les gains
+ * avec ou sans frais sur 20 ans. Barres proportionnelles, montants recalculés (`fondsEurosGrowth`, `ucFeesDrag`), exemples
+ * fictifs : aucune information factuelle nouvelle.
+ */
+export function SchemaFraisBilan({ kind, children }: { kind: FraisBilanKind; children: ReactNode }) {
+  const d = fraisBilan(kind);
+  const id = `ill-fraisb-${kind}`;
+  const X0 = 1;
+  const yearsH = d.years.length ? 46 + d.years.length * 23 + 14 : 0;
+  const maxYear = Math.max(1, ...d.years.map((y) => y.total));
+  const sy = 200 / maxYear;
+  const top = yearsH;
+  const sg = 318 / Math.max(...d.rows.map((r) => r.gains));
+  const endA = X0 + d.rows[0]!.gains * sg;
+  const endB = X0 + d.rows[1]!.gains * sg;
+  const sep = top + 186;
+  const H = sep + 54;
+  const desc = (d.years.length
+    ? `Exemple fictif. Intérêts de chaque année : ${d.years.map((y) => `année ${y.year}, ${fmtEur(y.total)}`).join(' ; ')}. Chaque année, ${fmtEur(d.years[0]!.onCapital)} viennent du capital versé ; le reste, des intérêts déjà gagnés qui rapportent à leur tour. `
+    : 'Exemple fictif. ')
+    + `${d.head} : ${d.rows.map((r) => `${r.label.toLowerCase()}, environ ${fmtEur(r.gains)}`).join(' ; ')}. ${d.note.join(' ')}`;
+  return (
+    <figure className="illustration">
+      <svg viewBox={`0 0 340 ${H}`} role="img" aria-labelledby={`${id}-t ${id}-d`} className="ill-svg">
+        <title id={`${id}-t`}>{d.title}</title>
+        <desc id={`${id}-d`}>{desc}</desc>
+        {d.years.length > 0 && (
+          <g>
+            <text x={0} y={16} className="ill-step">Les intérêts de chaque année</text>
+            <rect x={X0} y={28} width={14} height={14} rx={3} fill="var(--accent)" />
+            <text x={X0 + 20} y={40} className="ill-sub">{`sur les ${fmtEur(d.capital)} versés`}</text>
+            <rect x={X0 + 170} y={28} width={14} height={14} rx={3} fill="var(--primary)" />
+            <text x={X0 + 190} y={40} className="ill-sub">sur les intérêts gagnés</text>
+            {d.years.map((y, i) => {
+              const yy = 52 + i * 23;
+              const wc = y.onCapital * sy;
+              const wi = y.onInterest * sy;
+              return (
+                <g key={y.year}>
+                  <text x={0} y={yy + 14} className="ill-sub">{`Année ${y.year}`}</text>
+                  <rect x={66} y={yy} width={wc} height={18} fill="var(--accent)" />
+                  {wi > 0 && <rect x={66 + wc} y={yy} width={wi} height={18} fill="var(--primary)" />}
+                  <text x={66 + wc + wi + 8} y={yy + 14} className="ill-in">{fmtEur(y.total)}</text>
+                </g>
+              );
+            })}
+            <line x1={0} y1={yearsH - 10} x2={340} y2={yearsH - 10} stroke="var(--line)" strokeWidth={1} />
+          </g>
+        )}
+        <text x={0} y={top + 20} className="ill-step">{d.head}</text>
+        {d.rows.map((r, i) => {
+          const y = top + 34 + i * 66;
+          const w = r.gains * sg;
+          return (
+            <g key={r.label}>
+              <text x={0} y={y + 14} className="ill-sub">{r.label}</text>
+              <rect x={X0} y={y + 22} width={w} height={32} rx={6} fill={i === 0 ? 'var(--accent)' : 'var(--accent-soft)'} stroke="var(--accent)" strokeWidth={1.5} />
+              <text x={X0 + 10} y={y + 43} className={i === 0 ? 'ill-on-dark ill-total' : 'ill-total'}>{`environ ${fmtEur(r.gains)}`}</text>
+            </g>
+          );
+        })}
+        <path d={`M ${endA} ${top + 52} V ${top + 158}`} stroke="var(--ink-2)" strokeWidth={1.5} strokeDasharray="4 3" />
+        <path d={`M ${endB} ${top + 152} V ${top + 158} H ${endA} V ${top + 152}`} fill="none" stroke="var(--warn)" strokeWidth={2} strokeLinejoin="round" />
+        <text x={Math.min(339, endA)} y={top + 176} className="ill-total" textAnchor="end" style={{ fill: 'var(--warn)' }}>{`${fmtEur(d.gap)} de moins`}</text>
+        <line x1={0} y1={sep} x2={340} y2={sep} stroke="var(--line)" strokeWidth={1} />
+        <text x={0} y={sep + 20} className="ill-sub">{d.note[0]}</text>
+        <text x={0} y={sep + 38} className="ill-sub">{d.note[1]}</text>
       </svg>
       <figcaption>{children}</figcaption>
     </figure>
