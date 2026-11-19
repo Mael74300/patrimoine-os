@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, fmtEur, rentalAnalysis, rentalBalance, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
-import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio } from './finance';
+import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio, fmtMonths } from './finance';
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
 import { capacityForPayment } from './calc/debtRatio';
@@ -385,6 +385,18 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(t).toContain(eur(c.avalanche.totalInterest) + '€d\'intérêts');
     expect(t).toContain(eur(c.minimum.totalInterest) + '€d\'intérêts');
     expect(t).toContain(eur(c.interestSavedByAvalanche!) + '€d\'intérêtsdeplus');
+    // Trois lignes courtes ; l'atout de la boule de neige (première dette soldée plus tôt) est dit, mois tirés de comparePayoff.
+    const brut = debtsTakeaway({ extra: 100, ...c });
+    expect(brut.split('\n')).toHaveLength(3);
+    const first = (m: (number | null)[]) => Math.min(...(m.filter((x) => x !== null) as number[]));
+    expect(first(c.snowball.payoffMonths)).toBeLessThan(first(c.avalanche.payoffMonths));
+    expect(brut).toContain(`au bout de ${fmtMonths(first(c.snowball.payoffMonths))}, contre ${fmtMonths(first(c.avalanche.payoffMonths))} avec l'avalanche`);
+    // Sans versement supplémentaire : pas de comparaison avec lui-même.
+    const c0 = comparePayoff(D, 0);
+    expect(debtsTakeaway({ extra: 0, ...c0 })).toMatch(/^Avec vos seules mensualités minimales/);
+    // Une seule dette : les deux méthodes se confondent.
+    const one = comparePayoff([D[0]], 50);
+    expect(debtsTakeaway({ extra: 50, ...one })).toContain('même résultat');
     const stuck = comparePayoff([{ name: 'a', balance: 1000, rate: 0.5, minPayment: 1 }], 0);
     expect(debtsTakeaway({ extra: 0, ...stuck })).toContain('ne sont pas soldées');
     const none = comparePayoff([{ name: 'a', balance: 0, rate: 0.1, minPayment: 10 }], 0);
