@@ -10,7 +10,7 @@ import { simBlurb } from '../lib/simThemes';
 import { interleave, splitNext } from '../lib/nextLinks';
 import { NextList, NextMore, type NextItem } from '../components/NextList';
 import { DONATION_ABATTEMENTS, fmtEuros } from '../data/donationAbattements';
-import { SchemaActions, SchemaForet, SchemaDonation, SchemaDonationBilan, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaObligationBilan, SchemaEtfBilan, SchemaAssuranceVieBilan, SchemaOr, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaScpi, SchemaScpiBilan, SchemaCrowdfundingBilan, SchemaLocationNueBilan, SchemaUniteDeCompte, SchemaFondsEuros, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaRepriseBilan, SchemaLivretBilan, SchemaActiviteNumerique, SchemaPee, SchemaPeaBilan, SchemaForetBilan, SchemaFraisBilan } from '../components/schemas/fiches';
+import { SchemaActions, SchemaForet, SchemaDonation, SchemaDonationBilan, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaObligationBilan, SchemaEtfBilan, SchemaAssuranceVieBilan, SchemaOr, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaScpi, SchemaScpiBilan, SchemaCrowdfundingBilan, SchemaMicroBilan, SchemaUniteDeCompte, SchemaFondsEuros, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaRepriseBilan, SchemaLivretBilan, SchemaActiviteNumerique, SchemaPee, SchemaPeaBilan, SchemaForetBilan, SchemaFraisBilan } from '../components/schemas/fiches';
 import { SchemaPea, SchemaQuinzaines, SchemaLevier } from '../components/schemas/communs';
 import NotFound from './NotFound';
 import { DonationCalculator } from '../components/DonationCalculator';
@@ -172,7 +172,7 @@ export default function InvestmentPage() {
             if (inv.slug === 'per') return <SchemaPerBilan>{ex}</SchemaPerBilan>;
             if (inv.slug === 'crowdfunding') return <SchemaCrowdfundingBilan>{ex}</SchemaCrowdfundingBilan>;
             if (inv.slug === 'scpi') return <SchemaScpiBilan>{ex}</SchemaScpiBilan>;
-            if (inv.slug === 'location-nue') return <SchemaLocationNueBilan>{ex}</SchemaLocationNueBilan>;
+            if (inv.slug === 'location-nue' || inv.slug === 'lmnp') return <SchemaMicroBilan kind={inv.slug}>{ex}</SchemaMicroBilan>;
             if (inv.slug === 'donation') return <><SchemaDonationBilan>{ex}</SchemaDonationBilan><DonationCalculator /></>;
             if (inv.slug === 'obligations') return <SchemaObligationBilan>{ex}</SchemaObligationBilan>;
             if (inv.slug === 'etf-monde') return <SchemaEtfBilan>{ex}</SchemaEtfBilan>;

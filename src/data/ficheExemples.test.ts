@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { investmentBySlug } from './investments';
 import { bondCoupons, fondsEurosGrowth, livretQuinzaines, concentrationLoss, crowdfundingScenario, lepVsLivretA, pelVsLivretA, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, subscriptionChurn, trainingPayoff, yearlySavingsValue, termDepositVsLivretA, ucFeesDrag, forestCredit, artResale } from '../lib/calc/ficheExemples';
 import { amortize } from '../lib/calc/loan';
-import { CROWDFUNDING_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, leverageBars } from '../lib/illustrationData';
-import { SchemaCrowdfundingBilan, SchemaLivretBilan, SchemaLocationNueBilan, SchemaPee, SchemaRepriseBilan, SchemaScpiBilan, livretBilan } from '../components/schemas/fiches';
+import { CROWDFUNDING_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, leverageBars } from '../lib/illustrationData';
+import { SchemaCrowdfundingBilan, SchemaLivretBilan, SchemaMicroBilan, SchemaPee, SchemaRepriseBilan, SchemaScpiBilan, livretBilan } from '../components/schemas/fiches';
 import { guideBySlug } from './guides';
 import { LIVRETS } from './livrets';
 
@@ -112,12 +112,52 @@ describe('fiche Location nue : ce que le micro-foncier impose', () => {
     expect(ex).toContain('pour 3 ans');
     expect(fiche.sources.some((s) => s.url.endsWith('/F1991'))).toBe(true);
     expect(fiche.sources.some((s) => s.url.endsWith('/F1419'))).toBe(true);
-    const svg = renderToStaticMarkup(createElement(SchemaLocationNueBilan, null, 'légende'));
+    const svg = renderToStaticMarkup(createElement(SchemaMicroBilan, { kind: 'location-nue' }, 'légende'));
     const t = plain(svg);
     for (const v of [r.rents, monthlyRent, r.allowance, r.taxable, r.incomeTax]) expect(t).toContain(eur(v));
     expect(t).toContain(`Impôt dans la tranche à ${pctFr(marginalRatePct)}`);
     expect(t).toContain(`soit ${pctFr(r.incomeTaxPctOfRents)} des loyers`);
     expect(t).toContain(`plus ${pctFr(socialPct)} de prélèvements sociaux`);
+    expect(svg).toContain('role="img"');
+    expect(svg.length).toBeLessThan(15000);
+  });
+});
+
+/**
+ * Fiche Location meublée (LMNP) : micro-BIC, abattement de 50 % pour la location meublée de longue durée, recettes jusqu'à
+ * 83 600 € en 2026 (Service-Public F32744), tranche à 30 % (F1419). Sources consultées le 2026-11-19.
+ */
+describe('fiche Location meublée : ce que le micro-BIC impose', () => {
+  const { price, monthlyRent, months, allowancePct, marginalRatePct } = LMNP_EXAMPLE;
+  const r = microFoncierExample(monthlyRent, allowancePct, marginalRatePct, months);
+  const fiche = investmentBySlug['lmnp']!;
+  const ex = norm(fiche.example);
+  const pctFr = (n: number) => `${n.toLocaleString('fr-FR')} %`;
+
+  it('montants recalculés : 6 600 € de loyers, 3 300 € retirés, 3 300 € imposés, 990 € d’impôt (15 %)', () => {
+    expect(r).toEqual({ rents: 6600, allowance: 3300, taxable: 3300, incomeTax: 990, incomeTaxPctOfRents: 15 });
+  });
+  it('mêmes règles que la rubrique Fiscalité de la fiche, recettes sous le plafond du micro-BIC', () => {
+    const tax = norm(fiche.tax.text);
+    expect(tax).toContain(`jusqu’à 83 600 € de recettes par an avec un abattement de ${pctFr(allowancePct)}`);
+    expect(r.rents).toBeLessThanOrEqual(83600);
+    expect(fiche.sources.some((s) => s.url.endsWith('/F32744'))).toBe(true);
+    expect(fiche.sources.some((s) => s.url.endsWith('/F1419'))).toBe(true);
+  });
+  it('le texte de la fiche et le schéma citent les mêmes montants', () => {
+    expect(ex).toMatch(/^Exemple fictif/);
+    for (const v of [price, monthlyRent, r.rents, r.taxable, r.incomeTax]) expect(ex).toContain(eur(v));
+    expect(ex).toContain('un mois de vacance par an');
+    expect(ex).toContain(`${pctFr(r.incomeTaxPctOfRents)} des loyers`);
+    const svg = renderToStaticMarkup(createElement(SchemaMicroBilan, { kind: 'lmnp' }, 'légende'));
+    const t = plain(svg);
+    for (const v of [r.rents, monthlyRent, r.allowance, r.taxable, r.incomeTax]) expect(t).toContain(eur(v));
+    expect(t).toContain(`${months} mois loués`);
+    expect(t).toContain('micro-BIC');
+    expect(t).toContain(`Impôt dans la tranche à ${pctFr(marginalRatePct)}`);
+    expect(t).toContain(`soit ${pctFr(r.incomeTaxPctOfRents)} des loyers`);
+    expect(t).toContain('plus les prélèvements sociaux');
+    expect(t).not.toContain('17,2');
     expect(svg).toContain('role="img"');
     expect(svg.length).toBeLessThan(15000);
   });
