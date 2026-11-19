@@ -64,16 +64,16 @@ export const investmentNames: Record<string, string> = {
  * la carte dit ce qu’est le placement, comme en bas des fiches et des guides.
  */
 export const investmentSummaries: Record<string, string> = {
-  "etf-monde": "Fonds indiciels cotés qui répliquent un large marché d'actions à faibles frais.",
-  "location-nue": "Acheter un logement et le louer vide, avec des revenus fonciers.",
-  "credit-immobilier": "Utiliser l'emprunt pour acquérir un bien dont les loyers remboursent une partie des mensualités.",
-  "obligations": "Prêter de l'argent à un État ou une entreprise contre un intérêt (coupon).",
+  "etf-monde": "Des fonds de Bourse qui suivent tout un marché d'actions, à frais faibles.",
+  "location-nue": "Acheter un logement et le louer vide : les loyers sont des revenus fonciers.",
+  "credit-immobilier": "Emprunter pour acheter un logement à louer, dont les loyers paient une partie des mensualités.",
+  "obligations": "Prêter à un État ou une entreprise, qui verse des intérêts (le coupon).",
   "creation-entreprise": "Construire une activité dont les bénéfices et la valeur de revente constituent un patrimoine.",
   "reprise-entreprise": "Acquérir une entreprise existante, souvent avec un crédit, pour en percevoir les bénéfices.",
-  "activite-numerique": "Logiciels, boutiques en ligne, contenus : des actifs numériques capables de générer un revenu récurrent.",
-  "per": "Épargne bloquée jusqu’à la retraite, avec des versements déductibles du revenu imposable.",
+  "activite-numerique": "Logiciels, boutiques en ligne, contenus : des activités sur internet qui peuvent rapporter un revenu régulier.",
+  "per": "Épargne bloquée jusqu’à la retraite ; ce que vous y versez peut être déduit de vos revenus imposables.",
   "lep": "Le livret réglementé le mieux rémunéré, réservé aux foyers sous conditions de revenus.",
   "livret-a": "Livrets réglementés, sans risque, disponibles à tout moment et non imposés.",
-  "assurance-vie": "Enveloppe polyvalente : fonds euros, unités de compte, fiscalité douce après 8 ans et transmission.",
-  "donation": "Transmettre de son vivant en profitant des abattements renouvelables.",
+  "assurance-vie": "Un contrat d’épargne à tout faire : part garantie ou non, moins d’impôt après 8 ans, atout pour transmettre.",
+  "donation": "Donner de son vivant : des montants exonérés de droits, renouvelables.",
 };

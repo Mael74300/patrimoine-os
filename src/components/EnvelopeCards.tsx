@@ -25,7 +25,7 @@ export const ENVELOPE_CARDS: EnvelopeCard[] = [
     { label: 'Retraits', text: 'argent bloqué jusqu’à la retraite, sauf déblocage anticipé (achat de la résidence principale, « accident de la vie »)' },
     { label: 'Impôts', text: 'versements déductibles du revenu imposable avant 70 ans ; ce qui a été déduit est imposé à la sortie' },
   ] },
-  { name: 'Compte-titres', to: '/encyclopedie/compte-titres', paragraph: 3, use: 'pour placer sans plafond, partout dans le monde, avec une fiscalité standard', rows: [
+  { name: 'Compte-titres', to: '/encyclopedie/compte-titres', paragraph: 3, use: 'pour placer sans plafond, partout dans le monde, sans avantage fiscal', rows: [
     { label: 'Versements', text: 'aucune limite' },
     { label: 'Retraits', text: 'aucune limite' },
     { label: 'Impôts', text: 'prélèvement forfaitaire unique (PFU, ou « flat tax ») de 31,4 % en 2026 (12,8 % d’impôt et 18,6 % de prélèvements sociaux)' },
