@@ -673,7 +673,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
         body: [
           'L’inflation varie d’une année à l’autre : une hypothèse constante est une simplification. Comparez toujours un rendement à l’inflation de la même période.',
           'Gardez aussi en tête que la sécurité d’un placement et sa disponibilité ont une valeur, notamment pour l’épargne de précaution.',
-          'Les simulateurs « Inflation et pouvoir d’achat » et « Rendement réel de mon placement » calculent ces effets à partir de vos propres hypothèses.',
+          '« Inflation et pouvoir d’achat » calcule cet effet ; « Rendement de mon placement » donne le taux obtenu, avant inflation, à comparer à la hausse des prix.',
         ],
       },
     ],
