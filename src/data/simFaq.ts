@@ -136,7 +136,7 @@ export const simFaq: Record<string, FaqItem[]> = {
   ],
   portefeuille: [
     { q: 'Comment le rendement du portefeuille est-il calculé ?', a: 'C’est la moyenne des rendements attendus de chaque ligne, pondérée par son poids dans le portefeuille (montant de la ligne divisé par le total). Les frais et le niveau de risque sont pondérés de la même façon. Le rendement net de chaque ligne est (1 + rendement) × (1 − frais) − 1.' },
-    { q: 'Que fait le rééquilibrage ?', a: 'Pour chaque ligne, il compare le montant actuel au montant correspondant à l’allocation cible appliquée au total du portefeuille. Un résultat positif est un montant à acheter, un résultat négatif un montant à vendre. Les frais et impôts éventuels liés aux ventes ne sont pas pris en compte.' },
+    { q: 'Que fait le rééquilibrage ?', a: 'Pour chaque ligne, il compare le montant actuel au montant correspondant à sa part visée (votre « allocation cible ») appliquée au total du portefeuille. Un résultat positif est un montant à acheter, un résultat négatif un montant à vendre. Les frais et impôts éventuels liés aux ventes ne sont pas pris en compte.' },
     { q: 'Que signifie le niveau de risque moyen ?', a: 'C’est la moyenne pondérée des niveaux de risque de 1 à 7 que vous attribuez vous-même à chaque ligne. Il n’est pas calculé à partir de données de marché et ne mesure ni la volatilité ni le risque de perte réel.' },
     { q: 'La projection est-elle une prévision ?', a: 'Non. Elle applique chaque année le rendement net pondéré saisi, sans volatilité, avec une allocation maintenue constante. Les montants par défaut sont fictifs.' },
   ],
