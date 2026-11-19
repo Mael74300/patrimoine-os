@@ -25,7 +25,7 @@ export const INLINE_LINKS: InlineLink[] = [
   { phrase: 'guide Choisir son enveloppe', to: '/guides/choisir-son-enveloppe' },
   { phrase: 'guide sur la rentabilité locative', to: '/guides/rentabilite-locative' },
   { phrase: 'Inflation et pouvoir d’achat', to: '/simulateurs/inflation' },
-  { phrase: 'Rendement réel de mon placement', to: '/simulateurs/rendement-reel-de-mon-placement' },
+  { phrase: 'Rendement de mon placement', to: '/simulateurs/rendement-reel-de-mon-placement' },
   { phrase: 'Doubler son capital', to: '/simulateurs/interets-composes#doubler' },
 ];
 
