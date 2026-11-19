@@ -11,7 +11,7 @@ const DEFAULTS: State = {
   years: 20,
   lines: [
     { id: 'l1', label: 'ETF actions monde', amount: 12000, expectedReturn: 0.06, fees: 0.002, risk: 4, target: 0.5 },
-    { id: 'l2', label: 'Fonds euros', amount: 5000, expectedReturn: 0.025, fees: 0.006, risk: 1, target: 0.3 },
+    { id: 'l2', label: 'Fonds en euros', amount: 5000, expectedReturn: 0.025, fees: 0.006, risk: 1, target: 0.3 },
     { id: 'l3', label: 'Livret A', amount: 3000, expectedReturn: 0.017, fees: 0, risk: 1, target: 0.2 },
   ],
 };
@@ -36,16 +36,19 @@ export default function SimPortefeuille() {
     <>
       <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: 'Portefeuille' }]} />
       <PageHead eyebrow="Calculateur" title="Calculateur de portefeuille financier">
-        Saisissez ce que vous détenez : le calculateur en déduit le rendement moyen, les frais et le risque, puis indique quoi acheter ou vendre pour retrouver la répartition que vous visez (votre « allocation cible », par exemple 60 % / 40 %).
+        Saisissez vos placements : le calculateur en déduit le rendement moyen, les frais et le risque, puis dit quoi acheter ou vendre pour retrouver la répartition voulue.
       </PageHead>
 
       <h2>Ce que vous détenez</h2>
+      <p className="small muted" style={{ marginTop: 0 }}>
+        <strong>Rendement</strong> et <strong>frais</strong> : en % par an. <strong>Risque</strong> : de 1 (très prudent) à 7 (très risqué). <strong>Part visée</strong> : la part du total voulue pour chaque placement (100 % en tout).
+      </p>
       <div className="table-wrap line-wrap" tabIndex={0}>
         <table className="line-table">
           <thead>
             <tr>
-              <th>Support</th><th className="r">Montant (€)</th><th className="r">Rendement supposé (%)</th><th className="r">Frais (%)</th>
-              <th className="r">Risque (1 à 7)</th><th className="r">Cible (%)</th><th><span className="sr-only">Actions</span></th>
+              <th>Support</th><th className="r">Montant (€)</th><th className="r">Rendement par an (%)</th><th className="r">Frais par an (%)</th>
+              <th className="r">Risque (1 à 7)</th><th className="r">Part visée (%)</th><th><span className="sr-only">Actions</span></th>
             </tr>
           </thead>
           <tbody>
@@ -63,7 +66,7 @@ export default function SimPortefeuille() {
                   <td className="r" data-label="Rendement %">{num(+(l.expectedReturn * 100).toFixed(4), (n) => setLine(l.id, { expectedReturn: n / 100 }), 0.25, 'Rendement')}</td>
                   <td className="r" data-label="Frais %">{num(+(l.fees * 100).toFixed(4), (n) => setLine(l.id, { fees: Math.max(0, n / 100) }), 0.05, 'Frais')}</td>
                   <td className="r" data-label="Risque 1 à 7">{num(l.risk, (n) => setLine(l.id, { risk: Math.min(7, Math.max(1, n)) }), 1, 'Risque')}</td>
-                  <td className="r" data-label="Cible %">{num(+(l.target * 100).toFixed(4), (n) => setLine(l.id, { target: Math.max(0, n / 100) }), 5, 'Cible')}</td>
+                  <td className="r" data-label="Part visée %">{num(+(l.target * 100).toFixed(4), (n) => setLine(l.id, { target: Math.max(0, n / 100) }), 5, 'Part visée')}</td>
                   <td className="lt-del">
                     <button className="btn small secondary" aria-label={`Retirer ${l.label}`} onClick={() => setS((st) => ({ ...st, lines: st.lines.filter((x) => x.id !== l.id) }))}>×</button>
                   </td>
@@ -79,12 +82,9 @@ export default function SimPortefeuille() {
         </button>
         <button className="btn small secondary" onClick={() => setS(DEFAULTS)}>Réinitialiser</button>
       </div>
-      <p className="small muted" style={{ marginTop: 12 }}>
-        <strong>Cible (%)</strong> : la part que vous voulez donner à ce support (le total doit faire 100 %). Le risque se note de 1 (très prudent) à 7 (très risqué).
-      </p>
       {!targetsOk && (
         <p className="notice small" style={{ marginTop: 12 }}>
-          Vos allocations cibles totalisent {fmtPct(targetTotal)} au lieu de 100 % : les montants à ajouter ou à retirer ne peuvent pas être calculés.
+          Vos parts visées totalisent {fmtPct(targetTotal)} au lieu de 100 % : corrigez-les pour savoir quoi ajouter ou retirer.
         </p>
       )}
 
@@ -93,29 +93,29 @@ export default function SimPortefeuille() {
         <Kpi label="Valeur totale" value={fmtEur(sum.total)} />
         <Kpi label="Rendement supposé net de frais" value={fmtPct(sum.netReturn)} sub={`brut ${fmtPct(sum.grossReturn)}`} />
         <Kpi label="Frais annuels" value={fmtEur(sum.annualFeesEuro)} sub={`${fmtPct(sum.weightedFees)} en moyenne`} tone="neg" />
-        <Kpi label="Risque moyen pondéré" value={`${sum.weightedRisk.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} / 7`} sub="échelle saisie par vous" />
+        <Kpi label="Risque moyen" value={`${sum.weightedRisk.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} / 7`} sub="les gros montants comptent plus" />
       </div>
 
       <Takeaway>{portfolioTakeaway({ total: sum.total, netReturn: sum.netReturn, annualFeesEuro: sum.annualFeesEuro, topLabel: top?.label ?? '', topWeight: top?.weight ?? 0 })}</Takeaway>
 
-      <h2>Répartition : aujourd’hui et cible</h2>
+      <h2>Répartition : aujourd’hui et visée</h2>
       <div className="panel">
         <ul className="alloc-list">
           {s.lines.map((l, i) => {
             const w = sum.weights.find((x) => x.id === l.id)?.weight ?? 0;
             const m = moves[l.id] ?? 0;
-            const action = !targetsOk ? '' : Math.abs(m) < 1 ? 'À la cible' : m > 0 ? `Ajouter ${fmtEur(m)}` : `Retirer ${fmtEur(-m)}`;
+            const action = !targetsOk ? '' : Math.abs(m) < 1 ? 'Déjà atteint' : m > 0 ? `Ajouter ${fmtEur(m)}` : `Retirer ${fmtEur(-m)}`;
             return (
               <li key={l.id} className="alloc-row">
                 <div className="alloc-head">
                   <span className="alloc-name">{l.label}</span>
                   {action && <strong className={`alloc-action ${Math.abs(m) < 1 ? '' : m > 0 ? 'pos' : 'neg'}`}>{action}</strong>}
                 </div>
-                <div className="alloc-bar" role="img" aria-label={`${l.label} : ${fmtPct(w)} aujourd’hui, cible ${fmtPct(l.target)}`}>
+                <div className="alloc-bar" role="img" aria-label={`${l.label} : ${fmtPct(w)} aujourd’hui, part visée ${fmtPct(l.target)}`}>
                   <div className="alloc-fill" style={{ width: `${Math.min(100, w * 100)}%`, background: COLORS[i % COLORS.length] }} />
                   <div className="alloc-target" style={{ left: `${Math.min(100, l.target * 100)}%` }} />
                 </div>
-                <div className="alloc-nums small muted num" aria-hidden="true">{fmtPct(w)} aujourd’hui · cible {fmtPct(l.target)}{i === 0 ? ' (trait vertical)' : ''}</div>
+                <div className="alloc-nums small muted num" aria-hidden="true">{fmtPct(w)} aujourd’hui · visé {fmtPct(l.target)}{i === 0 ? ' (trait vertical)' : ''}</div>
               </li>
             );
           })}
