@@ -23,12 +23,12 @@ export default function SimRendement() {
 
   return (
     <>
-      <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: 'Rendement réel de mon placement' }]} />
-      <PageHead eyebrow="Simulateur" title="Rendement réel de mon placement : quel taux annuel ai-je obtenu ?">
-        À partir de ce que vous avez versé et de la valeur actuelle, calcule le rendement annuel équivalent (taux de rendement interne), en tenant compte de la date de chaque versement.
+      <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: 'Rendement de mon placement' }]} />
+      <PageHead eyebrow="Simulateur" title="Rendement de mon placement : quel taux annuel ai-je obtenu ?">
+        Indiquez ce que vous avez versé et ce que vaut votre placement aujourd’hui : vous obtenez le taux annuel moyen qu’il vous a rapporté.
       </PageHead>
       <SimNotice>
-        Calcul fondé uniquement sur les montants que vous saisissez, sans chiffre réglementaire ni prévision. Le résultat est un rendement passé, avant impôt sauf si la valeur saisie est déjà nette.
+        Calcul fondé uniquement sur les montants que vous saisissez, sans chiffre réglementaire ni prévision. Le résultat est un rendement passé, avant impôt (sauf si la valeur saisie est déjà nette) et avant inflation.
         Voir aussi les <Link to="/simulateurs/patrimoine">projections de patrimoine</Link> et l’<Link to="/simulateurs/inflation">inflation</Link>.
       </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
@@ -70,10 +70,15 @@ export default function SimRendement() {
                 ))}
               </ul>
               {r.annualized !== null && r.cumulative !== null && (
+                <>
                 <p className="pf-why">
                   <strong>Pourquoi deux taux ?</strong> {fmtPct(r.cumulative)} compare le gain au total versé, sur toute la durée.
-                  {' '}{fmtPct(r.annualized)} par an ramène ce résultat à une année, en tenant compte du temps passé placé par chaque versement : les premiers euros ont travaillé plus longtemps que les derniers.
+                  {' '}{fmtPct(r.annualized)} par an ramène ce résultat à une année, en tenant compte du fait que les premiers euros ont été placés plus longtemps que les derniers (on parle de taux de rendement interne, ou TRI).
                 </p>
+                <p className="pf-why">
+                  <strong>Et l’inflation ?</strong> Ce taux ne la retire pas : comparez-le à la hausse des prix de la même période pour obtenir votre <Link to="/guides/inflation-pouvoir-d-achat-epargne">rendement réel</Link>.
+                </p>
+                </>
               )}
             </>
           )}
