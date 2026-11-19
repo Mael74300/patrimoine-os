@@ -4,7 +4,7 @@ import { guideBySlug, guideGroups, guides, otherGuides } from '../data/guides';
 import { investmentBySlug } from '../data/investments';
 import { guideBlurb } from '../lib/guideBlurbs';
 import { simBlurb } from '../lib/simThemes';
-import { guideSimulators, guidesForGuide } from '../lib/relatedSims';
+import { guideComparatorLink, guideSimulators, guidesForGuide } from '../lib/relatedSims';
 import { interleave, splitNext } from '../lib/nextLinks';
 import { NextList, NextMore, type NextItem } from '../components/NextList';
 import { NetWorthCalculator } from '../components/NetWorthCalculator';
@@ -106,9 +106,9 @@ export function GuidePage() {
   /* Guide d'entrée « Types d'investissements » : la suite du parcours (guides suivants, comparateur) passe avant le simulateur (chantier 200). */
   const guideItems: NextItem[] = (guidesForGuide[g.slug] ?? []).filter((x) => guideBySlug[x])
     .map((x) => ({ kind: 'Guide', to: `/guides/${x}`, title: guideBySlug[x].title, blurb: guideBlurb(x) }));
-  const toolItems: NextItem[] = g.slug === 'types-investissements'
-    ? [{ kind: 'Outil', to: '/comparateur', title: 'Comparateur de placements', blurb: 'Trois placements côte à côte, à vos hypothèses.' }, ...simItems]
-    : simItems;
+  // Comparateur préréglé sur les placements du guide, avant les simulateurs (chantiers 200 et 201).
+  const comparator = guideComparatorLink(g.slug);
+  const toolItems: NextItem[] = comparator ? [{ kind: 'Outil', ...comparator }, ...simItems] : simItems;
   const leadItems = interleave(guideItems, toolItems);
   // « Autres guides » ne répète pas un guide déjà proposé en carte juste au-dessus.
   const others = otherGuides(g.slug, 3, guidesForGuide[g.slug] ?? []);

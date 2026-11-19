@@ -5,6 +5,8 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { SchemaEnveloppe } from './components/Illustrations';
 import { GuidePage } from './pages/Guides';
 import { guideBySlug } from './data/guides';
+import { investmentBySlug } from './data/investments';
+import { comparatorForGuide } from './lib/relatedSims';
 
 const renderGuide = (slug: string) => renderToStaticMarkup(
   createElement(MemoryRouter, { initialEntries: [`/guides/${slug}`] },
@@ -46,5 +48,30 @@ describe('guide Types d’investissements : « Pour aller plus loin » (chantier
     expect(liens).toEqual(['/guides/choisir-son-enveloppe', '/comparateur', '/simulateurs/portefeuille']);
     expect(suite).not.toContain('autres pages liées');
     expect(html.split('href="/guides/choisir-son-enveloppe"').length - 1).toBe(2); // lien dans le texte et carte, pas dans « Autres guides »
+  });
+});
+
+describe('guides Choisir son enveloppe et Fonctionnement du PEA : le comparateur préréglé en suite (chantier 201)', () => {
+  const suite = (slug: string) => {
+    const html = renderGuide(slug);
+    return html.slice(html.indexOf('id="rub-pour-aller-plus-loin"'), html.indexOf('id="rub-sources"'));
+  };
+  const liens = (html: string) => [...html.matchAll(/href="([^"]+)"/g)].map((m) => m[1].replace(/&amp;/g, '&'));
+
+  it('Choisir son enveloppe propose d’abord PEA, assurance-vie et PER côte à côte, puis l’impact des frais (la projection du comparateur remplace le simulateur de patrimoine)', () => {
+    expect(liens(suite('choisir-son-enveloppe'))).toEqual(['/comparateur?ids=pea,assurance-vie,per', '/simulateurs/frais']);
+  });
+  it('Fonctionnement du PEA propose le PEA face au compte-titres et à l’assurance-vie', () => {
+    expect(liens(suite('fonctionnement-pea'))[0]).toBe('/comparateur?ids=pea,compte-titres,assurance-vie');
+  });
+  it('chaque placement préréglé a sa fiche, et chaque guide parle des placements comparés', () => {
+    for (const [slug, c] of Object.entries(comparatorForGuide)) {
+      expect(guideBySlug[slug], slug).toBeDefined();
+      for (const id of c.ids ?? []) expect(investmentBySlug[id], id).toBeDefined();
+      expect((c.ids ?? []).length).toBeLessThanOrEqual(3);
+    }
+    const texte = (slug: string) => JSON.stringify(guideBySlug[slug]).toLowerCase();
+    ['pea', 'assurance-vie', 'per'].forEach((m) => expect(texte('choisir-son-enveloppe')).toContain(m));
+    expect(liens(suite('fonctionnement-pea'))).not.toContain('/encyclopedie/compte-titres'); // déjà dans le comparateur
   });
 });

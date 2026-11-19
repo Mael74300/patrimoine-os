@@ -214,7 +214,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
         ],
       },
     ],
-    related: ['pea', 'etf-monde', 'compte-titres'],
+    related: ['pea', 'etf-monde'],
     sources: [
       SP('PEA', 'F2385'),
       { label: 'impots.gouv.fr — Retraits du PEA', url: 'https://www.impots.gouv.fr/particulier/questions/jai-un-plan-depargne-en-actions-pea-les-retraits-sont-ils-imposables', official: true },
