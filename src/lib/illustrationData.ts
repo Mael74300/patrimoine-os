@@ -351,6 +351,14 @@ export const OBLIGATION_EXAMPLE = { amount: 1000, ratePct: 3, years: 5, sensitiv
 export const LOCATION_NUE_EXAMPLE = { price: 150000, monthlyRent: 750, allowancePct: 30, ceiling: 15000, marginalRatePct: 30, socialPct: 17.2 };
 
 /**
+ * Fiche Location meublée (LMNP) : exemple fictif, studio de 120 000 € loué 600 € par mois, un mois sans locataire par an,
+ * au micro-BIC (abattement de 50 % pour la location meublée de longue durée, recettes jusqu'à 83 600 € en 2026 :
+ * Service-Public F32744, vérifiée le 15 avril 2026, consultée le 2026-11-19), revenus imposés dans la tranche à 30 %
+ * (Service-Public F1419, consultée le 2026-11-19). Les prélèvements sociaux s'ajoutent ; leur taux n'est pas cité ici.
+ */
+export const LMNP_EXAMPLE = { price: 120000, monthlyRent: 600, months: 11, allowancePct: 50, marginalRatePct: 30 };
+
+/**
  * Fiche Racheter une entreprise : exemple fictif, une entreprise qui dégage 100 000 € de résultat par an, achetée 500 000 €
  * dont 400 000 € empruntés sur 7 ans à un taux fictif de 4 %, puis le même remboursement si le résultat baisse de 30 %.
  * Aucun chiffre réglementaire : tout est fictif, recalculé par `repriseDebtShare` (ficheExemples.test.ts).

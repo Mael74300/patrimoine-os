@@ -375,7 +375,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Loyers généralement plus élevés qu’en location nue', 'Fiscalité au réel souvent favorable'],
     cons: ['Plus-value de revente plus lourde au régime réel (amortissements réintégrés)', 'Bail plus court qu’en location vide (1 an, 9 mois pour un étudiant, contre 3 ans) : locataires qui changent plus souvent', 'Gestion plus lourde'],
     timeSkills: 'Élevé.',
-    example: 'Exemple fictif : studio meublé de 120 000 € loué 600 € par mois, avec un mois de vacance par an : 6 600 € de loyers encaissés. Au micro-BIC, l’abattement de 50 % retire 3 300 € : seuls 3 300 € s’ajoutent à vos autres revenus pour le calcul de l’impôt. Dans la tranche à 30 % : 990 € d’impôt sur le revenu (15 % des loyers), plus les prélèvements sociaux.',
+    example: 'Exemple fictif : studio meublé de 120 000 € loué 600 € par mois, avec un mois de vacance par an : 6 600 € de loyers encaissés. Au micro-BIC, l’abattement de 50 % retire 3 300 € : seuls 3 300 € s’ajoutent à vos autres revenus. Dans la tranche à 30 % : 990 € d’impôt sur le revenu (15 % des loyers), plus les prélèvements sociaux.',
     sources: [S.lmnpSp, S.videMeuble, S.pvMeuble, { label: 'Service-Public.fr — Barème de l’impôt sur le revenu (tranche à 30 %)', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F1419', official: true }, { label: 'La finance pour tous — Amortissement comptable (définition)', url: 'https://www.lafinancepourtous.com/outils/dictionnaire/amortissement-comptable/', official: true }],
     alternatives: ['location-nue', 'scpi'],
     tags: ['immobilier', 'revenus'],

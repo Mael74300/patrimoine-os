@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { fmtEur } from '../../lib/finance';
 import { pfuSplit, PFU_IR_PCT, PFU_PS_PCT, PFU_TOTAL_PCT } from '../../lib/calc/pfu';
 import { perDeductionBalance } from '../../lib/calc/per';
-import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
+import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
 import { LIVRETS } from '../../data/livrets';
 import { assuranceVieRetrait, bondCoupons, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
@@ -1376,29 +1376,52 @@ export function SchemaScpiBilan({ children }: { children: ReactNode }) {
 }
 
 /**
- * Schéma « Location nue : ce que le micro-foncier impose » (exemple fictif de la fiche, montants recalculés par
- * `microFoncierExample`). Abattement de 30 % jusqu'à 15 000 € de loyers par an (Service-Public F1991) ; tranche à 30 %
- * (Service-Public F1419) ; prélèvements sociaux de 17,2 % sur les revenus fonciers (Service-Public F2329) ; consultés le
- * 2026-11-14. Les longueurs des barres sont proportionnelles aux montants.
+ * Schéma « ce que le régime micro impose » (exemples fictifs des fiches Location nue et Location meublée, montants
+ * recalculés par `microFoncierExample`). Location nue : micro-foncier, abattement de 30 % jusqu'à 15 000 € de loyers par
+ * an (Service-Public F1991), prélèvements sociaux de 17,2 % sur les revenus fonciers (Service-Public F2329), consultés le
+ * 2026-11-14. Location meublée (constat du 2026-11-19 : l'exemple restait un paragraphe de six montants) : micro-BIC,
+ * abattement de 50 % (Service-Public F32744, consultée le 2026-11-19), prélèvements sociaux cités sans taux, comme dans
+ * la fiche. Tranche à 30 % : Service-Public F1419. Les longueurs des barres sont proportionnelles aux montants.
  */
-export function SchemaLocationNueBilan({ children }: { children: ReactNode }) {
-  const { monthlyRent, allowancePct, marginalRatePct, socialPct } = LOCATION_NUE_EXAMPLE;
-  const r = microFoncierExample(monthlyRent, allowancePct, marginalRatePct);
+const MICRO_BILAN = {
+  'location-nue': {
+    ...LOCATION_NUE_EXAMPLE,
+    months: 12,
+    id: 'lnb',
+    title: 'Location nue au micro-foncier : la part des loyers qui est imposée',
+    regime: 'Le micro-foncier',
+    social: `plus ${LOCATION_NUE_EXAMPLE.socialPct.toLocaleString('fr-FR')}\u00a0% de prélèvements sociaux`,
+  },
+  lmnp: {
+    ...LMNP_EXAMPLE,
+    id: 'lmb',
+    title: 'Location meublée au micro-BIC : la part des loyers qui est imposée',
+    regime: 'Le micro-BIC',
+    social: 'plus les prélèvements sociaux',
+  },
+} as const;
+
+export function SchemaMicroBilan({ kind, children }: { kind: keyof typeof MICRO_BILAN; children?: ReactNode }) {
+  const c = MICRO_BILAN[kind];
+  const { monthlyRent, months, allowancePct, marginalRatePct } = c;
+  const r = microFoncierExample(monthlyRent, allowancePct, marginalRatePct, months);
   const k = 338 / r.rents;
   const xa = 1 + r.allowance * k;
   const pct = (n: number) => `${n.toLocaleString('fr-FR')}\u00a0%`;
+  const monthsTxt = months === 12 ? `12 × ${fmtEur(monthlyRent)}` : `${months} mois loués × ${fmtEur(monthlyRent)}`;
+  const vacancy = months === 12 ? '' : `, loué ${months} mois sur 12`;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 340 186" role="img" aria-labelledby="ill-lnb-t ill-lnb-d" className="ill-svg">
-        <title id="ill-lnb-t">Location nue au micro-foncier : la part des loyers qui est imposée</title>
-        <desc id="ill-lnb-d">{`Exemple fictif : ${fmtEur(monthlyRent)} de loyer par mois, soit ${fmtEur(r.rents)} par an. Le micro-foncier retire d’office ${allowancePct} %, soit ${fmtEur(r.allowance)} : ${fmtEur(r.taxable)} s’ajoutent aux autres revenus. Dans la tranche à ${marginalRatePct} %, cela fait ${fmtEur(r.incomeTax)} d’impôt sur le revenu, ${pct(r.incomeTaxPctOfRents)} des loyers, plus ${socialPct.toLocaleString('fr-FR')} % de prélèvements sociaux.`}</desc>
-        <text x={0} y={16} className="ill-year" textAnchor="start">{`Loyers : ${fmtEur(r.rents)} par an (12 × ${fmtEur(monthlyRent)})`}</text>
+      <svg viewBox="0 0 340 186" role="img" aria-labelledby={`ill-${c.id}-t ill-${c.id}-d`} className="ill-svg">
+        <title id={`ill-${c.id}-t`}>{c.title}</title>
+        <desc id={`ill-${c.id}-d`}>{`Exemple fictif : ${fmtEur(monthlyRent)} de loyer par mois${vacancy}, soit ${fmtEur(r.rents)} par an. ${c.regime} retire d’office ${allowancePct} %, soit ${fmtEur(r.allowance)} : ${fmtEur(r.taxable)} s’ajoutent aux autres revenus. Dans la tranche à ${marginalRatePct} %, cela fait ${fmtEur(r.incomeTax)} d’impôt sur le revenu, ${pct(r.incomeTaxPctOfRents)} des loyers, ${c.social}.`}</desc>
+        <text x={0} y={16} className="ill-year" textAnchor="start">{`Loyers : ${fmtEur(r.rents)} par an (${monthsTxt})`}</text>
         <rect x={1} y={26} width={r.allowance * k - 3} height={26} rx={4} fill="var(--surface)" stroke="var(--ink-3)" strokeWidth={1.5} strokeDasharray="4 3" />
         <text x={(1 + xa - 3) / 2} y={44} className="ill-in" textAnchor="middle">{fmtEur(r.allowance)}</text>
         <rect x={xa} y={26} width={339 - xa} height={26} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
         <text x={(xa + 339) / 2} y={44} className="ill-in" textAnchor="middle">{fmtEur(r.taxable)}</text>
         <text x={1} y={70} className="ill-sub" textAnchor="start">{`${pct(allowancePct)} retirés`}</text>
-        <text x={xa} y={70} className="ill-sub" textAnchor="start">ajoutés à vos autres revenus</text>
+        <text x={xa} y={70} className="ill-sub" textAnchor="start">{xa > 140 ? 'ajoutés à vos revenus' : 'ajoutés à vos autres revenus'}</text>
 
         <text x={0} y={104} className="ill-year" textAnchor="start">{`Impôt dans la tranche à ${pct(marginalRatePct)}`}</text>
         <rect x={xa} y={114} width={r.incomeTax * k} height={26} rx={4} fill="var(--danger)" />
@@ -1406,7 +1429,7 @@ export function SchemaLocationNueBilan({ children }: { children: ReactNode }) {
         <text x={xa + r.incomeTax * k + 8} y={132} className="ill-sub" textAnchor="start">{`sur ces ${fmtEur(r.taxable)}`}</text>
 
         <text x={0} y={166} className="ill-total" textAnchor="start" style={{ fill: 'var(--danger)' }}>{`Impôt : ${fmtEur(r.incomeTax)}, soit ${pct(r.incomeTaxPctOfRents)} des loyers`}</text>
-        <text x={0} y={184} className="ill-sub" textAnchor="start">{`plus ${pct(socialPct)} de prélèvements sociaux`}</text>
+        <text x={0} y={184} className="ill-sub" textAnchor="start">{c.social}</text>
       </svg>
       <figcaption>{children}</figcaption>
     </figure>
