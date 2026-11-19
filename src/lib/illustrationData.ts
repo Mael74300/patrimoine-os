@@ -377,3 +377,12 @@ export const ETF_EXAMPLE = { monthly: 200, ratePct: 6, years: 20, step: 5, dropP
  * rubrique Fiscalité de la fiche (vérifiée le 14 novembre 2026). Recalculé par `assuranceVieRetrait`.
  */
 export const ASSURANCE_VIE_EXAMPLE = { paid: 7000, value: 10000, allowance: 4600, socialPct: 17.2 };
+
+/**
+ * Fiches Compte à terme et PEL : exemples fictifs sur un an, 10 000 € comparés au Livret A (taux pris dans `LIVRETS`).
+ * Compte à terme : intérêts au prélèvement forfaitaire unique de 31,4 % (Service-Public F2329). PEL ouvert en 2026 :
+ * 2,00 %, intérêts au prélèvement forfaitaire unique de 30 % (rubrique Fiscalité de la fiche). Mêmes valeurs que le
+ * texte des fiches, recalculées par `src/data/ficheExemples.test.ts`.
+ */
+export const TERM_DEPOSIT_EXAMPLE = { amount: 10000, grossPct: 3, pfuPct: PFU_TOTAL_PCT };
+export const PEL_EXAMPLE = { amount: 10000, ratePct: 2, pfuPct: 30 };
