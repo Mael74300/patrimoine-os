@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { feeImpact, feeSplit, fmtEur, fmtPct, type FeeLevelResult } from '../lib/finance';
+import { feeImpact, feeSplit, fmtEur, fmtPart, fmtPct, type FeeLevelResult } from '../lib/finance';
 import { feesTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice, Fold } from '../components/ui';
 
@@ -25,7 +25,7 @@ function FeeBar({ label, r, scale, reference }: { label: string; r: FeeLevelResu
       <p className="fb-sub">
         {reference
           ? `soit ${fmtEur(r.realValue)} d'aujourd'hui`
-          : <>soit {fmtEur(r.realValue)} d'aujourd'hui · <strong>frais : {fmtEur(r.cost)}</strong>, {fmtPct(r.shareOfGains)} des gains absorbés</>}
+          : <>soit {fmtEur(r.realValue)} d'aujourd'hui · <strong>frais : {fmtEur(r.cost)}</strong> ({fmtPart(r.shareOfGains)} des gains)</>}
       </p>
     </li>
   );
@@ -36,7 +36,6 @@ export default function SimFrais() {
   const levels = [s.feesA, s.feesB, s.feesC];
   const res = feeImpact(s, levels);
   const base = feeImpact(s, [0])[0];
-  const worst = res[2];
   const byFees = [...res].sort((a, b) => a.fees - b.fees);
   const lowest = byFees[0];
   const highest = byFees[byFees.length - 1];
@@ -81,9 +80,9 @@ export default function SimFrais() {
         </form>
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
-            <Kpi label="Capital sans aucun frais" value={fmtEur(base.finalValue)} sub={`après ${s.years}\u00a0ans (référence)`} />
-            <Kpi label={`Coût des frais à ${fmtPct(worst.fees)}`} value={fmtEur(worst.cost)} sub={`${fmtPct(worst.shareOfGains)} des gains absorbés`} tone={worst.cost > 0 ? 'neg' : undefined} />
-            <Kpi label={`Capital avec ${fmtPct(res[0].fees)} de frais`} value={fmtEur(res[0].finalValue)} sub={`soit ${fmtEur(res[0].realValue)} d'aujourd'hui`} />
+            <Kpi label={`Capital avec ${fmtPct(lowest.fees)} de frais`} value={fmtEur(lowest.finalValue)} sub={`soit ${fmtEur(lowest.realValue)} d'aujourd'hui`} />
+            <Kpi label={`Capital avec ${fmtPct(highest.fees)} de frais`} value={fmtEur(highest.finalValue)} sub={`soit ${fmtEur(highest.realValue)} d'aujourd'hui`} />
+            <Kpi label="Écart dû aux frais" value={fmtEur(lowest.finalValue - highest.finalValue)} sub={`${fmtPct(highest.fees)} au lieu de ${fmtPct(lowest.fees)} par an`} tone={lowest.finalValue - highest.finalValue > 0.5 ? 'neg' : undefined} />
           </div>
           <Takeaway>{feesTakeaway({ years: s.years, lowest: lowest, highest: highest, noFees: base.finalValue })}</Takeaway>
           <h2>Ce que les frais prennent sur vos gains</h2>

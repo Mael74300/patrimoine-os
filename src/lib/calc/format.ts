@@ -12,11 +12,14 @@ const typo = (s: string) => nbsp(s).replace(/^-/, MINUS);
 const eur = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
 const eur2 = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const pct = new Intl.NumberFormat('fr-FR', { style: 'percent', maximumFractionDigits: 2 });
+const pct1 = new Intl.NumberFormat('fr-FR', { style: 'percent', maximumFractionDigits: 1 });
 const n1 = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 1 });
 
 export const fmtEur = (n: number) => (Number.isFinite(n) ? typo(eur.format(Math.abs(n) < 0.5 ? 0 : n)) : '—');
 export const fmtEur2 = (n: number) => (Number.isFinite(n) ? typo(eur2.format(n)) : '—');
 export const fmtPct = (n: number) => (Number.isFinite(n) ? typo(pct.format(n)) : '—');
+/** Part arrondie au dixième (« 47,9 % » plutôt que « 47,88 % ») : pour une proportion lue d'un coup d'œil, pas pour un taux saisi. */
+export const fmtPart = (n: number) => (Number.isFinite(n) ? typo(pct1.format(n)) : '—');
 export const fmtNum = (n: number) => (Number.isFinite(n) ? typo(n1.format(n)) : '—');
 /**
  * Écart entre deux taux, en points de pourcentage : 3,71 % − 3 % = « 0,71 point » (et non « 0,71 % »,

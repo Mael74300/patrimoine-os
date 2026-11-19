@@ -395,10 +395,15 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     const [a, b, c] = feeImpact(inp, [0.002, 0.01, 0.02]);
     const base = feeImpact(inp, [0])[0];
     const t = digits(feesTakeaway({ years: 25, lowest: a, highest: c, noFees: base.finalValue }));
-    expect(t).toContain(eur(a.finalValue) + '€');
-    expect(t).toContain(eur(c.finalValue) + '€');
     expect(t).toContain(eur(a.finalValue - c.finalValue) + '€');
     expect(t).toContain(eur(c.cost) + '€');
+    expect(t).toContain(eur(base.finalValue) + '€');
+    // Part des gains arrondie au dixième (47,9 % et non 47,88 %), avec ce que « gains » veut dire.
+    const brut = feesTakeaway({ years: 25, lowest: a, highest: c, noFees: base.finalValue }).replace(/[\u00a0\u202f]/g, ' ');
+    expect(brut).toContain((Math.round(c.shareOfGains * 1000) / 10).toLocaleString('fr-FR') + ' % des gains (ce que le placement rapporte en plus de vos versements)');
+    expect(brut).not.toMatch(/\d,\d\d %/);
+    // L'écart entre deux niveaux et le coût face au placement sans frais sont dans deux phrases distinctes.
+    expect(digits(brut.split('. ')[0])).not.toContain(eur(c.cost));
     expect(b.finalValue).toBeGreaterThan(c.finalValue);
     expect(feesTakeaway({ years: 25, lowest: a, highest: a, noFees: base.finalValue })).toBe('');
   });

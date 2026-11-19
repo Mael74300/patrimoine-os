@@ -199,7 +199,7 @@ export const simFaq: Record<string, FaqItem[]> = {
   ],
   frais: [
     { q: 'Pourquoi une petite différence de frais pèse-t-elle autant à long terme ?', a: 'Les frais annuels sont prélevés chaque année sur le capital, qui ne produit plus de gains sur la part prélevée. Cet effet se cumule avec la durée, d’où un écart de capital final bien supérieur à la différence de frais.' },
-    { q: 'Que signifie la part des gains absorbée par les frais ?', a: 'C’est le rapport entre le coût des frais (capital final sans frais moins capital final avec frais) et les gains obtenus sans frais, à rendement brut et versements identiques.' },
+    { q: 'Que veut dire le pourcentage « des gains » sous chaque barre ?', a: 'Les gains, c’est ce que le placement aurait rapporté sans aucun frais, en plus de vos versements. Le pourcentage indique la part de ces gains que les frais vous coûtent. Par exemple, si le placement avait rapporté 100\u00a0000\u00a0€ sans frais et que les frais vous coûtent 30\u00a0000\u00a0€, ils prennent 30\u00a0% des gains. Le calcul se fait à rendement brut et versements identiques.' },
     { q: 'Quels frais faut-il saisir ?', a: 'Le total des frais annuels courants de votre placement, en pourcentage de l’encours. Le simulateur compare trois niveaux, à rendement brut et versements identiques ; les valeurs par défaut sont fictives.' },
   ],
   credit: [

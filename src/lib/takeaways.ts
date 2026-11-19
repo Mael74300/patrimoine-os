@@ -1,4 +1,4 @@
-import { fmtAns, fmtDuree, fmtEur, fmtMonths, fmtNum, fmtPct } from './finance';
+import { fmtAns, fmtDuree, fmtEur, fmtMonths, fmtNum, fmtPart, fmtPct } from './finance';
 
 /**
  * Phrases « Concrètement » affichées sous les résultats des simulateurs.
@@ -307,13 +307,19 @@ export function debtsTakeaway(p: { extra: number; minimum: { months: number | nu
   return `${ajout}${duree}${vs}.${boule}`;
 }
 
-/** Impact des frais : écart de capital entre le niveau de frais le plus bas et le plus élevé saisis. */
+/**
+ * Impact des frais : d'abord l'écart entre le niveau de frais le plus bas et le plus élevé (la comparaison
+ * que fait le visiteur), puis, dans une phrase à part, le coût total par rapport à un placement sans frais,
+ * avec ce que « les gains » veut dire. Deux montants différents ne sont plus dits l'un derrière l'autre.
+ */
 export function feesTakeaway(p: { years: number; lowest: { fees: number; finalValue: number }; highest: { fees: number; finalValue: number; cost: number; shareOfGains: number }; noFees: number }): string {
   const { lowest: lo, highest: hi } = p;
   const ecart = lo.finalValue - hi.finalValue;
   if (!(p.years > 0) || !(ecart > 0.5) || !(p.noFees > 0)) return '';
-  const part = hi.shareOfGains > 0 ? ` soit ${fmtPct(hi.shareOfGains)} des gains que vous auriez eus sans frais` : '';
-  return `Sur ${fmtAns(p.years)}, avec ${fmtPct(lo.fees)} de frais par an, votre capital atteint ${fmtEur(lo.finalValue)} ; avec ${fmtPct(hi.fees)}, il n'atteint que ${fmtEur(hi.finalValue)}. Cet écart de ${fmtEur(ecart)} vient uniquement des frais : à ${fmtPct(hi.fees)}, ils vous coûtent ${fmtEur(hi.cost)} au total,${part}.`;
+  const part = hi.shareOfGains > 0
+    ? `, soit ${fmtPart(hi.shareOfGains)} des gains (ce que le placement rapporte en plus de vos versements)`
+    : '';
+  return `Sur ${fmtAns(p.years)}, ${fmtPct(hi.fees)} de frais par an au lieu de ${fmtPct(lo.fees)} vous laissent ${fmtEur(ecart)} de moins. Face à un placement sans aucun frais (${fmtEur(p.noFees)}), les frais à ${fmtPct(hi.fees)} coûtent ${fmtEur(hi.cost)}${part}.`;
 }
 
 /** Patrimoine à long terme : versements, capital simulé, puis valeur après impôt en euros d'aujourd'hui. */
