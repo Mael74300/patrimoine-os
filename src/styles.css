@@ -323,7 +323,16 @@ details.fold > p { margin-left: 14px; margin-right: 14px; }
 @media (min-width: 701px) { .prose ul.next-list, .sim-next ul.next-list { grid-template-columns: 1fr 1fr; } }
 /* Nombre impair de cartes sur deux colonnes : la dernière prend toute la largeur au lieu de rester seule à gauche (chantier 182). */
 @media (min-width: 701px) { .next-list > li:last-child:nth-child(odd):not(:first-child) { grid-column: 1 / -1; } }
-.source-list { padding-left: 1.1rem; }
+/* Sources : une ligne par page consultée, l'organisme en petit au-dessus du titre (à gauche sur grand écran), la date à la suite. */
+.prose ul.source-list, ul.source-list { list-style: none; padding: 0; margin: 0 0 1rem; border-top: 1px solid var(--line); }
+.source-list li { margin: 0; padding: 5px 0 6px; border-bottom: 1px solid var(--line); line-height: 1.35; }
+.source-pub { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); }
+.source-list a:hover .source-pub { color: var(--accent); }
+.source-title { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.source-date { font-size: 0.8rem; color: var(--ink-3); }
+.source-list li > .source-date { display: block; }
+/* Grand écran : l'organisme en colonne à gauche, le titre à droite, comme un petit tableau. */
+@media (min-width: 701px) { ul.source-list a { display: grid; grid-template-columns: 9.5rem 1fr; column-gap: 12px; align-items: baseline; } .source-main { grid-column: 2; } .source-list li { padding: 2px 0; } }
 
 /* ---------- Catégories */
 .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
@@ -595,9 +604,8 @@ details.fold > section { margin: 0 14px 10px; }
 
 /* Cibles tactiles : liens isolés d'au moins 24 px de haut (WCAG 2.2, 2.5.8) ; les liens dans une phrase restent en ligne. */
 .link-block a, .breadcrumb a { display: inline-block; padding: 4px 0; }
-/* Sources : lien en ligne (la puce reste devant la première ligne quand le titre passe à la ligne) ; le padding vertical agrandit quand même la zone touchable. */
-.source-list a { display: inline; padding: 4px 0; }
-.source-list li { margin-bottom: 2px; }
+/* Sources : le lien occupe tout le bloc organisme + titre, cible tactile largement au-dessus de 24 px. */
+.source-list a { display: block; padding: 2px 0; text-decoration: none; }
 @media (max-width: 899px) {
   .link-block a { padding: 8px 0; }
 }
