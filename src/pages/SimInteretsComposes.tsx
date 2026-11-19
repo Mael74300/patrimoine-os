@@ -486,13 +486,17 @@ export default function SimInteretsComposes() {
   return (
     <>
       <Crumbs items={[{ to: '/simulateurs', label: 'Simulateurs' }, { label: 'Intérêts composés' }]} />
-      <PageHead eyebrow="Simulateur" title="Intérêts composés : combien placer, en quel temps, à quel rendement ?">
-        Huit calculs autour d’une même idée : l’argent placé rapporte des intérêts, qui rapportent eux-mêmes des intérêts. Choisissez votre question dans les onglets.
+      <PageHead eyebrow="Simulateur" title="Simulateur d’intérêts composés">
+        Huit calculs autour d’une idée : les intérêts gagnés rapportent à leur tour des intérêts.
       </PageHead>
       <SimNotice>
         Calcul fondé uniquement sur les hypothèses que vous saisissez, sans chiffre réglementaire ni prévision. Le rendement est supposé constant, avant frais, impôts et inflation, et n’est jamais garanti.
-        Voir aussi les <Link to="/simulateurs/patrimoine">projections de patrimoine</Link>, l’<Link to="/simulateurs/inflation">effet de l’inflation</Link> et le <Link to="/simulateurs/objectif-epargne">versement à prévoir pour un objectif</Link>.
+        Voir aussi l’<Link to="/simulateurs/inflation">effet de l’inflation</Link> et le <Link to="/simulateurs/objectif-epargne">versement à prévoir pour un objectif</Link>.
       </SimNotice>
+      <div className="panel cta-band slim">
+        <p><strong>Combien aurez-vous dans 20 ans&nbsp;?</strong> Ce calcul se fait dans le simulateur de patrimoine.</p>
+        <Link className="btn small secondary" to="/simulateurs/patrimoine">Projeter mon épargne →</Link>
+      </div>
       <Tabs
         grid
         label="Calcul à choisir"

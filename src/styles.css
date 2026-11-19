@@ -1587,12 +1587,16 @@ details.fold.next-more > summary { padding: 10px 14px; }
 .don-calc-kpis { margin: 4px 0 12px; }
 .don-calc-note { margin: 10px 0 0; }
 
-/* Page Entrepreneuriat : l’action principale (chiffrer son projet) en bandeau, bouton bien visible. */
-.path-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin: 24px 0 0; border-left: 4px solid var(--accent); }
-.path-cta p { flex: 1 1 320px; margin: 0; }
-.path-cta .btn { flex: 0 0 auto; }
-@media (max-width: 520px) { .path-cta .btn { width: 100%; justify-content: center; } }
-@media print { .path-cta .btn { display: none; } }
+/* Bandeau d’action : une phrase et un bouton bien visible (Entrepreneuriat : chiffrer son projet ; Intérêts composés : renvoi vers la projection d’épargne). */
+.cta-band { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin: 24px 0 0; border-left: 4px solid var(--accent); }
+.cta-band p { flex: 1 1 320px; margin: 0; }
+.cta-band .btn { flex: 0 0 auto; }
+@media (max-width: 520px) { .cta-band .btn { width: 100%; justify-content: center; } }
+@media print { .cta-band .btn { display: none; } }
+/* Variante compacte : simple aiguillage vers un autre simulateur, au-dessus des onglets. */
+.cta-band.slim { margin-top: 16px; padding: 12px 16px; gap: 8px 20px; }
+.cta-band.slim p { flex-basis: 260px; font-size: 0.9375rem; line-height: 1.45; }
+@media (max-width: 520px) { .cta-band.slim .btn { width: auto; } }
 .path-prep .path-warn { margin: 10px 0 0; padding-top: 8px; border-top: 1px solid var(--line); color: var(--ink-2); }
 /* Renégociation : frise « mois après mois » (frais remboursés jusqu'au point mort, puis gain). */
 .rt { margin: 14px -16px 0; padding: 12px 16px 10px; border-top: 1px solid var(--line); }
