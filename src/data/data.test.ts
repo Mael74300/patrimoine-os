@@ -7,7 +7,7 @@ import { simFaq } from './simFaq';
 import { investmentBySlug, investments } from './investments';
 import { splitSentences } from '../components/ui';
 import { loanPayment, projectGrowth } from '../lib/finance';
-import { DONATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, loanSlices } from '../lib/illustrationData';
+import { DONATION_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE } from '../lib/illustrationData';
 
 describe('intégrité des données éditoriales', () => {
   it('slugs uniques', () => {
@@ -61,7 +61,7 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
     const m = loanPayment(principal, annualRate, years);
     const ex = investmentBySlug['credit-immobilier'].example.replace(/\u00a0/g, ' ');
     const eur = (v: number, step: number) => `${(Math.round(v / step) * step).toLocaleString('fr-FR').replace(/\u202f|\u00a0/g, ' ')} €`;
-    for (const t of [eur(price, 1), eur(down, 1), eur(principal, 1), '3,5 %', `${years} ans`, eur(m, 1), eur(m * years * 12 - principal, 10), eur(loanSlices().slices[0].interest, 1)]) expect(ex).toContain(t);
+    for (const t of [eur(price, 1), eur(down, 1), eur(principal, 1), '3,5 %', `${years} ans`, eur(m, 1), eur(m * years * 12 - principal, 10)]) expect(ex).toContain(t);
     expect(ex).toContain('Exemple fictif');
   });
   it('Crédit immobilier : sources en rapport avec le crédit (Service-Public F22152), plus de page « Épargne réglementée »', () => {

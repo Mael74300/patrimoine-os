@@ -204,7 +204,7 @@ describe('fiche Investir à crédit : l’exemple chiffré reprend le schéma du
   const { interest, down, bars } = leverageBars();
   const first = loan.schedule[0]!;
 
-  it('montants recalculés : 6 199 € d’intérêts, 3 801 € restants, 199 € manquants, 6 328 € de capital', () => {
+  it('montants recalculés (schéma et texte) : 6 199 € d’intérêts, 3 801 € restants, 199 € manquants, 6 328 € de capital', () => {
     expect(Math.round(interest)).toBe(6199);
     expect(bars.map((b) => Math.round(b.left))).toEqual([3801, 0]);
     expect(bars.map((b) => Math.round(b.shortfall))).toEqual([0, 199]);
@@ -212,9 +212,11 @@ describe('fiche Investir à crédit : l’exemple chiffré reprend le schéma du
     expect(Math.round(loan.monthlyPayment)).toBe(1044);
     expect(Math.round((loan.monthlyPayment * years * 12 - principal) / 10) * 10).toBe(70540);
   });
-  it('le texte de la fiche cite les mêmes montants que le schéma et reste marqué fictif', () => {
+  it('le texte de la fiche reprend le cas du schéma sans répéter ses montants et reste marqué fictif', () => {
     expect(ex).toMatch(/^Exemple fictif, celui du schéma/);
-    for (const v of [LEVERAGE_EXAMPLE.price, down, principal, 1044, 6199, ...bars.map((b) => b.income), 3801, 199, 6328, 70540]) expect(ex).toContain(eur(v));
+    for (const v of [LEVERAGE_EXAMPLE.price, down, principal, 1044, ...bars.map((b) => b.income), 70540]) expect(ex).toContain(eur(v));
+    // Intérêts, reste et manque de la première année sont lus sur le schéma, pas répétés dans le texte.
+    for (const v of [6199, 3801, 199]) expect(ex).not.toContain(eur(v));
     expect(ex).toContain(`${norm((annualRate * 100).toLocaleString('fr-FR'))} %`);
     expect(ex).toContain('avant impôt');
     expect(ex).not.toContain('6 200');
@@ -223,9 +225,9 @@ describe('fiche Investir à crédit : l’exemple chiffré reprend le schéma du
     const yearly = loan.monthlyPayment * 12;
     expect(Math.round(first.principalPaid / 12)).toBe(527);
     expect(bars.map((b) => Math.round((yearly - b.income) / 12))).toEqual([211, 544]);
-    expect(ex).toContain(`capital remboursé (environ ${eur(527)} par mois)`);
-    expect(ex).toContain(`vous ajoutez environ ${eur(211)} par mois, avant impôt`);
-    expect(ex).toContain(`environ ${eur(544)} par mois en tout`);
+    expect(ex).toContain(`environ ${eur(527)} de chaque mensualité remboursent le capital`);
+    expect(ex).toContain(`vous ajoutez environ ${eur(211)} par mois de votre poche, avant impôt`);
+    expect(ex).toContain(`${eur(bars[1]!.income)}, environ ${eur(544)}`);
     expect(ex).toContain('n’est pas perdu');
   });
   it('les hypothèses affichées dans « Détail du suivi » citent le même taux que l’exemple', () => {
