@@ -204,7 +204,7 @@ export function GuidePage() {
             <NextMore items={rest} />
           </>);
         })()}
-        <h2 id="rub-sources">Sources</h2>
+        <h2 id="rub-sources">{g.sources.every((x) => x.official) ? 'Sources officielles' : 'Sources'}</h2>
         <Sources list={g.sources} />
         {g.slug !== 'par-ou-commencer' && (<>
           <MobileFold label="Autres guides" hint={others.map((o) => o.title).join(' · ')}>

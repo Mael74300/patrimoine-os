@@ -17,6 +17,7 @@ import { readingForSimulator, type ReadingLink } from '../lib/relatedSims';
 import { formatFr, liveFormatFr, parseFr, stepValue } from '../lib/frNumber';
 import { fmtDate } from '../lib/dates';
 import { sentenceLead } from '../lib/sentenceLead';
+import { splitSourceLabel } from '../lib/sourceLabel';
 import { checkedParts, leadOfSegments, splitSentences } from '../lib/ficheText';
 import { buildExport, mergeSims, parseExport } from '../lib/simExport';
 import { dotsClass, effortParts, meterWord, type MeterKind } from '../lib/meters';
@@ -356,16 +357,26 @@ export function CheckedText({ c, split = false, path, segs }: { c: Checked; spli
   );
 }
 
+/** Sources d'une page : l'organisme en petit au-dessus (à gauche sur grand écran), le titre en lien, la date à la suite. Plus de « · source institutionnelle » répété à chaque ligne : l'organisme nommé suffit (titre « Sources officielles » des guides). */
 export function Sources({ list }: { list: Source[] }) {
+  const allOfficial = list.every((s) => s.official);
   return (
-    <ul className="source-list">
-      {list.map((s) => (
-        <li key={s.url + s.label}>
-          <a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a>
-          {s.official && <span className="muted small"> · source institutionnelle</span>}
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul className="source-list">
+        {list.map((s) => {
+          const { pub, title, date } = splitSourceLabel(s.label);
+          return (
+            <li key={s.url + s.label}>
+              <a href={s.url} target="_blank" rel="noopener noreferrer">
+                {title && <span className="source-pub">{pub}<span className="sr-only"> — </span></span>}
+                <span className="source-main"><span className="source-title">{title ?? pub}</span>{date && <span className="source-date"> · {date}</span>}</span>
+              </a>
+              {s.official && !allOfficial && <span className="source-date">source institutionnelle</span>}
+            </li>
+          );
+        })}
+      </ul>
+    </>
   );
 }
 
