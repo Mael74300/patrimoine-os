@@ -503,7 +503,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Combien épargner par mois pour atteindre un objectif ?',
     summary: 'Apport, voyage, travaux : comment calculer le versement mensuel selon le montant visé, la durée et le taux, et ce que changent les intérêts.',
     readingMinutes: 3,
-    updatedOn: '2026-10-27',
+    updatedOn: '2026-11-19',
     sections: [
       {
         heading: 'Le calcul de base',
@@ -521,7 +521,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       {
         heading: 'Où placer l’argent selon l’échéance',
         body: [
-          'Pour un objectif à moins de 3 à 5 ans, privilégiez des supports sans risque de perte en capital (vous ne pouvez pas y perdre ce que vous avez versé) et disponibles : les livrets réglementés, dans la limite de leurs plafonds (voir la fiche Livret A). Un support investi en actions peut perdre de la valeur au moment où vous avez besoin de la somme. Au-delà d’une dizaine d’années, les autres enveloppes présentées dans les guides deviennent envisageables, avec un risque à accepter.',
+          'Plus l’échéance est proche, moins vous pouvez accepter de risque : un placement en actions peut baisser juste quand vous avez besoin de la somme. Pour un projet à moins de 3 ans, restez sur des supports sans risque de perte en capital et disponibles, comme les livrets réglementés (voir la fiche Livret A).',
         ],
       },
       {
@@ -532,11 +532,14 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       },
     ],
     related: ['livret-a', 'lep'],
-    sources: [SP('Livret A', 'F2365'), BDF],
+    sources: [
+      SP('Livret A', 'F2365'),
+      { label: 'La finance pour tous — Horizon, objectifs, tempérament', url: 'https://www.lafinancepourtous.com/pratique/placements/les-questions-clefs-avant-d-investir/horizon-objectifs-temperament/', official: true },
+      { label: 'Banque de France — Les principaux placements et leurs risques', url: 'https://www.banque-france.fr/system/files/2024-10/principaux_placements_et_risques.pdf', official: true },
+    ],
     faq: [
       { q: 'Comment calculer combien épargner par mois pour un objectif ?', a: 'Sans intérêts, divisez l’objectif par le nombre de mois. Exemple fictif : 20 000 € en 5 ans donnent environ 333 € par mois. Avec des intérêts, le versement est un peu plus bas ; le simulateur le calcule.' },
       { q: 'Les intérêts changent-ils beaucoup le montant à épargner ?', a: 'Sur quelques années et avec un placement sans risque, peu : dans l’exemple fictif de 20 000 € en 5 ans à 1,7 %, les intérêts représentent environ 4 % de l’objectif, avant impôt.' },
-      { q: 'Où placer l’argent d’un projet à court terme ?', a: 'Sur des supports disponibles et sans risque de perte en capital, comme les livrets réglementés, dans la limite de leurs plafonds.' },
     ],
     cta: { to: '/simulateurs/objectif-epargne', label: 'Calculer mon versement mensuel' },
   },

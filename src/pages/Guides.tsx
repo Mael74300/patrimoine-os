@@ -13,7 +13,7 @@ import { ENVELOPE_CARDS, EnvelopeCards } from '../components/EnvelopeCards';
 import { LivretsTable } from '../components/LivretsTable';
 import { RiskMap } from '../components/RiskMap';
 import { GuideGroupIcon } from '../components/Icons';
-import { SchemaEnveloppe, SchemaHorlogesEnveloppes, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaLeviers, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaFrais, SchemaFraisCumul, SchemaFamillesFrais, SchemaAdditionFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz, SchemaCashflow } from '../components/schemas/guides';
+import { SchemaEnveloppe, SchemaHorlogesEnveloppes, SchemaRendement, SchemaEscalier, SchemaDiversification, SchemaDiversificationPrincipe, SchemaInflation, SchemaInterets, SchemaMensualite, SchemaEndettement, SchemaLeviers, SchemaPatrimoineNet, SchemaRembourser, SchemaImmoEtf, SchemaRegle72, SchemaEpargneMois, SchemaHorizons, SchemaFrais, SchemaFraisCumul, SchemaFamillesFrais, SchemaAdditionFrais, SchemaPetitsVersements, SchemaPrecaution, SchemaPtz, SchemaCashflow } from '../components/schemas/guides';
 import { SchemaPea, SchemaQuinzaines, SchemaLevier } from '../components/schemas/communs';
 import { annotateJargon, splitLead, type JargonSegment } from '../lib/jargon';
 import { JargonText } from '../components/Jargon';
@@ -160,6 +160,7 @@ export function GuidePage() {
             {g.slug === 'immobilier-ou-etf' && s.heading.startsWith('La méthode') && <SchemaImmoEtf />}
             {g.slug === 'regle-de-72-doubler-son-capital' && s.heading.startsWith('Jusqu’où') && <SchemaRegle72 />}
             {g.slug === 'combien-epargner-par-mois-objectif' && s.heading.startsWith('La durée') && <SchemaEpargneMois />}
+            {g.slug === 'combien-epargner-par-mois-objectif' && s.heading.startsWith('Où placer') && <SchemaHorizons />}
             {g.slug === 'epargne-limitee' && s.heading.startsWith('Commencer petit') && <SchemaPetitsVersements />}
             {g.slug === 'combien-epargne-de-precaution' && s.heading.startsWith('Aucune règle') && <SchemaPrecaution />}
             {g.slug === 'comparer-les-frais' && s.heading.startsWith('L’effet') && <SchemaFrais />}
