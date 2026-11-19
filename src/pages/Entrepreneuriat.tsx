@@ -62,7 +62,7 @@ export default function Entrepreneuriat() {
       </div>
       <MetersLegend />
 
-      <div className="panel path-cta">
+      <div className="panel cta-band">
         <p>
           <strong>Votre projet en chiffres :</strong> ventes, charges, ce que vous pourrez vous verser et l’argent disponible, en scénario pessimiste,
           central et optimiste.
