@@ -1586,3 +1586,11 @@ details.fold.next-more > summary { padding: 10px 14px; }
 @media (min-width: 560px) { .don-calc-form { grid-template-columns: 1fr 1fr; } .don-calc-form > :nth-child(3) { grid-column: 1 / -1; } .don-calc-form > :nth-child(3) .choice-opts { max-width: calc(50% - 8px); } }
 .don-calc-kpis { margin: 4px 0 12px; }
 .don-calc-note { margin: 10px 0 0; }
+
+/* Page Entrepreneuriat : l’action principale (chiffrer son projet) en bandeau, bouton bien visible. */
+.path-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin: 24px 0 0; border-left: 4px solid var(--accent); }
+.path-cta p { flex: 1 1 320px; margin: 0; }
+.path-cta .btn { flex: 0 0 auto; }
+@media (max-width: 520px) { .path-cta .btn { width: 100%; justify-content: center; } }
+@media print { .path-cta .btn { display: none; } }
+.path-prep .path-warn { margin: 10px 0 0; padding-top: 8px; border-top: 1px solid var(--line); color: var(--ink-2); }
