@@ -49,6 +49,10 @@ export const JARGON_PATTERNS: Record<string, string[]> = {
   'DIC (document d’informations clés)': ['DIC', 'document d[’\']informations clés'],
   'Usufruit et nue-propriété': ['usufruit', 'nue-propriété'],
   'Livret A': ['Livret A'],
+  'Abattement': ['abattements?'],
+  'Micro-foncier et régime réel': ['micro-foncier'],
+  'Unités de compte': ['unités de compte'],
+  'Taux nominal (taux débiteur)': ['taux nominal', 'taux débiteur'],
   'PSCA (prestataire de services sur crypto-actifs)': ['PSCA', 'prestataires? de services sur crypto-actifs'],
   'FGDR (Fonds de garantie des dépôts et de résolution)': ['FGDR', 'garantie des dépôts'],
 };
