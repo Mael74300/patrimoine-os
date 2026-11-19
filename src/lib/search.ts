@@ -124,6 +124,7 @@ export const searchShortcuts: { queries: string[]; to: string[] }[] = [
   { queries: ['fonds euros', 'fonds en euros', 'fonds euro'], to: ['/encyclopedie/fonds-euros'] },
   { queries: ['investir en bourse', 'placer en bourse', 'bourse', 'acheter des actions'], to: ['/encyclopedie/etf-monde', '/encyclopedie/actions-individuelles'] },
   { queries: ['payer moins d’impôts', 'payer moins d’impôt', 'réduire ses impôts', 'réduire impôts', 'baisser ses impôts', 'défiscaliser', 'défiscalisation'], to: ['/guides/choisir-son-enveloppe', '/encyclopedie/per'] },
+  { queries: ['déficit foncier', 'déficit', 'déduire ses travaux', 'travaux déductibles'], to: ['/encyclopedie/location-nue'] },
   { queries: ['vivre de ses rentes', 'vivre de ses placements', 'rentier', 'rente'], to: ['/simulateurs/independance-financiere', '/simulateurs/retraits-reguliers-duree-du-capital'] },
 ];
 

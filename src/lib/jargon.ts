@@ -51,6 +51,7 @@ export const JARGON_PATTERNS: Record<string, string[]> = {
   'Livret A': ['Livret A'],
   'Abattement': ['abattements?'],
   'Micro-foncier et régime réel': ['micro-foncier'],
+  'Déficit foncier': ['déficits? fonciers?'],
   'Unités de compte': ['unités de compte'],
   'Taux nominal (taux débiteur)': ['taux nominal', 'taux débiteur'],
   'PSCA (prestataire de services sur crypto-actifs)': ['PSCA', 'prestataires? de services sur crypto-actifs'],
