@@ -87,6 +87,24 @@ export const guidesForGuide: Record<string, string[]> = {
   'types-investissements': ['choisir-son-enveloppe'],
 };
 
+/**
+ * Comparateur proposé en suite d'un guide, préréglé sur les placements dont le guide parle (chantier 201) :
+ * le lecteur retrouve côte à côte, avec leurs dates de vérification, les frais et la fiscalité que le guide résume.
+ * Il passe avant les simulateurs, car c'est la suite la plus directe de la lecture.
+ */
+export const comparatorForGuide: Record<string, { ids?: string[]; title: string; blurb: string }> = {
+  'types-investissements': { title: 'Comparateur de placements', blurb: 'Trois placements côte à côte, à vos hypothèses.' },
+  'choisir-son-enveloppe': { ids: ['pea', 'assurance-vie', 'per'], title: 'Comparer PEA, assurance-vie et PER', blurb: 'Frais, fiscalité et disponibilité des trois enveloppes, côte à côte.' },
+  'fonctionnement-pea': { ids: ['pea', 'compte-titres', 'assurance-vie'], title: 'Comparer PEA, compte-titres et assurance-vie', blurb: 'Les règles du PEA face aux deux autres enveloppes pour des actions.' },
+};
+
+/** Adresse du comparateur préréglé d'un guide, ou `undefined` si le guide n'en propose pas. */
+export function guideComparatorLink(guideSlug: string): { to: string; title: string; blurb: string } | undefined {
+  const c = comparatorForGuide[guideSlug];
+  if (!c) return undefined;
+  return { to: c.ids ? `/comparateur?ids=${c.ids.join(',')}` : '/comparateur', title: c.title, blurb: c.blurb };
+}
+
 export const simsForGuide: Record<string, string[]> = {
   'types-investissements': ['portefeuille'],
   'patrimoine-net': ['patrimoine', 'budget'],
@@ -98,7 +116,7 @@ export const simsForGuide: Record<string, string[]> = {
   'epargne-limitee': ['epargne-de-precaution', 'inflation'],
   'par-ou-commencer': ['budget', 'epargne-de-precaution', 'objectif-epargne', 'interets-composes'],
   'interets-composes': ['interets-composes', 'patrimoine', 'inflation', 'investir-d-un-coup-ou-progressivement', 'rendement-reel-de-mon-placement'],
-  'choisir-son-enveloppe': ['frais', 'patrimoine'],
+  'choisir-son-enveloppe': ['frais'],
   'combien-epargne-de-precaution': ['epargne-de-precaution', 'inflation', 'budget'],
   'taux-endettement-capacite-emprunt': ['endettement', 'credit', 'dettes'],
   'pret-a-taux-zero-ptz': ['endettement', 'credit', 'louer-ou-acheter'],
