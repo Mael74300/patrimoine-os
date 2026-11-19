@@ -26,6 +26,10 @@ describe('intégrité des données éditoriales', () => {
     const jargon = /risque spécifique|biais comportement|empilement|illiquidit|dispersion des résultats|décorrél|actif tangible|ticket d.entrée|potentiel spéculatif|valeur intrinsèque|dessaisissement|non saisissable|surpayer|univers d.investissement|titres éligibles/i;
     for (const i of investments) for (const t of [...i.pros, ...i.cons]) expect(t, `${i.slug} : « ${t} »`).not.toMatch(jargon);
   });
+  it('avantages, inconvénients et « Comment investir » sans mot technique laissé seul (volatilité, liquidité, effet de levier…)', () => {
+    const anciens = /volatil|liquidit|effet de levier|gestion pilotée|contrôle total|^diversification|écarts achat-vente|adossés à l|outil de transmission/i;
+    for (const i of investments) for (const t of [...i.pros, ...i.cons, ...i.howToInvest]) expect(t, `${i.slug} : « ${t} »`).not.toMatch(anciens);
+  });
 
   it('chaque guide figure dans un seul groupe de la page Guides', () => {
     const all = guideGroups.flatMap((g) => g.slugs);
