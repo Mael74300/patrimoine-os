@@ -81,3 +81,15 @@ export function requiredMonthly(target: number, initial: number, annualNetReturn
   if (Math.abs(rm) < 1e-12) return remaining / n;
   return remaining / (((Math.pow(1 + rm, n) - 1) / rm) * (1 + rm));
 }
+
+/**
+ * Nombre d'années, à la fin de la projection, pendant lesquelles s'accumule la seconde moitié des gains :
+ * durée moins la première année où les gains atteignent la moitié des gains finaux.
+ * `null` si les gains finaux ne sont pas positifs (rien à partager).
+ */
+export function lateHalfGainsYears(points: YearPoint[]): number | null {
+  const last = points[points.length - 1];
+  if (!last || !(last.gains > 0)) return null;
+  const half = points.find((p) => p.gains >= last.gains / 2);
+  return half ? last.year - half.year : null;
+}

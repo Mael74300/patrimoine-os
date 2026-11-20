@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { afterTax, deflate, monthlyRate, netOfFees, realRate } from './common';
-import { monthlyFor, projectGrowth, requiredMonthly } from './growth';
+import { lateHalfGainsYears, monthlyFor, projectGrowth, requiredMonthly } from './growth';
 
 const base = { initial: 0, monthly: 0, annualReturn: 0, annualFees: 0, years: 10, inflation: 0 };
 
@@ -82,4 +82,18 @@ describe('versement requis', () => {
     expect(requiredMonthly(1000, 0, 0.03, 0)).toBe(0);
   });
   it('rendement nul : division simple', () => expect(requiredMonthly(12000, 0, 0, 1)).toBeCloseTo(1000, 10));
+});
+
+describe('lateHalfGainsYears', () => {
+  it('compte les dernières années où s’accumule la seconde moitié des gains', () => {
+    const pts = projectGrowth({ initial: 5000, monthly: 300, annualReturn: 0.05, annualFees: 0.005, inflation: 0.02, years: 25 });
+    const half = pts.at(-1)!.gains / 2;
+    expect(pts[18].gains).toBeLessThan(half);
+    expect(pts[19].gains).toBeGreaterThanOrEqual(half);
+    expect(lateHalfGainsYears(pts)).toBe(6);
+  });
+  it('renvoie null sans gain positif', () => {
+    expect(lateHalfGainsYears(projectGrowth({ initial: 1000, monthly: 0, annualReturn: 0, annualFees: 0, inflation: 0, years: 5 }))).toBeNull();
+    expect(lateHalfGainsYears(projectGrowth({ initial: 1000, monthly: 0, annualReturn: 0.02, annualFees: 0.05, inflation: 0, years: 5 }))).toBeNull();
+  });
 });

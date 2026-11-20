@@ -450,19 +450,43 @@ export function feesTakeaway(p: { years: number; initial: number; monthly: numbe
   return `${debut} Un taux de frais paraît petit, mais il est prélevé chaque année sur un capital qui grossit : son coût augmente avec la durée.`;
 }
 
-/** Patrimoine à long terme : versements, capital simulé, puis valeur après impôt en euros d'aujourd'hui. */
-export function wealthTakeaway(p: { years: number; contributed: number; withdrawn: number; value: number; gains: number; netValue: number; netRealValue: number; taxRate: number; inflation: number }): string {
+/**
+ * Patrimoine à long terme : ce que veulent dire les cases, sans les recopier. La part des gains dans le capital final,
+ * le temps qu'il faut pour en gagner la seconde moitié, puis ce que l'impôt et la hausse des prix en retirent,
+ * en renvoyant à la case qui mesure le pouvoir d'achat.
+ */
+export function wealthTakeaway(p: { years: number; contributed: number; value: number; gains: number; netValue: number; netRealValue: number; inflation: number; lateHalfYears: number | null }): string {
   if (!(p.years > 0) || !(p.contributed > 0) || !(p.value > 0)) return '';
-  const duree = fmtAns(p.years);
-  const retraits = p.withdrawn > 0.5 ? ` et en retirez ${fmtEur(p.withdrawn)} en chemin` : '';
-  const gain = p.gains >= 0 ? `, dont ${fmtEur(p.gains)} de gains simulés` : `, avec une perte simulée de ${fmtEur(-p.gains)}`;
-  const impot = p.value - p.netValue > 0.5
-    ? ` Après un impôt de ${fmtPct(p.taxRate)} sur les gains, il vous resterait ${fmtEur(p.netValue)}.`
-    : '';
-  const reel = p.inflation > 0
-    ? ` Avec ${fmtPct(p.inflation)} d'inflation par an, cette somme ne vaudra que ${fmtEur(p.netRealValue)} en euros d'aujourd'hui : c'est le chiffre le plus proche de votre pouvoir d'achat réel.`
-    : '';
-  return `En ${duree}, vous versez ${fmtEur(p.contributed)}${retraits}, et le capital simulé atteint ${fmtEur(p.value)}${gain}.${impot}${reel}`;
+  const share = p.gains / p.value;
+  let gains: string;
+  if (p.gains < -0.5) {
+    gains = 'Avec ces hypothèses, le capital final reste inférieur à ce que vous versez : le placement vous fait perdre de l\'argent.';
+  } else if (p.gains <= 0.5) {
+    gains = 'Avec ces hypothèses, le placement ne rapporte rien : le capital final vient uniquement de vos versements.';
+  } else if (share >= 1) {
+    gains = 'Les gains simulés dépassent le capital restant, car vous retirez de l\'argent en chemin.';
+  } else {
+    gains = `Les gains simulés font ${fmtPart(share)} du capital final : ce que l'argent placé a rapporté, puis ce que ces gains ont rapporté à leur tour.`;
+    const n = p.lateHalfYears;
+    if (n !== null && n >= 1 && n < p.years / 2) {
+      const ans = n === 1 ? 'la dernière année' : `les ${n}\u00a0dernières années sur ${p.years}`;
+      gains += ` Leur seconde moitié arrive pendant ${ans} : la durée pèse lourd.`;
+    }
+  }
+  const loss = 1 - p.netRealValue / p.value;
+  const taxed = p.value - p.netValue > 0.5;
+  const inflated = p.inflation > 0;
+  let pouvoir = '';
+  if (loss >= 0.001) {
+    if (taxed && inflated) {
+      pouvoir = ` L'impôt et la hausse des prix en retirent ensemble ${fmtPart(loss)} : votre pouvoir d'achat réel est la ligne « après fiscalité » de la case « En euros d'aujourd'hui ».`;
+    } else if (taxed) {
+      pouvoir = ` L'impôt sur les gains en retire ${fmtPart(loss)} : ce qui vous reviendrait est la ligne « après fiscalité » de la case « Capital final ».`;
+    } else if (inflated) {
+      pouvoir = ` La hausse des prix retire ${fmtPart(loss)} à ce que ce capital permettra d'acheter : voir la case « En euros d'aujourd'hui ».`;
+    }
+  }
+  return gains + pouvoir;
 }
 
 /** Entreprise : le chiffre d'affaires n'est pas un gain ; ce qui reste, la trésorerie et le besoin de financement du scénario pessimiste. */
