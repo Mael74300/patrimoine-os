@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, fmtEur, rentalAnalysis, rentalBalance, rentalProjection, type RentalInput, fireTarget, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
+import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, fmtEur, rentalAnalysis, rentalBalance, rentalProjection, type RentalInput, fireTarget, drawdown, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
 import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio, fmtMonths } from './finance';
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
@@ -107,6 +107,14 @@ describe('phrases « Concrètement »', () => {
     const t = digits(fireTakeaway({ gap: 30000, withdrawalRate: 0.035, target, currentWealth: 80000, annualSavings: 15000, years }));
     expect(t).toContain(eur(target));
     expect(t).toContain(`${years}ans`);
+    expect(t).toContain('eurosd’aujourd’hui');
+    // Durée du capital en retrait : même calcul que la barre « le vôtre » du simulateur.
+    const lasts = drawdown(target, fi, 60).depletedAt;
+    expect(lasts).not.toBeNull();
+    const tl = digits(fireTakeaway({ gap: 30000, withdrawalRate: 0.035, target, currentWealth: 80000, annualSavings: 15000, years, nominalReturn: 0.05, lastsYears: lasts, horizon: 60 }));
+    expect(tl).toContain(`épuiséauboutde${lasts}ans`);
+    expect(digits(fireTakeaway({ gap: 30000, withdrawalRate: 0.035, target, currentWealth: 80000, annualSavings: 15000, years, nominalReturn: 0.07, lastsYears: null, horizon: 60 }))).toContain("plusde60ans");
+    expect(t).not.toContain('Ensuite');
     expect(fireTakeaway({ gap: 30000, withdrawalRate: 0.035, target, currentWealth: 900000, annualSavings: 0, years: 0 })).toContain('atteint déjà');
     expect(fireTakeaway({ gap: 30000, withdrawalRate: 0.035, target, currentWealth: 0, annualSavings: 0, years: null }).replace(/\u00a0/g, ' ')).toContain('100 ans');
     expect(fireTakeaway({ gap: 0, withdrawalRate: 0.035, target: 0, currentWealth: 0, annualSavings: 0, years: 0 })).toContain('aucun capital');

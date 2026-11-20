@@ -67,14 +67,20 @@ export function rentVsBuyTakeaway(p: { horizonYears: number; advantage: number; 
     : `Au bout de ${ans}, avec ces hypothèses, vous seriez plus riche de ${fmtEur(-p.advantage)} en louant (et en plaçant la différence) qu’en achetant.${fin}`;
 }
 
-/** Indépendance financière : capital à réunir, avance actuelle et délai (en euros constants). */
-export function fireTakeaway(p: { gap: number; withdrawalRate: number; target: number; currentWealth: number; annualSavings: number; years: number | null }): string {
+/**
+ * Indépendance financière : capital à réunir, délai (en euros d'aujourd'hui), puis durée du capital en retrait.
+ * `lastsYears` : année d'épuisement de la phase de retrait (null : tient tout l'horizon) ; omis : phrase non ajoutée.
+ */
+export function fireTakeaway(p: { gap: number; withdrawalRate: number; target: number; currentWealth: number; annualSavings: number; years: number | null; nominalReturn?: number; lastsYears?: number | null; horizon?: number }): string {
   if (!(p.gap >= 0) || !Number.isFinite(p.target)) return '';
   if (p.gap === 0) return 'Vos revenus récurrents couvrent déjà vos dépenses : aucun capital n’est nécessaire pour les financer.';
   const base = `Pour financer ${fmtEur(p.gap)} de dépenses par an que vos revenus ne couvrent pas, en retirant ${fmtPct(p.withdrawalRate)} du capital la première année, il faut environ ${fmtEur(p.target)}.`;
-  if (p.years === 0) return `${base} Votre patrimoine de ${fmtEur(p.currentWealth)} atteint déjà ce capital.`;
-  if (p.years === null) return `${base} Avec ces hypothèses, vous ne l’atteignez pas en 100 ans.`;
-  return `${base} Avec ${fmtEur(p.currentWealth)} déjà réunis et ${fmtEur(p.annualSavings)} mis de côté chaque année, vous y arrivez dans environ ${fmtAns(p.years)}, en euros constants.`;
+  const lasts = p.lastsYears === undefined || p.nominalReturn === undefined
+    ? ''
+    : ` Ensuite, à ${fmtPct(p.nominalReturn)} par an, il ${p.lastsYears === null ? `durerait plus de ${fmtAns(p.horizon ?? 60)}` : `serait épuisé au bout de ${fmtAns(p.lastsYears)}`}.`;
+  if (p.years === 0) return `${base} Votre patrimoine de ${fmtEur(p.currentWealth)} atteint déjà ce capital.${lasts}`;
+  if (p.years === null) return `${base} Avec ces hypothèses, vous ne l’atteignez pas en 100 ans.`;
+  return `${base} Avec ${fmtEur(p.currentWealth)} déjà réunis et ${fmtEur(p.annualSavings)} mis de côté chaque année, vous y arrivez dans environ ${fmtAns(p.years)} (en euros d’aujourd’hui).${lasts}`;
 }
 
 /** Retraits réguliers : combien de temps le capital tient, et le retrait qui tiendrait tout l'horizon. */
