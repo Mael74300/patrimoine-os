@@ -209,22 +209,27 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
   const args = (i: RentalInput) => {
     const r = rentalAnalysis(i);
     const proj = rentalProjection(i);
-    return { totalCost: r.totalCost, netYield: r.netYield, monthlyCashflow: r.monthlyCashflow, monthlyCashflowAfterTax: proj[0].cashflowAfterTax / 12, horizon: i.horizon, netEquity: proj[proj.length - 1].netEquity };
+    const b = rentalBalance(i, proj);
+    return { totalCost: r.totalCost, netYield: r.netYield, monthlyCashflow: r.monthlyCashflow, monthlyCashflowAfterTax: proj[0].cashflowAfterTax / 12, horizon: i.horizon, gap: Math.round(b.got) - Math.round(b.putIn) };
   };
-  it('reprend soldes mensuels et patrimoine calculés', () => {
+  it('reprend le solde mensuel calculé, sans recopier les montants du bilan', () => {
     const a = args(base);
+    const b = rentalBalance(base);
     expect(a.monthlyCashflow).toBeLessThan(0);
     const t = digits(rentalTakeaway(a));
     expect(t).toContain(eur(-a.monthlyCashflow));
     expect(t).toContain('devotrepoche');
-    expect(t).toContain(eur(a.netEquity));
+    expect(t).not.toContain(eur(b.putIn));
+    expect(t).not.toContain(eur(b.got));
   });
-  it('bilan : somme sortie de sa poche reprise du calcul', () => {
-    const b = rentalBalance(base);
-    const t = digits(rentalTakeaway({ ...args(base), putIn: b.putIn }));
-    expect(t).toContain(eur(b.putIn));
-    expect(t).toContain('apportcompris');
-    expect(t).toContain(eur(b.netEquity));
+  it('verdict du bilan selon le signe des écarts central et défavorable', () => {
+    const c = { totalCost: 100000, netYield: 0.04, monthlyCashflow: -100, monthlyCashflowAfterTax: null, horizon: 20 };
+    expect(args(base).gap).toBeGreaterThan(0);
+    expect(rentalTakeaway({ ...c, gap: 23291, badGap: -75152 })).toContain("vous détiendriez plus que ce que vous auriez sorti de votre poche ; dans le scénario défavorable, ce serait l'inverse.");
+    expect(rentalTakeaway({ ...c, gap: 5000, badGap: 10 })).toContain('même dans le scénario défavorable');
+    expect(rentalTakeaway({ ...c, gap: 5000 })).not.toContain('défavorable');
+    expect(rentalTakeaway({ ...c, gap: 0, badGap: -10 })).toContain('à peu près ce que vous auriez sorti');
+    expect(rentalTakeaway({ ...c, gap: -1, badGap: -10 })).toContain('vous auriez sorti de votre poche plus que ce que vous détiendriez');
   });
   it('flux positif : le loyer couvre mensualité et charges', () => {
     const a = args({ ...base, monthlyRent: 1500 });
@@ -240,7 +245,7 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(rentalCashflowSub(Number.NaN, true)).toBe("loyer et dépenses s'équilibrent, après impôt");
   });
   it('avant et après impôt dans une même phrase, « mais » quand le signe s’inverse', () => {
-    const c = { totalCost: 100000, netYield: 0.04, horizon: 20, netEquity: 50000 };
+    const c = { totalCost: 100000, netYield: 0.04, horizon: 20, gap: 5000 };
     expect(digits(rentalTakeaway({ ...c, monthlyCashflow: -392.4, monthlyCashflowAfterTax: -619.2 }))).toContain(digits('il faut ajouter environ 392 € de votre poche avant impôt, et environ 619 € après l’impôt estimé').replace('’', "'"));
     expect(rentalTakeaway({ ...c, monthlyCashflow: 120, monthlyCashflowAfterTax: -30 })).toContain(', mais il faut ajouter environ');
     expect(rentalTakeaway({ ...c, monthlyCashflow: 120, monthlyCashflowAfterTax: 80 })).toContain('avant impôt, et environ');

@@ -145,8 +145,12 @@ export function prepayTakeaway(p: { lump: number; advantageInvest: number; inter
     : `Avec ces hypothèses, utiliser ${fmtEur(p.lump)} pour rembourser votre crédit vous laisse ${fmtEur(-p.advantageInvest)} de plus à la fin que les placer. ${certain}${seuil}`;
 }
 
-/** Immobilier locatif : ce que rapporte le bien, ce que le propriétaire paie de sa poche, et le patrimoine à l'horizon. */
-export function rentalTakeaway(p: { totalCost: number; netYield: number; monthlyCashflow: number; monthlyCashflowAfterTax: number | null; horizon: number; netEquity: number; putIn?: number }): string {
+/**
+ * Immobilier locatif : ce que le propriétaire paie de sa poche chaque mois, puis le verdict du bilan à l'horizon
+ * en mots (sans recopier les montants du bilan affiché juste en dessous). `gap` et `badGap` : « détenu à la fin »
+ * moins « sorti de votre poche », scénario central et défavorable, arrondis à l'euro comme l'affichage.
+ */
+export function rentalTakeaway(p: { totalCost: number; netYield: number; monthlyCashflow: number; monthlyCashflowAfterTax: number | null; horizon: number; gap: number; badGap?: number }): string {
   if (!(p.totalCost > 0) || !Number.isFinite(p.netYield)) return '';
   const mois = Math.round(p.monthlyCashflow);
   const a = p.monthlyCashflowAfterTax === null ? null : Math.round(p.monthlyCashflowAfterTax);
@@ -156,10 +160,20 @@ export function rentalTakeaway(p: { totalCost: number; netYield: number; monthly
   const tresorerie = mois >= 0
     ? `Chaque mois, le loyer couvre la mensualité du crédit et les charges : il reste environ ${fmtEur(mois)} avant impôt${apres}.`
     : `Chaque mois, le loyer ne couvre pas la mensualité du crédit et les charges : il faut ajouter environ ${fmtEur(-mois)} de votre poche avant impôt${apres}.`;
-  const fin = p.putIn !== undefined && p.putIn > 0
-    ? `\nEn ${fmtAns(p.horizon)}, vous auriez sorti environ ${fmtEur(p.putIn)}, apport compris, pour un bien qui représenterait environ ${fmtEur(p.netEquity)} de patrimoine, crédit déduit (estimation, si prix et loyers évoluent comme saisi).`
-    : `\nÀ ${fmtAns(p.horizon)}, crédit déduit, le bien représenterait environ ${fmtEur(p.netEquity)} de patrimoine (estimation, si prix et loyers évoluent comme saisi).`;
-  return tresorerie + fin;
+  const gap = Math.round(p.gap);
+  const bad = p.badGap === undefined ? null : Math.round(p.badGap);
+  const en = `En ${fmtAns(p.horizon)}`;
+  let fin: string;
+  if (gap > 0) {
+    fin = bad === null ? `${en}, vous détiendriez plus que ce que vous auriez sorti de votre poche.`
+      : bad >= 0 ? `${en}, vous détiendriez plus que ce que vous auriez sorti de votre poche, même dans le scénario défavorable.`
+      : `${en}, vous détiendriez plus que ce que vous auriez sorti de votre poche ; dans le scénario défavorable, ce serait l'inverse.`;
+  } else if (gap === 0) {
+    fin = `${en}, vous détiendriez à peu près ce que vous auriez sorti de votre poche.`;
+  } else {
+    fin = `${en}, vous auriez sorti de votre poche plus que ce que vous détiendriez à la fin.`;
+  }
+  return `${tresorerie}\n${fin} Le bilan ci-dessous donne le détail.`;
 }
 
 /**
