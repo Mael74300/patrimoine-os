@@ -391,8 +391,8 @@ function firstPayoff(months: (number | null)[]): number | null {
 }
 
 /**
- * Plusieurs dettes, en trois lignes courtes : le point de départ (mensualités minimales seules), ce que fait
- * l'avalanche, puis l'arbitrage de la boule de neige (une première dette soldée plus tôt, contre des intérêts en plus).
+ * Plusieurs dettes, en trois lignes courtes : le point de départ (mensualités minimales seules), ce que le versement
+ * supplémentaire fait gagner avec l'avalanche (durée et intérêts, sans recopier les cases), puis l'arbitrage de la boule de neige (une première dette soldée plus tôt, contre des intérêts en plus).
  * Tous les montants et durées viennent de `comparePayoff`.
  */
 export function debtsTakeaway(p: {
@@ -407,8 +407,16 @@ export function debtsTakeaway(p: {
   if (av.months === 0) return '';
   const lignes: string[] = [];
   if (p.extra > 0) {
-    if (min.months !== null) lignes.push(`Sans rien ajouter, vos dettes seraient soldées en ${fmtMonths(min.months)}, avec ${fmtEur(min.totalInterest)} d'intérêts.`);
-    lignes.push(`En ajoutant ${fmtEur(p.extra)} par mois, l'avalanche les solde toutes en ${fmtMonths(av.months)}, avec ${fmtEur(av.totalInterest)} d'intérêts.`);
+    if (min.months === null) {
+      lignes.push(`Avec les seules mensualités minimales, vos dettes ne seraient pas soldées en 50 ans : ce sont vos ${fmtEur(p.extra)} de plus par mois qui permettent de les solder.`);
+    } else {
+      lignes.push(`Sans rien ajouter, vos dettes seraient soldées en ${fmtMonths(min.months)}, avec ${fmtEur(min.totalInterest)} d'intérêts.`);
+      const gagne = min.months - av.months;
+      const evite = min.totalInterest - av.totalInterest;
+      lignes.push(gagne > 0
+        ? `Vos ${fmtEur(p.extra)} de plus par mois les soldent ${fmtMonths(gagne)} plus tôt avec l'avalanche, et vous évitent ${fmtEur(evite)} d'intérêts.`
+        : `Vos ${fmtEur(p.extra)} de plus par mois vous évitent ${fmtEur(evite)} d'intérêts avec l'avalanche.`);
+    }
   } else {
     lignes.push(`Avec vos seules mensualités minimales, l'avalanche solde toutes vos dettes en ${fmtMonths(av.months)}, avec ${fmtEur(av.totalInterest)} d'intérêts.`);
   }
@@ -500,18 +508,55 @@ export function wealthTakeaway(p: { years: number; contributed: number; value: n
   return gains + pouvoir;
 }
 
-/** Entreprise : le chiffre d'affaires n'est pas un gain ; ce qui reste, la trésorerie et le besoin de financement du scénario pessimiste. */
-export function businessTakeaway(p: { years: number; revenueFirst: number; revenueLast: number; netResultLast: number; cashLast: number; pessimisticLowestCash: number }): string {
-  if (!(p.years > 0) || !(p.revenueLast > 0)) return '';
-  const duree = fmtAns(p.years);
-  const reste = p.netResultLast >= 0
-    ? `il vous reste ${fmtEur(p.netResultLast)} de résultat net la dernière année`
-    : `l'entreprise perd ${fmtEur(-p.netResultLast)} la dernière année`;
-  const treso = p.cashLast >= 0 ? `la trésorerie finale est de ${fmtEur(p.cashLast)}` : `la trésorerie finale est négative (${fmtEur(p.cashLast)})`;
-  const risque = p.pessimisticLowestCash < 0
-    ? ` Dans le scénario pessimiste, la trésorerie tombe jusqu'à ${fmtEur(p.pessimisticLowestCash)} : il faudrait trouver ce financement (apport, prêt, délais de paiement négociés).`
-    : '';
-  return `Dans le scénario central, le chiffre d'affaires passe de ${fmtEur(p.revenueFirst)} à ${fmtEur(p.revenueLast)} en ${duree}, mais ce n'est pas ce que vous gagnez : après charges, rémunération et impôt, ${reste}, et ${treso}.${risque}`;
+/** Année où la trésorerie passe pour la première fois sous zéro : 0 si elle l'est dès le départ, null jamais. */
+function firstNegativeCashYear(rows: { year: number; cash: number }[], start: number): number | null {
+  if (start < 0) return 0;
+  const r = rows.find((x) => x.cash < 0);
+  return r ? r.year : null;
+}
+
+const quand = (y: number) => (y === 0 ? 'dès le départ' : `dès l'année ${y}`);
+
+/**
+ * Entreprise, sans recopier le tableau des scénarios : ce qu'il reste de 100 € vendus la dernière année (scénario central),
+ * la marge de sécurité de la caisse à son plus bas (en mois de charges fixes et de rémunération de la première année),
+ * puis l'année où la trésorerie du scénario pessimiste passe sous zéro. Tout vient de `projectBusiness`.
+ */
+export function businessTakeaway(p: {
+  central: { year: number; revenue: number; netResult: number; cash: number; fixedCosts: number; payrollCost: number }[];
+  pessimistic: { year: number; cash: number }[];
+  start: number;
+}): string {
+  const c = p.central;
+  const last = c[c.length - 1];
+  if (!last || !(last.revenue > 0)) return '';
+  const lignes: string[] = [];
+  if (last.netResult > 0) {
+    const sur100 = Math.round((last.netResult / last.revenue) * 100);
+    const reste = sur100 >= 1 ? `environ ${fmtEur(sur100)}` : 'moins de 1\u00a0€';
+    lignes.push(`Scénario central : sur 100\u00a0€ vendus la dernière année, il vous reste ${reste} après achats, charges, rémunération et impôt.`);
+  } else {
+    lignes.push("Scénario central : l'entreprise perd encore de l'argent la dernière année ; les ventes ne couvrent pas achats, charges et rémunération.");
+  }
+  const lowC = Math.min(p.start, ...c.map((r) => r.cash));
+  const lowP = Math.min(p.start, ...p.pessimistic.map((r) => r.cash));
+  const parMois = (c[0].fixedCosts + c[0].payrollCost) / 12;
+  if (lowC < 0) {
+    lignes.push(`Même dans ce scénario, la trésorerie passe sous zéro ${quand(firstNegativeCashYear(c, p.start) as number)}, à financer (apport, prêt, délais de paiement).`);
+  } else if (parMois > 0) {
+    const mois = Math.floor(lowC / parMois);
+    lignes.push(mois < 1
+      ? 'Au plus bas, la caisse tient moins d\'un mois de charges fixes et de rémunération.'
+      : `Au plus bas, la caisse tient environ ${mois}\u00a0mois de charges fixes et de rémunération.`);
+  }
+  if (lowC >= 0) {
+    lignes.push(lowP < 0
+      ? `Scénario pessimiste : trésorerie sous zéro ${quand(firstNegativeCashYear(p.pessimistic, p.start) as number)}, à financer (apport, prêt, délais de paiement).`
+      : 'Scénario pessimiste : la trésorerie reste positive.');
+  } else if (lowP < lowC) {
+    lignes.push('Scénario pessimiste : le besoin est plus grand encore.');
+  }
+  return lignes.join('\n');
 }
 
 /**

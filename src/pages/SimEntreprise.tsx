@@ -132,7 +132,7 @@ export default function SimEntreprise() {
               </tbody>
             </table>
           </div>
-          <Takeaway>{businessTakeaway({ years: s.years, revenueFirst: runs[1][0]?.revenue ?? 0, revenueLast: runs[1][runs[1].length - 1]?.revenue ?? 0, netResultLast: runs[1][runs[1].length - 1]?.netResult ?? 0, cashLast: runs[1][runs[1].length - 1]?.cash ?? 0, pessimisticLowestCash: lowestCash(runs[0], start) })}</Takeaway>
+          <Takeaway>{businessTakeaway({ central: runs[1], pessimistic: runs[0], start })}</Takeaway>
           <p className="small muted">
             Pessimiste : ventes de départ −20 %, croissance −5 points, marge −5 points. Optimiste : ventes +15 %, croissance +5 points, marge +3 points.
             {zeroValue && <> {zeroValue}</>}

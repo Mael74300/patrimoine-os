@@ -454,8 +454,14 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     const D = [{ name: 'a', balance: 2000, rate: 0.2, minPayment: 60 }, { name: 'b', balance: 6000, rate: 0.05, minPayment: 150 }, { name: 'c', balance: 1000, rate: 0.03, minPayment: 50 }];
     const c = comparePayoff(D, 100);
     const t = digits(debtsTakeaway({ extra: 100, ...c }));
-    expect(t).toContain(eur(c.avalanche.totalInterest) + '€d\'intérêts');
     expect(t).toContain(eur(c.minimum.totalInterest) + '€d\'intérêts');
+    // Ce que le versement supplémentaire fait gagner, sans recopier les cases (durée et intérêts de l'avalanche).
+    const gainMois = c.minimum.months! - c.avalanche.months!;
+    expect(gainMois).toBeGreaterThan(0);
+    expect(debtsTakeaway({ extra: 100, ...c })).toContain(`les soldent ${fmtMonths(gainMois)} plus tôt avec l'avalanche`);
+    expect(t).toContain('évitent' + eur(c.minimum.totalInterest - c.avalanche.totalInterest) + '€d\'intérêts');
+    expect(t).not.toContain(eur(c.avalanche.totalInterest) + '€');
+    expect(debtsTakeaway({ extra: 100, ...c })).not.toContain(fmtMonths(c.avalanche.months!) + ',');
     expect(t).toContain(eur(c.interestSavedByAvalanche!) + '€d\'intérêtsdeplus');
     // Trois lignes courtes ; l'atout de la boule de neige (première dette soldée plus tôt) est dit, mois tirés de comparePayoff.
     const brut = debtsTakeaway({ extra: 100, ...c });
@@ -469,6 +475,10 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     // Une seule dette : les deux méthodes se confondent.
     const one = comparePayoff([D[0]], 50);
     expect(debtsTakeaway({ extra: 50, ...one })).toContain('même résultat');
+    // Mensualités minimales insuffisantes : le versement supplémentaire est ce qui solde les dettes.
+    const sauve = comparePayoff([{ name: 'a', balance: 1000, rate: 0.5, minPayment: 1 }], 100);
+    expect(sauve.minimum.months).toBeNull();
+    expect(debtsTakeaway({ extra: 100, ...sauve })).toMatch(/^Avec les seules mensualités minimales, vos dettes ne seraient pas soldées en 50 ans : ce sont vos 100/);
     const stuck = comparePayoff([{ name: 'a', balance: 1000, rate: 0.5, minPayment: 1 }], 0);
     expect(debtsTakeaway({ extra: 0, ...stuck })).toContain('ne sont pas soldées');
     const none = comparePayoff([{ name: 'a', balance: 0, rate: 0.1, minPayment: 10 }], 0);
@@ -529,21 +539,44 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(wealthTakeaway({ years: 10, contributed: 1000, value: 300, gains: 400, netValue: 300, netRealValue: 300, inflation: 0, lateHalfYears: 3 })).toContain('dépassent le capital restant');
     expect(wealthTakeaway({ years: 0, contributed: 1, value: 1, gains: 0, netValue: 1, netRealValue: 1, inflation: 0, lateHalfYears: null })).toBe('');
   });
-  it('entreprise : CA, résultat, trésorerie et besoin de financement viennent de projectBusiness', () => {
-    const inp = { revenueY1: 120000, revenueGrowth: 0.1, grossMarginRate: 0.6, fixedCosts: 30000, fixedCostsGrowth: 0.02, founderPay: 24000, socialRate: 0.45, corporateTaxRate: 0.25, receivableDays: 30, initialCash: 15000, initialInvestment: 10000, valuationMultiple: 5, years: 5 };
-    const c = projectBusiness(inp, BUSINESS_SCENARIOS.central);
-    const low = lowestCash(projectBusiness(inp, BUSINESS_SCENARIOS.pessimiste), 5000);
-    const l = c[c.length - 1];
-    const t = digits(businessTakeaway({ years: 5, revenueFirst: c[0].revenue, revenueLast: l.revenue, netResultLast: l.netResult, cashLast: l.cash, pessimisticLowestCash: low }));
-    expect(t).toContain(eur(c[0].revenue) + '€');
-    expect(t).toContain(eur(l.revenue) + '€');
-    expect(t).toContain(eur(l.netResult) + '€');
-    expect(t).toContain(eur(l.cash) + '€');
-    expect(t.includes('scénariopessimiste')).toBe(low < 0);
-    const perte = businessTakeaway({ years: 1, revenueFirst: 1000, revenueLast: 1000, netResultLast: -500, cashLast: -200, pessimisticLowestCash: -900 });
-    expect(perte).toContain('perd');
-    expect(perte).toContain('négative');
-    expect(businessTakeaway({ years: 0, revenueFirst: 0, revenueLast: 0, netResultLast: 0, cashLast: 0, pessimisticLowestCash: 0 })).toBe('');
+  it('entreprise : ce qu’il reste de 100 € vendus, la marge de la caisse et le scénario pessimiste, sans recopier le tableau', () => {
+    const inp = { revenueY1: 120000, revenueGrowth: 0.1, grossMarginRate: 0.6, fixedCosts: 30000, fixedCostsGrowth: 0.02, founderPay: 24000, socialRate: 0.45, corporateTaxRate: 0.25, smallBusinessRate: true, receivableDays: 30, initialCash: 15000, initialInvestment: 10000, valuationMultiple: 5, years: 5 };
+    const run = (i: typeof inp) => ({ central: projectBusiness(i, BUSINESS_SCENARIOS.central), pessimistic: projectBusiness(i, BUSINESS_SCENARIOS.pessimiste), start: i.initialCash - i.initialInvestment });
+    const r = run(inp);
+    const l = r.central[r.central.length - 1];
+    const brut = businessTakeaway(r);
+    const t = digits(brut);
+    // Valeurs par défaut (fictives) : 18 € sur 100 € vendus, caisse sous un mois de charges, pessimiste sous zéro dès l'année 1.
+    const sur100 = Math.round((l.netResult / l.revenue) * 100);
+    expect(sur100).toBe(18);
+    expect(brut).toContain('Scénario central : sur 100\u00a0€ vendus la dernière année, il vous reste environ 18\u00a0€');
+    const lowC = lowestCash(r.central, r.start);
+    expect(lowC).toBeGreaterThanOrEqual(0);
+    expect(lowC).toBeLessThan((r.central[0].fixedCosts + r.central[0].payrollCost) / 12);
+    expect(brut).toContain('tient moins d\'un mois de charges fixes');
+    expect(r.pessimistic[0].cash).toBeLessThan(0);
+    expect(brut).toContain('Scénario pessimiste : trésorerie sous zéro dès l\'année 1, à financer');
+    expect(brut.split('\n')).toHaveLength(3);
+    // Aucun montant du tableau n'est recopié.
+    const lowP = lowestCash(r.pessimistic, r.start);
+    for (const v of [l.revenue, l.netResult, l.cash, lowC, lowP, r.central[0].revenue]) expect(t).not.toContain(eur(v) + '€');
+    // Caisse confortable : en mois de charges fixes et de rémunération.
+    const large = run({ ...inp, initialCash: 60000 });
+    const lowL = lowestCash(large.central, large.start);
+    const moisL = Math.floor(lowL / ((large.central[0].fixedCosts + large.central[0].payrollCost) / 12));
+    expect(moisL).toBeGreaterThanOrEqual(1);
+    expect(businessTakeaway(large)).toContain(`tient environ ${moisL}\u00a0mois`);
+    // Pessimiste toujours positif.
+    const sur = run({ ...inp, fixedCosts: 0, initialCash: 60000 });
+    expect(lowestCash(sur.pessimistic, sur.start)).toBeGreaterThanOrEqual(0);
+    expect(businessTakeaway(sur)).toContain('Scénario pessimiste : la trésorerie reste positive.');
+    // Central en perte et sous zéro dès le départ (investissement supérieur à la trésorerie).
+    const perte = run({ ...inp, fixedCosts: 90000, initialInvestment: 20000 });
+    expect(perte.central[perte.central.length - 1].netResult).toBeLessThan(0);
+    const tp = businessTakeaway(perte);
+    expect(tp).toContain('perd encore');
+    expect(tp).toContain('Même dans ce scénario, la trésorerie passe sous zéro dès le départ');
+    expect(businessTakeaway({ central: [], pessimistic: [], start: 0 })).toBe('');
   });
   it('entreprise : la note « valeur estimée à 0 € » suit exactement les valeurs nulles de projectBusiness', () => {
     const inp = { revenueY1: 120000, revenueGrowth: 0.1, grossMarginRate: 0.6, fixedCosts: 30000, fixedCostsGrowth: 0.02, founderPay: 24000, socialRate: 0.45, corporateTaxRate: 0.25, receivableDays: 30, initialCash: 15000, initialInvestment: 10000, valuationMultiple: 5, years: 5 };
