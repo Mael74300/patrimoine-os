@@ -105,15 +105,29 @@ export function withdrawalChartNote(p: { monthly: number; years: number; sustain
     : `Pointillés : le premier retrait pourrait monter jusqu'à ${fmtEur(p.sustainable)} par mois ; le capital durerait alors les ${ans}, presque entièrement dépensé à la fin.`;
 }
 
-/** Épargne de précaution : montant à réunir, ce qui manque et en combien de temps avec le versement saisi. */
-export function precautionTakeaway(p: { target: number; savings: number; monthlySaving: number; reachedAt: number | null }): string {
+/**
+ * Épargne de précaution : ce que les cases de résultat ne disent pas. Elles affichent déjà le montant visé, le manque,
+ * le délai avec le versement saisi et le versement qui tiendrait le délai souhaité ; la phrase les relie
+ * (avance ou retard sur le délai souhaité, versement à ajouter) sans recopier leurs montants.
+ * `needed` est le versement arrondi à l'euro supérieur, comme dans la case.
+ */
+export function precautionTakeaway(p: { target: number; savings: number; monthlySaving: number; reachedAt: number | null; deadline: number; needed: number }): string {
   if (!(p.target > 0)) return '';
-  const gap = Math.max(0, p.target - p.savings);
-  if (gap === 0) return `Votre épargne de ${fmtEur(p.savings)} couvre déjà le montant visé de ${fmtEur(p.target)} : en cas d'imprévu, vous avez de quoi tenir sans toucher à vos autres placements.`;
-  const base = `Pour être à l'abri d'un imprévu, il faut mettre ${fmtEur(p.target)} de côté, disponibles à tout moment. Vous en avez ${fmtEur(p.savings)} : il manque ${fmtEur(gap)}.`;
-  if (!(p.monthlySaving > 0)) return `${base} Sans versement mensuel, ce manque ne se comble pas.`;
-  if (p.reachedAt === null) return `${base} Avec ${fmtEur(p.monthlySaving)} par mois, ce montant n'est pas atteint en 50 ans : il faut verser davantage.`;
-  return `${base} Avec ${fmtEur(p.monthlySaving)} par mois, vous y arrivez en ${fmtMonths(p.reachedAt)}.`;
+  if (p.savings >= p.target) return 'Votre épargne couvre déjà le montant visé : en cas d\'imprévu, vous avez de quoi tenir sans toucher à vos autres placements ni emprunter.';
+  const role = 'Cette réserve sert à payer un imprévu sans vendre un placement ni emprunter.';
+  if (!(p.monthlySaving > 0)) return `${role} Sans versement mensuel, le manque ne se comble pas : même une petite somme chaque mois fait avancer.`;
+  const extra = Math.max(0, p.needed - p.monthlySaving);
+  const toAdd = extra > 0 ? ` Pour la finir dans le délai souhaité, il faudrait verser ${fmtEur(extra)} de plus chaque mois.` : '';
+  if (p.reachedAt === null) return `${role} Avec ce versement, elle ne serait pas complète avant 50\u00a0ans.${toAdd}`;
+  const diff = p.reachedAt - p.deadline;
+  if (diff < 0) return `${role} Votre versement suffit : elle serait complète ${fmtMonths(-diff)} avant le délai que vous vous êtes fixé.`;
+  if (diff === 0) return `${role} Votre versement suffit : elle serait complète juste dans le délai que vous vous êtes fixé.`;
+  return `${role} Votre versement ne suffit pas pour tenir le délai que vous vous êtes fixé : elle serait complète ${fmtMonths(diff)} plus tard.${toAdd}`;
+}
+
+/** Épargne de précaution : part des intérêts dans la réserve, en mots (« moins de 2 % »), arrondie au point supérieur strict. */
+export function interestShareLabel(share: number): string {
+  return `moins de ${Math.floor(Math.max(0, share) * 100) + 1}\u00a0%`;
 }
 
 /** Épargne de précaution : composition du montant visé, en mots (sous-titre de la carte « Montant visé »). */
@@ -125,13 +139,16 @@ export function precautionTargetSub(months: number, extraReserve: number): strin
 /**
  * Épargne de précaution : ce que rapporte la réserve une fois complète et placée sur les livrets (une année pleine),
  * distingué des intérêts gagnés pendant la constitution (barre « D'où viendra la réserve »), qui ne portent que sur une réserve incomplète.
+ * Avec un seul livret, le montant annuel figure déjà sur sa ligne : la phrase ne le recopie pas.
  */
-export function precautionPlacementTakeaway(p: { yearlyInterest: number; blendedRate: number; overflow: number; buildInterest: number | null; buildMonths: number | null }): string {
+export function precautionPlacementTakeaway(p: { yearlyInterest: number; blendedRate: number; overflow: number; livrets: number; building: boolean }): string {
   if (!(p.yearlyInterest > 0)) return '';
   const rest = p.overflow > 0 ? ` sur les livrets (hors les ${fmtEur(p.overflow)} placés au-delà des plafonds)` : '';
-  const base = `Une fois complète et placée ainsi, la réserve rapporterait environ ${fmtEur(p.yearlyInterest)} par an${rest}, soit ${fmtPct(p.blendedRate)} en moyenne.`;
-  if (p.buildInterest === null || p.buildMonths === null || !(p.buildInterest > 0)) return base;
-  return `${base} Les ${fmtEur(p.buildInterest)} vus plus haut, eux, sont gagnés pendant les ${fmtMonths(p.buildMonths)} de constitution, quand la réserve n’est pas encore complète.`;
+  const base = p.livrets > 1
+    ? `Une fois complète et placée ainsi, la réserve rapporterait environ ${fmtEur(p.yearlyInterest)} par an${rest}, soit ${fmtPct(p.blendedRate)} en moyenne.`
+    : `Les intérêts indiqués sur la ligne du livret sont ceux d’une année pleine, une fois la réserve complète${rest}.`;
+  if (!p.building) return base;
+  return `${base} Ceux de la barre « D’où viendra la réserve », eux, sont gagnés pendant la constitution, quand la réserve n’est pas encore complète.`;
 }
 
 /** Rembourser ou investir : l'option qui laisse le plus à l'horizon, avec le compromis certain / incertain. */

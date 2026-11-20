@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, fmtEur, rentalAnalysis, rentalBalance, rentalProjection, type RentalInput, fireTarget, drawdown, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
-import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio, fmtMonths } from './finance';
+import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio, fmtMonths, monthlySavingNeeded } from './finance';
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
 import { capacityForPayment } from './calc/debtRatio';
 import { prepayment } from './calc/loan';
 import { precautionTarget } from './calc/precaution';
-import { rebalanceTakeaway, portfolioProjectionNote, businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, budgetGapPhrase, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, capacityTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionPlacementTakeaway, precautionTargetSub, prepayTakeaway, prepaySummary, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalChartNote, withdrawalTakeaway } from './takeaways';
+import { interestShareLabel, rebalanceTakeaway, portfolioProjectionNote, businessTakeaway, businessZeroValueNote, portfolioTakeaway, wealthTakeaway, feesTakeaway, debtsTakeaway, inflationTakeaway, budgetTakeaway, budgetGapPhrase, delayCostTakeaway, doublingTakeaway, presentValueTakeaway, rateConversionTakeaway, requiredReturnTakeaway, simpleVsCompoundTakeaway, stepUpTakeaway, timeToTargetTakeaway, creditTakeaway, capacityTakeaway, debtRatioTakeaway, fireTakeaway, performanceTakeaway, precautionTakeaway, precautionPlacementTakeaway, precautionTargetSub, prepayTakeaway, prepaySummary, rentalCashflowSub, rentalTakeaway, rentVsBuyTakeaway, savingsGoalTakeaway, withdrawalChartNote, withdrawalTakeaway } from './takeaways';
 
 describe('phrases « Concrètement »', () => {
   it('crédit : le total rendu = capital + coût total, calculé par amortize', () => {
@@ -148,17 +148,33 @@ describe('phrases « Concrètement »', () => {
     expect(digits(t2)).toContain(eur(out.sustainable));
     expect(withdrawalTakeaway({ capital: 0, monthly: 100, years: 5, ...ok })).toBe('');
   });
-  it('épargne de précaution : manque et délai issus du calcul, cas atteint et non atteint', () => {
+  it('épargne de précaution : avance ou retard sur le délai souhaité, sans recopier les cases (exemple fictif)', () => {
     const input = { profile: 'stable' as const, monthlyExpenses: 2000, months: 3, extraReserve: 1000, currentSavings: 2500, monthlySaving: 250, annualRate: 0.017, deadline: 24 };
     const path = precautionPath(input);
-    const t = digits(precautionTakeaway({ target: path.target, savings: 2500, monthlySaving: 250, reachedAt: path.reachedAt }));
-    expect(t).toContain(eur(path.target));
-    expect(t).toContain(eur(path.target - 2500));
+    const needed = Math.ceil(monthlySavingNeeded(path.target, 2500, 24, 0.017));
     expect(path.reachedAt).not.toBeNull();
-    expect(precautionTakeaway({ target: 7000, savings: 8000, monthlySaving: 0, reachedAt: 0 })).toContain('couvre déjà');
-    expect(precautionTakeaway({ target: 7000, savings: 0, monthlySaving: 0, reachedAt: null })).toContain('ne se comble pas');
-    expect(precautionTakeaway({ target: 7000, savings: 0, monthlySaving: 1, reachedAt: null }).replace(/\u00a0/g, ' ')).toContain('50 ans');
-    expect(precautionTakeaway({ target: 0, savings: 0, monthlySaving: 0, reachedAt: 0 })).toBe('');
+    const reached = path.reachedAt as number;
+    expect(reached).toBeLessThan(24);
+    const t = precautionTakeaway({ target: path.target, savings: 2500, monthlySaving: 250, reachedAt: reached, deadline: 24, needed });
+    expect(t).toContain('suffit');
+    expect(t).toContain(`${fmtMonths(24 - reached)} avant`);
+    for (const shown of [path.target, path.target - 2500, 250, needed]) expect(digits(t)).not.toContain(eur(shown));
+    // Versement trop faible : retard et versement à ajouter, égal à l'écart entre les deux cases.
+    const slow = precautionPath({ ...input, monthlySaving: 100 });
+    const late = precautionTakeaway({ target: slow.target, savings: 2500, monthlySaving: 100, reachedAt: slow.reachedAt, deadline: 24, needed });
+    expect(late).toContain('ne suffit pas');
+    expect(late).toContain(`${fmtMonths((slow.reachedAt as number) - 24)} plus tard`);
+    expect(digits(late)).toContain(`${eur(needed - 100)}€deplus`);
+    expect(precautionTakeaway({ target: 7000, savings: 2500, monthlySaving: 200, reachedAt: 24, deadline: 24, needed: 200 })).toContain('juste dans le délai');
+    expect(precautionTakeaway({ target: 7000, savings: 8000, monthlySaving: 0, reachedAt: 0, deadline: 24, needed: 0 })).toContain('couvre déjà');
+    expect(precautionTakeaway({ target: 7000, savings: 0, monthlySaving: 0, reachedAt: null, deadline: 24, needed: 300 })).toContain('ne se comble pas');
+    expect(precautionTakeaway({ target: 7000, savings: 0, monthlySaving: 1, reachedAt: null, deadline: 24, needed: 300 }).replace(/\u00a0/g, ' ')).toContain('50 ans');
+    expect(precautionTakeaway({ target: 0, savings: 0, monthlySaving: 0, reachedAt: 0, deadline: 24, needed: 0 })).toBe('');
+  });
+  it('épargne de précaution : part des intérêts en mots, toujours strictement au-dessus de la part réelle', () => {
+    expect(interestShareLabel(118 / 7118).replace(/\u00a0/g, ' ')).toBe('moins de 2 %');
+    expect(interestShareLabel(0.02).replace(/\u00a0/g, ' ')).toBe('moins de 3 %');
+    expect(interestShareLabel(0.004).replace(/\u00a0/g, ' ')).toBe('moins de 1 %');
   });
   it('épargne de précaution : sous-titre du montant visé en mots, réserve nommée et égal au calcul', () => {
     const sub = digits(precautionTargetSub(3, 1000));
@@ -168,15 +184,17 @@ describe('phrases « Concrètement »', () => {
     expect(precautionTargetSub(6, 0)).not.toContain('réserve');
   });
   it('épargne de précaution : intérêts d’une année pleine distingués de ceux de la constitution (exemple fictif)', () => {
-    const t = digits(precautionPlacementTakeaway({ yearlyInterest: 119, blendedRate: 0.017, overflow: 0, buildInterest: 118, buildMonths: 18 }));
-    expect(t).toContain('119€paran');
-    expect(t).toContain('1,7%');
-    expect(t).toContain('118€');
-    expect(t).toContain('1anet6mois');
-    expect(t).not.toContain('plafonds');
-    expect(digits(precautionPlacementTakeaway({ yearlyInterest: 200, blendedRate: 0.02, overflow: 5000, buildInterest: null, buildMonths: null }))).toContain('horsles5000€');
-    expect(precautionPlacementTakeaway({ yearlyInterest: 200, blendedRate: 0.02, overflow: 0, buildInterest: null, buildMonths: null })).not.toContain('vus plus haut');
-    expect(precautionPlacementTakeaway({ yearlyInterest: 0, blendedRate: 0, overflow: 0, buildInterest: 10, buildMonths: 3 })).toBe('');
+    const one = digits(precautionPlacementTakeaway({ yearlyInterest: 119, blendedRate: 0.017, overflow: 0, livrets: 1, building: true }));
+    expect(one).not.toContain('119€');
+    expect(one).toContain('annéepleine');
+    expect(one).toContain('constitution');
+    expect(one).not.toContain('plafonds');
+    const two = digits(precautionPlacementTakeaway({ yearlyInterest: 200, blendedRate: 0.02, overflow: 5000, livrets: 2, building: false }));
+    expect(two).toContain('200€paran');
+    expect(two).toContain('2%');
+    expect(two).toContain('horsles5000€');
+    expect(two).not.toContain('constitution');
+    expect(precautionPlacementTakeaway({ yearlyInterest: 0, blendedRate: 0, overflow: 0, livrets: 1, building: true })).toBe('');
   });
   it('rembourser ou investir : sens de l’écart, intérêts économisés et seuil', () => {
     const base = { balance: 150000, annualRate: 0.035, remainingYears: 15, lump: 20000, annualReturn: 0.05, annualFees: 0.005, taxRate: 0.314 };
