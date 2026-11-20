@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { config } from '../config';
 import { buildExport, clearAll, parseImport, readAll, writeAll } from '../lib/storage';
 import { PageHead } from '../components/ui';
+import { ProseWithToc, TocH2, tocItems } from '../components/PageToc';
 
 function LocalDataTools({ onClear }: { onClear: () => void }) {
   const [message, setMessage] = useState('');
@@ -50,24 +51,34 @@ function LocalDataTools({ onClear }: { onClear: () => void }) {
   );
 }
 
+/** Rubriques de la politique de confidentialité ; « Mesure d'audience » seulement si la mesure est activée. */
+export function confidentialiteRubriques(audience: boolean): string[] {
+  return [
+    'Ce que le site ne collecte pas', 'Les calculs restent sur votre appareil', 'Stockage local',
+    ...(audience ? ["Mesure d'audience"] : []), 'Hébergement', 'Liens externes', 'Vos droits',
+  ];
+}
+
+export const MENTIONS_RUBRIQUES = ['Éditeur', 'Hébergeur', 'Nature du contenu', 'Liens commerciaux', 'Propriété intellectuelle'];
+
 export function Confidentialite() {
   const [cleared, setCleared] = useState(false);
   return (
-    <div className="prose">
+    <ProseWithToc items={tocItems(confidentialiteRubriques(Boolean(config.analytics.goatcounter)))}>
       <PageHead eyebrow="RGPD" title="Politique de confidentialité">Version du 10 octobre 2026, mise à jour pour la mesure d'audience.</PageHead>
 
-      <h2>Ce que le site ne collecte pas</h2>
+      <TocH2>Ce que le site ne collecte pas</TocH2>
       <p>
         {config.siteName} ne demande ni compte, ni adresse électronique, ni coordonnées bancaires, ni mot de passe. Il n'utilise aucun cookie
         et aucun traceur publicitaire. Aucun formulaire n'envoie de données à un serveur.
       </p>
 
-      <h2>Les calculs restent sur votre appareil</h2>
+      <TocH2>Les calculs restent sur votre appareil</TocH2>
       <p>
         Les simulateurs s'exécutent entièrement dans votre navigateur. Les montants que vous saisissez ne sont transmis à personne, y compris à l'éditeur.
       </p>
 
-      <h2>Stockage local</h2>
+      <TocH2>Stockage local</TocH2>
       <p>
         Pour vous éviter de tout ressaisir, vos dernières saisies et les simulations que vous choisissez d'enregistrer sont conservées dans le
         stockage local de votre navigateur (localStorage). Ce stockage sert uniquement une fonctionnalité que vous utilisez ; il ne sert ni à
@@ -79,7 +90,7 @@ export function Confidentialite() {
 
       {config.analytics.goatcounter && (
         <>
-          <h2>Mesure d'audience</h2>
+          <TocH2>{"Mesure d'audience"}</TocH2>
           <p>
             Pour savoir quelles pages sont utiles, le site compte les pages vues avec{' '}
             <a href="https://www.goatcounter.com" target="_blank" rel="noopener noreferrer">GoatCounter</a>, un outil open source qui
@@ -95,47 +106,47 @@ export function Confidentialite() {
         </>
       )}
 
-      <h2>Hébergement</h2>
+      <TocH2>Hébergement</TocH2>
       <p>
         Le site est hébergé par GitHub Pages. Comme tout hébergeur, GitHub peut enregistrer des données techniques de connexion, notamment
         l'adresse IP, à des fins de sécurité et de fonctionnement, et peut les traiter aux États-Unis. Ce traitement relève de GitHub :
         consultez sa <a href={config.legal.hostPrivacyUrl} target="_blank" rel="noopener noreferrer">déclaration de confidentialité</a>.
       </p>
 
-      <h2>Liens externes</h2>
+      <TocH2>Liens externes</TocH2>
       <p>Les liens vers des sites officiels ou des partenaires ouvrent des sites tiers, soumis à leurs propres politiques.</p>
 
-      <h2>Vos droits</h2>
+      <TocH2>Vos droits</TocH2>
       <p>
         L'éditeur ne détenant aucune donnée personnelle vous concernant, il n'en a aucune à vous communiquer ou à effacer. Pour toute question :
         {' '}{config.legal.contact}. Vous pouvez aussi saisir la <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">CNIL</a>.
       </p>
       <p className="small muted">Si d'autres services tiers (publicité, par exemple) étaient ajoutés, cette page serait mise à jour et un consentement serait demandé lorsque la loi l'exige, avant tout dépôt de traceur.</p>
-    </div>
+    </ProseWithToc>
   );
 }
 
 export function MentionsLegales() {
   return (
-    <div className="prose">
+    <ProseWithToc items={tocItems(MENTIONS_RUBRIQUES)}>
       <PageHead eyebrow="Informations légales" title="Mentions légales" />
-      <h2>Éditeur</h2>
+      <TocH2>Éditeur</TocH2>
       <p>{config.legal.publisher}<br />Directeur ou directrice de la publication : {config.legal.publicationDirector}<br />Contact : {config.legal.contact}</p>
-      <h2>Hébergeur</h2>
+      <TocH2>Hébergeur</TocH2>
       <p>{config.legal.host}</p>
-      <h2>Nature du contenu</h2>
+      <TocH2>Nature du contenu</TocH2>
       <p>
         Les informations publiées sont générales et pédagogiques. Elles ne constituent ni un conseil en investissement, ni un conseil juridique ou
         fiscal, et ne tiennent pas compte de votre situation personnelle. Les résultats des simulateurs dépendent de vos hypothèses et ne sont pas des
         prévisions. Avant toute décision, consultez un professionnel habilité.
       </p>
-      <h2>Liens commerciaux</h2>
+      <TocH2>Liens commerciaux</TocH2>
       <p>
         Le site ne contient aujourd'hui aucun lien commercial ni publicité. S'il en contient un jour, chacun sera signalé comme tel ; la présence d'une
         rémunération n'influencera pas le contenu des fiches. Voir <Link to="/methodologie">Méthode et sources</Link>.
       </p>
-      <h2>Propriété intellectuelle</h2>
+      <TocH2>Propriété intellectuelle</TocH2>
       <p>Les textes, données et code sont originaux. Les sources citées restent la propriété de leurs auteurs ; aucun article n'est reproduit.</p>
-    </div>
+    </ProseWithToc>
   );
 }
