@@ -566,7 +566,7 @@ describe('phrase « Concrètement » : investir d’un coup ou progressivement',
 describe('etfImmoTakeaway', () => {
   const digits = (t: string) => t.replace(/\s/g, '');
   const eur = (n: number) => digits(Math.round(n).toLocaleString('fr-FR'));
-  it('reprend les montants de compareEtfImmo et nomme le gagnant', async () => {
+  it('dit l’effort mensuel recalculé et le gagnant en mots, sans recopier les patrimoines', async () => {
     const f = await import('./finance');
     const { etfImmoTakeaway } = await import('./takeaways');
     const r = f.compareEtfImmo({
@@ -574,22 +574,36 @@ describe('etfImmoTakeaway', () => {
       etf: { annualReturn: 0.06, annualFees: 0.003, exitTaxRate: 0.314 },
       horizon: 20, inflation: 0.02, cashRate: 0.017, saleCostRate: 0.05,
     });
-    const t = digits(etfImmoTakeaway({ horizon: 20, etfNet: r.etf.netWealth, immoNet: r.immo.netWealth, startCapital: r.startCapital }));
-    expect(t).toContain(eur(r.etf.netWealth));
-    expect(t).toContain(eur(r.immo.netWealth));
-    expect(t).toContain(eur(Math.abs(r.etf.netWealth - r.immo.netWealth)));
-    expect(t).toContain(r.etf.netWealth > r.immo.netWealth ? 'faveurdesETF' : 'faveurdel\'immobilier');
+    const avgMonthly = (r.etf.invested - r.startCapital) / (20 * 12);
+    const raw = etfImmoTakeaway({ horizon: 20, etfNet: r.etf.netWealth, immoNet: r.immo.netWealth, startCapital: r.startCapital, avgMonthly });
+    const t = digits(raw);
+    expect(avgMonthly).toBeGreaterThan(0);
+    expect(t).toContain(eur(r.startCapital));
+    expect(t).toContain(eur(avgMonthly));
+    expect(t).not.toContain(eur(r.etf.netWealth));
+    expect(t).not.toContain(eur(r.immo.netWealth));
+    expect(t).not.toContain(eur(Math.abs(r.etf.netWealth - r.immo.netWealth)));
+    expect(raw).toContain(r.etf.netWealth > r.immo.netWealth ? "davantage avec les ETF qu'avec le bien" : "davantage avec le bien qu'avec les ETF");
+  });
+  it('verdict selon l’écart arrondi, effort nul dit en mots', async () => {
+    const { etfImmoTakeaway } = await import('./takeaways');
+    const c = { horizon: 20, startCapital: 22000, avgMonthly: 300 };
+    expect(etfImmoTakeaway({ ...c, etfNet: 100000, immoNet: 120000 })).toContain("davantage avec le bien qu'avec les ETF");
+    expect(etfImmoTakeaway({ ...c, etfNet: 100000.2, immoNet: 99999.9 })).toContain('autant des deux côtés');
+    const z = etfImmoTakeaway({ ...c, avgMonthly: 0.3, etfNet: 1, immoNet: 2 });
+    expect(z).toContain('puis rien chaque mois : les loyers couvrent les dépenses du bien');
+    expect(z).toContain('\n');
   });
   it('vide sans horizon', async () => {
     const { etfImmoTakeaway } = await import('./takeaways');
-    expect(etfImmoTakeaway({ horizon: 0, etfNet: 0, immoNet: 0, startCapital: 0 })).toBe('');
+    expect(etfImmoTakeaway({ horizon: 0, etfNet: 0, immoNet: 0, startCapital: 0, avgMonthly: 0 })).toBe('');
   });
 });
 
 describe('etfImmoGapText', () => {
   const digits = (t: string) => t.replace(/\s/g, '');
   const eur = (n: number) => digits(Math.round(n).toLocaleString('fr-FR'));
-  it('versements communs et gains nets recalculés par compareEtfImmo', async () => {
+  it('versements communs recalculés par compareEtfImmo, sans répéter les gains des barres', async () => {
     const f = await import('./finance');
     const { etfImmoGapText } = await import('./takeaways');
     const r = f.compareEtfImmo({
@@ -597,18 +611,12 @@ describe('etfImmoGapText', () => {
       etf: { annualReturn: 0.06, annualFees: 0.003, exitTaxRate: 0.314 },
       horizon: 20, inflation: 0.02, cashRate: 0.017, saleCostRate: 0.05,
     });
-    const t = digits(etfImmoGapText({ invested: r.etf.invested, etfNet: r.etf.netWealth, immoNet: r.immo.netWealth }));
+    const t = digits(etfImmoGapText({ invested: r.etf.invested }));
     const inv = Math.round(r.etf.invested);
     expect(t).toContain(eur(inv));
-    expect(t).toContain(eur(Math.round(r.etf.netWealth) - inv));
-    expect(t).toContain(eur(Math.round(r.immo.netWealth) - inv));
-  });
-  it('perte et égalité dites en mots', async () => {
-    const { etfImmoGapText } = await import('./takeaways');
-    const t = etfImmoGapText({ invested: 100000, etfNet: 100000, immoNet: 90000 });
-    expect(t).toContain('le portefeuille d’ETF rend tout juste vos versements');
-    expect(digits(t)).toContain('lebienimmobilierenperd10000');
-    expect(etfImmoGapText({ invested: 0, etfNet: 1, immoNet: 1 })).toBe('');
+    expect(t).toContain('apportcompris');
+    expect(t).not.toContain(eur(Math.round(r.etf.netWealth) - inv));
+    expect(etfImmoGapText({ invested: 0 })).toBe('');
   });
 });
 

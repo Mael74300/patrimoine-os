@@ -463,32 +463,33 @@ export function lumpGradualTakeaway(p: { amount: number; spreadMonths: number; m
   return `${base} Ici, l'étalement finit ${fmtEur(ecart)} au-dessus : c'est le cas quand le prix baisse pendant l'étalement. Si le prix avait monté, investir tout de suite aurait été préférable.`;
 }
 
-/** ETF ou immobilier locatif : le patrimoine net de chaque côté, l'écart, et le rappel que tout dépend des hypothèses. */
-export function etfImmoTakeaway(p: { horizon: number; etfNet: number; immoNet: number; startCapital: number }): string {
+/**
+ * ETF ou immobilier locatif : ce que l'on verse concrètement (apport, puis effort mensuel moyen), puis le verdict
+ * en mots, sans recopier les montants déjà affichés dans les cases de résultat et sur les barres.
+ * Verdict calculé sur les montants arrondis affichés, comme la case « Écart ».
+ */
+export function etfImmoTakeaway(p: { horizon: number; etfNet: number; immoNet: number; startCapital: number; avgMonthly: number }): string {
   if (!(p.horizon > 0)) return '';
-  const ans = fmtAns(p.horizon);
-  const base = `Avec ces hypothèses, après ${ans}, un même apport de ${fmtEur(p.startCapital)} et un même effort d'épargne donneraient ${fmtEur(p.etfNet)} placé en ETF et ${fmtEur(p.immoNet)} dans l'immobilier locatif, impôts et frais de sortie déduits.`;
-  const ecart = Math.abs(p.etfNet - p.immoNet);
-  const fin = ecart < 0.5
-    ? ' Les deux stratégies finissent à égalité.'
-    : ` L'écart est de ${fmtEur(ecart)} en faveur ${p.etfNet > p.immoNet ? 'des ETF' : 'de l\'immobilier'}.`;
-  return `${base}${fin} Ce n'est pas une prévision : changez le rendement ou l'évolution du prix du bien, et l'écart peut s'inverser.`;
+  const mensuel = Math.round(p.avgMonthly);
+  const verse = mensuel > 0
+    ? `Vous placez ${fmtEur(p.startCapital)} au départ, puis ${fmtEur(mensuel)} par mois en moyenne : ce que le bien vous coûte après impôt, versé aussi sur les ETF.`
+    : `Vous placez ${fmtEur(p.startCapital)} au départ, puis rien chaque mois : les loyers couvrent les dépenses du bien.`;
+  const ecart = Math.round(p.etfNet) - Math.round(p.immoNet);
+  const fin = `Au bout de ${fmtAns(p.horizon)}, une fois tout vendu, le crédit remboursé et les impôts payés, `;
+  const verdict = ecart > 0 ? `${fin}vous auriez davantage avec les ETF qu'avec le bien.`
+    : ecart < 0 ? `${fin}vous auriez davantage avec le bien qu'avec les ETF.`
+    : `${fin}vous auriez autant des deux côtés.`;
+  return `${verse}\n${verdict} Ce n'est pas une prévision : changez le rendement des ETF ou le prix du bien, et le résultat peut s'inverser.`;
 }
 
 /**
  * Comparateur ETF / immobilier : d'où vient l'écart. Les versements sont identiques des deux côtés,
- * l'écart est donc la différence entre ce que chaque placement ajoute (ou retire) une fois vendu.
- * Calculé sur les montants arrondis affichés pour que les soustractions tombent juste à l'euro près.
+ * l'écart est donc la différence entre ce que chaque placement en fait une fois vendu ; le gain de chacun
+ * figure déjà sous sa barre, la phrase ne le répète pas.
  */
-export function etfImmoGapText(p: { invested: number; etfNet: number; immoNet: number }): string {
+export function etfImmoGapText(p: { invested: number }): string {
   if (!(p.invested > 0)) return '';
-  const inv = Math.round(p.invested);
-  const part = (name: string, net: number) => {
-    const d = Math.round(net) - inv;
-    if (d === 0) return `${name} rend tout juste vos versements`;
-    return d > 0 ? `${name} y ajoute ${fmtEur(d)}` : `${name} en perd ${fmtEur(-d)}`;
-  };
-  return `Des deux côtés, vous versez la même somme : ${fmtEur(inv)}. L'écart vient seulement de ce que chaque placement en fait, une fois vendu et imposé : ${part('le portefeuille d’ETF', p.etfNet)}, ${part('le bien immobilier', p.immoNet)}.`;
+  return `Des deux côtés, vous versez la même somme : ${fmtEur(Math.round(p.invested))}, apport compris. L'écart vient donc seulement de ce que chaque placement en fait, une fois vendu et imposé.`;
 }
 
 /** Comparer des durées de crédit : la mensualité baisse, le coût total monte. */
