@@ -1046,9 +1046,12 @@ h2.gloss-letter::before { content: none; }
 .bb-seg + .bb-seg { border-left: 2px solid var(--surface); }
 .bb-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 4px 0 0 calc(5.2rem + 10px); font-size: .85rem; color: var(--ink-2); }
 .bb-dot { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin-right: 6px; vertical-align: -1px; border: 1px solid var(--line); }
-.bb-list { list-style: none; padding: 0; margin: 0 0 16px; display: grid; gap: 8px; }
+.bb-list { list-style: none; padding: 0; margin: 0 0 16px; display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
 .bb-list li { display: grid; grid-template-columns: 18px 1fr; align-items: baseline; padding: 10px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; line-height: 1.45; }
 .bb-list .bb-dot { margin: 0; }
+.bb-share { display: block; }
+@media (max-width: 480px) { .bb-share { display: inline; } .bb-share::before { content: " : "; } .bb-list li { padding: 8px 12px; } }
+.bb-share b { font-size: 1.15rem; }
 .bb-gap { display: block; color: var(--ink-2); font-size: .92rem; }
 @media (max-width: 480px) { .bb-row { grid-template-columns: 4.2rem 1fr; gap: 8px; } .bb-legend { margin-left: calc(4.2rem + 8px); } }
 /* Simulateur Taux d'endettement : où partent les revenus du mois, repère de 35 % en pointillé */

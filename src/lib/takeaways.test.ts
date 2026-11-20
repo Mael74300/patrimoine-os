@@ -347,48 +347,50 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(t).toContain((r.proportionalRate * 100).toFixed(4).replace('.', ','));
     expect(rateConversionTakeaway({ annualRate: 0.05, periods: 7, equivalentRate: r.equivalentRate, proportionalRate: r.proportionalRate, gap: r.gap })).toBe('');
   });
-  it('budget : parts du revenu, dépassement et effort issus du calcul', () => {
-    const inp = { netIncome: 2500, needs: 1400, wants: 650, saving: 250 };
-    const b = analyzeBudget(inp);
-    const c = catchUp(inp, 0.2);
-    const t = digits(budgetTakeaway({ income: b.income, shares: b.shares, unallocated: b.unallocated, targetRate: 0.2, missing: c.missing }));
-    expect(t).toContain('56€vontauxbesoins');
-    expect(t).toContain('26€auxenvies');
-    expect(t).toContain('10€àl\'épargne');
-    expect(t).toContain(eur(200));
-    expect(t).toContain(eur(c.missing));
-    const over = analyzeBudget({ ...inp, wants: 1200 });
-    expect(budgetTakeaway({ income: over.income, shares: over.shares, unallocated: over.unallocated, targetRate: 0.2, missing: 500 })).toContain('dépassent le revenu de');
-    const ok = analyzeBudget({ ...inp, saving: 600, wants: 500 });
-    expect(budgetTakeaway({ income: ok.income, shares: ok.shares, unallocated: ok.unallocated, targetRate: 0.2, missing: 0 })).toContain('déjà');
-    expect(budgetTakeaway({ income: 0, shares: { needs: 0, wants: 0, saving: 0 }, unallocated: 0, targetRate: 0.2, missing: 0 })).toBe('');
-  });
-  it('budget : où trouver l’effort, chaque montant cité une seule fois, issu de catchUp', () => {
-    const run = (inp: { netIncome: number; needs: number; wants: number; saving: number }) => {
+  it('budget : le « Concrètement » ne recopie ni les cases ni la répartition de la barre', () => {
+    const run = (inp: { netIncome: number; needs: number; wants: number; saving: number }, target = 0.2) => {
       const b = analyzeBudget(inp);
-      const c = catchUp(inp, 0.2);
-      return { c, t: digits(budgetTakeaway({ income: b.income, shares: b.shares, unallocated: b.unallocated, targetRate: 0.2, missing: c.missing, fromUnallocated: c.fromUnallocated, fromWants: c.fromWants, uncovered: c.uncovered })) };
+      const c = catchUp(inp, target);
+      return { b, c, t: digits(budgetTakeaway({ income: b.income, shares: b.shares, unallocated: b.unallocated, targetRate: target, missing: c.missing, wants: b.wants, fromUnallocated: c.fromUnallocated, fromWants: c.fromWants, uncovered: c.uncovered })) };
     };
     // Exemple fictif par défaut : 250 € manquants = 200 € non affectés + 50 € d'envies.
     const d = run({ netIncome: 2500, needs: 1400, wants: 650, saving: 250 });
     expect(d.c).toMatchObject({ missing: 250, fromUnallocated: 200, fromWants: 50, uncovered: 0 });
-    expect(d.t).toContain(`${eur(250)}€deplus`);
-    expect(d.t).toContain(`les${eur(200)}€nonaffectés,plus${eur(50)}€prissurlesenvies.`);
-    expect(d.t).not.toContain('affectésàrien');
-    expect(d.t).not.toContain('resterait');
-    // Non affecté plus grand que l'effort : une partie seulement est prise.
+    expect(d.t).toContain('toutl\'argentquevousn\'avezaffectéàrien');
+    expect(d.t).toContain(`retirez${eur(50)}€parmoisauxenvies`);
+    expect(d.t).toContain(`passeraientà${eur(600)}€`);
+    // Aucun montant des cases ni part de la barre recopié.
+    for (const v of [`${eur(250)}€`, `${eur(200)}€`, '56', '26', '10%']) expect(d.t).not.toContain(v);
+    // Non affecté plus grand que l'effort : une partie seulement est prise, le reste libre est dit.
     const big = run({ netIncome: 3000, needs: 1400, wants: 650, saving: 250 });
     expect(big.c).toMatchObject({ missing: 350, fromUnallocated: 350, fromWants: 0 });
-    expect(big.t).toContain(`${eur(350)}€prissurles${eur(700)}€nonaffectés.`);
+    expect(big.t).toContain(`unepartie`);
+    expect(big.t).toContain(`resterait${eur(350)}€parmois`);
+    expect(big.t).not.toContain(`${eur(700)}€`);
+    // Non affecté exactement égal à l'effort.
+    const exact = run({ netIncome: 2500, needs: 1400, wants: 600, saving: 250 });
+    expect(exact.c).toMatchObject({ missing: 250, fromUnallocated: 250, fromWants: 0 });
+    expect(exact.t).toContain('suffitdemettredecôtétoutl\'argent');
+    // Rien de libre : tout l'effort sur les envies.
+    const wantsOnly = run({ netIncome: 2500, needs: 1400, wants: 850, saving: 250 });
+    expect(wantsOnly.c).toMatchObject({ fromUnallocated: 0, fromWants: 250 });
+    expect(wantsOnly.t).toContain(`toutl'effortsurlesenvies(ellespasseraientà${eur(600)}€parmois)`);
     // Envies insuffisantes : la part non couverte est signalée.
     const short = run({ netIncome: 2500, needs: 2200, wants: 50, saving: 250 });
     expect(short.c).toMatchObject({ missing: 250, fromUnallocated: 0, fromWants: 50, uncovered: 200 });
-    expect(short.t).toContain(`:${eur(50)}€prissurlesenvies.`);
-    expect(short.t).toContain(`Ilresterait${eur(200)}€àtrouver`);
-    // Taux visé déjà atteint : le revenu non affecté reste mentionné.
+    expect(short.t).toContain(`renonçantàtouteslesenvies,ilmanquerait${eur(200)}€parmois`);
+    const none = run({ netIncome: 2500, needs: 2250, wants: 0, saving: 250 });
+    expect(none.t).toContain('niargentnonaffecténienviesàréduire');
+    // Dépassement du revenu : le budget est déclaré déséquilibré, sans viser de taux.
+    const over = run({ netIncome: 2500, needs: 1400, wants: 1200, saving: 250 });
+    expect(over.t).toContain('dépassentvotrerevenu');
+    expect(over.t).not.toContain('Pourépargner');
+    // Taux visé déjà atteint.
     const ok = run({ netIncome: 2500, needs: 1200, wants: 500, saving: 600 });
-    expect(ok.t).toContain(`Ilreste${eur(200)}€parmois`);
     expect(ok.t).toContain('déjà');
+    expect(ok.t).toContain('affectéàrien');
+    expect(run({ netIncome: 2500, needs: 1300, wants: 600, saving: 600 }).t).not.toContain('affectéàrien');
+    expect(budgetTakeaway({ income: 0, shares: { needs: 0, wants: 0, saving: 0 }, unallocated: 0, targetRate: 0.2, missing: 0 })).toBe('');
   });
   it('budget : écart de chaque poste au repère, en mots, issu de analyzeBudget', () => {
     const b = analyzeBudget({ netIncome: 2500, needs: 1400, wants: 650, saving: 250 });
