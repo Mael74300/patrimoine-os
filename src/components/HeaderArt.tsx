@@ -1,5 +1,6 @@
 export type HeaderArtName =
   | 'guides' | 'simulateurs' | 'encyclopedie' | 'comparateur' | 'entrepreneuriat'
+  | 'glossaire' | 'plan-du-site' | 'introuvable'
   | 'sim-epargne' | 'sim-credit' | 'sim-budget' | 'sim-immobilier' | 'sim-retraite';
 
 /** Scène du bandeau d'un simulateur, selon son thème (même découpage que la liste des simulateurs). */
@@ -63,6 +64,49 @@ export function HeaderArt({ name }: { name: HeaderArtName }) {
         <path d="M44 44 24 92h40zM196 44l-20 48h40z" {...soft} />
         <path d="M24 92a20 14 0 0 0 40 0M176 92a20 14 0 0 0 40 0" {...line} />
         <path d="M34 78h20M186 66h20M186 78h20" {...line} strokeWidth={2.5} />
+      </>;
+      break;
+    case 'glossaire': // bulle « ? » devenue bulle expliquée, et trois lettres en tuiles
+      scene = <>
+        <path d="M24 26h70a12 12 0 0 1 12 12v30a12 12 0 0 1-12 12H52l-16 14V80H24a12 12 0 0 1-12-12V38a12 12 0 0 1 12-12z" {...white} />
+        <path d="M51 44a8 8 0 1 1 11 7c-3 1-4 3-4 6" {...line} />
+        <circle cx="58" cy="66" r="2.5" fill="var(--primary)" />
+        <path d="M112 54h16M122 46l8 8-8 8" {...line} stroke="var(--accent)" />
+        <path d="M148 18h70a12 12 0 0 1 12 12v42a12 12 0 0 1-12 12h-12v14l-16-14h-42a12 12 0 0 1-12-12V30a12 12 0 0 1 12-12z" {...soft} />
+        <path d="M152 38h54M152 52h62M152 66h40" {...line} strokeWidth={2.5} />
+        <rect x="60" y="104" width="34" height="34" rx="7" {...gold} />
+        <path d="M69 130l8-18 8 18M72 124h10" {...line} strokeWidth={2.5} />
+        <rect x="104" y="104" width="34" height="34" rx="7" {...white} />
+        <path d="M115 112v18h7a5 5 0 0 0 0-10h-7 6a4 4 0 0 0 0-8z" {...line} strokeWidth={2.5} />
+        <rect x="148" y="104" width="34" height="34" rx="7" {...soft} />
+        <path d="M172 115a9 9 0 1 0 0 12" {...line} strokeWidth={2.5} />
+      </>;
+      break;
+    case 'plan-du-site': // carte pliée en trois volets, chemin en pointillés jusqu'à une épingle
+      scene = <>
+        <path d="M30 40l56-16 64 16 60-16v100l-60 16-64-16-56 16z" {...white} />
+        <path d="M86 24l64 16v100l-64-16z" {...soft} />
+        <path d="M86 24v100M150 40v100" {...line} />
+        <path d="M48 112c14-6 22-22 38-24s30 18 48 10 22-30 42-34" {...line} stroke="var(--accent)" strokeDasharray="2 9" />
+        <circle cx="48" cy="112" r="5" {...gold} />
+        <path d="M184 70c0-14-11-22-11-32a11 11 0 0 1 22 0c0 10-11 18-11 32z" {...gold} />
+        <circle cx="184" cy="38" r="4" {...white} />
+      </>;
+      break;
+    case 'introuvable': // panneau indicateur à deux directions sur un chemin qui se sépare
+      scene = <>
+        <path d="M24 134h192" {...line} />
+        <path d="M120 134V22" {...line} strokeWidth={4} />
+        <circle cx="120" cy="20" r="5" {...gold} />
+        <path d="M120 34h66l16 14-16 14h-66z" {...soft} />
+        <path d="M134 48h40" {...line} strokeWidth={2.5} />
+        <path d="M120 72H56L40 86l16 14h64z" {...white} />
+        <path d="M66 86h40" {...line} strokeWidth={2.5} />
+        <path d="M96 134a24 10 0 0 1 48 0z" {...soft} />
+        <path d="M44 128v-8M50 128v-12M56 128v-7M184 128v-8M190 128v-12M196 128v-7" {...line} stroke="var(--accent)" strokeWidth={2.5} />
+        <circle cx="62" cy="40" r="20" {...gold} />
+        <path d="M55 35a7 7 0 1 1 10 6c-2 1-3 3-3 5" {...line} />
+        <circle cx="62" cy="52" r="2.2" fill="var(--primary)" />
       </>;
       break;
     case 'sim-epargne': // bocal de pièces, une pièce qui tombe, pousse sur une petite pile

@@ -22,7 +22,7 @@ export default function Glossaire() {
   return (
     <div className="prose gloss-page">
       <Crumbs items={[{ to: '/', label: 'Accueil' }, { label: 'Glossaire' }]} />
-      <PageHead eyebrow="Pédagogie" title="Glossaire de la finance personnelle">
+      <PageHead eyebrow="Pédagogie" title="Glossaire de la finance personnelle" art="glossaire">
         {all.length} notions expliquées simplement, avec des liens vers les simulateurs, fiches et guides qui les mettent en pratique.
       </PageHead>
       <div className="search-box gloss-search" role="search">

@@ -24,7 +24,7 @@ export default function PlanDuSite() {
   return (
     <div className="prose">
       <Crumbs items={[{ to: '/', label: 'Accueil' }, { label: 'Plan du site' }]} />
-      <PageHead eyebrow="Navigation" title="Plan du site">
+      <PageHead eyebrow="Navigation" title="Plan du site" art="plan-du-site">
         Toutes les pages du site sur une seule page : {fiches.length} fiches, {guides.length} guides et {simulators.length} simulateurs.
       </PageHead>
 
