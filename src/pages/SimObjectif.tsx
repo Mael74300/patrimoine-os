@@ -82,7 +82,7 @@ export default function SimObjectif() {
             <Kpi label="Total des versements" value={fmtEur(r.deposits)} sub={`en plus des ${fmtEur(s.current)} déjà épargnés`} />
             <Kpi label="Intérêts attendus" value={fmtEur(r.interest)} sub={`soit ${fmtPct(r.interestShare)} de l'objectif`} />
           </div>
-          <Takeaway>{savingsGoalTakeaway({ target: s.target, current: s.current, years: n, monthly: r.monthly, deposits: r.deposits, interest: r.interest })}</Takeaway>
+          <Takeaway>{savingsGoalTakeaway({ target: s.target, current: s.current, years: n, monthly: r.monthly, interest: r.interest, monthlyWithoutReturn: byRate[0].monthly })}</Takeaway>
           <h2>Ce que changent quelques années de plus</h2>
           <p className="fb-intro">
             {hasLoss

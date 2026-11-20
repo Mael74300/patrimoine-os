@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, fmtEur, rentalAnalysis, rentalBalance, rentalProjection, type RentalInput, fireTarget, drawdown, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
-import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio, fmtMonths, monthlySavingNeeded, lateHalfGainsYears, fmtPart } from './finance';
+import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio, fmtMonths, monthlySavingNeeded, lateHalfGainsYears, fmtPart, monthlyByRate } from './finance';
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
 import { capacityForPayment } from './calc/debtRatio';
@@ -64,20 +64,35 @@ describe('phrases « Concrètement »', () => {
   const digits = (t: string) => t.replace(/\s/g, '');
   const eur = (n: number) => digits(Math.round(n).toLocaleString('fr-FR'));
 
-  it('objectif d’épargne : versement, versements totaux et intérêts calculés', () => {
-    const input = { target: 20000, current: 2000, years: 5, annualRate: 0.02 };
+  it('objectif d’épargne : ce que veulent dire les cases, sans recopier leurs montants (exemple fictif par défaut)', () => {
+    const input = { target: 20000, current: 2000, years: 5, annualRate: 0.017 };
     const r = savingsGoal(input);
-    const t = digits(savingsGoalTakeaway({ ...input, monthly: r.monthly, deposits: r.deposits, interest: r.interest }));
-    expect(t).toContain(eur(r.monthly));
-    expect(t).toContain(eur(r.deposits));
-    expect(t).toContain(eur(r.interest));
-    expect(t).toContain('5ans');
+    const zero = monthlyByRate(input, [0])[0].monthly;
+    const brut = savingsGoalTakeaway({ ...input, monthly: r.monthly, interest: r.interest, monthlyWithoutReturn: zero });
+    const t = digits(brut);
+    // Les montants des cases (versement, total versé, intérêts) ne sont pas recopiés.
+    for (const v of [r.monthly, r.deposits, r.interest]) expect(t).not.toContain(eur(v) + '€');
+    // Intérêts sous 15 % de l'objectif : c'est l'effort qui fait le travail.
+    expect(r.interest / input.target).toBeLessThan(0.15);
+    expect(brut).toContain('surtout votre effort qui compte');
+    // L'écart avec un argent qui ne rapporte rien, recalculé : 300 € − 285 € ≈ 15 € par mois.
+    expect(Math.round(zero)).toBe(300);
+    expect(t).toContain(`allègel'effortde${eur(zero - r.monthly)}€parmois`);
+    expect(brut).toContain('5\u00a0ans');
   });
-  it('objectif d’épargne : taux nul, objectif déjà couvert, échéance nulle', () => {
+  it('objectif d’épargne : part des intérêts, taux nul ou négatif, objectif déjà couvert, échéance nulle', () => {
+    const longue = { target: 100000, current: 0, years: 30, annualRate: 0.05 };
+    const l = savingsGoal(longue);
+    expect(savingsGoalTakeaway({ ...longue, monthly: l.monthly, interest: l.interest, monthlyWithoutReturn: monthlyByRate(longue, [0])[0].monthly })).toContain('le temps travaille pour vous');
     const z = savingsGoal({ target: 12000, current: 0, years: 5, annualRate: 0 });
-    expect(savingsGoalTakeaway({ target: 12000, current: 0, years: 5, monthly: z.monthly, deposits: z.deposits, interest: z.interest })).toContain('pas d\'intérêts');
-    expect(savingsGoalTakeaway({ target: 1000, current: 5000, years: 3, monthly: 0, deposits: 0, interest: 0 })).toContain('sans rien verser');
-    expect(savingsGoalTakeaway({ target: 1000, current: 0, years: 0, monthly: 0, deposits: 0, interest: 0 })).toBe('');
+    const tz = savingsGoalTakeaway({ target: 12000, current: 0, years: 5, monthly: z.monthly, interest: z.interest, monthlyWithoutReturn: z.monthly });
+    expect(tz).toContain('pas d\'intérêts');
+    expect(tz).not.toContain('allège');
+    const neg = { target: 12000, current: 0, years: 5, annualRate: -0.02 };
+    const n = savingsGoal(neg);
+    expect(savingsGoalTakeaway({ ...neg, monthly: n.monthly, interest: n.interest, monthlyWithoutReturn: z.monthly })).toContain('alourdit');
+    expect(savingsGoalTakeaway({ target: 1000, current: 5000, years: 3, monthly: 0, interest: 0, monthlyWithoutReturn: 0 })).toContain('sans rien verser');
+    expect(savingsGoalTakeaway({ target: 1000, current: 0, years: 0, monthly: 0, interest: 0, monthlyWithoutReturn: 0 })).toBe('');
   });
   it('louer ou acheter : sens de l’écart et mise en garde sur les hypothèses', () => {
     const base = { price: 250000, downPayment: 50000, acquisitionRate: 0.08, loanRate: 0.035, loanYears: 20, ownerCostRate: 0.015, priceGrowth: 0.02, sellingRate: 0.05, monthlyRent: 900, rentGrowth: 0.02, investReturn: 0.04, horizonYears: 15 };
@@ -566,20 +581,27 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     const sum = summarizePortfolio(lines);
     const proj = projectGrowth({ initial: sum.total, monthly: 300, annualReturn: sum.netReturn, annualFees: 0, years: 20, inflation: 0 });
     const f = proj[proj.length - 1];
-    const t = digits(portfolioTakeaway({ total: sum.total, netReturn: sum.netReturn, annualFeesEuro: sum.annualFeesEuro, topLabel: 'ETF monde', topWeight: 0.6 }));
-    expect(t).toContain(eur(sum.total) + '€');
+    const brut = portfolioTakeaway({ total: sum.total, grossReturn: sum.grossReturn, netReturn: sum.netReturn, annualFeesEuro: sum.annualFeesEuro, topLabel: 'ETF monde', topWeight: 0.6 });
+    const t = digits(brut);
+    // Le gain annuel en euros (absent des cases) est dit ; la valeur, le rendement et les frais des cases ne sont pas recopiés.
     expect(t).toContain(eur(sum.total * sum.netReturn) + '€');
-    expect(t).toContain(eur(sum.annualFeesEuro) + '€');
-    expect(t).toContain('ETFmonde');
-    const n = digits(portfolioProjectionNote({ years: 20, monthly: 300, contributed: f.contributed, value: f.value }));
-    expect(n).toContain('20ans');
-    expect(n).toContain('300€');
-    expect(n).toContain(eur(f.value) + '€');
-    expect(n).toContain(eur(f.contributed) + '€');
-    expect(portfolioProjectionNote({ years: 10, monthly: 0, contributed: 1000, value: 1500 })).toContain('sans versement supplémentaire');
-    expect(portfolioProjectionNote({ years: 10, monthly: 0, contributed: 0, value: 0 })).toBe('');
-    expect(portfolioTakeaway({ total: 1000, netReturn: 0.02, annualFeesEuro: 0, topLabel: 'X', topWeight: 0.4 })).not.toContain('pèse');
-    expect(portfolioTakeaway({ total: 0, netReturn: 0, annualFeesEuro: 0, topLabel: '', topWeight: 0 })).toBe('');
+    expect(t).not.toContain(eur(sum.total) + '€');
+    expect(t).not.toContain(eur(sum.annualFeesEuro) + '€');
+    expect(brut).not.toContain('%');
+    // Frais rapportés au gain avant frais : 12 000 × 0,2 % = 24 € sur 12 000 × 6 % + 8 000 × 2 % = 880 €, soit environ 3 € sur 100 €.
+    expect(Math.round((sum.annualFeesEuro / (sum.total * sum.grossReturn)) * 100)).toBe(3);
+    expect(t).toContain('Sur100€gagnésavantfrais,environ3€partentenfrais');
+    expect(brut).toContain('Plus de la moitié de votre argent repose sur « ETF monde »');
+    const n = portfolioProjectionNote({ years: 20, contributed: f.contributed, value: f.value });
+    // La légende du graphique donne déjà les montants : la note dit la part des gains, recalculée.
+    expect(digits(n)).not.toContain(eur(f.value) + '€');
+    expect(digits(n)).not.toContain(eur(f.contributed) + '€');
+    expect(n).toContain(`environ ${Math.round(((f.value - f.contributed) / f.value) * 10)}\u00a0€ sur 10`);
+    expect(portfolioProjectionNote({ years: 10, contributed: 1000, value: 900 })).toContain('ne vous enrichit pas');
+    expect(portfolioProjectionNote({ years: 10, contributed: 0, value: 0 })).toBe('');
+    expect(portfolioTakeaway({ total: 1000, grossReturn: 0.02, netReturn: 0.02, annualFeesEuro: 0, topLabel: 'X', topWeight: 0.4 })).not.toContain('repose');
+    expect(portfolioTakeaway({ total: 1000, grossReturn: 0.05, netReturn: 0.04, annualFeesEuro: 10, topLabel: 'X', topWeight: 0.8 })).toContain('Au moins les trois quarts');
+    expect(portfolioTakeaway({ total: 0, grossReturn: 0, netReturn: 0, annualFeesEuro: 0, topLabel: '', topWeight: 0 })).toBe('');
   });
 });
 
