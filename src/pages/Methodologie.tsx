@@ -49,7 +49,7 @@ export const FORMULAS: [string, string[]][] = [
   ]],
   ['Rendement réel d’un placement', [
     'Versement initial au début, puis versement mensuel en fin de chaque mois. Le taux mensuel m est celui pour lequel initial × (1 + m)^n + versement × ((1 + m)^n − 1) / m = valeur actuelle, trouvé par dichotomie (n = nombre de mois).',
-    'Rendement annuel équivalent = (1 + m)^12 − 1. Rendement cumulé = (valeur actuelle − total versé) / total versé. Montants saisis uniquement, rendement passé et nominal.',
+    'Rendement annuel équivalent = (1 + m)^12 − 1. Rendement cumulé = (valeur actuelle − total versé) / total versé. Montants saisis uniquement, rendement passé et nominal. Si une inflation moyenne est saisie : rendement réel = (1 + rendement annuel équivalent) / (1 + inflation) − 1.',
   ]],
   ['Coût d’attendre pour épargner', [
     'Capital à l’arrivée = versement × ((1 + m)^n − 1) / m, avec m le taux mensuel équivalent au rendement annuel supposé et n le nombre de mois de versement (n × versement si le rendement est nul). Versements en fin de mois.',

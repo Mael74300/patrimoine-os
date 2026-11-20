@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { performance, performanceSegments } from './performance';
+import { performance, performanceSegments, realAnnualized } from './performance';
 
 // Exemples fictifs.
 describe('Rendement réel (TRI)', () => {
@@ -65,5 +65,25 @@ describe('Barre « D’où vient la valeur actuelle »', () => {
     expect(performanceSegments({ initial: 0, monthly: 100, months: 12, finalValue: 1200 }).map((x) => x.key)).toEqual(['monthly']);
     expect(performanceSegments({ initial: 0, monthly: 0, months: 12, finalValue: 100 })).toEqual([]);
     expect(performanceSegments({ initial: NaN, monthly: -5, months: NaN, finalValue: Infinity })).toEqual([]);
+  });
+});
+
+// Exemples fictifs.
+describe('Rendement réel après inflation', () => {
+  it('retire l’inflation : (1 + r) / (1 + i) − 1', () => {
+    expect(realAnnualized(0.03, 0.02)).toBeCloseTo(1.03 / 1.02 - 1, 12);
+    expect(realAnnualized(0.03, 0.02)).toBeCloseTo(0.0098, 4);
+  });
+  it('rendement inférieur à l’inflation : rendement réel négatif', () => {
+    expect(realAnnualized(0.01, 0.02)!).toBeLessThan(0);
+  });
+  it('inflation non saisie (0) ou rendement indéfini : pas de rendement réel', () => {
+    expect(realAnnualized(0.03, 0)).toBeNull();
+    expect(realAnnualized(null, 0.02)).toBeNull();
+  });
+  it('exemple de départ du simulateur : 2,7 % par an, puis 2 % d’inflation saisie', () => {
+    const r = performance({ initial: 5000, monthly: 200, months: 120, finalValue: 34000 });
+    expect(r.annualized!).toBeCloseTo(0.027, 3);
+    expect(realAnnualized(r.annualized, 0.02)!).toBeCloseTo((1 + r.annualized!) / 1.02 - 1, 12);
   });
 });

@@ -1,4 +1,4 @@
-import { clamp, num } from './common';
+import { clamp, num, realRate } from './common';
 
 /**
  * Rendement réel d'un placement (taux de rendement interne) à partir de ce qui a été versé et de la valeur finale.
@@ -83,4 +83,14 @@ export function performanceSegments(input: PerformanceInput): PerformanceSegment
         { key: 'loss', label: 'Perte', amount: invested - finalValue, width: 0 },
       ];
   return raw.filter((s) => s.amount > 0).map((s) => ({ ...s, width: (s.amount / base) * 100 }));
+}
+
+/**
+ * Rendement réel : le rendement annuel équivalent une fois retirée l'inflation moyenne saisie,
+ * (1 + rendement) / (1 + inflation) − 1. Null si le rendement n'est pas défini ou si l'inflation est nulle (non saisie).
+ */
+export function realAnnualized(annualized: number | null, inflation: number): number | null {
+  const i = num(inflation);
+  if (annualized === null || i === 0 || i <= -1) return null;
+  return realRate(annualized, i);
 }

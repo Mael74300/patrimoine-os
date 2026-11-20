@@ -59,6 +59,10 @@ describe('phrases « Concrètement »', () => {
     const p = performance({ initial: 5000, monthly: 200, months: 120, finalValue: 20000 });
     expect(performanceTakeaway({ invested: p.invested, gain: p.gain, annualized: p.annualized })).toContain('perdu');
     expect(performanceTakeaway({ invested: 0, gain: 0, annualized: null })).toBe('');
+    // Exemple fictif : 3 % par an et 2 % d'inflation saisis donnent environ 0,98 % de rendement réel.
+    expect(performanceTakeaway({ invested: 10000, gain: 3000, annualized: 0.03, inflation: 0.02, real: 1.03 / 1.02 - 1 })).toMatch(/progressé d'environ 0,98\s%/u);
+    expect(performanceTakeaway({ invested: 10000, gain: 500, annualized: 0.01, inflation: 0.02, real: 1.01 / 1.02 - 1 })).toContain('a baissé');
+    expect(performanceTakeaway({ invested: 10000, gain: 3000, annualized: 0.03 })).toContain('indiquez l\'inflation pour voir le rendement réel');
   });
 
   const digits = (t: string) => t.replace(/\s/g, '');

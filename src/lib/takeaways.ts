@@ -38,10 +38,17 @@ export function debtRatioTakeaway(p: { income: number; ratioAfter: number; remai
 }
 
 /** Rendement réel : traduit le taux annuel équivalent en gain sur 100 € placés. */
-export function performanceTakeaway(p: { invested: number; gain: number; annualized: number | null }): string {
+export function performanceTakeaway(p: { invested: number; gain: number; annualized: number | null; inflation?: number; real?: number | null }): string {
   if (!(p.invested > 0) || p.annualized === null) return '';
   const verbe = p.gain >= 0 ? `gagné ${fmtEur(p.gain)}` : `perdu ${fmtEur(-p.gain)}`;
-  return `Vous avez versé ${fmtEur(p.invested)} et ${verbe}. Ramené à une année, c'est comme si l'argent placé avait rapporté ${fmtPct(p.annualized)} par an en moyenne. Ce taux sert à comparer avec un livret ou un autre placement sur la même durée.`;
+  const base = `Vous avez versé ${fmtEur(p.invested)} et ${verbe}. Ramené à une année, c'est comme si l'argent placé avait rapporté ${fmtPct(p.annualized)} par an en moyenne.`;
+  if (p.real === null || p.real === undefined || !p.inflation) {
+    return `${base} Ce taux se compare à celui d'un livret sur la même durée ; indiquez l'inflation pour voir le rendement réel.`;
+  }
+  const sens = p.real >= 0
+    ? `votre pouvoir d'achat a progressé d'environ ${fmtPct(p.real)} par an`
+    : `votre pouvoir d'achat a baissé d'environ ${fmtPct(-p.real)} par an, même si le montant a grossi`;
+  return `${base} Avec des prix en hausse de ${fmtPct(p.inflation)} par an, ${sens} : c'est le rendement réel.`;
 }
 
 /** Objectif d'épargne : ce que l'on verse soi-même et ce que les intérêts apportent. */
