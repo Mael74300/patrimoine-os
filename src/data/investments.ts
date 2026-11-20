@@ -687,7 +687,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Abondement : l’entreprise complète vos versements', 'Gains sans impôt sur le revenu'],
     cons: ['Argent bloqué 5 ans, sauf cas prévus', 'Choix limité aux fonds du plan'],
     timeSkills: 'Faible.',
-    example: 'Exemple fictif : vous versez 500 € et le règlement prévoit un abondement de 100 % : l’entreprise ajoute 500 €. 1 000 € sont placés pour 500 € sortis de votre poche, avant la CSG et la CRDS prélevées sur l’abondement. Une prime d’intéressement de 1 000 € placée sur le plan échappe à l’impôt sur le revenu mais reste bloquée 5 ans ; touchée tout de suite, elle s’ajoute à votre revenu imposable de l’année.',
+    example: 'Exemple fictif : vous versez 500 € et le règlement prévoit un abondement de 100 % : l’entreprise ajoute 500 €. 1 000 € sont placés pour 500 € sortis de votre poche. À retenir : chaque euro versé en apporte ici un autre ; en échange, l’argent placé, comme une prime d’intéressement, reste bloqué 5 ans, sauf cas de déblocage anticipé.',
     sources: [S.pee, S.interessement],
     alternatives: ['per', 'pea'],
     tags: ['épargne salariale', 'salarié', 'intéressement', 'participation', 'abondement'],

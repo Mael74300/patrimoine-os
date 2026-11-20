@@ -1589,6 +1589,60 @@ export function SchemaPee() {
   );
 }
 
+/** Exemple fictif de la fiche PEE : versement du salarié, taux d'abondement choisi pour l'illustration, prime d'intéressement. */
+export const PEE_EXAMPLE = { verse: 500, abondementPct: 100, prime: 1000 };
+
+/**
+ * Schéma de l'exemple chiffré de la fiche PEE (constat du 2026-11-20 : l'exemple restait un paragraphe de six montants,
+ * alors que les fiches sœurs le montrent en schéma). En haut, une barre à l'échelle : ce qui sort de votre poche, puis
+ * l'abondement, qui forment ensemble la somme placée. En bas, les deux choix d'une prime d'intéressement. Règles de la
+ * rubrique Fiscalité (Service-Public F2142 et F2140, reconsultées le 2026-11-20) ; aucun chiffre nouveau.
+ */
+export function SchemaPeeBilan({ children }: { children: ReactNode }) {
+  const { verse, abondementPct, prime } = PEE_EXAMPLE;
+  const abondement = (verse * abondementPct) / 100;
+  const total = verse + abondement;
+  const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const X0 = 10;
+  const W = 320;
+  const wVous = (verse / total) * W;
+  const box = (x: number, fill: string, stroke: string, title: string, sub: string, lines: string[]) => (
+    <g>
+      <rect x={x} y={240} width={158} height={116} rx={12} fill={fill} stroke={stroke} strokeWidth={2} />
+      <text x={x + 79} y={264} textAnchor="middle" className="ill-step">{title}</text>
+      <text x={x + 79} y={284} textAnchor="middle" className="ill-in">{sub}</text>
+      {lines.map((l, i) => <text key={l} x={x + 79} y={308 + i * 18} textAnchor="middle" className="ill-sub">{l}</text>)}
+    </g>
+  );
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 360" role="img" aria-labelledby="ill-peeb-t ill-peeb-d" className="ill-svg">
+        <title id="ill-peeb-t">{`PEE : ${fmtEur(verse)} versés deviennent ${fmtEur(total)} placés ; une prime placée ou touchée`}</title>
+        <desc id="ill-peeb-d">{`Exemple fictif. Vous versez ${fmtEur(verse)} sur le PEE et le règlement prévoit un abondement de ${abondementPct} % : l’entreprise ajoute ${fmtEur(abondement)}. ${fmtEur(total)} sont placés pour ${fmtEur(verse)} sortis de votre poche, avant la CSG et la CRDS prélevées sur l’abondement (barre à l’échelle). Une prime d’intéressement de ${fmtEur(prime)} peut être placée sur le PEE : elle échappe alors à l’impôt sur le revenu mais reste bloquée 5 ans. Touchée tout de suite, elle est disponible mais s’ajoute à votre revenu imposable.`}</desc>
+        <text x={X0} y={20} className="ill-step">{`Vos ${fmtEur(verse)} versés, abondés à ${abondementPct} %`}</text>
+        <rect x={X0} y={34} width={14} height={14} rx={3} fill="var(--surface-2)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={X0 + 20} y={46} className="ill-sub">de votre poche</text>
+        <rect x={X0 + 140} y={34} width={14} height={14} rx={3} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={X0 + 160} y={46} className="ill-sub">ajouté par l’entreprise</text>
+        <rect x={X0} y={60} width={wVous} height={40} rx={8} fill="var(--surface-2)" stroke="var(--primary)" strokeWidth={2} />
+        <rect x={X0 + wVous} y={60} width={W - wVous} height={40} rx={8} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={X0 + 12} y={85} className="ill-total">{`${fmtEur(verse)} : vous`}</text>
+        <text x={X0 + wVous + 12} y={85} className="ill-total">{`+ ${fmtEur(abondement)}`}</text>
+        <path d={`M ${X0 + 1} 108 V 114 H ${X0 + W - 1} V 108`} fill="none" stroke="var(--accent)" strokeWidth={2} strokeLinejoin="round" />
+        <text x={170} y={136} textAnchor="middle" className="ill-total" style={{ fill: 'var(--accent)' }}>{`${fmtEur(total)} placés sur le PEE`}</text>
+        <text x={170} y={156} textAnchor="middle" className="ill-sub">CSG et CRDS prélevées sur l’abondement</text>
+        <line x1={X0} y1={174} x2={X0 + W} y2={174} stroke="var(--line)" strokeWidth={1} />
+        <text x={170} y={202} textAnchor="middle" className="ill-step">{`Une prime d’intéressement de ${fmtEur(prime)}`}</text>
+        <path d="M 170 210 V 220 Q 170 226 162 226 H 90 Q 82 226 82 234 V 240 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        <path d="M 170 220 Q 170 226 178 226 H 250 Q 258 226 258 234 V 240 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+        {box(3, 'var(--accent-soft)', 'var(--accent)', 'Placée', 'sur le PEE', ['sans impôt sur', 'le revenu', 'bloquée 5 ans'])}
+        {box(179, 'var(--surface-2)', 'var(--ink-2)', 'Touchée', 'tout de suite', ['disponible', 'ajoutée au revenu', 'imposable'])}
+      </svg>
+      <figcaption>{children}</figcaption>
+    </figure>
+  );
+}
+
 /**
  * Schéma « ce que rapportent 10 000 € en un an », commun aux fiches Compte à terme, PEL et LEP : le placement face au
  * Livret A, à la même échelle, avec la part retenue par l'impôt. Exemples fictifs des fiches (`TERM_DEPOSIT_EXAMPLE`,
