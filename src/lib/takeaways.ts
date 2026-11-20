@@ -84,25 +84,46 @@ export function fireTakeaway(p: { gap: number; withdrawalRate: number; target: n
 }
 
 /** Retraits réguliers : combien de temps le capital tient, et le retrait qui tiendrait tout l'horizon. */
+/**
+ * Retraits : ce que les cases ne disent pas. Elles affichent déjà la durée, le capital restant et le retrait tenable ;
+ * la phrase les relie (combien de temps avant l'horizon le capital s'épuise, de combien baisser ou monter le premier retrait,
+ * ce que l'on aura retiré en tout) sans recopier leurs montants. L'écart se calcule sur les montants arrondis à l'euro,
+ * comme dans les cases.
+ */
 export function withdrawalTakeaway(p: { capital: number; monthly: number; years: number; monthsUntilEmpty: number | null; remaining: number; totalWithdrawn: number; sustainable: number }): string {
   if (!(p.capital > 0) || !(p.monthly > 0) || !(p.years >= 1)) return '';
   const ans = fmtAns(p.years);
+  const gap = Math.round(p.monthly) - Math.round(p.sustainable);
+  const share = Math.round((Math.abs(gap) / p.monthly) * 100);
+  const total = p.totalWithdrawn > p.capital
+    ? `vous auriez retiré ${fmtEur(p.totalWithdrawn)}, plus que le capital placé, grâce à son rendement`
+    : `vous auriez retiré ${fmtEur(p.totalWithdrawn)} en tout`;
   if (p.monthsUntilEmpty !== null) {
-    return `En retirant ${fmtEur(p.monthly)} le premier mois sur un capital de ${fmtEur(p.capital)}, il n'y a plus rien au bout de ${fmtMonths(p.monthsUntilEmpty)}, après ${fmtEur(p.totalWithdrawn)} retirés en tout. Pour tenir ${ans}, le premier retrait devrait rester sous ${fmtEur(p.sustainable)} par mois.`;
+    const early = Math.floor(p.years * 12) - p.monthsUntilEmpty;
+    const when = early > 0 ? `Le capital est vide ${fmtMonths(early)} avant l'horizon de ${ans}.` : `Le capital est vide juste à l'horizon de ${ans}.`;
+    const lower = gap > 0
+      ? ` Pour tenir jusqu'au bout, commencez ${fmtEur(gap)} plus bas par mois${share >= 1 ? ` (environ ${share}\u00a0% de moins)` : ''}.`
+      : '';
+    return `${when}${lower} D'ici là, ${total}.`;
   }
-  return `En retirant ${fmtEur(p.monthly)} le premier mois sur un capital de ${fmtEur(p.capital)}, vous avez encore ${fmtEur(p.remaining)} au bout de ${ans}, après ${fmtEur(p.totalWithdrawn)} retirés en tout. Le premier retrait pourrait aller jusqu'à ${fmtEur(p.sustainable)} par mois sans épuiser le capital avant ${ans}. Tout repose sur le rendement supposé : s'il est plus faible, le capital dure moins longtemps.`;
+  const higher = gap < 0
+    ? ` Le premier retrait pourrait monter de ${fmtEur(-gap)} par mois${share >= 1 ? ` (environ ${share}\u00a0% de plus)` : ''} sans vider le capital avant ${ans}.`
+    : ' Votre retrait est presque au maximum tenable sur cette durée.';
+  const t = total.charAt(0).toUpperCase() + total.slice(1);
+  return `Votre retrait tient jusqu'à l'horizon de ${ans}, et il reste du capital ensuite. ${t}.${higher} Tout repose sur le rendement supposé : s'il est plus faible, le capital dure moins longtemps.`;
 }
 
 /**
  * Retraits : légende du graphique quand la courbe du retrait tenable s'ajoute à celle du retrait saisi.
+ * Le montant n'y est pas répété : la légende de la courbe l'affiche déjà.
  * Chaîne vide quand les deux retraits s'affichent pareil (la seconde courbe n'apporterait rien).
  */
 export function withdrawalChartNote(p: { monthly: number; years: number; sustainable: number }): string {
   if (!(p.monthly > 0) || !(p.sustainable > 0) || !(p.years >= 1) || fmtEur(p.sustainable) === fmtEur(p.monthly)) return '';
   const ans = fmtAns(p.years);
   return p.sustainable < p.monthly
-    ? `Pointillés : en commençant à ${fmtEur(p.sustainable)} par mois, le capital dure les ${ans}, presque entièrement dépensé à la fin.`
-    : `Pointillés : le premier retrait pourrait monter jusqu'à ${fmtEur(p.sustainable)} par mois ; le capital durerait alors les ${ans}, presque entièrement dépensé à la fin.`;
+    ? `Pointillés : le retrait tenable, qui fait durer le capital les ${ans}.`
+    : `Pointillés : le premier retrait au plus haut qui fait encore durer le capital les ${ans}.`;
 }
 
 /**

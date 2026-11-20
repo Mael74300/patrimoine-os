@@ -125,27 +125,41 @@ describe('phrases « Concrètement »', () => {
     const ko = withdrawal(base);
     const t = withdrawalChartNote({ monthly: 1000, years: 25, ...ko });
     expect(t).toContain('25\u00a0ans');
-    expect(t).toContain(fmtEur(ko.sustainable));
-    expect(t).toContain('Pointillés');
+    expect(t).not.toContain(fmtEur(ko.sustainable));
+    expect(t).toContain('Pointillés : le retrait tenable');
     const ok = withdrawal({ ...base, monthly: 500 });
     const t2 = withdrawalChartNote({ monthly: 500, years: 25, ...ok });
-    expect(t2).toContain('pourrait monter');
+    expect(t2).toContain('au plus haut');
     expect(withdrawalChartNote({ monthly: ko.sustainable, years: 25, ...ko })).toBe('');
     expect(withdrawalChartNote({ monthly: 0, years: 25, ...ko })).toBe('');
   });
-  it('retraits : durée, capital restant et retrait tenable issus du calcul', () => {
+  it('retraits : ce que signifient les cases, sans recopier leurs montants (exemple fictif)', () => {
     const base = { capital: 200000, monthly: 1000, annualReturn: 0.03, indexation: 0.02, years: 25 };
-    const ok = withdrawal(base);
-    const t = digits(withdrawalTakeaway({ capital: 200000, monthly: 1000, years: 25, ...ok }));
-    expect(t).toContain(eur(ok.remaining));
-    expect(t).toContain(eur(ok.totalWithdrawn));
-    expect(t).toContain(eur(ok.sustainable));
-    const out = withdrawal({ ...base, monthly: 2500 });
-    expect(out.monthsUntilEmpty).not.toBeNull();
-    const m = out.monthsUntilEmpty as number;
-    const t2 = withdrawalTakeaway({ capital: 200000, monthly: 2500, years: 25, ...out });
-    expect(t2).toContain(`${Math.floor(m / 12)}\u00a0an`);
-    expect(digits(t2)).toContain(eur(out.sustainable));
+    const ko = withdrawal(base);
+    expect(ko.monthsUntilEmpty).not.toBeNull();
+    const m = ko.monthsUntilEmpty as number;
+    const t = withdrawalTakeaway({ capital: 200000, monthly: 1000, years: 25, ...ko });
+    // Écart à l'horizon et baisse du premier retrait, recalculés ; ni la durée ni le retrait tenable des cases.
+    expect(t).toContain(`${fmtMonths(25 * 12 - m)} avant l'horizon`);
+    const gap = 1000 - Math.round(ko.sustainable);
+    expect(digits(t)).toContain(`${eur(gap)}€plusbas`);
+    expect(t).toContain(`(environ ${Math.round((gap / 1000) * 100)}\u00a0% de moins)`);
+    expect(digits(t)).toContain(eur(ko.totalWithdrawn));
+    expect(ko.totalWithdrawn).toBeGreaterThan(200000);
+    expect(t).toContain('plus que le capital placé');
+    expect(t).not.toContain(fmtMonths(m));
+    expect(digits(t)).not.toContain(eur(ko.sustainable));
+    // Capital qui tient : marge sur le premier retrait, sans recopier le capital restant ni le retrait tenable.
+    const ok = withdrawal({ ...base, monthly: 500 });
+    expect(ok.monthsUntilEmpty).toBeNull();
+    const t2 = withdrawalTakeaway({ capital: 200000, monthly: 500, years: 25, ...ok });
+    expect(t2).toContain('tient jusqu');
+    expect(digits(t2)).toContain(`${eur(Math.round(ok.sustainable) - 500)}€parmois`);
+    expect(digits(t2)).not.toContain(eur(ok.remaining));
+    expect(digits(t2)).not.toContain(eur(ok.sustainable));
+    // Rendement négatif : on retire moins que le capital de départ, la phrase ne dit pas « plus que ».
+    const neg = withdrawal({ ...base, annualReturn: -0.02 });
+    expect(withdrawalTakeaway({ capital: 200000, monthly: 1000, years: 25, ...neg })).not.toContain('plus que le capital');
     expect(withdrawalTakeaway({ capital: 0, monthly: 100, years: 5, ...ok })).toBe('');
   });
   it('épargne de précaution : avance ou retard sur le délai souhaité, sans recopier les cases (exemple fictif)', () => {
