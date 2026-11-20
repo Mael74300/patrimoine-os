@@ -179,7 +179,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Votre argent réparti d’un coup entre de nombreuses entreprises', 'Frais faibles', 'Peu de choses à suivre'],
     cons: ['Baisses temporaires fortes possibles (−30 % à −50 % lors de crises passées)', 'Aucune garantie en capital'],
     timeSkills: 'Une à deux heures pour comprendre et mettre en place, puis quelques minutes par mois.',
-    example: 'Exemple fictif : 200 € par mois pendant 20 ans, avec une hypothèse de 6 % par an nette de frais. Les 48 000 € versés deviendraient environ 91 100 €, dont 43 100 € de gains, presque la moitié arrivés pendant les 5 dernières années. Si la Bourse baissait de 30 % juste avant la sortie, il resterait environ 63 800 € : d’où l’horizon long, pour ne pas devoir vendre au mauvais moment. Avant impôt ; le résultat réel peut être très différent.',
+    example: 'Exemple fictif, celui du schéma : 200 € par mois pendant 20 ans, avec une hypothèse de 6 % par an nette de frais. À retenir : les gains déjà acquis rapportent à leur tour, donc les dernières années comptent le plus. Une baisse de 30 % juste avant la sortie effacerait plus de la moitié des gains : d’où l’horizon long, pour ne pas devoir vendre au mauvais moment. Avant impôt.',
     sources: [S.amf, S.amfFrais, S.lfptFraisBourse],
     alternatives: ['pea', 'actions-individuelles', 'unites-de-compte'],
     tags: ['bourse', 'long terme', 'passif'],

@@ -1,3 +1,6 @@
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { SchemaDiversification } from '../components/schemas/guides';
 import { detailDroitsLigneDirecte, droitsDonationLigneDirecte, BAREME_LIGNE_DIRECTE } from '../lib/calc/donation';
 import { DONATION_ABATTEMENTS } from './donationAbattements';
 import { describe, expect, it } from 'vitest';
@@ -222,7 +225,12 @@ describe('guide diversification', () => {
     expect((-1340 / 10000) * 100).toBeCloseTo(-13.4, 10);
     const g = guides.find((x) => x.slug === 'diversification-placements')!;
     const t = JSON.stringify(g).replace(/\u00a0/g, ' ');
-    for (const v of ['10 000 €', '7 000 €', '3 000 €', '2 000 €', '1 400 €', '60 €', '1 340 €', '13,4 %', 'fictif']) expect(t, v).toContain(v);
+    // Le texte dit ce qu’il faut retenir ; le détail en euros est dans la question fréquente et dans le schéma.
+    for (const v of ['10 000 €', '7 000 €', '3 000 €', '1 400 €', '60 €', '1 340 €', '13,4 %', 'fictif', 'À retenir']) expect(t, v).toContain(v);
+    const texte = g.sections.find((x) => x.heading === 'Un exemple fictif chiffré')!.body.join(' ').replace(/\u00a0/g, ' ');
+    expect(texte).not.toMatch(/1 340|1 400|13,4/);
+    const schema = renderToStaticMarkup(createElement(SchemaDiversification)).replace(/[\u00a0\u202f]/g, ' ');
+    for (const v of ['2 000 €', '1 340 €', '13,4 %', '3 000 €']) expect(schema, v).toContain(v);
     // Plus de formule brute ni de « moyenne pondérée » : des euros à la place.
     expect(t).not.toMatch(/×|pondérée/);
     expect(g.cta?.to).toBe('/simulateurs/portefeuille');

@@ -618,8 +618,8 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       {
         heading: 'Un exemple fictif chiffré',
         body: [
-          'Prenons 10 000 € et une année où les actions perdent 20 % pendant qu’un placement prudent gagne 2 %. Tout en actions, vous perdez 2 000 €. Avec 7 000 € d’actions et 3 000 € de placement prudent, les actions perdent 1 400 € et la part prudente rapporte 60 € : vous perdez 1 340 €, soit 13,4 % au lieu de 20 %.',
-          'Chaque placement pèse selon sa part : plus la part prudente est grande, plus la baisse est amortie. Exemple fictif : ces rendements ne sont ni observés ni prévus.',
+          'Prenons 10 000 € et une année où les actions perdent 20 % pendant qu’un placement prudent gagne 2 %. Le schéma compare deux façons de les placer : tout en actions, ou 3 000 € sur le placement prudent.',
+          'À retenir : chaque placement pèse selon sa part. La part prudente ne perd rien, elle rapporte même un peu : la perte de l’année est donc plus petite, et d’autant plus que cette part est grande. Exemple fictif : ces rendements ne sont ni observés ni prévus.',
         ],
       },
       {
@@ -711,7 +711,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       {
         heading: 'Jusqu’où l’estimation est-elle bonne ?',
         body: [
-          'Le calcul exact donne 11 ans et 11 mois à 6 % par an : presque les 12 ans de la règle. L’écart reste d’un an au plus entre 2 % et 12 % : à 2 %, la règle annonce 36 ans au lieu de 35 ; à 12 %, 6 ans au lieu de 6 ans et 1 mois.',
+          'Très bien pour un calcul de tête : à 6 % par an, le calcul exact donne 11 ans et 11 mois, presque les 12 ans de la règle. Pour tout taux entre 2 % et 12 %, l’écart reste d’un an au plus, comme le montre le schéma.',
           'La règle ignore les frais, les impôts et l’inflation, qui allongent la durée : utilisez un taux net de frais.',
         ],
       },
