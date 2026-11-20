@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { activeSection } from '../lib/toc';
+import { activeSection, sectionId } from '../lib/toc';
 
 export type TocItem = { id: string; label: string };
 
@@ -47,4 +47,28 @@ export function PageToc({ items, className = '', children }: { items: TocItem[];
       {children}
     </nav>
   );
+}
+
+/**
+ * Page de texte (Méthode, Confidentialité, Mentions légales) mise en page comme un guide :
+ * le texte à gauche, le sommaire collant à droite sur grand écran (masqué sur téléphone).
+ * Les titres de rubrique portent l’identifiant `sectionId(titre)`.
+ */
+export function ProseWithToc({ items, children }: { items: TocItem[]; children: ReactNode }) {
+  return (
+    <div className="guide-layout">
+      <div className="prose">{children}</div>
+      <PageToc className="guide-toc" items={items} />
+    </div>
+  );
+}
+
+/** Titre de rubrique repérable par le sommaire. */
+export function TocH2({ children }: { children: string }) {
+  return <h2 id={sectionId(children)}>{children}</h2>;
+}
+
+/** Entrées du sommaire à partir des titres de rubrique, dans l’ordre de la page. */
+export function tocItems(headings: string[]): TocItem[] {
+  return headings.map((h) => ({ id: sectionId(h), label: h }));
 }

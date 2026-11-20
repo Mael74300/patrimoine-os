@@ -3,6 +3,7 @@ import { investments } from '../data/investments';
 import { needsCheck } from '../data/types';
 import { Fold, PageHead } from '../components/ui';
 import { SchemaVerification } from '../components/schemas/SchemaVerification';
+import { ProseWithToc, TocH2, tocItems } from '../components/PageToc';
 
 const MOIS = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
 
@@ -162,10 +163,13 @@ export const GROUPS: [string, string[]][] = [
   ['Budget, retraite et entreprise', ['Budget et taux d’épargne', 'Retraits réguliers', 'Indépendance financière', 'Entreprise']],
 ];
 
+/** Rubriques de la page, dans l’ordre : elles forment le sommaire « Sur cette page ». */
+export const METHODE_RUBRIQUES = ['Sources et vérification', 'Contrôles automatiques, décision humaine', 'Formules de calcul', 'Liens commerciaux et publicité', 'Confidentialité'];
+
 export default function Methodologie() {
   const flagged = investments.filter((i) => needsCheck(i.tax) || needsCheck(i.fees) || needsCheck(i.minCapital)).length;
   return (
-    <div className="prose">
+    <ProseWithToc items={tocItems(METHODE_RUBRIQUES)}>
       <PageHead eyebrow="Transparence" title="Méthode et sources">
         Comment les informations sont vérifiées, comment les calculs sont faits et comment le site est maintenu.
       </PageHead>
@@ -177,7 +181,7 @@ export default function Methodologie() {
         <li><strong>Vos données restent chez vous</strong> : aucun cookie, vos saisies ne quittent pas votre navigateur.</li>
       </ul>
 
-      <h2>Sources et vérification</h2>
+      <TocH2>Sources et vérification</TocH2>
       <p>
         Les informations de référence proviennent en priorité de sources officielles : AMF, Banque de France, ACPR, INSEE, Service-Public.fr,
         impots.gouv.fr et textes publiés au Journal officiel. Chaque fiche conserve ses sources, la date de vérification, la date à laquelle la fiscalité
@@ -185,7 +189,7 @@ export default function Methodologie() {
         vérification (la plus récente : {dateEnClair(derniereVerification())}). {flagged === 0 ? 'À ce jour, aucune fiche ne comporte d’élément signalé « à vérifier ».' : `À ce jour, ${flagged} fiche${flagged > 1 ? 's comportent' : ' comporte'} au moins un élément signalé « à vérifier ».`}
       </p>
 
-      <h2>Contrôles automatiques, décision humaine</h2>
+      <TocH2>Contrôles automatiques, décision humaine</TocH2>
       <SchemaVerification>
         <p>Chaque semaine, des contrôles gratuits et automatiques :</p>
         <ul>
@@ -201,7 +205,7 @@ export default function Methodologie() {
         Aucun contenu financier n'est généré automatiquement.
       </p>
 
-      <h2>Formules de calcul</h2>
+      <TocH2>Formules de calcul</TocH2>
       <p>Pour les curieux : vous n'avez pas besoin de lire les formules pour utiliser le site, mais elles sont toutes publiées.</p>
       <Fold title="Afficher les formules des simulateurs">
       {GROUPS.map(([group, titles]) => (
@@ -220,14 +224,14 @@ export default function Methodologie() {
       </Fold>
       <p>Chaque module de calcul est indépendant et couvert par des tests automatisés, y compris sur des exemples connus et des valeurs limites.</p>
 
-      <h2>Liens commerciaux et publicité</h2>
+      <TocH2>Liens commerciaux et publicité</TocH2>
       <p>
         Le site ne contient aujourd'hui ni publicité ni lien affilié, et fonctionne entièrement sans revenu. Si des partenariats sont ajoutés,
         chaque lien sera signalé « Lien commercial ». Un produit ne sera jamais mis en avant parce qu'il rapporte une commission.
       </p>
 
-      <h2>Confidentialité</h2>
+      <TocH2>Confidentialité</TocH2>
       <p>Aucun cookie ; une mesure d'audience anonyme compte les pages vues ; vos calculs restent dans votre navigateur. Détails dans la <Link to="/confidentialite">politique de confidentialité</Link>.</p>
-    </div>
+    </ProseWithToc>
   );
 }
