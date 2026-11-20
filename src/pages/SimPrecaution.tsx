@@ -5,7 +5,7 @@ import {
   PROFILE_MONTHS, precautionSegments, type PrecautionInput, type PrecautionSegment, type PrecautionProfile,
 } from '../lib/finance';
 import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
-import { precautionPlacementTakeaway, precautionTakeaway, precautionTargetSub } from '../lib/takeaways';
+import { interestShareLabel, precautionPlacementTakeaway, precautionTakeaway, precautionTargetSub } from '../lib/takeaways';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, ChoiceField, Fold, Sources, usePersistentState, JumpToResults, CoverageGauge, SimNotice } from '../components/ui';
 
 type State = PrecautionInput & { profile: PrecautionProfile; lep: 'oui' | 'non'; deadline: number };
@@ -36,11 +36,11 @@ export default function SimPrecaution() {
   const interestShare = bar ? (interestPart ? interestPart.amount / bar.balance : 0) : null;
   const placement = precautionPlacementTakeaway({
     yearlyInterest: alloc.interest, blendedRate: alloc.blendedRate, overflow: alloc.overflow,
-    buildInterest: interestPart?.amount ?? null, buildMonths: bar?.month ?? null,
+    livrets: used.length, building: (interestPart?.amount ?? 0) > 0,
   });
   const segHint: Record<PrecautionSegment['key'], string> = {
     start: ', déjà de côté',
-    deposits: bar ? ` (${fmtEur(s.monthlySaving)} par mois pendant ${fmtMonths(bar.month)})` : '',
+    deposits: ', versés chaque mois',
     interest: ` à ${fmtPct(s.annualRate)} par an`,
   };
 
@@ -108,7 +108,7 @@ export default function SimPrecaution() {
             <Kpi label={`Versement pour y arriver en ${fmtNum(s.deadline)}\u00a0mois`} value={fmtEur(Math.ceil(need))} sub="par mois, intérêts compris" />
           </div>
           <CoverageGauge savings={s.currentSavings} target={target} label="Épargne actuelle" />
-          <Takeaway>{precautionTakeaway({ target, savings: s.currentSavings, monthlySaving: s.monthlySaving, reachedAt: path.reachedAt })}</Takeaway>
+          <Takeaway>{precautionTakeaway({ target, savings: s.currentSavings, monthlySaving: s.monthlySaving, reachedAt: path.reachedAt, deadline: s.deadline, needed: Math.ceil(need) })}</Takeaway>
 
           {bar && (
             <>
@@ -128,7 +128,7 @@ export default function SimPrecaution() {
               </ul>
               {interestShare !== null && interestShare < 0.2 && (
                 <p className="pf-why">
-                  <strong>Les intérêts pèsent peu</strong> ({fmtEur(interestPart?.amount ?? 0)} sur {fmtEur(bar.balance)}) : c’est surtout votre épargne qui la constitue.
+                  <strong>Les intérêts pèsent peu</strong> ({interestShareLabel(interestShare)} de la réserve) : c’est surtout votre épargne qui la constitue.
                   Son rôle est d’être disponible tout de suite, pas de rapporter.
                 </p>
               )}
