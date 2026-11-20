@@ -24,7 +24,7 @@ export function fireTarget(annualExpenses: number, recurringIncome: number, with
 }
 
 /**
- * Années nécessaires pour atteindre la cible, en raisonnant en euros constants :
+ * Années nécessaires pour atteindre la cible, en raisonnant en euros d'aujourd'hui (inflation retirée) :
  * capital × (1 + rendement réel) + épargne annuelle (épargne revalorisée comme l'inflation).
  * Renvoie null si la cible n'est pas atteinte en 100 ans.
  */

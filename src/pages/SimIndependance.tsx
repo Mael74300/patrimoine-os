@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { drawdown, fireTarget, fmtEur, fmtPct, fmtYears, holdBars, realRate, yearsToTarget, type FireInput, type HoldBar } from '../lib/finance';
+import { drawdown, fireTarget, fmtAns, fmtEur, fmtPct, fmtYears, holdBars, yearsToTarget, type FireInput, type HoldBar } from '../lib/finance';
 import { fireTakeaway } from '../lib/takeaways';
 import { SchemaCapitalVise } from '../components/schemas/SchemaCapitalVise';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
@@ -52,6 +52,8 @@ export default function SimIndependance() {
   const rates = useMemo(() => Array.from(new Set([...RATES, s.withdrawalRate])).sort((a, b) => a - b), [s.withdrawalRate]);
   const startCapital = Number.isFinite(target) && target > 0 ? target : s.currentWealth;
   const gap = Math.max(0, s.annualExpenses - s.recurringIncome);
+  // Phase de retrait de votre scénario : même calcul que la barre « le vôtre » et la ligne en gras du tableau.
+  const lasts = useMemo(() => drawdown(startCapital, s, HORIZON).depletedAt, [s, startCapital]);
   const bars = useMemo(
     () => holdBars(startCapital, s, SPREAD.map((d) => s.nominalReturn + d), HORIZON),
     [s, startCapital],
@@ -64,7 +66,7 @@ export default function SimIndependance() {
         Estimez le capital qui couvrirait vos dépenses par des retraits réguliers, le temps pour l'atteindre et sa résistance à plusieurs hypothèses de rendement.
       </PageHead>
       <SimNotice>
-        Aucun taux de retrait ne garantit une indépendance financière durable. Les rendements réels varient d'une année à l'autre, et une succession
+        Aucun taux de retrait ne garantit une indépendance financière durable. Les rendements obtenus varient d'une année à l'autre, et une succession
         de mauvaises années au début des retraits peut épuiser un capital plus vite que prévu.
       </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
@@ -92,10 +94,12 @@ export default function SimIndependance() {
         <section id="resultats" aria-label="Résultats" tabIndex={-1}>
           <div className="kpis">
             <Kpi label="Capital visé" value={Number.isFinite(target) ? fmtEur(target) : '—'} sub={`en retirant ${fmtPct(s.withdrawalRate)} la première année`} />
-            <Kpi label="Délai estimé" value={fmtYears(yrs)} sub="pour réunir ce capital" />
-            <Kpi label="Rendement réel retenu" value={fmtPct(realRate(s.nominalReturn, s.inflation))} sub="rendement une fois l’inflation retirée" />
+            <Kpi label="Délai estimé" value={fmtYears(yrs)} sub="épargne et dépenses suivant la hausse des prix" />
+            {gap > 0 && (
+              <Kpi label="Puis le capital dure" value={lasts === null ? `plus de ${HORIZON}\u00a0ans` : fmtAns(lasts)} sub={`en retirant, à ${fmtPct(s.nominalReturn)} de rendement par an`} />
+            )}
           </div>
-          <Takeaway>{fireTakeaway({ gap: Math.max(0, s.annualExpenses - s.recurringIncome), withdrawalRate: s.withdrawalRate, target, currentWealth: s.currentWealth, annualSavings: s.annualSavings, years: yrs })}</Takeaway>
+          <Takeaway>{fireTakeaway({ gap, withdrawalRate: s.withdrawalRate, target, currentWealth: s.currentWealth, annualSavings: s.annualSavings, years: yrs, nominalReturn: s.nominalReturn, lastsYears: lasts, horizon: HORIZON })}</Takeaway>
 
           <details className="fold">
             <summary>Comprendre le capital visé (schéma)</summary>
@@ -103,20 +107,20 @@ export default function SimIndependance() {
           </details>
 
           <h2>Selon le taux de retrait</h2>
-          <p className="muted">Capital à réunir, délai pour l’atteindre, puis durée de tenue du capital en retrait.</p>
+          <p className="muted">Retirer moins demande un plus gros capital, qui dure plus longtemps.</p>
           <div className="table-wrap" tabIndex={0}>
             <table>
-              <thead><tr><th>Retrait</th><th className="r">Capital visé</th><th className="r">Pour y arriver</th><th className="r">Capital tient</th></tr></thead>
+              <thead><tr><th>Retrait</th><th className="r">Capital</th><th className="r">Délai</th><th className="r">Puis il dure</th></tr></thead>
               <tbody>
                 {rates.map((w) => {
                   const t = fireTarget(s.annualExpenses, s.recurringIncome, w);
-                  const d = drawdown(t, s, 60).depletedAt;
+                  const d = drawdown(t, s, HORIZON).depletedAt;
                   return (
                     <tr key={w} style={w === s.withdrawalRate ? { fontWeight: 600 } : undefined}>
                       <td>{fmtPct(w)}</td>
                       <td className="r">{Number.isFinite(t) ? fmtEur(t) : '—'}</td>
                       <td className="r">{fmtYears(yearsToTarget({ ...s, withdrawalRate: w }))}</td>
-                      <td className="r">{d === null ? 'plus de 60 ans' : `${d}\u00a0ans`}</td>
+                      <td className="r">{d === null ? `plus de ${HORIZON}\u00a0ans` : `${d}\u00a0ans`}</td>
                     </tr>
                   );
                 })}
