@@ -1,11 +1,10 @@
 import type { Guide, Source } from './types';
 import { deepKeepNumbers } from '../lib/nbsp';
 
-const SP = (label: string, id: string): Source => ({ label: `Service-Public.fr — ${label}`, url: `https://www.service-public.fr/particuliers/vosdroits/${id}`, official: true });
+const SP = (label: string, id: string): Source => ({ label: `Service-Public.fr — ${label}`, url: `https://www.service-public.gouv.fr/particuliers/vosdroits/${id}`, official: true });
 const IFP: Source = { label: 'La finance pour tous (IEFP)', url: 'https://www.lafinancepourtous.com', official: true };
 const AMF: Source = { label: 'AMF — Espace épargnants', url: 'https://www.amf-france.org/fr/espace-epargnants', official: true };
 const ANIL: Source = { label: 'ANIL — Information logement', url: 'https://www.anil.org', official: true };
-const IMPOTS: Source = { label: 'impots.gouv.fr — Particuliers', url: 'https://www.impots.gouv.fr/particulier', official: true };
 const BDF: Source = { label: 'Banque de France', url: 'https://www.banque-france.fr', official: true };
 
 /**
@@ -182,7 +181,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       },
     ],
     related: ['location-nue', 'lmnp', 'credit-immobilier'],
-    sources: [ANIL, IMPOTS],
+    sources: [ANIL, SP('Revenus locatifs (location non meublée)', 'F1991'), SP('Revenus d’une location meublée', 'F32744')],
     cta: { to: '/simulateurs/immobilier', label: 'Calculer ma rentabilité' },
   },
   {
@@ -216,9 +215,9 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     ],
     related: ['pea', 'etf-monde'],
     sources: [
-      SP('PEA', 'F2385'),
+      SP('Plan d’épargne en actions (PEA)', 'F2385'),
       { label: 'impots.gouv.fr — Retraits du PEA', url: 'https://www.impots.gouv.fr/particulier/questions/jai-un-plan-depargne-en-actions-pea-les-retraits-sont-ils-imposables', official: true },
-      SP('Prélèvements sociaux', 'F2329'),
+      SP('Prélèvements sociaux (CSG, CRDS) sur les revenus du patrimoine et de placements', 'F2329'),
     ],
     faq: [
       { q: 'Quel est le plafond de versement du PEA ?', a: 'Les versements, uniquement en euros, sont plafonnés à 150 000 €. Avec un PEA PME-ETI, les versements sur les deux plans réunis ne peuvent pas dépasser 225 000 €.' },
@@ -293,7 +292,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     ],
     related: ['lep', 'livret-a', 'etf-monde', 'capital-humain'],
     sources: [
-      SP('LEP', 'F2367'),
+      SP('Livret d’épargne populaire (LEP)', 'F2367'),
       { label: 'AMF — Risques et rendements des placements', url: 'https://www.amf-france.org/fr/espace-epargnants/savoir-bien-investir/cadrer-son-projet/risques-et-rendements-des-placements', official: true },
       { label: 'AMF — Listes noires et mises en garde', url: 'https://www.amf-france.org/fr/espace-epargnants/proteger-son-epargne/listes-noires-et-mises-en-garde', official: true },
     ],
@@ -351,7 +350,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       { heading: 'Comment les combiner', body: ['Chaque enveloppe a son horloge : certaines sont disponibles tout de suite, d’autres deviennent plus avantageuses avec les années ou restent bloquées jusqu’à la retraite. On répartit donc souvent son épargne selon le moment où l’on aura besoin de l’argent.', 'Avant tout, gardez une épargne de précaution sur des livrets. Salarié ? Un plan d’épargne entreprise (fiche PEE) permet à l’employeur de compléter vos versements, contre 5 ans de blocage, sauf cas de déblocage anticipé. Les 5 ans du PEA comptent à partir du premier versement : l’ouvrir tôt, même avec une petite somme, fait courir ce délai. Ce n’est pas un ordre obligatoire : vos impôts, vos projets et votre besoin de disponibilité peuvent justifier d’autres choix.'] },
     ],
     related: ['pea', 'assurance-vie', 'per', 'compte-titres'],
-    sources: [SP('PEA', 'F2385'), SP('Assurance-vie', 'F22414'), SP('Assurance-vie : versements et disponibilité', 'F15274'), SP('PER', 'F34982'), SP('Plus-values sur valeurs mobilières (PFU)', 'F21618'), SP('Livret A', 'F2365'), SP('Plan d’épargne entreprise (PEE)', 'F2142')],
+    sources: [SP('Plan d’épargne en actions (PEA)', 'F2385'), SP('Comment sont imposés les revenus d’un contrat d’assurance-vie ?', 'F22414'), SP('Contrat d’assurance-vie : fonctionnement', 'F15274'), SP('Plan d’épargne retraite (PER)', 'F34982'), SP('Plus-values sur valeurs mobilières', 'F21618'), SP('Livret A', 'F2365'), SP('Plan d’épargne entreprise (PEE)', 'F2142')],
   },
   {
     slug: 'combien-epargne-de-precaution',
@@ -387,7 +386,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       },
     ],
     related: ['livret-a', 'lep'],
-    sources: [SP('Livret A', 'F2365'), SP('LEP', 'F2367'), SP('LDDS', 'F2368'), BDF],
+    sources: [SP('Livret A', 'F2365'), SP('Livret d’épargne populaire (LEP)', 'F2367'), SP('Livret de développement durable et solidaire (LDDS)', 'F2368'), BDF],
     faq: [
       { q: 'Combien de mois de dépenses faut-il garder en épargne de précaution ?', a: 'Aucune règle officielle ne le fixe. Les repères courants sont d’environ 3 mois de dépenses avec des revenus stables, 6 mois avec des revenus variables et jusqu’à 9 mois pour un indépendant. À adapter à votre situation.' },
       { q: 'Sur quel placement garder son épargne de précaution ?', a: 'Sur des supports disponibles immédiatement et sans risque de perte en capital : les livrets réglementés (LEP si vous y avez droit, Livret A, LDDS), dans la limite de leurs plafonds.' },
@@ -586,7 +585,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       },
     ],
     related: ['credit-immobilier'],
-    sources: [ANIL, BDF, SP('Plus-values sur valeurs mobilières (PFU)', 'F21618')],
+    sources: [ANIL, BDF, SP('Plus-values sur valeurs mobilières', 'F21618')],
     faq: [
       { q: 'Vaut-il mieux rembourser son crédit ou investir ?', a: 'Cela dépend du taux du crédit et du rendement net espéré du placement. Dans l’exemple fictif de cette page (crédit à 4 %, placement à 5 %), rembourser l’emporte ; le rendement d’équilibre est d’environ 5,4 % brut par an.' },
       { q: 'Que se passe-t-il quand on rembourse par anticipation ?', a: 'Le capital restant dû baisse. Selon l’option choisie avec la banque, la mensualité ou la durée est réduite ; le simulateur suppose que la mensualité est conservée et que le crédit s’éteint plus tôt.' },
