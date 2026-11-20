@@ -1253,8 +1253,13 @@ h2.gloss-letter::before { content: none; }
 .nw-note { margin: 0; }
 .linklike { background: none; border: 0; padding: 0; font: inherit; color: var(--primary); text-decoration: underline; cursor: pointer; }
 @media (max-width: 479px) {
-  .nw-row { grid-template-columns: minmax(0, 1fr) 40px; row-gap: 6px; margin-bottom: 14px; }
-  .nw-row > .nw-label { grid-column: 1 / -1; }
+  /* Sur téléphone, le nom et le montant passent sur deux lignes : chaque ligne devient une petite carte pour qu'on voie
+     qu'ils vont ensemble, le nom écrit comme un titre modifiable (souligné en pointillé) plutôt qu'une deuxième case. */
+  .nw-row { grid-template-columns: minmax(0, 1fr) 40px; row-gap: 4px; margin-bottom: 8px; padding: 6px 10px 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); }
+  .nw-row > .nw-label { grid-column: 1 / -1; min-height: 40px; padding: 6px 2px; border: 0; border-bottom: 1.5px dashed #a9b8cd; border-radius: 0; background: transparent; font-weight: 600; color: var(--ink); }
+  .nw-row > .nw-label:hover { border-bottom-color: var(--ink-3); }
+  .nw-row > .nw-label:focus { border-bottom-style: solid; border-bottom-color: var(--primary); }
+  .nw-row .num-input { background: var(--surface); }
   /* Résultats en lignes « libellé … montant » : style commun des .kpis sur téléphone */
   .nw-hint { margin-bottom: 10px; }
 }
