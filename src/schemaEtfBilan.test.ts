@@ -37,7 +37,13 @@ describe('fiche ETF : schéma de l’exemple chiffré', () => {
   it('le texte de la fiche cite les mêmes montants', () => {
     const t = norm(investmentBySlug['etf-monde'].example);
     expect(t).toMatch(/^Exemple fictif/);
-    for (const s of ['200 € par mois pendant 20 ans', '6 % par an nette de frais', '48 000 € versés', 'environ 91 100 €', '43 100 € de gains', 'presque la moitié', '5 dernières années', 'baissait de 30 %', 'environ 63 800 €', 'Avant impôt']) expect(t).toContain(s);
+    // Le texte dit ce qu’il faut retenir ; les montants sont écrits sur les barres du schéma (test suivant).
+    for (const s of ['celui du schéma', '200 € par mois pendant 20 ans', '6 % par an nette de frais', 'les dernières années comptent le plus', 'baisse de 30 %', 'plus de la moitié des gains', 'Avant impôt']) expect(t).toContain(s);
+    for (const s of ['48 000', '91 100', '43 100', '63 800']) expect(t).not.toContain(s);
+    // « plus de la moitié de ces gains » : la baisse de 30 % efface 27 300 € des 43 100 € de gains.
+    const perdu = r.milestones[3].value - r.afterDrop;
+    expect(perdu / r.milestones[3].gains).toBeGreaterThan(0.5);
+    expect(perdu / r.milestones[3].gains).toBeLessThan(1);
   });
 
   it('le schéma affiche les mêmes montants', () => {

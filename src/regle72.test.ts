@@ -13,9 +13,11 @@ describe('schéma « règle de 72 »', () => {
     const r = regle72Rows().map((x) => [x.rate, x.exact.toFixed(2), x.rule]);
     expect(r).toEqual([[0.02, '35.00', 36], [0.04, '17.67', 18], [0.06, '11.90', 12], [0.08, '9.01', 9], [0.12, '6.12', 6]]);
     expect(regle72Rows().map((x) => fmtDuree(x.exact).replace(/\u00a0/g, ' '))).toEqual(['35 ans', '17 ans et 8 mois', '11 ans et 11 mois', '9 ans', '6 ans et 1 mois']);
-    expect(texte).toContain('à 2 %, la règle annonce 36 ans au lieu de 35 ;');
-    expect(texte).toContain('à 12 %, 6 ans au lieu de 6 ans et 1 mois');
-    expect(texte).toContain('Le calcul exact donne 11 ans et 11 mois à 6 %');
+    // Le texte dit ce qu’il faut retenir ; les cinq durées sont sur le schéma (et dans son texte alternatif).
+    expect(texte).toContain('à 6 % par an, le calcul exact donne 11 ans et 11 mois, presque les 12 ans de la règle');
+    expect(texte).not.toContain('36 ans');
+    const svg = renderToStaticMarkup(createElement(SchemaRegle72)).replace(/\u00a0/g, ' ');
+    for (const v of ['35 ans', '36 ans', '17 ans et 8 mois', '18 ans', '6 ans et 1 mois']) expect(svg, v).toContain(v);
     expect(texte).not.toMatch(/\d,\d+ ans/);
   });
   it('écart d’un an au plus entre 2 % et 12 %, comme le dit le guide', () => {
@@ -23,7 +25,7 @@ describe('schéma « règle de 72 »', () => {
     let max = 0;
     for (let p = 2; p <= 12.0001; p += 0.01) max = Math.max(max, Math.abs(72 / p - exact(p / 100)));
     expect(max).toBeLessThanOrEqual(1);
-    expect(texte).toContain('d’un an au plus entre 2 % et 12 %');
+    expect(texte).toContain('Pour tout taux entre 2 % et 12 %, l’écart reste d’un an au plus');
   });
   it('exemple fictif 10 000 € à 6 % : environ 20 000 € au bout de 12 ans', () => {
     expect(Math.round(10000 * 1.06 ** 12)).toBe(20122);
