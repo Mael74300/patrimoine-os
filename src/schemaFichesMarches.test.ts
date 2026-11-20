@@ -1,9 +1,10 @@
 import { createElement } from 'react';
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { SchemaActions, SchemaCrypto, SchemaEtf, SchemaObligation } from './components/Illustrations';
+import { SchemaCrypto, SchemaEtf, SchemaObligation } from './components/Illustrations';
 
 /**
+ * (Le schéma Actions, redessiné en comparaison 15 lignes / 3 lignes, a son propre test : actions-schema.test.ts.)
  * Fiches ETF, Actions, Obligations et Cryptomonnaies : schémas redessinés en viewBox 340 (chantier 112)
  * pour que leurs textes s'affichent à 13 px ou plus à 375 px. Chaque ligne doit tenir dans la largeur du dessin.
  * Largeur estimée d'un caractère : 0,52 em (texte normal) ou 0,56 em (texte gras), police système sans empattement.
@@ -13,7 +14,7 @@ const TAILLES: Record<string, { px: number; em: number }> = {
   'ill-in': { px: 12, em: 0.56 },
   'ill-sub': { px: 13, em: 0.52 },
 };
-const schemas = { SchemaEtf, SchemaActions, SchemaObligation, SchemaCrypto };
+const schemas = { SchemaEtf, SchemaObligation, SchemaCrypto };
 
 describe('schémas des fiches de marché en viewBox 340', () => {
   for (const [nom, composant] of Object.entries(schemas)) {

@@ -125,7 +125,6 @@ export default function InvestmentPage() {
           {inv.slug === 'etf-monde' && <SchemaEtf />}
           {inv.slug === 'cryptomonnaies' && <SchemaCrypto />}
           {inv.slug === 'compte-titres' && <SchemaCto />}
-          {inv.slug === 'actions-individuelles' && <SchemaActions />}
           {inv.slug === 'donation' && <SchemaDonation />}
           {inv.slug === 'or' && <SchemaOr />}
           {inv.slug === 'livret-a' && <SchemaQuinzaines />}
@@ -177,6 +176,7 @@ export default function InvestmentPage() {
             if (inv.slug === 'obligations') return <SchemaObligationBilan>{ex}</SchemaObligationBilan>;
             if (inv.slug === 'etf-monde') return <SchemaEtfBilan>{ex}</SchemaEtfBilan>;
             if (inv.slug === 'assurance-vie') return <SchemaAssuranceVieBilan>{ex}</SchemaAssuranceVieBilan>;
+            if (inv.slug === 'actions-individuelles') return <SchemaActions>{ex}</SchemaActions>;
             if (inv.slug === 'pea') return <SchemaPeaBilan>{ex}</SchemaPeaBilan>;
             if (inv.slug === 'fonds-euros' || inv.slug === 'unites-de-compte') return <SchemaFraisBilan kind={inv.slug}>{ex}</SchemaFraisBilan>;
             if (inv.slug === 'groupements-forestiers') return <SchemaForetBilan>{ex}</SchemaForetBilan>;

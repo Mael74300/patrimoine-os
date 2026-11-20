@@ -4,7 +4,7 @@ import { pfuSplit, PFU_IR_PCT, PFU_PS_PCT, PFU_TOTAL_PCT } from '../../lib/calc/
 import { perDeductionBalance } from '../../lib/calc/per';
 import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
 import { LIVRETS } from '../../data/livrets';
-import { assuranceVieRetrait, bondCoupons, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
+import { assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
 import { fmtEur2 } from '../../lib/calc/format';
 import { W } from './outils';
@@ -656,27 +656,60 @@ export function SchemaCto() {
   );
 }
 
-/** Schéma « Actions en direct : répartir sur 15 lignes limite l’effet d’une défaillance » : reprend l’exemple fictif de la fiche (15 lignes de 1 000 €, perte maximale 1 000 €, soit 6,7 % de 15 000 €), recalculé par test. Aucune information factuelle nouvelle. */
-export function SchemaActions() {
-  const cells = Array.from({ length: 15 }, (_, i) => ({ x: 11 + (i % 5) * 65, y: 42 + Math.floor(i / 5) * 46, bad: i === 7 }));
+/** Exemple fictif de la fiche Actions en direct : 15 000 € répartis sur 15 lignes, puis sur 3. */
+export const ACTIONS_EXAMPLE = { total: 15_000, many: 15, few: 3, badIndex: { many: 7, few: 1 } } as const;
+
+/**
+ * Schéma de l'exemple chiffré de la fiche Actions en direct (chantier « Illustrations maison », constat du 2026-11-20) :
+ * les mêmes 15 000 € en deux rangées de même longueur, 15 lignes puis 3 ; une seule entreprise défaillante pèse 1/15
+ * ou 1/3 de la rangée. Montants recalculés par `concentrationLoss` (6,7 % et 33,3 %) et par test. Aucune information
+ * factuelle nouvelle : schéma d'illustration d'un exemple fictif.
+ */
+export function SchemaActions({ children }: { children?: ReactNode }) {
+  const { total, many, few, badIndex } = ACTIONS_EXAMPLE;
+  const a = concentrationLoss(total, many);
+  const b = concentrationLoss(total, few);
+  const pct = (n: number) => `${n.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} %`;
+  const X0 = 1;
+  const WIDTH = 338;
+  const row = (n: number, bad: number, y: number, h: number, gap: number, label?: (bad: boolean) => string) => {
+    const w = (WIDTH - (n - 1) * gap) / n;
+    return Array.from({ length: n }, (_, i) => {
+      const x = X0 + i * (w + gap);
+      const isBad = i === bad;
+      return (
+        <g key={i}>
+          <rect x={x} y={y} width={w} height={h} rx={n > 5 ? 4 : 8} fill={isBad ? 'var(--warn-soft)' : 'var(--accent-soft)'} stroke={isBad ? 'var(--warn)' : 'var(--accent)'} strokeWidth={2} strokeDasharray={isBad ? '4 3' : undefined} />
+          {label && <text x={x + w / 2} y={y + h / 2 + 5} textAnchor="middle" className="ill-in">{label(isBad)}</text>}
+        </g>
+      );
+    });
+  };
+  const ratio = Math.round(b.perLine / a.perLine);
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 340 300" role="img" aria-labelledby="ill-act-t ill-act-d" className="ill-svg">
-        <title id="ill-act-t">Actions : une seule entreprise défaillante sur quinze</title>
-        <desc id="ill-act-d">Exemple fictif : un portefeuille de quinze actions de 1 000 € chacune, soit 15 000 €. Si une seule entreprise fait défaillance, la perte est au plus de 1 000 €, soit 6,7 % du total.</desc>
-        <text x={170} y={20} textAnchor="middle" className="ill-step">15 entreprises × 1 000 € = 15 000 €</text>
-        {cells.map((c, i) => (
-          <g key={i}>
-            <rect x={c.x} y={c.y} width={58} height={36} rx={8} fill={c.bad ? 'var(--warn-soft)' : 'var(--accent-soft)'} stroke={c.bad ? 'var(--warn)' : 'var(--accent)'} strokeWidth={2} />
-            <text x={c.x + 29} y={c.y + 23} textAnchor="middle" className="ill-in">{c.bad ? '0 €' : '1 000 €'}</text>
-          </g>
-        ))}
-        <rect x={1} y={184} width={338} height={82} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={170} y={208} textAnchor="middle" className="ill-step">Une entreprise défaillante :</text>
-        <text x={170} y={228} textAnchor="middle" className="ill-step">− 1 000 € au plus</text>
-        <text x={170} y={252} textAnchor="middle" className="ill-sub">soit 6,7 % du total (1 000 € sur 15 000 €)</text>
-        <text x={170} y={292} textAnchor="middle" className="ill-sub">Exemple fictif, schéma d’illustration</text>
+      <svg viewBox="0 0 340 344" role="img" aria-labelledby="ill-act-t ill-act-d" className="ill-svg">
+        <title id="ill-act-t">{`Actions : les mêmes ${fmtEur(total)} sur ${many} lignes ou sur ${few}`}</title>
+        <desc id="ill-act-d">{`Exemple fictif : ${fmtEur(total)} placés en actions. Répartis sur ${many} lignes de ${fmtEur(a.perLine)}, une entreprise défaillante fait perdre au plus ${fmtEur(a.perLine)}, soit ${pct(a.maxLossPct)} du total. Répartis sur ${few} lignes de ${fmtEur(b.perLine)}, la même défaillance fait perdre jusqu’à ${fmtEur(b.perLine)}, soit ${pct(b.maxLossPct)} : une perte ${ratio} fois plus lourde.`}</desc>
+        <text x={X0} y={18} className="ill-step">{`${fmtEur(total)} placés en actions`}</text>
+        <rect x={X0} y={30} width={14} height={14} rx={3} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={X0 + 20} y={42} className="ill-sub">ligne intacte</text>
+        <rect x={X0 + 130} y={30} width={14} height={14} rx={3} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} strokeDasharray="4 3" />
+        <text x={X0 + 150} y={42} className="ill-sub">entreprise défaillante</text>
+
+        <text x={X0} y={80} className="ill-step">{`${many} lignes de ${fmtEur(a.perLine)}`}</text>
+        {row(many, badIndex.many, 90, 40, 3)}
+        <text x={X0} y={154} className="ill-total">{`Perte : ${fmtEur(a.perLine)}, soit ${pct(a.maxLossPct)}`}</text>
+
+        <text x={X0} y={196} className="ill-step">{`${few} lignes de ${fmtEur(b.perLine)}`}</text>
+        {row(few, badIndex.few, 206, 40, 6, (bad) => (bad ? '0 €' : fmtEur(b.perLine)))}
+        <text x={X0} y={270} className="ill-total">{`Perte : ${fmtEur(b.perLine)}, soit ${pct(b.maxLossPct)}`}</text>
+
+        <line x1={X0} y1={288} x2={X0 + WIDTH} y2={288} stroke="var(--line)" strokeWidth={1} />
+        <text x={X0} y={310} className="ill-sub">{`Même défaillance, perte ${ratio} fois plus lourde.`}</text>
+        <text x={X0} y={334} className="ill-sub">Exemple fictif, schéma d’illustration</text>
       </svg>
+      {children && <figcaption>{children}</figcaption>}
     </figure>
   );
 }
