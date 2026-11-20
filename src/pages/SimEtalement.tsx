@@ -78,7 +78,7 @@ export default function SimEtalement() {
             <Kpi label="En une seule fois" value={fmtEur(r.lump)} sub={`valeur après ${fmtMonths(r.months)}`} />
             <Kpi label="En tranches égales" value={fmtEur(r.gradual)} sub={`${r.spreadMonths}\u00a0mois d’étalement`} />
           </div>
-          <Takeaway>{lumpGradualTakeaway({ amount: s.amount, spreadMonths: r.spreadMonths, months: r.months, lump: r.lump, gradual: r.gradual, advantageGradual: r.advantageGradual })}</Takeaway>
+          <Takeaway>{lumpGradualTakeaway({ amount: s.amount, path: s.path, annualReturn: s.ret, cashRate: s.cash, advantageGradual: r.advantageGradual })}</Takeaway>
           {s.amount > 0 && (
             <>
               <h2>Qui finit au-dessus, selon ce que fait le prix</h2>

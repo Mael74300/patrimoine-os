@@ -345,16 +345,32 @@ export function budgetGapPhrase(gap: number, bench: number): string {
   return g > 0 ? `${fmtEur(g)} de plus que ${repere}` : `${fmtEur(-g)} de moins que ${repere}`;
 }
 
-/** Inflation : ce que la somme permet d'acheter à l'horizon, laissée telle quelle ou placée. */
-export function inflationTakeaway(p: { amount: number; years: number; inflation: number; annualReturn: number; idleRealValue: number; nominalToKeepPower: number; investedRealValue: number }): string {
+/**
+ * Inflation : ce que veulent dire les trois cases, sans recopier leurs montants. D'abord un repère du quotidien
+ * (ce que deviendrait le prix d'un panier de 100 €, à l'inflation saisie), puis le rôle du placement : grandir plus vite,
+ * aussi vite ou moins vite que les prix. `basketLater` est le prix du panier à l'horizon, calculé par `purchasingPower`.
+ */
+export function inflationTakeaway(p: { amount: number; years: number; inflation: number; annualReturn: number; realReturn: number; basketLater: number }): string {
   if (!(p.amount > 0) || !(p.years > 0)) return '';
-  const duree = fmtAns(p.years);
-  const rien = p.inflation > 0
-    ? `Avec ${fmtPct(p.inflation)} d'inflation par an, ${fmtEur(p.amount)} laissés tels quels pendant ${duree} ne permettront d'acheter que ce que ${fmtEur(p.idleRealValue)} achètent aujourd'hui. Pour garder le même pouvoir d'achat, il faudrait alors détenir ${fmtEur(p.nominalToKeepPower)}.`
-    : `Avec ${fmtPct(p.inflation)} d'inflation par an, ${fmtEur(p.amount)} laissés tels quels pendant ${duree} permettent d'acheter, en euros d'aujourd'hui, ${fmtEur(p.idleRealValue)}.`;
-  const diff = Math.round(p.investedRealValue) - Math.round(p.amount);
-  const place = ` Placée à ${fmtPct(p.annualReturn)} par an, la même somme vaut ${fmtEur(p.investedRealValue)} en euros d'aujourd'hui : ${diff > 0 ? `elle gagne ${fmtEur(diff)} de pouvoir d'achat` : diff < 0 ? `elle perd encore ${fmtEur(-diff)} de pouvoir d'achat` : 'son pouvoir d\'achat est conservé'}.`;
-  return rien + place;
+  const dans = `dans ${fmtAns(p.years)}`;
+  const panier = fmtEur(p.basketLater);
+  const prix = p.inflation > 0
+    ? `Avec des prix qui montent de ${fmtPct(p.inflation)} par an, un panier de courses de 100 € aujourd'hui en coûterait environ ${panier} ${dans} : une somme qui ne bouge pas en achète de moins en moins.`
+    : p.inflation < 0
+      ? `Avec des prix qui baissent de ${fmtPct(-p.inflation)} par an, un panier de courses de 100 € aujourd'hui en coûterait environ ${panier} ${dans} : une somme qui ne bouge pas en achète davantage.`
+      : `Sans inflation, les prix ne bougent pas : une somme laissée telle quelle garde ce qu'elle permet d'acheter.`;
+  const r = Math.round(p.realReturn * 10000);
+  const taux = `à ${fmtPct(p.annualReturn)} par an`;
+  const place = p.annualReturn === 0
+    ? ` Placée à 0 % par an, elle ne rapporte rien : c'est comme la laisser telle quelle.`
+    : p.annualReturn < 0
+      ? ` Placée ${taux}, elle perd de la valeur : c'est pire que la laisser telle quelle.`
+      : r > 0
+        ? ` Placée ${taux}, la somme grandit plus vite que les prix : elle achètera plus qu'aujourd'hui.`
+        : r === 0
+          ? ` Placée ${taux}, la somme grandit au même rythme que les prix : elle achètera autant qu'aujourd'hui, sans plus.`
+          : ` Placée ${taux}, la somme grandit moins vite que les prix : le placement réduit la perte de pouvoir d'achat sans l'effacer.`;
+  return prix + place;
 }
 
 /** Mois où la première dette est soldée (la plus tôt), parmi celles qui restaient dues. */
@@ -406,18 +422,32 @@ export function debtsTakeaway(p: {
 }
 
 /**
- * Impact des frais : d'abord l'écart entre le niveau de frais le plus bas et le plus élevé (la comparaison
- * que fait le visiteur), puis, dans une phrase à part, le coût total par rapport à un placement sans frais,
- * avec ce que « les gains » veut dire. Deux montants différents ne sont plus dits l'un derrière l'autre.
+ * Impact des frais : ce que représente l'écart entre le niveau de frais le plus bas et le plus élevé, sans recopier
+ * les montants des cases ni des barres : en années de versements mensuels (ou, sans versement, en part du capital de départ),
+ * puis pourquoi un petit taux finit par coûter cher.
  */
-export function feesTakeaway(p: { years: number; lowest: { fees: number; finalValue: number }; highest: { fees: number; finalValue: number; cost: number; shareOfGains: number }; noFees: number }): string {
-  const { lowest: lo, highest: hi } = p;
-  const ecart = lo.finalValue - hi.finalValue;
+export function feesTakeaway(p: { years: number; initial: number; monthly: number; lowest: { finalValue: number }; highest: { finalValue: number }; noFees: number }): string {
+  const ecart = p.lowest.finalValue - p.highest.finalValue;
   if (!(p.years > 0) || !(ecart > 0.5) || !(p.noFees > 0)) return '';
-  const part = hi.shareOfGains > 0
-    ? `, soit ${fmtPart(hi.shareOfGains)} des gains (ce que le placement rapporte en plus de vos versements)`
-    : '';
-  return `Sur ${fmtAns(p.years)}, ${fmtPct(hi.fees)} de frais par an au lieu de ${fmtPct(lo.fees)} vous laissent ${fmtEur(ecart)} de moins. Face à un placement sans aucun frais (${fmtEur(p.noFees)}), les frais à ${fmtPct(hi.fees)} coûtent ${fmtEur(hi.cost)}${part}.`;
+  let equiv = '';
+  if (p.monthly > 0) {
+    const ans = ecart / (12 * p.monthly);
+    const mois = Math.round(ecart / p.monthly);
+    equiv = ans >= 1.5
+      ? `l'équivalent d'environ ${Math.round(ans)} ans de vos versements mensuels`
+      : mois >= 1
+        ? `l'équivalent d'environ ${mois} mois de vos versements mensuels`
+        : `moins d'un mois de vos versements mensuels`;
+  } else if (p.initial > 0) {
+    const ratio = ecart / p.initial;
+    equiv = ratio >= 1
+      ? `l'équivalent d'environ ${fmtNum(ratio)}\u00a0fois votre capital de départ`
+      : `l'équivalent de ${fmtPart(ratio)} de votre capital de départ`;
+  }
+  const debut = equiv
+    ? `Payer les frais les plus élevés plutôt que les plus bas vous coûte ${equiv}.`
+    : `Payer les frais les plus élevés plutôt que les plus bas réduit nettement le capital final.`;
+  return `${debut} Un taux de frais paraît petit, mais il est prélevé chaque année sur un capital qui grossit : son coût augmente avec la durée.`;
 }
 
 /** Patrimoine à long terme : versements, capital simulé, puis valeur après impôt en euros d'aujourd'hui. */
@@ -500,15 +530,28 @@ export function rebalanceTakeaway(items: { label: string; move: number }[]): str
   return `Pour retrouver la répartition visée, il faudrait ${parts.join(' et ')}.${sansVente}`;
 }
 
-/** Investir d'un coup ou progressivement : ce que l'on obtient dans chaque cas, et l'écart, en mots simples. */
-export function lumpGradualTakeaway(p: { amount: number; spreadMonths: number; months: number; lump: number; gradual: number; advantageGradual: number }): string {
+/**
+ * Investir d'un coup ou progressivement : pourquoi l'une des deux méthodes finit au-dessus, et le poids de l'écart
+ * rapporté au capital, sans recopier les montants des cases ni des barres. L'explication suit le parcours de prix
+ * supposé et le rendement de la part qui attend d'être investie.
+ */
+export function lumpGradualTakeaway(p: { amount: number; path: 'steady' | 'dip' | 'rise'; annualReturn: number; cashRate: number; advantageGradual: number }): string {
   if (!(p.amount > 0)) return '';
-  const mois = `${p.spreadMonths}\u00a0mois`;
-  const base = `Avec ${fmtEur(p.amount)} à placer, investir la totalité tout de suite donne ${fmtEur(p.lump)} après ${fmtMonths(p.months)}, contre ${fmtEur(p.gradual)} en investissant par tranches égales sur ${mois}.`;
   const ecart = Math.abs(p.advantageGradual);
-  if (ecart < 0.005) return `${base} Les deux méthodes donnent le même résultat avec ces hypothèses.`;
-  if (p.advantageGradual < 0) return `${base} Ici, investir tout de suite finit ${fmtEur(ecart)} au-dessus : l'argent resté en attente a rapporté moins que le placement. L'étalement sert surtout à limiter le regret d'un achat juste avant une baisse.`;
-  return `${base} Ici, l'étalement finit ${fmtEur(ecart)} au-dessus : c'est le cas quand le prix baisse pendant l'étalement. Si le prix avait monté, investir tout de suite aurait été préférable.`;
+  if (Math.round(ecart) === 0) return 'Avec ces hypothèses, les deux méthodes donnent le même résultat.';
+  const etale = p.advantageGradual > 0;
+  const attente = p.cashRate < p.annualReturn ? 'moins' : 'plus';
+  let pourquoi: string;
+  if (p.path === 'dip' && etale) pourquoi = 'le prix baisse pendant l\'étalement, donc les tranches suivantes achètent moins cher que la première.';
+  else if (p.path === 'rise' && !etale) pourquoi = 'le prix monte pendant l\'étalement, donc les tranches suivantes achètent plus cher que la première.';
+  else if (p.path === 'steady') pourquoi = `l'argent qui attend son tour rapporte ${attente} que le placement.`;
+  else pourquoi = `le mouvement de prix supposé est trop faible pour l'emporter sur le rendement de l'argent qui attend son tour.`;
+  const qui = etale ? 'l\'étalement finit au-dessus' : 'investir tout de suite finit au-dessus';
+  const poids = ` L'écart représente ${fmtPart(ecart / p.amount)} du capital placé.`;
+  const fin = etale
+    ? ' Si le prix avait monté, investir tout de suite aurait été préférable.'
+    : ' L\'étalement sert surtout à limiter le regret d\'un achat juste avant une baisse.';
+  return `Ici, ${qui} : ${pourquoi}${poids}${fin}`;
 }
 
 /**
