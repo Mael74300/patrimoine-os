@@ -328,11 +328,13 @@ details.fold > p { margin-left: 14px; margin-right: 14px; }
 .source-list li { margin: 0; padding: 5px 0 6px; border-bottom: 1px solid var(--line); line-height: 1.35; }
 .source-pub { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); }
 .source-list a:hover .source-pub { color: var(--accent); }
+/* Site de destination quand la source n'a pas d'organisme séparé : même style, coupé si l'adresse est longue. */
+.source-pub.source-site { overflow-wrap: anywhere; }
 .source-title { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 .source-date { font-size: 0.8rem; color: var(--ink-3); }
 .source-list li > .source-date { display: block; }
 /* Grand écran : l'organisme en colonne à gauche, le titre à droite, comme un petit tableau. */
-@media (min-width: 701px) { ul.source-list a { display: grid; grid-template-columns: 9.5rem 1fr; column-gap: 12px; align-items: baseline; } .source-main { grid-column: 2; } .source-list li { padding: 2px 0; } }
+@media (min-width: 701px) { ul.source-list a { display: grid; grid-template-columns: 11rem 1fr; column-gap: 12px; align-items: baseline; } .source-main { grid-column: 2; } .source-list li { padding: 2px 0; } }
 
 /* ---------- Catégories */
 .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
