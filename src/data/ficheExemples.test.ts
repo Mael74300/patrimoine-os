@@ -5,7 +5,7 @@ import { investmentBySlug } from './investments';
 import { bondCoupons, fondsEurosGrowth, livretQuinzaines, concentrationLoss, crowdfundingScenario, lepVsLivretA, pelVsLivretA, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, subscriptionChurn, trainingPayoff, yearlySavingsValue, termDepositVsLivretA, ucFeesDrag, forestCredit, artResale } from '../lib/calc/ficheExemples';
 import { amortize } from '../lib/calc/loan';
 import { CROWDFUNDING_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, leverageBars } from '../lib/illustrationData';
-import { SchemaCrowdfundingBilan, SchemaLivretBilan, SchemaMicroBilan, SchemaPee, SchemaRepriseBilan, SchemaScpiBilan, livretBilan } from '../components/schemas/fiches';
+import { SchemaCrowdfundingBilan, SchemaLivretBilan, SchemaMicroBilan, SchemaPee, SchemaPeeBilan, PEE_EXAMPLE, SchemaRepriseBilan, SchemaScpiBilan, livretBilan } from '../components/schemas/fiches';
 import { guideBySlug } from './guides';
 import { LIVRETS } from './livrets';
 
@@ -520,8 +520,9 @@ describe('fiches Compte à terme, Unités de compte et Forêt : exemples recalcu
   it('PEE : 500 € versés + 500 € d’abondement = 1 000 € placés, dans les plafonds de 2026 (Service-Public F2142 et F2140, consultées le 2026-11-18)', () => {
     const PLAFOND_ABONDEMENT = 3844.8;
     const PLAFOND_INTERESSEMENT = 36045;
-    const verse = 500;
-    const abondement = verse * 1; // abondement de 100 %, choisi pour l’exemple
+    const { verse, abondementPct, prime } = PEE_EXAMPLE;
+    expect(abondementPct).toBe(100); // abondement de 100 %, choisi pour l’exemple
+    const abondement = (verse * abondementPct) / 100;
     expect(abondement).toBeLessThanOrEqual(3 * verse);
     expect(abondement).toBeLessThanOrEqual(PLAFOND_ABONDEMENT);
     const fiche = investmentBySlug['pee']!;
@@ -536,6 +537,15 @@ describe('fiches Compte à terme, Unités de compte et Forêt : exemples recalcu
     const svg = plain(renderToStaticMarkup(createElement(SchemaPee)));
     expect(svg).toContain('jusqu’à 3 fois');
     expect(svg).toContain('bloqué au moins 5 ans');
+    // Schéma de l'exemple chiffré : mêmes montants que le texte, barre à l'échelle (500 € sur 1 000 €).
+    const bilan = plain(renderToStaticMarkup(createElement(SchemaPeeBilan, null, 'x')));
+    expect(bilan).toContain(`Vos ${eur(verse)} versés, abondés à 100 %`);
+    expect(bilan).toContain(`+ ${eur(abondement)}`);
+    expect(bilan).toContain(`${eur(verse + abondement)} placés sur le PEE`);
+    expect(bilan).toContain(`Une prime d’intéressement de ${eur(prime)}`);
+    expect(bilan).toContain('CSG et CRDS prélevées sur l’abondement');
+    expect(bilan).toContain('bloquée 5 ans');
+    expect(bilan).toContain('Exemple fictif');
   });
 });
 

@@ -10,7 +10,7 @@ import { simBlurb } from '../lib/simThemes';
 import { interleave, splitNext } from '../lib/nextLinks';
 import { NextList, NextMore, type NextItem } from '../components/NextList';
 import { DONATION_ABATTEMENTS, fmtEuros } from '../data/donationAbattements';
-import { SchemaActions, SchemaForet, SchemaDonation, SchemaDonationBilan, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaObligationBilan, SchemaEtfBilan, SchemaAssuranceVieBilan, SchemaOr, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaScpi, SchemaScpiBilan, SchemaCrowdfundingBilan, SchemaMicroBilan, SchemaUniteDeCompte, SchemaFondsEuros, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaRepriseBilan, SchemaLivretBilan, SchemaActiviteNumerique, SchemaPee, SchemaPeaBilan, SchemaForetBilan, SchemaFraisBilan } from '../components/schemas/fiches';
+import { SchemaActions, SchemaForet, SchemaDonation, SchemaDonationBilan, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaObligationBilan, SchemaEtfBilan, SchemaAssuranceVieBilan, SchemaOr, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaScpi, SchemaScpiBilan, SchemaCrowdfundingBilan, SchemaMicroBilan, SchemaUniteDeCompte, SchemaFondsEuros, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaRepriseBilan, SchemaLivretBilan, SchemaActiviteNumerique, SchemaPee, SchemaPeeBilan, SchemaPeaBilan, SchemaForetBilan, SchemaFraisBilan } from '../components/schemas/fiches';
 import { SchemaPea, SchemaQuinzaines, SchemaLevier } from '../components/schemas/communs';
 import NotFound from './NotFound';
 import { DonationCalculator } from '../components/DonationCalculator';
@@ -178,6 +178,7 @@ export default function InvestmentPage() {
             if (inv.slug === 'assurance-vie') return <SchemaAssuranceVieBilan>{ex}</SchemaAssuranceVieBilan>;
             if (inv.slug === 'actions-individuelles') return <SchemaActions>{ex}</SchemaActions>;
             if (inv.slug === 'pea') return <SchemaPeaBilan>{ex}</SchemaPeaBilan>;
+            if (inv.slug === 'pee') return <SchemaPeeBilan>{ex}</SchemaPeeBilan>;
             if (inv.slug === 'fonds-euros' || inv.slug === 'unites-de-compte') return <SchemaFraisBilan kind={inv.slug}>{ex}</SchemaFraisBilan>;
             if (inv.slug === 'groupements-forestiers') return <SchemaForetBilan>{ex}</SchemaForetBilan>;
             if (inv.slug === 'reprise-entreprise') return <SchemaRepriseBilan>{ex}</SchemaRepriseBilan>;
