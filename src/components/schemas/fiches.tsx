@@ -11,7 +11,8 @@ import { W } from './outils';
 
 /** Schéma « Comment fonctionne une SCPI » : principe qualitatif (aucun chiffre), repris du texte de la fiche et de La finance pour tous. */
 /* ViewBox 340 (chantier 112, étape 3) : à 375 px, les textes s'affichent presque à leur taille
- * (≈ 11,2 px et cadres collés aux bords avec l'ancien viewBox 420). Mêmes textes et mêmes règles. */
+ * (≈ 11,2 px et cadres collés aux bords avec l'ancien viewBox 420). Mêmes textes et mêmes règles.
+ * Dessin décalé de 15 unités (constat du 2026-11-20) : il touchait le bord gauche et laissait un vide à droite. */
 export function SchemaScpi() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   return (
@@ -19,26 +20,28 @@ export function SchemaScpi() {
       <svg viewBox="0 0 340 334" role="img" aria-labelledby="ill-scpi-t ill-scpi-d" className="ill-svg">
         <title id="ill-scpi-t">Comment fonctionne une SCPI</title>
         <desc id="ill-scpi-d">Les épargnants achètent des parts de la SCPI. La SCPI, gérée par une société de gestion, achète des immeubles et les loue. Les loyers perçus, après déduction des frais, reviennent aux épargnants sous forme de revenus.</desc>
-        <rect x={1} y={2} width={190} height={58} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={96} y={28} textAnchor="middle" className="ill-step">Les épargnants</text>
-        <text x={96} y={48} textAnchor="middle" className="ill-sub">achètent des parts</text>
-        <path d="M 96 60 V 108 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={106} y={90} textAnchor="start" className="ill-in">leur argent</text>
-        <rect x={1} y={108} width={190} height={76} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={96} y={132} textAnchor="middle" className="ill-step">La SCPI</text>
-        <text x={96} y={154} textAnchor="middle" className="ill-sub">gérée par une</text>
-        <text x={96} y={172} textAnchor="middle" className="ill-sub">société de gestion</text>
-        <path d="M 96 184 V 232 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={106} y={204} textAnchor="start" className="ill-in">achète et met</text>
-        <text x={106} y={221} textAnchor="start" className="ill-in">en location</text>
-        <rect x={1} y={232} width={190} height={58} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={96} y={258} textAnchor="middle" className="ill-step">Des immeubles loués</text>
-        <text x={96} y={278} textAnchor="middle" className="ill-sub">bureaux, commerces…</text>
-        <path d="M 191 261 H 212 V 31 H 199 m 8 -7 l -8 7 l 8 7" {...arrow} />
-        <text x={222} y={122} textAnchor="start" className="ill-in">les loyers,</text>
-        <text x={222} y={140} textAnchor="start" className="ill-in">moins les frais,</text>
-        <text x={222} y={158} textAnchor="start" className="ill-in">reviennent aux</text>
-        <text x={222} y={176} textAnchor="start" className="ill-in">épargnants</text>
+        <g transform="translate(15 0)">
+          <rect x={1} y={2} width={190} height={58} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+          <text x={96} y={28} textAnchor="middle" className="ill-step">Les épargnants</text>
+          <text x={96} y={48} textAnchor="middle" className="ill-sub">achètent des parts</text>
+          <path d="M 96 60 V 108 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+          <text x={106} y={90} textAnchor="start" className="ill-in">leur argent</text>
+          <rect x={1} y={108} width={190} height={76} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+          <text x={96} y={132} textAnchor="middle" className="ill-step">La SCPI</text>
+          <text x={96} y={154} textAnchor="middle" className="ill-sub">gérée par une</text>
+          <text x={96} y={172} textAnchor="middle" className="ill-sub">société de gestion</text>
+          <path d="M 96 184 V 232 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+          <text x={106} y={204} textAnchor="start" className="ill-in">achète et met</text>
+          <text x={106} y={221} textAnchor="start" className="ill-in">en location</text>
+          <rect x={1} y={232} width={190} height={58} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+          <text x={96} y={258} textAnchor="middle" className="ill-step">Des immeubles loués</text>
+          <text x={96} y={278} textAnchor="middle" className="ill-sub">bureaux, commerces…</text>
+          <path d="M 191 261 H 212 V 31 H 199 m 8 -7 l -8 7 l 8 7" {...arrow} />
+          <text x={222} y={122} textAnchor="start" className="ill-in">les loyers,</text>
+          <text x={222} y={140} textAnchor="start" className="ill-in">moins les frais,</text>
+          <text x={222} y={158} textAnchor="start" className="ill-in">reviennent aux</text>
+          <text x={222} y={176} textAnchor="start" className="ill-in">épargnants</text>
+        </g>
         <text x={170} y={324} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
       </svg>
     </figure>
@@ -133,7 +136,8 @@ export function SchemaCrowdfunding() {
 }
 
 /** Schéma « Comment fonctionne une foncière cotée » : principe qualitatif (aucun chiffre), repris de La finance pour tous (page « Les sociétés foncières »). */
-/* ViewBox 340 (chantier 112, étape 8), même construction que le schéma SCPI : mêmes textes, coupés en deux lignes quand il le faut. */
+/* ViewBox 340 (chantier 112, étape 8), même construction que le schéma SCPI : mêmes textes, coupés en deux lignes quand il le faut.
+ * Dessin décalé de 9 unités pour être centré (constat du 2026-11-20). */
 export function SchemaFonciereCotee() {
   const arrow = { fill: 'none', stroke: 'var(--ink-2)', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   return (
@@ -141,28 +145,30 @@ export function SchemaFonciereCotee() {
       <svg viewBox="0 0 340 352" role="img" aria-labelledby="ill-fc-t ill-fc-d" className="ill-svg">
         <title id="ill-fc-t">Comment fonctionne une foncière cotée</title>
         <desc id="ill-fc-d">Les investisseurs achètent et revendent des actions de la foncière en Bourse, au prix du marché. La foncière possède des immeubles de bureaux et de commerces qu’elle loue. Les loyers lui permettent de verser des dividendes aux actionnaires.</desc>
-        <rect x={1} y={2} width={190} height={76} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-        <text x={96} y={28} textAnchor="middle" className="ill-step">Les investisseurs</text>
-        <text x={96} y={50} textAnchor="middle" className="ill-sub">achètent des</text>
-        <text x={96} y={68} textAnchor="middle" className="ill-sub">actions en Bourse</text>
-        <path d="M 96 78 V 126 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={106} y={100} textAnchor="start" className="ill-in">revendables</text>
-        <text x={106} y={117} textAnchor="start" className="ill-in">en Bourse</text>
-        <rect x={1} y={126} width={190} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
-        <text x={96} y={152} textAnchor="middle" className="ill-step">La foncière cotée</text>
-        <text x={96} y={174} textAnchor="middle" className="ill-sub">société dont le prix varie</text>
-        <path d="M 96 190 V 238 m -7 -8 l 7 8 l 7 -8" {...arrow} />
-        <text x={106} y={212} textAnchor="start" className="ill-in">possède</text>
-        <text x={106} y={229} textAnchor="start" className="ill-in">et loue</text>
-        <rect x={1} y={238} width={190} height={76} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={96} y={264} textAnchor="middle" className="ill-step">Des immeubles loués</text>
-        <text x={96} y={286} textAnchor="middle" className="ill-sub">surtout bureaux</text>
-        <text x={96} y={304} textAnchor="middle" className="ill-sub">et commerces</text>
-        <path d="M 191 276 H 208 V 40 H 199 m 8 -7 l -8 7 l 8 7" {...arrow} />
-        <text x={216} y={140} textAnchor="start" className="ill-in">les loyers</text>
-        <text x={216} y={158} textAnchor="start" className="ill-in">financent les</text>
-        <text x={216} y={176} textAnchor="start" className="ill-in">dividendes versés</text>
-        <text x={216} y={194} textAnchor="start" className="ill-in">aux actionnaires</text>
+        <g transform="translate(9 0)">
+          <rect x={1} y={2} width={190} height={76} rx={12} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+          <text x={96} y={28} textAnchor="middle" className="ill-step">Les investisseurs</text>
+          <text x={96} y={50} textAnchor="middle" className="ill-sub">achètent des</text>
+          <text x={96} y={68} textAnchor="middle" className="ill-sub">actions en Bourse</text>
+          <path d="M 96 78 V 126 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+          <text x={106} y={100} textAnchor="start" className="ill-in">revendables</text>
+          <text x={106} y={117} textAnchor="start" className="ill-in">en Bourse</text>
+          <rect x={1} y={126} width={190} height={64} rx={12} fill="var(--surface)" stroke="var(--primary)" strokeWidth={2} />
+          <text x={96} y={152} textAnchor="middle" className="ill-step">La foncière cotée</text>
+          <text x={96} y={174} textAnchor="middle" className="ill-sub">société dont le prix varie</text>
+          <path d="M 96 190 V 238 m -7 -8 l 7 8 l 7 -8" {...arrow} />
+          <text x={106} y={212} textAnchor="start" className="ill-in">possède</text>
+          <text x={106} y={229} textAnchor="start" className="ill-in">et loue</text>
+          <rect x={1} y={238} width={190} height={76} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+          <text x={96} y={264} textAnchor="middle" className="ill-step">Des immeubles loués</text>
+          <text x={96} y={286} textAnchor="middle" className="ill-sub">surtout bureaux</text>
+          <text x={96} y={304} textAnchor="middle" className="ill-sub">et commerces</text>
+          <path d="M 191 276 H 208 V 40 H 199 m 8 -7 l -8 7 l 8 7" {...arrow} />
+          <text x={216} y={140} textAnchor="start" className="ill-in">les loyers</text>
+          <text x={216} y={158} textAnchor="start" className="ill-in">financent les</text>
+          <text x={216} y={176} textAnchor="start" className="ill-in">dividendes versés</text>
+          <text x={216} y={194} textAnchor="start" className="ill-in">aux actionnaires</text>
+        </g>
         <text x={170} y={342} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
       </svg>
     </figure>
@@ -1379,29 +1385,35 @@ export function SchemaCrowdfundingBilan({ children }: { children: ReactNode }) {
 export function SchemaScpiBilan({ children }: { children: ReactNode }) {
   const { amount, entryFeePct, distributionPct } = SCPI_EXAMPLE;
   const { fees, yearly, years } = scpiFeesPayback(amount, entryFeePct, distributionPct);
-  const scale = 240 / fees;
+  // Dessin centré sur toute la largeur (constat du 2026-11-20 : barres sur 240 unités, collées à gauche à 375 px).
+  const X0 = 10;
+  const W = 320;
+  const scale = W / Math.max(fees, years * yearly);
+  const gap = 6;
   const years_ = Array.from({ length: years }, (_, k) => k + 1);
+  const feesW = fees * scale;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 340 196" role="img" aria-labelledby="ill-scpib-t ill-scpib-d" className="ill-svg">
+      <svg viewBox="0 0 340 214" role="img" aria-labelledby="ill-scpib-t ill-scpib-d" className="ill-svg">
         <title id="ill-scpib-t">SCPI : les loyers distribués compensent d’abord les frais d’entrée</title>
         <desc id="ill-scpib-d">{`Exemple fictif : ${fmtEur(amount)} souscrits avec ${entryFeePct} % de frais d’entrée, soit ${fmtEur(fees)} de frais. Avec ${fmtEur(yearly)} distribués par an, il faut ${years} ans pour les compenser, à prix de part constant et avant impôt.`}</desc>
-        <text x={0} y={18} className="ill-year" textAnchor="start">{`Frais d’entrée : ${entryFeePct}\u00a0% de ${fmtEur(amount)}`}</text>
-        <rect x={1} y={28} width={fees * scale} height={24} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
-        <text x={fees * scale + 10} y={45} className="ill-in" textAnchor="start">{fmtEur(fees)}</text>
-        <text x={0} y={90} className="ill-year" textAnchor="start">{`Loyers distribués : ${distributionPct}\u00a0% par an`}</text>
+        <text x={X0} y={18} className="ill-step" textAnchor="start">{`Frais d’entrée : ${entryFeePct}\u00a0% de ${fmtEur(amount)}`}</text>
+        <rect x={X0} y={30} width={feesW} height={36} rx={8} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={X0 + feesW / 2} y={53} className="ill-total" textAnchor="middle">{`${fmtEur(fees)} de frais`}</text>
+        <text x={X0} y={100} className="ill-step" textAnchor="start">{`Loyers distribués : ${distributionPct}\u00a0% par an`}</text>
         {years_.map((k) => {
-          const x = 1 + (k - 1) * yearly * scale;
+          const x = X0 + (k - 1) * yearly * scale;
+          const w = yearly * scale - (k < years ? gap : 0);
           return (
             <g key={k}>
-              <rect x={x} y={100} width={yearly * scale - 4} height={24} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
-              <text x={x + (yearly * scale - 4) / 2} y={117} className="ill-in" textAnchor="middle">{`année ${k} : ${fmtEur(yearly)}`}</text>
+              <rect x={x} y={112} width={w} height={36} rx={8} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+              <text x={x + w / 2} y={135} className="ill-in" textAnchor="middle">{`année ${k} : ${fmtEur(yearly)}`}</text>
             </g>
           );
         })}
-        <path d={`M ${fees * scale + 1} 22 V 132`} stroke="var(--ink-2)" strokeWidth={1.5} strokeDasharray="4 3" />
-        <text x={0} y={162} className="ill-total" textAnchor="start" style={{ fill: 'var(--accent)' }}>{`Après ${years} ans, frais compensés`}</text>
-        <text x={0} y={184} className="ill-sub" textAnchor="start">ensuite, les loyers deviennent un gain</text>
+        <path d={`M ${X0 + 1} 156 V 162 H ${X0 + feesW - 1} V 156`} fill="none" stroke="var(--accent)" strokeWidth={2} strokeLinejoin="round" />
+        <text x={X0 + feesW / 2} y={186} className="ill-total" textAnchor="middle" style={{ fill: 'var(--accent)' }}>{`Après ${years} ans, frais compensés`}</text>
+        <text x={X0 + feesW / 2} y={206} className="ill-sub" textAnchor="middle">ensuite, les loyers deviennent un gain</text>
       </svg>
       <figcaption>{children}</figcaption>
     </figure>
