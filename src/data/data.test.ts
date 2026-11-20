@@ -41,6 +41,15 @@ describe('intégrité des données éditoriales', () => {
     expect(o.map((g) => g.slug)).not.toContain('interets-composes');
     expect(o[0].slug).toBe('regle-de-72-doubler-son-capital');
   });
+  it('les sources AMF et La finance pour tous des guides mènent à une page précise, pas à un accueil', () => {
+    for (const g of guides)
+      for (const src of g.sources) {
+        const u = new URL(src.url);
+        if (!/(^|\.)(lafinancepourtous\.com|amf-france\.org)$/.test(u.hostname)) continue;
+        expect(u.pathname.replace(/\/$/, ''), `${g.slug} : ${src.url}`).not.toMatch(/^(|\/fr|\/fr\/espace-epargnants)$/);
+        expect(src.label, `${g.slug} : ${src.label}`).toMatch(/ — /);
+      }
+  });
   it('les guides pointent vers des fiches existantes', () => {
     for (const g of guides) for (const r of g.related) expect(investmentBySlug[r], r).toBeDefined();
   });
