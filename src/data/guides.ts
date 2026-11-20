@@ -2,8 +2,17 @@ import type { Guide, Source } from './types';
 import { deepKeepNumbers } from '../lib/nbsp';
 
 const SP = (label: string, id: string): Source => ({ label: `Service-Public.fr — ${label}`, url: `https://www.service-public.gouv.fr/particuliers/vosdroits/${id}`, official: true });
-const IFP: Source = { label: 'La finance pour tous (IEFP)', url: 'https://www.lafinancepourtous.com', official: true };
-const AMF: Source = { label: 'AMF — Espace épargnants', url: 'https://www.amf-france.org/fr/espace-epargnants', official: true };
+const src = (label: string, url: string): Source => ({ label, url, official: true });
+// Pages précises de La finance pour tous et de l’AMF, relues le 2026-11-20 (titres repris des pages).
+const IFP_REGLE_72 = src('La finance pour tous — Calculer le taux de rendement d’un placement grâce à la règle d’Einstein', 'https://www.lafinancepourtous.com/decryptages/finance-perso/epargne-et-placement/calculer-le-taux-de-rendement-d-un-placement-grace-a-la-regle-d-einstein/');
+const IFP_PATRIMOINE = src('La finance pour tous — Qu’est-ce qu’un patrimoine ?', 'https://www.lafinancepourtous.com/decryptages/finance-perso/epargne-et-placement/patrimoine/qu-est-ce-qu-un-patrimoine/');
+const IFP_SE_PREPARER = src('La finance pour tous — Bien se préparer avant d’investir', 'https://www.lafinancepourtous.com/pratique/placements/les-questions-clefs-avant-d-investir/le-parcours-de-linvestissement-de-long-terme/bien-se-preparer-avant-d-investir/');
+const AMF_RISQUES = src('AMF — Rendements et risques des placements financiers', 'https://www.amf-france.org/fr/espace-epargnants/savoir-bien-investir/cadrer-son-projet/risques-et-rendements-des-placements');
+const AMF_HORIZON = src('AMF — Avant de souscrire : bien connaître son horizon de placement', 'https://www.amf-france.org/fr/espace-epargnants/savoir-bien-investir/cadrer-son-projet/fixer-son-horizon-de-placement');
+const AMF_FRAIS = src('AMF — Comprendre les frais des placements financiers', 'https://www.amf-france.org/fr/espace-epargnants/les-frais-des-placements-financiers/comprendre-les-frais-des-placements-financiers');
+const AMF_INFO_FRAIS = src('AMF — Placements financiers : quelle information sur les frais ?', 'https://www.amf-france.org/fr/espace-epargnants/savoir-bien-investir/cadrer-son-projet/comparer-les-frais/placements-financiers-quelle-information-sur-les-frais');
+const AMF_ETF = src('AMF — Ce qu’il faut savoir sur les ETF avant d’investir', 'https://www.amf-france.org/fr/espace-epargnants/comprendre-les-produits-financiers/placements-collectifs/trackers-etf');
+const AMF_DIVERSIFIER = src('AMF — Comment bien diversifier un investissement ?', 'https://www.amf-france.org/fr/espace-epargnants/savoir-bien-investir/conseils-pratiques/diversifier-ses-placements');
 const ANIL: Source = { label: 'ANIL — Information logement', url: 'https://www.anil.org', official: true };
 const BDF: Source = { label: 'Banque de France', url: 'https://www.banque-france.fr', official: true };
 
@@ -38,7 +47,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       },
     ],
     related: ['livret-a', 'etf-monde', 'assurance-vie', 'scpi'],
-    sources: [AMF, IFP],
+    sources: [AMF_RISQUES, AMF_HORIZON],
     cta: { to: '/encyclopedie', label: 'Filtrer l’encyclopédie' },
   },
   {
@@ -79,7 +88,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       },
     ],
     related: ['credit-immobilier', 'assurance-vie'],
-    sources: [IFP, BDF],
+    sources: [IFP_PATRIMOINE, BDF],
     cta: { to: '/simulateurs/patrimoine', label: 'Projeter mon patrimoine' },
   },
   {
@@ -116,7 +125,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       },
     ],
     related: ['etf-monde', 'location-nue', 'credit-immobilier'],
-    sources: [AMF, ANIL],
+    sources: [AMF_ETF, ANIL],
     cta: { to: '/simulateurs/etf-immobilier', label: 'Ouvrir le comparateur ETF / immobilier' },
   },
   {
@@ -254,7 +263,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       },
     ],
     related: ['etf-monde', 'unites-de-compte', 'assurance-vie'],
-    sources: [AMF, IFP],
+    sources: [AMF_FRAIS, AMF_INFO_FRAIS],
     cta: { to: '/simulateurs/frais', label: 'Calculer l’effet de mes frais' },
   },
   {
@@ -293,7 +302,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     related: ['lep', 'livret-a', 'etf-monde', 'capital-humain'],
     sources: [
       SP('Livret d’épargne populaire (LEP)', 'F2367'),
-      { label: 'AMF — Risques et rendements des placements', url: 'https://www.amf-france.org/fr/espace-epargnants/savoir-bien-investir/cadrer-son-projet/risques-et-rendements-des-placements', official: true },
+      AMF_RISQUES,
       { label: 'AMF — Listes noires et mises en garde', url: 'https://www.amf-france.org/fr/espace-epargnants/proteger-son-epargne/listes-noires-et-mises-en-garde', official: true },
     ],
     faq: [
@@ -315,7 +324,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       { heading: 'Investir régulièrement selon son horizon', body: ['L’argent nécessaire dans moins de trois ans n’a pas sa place en actions. Pour un horizon long, une allocation diversifiée et peu coûteuse, alimentée chaque mois, est une approche robuste.'] },
     ],
     related: ['livret-a', 'lep', 'pea', 'assurance-vie', 'pee', 'etf-monde'],
-    sources: [IFP, AMF, SP('Plan d’épargne entreprise (PEE)', 'F2142')],
+    sources: [IFP_SE_PREPARER, AMF_HORIZON, SP('Plan d’épargne entreprise (PEE)', 'F2142')],
     cta: { to: '/simulateurs/patrimoine', label: 'Voir ce que deviendra mon épargne' },
   },
   {
@@ -330,7 +339,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       { heading: 'L’inflation', body: ['Les prix montent avec le temps : une somme reçue dans 20 ans achètera moins que la même somme aujourd’hui.', 'Exemple fictif : avec une inflation de 2 % par an, les 26 533 € de l’exemple vaudront environ 17 856 € d’aujourd’hui. Nos simulateurs affichent les deux montants : le montant futur et sa valeur en euros d’aujourd’hui.'] },
     ],
     related: ['etf-monde', 'assurance-vie', 'fonds-euros'],
-    sources: [IFP],
+    sources: [IFP_REGLE_72],
     faq: [
       { q: 'Quelle est la formule des intérêts composés ?', a: 'Un capital C placé à un taux annuel r pendant n années devient C × (1 + r)^n, si les gains restent placés. Exemple fictif : 10 000 × 1,05^10 ≈ 16 289 €.' },
       { q: 'Comment calcule-t-on la valeur en euros d’aujourd’hui ?', a: 'On divise le montant futur par (1 + inflation)^n. Exemple fictif : 26 533 ÷ 1,02^20 ≈ 17 856 €.' },
@@ -629,7 +638,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       },
     ],
     related: ['etf-monde', 'livret-a', 'assurance-vie'],
-    sources: [{ label: 'La finance pour tous — La diversification, oui mais comment ?', url: 'https://www.lafinancepourtous.com/pratique/placements/les-questions-clefs-avant-d-investir/la-diversification-oui-mais-comment/', official: true }, AMF],
+    sources: [{ label: 'La finance pour tous — La diversification, oui mais comment ?', url: 'https://www.lafinancepourtous.com/pratique/placements/les-questions-clefs-avant-d-investir/la-diversification-oui-mais-comment/', official: true }, AMF_DIVERSIFIER],
     faq: [
       { q: 'Pourquoi diversifier ses placements ?', a: 'Parce que les placements n’évoluent pas tous de la même manière et n’offrent pas le même degré de disponibilité. Répartir l’épargne évite qu’un seul placement décide de tout le patrimoine.' },
       { q: 'La diversification supprime-t-elle le risque de perte ?', a: 'Non. Si tous les placements détenus baissent en même temps, la répartition n’amortit rien. Elle réduit la dépendance à un seul placement, sans garantir un gain ni l’absence de perte.' },
@@ -715,7 +724,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       },
     ],
     related: ['etf-monde', 'fonds-euros'],
-    sources: [IFP],
+    sources: [IFP_REGLE_72],
     faq: [
       { q: 'Comment appliquer la règle de 72 ?', a: 'Divisez 72 par le taux de rendement annuel en pourcentage : le résultat est une estimation du nombre d’années pour doubler. Exemple fictif : 72 ÷ 8 = 9 ans.' },
       { q: 'La règle de 72 est-elle exacte ?', a: 'Non, c’est une approximation. L’écart reste faible pour des taux modérés. Pour les curieux, la durée exacte vaut ln 2 ÷ ln (1 + taux), où ln est le logarithme népérien (touche « ln » d’une calculatrice) : à 6 %, ln 2 ÷ ln 1,06 ≈ 11,90 ans, soit environ 11 ans et 11 mois (0,90 an fait près de 11 mois, pas 9).' },
