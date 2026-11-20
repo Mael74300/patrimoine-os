@@ -23,6 +23,11 @@ export default function SimRetraits() {
     const alt = withdrawalSeries({ capital: s.capital, monthly: r.sustainable, annualReturn: s.ret, indexation: s.idx, years: s.years });
     chartSeries.push({ name: `Retrait tenable (${fmtEur(r.sustainable)} par mois)`, color: 'var(--chart-2)', values: alt, dashed: true });
   }
+  // Capital épuisé avant l'horizon : zone grisée à partir de l'épuisement, et lecture par défaut sur la dernière année
+  // où il reste quelque chose (sinon la légende afficherait « 0 € » pour les deux courbes).
+  const lastYear = series.length - 1;
+  const emptyBand = dur !== null && dur / 12 < lastYear ? { from: dur / 12, to: lastYear, label: 'Capital vide' } : undefined;
+  const readAt = dur !== null ? Math.max(0, Math.ceil(dur / 12) - 1) : undefined;
 
   return (
     <>
@@ -72,6 +77,8 @@ export default function SimRetraits() {
             xLabels={series.map((_, i) => `An ${i}`)}
             format={fmtEur}
             series={chartSeries}
+            band={emptyBand}
+            defaultIndex={readAt}
           />
           <p className="muted small">
             {chartNote && <>{chartNote} </>}
