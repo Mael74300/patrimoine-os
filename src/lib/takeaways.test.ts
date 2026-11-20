@@ -413,17 +413,27 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(digits(budgetGapPhrase(b.gaps.saving, 0.2))).toBe(digits(`${eur(250)} € de moins que le repère de 20 %`));
     expect(digits(budgetGapPhrase(0.3, 0.2))).toBe(digits('au niveau du repère de 20 %'));
   });
-  it('inflation : valeurs issues de purchasingPower, gain ou perte de pouvoir d\'achat', () => {
+  it('inflation : un panier de 100 € au lieu des montants des cases, puis le rôle du placement', () => {
     const inp = { amount: 10000, years: 20, inflation: 0.02, annualReturn: 0.03 };
-    const r = purchasingPower(inp);
-    const mk = (x: typeof r, i: typeof inp) => digits(inflationTakeaway({ ...i, idleRealValue: x.idleRealValue, nominalToKeepPower: x.nominalToKeepPower, investedRealValue: x.investedRealValue }));
-    const t = mk(r, inp);
-    expect(t).toContain(eur(r.idleRealValue) + '€achètent');
-    expect(t).toContain(eur(r.nominalToKeepPower));
-    expect(t).toContain('ellegagne' + eur(r.investedRealValue - 10000) + '€de');
-    const low = { ...inp, annualReturn: 0.01 };
-    expect(mk(purchasingPower(low), low)).toContain('elleperdencore');
-    expect(inflationTakeaway({ ...inp, amount: 0, idleRealValue: 0, nominalToKeepPower: 0, investedRealValue: 0 })).toBe('');
+    const mk = (i: typeof inp) => {
+      const r = purchasingPower(i);
+      const basket = purchasingPower({ ...i, amount: 100 });
+      return { r, basket, t: inflationTakeaway({ ...i, realReturn: r.realReturn, basketLater: basket.nominalToKeepPower }) };
+    };
+    const { r, basket, t } = mk(inp);
+    // Panier de courses recalculé par le moteur : 100 € × 1,02^20 ≈ 149 € (exemple fictif).
+    expect(Math.round(basket.nominalToKeepPower)).toBe(149);
+    expect(digits(t)).toContain('100€aujourd\'huiencoûteraitenviron' + eur(basket.nominalToKeepPower) + '€');
+    // Aucun montant des trois cases n'est recopié.
+    for (const v of [r.idleRealValue, r.nominalToKeepPower, r.investedRealValue, r.investedValue]) expect(digits(t)).not.toContain(eur(v));
+    expect(t).toContain('plus vite que les prix');
+    expect(mk({ ...inp, annualReturn: 0.01 }).t).toContain('moins vite que les prix');
+    expect(mk({ ...inp, annualReturn: 0.02 }).t).toContain('au même rythme');
+    expect(mk({ ...inp, annualReturn: 0 }).t).toContain('ne rapporte rien');
+    expect(mk({ ...inp, annualReturn: -0.01 }).t).toContain('pire que la laisser');
+    expect(mk({ ...inp, inflation: 0 }).t).toMatch(/^Sans inflation/);
+    expect(mk({ ...inp, inflation: -0.01 }).t).toContain('baissent de 1');
+    expect(inflationTakeaway({ ...inp, amount: 0, realReturn: 0, basketLater: 0 })).toBe('');
   });
   it('dettes : valeurs issues de comparePayoff', () => {
     const D = [{ name: 'a', balance: 2000, rate: 0.2, minPayment: 60 }, { name: 'b', balance: 6000, rate: 0.05, minPayment: 150 }, { name: 'c', balance: 1000, rate: 0.03, minPayment: 50 }];
@@ -449,22 +459,29 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     const none = comparePayoff([{ name: 'a', balance: 0, rate: 0.1, minPayment: 10 }], 0);
     expect(debtsTakeaway({ extra: 0, ...none })).toBe('');
   });
-  it('frais : valeurs issues de feeImpact, niveaux triés', () => {
+  it('frais : l\'écart en années de versements, sans recopier les cases ni les barres', () => {
     const inp = { initial: 10000, monthly: 300, annualReturn: 0.06, years: 25, inflation: 0.02 };
     const [a, b, c] = feeImpact(inp, [0.002, 0.01, 0.02]);
     const base = feeImpact(inp, [0])[0];
-    const t = digits(feesTakeaway({ years: 25, lowest: a, highest: c, noFees: base.finalValue }));
-    expect(t).toContain(eur(a.finalValue - c.finalValue) + '€');
-    expect(t).toContain(eur(c.cost) + '€');
-    expect(t).toContain(eur(base.finalValue) + '€');
-    // Part des gains arrondie au dixième (47,9 % et non 47,88 %), avec ce que « gains » veut dire.
-    const brut = feesTakeaway({ years: 25, lowest: a, highest: c, noFees: base.finalValue }).replace(/[\u00a0\u202f]/g, ' ');
-    expect(brut).toContain((Math.round(c.shareOfGains * 1000) / 10).toLocaleString('fr-FR') + ' % des gains (ce que le placement rapporte en plus de vos versements)');
-    expect(brut).not.toMatch(/\d,\d\d %/);
-    // L'écart entre deux niveaux et le coût face au placement sans frais sont dans deux phrases distinctes.
-    expect(digits(brut.split('. ')[0])).not.toContain(eur(c.cost));
+    const run = (i: typeof inp) => feesTakeaway({ years: 25, initial: i.initial, monthly: i.monthly, lowest: a, highest: c, noFees: base.finalValue });
+    const t = run(inp);
+    // Écart (≈ 61 990 €, exemple fictif) ÷ 3 600 € versés par an ≈ 17 ans.
+    const ans = Math.round((a.finalValue - c.finalValue) / 3600);
+    expect(ans).toBe(17);
+    expect(t).toContain(`environ ${ans}\u00a0ans de vos versements mensuels`);
+    for (const v of [a.finalValue, c.finalValue, a.finalValue - c.finalValue, c.cost, base.finalValue]) expect(digits(t)).not.toContain(eur(v));
+    expect(t).not.toMatch(/\d,\d %/);
+    // Sans versement : en part du capital de départ.
+    const [a0, , c0] = feeImpact({ ...inp, monthly: 0 }, [0.002, 0.01, 0.02]);
+    const ratio = (a0.finalValue - c0.finalValue) / 10000;
+    // Sans versement, 10 000 € placés 25 ans : l'écart (≈ 1,5 fois le capital, exemple fictif) est dit en nombre de fois.
+    expect(Math.round(ratio * 10)).toBe(15);
+    expect(feesTakeaway({ years: 25, initial: 10000, monthly: 0, lowest: a0, highest: c0, noFees: 1 })).toContain(`environ ${(Math.round(ratio * 10) / 10).toLocaleString('fr-FR')}\u00a0fois votre capital de départ`);
+    expect(feesTakeaway({ years: 5, initial: 10000, monthly: 0, lowest: { finalValue: 12000 }, highest: { finalValue: 9000 }, noFees: 1 }).replace(/[\u00a0\u202f]/g, ' ')).toContain('30 % de votre capital de départ');
+    // Écart de moins d'un an et demi : en mois.
+    expect(feesTakeaway({ years: 5, initial: 0, monthly: 1000, lowest: { finalValue: 10000 }, highest: { finalValue: 4000 }, noFees: 11000 })).toContain('environ 6\u00a0mois');
     expect(b.finalValue).toBeGreaterThan(c.finalValue);
-    expect(feesTakeaway({ years: 25, lowest: a, highest: a, noFees: base.finalValue })).toBe('');
+    expect(feesTakeaway({ years: 25, initial: 1, monthly: 1, lowest: a, highest: a, noFees: base.finalValue })).toBe('');
   });
 
   it('patrimoine : versements, capital, impôt et valeur réelle viennent de projectGrowth', () => {
@@ -559,26 +576,45 @@ describe('phrase « Concrètement » : investir d’un coup ou progressivement',
   const digits = (t: string) => t.replace(/\s/g, '');
   const eur = (n: number) => digits(Math.round(n).toLocaleString('fr-FR'));
   const base = { amount: 12000, spreadMonths: 12, years: 5, annualReturn: 0.05, cashRate: 0, move: 0.2 };
-  it('rendement régulier : les montants viennent de lumpVsGradual et investir tout de suite gagne', async () => {
-    const { lumpVsGradual, lumpGradualTakeaway } = await import('./finance').then(async (f) => ({ lumpVsGradual: f.lumpVsGradual, lumpGradualTakeaway: (await import('./takeaways')).lumpGradualTakeaway }));
-    const r = lumpVsGradual({ ...base, path: 'steady' });
-    const t = digits(lumpGradualTakeaway({ amount: 12000, spreadMonths: r.spreadMonths, months: r.months, lump: r.lump, gradual: r.gradual, advantageGradual: r.advantageGradual }));
-    expect(t).toContain(eur(r.lump));
-    expect(t).toContain(eur(r.gradual));
-    expect(t).toContain(eur(Math.abs(r.advantageGradual)));
-    expect(r.advantageGradual).toBeLessThan(0);
-    expect(t).toContain('toutdesuitefinit');
-  });
-  it('baisse pendant l’étalement : l’étalement gagne', async () => {
+  const say = (r: { advantageGradual: number }, path: 'steady' | 'dip' | 'rise', extra: Partial<typeof base> = {}) => {
+    const x = { ...base, ...extra };
+    return import('./takeaways').then((m) => m.lumpGradualTakeaway({ amount: x.amount, path, annualReturn: x.annualReturn, cashRate: x.cashRate, advantageGradual: r.advantageGradual }));
+  };
+  it('rendement régulier : investir tout de suite gagne, sans recopier les montants des cases', async () => {
     const f = await import('./finance');
-    const { lumpGradualTakeaway } = await import('./takeaways');
+    const r = f.lumpVsGradual({ ...base, path: 'steady' });
+    expect(r.advantageGradual).toBeLessThan(0);
+    const t = await say(r, 'steady');
+    expect(t).toContain('investir tout de suite finit au-dessus');
+    expect(t).toContain('rapporte moins que le placement');
+    for (const v of [r.lump, r.gradual, Math.abs(r.advantageGradual)]) expect(digits(t)).not.toContain(eur(v));
+    // Poids de l'écart dans le capital, recalculé (≈ 337 € sur 12 000 €, exemple fictif).
+    expect(t.replace(/[\u00a0\u202f]/g, ' ')).toContain(`${(Math.round(Math.abs(r.advantageGradual) / 12000 * 1000) / 10).toLocaleString('fr-FR')} % du capital placé`);
+  });
+  it('baisse pendant l’étalement : l’étalement gagne, tranches achetées moins cher', async () => {
+    const f = await import('./finance');
     const r = f.lumpVsGradual({ ...base, path: 'dip' });
     expect(r.advantageGradual).toBeGreaterThan(0);
-    expect(lumpGradualTakeaway({ amount: 12000, spreadMonths: r.spreadMonths, months: r.months, lump: r.lump, gradual: r.gradual, advantageGradual: r.advantageGradual })).toContain('l\'étalement finit');
+    const t = await say(r, 'dip');
+    expect(t).toContain('l\'étalement finit au-dessus');
+    expect(t).toContain('achètent moins cher');
   });
-  it('vide sans capital', async () => {
+  it('hausse, mouvement trop faible et argent en attente mieux payé : explications cohérentes avec le calcul', async () => {
+    const f = await import('./finance');
+    const rise = f.lumpVsGradual({ ...base, path: 'rise' });
+    expect(rise.advantageGradual).toBeLessThan(0);
+    expect(await say(rise, 'rise')).toContain('achètent plus cher');
+    const smallDip = f.lumpVsGradual({ ...base, path: 'dip', move: 0.005, cashRate: -0.2 });
+    expect(smallDip.advantageGradual).toBeLessThan(0);
+    expect(await say(smallDip, 'dip', { move: 0.005, cashRate: -0.2 })).toContain('trop faible');
+    const cash = f.lumpVsGradual({ ...base, path: 'steady', annualReturn: -0.05 });
+    expect(cash.advantageGradual).toBeGreaterThan(0);
+    expect(await say(cash, 'steady', { annualReturn: -0.05 })).toContain('rapporte plus que le placement');
+  });
+  it('vide sans capital, égalité dite en mots', async () => {
     const { lumpGradualTakeaway } = await import('./takeaways');
-    expect(lumpGradualTakeaway({ amount: 0, spreadMonths: 12, months: 60, lump: 0, gradual: 0, advantageGradual: 0 })).toBe('');
+    expect(lumpGradualTakeaway({ amount: 0, path: 'steady', annualReturn: 0.05, cashRate: 0, advantageGradual: 0 })).toBe('');
+    expect(lumpGradualTakeaway({ amount: 1000, path: 'steady', annualReturn: 0.05, cashRate: 0.05, advantageGradual: 0.2 })).toContain('même résultat');
   });
   it('trois parcours : la phrase nomme les parcours où l’étalement gagne, d’après le calcul', async () => {
     const f = await import('./finance');

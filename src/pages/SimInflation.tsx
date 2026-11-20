@@ -14,6 +14,8 @@ export default function SimInflation() {
   const [s, setS, up] = usePersistentState<State>('inflation', DEFAULTS);
   const r = purchasingPower(s);
   const n = r.idleSeries.length - 1;
+  // Repère du quotidien : prix, à l'horizon, d'un panier de 100 € aujourd'hui, à l'inflation saisie.
+  const basket = purchasingPower({ ...s, amount: 100 });
 
   return (
     <>
@@ -48,7 +50,7 @@ export default function SimInflation() {
             <Kpi label="Montant pour garder le même pouvoir d'achat" value={fmtEur(r.nominalToKeepPower)} sub={`dans ${fmtAns(n)}, en euros courants`} />
             <Kpi label="Somme placée, en euros d'aujourd'hui" value={fmtEur(r.investedRealValue)} sub={`${fmtEur(r.investedValue)} en euros courants · rendement réel ${fmtPct(r.realReturn)}`} tone={r.realReturn < 0 ? 'neg' : undefined} />
           </div>
-          <Takeaway>{inflationTakeaway({ amount: s.amount, years: n, inflation: s.inflation, annualReturn: s.annualReturn, idleRealValue: r.idleRealValue, nominalToKeepPower: r.nominalToKeepPower, investedRealValue: r.investedRealValue })}</Takeaway>
+          <Takeaway>{inflationTakeaway({ amount: s.amount, years: n, inflation: s.inflation, annualReturn: s.annualReturn, realReturn: r.realReturn, basketLater: basket.nominalToKeepPower })}</Takeaway>
           <h2>Valeur de la somme dans le temps (euros d’aujourd’hui)</h2>
           <LineChart
             title="Pouvoir d'achat de la somme, inchangée ou placée"

@@ -84,7 +84,7 @@ export default function SimFrais() {
             <Kpi label={`Capital avec ${fmtPct(highest.fees)} de frais`} value={fmtEur(highest.finalValue)} sub={`soit ${fmtEur(highest.realValue)} d'aujourd'hui`} />
             <Kpi label="Écart dû aux frais" value={fmtEur(lowest.finalValue - highest.finalValue)} sub={`${fmtPct(highest.fees)} au lieu de ${fmtPct(lowest.fees)} par an`} tone={lowest.finalValue - highest.finalValue > 0.5 ? 'neg' : undefined} />
           </div>
-          <Takeaway>{feesTakeaway({ years: s.years, lowest: lowest, highest: highest, noFees: base.finalValue })}</Takeaway>
+          <Takeaway>{feesTakeaway({ years: s.years, initial: s.initial, monthly: s.monthly, lowest, highest, noFees: base.finalValue })}</Takeaway>
           <h2>Ce que les frais prennent sur vos gains</h2>
           <p className="fb-intro">
             Capital au bout de {`${s.years}\u00a0ans`}. Chaque barre a la même longueur totale : le capital que vous auriez sans frais.
