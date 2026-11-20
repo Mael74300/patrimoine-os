@@ -10,8 +10,8 @@ import { simBlurb } from '../lib/simThemes';
 import { interleave, splitNext } from '../lib/nextLinks';
 import { NextList, NextMore, type NextItem } from '../components/NextList';
 import { DONATION_ABATTEMENTS, fmtEuros } from '../data/donationAbattements';
-import { SchemaActions, SchemaForet, SchemaDonation, SchemaDonationBilan, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaObligationBilan, SchemaEtfBilan, SchemaAssuranceVieBilan, SchemaOr, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaScpi, SchemaScpiBilan, SchemaCrowdfundingBilan, SchemaMicroBilan, SchemaUniteDeCompte, SchemaFondsEuros, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaRepriseBilan, SchemaLivretBilan, SchemaActiviteNumerique, SchemaPee, SchemaPeeBilan, SchemaPeaBilan, SchemaForetBilan, SchemaFraisBilan } from '../components/schemas/fiches';
-import { SchemaPea, SchemaQuinzaines, SchemaLevier } from '../components/schemas/communs';
+import { SchemaActions, SchemaForet, SchemaDonation, SchemaDonationBilan, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaObligationBilan, SchemaEtfBilan, SchemaAssuranceVieBilan, SchemaOr, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaScpi, SchemaScpiBilan, SchemaCrowdfundingBilan, SchemaMicroBilan, SchemaUniteDeCompte, SchemaFondsEuros, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaRepriseBilan, SchemaLivretBilan, SchemaActiviteNumerique, SchemaPee, SchemaPeeBilan, SchemaLevierBilan, SchemaPeaBilan, SchemaForetBilan, SchemaFraisBilan } from '../components/schemas/fiches';
+import { SchemaPea, SchemaQuinzaines } from '../components/schemas/communs';
 import NotFound from './NotFound';
 import { DonationCalculator } from '../components/DonationCalculator';
 import { fmtDate } from '../lib/dates';
@@ -138,7 +138,6 @@ export default function InvestmentPage() {
           {inv.slug === 'reprise-entreprise' && <SchemaRepriseEntreprise />}
           {inv.slug === 'activite-numerique' && <SchemaActiviteNumerique />}
           {inv.slug === 'compte-a-terme' && <SchemaCompteATerme />}
-          {inv.slug === 'credit-immobilier' && <SchemaLevier />}
           <h2 id={howToId}>{howToTitle}</h2>
           <ul>{inv.howToInvest.map((s, i) => <li key={s}><JargonText segs={jSteps[i]} /></li>)}</ul>
 
@@ -173,6 +172,7 @@ export default function InvestmentPage() {
             if (inv.slug === 'scpi') return <SchemaScpiBilan>{ex}</SchemaScpiBilan>;
             if (inv.slug === 'location-nue' || inv.slug === 'lmnp') return <SchemaMicroBilan kind={inv.slug}>{ex}</SchemaMicroBilan>;
             if (inv.slug === 'donation') return <><SchemaDonationBilan>{ex}</SchemaDonationBilan><DonationCalculator /></>;
+            if (inv.slug === 'credit-immobilier') return <SchemaLevierBilan>{ex}</SchemaLevierBilan>;
             if (inv.slug === 'obligations') return <SchemaObligationBilan>{ex}</SchemaObligationBilan>;
             if (inv.slug === 'etf-monde') return <SchemaEtfBilan>{ex}</SchemaEtfBilan>;
             if (inv.slug === 'assurance-vie') return <SchemaAssuranceVieBilan>{ex}</SchemaAssuranceVieBilan>;

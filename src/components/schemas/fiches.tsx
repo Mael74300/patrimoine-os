@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { fmtEur } from '../../lib/finance';
 import { pfuSplit, PFU_IR_PCT, PFU_PS_PCT, PFU_TOTAL_PCT } from '../../lib/calc/pfu';
 import { perDeductionBalance } from '../../lib/calc/per';
-import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
+import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, leverageMonth, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
 import { LIVRETS } from '../../data/livrets';
 import { assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
@@ -1996,6 +1996,64 @@ export function SchemaFraisBilan({ kind, children }: { kind: FraisBilanKind; chi
         <line x1={0} y1={sep} x2={340} y2={sep} stroke="var(--line)" strokeWidth={1} />
         <text x={0} y={sep + 20} className="ill-sub">{d.note[0]}</text>
         <text x={0} y={sep + 38} className="ill-sub">{d.note[1]}</text>
+      </svg>
+      <figcaption>{children}</figcaption>
+    </figure>
+  );
+}
+
+/**
+ * Schéma de l'exemple chiffré de la fiche « Investir à crédit » (constat du 2026-11-20 : le schéma annuel du levier,
+ * « Manque 199 € » d'intérêts, voisinait avec un texte qui annonçait 544 € par mois de sa poche, sans montrer d'où venait
+ * l'écart). Un mois moyen de la première année, barres à la même échelle : en haut la mensualité hors assurance,
+ * partagée entre intérêts et capital remboursé ; dessous, pour chaque bien, les loyers nets de charges et ce qui sort
+ * de votre poche. Le trait pointillé marque la fin des intérêts : les loyers le dépassent ou non. Exemple fictif
+ * (`LEVERAGE_EXAMPLE`, `LOAN_EXAMPLE`), montants recalculés par `src/data/ficheExemples.test.ts`.
+ */
+export function SchemaLevierBilan({ children }: { children: ReactNode }) {
+  const { payment, interest, principal, rows } = leverageMonth();
+  const X0 = 10;
+  const W = 320;
+  const s = W / payment;
+  const xi = X0 + interest * s;
+  const pct = (v: number) => String(Math.round(v * 10) / 10).replace('.', ',');
+  const BAR = 34;
+  const ROWS = [118, 214];
+  const desc = `Exemple fictif, un mois moyen de la première année, avant impôt et hors assurance. Mensualité de ${fmtEur(payment)} : ${fmtEur(interest)} d’intérêts et ${fmtEur(principal)} de capital remboursé. `
+    + rows.map((r) => `Bien qui rapporte ${pct(r.yieldPct)} % (${fmtEur(r.yearlyIncome)} par an) : ${fmtEur(r.rent)} de loyers nets de charges par mois, ${r.coversInterest ? 'qui paient les intérêts et une partie du capital' : 'qui ne couvrent pas les intérêts'} ; ${fmtEur(r.pocket)} sortent de votre poche.`).join(' ');
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 330" role="img" aria-labelledby="ill-levb-t ill-levb-d" className="ill-svg">
+        <title id="ill-levb-t">Investir à crédit : chaque mois, ce que paient les loyers et ce qui sort de votre poche</title>
+        <desc id="ill-levb-d">{desc}</desc>
+        <text x={X0} y={18} className="ill-step">{`Mensualité : ${fmtEur(payment)} par mois`}</text>
+        <rect x={X0} y={28} width={interest * s} height={BAR} rx={6} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <rect x={xi} y={28} width={principal * s} height={BAR} rx={6} fill="var(--surface-2)" stroke="var(--primary)" strokeWidth={2} />
+        <text x={X0 + (interest * s) / 2} y={50} textAnchor="middle" className="ill-in">{fmtEur(interest)}</text>
+        <text x={xi + (principal * s) / 2} y={50} textAnchor="middle" className="ill-in">{fmtEur(principal)}</text>
+        <text x={X0 + (interest * s) / 2} y={80} textAnchor="middle" className="ill-sub">intérêts</text>
+        <text x={xi + (principal * s) / 2} y={80} textAnchor="middle" className="ill-sub">capital remboursé</text>
+        <line x1={xi} x2={xi} y1={66} y2={ROWS[1] + BAR + 6} stroke="var(--ink-2)" strokeWidth={1.5} strokeDasharray="4 4" />
+        {rows.map((r, i) => {
+          const y = ROWS[i];
+          const wr = r.rent * s;
+          return (
+            <g key={r.yieldPct}>
+              <text x={X0} y={y - 10} className="ill-step ill-halo-bg">{`Bien qui rapporte ${pct(r.yieldPct)} %`}</text>
+              <rect x={X0} y={y} width={wr} height={BAR} rx={6} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+              <rect x={X0 + wr} y={y} width={W - wr} height={BAR} rx={6} fill="var(--surface)" stroke="var(--ink-2)" strokeWidth={2} strokeDasharray="5 4" />
+              <text x={X0 + 10} y={y + 22} className="ill-in">{`${fmtEur(r.rent)} de loyers`}</text>
+              <text x={X0 + wr + (W - wr) / 2} y={y + 22} textAnchor="middle" className="ill-in">{fmtEur(r.pocket)}</text>
+              <text x={X0} y={y + BAR + 22} className="ill-sub ill-halo-bg">{r.coversInterest ? 'Les loyers paient les intérêts, et plus' : 'Les loyers ne couvrent pas les intérêts'}</text>
+            </g>
+          );
+        })}
+        <g transform="translate(10 296)">
+          <rect width={14} height={14} rx={3} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+          <text x={20} y={12} className="ill-sub">loyers nets de charges</text>
+          <rect x={176} width={14} height={14} rx={3} fill="var(--surface)" stroke="var(--ink-2)" strokeWidth={2} strokeDasharray="3 2" />
+          <text x={196} y={12} className="ill-sub">de votre poche</text>
+        </g>
       </svg>
       <figcaption>{children}</figcaption>
     </figure>
