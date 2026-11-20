@@ -39,7 +39,7 @@ describe('prélèvements sociaux : hausse de 2026 expliquée', () => {
     const f = investmentBySlug['assurance-vie']!;
     const t = norm(f.tax.text);
     expect(t).not.toContain('selon les sources consultées');
-    expect(t).toContain(`17,2 % sur les gains, taux inchangé en 2026 (la hausse à ${pct(PFU_PS_PCT)} ne concerne pas`);
+    expect(t).toContain(`17,2 % des gains, taux inchangé en 2026 (${pct(PFU_PS_PCT)} pour les seuls contrats rente-survie et épargne handicap)`);
     expect(f.sources.some((s) => s.url.endsWith('/F2329'))).toBe(true);
   });
 
