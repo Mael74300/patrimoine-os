@@ -195,7 +195,7 @@ export default function SimEtfImmobilier() {
             <Kpi label={`Immobilier : patrimoine net à ${st.horizon}\u00a0ans`} value={fmtEur(res.immo.netWealth)} sub={`${fmtEur(res.immo.netWealthReal)} en euros d'aujourd'hui`} />
             <Kpi label="Écart selon ces hypothèses" value={fmtEur(Math.abs(diff))} sub={diff >= 0 ? 'en faveur des ETF' : "en faveur de l'immobilier"} />
           </div>
-          <Takeaway>{etfImmoTakeaway({ horizon: st.horizon, etfNet: res.etf.netWealth, immoNet: res.immo.netWealth, startCapital: res.startCapital })}</Takeaway>
+          <Takeaway>{etfImmoTakeaway({ horizon: st.horizon, etfNet: res.etf.netWealth, immoNet: res.immo.netWealth, startCapital: res.startCapital, avgMonthly })}</Takeaway>
           <h2>D’où vient l’écart</h2>
           <figure className="fb">
             <ul className="fb-legend" aria-hidden="true">
@@ -207,12 +207,9 @@ export default function SimEtfImmobilier() {
               <GapRow name="Portefeuille d’ETF" b={etfBal} scale={gapScale} debt={0} />
               <GapRow name="Bien immobilier" b={immoBal} scale={gapScale} debt={res.immo.debtAtHorizon} />
             </ul>
-            <figcaption className="gap-note">{etfImmoGapText({ invested: res.etf.invested, etfNet: res.etf.netWealth, immoNet: res.immo.netWealth })}</figcaption>
+            <figcaption className="gap-note">{etfImmoGapText({ invested: res.etf.invested })}</figcaption>
           </figure>
-          <p className="muted small">
-            Vos versements : l’apport de {fmtEur(res.startCapital)}, puis ce que le bien demande chaque mois après impôt, versé à l’identique sur les ETF.
-            Barres à la même échelle, montants estimés à {fmtAns(st.horizon)}.
-          </p>
+          <p className="muted small">Barres à la même échelle, montants estimés à {fmtAns(st.horizon)}.</p>
 
           <h2>Comparaison détaillée</h2>
           <MobileFold label="Afficher le tableau critère par critère">
