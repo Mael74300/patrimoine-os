@@ -24,16 +24,18 @@ describe('schéma de la fiche Assurance-vie : transmission au décès', () => {
   });
 });
 
-describe('fiche Assurance-vie : carte Fiscalité en points courts (Service-Public F22414, consulté le 2026-11-14)', () => {
+describe('fiche Assurance-vie : carte Fiscalité en points courts (Service-Public F22414, consulté le 2026-11-14 et le 2026-11-20)', () => {
   const av = investmentBySlug['assurance-vie'];
   const parts = splitSentences(av.tax.text).map(norm);
 
-  it('cinq points courts, la plupart introduits par un repère', () => {
-    expect(parts).toHaveLength(5);
+  it('six points courts, la plupart introduits par un repère (constat du 2026-11-20 : « 7,5 % (12,8 % sur la part… ») illisible)', () => {
+    expect(parts).toHaveLength(6);
     for (const p of parts) expect(p.length).toBeLessThan(220);
     expect(parts.filter((p) => sentenceLead(p)).map((p) => sentenceLead(p)!.lead)).toEqual([
-      'Prélèvements sociaux', 'Contrat de 8 ans ou plus', 'Contrat de moins de 8 ans', 'Au décès',
+      'Prélèvements sociaux', 'Contrat de moins de 8 ans', 'Contrat de 8 ans ou plus', 'Gros contrats', 'Au décès',
     ]);
+    // Plus de parenthèse imbriquée dans un taux.
+    expect(norm(av.tax.text)).not.toMatch(/\d % \(\d/);
   });
 
   it('règles confirmées : abattement, 7,5 % puis 12,8 % au-delà de 150 000 €, versements depuis 2017, conjoint exonéré', () => {

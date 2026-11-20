@@ -39,8 +39,8 @@ describe('fiche Assurance-vie : schéma de l’exemple chiffré', () => {
     expect(t).toMatch(/^Exemple fictif/);
     for (const s of ['7 000 € versés', 'plus de 8 ans', '10 000 €', '3 000 € de gains', '4 600 € exonérés', '17,2 % de prélèvements sociaux', 'soit 516 €']) expect(t).toContain(s);
     const tax = norm(inv.tax.text);
-    expect(tax).toContain('17,2 % sur les gains');
-    expect(tax).toContain('jusqu’à 4 600 € par an');
+    expect(tax).toContain('17,2 % des gains');
+    expect(tax).toContain('chaque année, 4 600 € de gains retirés sans impôt');
   });
 
   it('le schéma affiche les mêmes montants', () => {
