@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { splitSourceLabel } from './sourceLabel';
+import { siteOf, sourceParts, splitSourceLabel } from './sourceLabel';
 import { investments } from '../data/investments';
 import { guides } from '../data/guides';
 import { LIVRETS } from '../data/livrets';
@@ -33,6 +33,23 @@ describe('splitSourceLabel', () => {
     for (const s of all) {
       const p = splitSourceLabel(s.label);
       expect(words([p.pub, p.title, p.date].filter(Boolean).join(' '))).toEqual(words(s.label));
+    }
+  });
+});
+
+describe('sourceParts', () => {
+  it('donne le site de destination à une source sans organisme séparé', () => {
+    expect(sourceParts('Banque de France', 'https://www.banque-france.fr')).toEqual({ pub: 'banque-france.fr', title: 'Banque de France', site: true });
+    expect(sourceParts('Haut Conseil de stabilité financière', 'https://www.economie.gouv.fr/hcsf').pub).toBe('economie.gouv.fr');
+    expect(siteOf('pas une adresse')).toBeUndefined();
+  });
+
+  it('remplit les deux colonnes pour chaque source du site', () => {
+    const all = [...investments.flatMap((i) => i.sources), ...guides.flatMap((g) => g.sources), ...LIVRETS.map((l) => l.source)];
+    for (const s of all) {
+      const p = sourceParts(s.label, s.url);
+      expect(p.pub, s.label).toBeTruthy();
+      expect(p.title, s.label).toBeTruthy();
     }
   });
 });
