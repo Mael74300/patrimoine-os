@@ -440,7 +440,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Patrimoine construit avec l’argent de la banque', 'À taux fixe, la mensualité pèse moins si vos revenus suivent l’inflation'],
     cons: ['Engagement long', 'Risque en cas de vacance prolongée ou de baisse des prix'],
     timeSkills: 'Élevé.',
-    example: 'Exemple fictif, celui du schéma : 180 000 € empruntés à 3,5 % sur 20 ans pour un bien de 200 000 € (20 000 € d’apport), soit environ 1 044 € par mois hors assurance. Si le bien rapporte 10 000 € par an nets de charges, vous ajoutez environ 211 € par mois de votre poche, avant impôt ; s’il rapporte 6 000 €, environ 544 €. Ce n’est pas perdu : la première année, environ 527 € de chaque mensualité remboursent le capital, la part du bien qui devient la vôtre. Sur les 20 ans, le crédit coûte environ 70 540 € d’intérêts.',
+    example: 'Exemple fictif : 180 000 € empruntés à 3,5 % sur 20 ans pour un bien de 200 000 € (20 000 € d’apport), qui rapporte 10 000 € ou 6 000 € par an nets de charges. Le schéma montre un mois moyen de la première année, avant impôt et hors assurance. Ce qui sort de votre poche n’est pas perdu : il rembourse surtout du capital, la part du bien qui devient la vôtre. Sur les 20 ans, le crédit coûte environ 70 540 € d’intérêts.',
     sources: [S.creditImmo, S.lfptLevier, S.assuranceEmprunteur, S.taeg, S.anil],
     alternatives: ['location-nue', 'scpi'],
     tags: ['levier', 'crédit', 'immobilier'],

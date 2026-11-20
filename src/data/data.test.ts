@@ -54,14 +54,16 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
   it('Fonds euros : 20 000 € à 2,5 % sur 5 ans ≈ 22 630 €', () => {
     expect(20000 * Math.pow(1.025, 5)).toBeCloseTo(22628, -1);
   });
-  it('Crédit : l’exemple de la fiche reprend le cas du schéma (180 000 € à 3,5 % sur 20 ans), recalculé', () => {
+  it('Crédit : l’exemple de la fiche reprend le cas du guide (180 000 € à 3,5 % sur 20 ans), recalculé', () => {
     const { price, down } = LEVERAGE_EXAMPLE;
     const { principal, annualRate, years } = LOAN_EXAMPLE;
     expect(price - down).toBe(principal);
     const m = loanPayment(principal, annualRate, years);
     const ex = investmentBySlug['credit-immobilier'].example.replace(/\u00a0/g, ' ');
     const eur = (v: number, step: number) => `${(Math.round(v / step) * step).toLocaleString('fr-FR').replace(/\u202f|\u00a0/g, ' ')} €`;
-    for (const t of [eur(price, 1), eur(down, 1), eur(principal, 1), '3,5 %', `${years} ans`, eur(m, 1), eur(m * years * 12 - principal, 10)]) expect(ex).toContain(t);
+    // La mensualité (environ 1 044 €) est lue sur le schéma de l’exemple (SchemaLevierBilan), pas répétée dans le texte.
+    expect(Math.round(m)).toBe(1044);
+    for (const t of [eur(price, 1), eur(down, 1), eur(principal, 1), '3,5 %', `${years} ans`, eur(m * years * 12 - principal, 10)]) expect(ex).toContain(t);
     expect(ex).toContain('Exemple fictif');
   });
   it('Crédit immobilier : sources en rapport avec le crédit (Service-Public F22152), plus de page « Épargne réglementée »', () => {

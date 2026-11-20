@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { investmentBySlug } from './investments';
 import { bondCoupons, fondsEurosGrowth, livretQuinzaines, concentrationLoss, crowdfundingScenario, lepVsLivretA, pelVsLivretA, recoveryAfterDrop, fundFeesOnSubscribed, listedPropertyYear, microFoncierExample, repriseDebtShare, scpiFeesPayback, subscriptionChurn, trainingPayoff, yearlySavingsValue, termDepositVsLivretA, ucFeesDrag, forestCredit, artResale } from '../lib/calc/ficheExemples';
 import { amortize } from '../lib/calc/loan';
-import { CROWDFUNDING_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, leverageBars } from '../lib/illustrationData';
-import { SchemaCrowdfundingBilan, SchemaLivretBilan, SchemaMicroBilan, SchemaPee, SchemaPeeBilan, PEE_EXAMPLE, SchemaRepriseBilan, SchemaScpiBilan, livretBilan } from '../components/schemas/fiches';
+import { CROWDFUNDING_EXAMPLE, LEVERAGE_EXAMPLE, LOAN_EXAMPLE, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, leverageBars, leverageMonth } from '../lib/illustrationData';
+import { SchemaCrowdfundingBilan, SchemaLevierBilan, SchemaLivretBilan, SchemaMicroBilan, SchemaPee, SchemaPeeBilan, PEE_EXAMPLE, SchemaRepriseBilan, SchemaScpiBilan, livretBilan } from '../components/schemas/fiches';
 import { guideBySlug } from './guides';
 import { LIVRETS } from './livrets';
 
@@ -237,37 +237,43 @@ describe('fiches : exemples chiffrés menés jusqu’au résultat', () => {
   });
 });
 
-describe('fiche Investir à crédit : l’exemple chiffré reprend le schéma du levier', () => {
+describe('fiche Investir à crédit : l’exemple chiffré en schéma, un mois moyen de la première année', () => {
   const ex = norm(investmentBySlug['credit-immobilier']!.example);
   const { principal, annualRate, years } = LOAN_EXAMPLE;
   const loan = amortize({ principal, annualRate, years });
-  const { interest, down, bars } = leverageBars();
-  const first = loan.schedule[0]!;
+  const { bars } = leverageBars();
+  const month = leverageMonth();
+  const svg = norm(renderToStaticMarkup(createElement(SchemaLevierBilan, null, 'légende')));
+  const r = Math.round;
 
-  it('montants recalculés (schéma et texte) : 6 199 € d’intérêts, 3 801 € restants, 199 € manquants, 6 328 € de capital', () => {
-    expect(Math.round(interest)).toBe(6199);
-    expect(bars.map((b) => Math.round(b.left))).toEqual([3801, 0]);
-    expect(bars.map((b) => Math.round(b.shortfall))).toEqual([0, 199]);
-    expect(Math.round(first.principalPaid)).toBe(6328);
-    expect(Math.round(loan.monthlyPayment)).toBe(1044);
-    expect(Math.round((loan.monthlyPayment * years * 12 - principal) / 10) * 10).toBe(70540);
+  it('montants recalculés : 1 044 € = 517 € d’intérêts + 527 € de capital ; 833 € + 211 € et 500 € + 544 €', () => {
+    expect(r(month.payment)).toBe(1044);
+    expect(r(month.interest)).toBe(517);
+    expect(r(month.principal)).toBe(527);
+    expect(r(month.interest) + r(month.principal)).toBe(r(month.payment));
+    expect(month.rows.map((x) => r(x.rent))).toEqual([833, 500]);
+    expect(month.rows.map((x) => r(x.pocket))).toEqual([211, 544]);
+    for (const x of month.rows) expect(r(x.rent) + r(x.pocket)).toBe(r(month.payment));
+    // Même calcul que le guide : effort annuel 2 527 € et 6 527 €, ramené au mois.
+    expect(bars.map((b) => r((loan.monthlyPayment * 12 - b.income) / 12))).toEqual([211, 544]);
+    expect(month.rows.map((x) => x.coversInterest)).toEqual([true, false]);
+    expect(r((loan.monthlyPayment * years * 12 - principal) / 10) * 10).toBe(70540);
   });
-  it('le texte de la fiche reprend le cas du schéma sans répéter ses montants et reste marqué fictif', () => {
-    expect(ex).toMatch(/^Exemple fictif, celui du schéma/);
-    for (const v of [LEVERAGE_EXAMPLE.price, down, principal, 1044, ...bars.map((b) => b.income), 70540]) expect(ex).toContain(eur(v));
-    // Intérêts, reste et manque de la première année sont lus sur le schéma, pas répétés dans le texte.
-    for (const v of [6199, 3801, 199]) expect(ex).not.toContain(eur(v));
+  it('le schéma montre tous les montants du mois, à l’échelle, et dit si les loyers couvrent les intérêts', () => {
+    for (const v of [1044, 517, 527, 833, 211, 500, 544]) expect(svg).toContain(eur(v));
+    expect(svg).toContain('Les loyers paient les intérêts, et plus');
+    expect(svg).toContain('Les loyers ne couvrent pas les intérêts');
+    expect(svg).toMatch(/viewBox="0 0 340 \d+"/);
+    expect(svg).toContain('role="img"');
+    expect(svg).toContain('<figcaption>légende</figcaption>');
+    expect(svg.length).toBeLessThan(15000);
+  });
+  it('le texte donne les hypothèses sans recopier les montants du schéma et reste marqué fictif', () => {
+    expect(ex).toMatch(/^Exemple fictif/);
+    for (const v of [LEVERAGE_EXAMPLE.price, LEVERAGE_EXAMPLE.down, principal, ...bars.map((b) => b.income), 70540]) expect(ex).toContain(eur(v));
     expect(ex).toContain(`${norm((annualRate * 100).toLocaleString('fr-FR'))} %`);
-    expect(ex).toContain('avant impôt');
-    expect(ex).not.toContain('6 200');
-  });
-  it('dit ce que coûte chaque mois : 527 € de capital, 211 € ou 544 € à ajouter de sa poche', () => {
-    const yearly = loan.monthlyPayment * 12;
-    expect(Math.round(first.principalPaid / 12)).toBe(527);
-    expect(bars.map((b) => Math.round((yearly - b.income) / 12))).toEqual([211, 544]);
-    expect(ex).toContain(`environ ${eur(527)} de chaque mensualité remboursent le capital`);
-    expect(ex).toContain(`vous ajoutez environ ${eur(211)} par mois de votre poche, avant impôt`);
-    expect(ex).toContain(`${eur(bars[1]!.income)}, environ ${eur(544)}`);
+    for (const v of [1044, 517, 527, 833, 211, 544]) expect(ex).not.toContain(eur(v));
+    expect(ex).toContain('avant impôt et hors assurance');
     expect(ex).toContain('n’est pas perdu');
   });
   it('les hypothèses affichées dans « Détail du suivi » citent le même taux que l’exemple', () => {

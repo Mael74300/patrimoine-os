@@ -98,6 +98,29 @@ export function leverageBars(): { interest: number; down: number; bars: Leverage
   };
 }
 
+/**
+ * Le même exemple, ramené à un mois moyen de la première année (fiche « Investir à crédit », exemple chiffré) :
+ * la mensualité hors assurance se partage entre intérêts et capital remboursé ; les loyers nets de charges en paient
+ * une partie, le reste sort de votre poche, avant impôt. Montants non arrondis : l'affichage arrondit à l'euro.
+ */
+export type LeverageMonthRow = { yieldPct: number; yearlyIncome: number; rent: number; pocket: number; coversInterest: boolean };
+
+export function leverageMonth(): { payment: number; interest: number; principal: number; rows: LeverageMonthRow[] } {
+  const { principal, annualRate, years } = LOAN_EXAMPLE;
+  const r = amortize({ principal, annualRate, years });
+  const first = r.schedule[0];
+  const interest = first.interest / 12;
+  return {
+    payment: r.monthlyPayment,
+    interest,
+    principal: first.principalPaid / 12,
+    rows: leverageBars().bars.map((b) => {
+      const rent = b.income / 12;
+      return { yieldPct: b.yieldPct, yearlyIncome: b.income, rent, pocket: r.monthlyPayment - rent, coversInterest: rent >= interest };
+    }),
+  };
+}
+
 /** Exemple fictif du guide « Rentabilité locative » : bien à 150 000 €, loyer 750 €/mois, frais d'acquisition 8 %, travaux 10 000 €, un mois de vacance, 2 060 € de charges par an. */
 export const RENDEMENT_EXAMPLE = { price: 150000, monthlyRent: 750, acquisitionFeesRate: 0.08, works: 10000, vacancyMonths: 1, yearlyCharges: 2060 };
 
