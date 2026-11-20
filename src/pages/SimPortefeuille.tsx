@@ -96,7 +96,7 @@ export default function SimPortefeuille() {
         <Kpi label="Risque moyen" value={`${sum.weightedRisk.toLocaleString('fr-FR', { maximumFractionDigits: 1 })} / 7`} sub="les gros montants comptent plus" />
       </div>
 
-      <Takeaway>{portfolioTakeaway({ total: sum.total, netReturn: sum.netReturn, annualFeesEuro: sum.annualFeesEuro, topLabel: top?.label ?? '', topWeight: top?.weight ?? 0 })}</Takeaway>
+      <Takeaway>{portfolioTakeaway({ total: sum.total, grossReturn: sum.grossReturn, netReturn: sum.netReturn, annualFeesEuro: sum.annualFeesEuro, topLabel: top?.label ?? '', topWeight: top?.weight ?? 0 })}</Takeaway>
 
       <h2>Répartition : aujourd’hui et visée</h2>
       <div className="panel">
@@ -143,7 +143,7 @@ export default function SimPortefeuille() {
           ]}
         />
         <p className="small muted" style={{ margin: '8px 0 0' }}>
-          {portfolioProjectionNote({ years: s.years, monthly: s.monthly, contributed: proj[proj.length - 1]?.contributed ?? 0, value: proj[proj.length - 1]?.value ?? 0 })}{' '}
+          {portfolioProjectionNote({ years: s.years, contributed: proj[proj.length - 1]?.contributed ?? 0, value: proj[proj.length - 1]?.value ?? 0 })}{' '}
           Hypothèse simplificatrice : répartition maintenue et rendement moyen net de frais appliqué chaque année, sans les hausses et baisses des marchés.
         </p>
       </div>

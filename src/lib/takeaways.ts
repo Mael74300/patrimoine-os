@@ -44,15 +44,26 @@ export function performanceTakeaway(p: { invested: number; gain: number; annuali
   return `Vous avez versé ${fmtEur(p.invested)} et ${verbe}. Ramené à une année, c'est comme si l'argent placé avait rapporté ${fmtPct(p.annualized)} par an en moyenne. Ce taux sert à comparer avec un livret ou un autre placement sur la même durée.`;
 }
 
-/** Objectif d'épargne : ce que l'on verse soi-même et ce que les intérêts apportent. */
-export function savingsGoalTakeaway(p: { target: number; current: number; years: number; monthly: number; deposits: number; interest: number }): string {
+/**
+ * Objectif d'épargne : ce que veulent dire les cases, sans recopier leurs montants (versement, total versé, intérêts).
+ * Qui fait le travail (vous ou les intérêts), ce que le taux change par rapport à un argent qui ne rapporte rien,
+ * puis le levier le plus simple pour verser moins.
+ */
+export function savingsGoalTakeaway(p: { target: number; current: number; years: number; monthly: number; interest: number; monthlyWithoutReturn: number }): string {
   if (!(p.target > 0) || !(p.years >= 1)) return '';
   const ans = fmtAns(p.years);
   if (p.monthly === 0) return `Avec ${fmtEur(p.current)} déjà épargnés, vous atteignez ${fmtEur(p.target)} en ${ans} sans rien verser de plus, grâce au taux choisi.`;
-  const interets = p.interest > 0
-    ? ` Les intérêts apportent ${fmtEur(p.interest)} : le reste, soit ${fmtEur(p.deposits)}, vient de vos versements.`
-    : ` Avec ce taux, il n'y a pas d'intérêts : tout vient de vos versements.`;
-  return `Pour disposer de ${fmtEur(p.target)} dans ${ans}, il faut mettre de côté ${fmtEur(p.monthly)} chaque mois.${interets} Plus l'échéance est lointaine, plus la mensualité baisse (voir les barres plus bas).`;
+  const share = p.interest / p.target;
+  let qui: string;
+  if (p.interest <= 0.5) qui = 'Avec ce taux, il n\'y a pas d\'intérêts : tout vient de votre poche.';
+  else if (share < 0.15) qui = `Sur ${ans}, c'est surtout votre effort qui compte : les intérêts n'apportent qu'une petite partie.`;
+  else if (share < 0.4) qui = `Sur ${ans}, les intérêts apportent une part notable, mais l'essentiel vient de votre poche.`;
+  else qui = `Sur ${ans}, les intérêts apportent une grosse part : le temps travaille pour vous.`;
+  const ecart = p.monthlyWithoutReturn - p.monthly;
+  let taux = '';
+  if (ecart >= 1) taux = ` Le taux allège l'effort de ${fmtEur(ecart)} par mois face à un argent qui ne rapporte rien.`;
+  else if (ecart <= -1) taux = ` Ce rendement négatif alourdit l'effort de ${fmtEur(-ecart)} par mois face à un argent qui ne rapporte rien.`;
+  return `${qui}${taux} Pour verser moins, reculez l'échéance si possible (voir les barres).`;
 }
 
 /** Louer ou acheter : qui est le plus riche à l'horizon, avec la mise en garde sur les hypothèses. */
@@ -520,23 +531,47 @@ export function businessZeroValueNote(p: { multiple: number; scenarios: { label:
   return `Valeur estimée à 0\u00a0€ : ${qui} la dernière année, or la valeur vaut ${fois}\u00a0fois ce bénéfice.`;
 }
 
-/** Portefeuille : gain annuel supposé, frais, support dominant et projection. */
-export function portfolioTakeaway(p: { total: number; netReturn: number; annualFeesEuro: number; topLabel: string; topWeight: number }): string {
+/** Part d'un tout dite en mots : « les trois quarts », « plus des deux tiers », « plus de la moitié », « la moitié ». */
+function partEnMots(w: number): string {
+  if (w >= 0.75) return 'au moins les trois quarts';
+  if (w > 2 / 3) return 'plus des deux tiers';
+  if (w > 0.5) return 'plus de la moitié';
+  return 'la moitié';
+}
+
+/**
+ * Portefeuille : ce que veulent dire les cases, sans recopier leurs montants (valeur, rendement, frais) ni les barres
+ * de répartition : le gain annuel en euros, la part de ce gain que mangent les frais, puis le support dont tout dépend.
+ */
+export function portfolioTakeaway(p: { total: number; grossReturn: number; netReturn: number; annualFeesEuro: number; topLabel: string; topWeight: number }): string {
   if (!(p.total > 0)) return '';
   const gain = p.total * p.netReturn;
   const annuel = gain >= 0
-    ? `rapporte en moyenne ${fmtPct(p.netReturn)} par an une fois les frais déduits, soit environ ${fmtEur(gain)} par an (hypothèse saisie, pas une garantie)`
-    : `perd en moyenne ${fmtPct(-p.netReturn)} par an une fois les frais déduits, soit environ ${fmtEur(-gain)} par an`;
-  const frais = p.annualFeesEuro > 0.5 ? ` Les frais vous coûtent ${fmtEur(p.annualFeesEuro)} par an.` : '';
-  const poids = p.topWeight >= 0.5 ? ` « ${p.topLabel} » pèse ${fmtPct(p.topWeight)} du total : si ce support chute, tout le portefeuille en souffre.` : '';
-  return `Votre portefeuille de ${fmtEur(p.total)} ${annuel}.${frais}${poids}`;
+    ? `Si les rendements saisis se réalisent (rien n'est garanti), votre portefeuille rapporterait environ ${fmtEur(gain)} par an, frais déduits.`
+    : `Avec les rendements saisis, votre portefeuille perdrait environ ${fmtEur(-gain)} par an, frais déduits.`;
+  const brut = p.total * p.grossReturn;
+  let frais = '';
+  if (p.annualFeesEuro > 0.5 && brut > 0.5) {
+    const sur100 = Math.round((p.annualFeesEuro / brut) * 100);
+    frais = sur100 >= 1
+      ? ` Sur 100\u00a0€ gagnés avant frais, environ ${fmtNum(sur100)}\u00a0€ partent en frais.`
+      : ' Les frais en prennent moins de 1\u00a0€ sur 100\u00a0€ gagnés avant frais.';
+  }
+  const poids = p.topWeight >= 0.5 ? ` ${partEnMots(p.topWeight).replace(/^./, (c) => c.toUpperCase())} de votre argent repose sur « ${p.topLabel} » : si ce support chute, tout le portefeuille en souffre.` : '';
+  return `${annuel}${frais}${poids}`;
 }
 
-/** Portefeuille : la projection en une phrase, placée sous le graphique de projection (à côté de la durée et du versement saisis). */
-export function portfolioProjectionNote(p: { years: number; monthly: number; contributed: number; value: number }): string {
+/**
+ * Portefeuille : sous la projection, ce que veut dire la valeur finale (la légende du graphique donne déjà les montants) :
+ * la part qui viendrait des gains plutôt que de vos versements.
+ */
+export function portfolioProjectionNote(p: { years: number; contributed: number; value: number }): string {
   if (!(p.years > 0 && p.value > 0)) return '';
-  const verse = p.monthly > 0 ? `, avec ${fmtEur(p.monthly)} versés en plus chaque mois` : ', sans versement supplémentaire';
-  return `En ${fmtAns(p.years)}${verse}, le portefeuille atteindrait environ ${fmtEur(p.value)} (dont ${fmtEur(p.contributed)} de versements, capital de départ compris).`;
+  const gains = p.value - p.contributed;
+  if (gains <= 0.5) return `En ${fmtAns(p.years)}, la valeur projetée ne dépasse pas vos versements : avec ces rendements, le portefeuille ne vous enrichit pas.`;
+  const sur10 = Math.min(9, Math.round((gains / p.value) * 10));
+  const part = sur10 >= 1 ? `environ ${fmtNum(sur10)}\u00a0€ sur 10` : 'moins de 1\u00a0€ sur 10';
+  return `Au bout de ${fmtAns(p.years)}, ${part} de la valeur projetée viendraient des gains, le reste de vos versements (capital de départ compris).`;
 }
 
 /** Portefeuille : ce qu'il faut acheter ou vendre pour revenir à la répartition visée, en une phrase. Les écarts de moins de 1 € sont ignorés. */
