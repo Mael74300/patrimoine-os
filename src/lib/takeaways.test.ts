@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, fmtEur, rentalAnalysis, rentalBalance, rentalProjection, type RentalInput, fireTarget, drawdown, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
-import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio, fmtMonths, monthlySavingNeeded } from './finance';
+import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio, fmtMonths, monthlySavingNeeded, lateHalfGainsYears, fmtPart } from './finance';
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
 import { capacityForPayment } from './calc/debtRatio';
@@ -484,24 +484,35 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(feesTakeaway({ years: 25, initial: 1, monthly: 1, lowest: a, highest: a, noFees: base.finalValue })).toBe('');
   });
 
-  it('patrimoine : versements, capital, impôt et valeur réelle viennent de projectGrowth', () => {
-    const inp = { initial: 5000, monthly: 200, annualReturn: 0.05, annualFees: 0.005, inflation: 0.02, years: 25, contributionGrowth: 0, savingsChanges: [], withdrawals: [{ year: 10, amount: 3000 }] };
+  it('patrimoine : part des gains, seconde moitié des gains et pouvoir d\'achat, sans recopier les cases', () => {
+    // Valeurs par défaut du simulateur (fictives) : 5 000 € puis 300 € par mois, 5 % moins 0,5 % de frais, 25 ans.
+    const inp = { initial: 5000, monthly: 300, annualReturn: 0.05, annualFees: 0.005, inflation: 0.02, years: 25 };
     const pts = projectGrowth(inp);
     const l = pts[pts.length - 1];
     const net = afterTax(l.value, l.contributed - l.withdrawn, 0.314);
     const netReal = net / Math.pow(1.02, 25);
-    const t = digits(wealthTakeaway({ years: 25, contributed: l.contributed, withdrawn: l.withdrawn, value: l.value, gains: l.gains, netValue: net, netRealValue: netReal, taxRate: 0.314, inflation: 0.02 }));
-    expect(t).toContain(eur(l.contributed) + '€');
-    expect(t).toContain('retirez3000€');
-    expect(t).toContain(eur(l.value) + '€');
-    expect(t).toContain(eur(l.gains) + '€');
-    expect(t).toContain(eur(net) + '€');
-    expect(t).toContain(eur(netReal) + '€');
-    expect(netOfFees(0.05, 0.005)).toBeLessThan(0.05);
-    const sansImpot = wealthTakeaway({ years: 25, contributed: l.contributed, withdrawn: 0, value: l.value, gains: l.gains, netValue: l.value, netRealValue: netReal, taxRate: 0, inflation: 0 });
+    const late = lateHalfGainsYears(pts);
+    expect(late).toBe(6);
+    const t = wealthTakeaway({ years: 25, contributed: l.contributed, value: l.value, gains: l.gains, netValue: net, netRealValue: netReal, inflation: 0.02, lateHalfYears: late });
+    expect(digits(t)).toContain(digits(fmtPart(l.gains / l.value)) + 'ducapitalfinal');
+    expect(digits(t)).toContain('46,8%');
+    expect(t).toContain('6\u00a0dernières années sur 25');
+    expect(digits(t)).toContain(digits(fmtPart(1 - netReal / l.value)));
+    expect(t).toContain('« En euros d\'aujourd\'hui »');
+    // Aucun montant des cases n'est recopié.
+    for (const v of [l.contributed, l.gains, l.value, l.realValue, net, netReal]) expect(digits(t)).not.toContain(eur(v) + '€');
+    // Sans impôt ni inflation : pas de phrase sur le pouvoir d'achat.
+    const sansImpot = wealthTakeaway({ years: 25, contributed: l.contributed, value: l.value, gains: l.gains, netValue: l.value, netRealValue: l.value, inflation: 0, lateHalfYears: late });
     expect(sansImpot).not.toContain('impôt');
-    expect(sansImpot).not.toContain('inflation');
-    expect(wealthTakeaway({ years: 0, contributed: 1, withdrawn: 0, value: 1, gains: 0, netValue: 1, netRealValue: 1, taxRate: 0, inflation: 0 })).toBe('');
+    expect(sansImpot).not.toContain('prix');
+    // Impôt seul, inflation seule.
+    expect(wealthTakeaway({ years: 25, contributed: l.contributed, value: l.value, gains: l.gains, netValue: net, netRealValue: net, inflation: 0, lateHalfYears: late })).toContain('« Capital final »');
+    expect(wealthTakeaway({ years: 25, contributed: l.contributed, value: l.value, gains: l.gains, netValue: l.value, netRealValue: l.realValue, inflation: 0.02, lateHalfYears: late })).toContain('La hausse des prix retire');
+    // Perte, gain nul, retraits qui dépassent le capital restant.
+    expect(wealthTakeaway({ years: 10, contributed: 1000, value: 900, gains: -100, netValue: 900, netRealValue: 900, inflation: 0, lateHalfYears: null })).toContain('perdre');
+    expect(wealthTakeaway({ years: 10, contributed: 1000, value: 1000, gains: 0, netValue: 1000, netRealValue: 1000, inflation: 0, lateHalfYears: null })).toContain('ne rapporte rien');
+    expect(wealthTakeaway({ years: 10, contributed: 1000, value: 300, gains: 400, netValue: 300, netRealValue: 300, inflation: 0, lateHalfYears: 3 })).toContain('dépassent le capital restant');
+    expect(wealthTakeaway({ years: 0, contributed: 1, value: 1, gains: 0, netValue: 1, netRealValue: 1, inflation: 0, lateHalfYears: null })).toBe('');
   });
   it('entreprise : CA, résultat, trésorerie et besoin de financement viennent de projectBusiness', () => {
     const inp = { revenueY1: 120000, revenueGrowth: 0.1, grossMarginRate: 0.6, fixedCosts: 30000, fixedCostsGrowth: 0.02, founderPay: 24000, socialRate: 0.45, corporateTaxRate: 0.25, receivableDays: 30, initialCash: 15000, initialInvestment: 10000, valuationMultiple: 5, years: 5 };

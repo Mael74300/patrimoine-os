@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useMemo } from 'react';
 import { wealthGoalTakeaway, wealthTakeaway } from '../lib/takeaways';
-import { afterTax, fmtEur, fmtPct, netOfFees, projectGrowth, requiredMonthly, type SavingsChange, type Withdrawal } from '../lib/finance';
+import { afterTax, fmtEur, fmtPct, lateHalfGainsYears, netOfFees, projectGrowth, requiredMonthly, type SavingsChange, type Withdrawal } from '../lib/finance';
 import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, RowsEditor, SavedSims, ChoiceField, Tabs, usePersistentState, JumpToResults, CoverageGauge } from '../components/ui';
 
 type Scenario = {
@@ -66,7 +66,7 @@ export default function SimPatrimoine() {
 
   const series = st.scenarios.length === 1
     ? [
-        { name: 'Capital nominal', color: COLORS[0], values: points.map((p) => p.value) },
+        { name: 'Capital simulé', color: COLORS[0], values: points.map((p) => p.value) },
         { name: "Capital en euros d'aujourd'hui", color: 'var(--chart-2)', values: points.map((p) => p.realValue), dashed: true },
         { name: 'Versements cumulés', color: 'var(--chart-3)', values: points.map((p) => p.contributed) },
       ]
@@ -140,10 +140,10 @@ export default function SimPatrimoine() {
           <div className="kpis">
             <Kpi label="Total des versements" value={fmtEur(last.contributed)} sub={last.withdrawn ? `${fmtEur(last.withdrawn)} retirés` : undefined} />
             <Kpi label="Gains ou pertes simulés" value={fmtEur(last.gains)} tone={last.gains >= 0 ? 'pos' : 'neg'} />
-            <Kpi label={`Capital final nominal (${s.years}\u00a0ans)`} value={fmtEur(last.value)} sub={`${fmtEur(net)} après fiscalité`} />
-            <Kpi label="Corrigé de l'inflation" value={fmtEur(last.realValue)} sub={`${fmtEur(netReal)} après fiscalité`} />
+            <Kpi label={`Capital final (${s.years}\u00a0ans)`} value={fmtEur(last.value)} sub={`${fmtEur(net)} après fiscalité`} />
+            <Kpi label="En euros d'aujourd'hui" value={fmtEur(last.realValue)} sub={`${fmtEur(netReal)} après fiscalité`} />
           </div>
-          <Takeaway>{wealthTakeaway({ years: s.years, contributed: last.contributed, withdrawn: last.withdrawn, value: last.value, gains: last.gains, netValue: net, netRealValue: netReal, taxRate: s.taxRate, inflation: s.inflation })}</Takeaway>
+          <Takeaway>{wealthTakeaway({ years: s.years, contributed: last.contributed, value: last.value, gains: last.gains, netValue: net, netRealValue: netReal, inflation: s.inflation, lateHalfYears: lateHalfGainsYears(points) })}</Takeaway>
           <div className="panel">
             <LineChart title="Évolution du capital" showTitle xLabels={Array.from({ length: (st.scenarios.length === 1 ? points.length - 1 : maxYears) + 1 }, (_, y) => `An ${y}`)} format={fmtEur} series={series} />
           </div>
@@ -153,7 +153,7 @@ export default function SimPatrimoine() {
               <h2>Comparaison des scénarios</h2>
               <div className="table-wrap" tabIndex={0}>
                 <table>
-                  <thead><tr><th>Scénario</th><th className="r">Durée</th><th className="r">Versements</th><th className="r">Gains</th><th className="r">Capital nominal</th><th className="r">Corrigé inflation</th><th className="r">Après fiscalité</th></tr></thead>
+                  <thead><tr><th>Scénario</th><th className="r">Durée</th><th className="r">Versements</th><th className="r">Gains</th><th className="r">Capital final</th><th className="r">En euros d'aujourd'hui</th><th className="r">Après fiscalité</th></tr></thead>
                   <tbody>
                     {st.scenarios.map((sc, i) => {
                       const l = runs[i][runs[i].length - 1];
@@ -188,7 +188,7 @@ export default function SimPatrimoine() {
           <Fold title={`Tableau d'évolution année par année — ${s.name}`}>
           <div className="table-wrap" tabIndex={0}>
             <table>
-              <thead><tr><th>Année</th><th className="r">Versé (cumul)</th><th className="r">Retiré (cumul)</th><th className="r">Capital nominal</th><th className="r">Gains</th><th className="r">Corrigé inflation</th></tr></thead>
+              <thead><tr><th>Année</th><th className="r">Versé (cumul)</th><th className="r">Retiré (cumul)</th><th className="r">Capital</th><th className="r">Gains</th><th className="r">En euros d'aujourd'hui</th></tr></thead>
               <tbody>
                 {points.map((p) => (
                   <tr key={p.year}>
@@ -205,7 +205,7 @@ export default function SimPatrimoine() {
           </div>
           <p className="small muted" style={{ marginTop: 12 }}>
             Conventions : versements en début de mois, capitalisation mensuelle au taux équivalent au taux annuel net de frais,
-            retraits en fin d'année. Rendement nominal ; la colonne « corrigé inflation » ramène chaque montant en euros d'aujourd'hui (détail sur la page <Link to="/methodologie">Méthode</Link>).
+            retraits en fin d'année. Rendement avant inflation ; la colonne « En euros d'aujourd'hui » retire la hausse des prix de chaque montant (détail sur la page <Link to="/methodologie">Méthode</Link>).
           </p>
           </Fold>
           <SavedSims simKey="patrimoine-v2" current={st} onLoad={(d) => setSt({ ...DEFAULTS, ...d })} />
