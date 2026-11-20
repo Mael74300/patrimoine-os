@@ -14,7 +14,7 @@ export default function NotFound() {
   const [q, setQ] = useState('');
   return (
     <>
-      <PageHead title="Page introuvable">Cette page n'existe pas ou a été déplacée. Cherchez ce qui vous intéresse, ou reprenez par l'une de ces pages.</PageHead>
+      <PageHead title="Page introuvable" art="introuvable">Cette page n'existe pas ou a été déplacée. Cherchez ce qui vous intéresse, ou reprenez par l'une de ces pages.</PageHead>
       <form
         className="search-box search-box-page"
         role="search"

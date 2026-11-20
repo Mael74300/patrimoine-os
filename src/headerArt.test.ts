@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { HeaderArt, HomeArt, type HeaderArtName } from './components/Illustrations';
 
-const noms: HeaderArtName[] = ['guides', 'simulateurs', 'encyclopedie', 'comparateur', 'entrepreneuriat'];
+const noms: HeaderArtName[] = ['guides', 'simulateurs', 'encyclopedie', 'comparateur', 'entrepreneuriat', 'glossaire', 'plan-du-site', 'introuvable'];
 
 describe('illustrations des bandeaux de rubrique', () => {
   it('sont décoratives, distinctes et légères', () => {
