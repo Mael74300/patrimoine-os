@@ -44,9 +44,9 @@ export default function SimBudget() {
   const c = catchUp(s, s.targetRate);
   const proj = projectBudgetSaving(b.saving, s.projReturn, s.projYears);
   const rows = [
-    { key: 'needs', label: 'Besoins', hint: 'dépenses contraintes', amount: b.needs, share: b.shares.needs, bench: BUDGET_BENCHMARK.needs, gap: b.gaps.needs },
-    { key: 'wants', label: 'Envies', hint: 'confort, loisirs', amount: b.wants, share: b.shares.wants, bench: BUDGET_BENCHMARK.wants, gap: b.gaps.wants },
-    { key: 'saving', label: 'Épargne', hint: 'mise de côté', amount: b.saving, share: b.shares.saving, bench: BUDGET_BENCHMARK.saving, gap: b.gaps.saving },
+    { key: 'needs', label: 'Besoins', share: b.shares.needs, bench: BUDGET_BENCHMARK.needs, gap: b.gaps.needs },
+    { key: 'wants', label: 'Envies', share: b.shares.wants, bench: BUDGET_BENCHMARK.wants, gap: b.gaps.wants },
+    { key: 'saving', label: 'Épargne', share: b.shares.saving, bench: BUDGET_BENCHMARK.saving, gap: b.gaps.saving },
   ];
 
   return (
@@ -90,7 +90,7 @@ export default function SimBudget() {
             />
             <Kpi label={`Effort pour ${fmtPct(s.targetRate)}`} value={fmtEur(c.missing)} sub="à trouver chaque mois" tone={c.missing === 0 ? 'pos' : undefined} />
           </div>
-          <Takeaway>{budgetTakeaway({ income: b.income, shares: b.shares, unallocated: b.unallocated, targetRate: s.targetRate, missing: c.missing, fromUnallocated: c.fromUnallocated, fromWants: c.fromWants, uncovered: c.uncovered })}</Takeaway>
+          <Takeaway>{budgetTakeaway({ income: b.income, shares: b.shares, unallocated: b.unallocated, targetRate: s.targetRate, missing: c.missing, wants: b.wants, fromUnallocated: c.fromUnallocated, fromWants: c.fromWants, uncovered: c.uncovered })}</Takeaway>
 
           <h2>Votre budget face au repère 50 / 30 / 20</h2>
           <BudgetBars b={b} />
@@ -99,7 +99,8 @@ export default function SimBudget() {
               <li key={r.key}>
                 <i className={'bb-dot bb-' + r.key} aria-hidden="true" />
                 <span>
-                  <strong>{r.label}</strong> <span className="muted">({r.hint})</span> : <strong>{fmtEur(r.amount)}</strong> par mois, soit {fmtPct(r.share)} du revenu.
+                  <strong>{r.label}</strong>
+                  <span className="bb-share"><b>{fmtPct(r.share)}</b> du revenu</span>
                   <span className="bb-gap">{budgetGapPhrase(r.gap, r.bench).replace(/^./, (ch) => ch.toUpperCase())}.</span>
                 </span>
               </li>
@@ -108,7 +109,7 @@ export default function SimBudget() {
 
           <h2>Que devient cette épargne en {s.projYears}&nbsp;ans ?</h2>
           <p>
-            En épargnant {fmtEur(b.saving)} par mois à {fmtPct(s.projReturn)} net par an : <strong>{fmtEur(proj.finalValue)}</strong>, dont {fmtEur(proj.contributed)} versés
+            Au rythme actuel, placée à {fmtPct(s.projReturn)} net par an, votre épargne mensuelle atteindrait <strong>{fmtEur(proj.finalValue)}</strong>, dont {fmtEur(proj.contributed)} versés
             et {fmtEur(proj.gains)} de gains supposés.
           </p>
           <p className="muted small">
