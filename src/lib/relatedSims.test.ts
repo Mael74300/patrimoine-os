@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { guideBySlug, guides } from '../data/guides';
+import { guideBySlug, guides, otherGuides } from '../data/guides';
 import { investmentBySlug } from '../data/investments';
 import { guideSimulators, nextForSimulator, readingForSimulator, simsForGuide, simsForInvestment } from './relatedSims';
 import { simulators } from './search';
@@ -71,6 +71,19 @@ describe('pistes de lecture du futur acheteur', () => {
     expect(to).toContain('/guides/pret-a-taux-zero-ptz');
     expect(to).toContain('/simulateurs/louer-ou-acheter');
     expect(to).not.toContain('/encyclopedie/reprise-entreprise');
+  });
+});
+
+describe('parcours résidence principale (chantier 235)', () => {
+  it('le guide PTZ et Louer ou acheter ne renvoient pas vers l’investissement locatif', () => {
+    const ptz = guideBySlug['pret-a-taux-zero-ptz'];
+    expect(ptz.related).not.toContain('credit-immobilier');
+    expect(guideSimulators(ptz.slug, ptz.cta?.to).map((s) => s.slug)).toContain('comparer-des-credits');
+    expect(readingForSimulator('louer-ou-acheter').map((l) => l.to)).not.toContain('/encyclopedie/credit-immobilier');
+  });
+  it('« Autres guides » du PTZ propose le remboursement anticipé avant les guides locatifs', () => {
+    const autres = otherGuides('pret-a-taux-zero-ptz').map((g) => g.slug);
+    expect(autres.slice(0, 2)).toEqual(['taux-endettement-capacite-emprunt', 'rembourser-credit-par-anticipation-ou-investir']);
   });
 });
 

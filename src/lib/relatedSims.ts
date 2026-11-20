@@ -119,7 +119,7 @@ export const simsForGuide: Record<string, string[]> = {
   'choisir-son-enveloppe': ['frais'],
   'combien-epargne-de-precaution': ['epargne-de-precaution', 'inflation', 'budget'],
   'taux-endettement-capacite-emprunt': ['endettement', 'credit', 'dettes'],
-  'pret-a-taux-zero-ptz': ['endettement', 'credit', 'louer-ou-acheter'],
+  'pret-a-taux-zero-ptz': ['endettement', 'credit', 'comparer-des-credits', 'louer-ou-acheter'],
   'combien-epargner-par-mois-objectif': ['interets-composes', 'objectif-epargne', 'budget', 'inflation'],
   'rembourser-credit-par-anticipation-ou-investir': ['rembourser-ou-investir', 'credit', 'comparer-des-credits', 'dettes', 'epargne-de-precaution'],
   'diversification-placements': ['portefeuille', 'frais', 'epargne-de-precaution'],
@@ -152,7 +152,7 @@ export type ReadingLink = { to: string; title: string; kind: 'Guide' | 'Fiche' |
 /**
  * « Pour aller plus loin » en bas de chaque simulateur, choisi à la main dans l'ordre d'utilité pour le visiteur :
  * d'abord le guide qui explique le résultat, puis une étape suivante (au plus un autre simulateur), puis la fiche
- * du placement concerné. Préfixes : « g: » guide, « f: » fiche, « s: » simulateur. Cohérence vérifiée par les tests.
+ * du placement concerné (aucune pour Louer ou acheter : la fiche Investir à crédit parle de locatif, chantier 235). Préfixes : « g: » guide, « f: » fiche, « s: » simulateur. Cohérence vérifiée par les tests.
  */
 export const nextForSimulator: Record<string, string[]> = {
   patrimoine: ['g:interets-composes', 'g:choisir-son-enveloppe', 's:independance-financiere', 'f:etf-monde'],
@@ -169,7 +169,7 @@ export const nextForSimulator: Record<string, string[]> = {
   inflation: ['g:inflation-pouvoir-d-achat-epargne', 'g:regle-de-72-doubler-son-capital', 's:rendement-reel-de-mon-placement', 'f:livret-a'],
   endettement: ['g:taux-endettement-capacite-emprunt', 'g:pret-a-taux-zero-ptz', 's:credit', 'f:credit-immobilier'],
   'objectif-epargne': ['g:combien-epargner-par-mois-objectif', 'g:par-ou-commencer', 's:budget', 'f:livret-a'],
-  'louer-ou-acheter': ['g:pret-a-taux-zero-ptz', 'g:taux-endettement-capacite-emprunt', 's:credit', 'f:credit-immobilier'],
+  'louer-ou-acheter': ['g:pret-a-taux-zero-ptz', 'g:taux-endettement-capacite-emprunt', 's:credit'],
   dettes: ['g:taux-endettement-capacite-emprunt', 'g:combien-epargne-de-precaution', 's:budget'],
   'investir-d-un-coup-ou-progressivement': ['g:choisir-son-enveloppe', 'g:diversification-placements', 's:frais', 'f:etf-monde'],
   'retraits-reguliers-duree-du-capital': ['g:inflation-pouvoir-d-achat-epargne', 's:independance-financiere', 'f:assurance-vie', 'f:donation'],

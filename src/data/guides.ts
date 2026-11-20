@@ -489,7 +489,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
         ],
       },
     ],
-    related: ['credit-immobilier'],
+    related: [],
     sources: [{ label: 'Service-Public.fr — Prêt à taux zéro (PTZ ou PTZ+), page vérifiée le 15 septembre 2026, consultée le 13 novembre 2026', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F10871', official: true }, ANIL],
     faq: [
       { q: 'Le prêt à taux zéro est-il vraiment sans aucun frais ?', a: 'Le PTZ lui-même ne porte ni intérêts, ni frais de dossier ni frais d’expertise. Mais il s’ajoute à un autre prêt, qui, lui, a un coût : intérêts, assurance, garantie.' },
@@ -782,7 +782,7 @@ export const guideGroups: { title: string; intro: string; slugs: string[] }[] = 
   { title: 'Pour démarrer', intro: 'Les bases, dans l’ordre : priorités, réserve, effort d’épargne.', slugs: ['par-ou-commencer', 'combien-epargne-de-precaution', 'epargne-limitee', 'combien-epargner-par-mois-objectif', 'patrimoine-net'] },
   { title: 'Comprendre les mécanismes', intro: 'Le temps, l’inflation, les frais, la diversification : ce qui joue sur vos résultats.', slugs: ['interets-composes', 'regle-de-72-doubler-son-capital', 'inflation-pouvoir-d-achat-epargne', 'diversification-placements', 'comparer-les-frais', 'livret-a-calcul-interets-quinzaines'] },
   { title: 'Choisir ses placements', intro: 'Les familles de placements et les enveloppes qui les contiennent.', slugs: ['types-investissements', 'choisir-son-enveloppe', 'fonctionnement-pea', 'immobilier-ou-etf'] },
-  { title: 'Immobilier et crédit', intro: 'Emprunter, louer, rembourser : les repères avant de s’engager.', slugs: ['taux-endettement-capacite-emprunt', 'pret-a-taux-zero-ptz', 'investir-a-credit', 'rentabilite-locative', 'rembourser-credit-par-anticipation-ou-investir'] },
+  { title: 'Immobilier et crédit', intro: 'Emprunter, louer, rembourser : les repères avant de s’engager.', slugs: ['taux-endettement-capacite-emprunt', 'pret-a-taux-zero-ptz', 'rembourser-credit-par-anticipation-ou-investir', 'investir-a-credit', 'rentabilite-locative'] },
 ];
 
 /** Autres guides proposés en bas d’un guide : ceux du même groupe d’abord, puis le reste. */

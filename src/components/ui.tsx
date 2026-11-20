@@ -991,11 +991,13 @@ export const SIM_NEXT_VISIBLE = 2;
  */
 export function SimNext({ slug, links = readingForSimulator(slug ?? '') }: { slug?: string; links?: ReadingLink[] }) {
   if (!links.length) return null;
+  // Une seule piste de plus ne mérite pas un repli (un clic pour une seule carte) : elle s'affiche avec les autres (chantier 235).
+  const shown = links.length <= SIM_NEXT_VISIBLE + 1 ? links.length : SIM_NEXT_VISIBLE;
   return (
     <nav className="sim-next" aria-labelledby="rub-pour-aller-plus-loin">
       <h2 id="rub-pour-aller-plus-loin">Pour aller plus loin</h2>
-      <NextList items={links.slice(0, SIM_NEXT_VISIBLE)} />
-      <NextMore items={links.slice(SIM_NEXT_VISIBLE)} />
+      <NextList items={links.slice(0, shown)} />
+      <NextMore items={links.slice(shown)} />
     </nav>
   );
 }
