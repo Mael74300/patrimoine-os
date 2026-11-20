@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { fmtEur, netWorth, type NetWorthItem } from '../lib/finance';
 import { netWorthTakeaway, debtShareLabel } from '../lib/takeaways';
 import { NW_DEFAULT } from '../lib/illustrationData';
@@ -11,7 +12,16 @@ export function NetWorthCalculator() {
   const [st, setSt] = usePersistentState('patrimoine-net', NW_DEFAULT);
   const r = netWorth(st.items);
   const setItem = (id: string, patch: Partial<NetWorthItem>) => setSt((x) => ({ items: x.items.map((i) => (i.id === id ? { ...i, ...patch } : i)) }));
-  const add = (kind: NetWorthItem['kind']) => setSt((x) => ({ items: [...x.items, { id: kind[0] + Date.now(), label: '', amount: 0, kind }] }));
+  // Après « Ajouter », le curseur va dans le nom de la nouvelle ligne : on écrit tout de suite, sans chercher la case.
+  const [added, setAdded] = useState<string | null>(null);
+  useEffect(() => {
+    if (added) document.getElementById('nw-' + added)?.focus();
+  }, [added]);
+  const add = (kind: NetWorthItem['kind']) => {
+    const id = kind[0] + Date.now();
+    setSt((x) => ({ items: [...x.items, { id, label: '', amount: 0, kind }] }));
+    setAdded(id);
+  };
   const isDefault = JSON.stringify(st.items) === JSON.stringify(NW_DEFAULT.items);
   const block = (kind: NetWorthItem['kind'], title: string, hint: string, addLabel: string, placeholder: string) => (
     <div className="nw-block">
@@ -19,7 +29,7 @@ export function NetWorthCalculator() {
       <p className="nw-hint">{hint}</p>
       {st.items.filter((i) => i.kind === kind).map((i) => (
         <div key={i.id} className="nw-row">
-          <input type="text" className="nw-label" aria-label={`Nom de la ligne (${title.toLowerCase()})`} placeholder={placeholder} value={i.label} onChange={(e) => setItem(i.id, { label: e.target.value })} />
+          <input type="text" id={'nw-' + i.id} className="nw-label" aria-label={`Nom de la ligne (${title.toLowerCase()})`} placeholder={placeholder} value={i.label} onChange={(e) => setItem(i.id, { label: e.target.value })} />
           <div className="input-unit">
             <NumInput aria-label={`Montant en euros : ${i.label || placeholder}`} min={0} step={1000} value={i.amount} onChange={(n) => setItem(i.id, { amount: n })} />
             <span aria-hidden="true">€</span>
