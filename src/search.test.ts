@@ -121,6 +121,25 @@ describe('recherche', () => {
     // seuls les mots exacts d’un exemple déclenchent un raccourci
     expect(first('épargne logement')).not.toBe('/guides/par-ou-commencer');
   });
+  it('mots du quotidien : réserve, économies, dettes, pension (audit du 21 novembre 2026)', () => {
+    const first = (q: string) => search(q)[0].to;
+    const top = (q: string, n = 3) => search(q).slice(0, n).map((h) => h.to);
+    // « fonds d’urgence » ne mène plus aux fonds obligataires, quelle que soit l’apostrophe
+    expect(first("fonds d'urgence")).toBe('/guides/combien-epargne-de-precaution');
+    expect(first('fond d’urgence')).toBe('/guides/combien-epargne-de-precaution');
+    expect(top('fonds d’urgence', 5)).not.toContain('/encyclopedie/obligations');
+    expect(first('combien pour les imprévus')).toBe('/guides/combien-epargne-de-precaution');
+    // « mettre de côté » ne mène plus aux fonds « cotés » en Bourse
+    expect(first('mettre de l’argent de côté')).toBe('/simulateurs/budget');
+    expect(first('Économiser')).toBe('/simulateurs/budget');
+    expect(top('mettre de côté', 2)).not.toContain('/encyclopedie/etf-monde');
+    // un crédit à la consommation se simule avec le calculateur de crédit
+    expect(first('crédit à la consommation')).toBe('/simulateurs/credit');
+    expect(first('rembourser mes dettes')).toBe('/simulateurs/dettes');
+    // « pension » trouve les pages de la retraite au lieu de zéro résultat
+    expect(top('pension')).toContain('/encyclopedie/per');
+    expect(top('pension')).toContain('/simulateurs/retraits-reguliers-duree-du-capital');
+  });
   it('un montant tapé ne compte pas comme un mot, sauf s’il est seul', () => {
     expect(searchTerms('placer 10000 euros')).toEqual(['plac']);
     expect(searchTerms('72')).toEqual(['72']);

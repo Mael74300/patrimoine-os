@@ -102,6 +102,13 @@ export const searchAliases: Record<string, string[]> = {
   argent: ['argent', 'epargn', 'placement'],
   economiser: ['econom', 'epargn'],
   notaire: ['notaire', "frais d'acquisition"],
+  // Audit du 21 novembre 2026 : « pension » ne trouvait rien, « fonds d’urgence » menait aux fonds obligataires.
+  pension: ['pension', 'retraite', 'retrait'],
+  urgence: ['precaution', 'imprevu'],
+  imprevu: ['imprevu', 'precaution'],
+  matelas: ['precaution'],
+  secours: ['precaution', 'imprevu'],
+  dette: ['dette', 'endettement'],
 };
 
 /**
@@ -125,6 +132,12 @@ export const searchShortcuts: { queries: string[]; to: string[] }[] = [
   { queries: ['investir en bourse', 'placer en bourse', 'bourse', 'acheter des actions'], to: ['/encyclopedie/etf-monde', '/encyclopedie/actions-individuelles'] },
   { queries: ['payer moins d’impôts', 'payer moins d’impôt', 'réduire ses impôts', 'réduire impôts', 'baisser ses impôts', 'défiscaliser', 'défiscalisation'], to: ['/guides/choisir-son-enveloppe', '/encyclopedie/per'] },
   { queries: ['déficit foncier', 'déficit', 'déduire ses travaux', 'travaux déductibles'], to: ['/encyclopedie/location-nue'] },
+  // Audit du 21 novembre 2026 : « fonds d’urgence » menait aux fonds obligataires, « mettre de côté » aux fonds cotés en Bourse,
+  // « économiser » au LEP, « crédit conso » sans le calculateur de crédit.
+  { queries: ['épargne de précaution', 'fonds d’urgence', 'fond d’urgence', 'épargne d’urgence', 'matelas de sécurité', 'réserve de sécurité', 'épargne de sécurité', 'épargne de secours', 'coup dur', 'imprévus', 'faire face aux imprévus'], to: ['/guides/combien-epargne-de-precaution', '/simulateurs/epargne-de-precaution'] },
+  { queries: ['économiser', 'économiser de l’argent', 'faire des économies', 'mettre de côté', 'mettre de l’argent de côté', 'mettre argent de côté', 'épargner chaque mois', 'taux d’épargne'], to: ['/simulateurs/budget', '/guides/combien-epargner-par-mois-objectif', '/guides/combien-epargne-de-precaution'] },
+  { queries: ['dettes', 'plusieurs dettes', 'rembourser mes dettes', 'rembourser ses dettes', 'plusieurs crédits', 'rembourser plusieurs crédits'], to: ['/simulateurs/dettes'] },
+  { queries: ['crédit conso', 'crédit à la consommation', 'prêt personnel', 'prêt auto', 'crédit auto'], to: ['/simulateurs/credit', '/simulateurs/dettes'] },
   { queries: ['vivre de ses rentes', 'vivre de ses placements', 'rentier', 'rente'], to: ['/simulateurs/independance-financiere', '/simulateurs/retraits-reguliers-duree-du-capital'] },
 ];
 
