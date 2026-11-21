@@ -715,7 +715,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Rendement potentiel très élevé', 'Compétences gardées toute la carrière'],
     cons: ['Résultat incertain', 'Demande du temps'],
     timeSkills: 'Élevé.',
-    example: 'Exemple fictif : une formation à 1 000 € vous vaut une hausse de salaire de 200 € nets par mois : la dépense est remboursée en 5 mois. Épargnée chaque mois à 5 % par an, cette hausse devient environ 31 000 € en 10 ans (24 000 € versés) et 81 500 € en 20 ans (48 000 € versés). Sans hausse, seuls les 1 000 € et votre temps sont perdus.',
+    example: 'Exemple fictif : une formation à 1 000 € vous vaut une hausse de salaire de 200 € nets par mois, épargnée chaque mois à 5 % par an. À retenir : la dépense est vite couverte, et c’est la hausse qui dure qui fait la différence ; épargnée, elle finit par peser bien plus que la formation. Sans hausse, seuls les 1 000 € et votre temps sont perdus.',
     sources: [S.cpf, S.cpfSp],
     alternatives: ['creation-entreprise'],
     tags: ['revenus', 'compétences'],

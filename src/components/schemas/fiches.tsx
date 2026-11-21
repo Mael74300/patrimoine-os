@@ -4,7 +4,7 @@ import { pfuSplit, PFU_IR_PCT, PFU_PS_PCT, PFU_TOTAL_PCT } from '../../lib/calc/
 import { perDeductionBalance } from '../../lib/calc/per';
 import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, leverageMonth, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
 import { LIVRETS } from '../../data/livrets';
-import { abattementDetentionMeubles, artResale, assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, listedPropertyYear, subscriptionMonths, yearlySavingsValue, fundFeesOnSubscribed, microFoncierExample, recoveryAfterDrop, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
+import { abattementDetentionMeubles, artResale, assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, listedPropertyYear, subscriptionMonths, trainingPayoff, yearlySavingsValue, fundFeesOnSubscribed, microFoncierExample, recoveryAfterDrop, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
 import { fmtEur2 } from '../../lib/calc/format';
 import { W } from './outils';
@@ -1518,6 +1518,67 @@ export function SchemaCreationEntreprise() {
         <text x={170} y={266} textAnchor="middle" className="ill-in">est réel</text>
         <text x={170} y={308} textAnchor="middle" className="ill-sub">Schéma de principe</text>
       </svg>
+    </figure>
+  );
+}
+
+/** Exemple fictif de la fiche Formation et compétences, rubrique « Exemple chiffré » (mêmes hypothèses que le texte de la fiche). */
+export const FORMATION_BILAN = { cout: 1000, hausse: 200, taux: 5, horizons: [10, 20] } as const;
+
+/**
+ * Schéma de l'exemple chiffré de la fiche Formation et compétences (constat du 2026-11-21 : dernière fiche dont l'exemple restait un
+ * paragraphe de six montants). Deux étapes : la dépense de la formation face aux premiers mois de hausse de salaire, à la même échelle
+ * (cinq cases de 200 € couvrent 1 000 €) ; puis la hausse épargnée chaque mois à 5 % par an, après 10 et 20 ans, sur une même échelle,
+ * versements et intérêts séparés. Calcul pur `trainingPayoff` (moteur du simulateur de patrimoine, arrondi à 500 €). Aucun chiffre
+ * nouveau : les montants affichés sont ceux de l'ancien texte de la fiche, recalculés.
+ */
+export function SchemaFormationBilan({ children }: { children?: ReactNode }) {
+  const { cout, hausse, taux, horizons } = FORMATION_BILAN;
+  const r = trainingPayoff(cout, hausse, taux, [...horizons]);
+  const X0 = 1;
+  const L = 338;
+  const gap = 2;
+  const k1 = L / cout;
+  const max = Math.max(...r.saved.map((s) => s.value));
+  const k2 = L / max;
+  const pct = taux.toLocaleString('fr-FR');
+  const desc = r.saved.map((s) => `en ${s.years} ans, environ ${fmtEur(s.value)}, dont ${fmtEur(s.contributed)} versés et environ ${fmtEur(s.value - s.contributed)} d’intérêts`).join(' ; ');
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 322" role="img" aria-labelledby="ill-fob-t ill-fob-d" className="ill-svg">
+        <title id="ill-fob-t">Formation et compétences : ce qu’une hausse de salaire rapporte</title>
+        <desc id="ill-fob-d">{`Exemple fictif : une formation à ${fmtEur(cout)} vous vaut une hausse de salaire de ${fmtEur(hausse)} nets par mois. ${r.paybackMonths} mois de hausse suffisent à couvrir la dépense. Épargnée chaque mois à ${pct} % par an : ${desc}. Avant impôt ; les deux dernières barres sont à la même échelle.`}</desc>
+
+        <text x={X0} y={16} className="ill-step">{`La formation : ${fmtEur(cout)}`}</text>
+        <rect x={X0} y={26} width={L} height={30} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={X0 + L / 2} y={46} textAnchor="middle" className="ill-in">{`${fmtEur(cout)} dépensés`}</text>
+        {Array.from({ length: r.paybackMonths }, (_, i) => (
+          <rect key={i} x={X0 + i * hausse * k1} y={64} width={hausse * k1 - gap} height={30} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
+        ))}
+        {Array.from({ length: r.paybackMonths }, (_, i) => (
+          <text key={i} x={X0 + (i + 0.5) * hausse * k1} y={84} textAnchor="middle" className="ill-in">{fmtEur(hausse)}</text>
+        ))}
+        <text x={X0} y={114} className="ill-sub">{`${r.paybackMonths} mois de hausse à ${fmtEur(hausse)} nets la remboursent`}</text>
+
+        <text x={X0} y={156} className="ill-step">{`La hausse épargnée à ${pct} % par an`}</text>
+        {r.saved.map((s, i) => {
+          const y = 182 + i * 62;
+          const wv = s.contributed * k2;
+          return (
+            <g key={s.years}>
+              <text x={X0} y={y} className="ill-sub">{`En ${s.years} ans : ≈ ${fmtEur(s.value)}`}</text>
+              <rect x={X0} y={y + 10} width={wv - gap} height={30} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+              <rect x={X0 + wv} y={y + 10} width={(s.value - s.contributed) * k2} height={30} rx={4} fill="var(--accent)" stroke="var(--accent)" strokeWidth={2} />
+              <text x={X0 + wv / 2} y={y + 30} textAnchor="middle" className="ill-in">{fmtEur(s.contributed)}</text>
+            </g>
+          );
+        })}
+        <rect x={X0} y={296} width={14} height={14} rx={3} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={X0 + 20} y={308} className="ill-sub">versé</text>
+        <rect x={X0 + 90} y={296} width={14} height={14} rx={3} fill="var(--accent)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={X0 + 110} y={308} className="ill-sub">intérêts, avant impôt</text>
+      </svg>
+      {children && <figcaption>{children}</figcaption>}
     </figure>
   );
 }
