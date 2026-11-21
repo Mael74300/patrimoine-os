@@ -20,12 +20,19 @@ describe('schéma « CTO : sur un gain, ce qui reste »', () => {
     for (const v of ['128 €', '186 €', '314 €', '686 €', '1 000 €']) expect(svg).toContain(v);
     expect(svg).toContain('fictif');
   });
-  it('l’exemple chiffré de la fiche reprend le schéma, jusqu’au montant qui reste', () => {
+  it('l’exemple chiffré de la fiche légende le schéma sans en recopier chaque montant', () => {
+    // Constat du 2026-11-21 : le schéma était dans « Fonctionnement » et l'exemple le répétait en prose plus bas.
+    // Le schéma est désormais dans « Exemple chiffré », et le texte devient sa légende : gain, total retenu, reste.
     const ex = investmentBySlug['compte-titres'].example.replace(/[\u00a0\u202f]/g, ' ');
     const { ir, ps, total, net } = pfuSplit(CTO_EXAMPLE_GAIN);
-    expect(ex).toContain('fictif');
-    for (const v of [CTO_EXAMPLE_GAIN, ir, ps, total, net]) expect(ex).toContain(`${v.toLocaleString('fr-FR').replace(/[\u00a0\u202f]/g, ' ')} €`);
+    expect(ex).toMatch(/^Exemple fictif/);
+    for (const v of [CTO_EXAMPLE_GAIN, total, net]) expect(ex).toContain(`${v.toLocaleString('fr-FR').replace(/[\u00a0\u202f]/g, ' ')} €`);
+    for (const v of [ir, ps]) expect(ex).not.toContain(`${v} €`);
     expect(ex).toContain(`${String(PFU_TOTAL_PCT).replace('.', ',')} %`);
+    expect(ex).toContain('sans option pour le barème progressif');
+    const legende = renderToStaticMarkup(createElement(SchemaCto, null, ex));
+    expect(legende).toContain('Exemple fictif');
+    expect(legende).not.toContain('Illustration, exemple fictif');
   });
   it('avantages et fiscalité sans jargon d’initié', () => {
     const f = investmentBySlug['compte-titres'];

@@ -4,7 +4,7 @@ import { pfuSplit, PFU_IR_PCT, PFU_PS_PCT, PFU_TOTAL_PCT } from '../../lib/calc/
 import { perDeductionBalance } from '../../lib/calc/per';
 import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, leverageMonth, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
 import { LIVRETS } from '../../data/livrets';
-import { assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
+import { abattementDetentionMeubles, assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
 import { fmtEur2 } from '../../lib/calc/format';
 import { W } from './outils';
@@ -625,7 +625,7 @@ export const CTO_EXAMPLE_GAIN = 1000;
 /** Schéma « Compte-titres : sur un gain, ce qui reste après le PFU » : exemple fictif de 1 000 € de plus-value réalisée, taux de 2026 (12,8 % + 18,6 % = 31,4 %, Service-Public F21618, consulté le 2026-11-06). Chiffres recalculés par src/cto.test.ts.
  * ViewBox 340 (chantier 112) : à 375 px, les textes s'affichent presque à leur taille (≈ 13 à 14,5 px au lieu de ≈ 11,2 px
  * avec l'ancien viewBox 420). Mêmes chiffres et mêmes règles ; barre toujours proportionnelle aux montants. */
-export function SchemaCto() {
+export function SchemaCto({ children }: { children?: ReactNode } = {}) {
   const r = pfuSplit(CTO_EXAMPLE_GAIN);
   const X0 = 10;
   const W = 320;
@@ -656,7 +656,7 @@ export function SchemaCto() {
         <text x={170} y={204} textAnchor="middle" className="ill-sub">Total retiré : {fmtEur(r.total)}, soit 31,4 % du gain</text>
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : taux de 2026 sur une plus-value réalisée, sans option pour le barème progressif. Barre proportionnelle aux montants.
+        {children ?? <><strong>Illustration, exemple fictif</strong> : taux de 2026 sur une plus-value réalisée, sans option pour le barème progressif. Barre proportionnelle aux montants.</>}
       </figcaption>
     </figure>
   );
@@ -807,9 +807,80 @@ export function SchemaOr() {
         <text x={170} y={244} textAnchor="middle" className="ill-sub">Même taxe dans les deux cas :</text>
         <text x={170} y={264} textAnchor="middle" className="ill-sub">11,5 % du prix de vente de {fmtEur(OR_EXAMPLE_PRICE)}</text>
       </svg>
-      <figcaption>
-        <strong>Illustration, exemple fictif</strong> : régime forfaitaire (11 % + 0,5 % de CRDS) calculé sur le prix de vente, pas sur le gain. Barres proportionnelles aux montants.
+      <figcaption className="fig-short">
+        <strong>Illustration, exemple fictif</strong> : barres proportionnelles aux montants.
       </figcaption>
+    </figure>
+  );
+}
+
+/** Exemple fictif de la fiche Or, rubrique « Exemple chiffré » : pièce achetée 1 000 €, revendue 2 000 € après 23 ans. */
+export const OR_BILAN = { achat: 1000, vente: OR_EXAMPLE_PRICE, annees: 23, axeAnnees: 24 } as const;
+
+/**
+ * Schéma de l'exemple chiffré de la fiche Or (constat du 2026-11-21 : l'exemple restait un paragraphe, et la règle
+ * « 5 % par année de détention au-delà de la deuxième, exonéré après 22 ans » est la plus difficile à se représenter).
+ * Haut : la même pièce sous les deux régimes, barres proportionnelles aux montants (taxe forfaitaire de `orTaxe`,
+ * option : gain réduit par `abattementDetentionMeubles`). Bas : la part du gain exonérée selon la durée de détention,
+ * marche par marche, tracée par la même fonction. Règles : BOFiP BOI-RPPM-PVBMC-20-10 et BOI-RPPM-PVBMC-20-20,
+ * consultés le 2026-11-21 ; aucun chiffre nouveau par rapport à la rubrique Fiscalité de la fiche.
+ */
+export function SchemaOrBilan({ children }: { children?: ReactNode }) {
+  const { achat, vente, annees, axeAnnees } = OR_BILAN;
+  const taxe = orTaxe(vente);
+  const gain = vente - achat;
+  const impotOption = Math.round(gain * (1 - abattementDetentionMeubles(annees)));
+  const X0 = 1;
+  const W = 338;
+  const wTaxe = (taxe / vente) * W;
+  const wAchat = (achat / vente) * W;
+  const P0 = 44;
+  const P1 = 330;
+  const TOP = 232;
+  const BOT = 300;
+  const px = (an: number) => P0 + (an * (P1 - P0)) / axeAnnees;
+  const py = (part: number) => BOT - part * (BOT - TOP);
+  let marches = `M ${px(0)} ${py(abattementDetentionMeubles(0))}`;
+  for (let an = 1; an <= axeAnnees; an++) marches += ` H ${px(an).toFixed(1)} V ${py(abattementDetentionMeubles(an)).toFixed(1)}`;
+  const pct = (an: number) => `${Math.round(abattementDetentionMeubles(an) * 100)} %`;
+  const dotX = px(annees) + (px(1) - px(0)) / 2;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 326" role="img" aria-labelledby="ill-orb-t ill-orb-d" className="ill-svg">
+        <title id="ill-orb-t">{`Or : la même pièce revendue ${fmtEur(vente)}, taxe forfaitaire de ${fmtEur(taxe)} ou ${fmtEur(impotOption)} sur option après ${annees} ans`}</title>
+        <desc id="ill-orb-d">{`Exemple fictif : une pièce achetée ${fmtEur(achat)} il y a ${annees} ans, facture conservée, est revendue ${fmtEur(vente)}. Par défaut, la taxe forfaitaire prend 11,5 % du prix de vente, soit ${fmtEur(taxe)} : il reste ${fmtEur(vente - taxe)}. Sur option pour le régime des plus-values, seul le gain de ${fmtEur(gain)} compte, et il est réduit de 5 % par année de détention au-delà de la deuxième : ${pct(2)} à 2 ans, ${pct(12)} à 12 ans, ${pct(22)} à 22 ans. Après ${annees} ans, le gain est entièrement exonéré : ${fmtEur(impotOption)} d’impôt, il reste ${fmtEur(vente)}.`}</desc>
+
+        <text x={X0} y={16} className="ill-step">Taxe forfaitaire (par défaut)</text>
+        <rect x={X0} y={26} width={wTaxe} height={32} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <rect x={X0 + wTaxe} y={26} width={W - wTaxe} height={32} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={X0 + wTaxe + (W - wTaxe) / 2} y={47} textAnchor="middle" className="ill-in">{`${fmtEur(vente - taxe)} pour vous`}</text>
+        <text x={X0} y={78} className="ill-sub">{`${fmtEur(taxe)} de taxe (à gauche) : 11,5 % du prix`}</text>
+
+        <text x={X0} y={110} className="ill-step">Sur option, facture conservée</text>
+        <rect x={X0} y={120} width={wAchat} height={32} rx={4} fill="var(--surface-2)" stroke="var(--ink-3)" strokeWidth={1.5} />
+        <rect x={X0 + wAchat} y={120} width={W - wAchat} height={32} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={X0 + wAchat / 2} y={141} textAnchor="middle" className="ill-in">{`${fmtEur(achat)} payés`}</text>
+        <text x={X0 + wAchat + (W - wAchat) / 2} y={141} textAnchor="middle" className="ill-in">{`${fmtEur(gain)} de gain`}</text>
+        <text x={X0} y={174} className="ill-total" style={{ fill: 'var(--accent)' }}>{`${fmtEur(vente)} pour vous, ${fmtEur(impotOption)} d’impôt`}</text>
+
+        <line x1={X0} y1={190} x2={X0 + W} y2={190} stroke="var(--line)" strokeWidth={1} />
+        <text x={X0} y={214} className="ill-step">Sur option : part du gain exonérée</text>
+        {[1, 0.5, 0].map((part) => (
+          <g key={part}>
+            <line x1={P0} x2={P1} y1={py(part)} y2={py(part)} stroke="var(--line)" strokeWidth={1} />
+            <text x={P0 - 6} y={py(part) + 4} textAnchor="end" className="ill-sub">{`${part * 100} %`}</text>
+          </g>
+        ))}
+        <path d={`${marches} V ${BOT} H ${px(0)} Z`} fill="var(--accent-soft)" stroke="none" />
+        <path d={marches} fill="none" stroke="var(--accent)" strokeWidth={2} strokeLinejoin="round" />
+        <line x1={dotX} x2={dotX} y1={py(abattementDetentionMeubles(annees)) + 6} y2={BOT - 18} stroke="var(--accent)" strokeWidth={1.5} strokeDasharray="3 3" />
+        <circle cx={dotX} cy={py(abattementDetentionMeubles(annees))} r={5} fill="var(--accent)" stroke="var(--surface)" strokeWidth={2} />
+        <text x={dotX - 6} y={BOT - 12} textAnchor="end" className="ill-sub">{`votre pièce : ${annees} ans`}</text>
+        {[2, 12, 22].map((an) => (
+          <text key={an} x={px(an)} y={BOT + 18} textAnchor="middle" className="ill-sub">{`${an} ans`}</text>
+        ))}
+      </svg>
+      {children && <figcaption>{children}</figcaption>}
     </figure>
   );
 }

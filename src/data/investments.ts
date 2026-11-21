@@ -267,7 +267,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Aucun plafond', 'Placements du monde entier', 'Transmission : l’héritier reprend les titres à leur valeur au jour du décès ; s’il les revend, seul le gain réalisé depuis est imposé'],
     cons: ['Dividendes, intérêts et gains imposés dès l’année où on les touche'],
     timeSkills: 'Faible à modéré.',
-    example: 'Exemple fictif, celui du schéma : 1 000 € de gain en 2026 (plus-value ou dividendes). Le prélèvement forfaitaire unique de 31,4 % retient 314 € : 128 € d’impôt sur le revenu et 186 € de prélèvements sociaux. Il vous reste 686 €.',
+    example: 'Exemple fictif : 1 000 € de gain en 2026, plus-value ou dividendes, sans option pour le barème progressif. Le prélèvement forfaitaire unique de 31,4 % en retient 314 € : il vous reste 686 €.',
     sources: [{ label: 'impots.gouv.fr — Plus-values sur titres : imposition', url: 'https://www.impots.gouv.fr/particulier/questions/jai-realise-une-plus-value-mobiliere-comment-est-elle-imposee', official: true }, { label: 'impots.gouv.fr — Moins-values sur titres', url: 'https://www.impots.gouv.fr/particulier/questions/j-ai-realise-une-moins-value-mobiliere-comment-est-elle-prise-en-compte', official: true }, { label: 'BOFiP — Titres reçus par succession ou donation', url: 'https://bofip.impots.gouv.fr/bofip/3621-PGP.html/identifiant=BOI-RPPM-PVBMI-20-10-20-30-20191220', official: true }, S.prelevementsSociaux, S.amfCto],
     alternatives: ['pea', 'assurance-vie'],
     tags: ['enveloppe', 'bourse'],
