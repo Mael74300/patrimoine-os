@@ -8,11 +8,17 @@ const pages = import.meta.glob<string>('./pages/*.tsx', { query: '?raw', import:
 // Garde-fous d'accessibilité : contrastes des couleurs de texte et structure des tableaux.
 
 const root = css.slice(css.indexOf(':root'), css.indexOf('}', css.indexOf(':root')));
+// Palette du mode sombre : bloc « @media screen and (prefers-color-scheme: dark) { :root { … } } »
+const darkStart = css.indexOf('@media screen and (prefers-color-scheme: dark)');
+const dark = darkStart < 0 ? '' : css.slice(darkStart, css.indexOf('}', darkStart));
+const pick = (bloc: string, name: string): string | undefined => bloc.match(new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6})`))?.[1];
 const color = (name: string): string => {
-  const m = root.match(new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6})`));
+  const m = pick(root, name);
   if (!m) throw new Error(`variable --${name} introuvable`);
-  return m[1];
+  return m;
 };
+// Couleur en mode sombre : la valeur redéfinie, sinon celle du mode clair.
+const darkColor = (name: string): string => pick(dark, name) ?? color(name);
 
 function luminance(hex: string): number {
   const [r, g, b] = [1, 3, 5].map((i) => {
@@ -26,23 +32,55 @@ function contrast(a: string, b: string): number {
   return (hi + 0.05) / (lo + 0.05);
 }
 
-describe('contraste du texte (WCAG AA : 4,5 pour 1 au minimum)', () => {
-  const fonds = ['bg', 'surface', 'surface-2', 'accent-soft', 'warn-soft'];
-  const textes = ['ink', 'ink-2', 'ink-3', 'primary', 'accent', 'danger'];
-  for (const t of textes) {
-    for (const f of fonds) {
-      it(`--${t} sur --${f}`, () => {
-        // --accent et --danger ne servent pas de texte courant sur --accent-soft / --surface-2 : on teste les couples réels
-        if ((t === 'danger' || t === 'accent') && (f === 'surface-2' || f === 'warn-soft')) return;
-        expect(contrast(color(t), color(f))).toBeGreaterThanOrEqual(4.5);
+const palettes: [string, (n: string) => string][] = [['clair', color], ['sombre', darkColor]];
+
+for (const [mode, c] of palettes) {
+  describe(`contraste du texte, mode ${mode} (WCAG AA : 4,5 pour 1 au minimum)`, () => {
+    const fonds = ['bg', 'surface', 'surface-2', 'accent-soft', 'warn-soft', 'field'];
+    const textes = ['ink', 'ink-2', 'ink-3', 'primary', 'accent', 'danger'];
+    for (const t of textes) {
+      for (const f of fonds) {
+        it(`--${t} sur --${f}`, () => {
+          // --accent et --danger ne servent pas de texte courant sur --accent-soft / --surface-2 : on teste les couples réels
+          if ((t === 'danger' || t === 'accent') && (f === 'surface-2' || f === 'warn-soft')) return;
+          expect(contrast(c(t), c(f))).toBeGreaterThanOrEqual(4.5);
+        });
+      }
+    }
+    it('--warn sur --warn-soft', () => {
+      expect(contrast(c('warn'), c('warn-soft'))).toBeGreaterThanOrEqual(4.5);
+    });
+    it('texte des encadrés (--warn-ink, --accent-ink) sur leur fond', () => {
+      expect(contrast(c('warn-ink'), c('warn-soft'))).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(c('accent-ink'), c('accent-soft'))).toBeGreaterThanOrEqual(4.5);
+    });
+    // Aplats colorés qui portent du texte (boutons, onglets, segments de barre, schémas) : --primary-ink dessus
+    for (const f of ['primary', 'accent', 'chart-1']) {
+      it(`--primary-ink sur --${f}`, () => {
+        expect(contrast(c('primary-ink'), c(f))).toBeGreaterThanOrEqual(4.5);
       });
     }
-  }
-  it('--warn sur --warn-soft', () => {
-    expect(contrast(color('warn'), color('warn-soft'))).toBeGreaterThanOrEqual(4.5);
+    it('--gold-ink sur --gold', () => {
+      expect(contrast(c('gold-ink'), c('gold'))).toBeGreaterThanOrEqual(4.5);
+    });
+    it('bord des champs visible (3 pour 1 face au fond de page ou au champ, au moins l’un des deux)', () => {
+      expect(Math.max(contrast(c('field-line'), c('surface')), contrast(c('primary'), c('field')))).toBeGreaterThanOrEqual(3);
+    });
   });
-  it('texte blanc sur --primary', () => {
-    expect(contrast(color('primary-ink'), color('primary'))).toBeGreaterThanOrEqual(4.5);
+}
+
+describe('mode sombre', () => {
+  it('existe et ne s’applique qu’à l’écran (l’impression reste claire)', () => {
+    expect(darkStart).toBeGreaterThan(0);
+    expect(css).not.toMatch(/@media\s*\(prefers-color-scheme:\s*dark\)/);
+  });
+  it('déclare color-scheme: dark pour les champs et barres de défilement natifs', () => {
+    expect(css.slice(darkStart, darkStart + 3000)).toContain('color-scheme: dark');
+  });
+  it('aucun texte blanc écrit en dur sur un aplat qui change de teinte', () => {
+    // #fff reste permis sur les fonds fixes et foncés (bandeau d’accueil, pied de page)
+    const fautifs = css.split('\n').filter((l) => /color:\s*#fff\b/.test(l) && !/home-hero|site-footer/.test(l));
+    expect(fautifs).toEqual([]);
   });
 });
 
