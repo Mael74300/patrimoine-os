@@ -177,6 +177,16 @@ describe('les exemples chiffrés des guides sont exacts', () => {
     expect(PROFILE_MONTHS.variable.months).toBe(6);
     expect(PROFILE_MONTHS.independant.months).toBe(9);
   });
+  it('épargne de précaution : La finance pour tous est citée pour « 3 à 6 mois de revenus », jamais « de dépenses »', () => {
+    for (const slug of ['par-ou-commencer', 'combien-epargne-de-precaution']) {
+      const g = guides.find((x) => x.slug === slug)!;
+      const t = [...g.sections.flatMap((s) => s.body), ...(g.faq ?? []).map((f) => f.a)].join(' ').replace(/\u00a0/g, ' ');
+      expect(g.sources.some((s) => s.url.includes('bien-se-preparer-avant-d-investir')), slug).toBe(true);
+      expect(t, slug).toContain('La finance pour tous parle');
+      expect(t, slug).toMatch(/3 à 6 mois de revenus/);
+      expect(t, slug).not.toMatch(/trois à six mois de dépenses|3 à 6 mois de dépenses/);
+    }
+  });
   it('guide précaution : taux et plafonds des livrets = LIVRETS (tableau, aucun chiffre recopié dans le texte)', () => {
     const t = guides.find((x) => x.slug === 'combien-epargne-de-precaution')!.sections.find((s) => s.heading === 'Où placer cette réserve')!.body.join(' ').replace(/\u00a0/g, ' ');
     const by = Object.fromEntries(LIVRETS.map((l) => [l.id, l]));

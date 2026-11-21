@@ -24,6 +24,7 @@ export const INLINE_LINKS: InlineLink[] = [
   { phrase: 'guide Comparer les frais', to: '/guides/comparer-les-frais' },
   { phrase: 'guide Choisir son enveloppe', to: '/guides/choisir-son-enveloppe' },
   { phrase: 'guide sur la rentabilité locative', to: '/guides/rentabilite-locative' },
+  { phrase: 'guide sur l’épargne de précaution', to: '/guides/combien-epargne-de-precaution' },
   { phrase: 'Inflation et pouvoir d’achat', to: '/simulateurs/inflation' },
   { phrase: 'Rendement de mon placement', to: '/simulateurs/rendement-reel-de-mon-placement' },
   { phrase: 'Doubler son capital', to: '/simulateurs/interets-composes#doubler' },
