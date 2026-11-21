@@ -4,6 +4,8 @@ import { compareBalance, compareEtfImmo, fmtAns, fmtEur, fmtPct, netOfFees, rent
 import { load } from '../lib/storage';
 import { etfImmoAdvancedHint, etfImmoGapText, etfImmoTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, Fold, MobileFold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, ChoiceField, usePersistentState, JumpToResults } from '../components/ui';
+import { LIVRET_A } from '../data/livrets';
+import { PFU_PS_PCT, PFU_PS_RATE, PFU_TOTAL_PCT, PFU_TOTAL_RATE, PS_2025_PCT, PS_2025_RATE, pctLabel } from '../lib/calc/pfu';
 import { PS_OPTIONS, REGIMES, RENTAL_DEFAULTS, TMI_OPTIONS } from './SimImmobilier';
 
 type State = {
@@ -21,17 +23,17 @@ const DEFAULTS: State = {
   rental: RENTAL_DEFAULTS,
   etfReturn: 0.06,
   etfFees: 0.003,
-  etfTax: 0.314,
+  etfTax: PFU_TOTAL_RATE,
   horizon: 20,
   inflation: 0.02,
-  cashRate: 0.017,
+  cashRate: LIVRET_A.rate,
   saleCostRate: 0.05,
 };
 
 const ETF_TAX = [
-  { v: 0.314, label: '31,4 %', detail: 'compte-titres, PFU 2026' },
-  { v: 0.186, label: '18,6 %', detail: 'PEA après 5 ans, taux 2026' },
-  { v: 0.172, label: '17,2 %', detail: 'PEA, taux historique' },
+  { v: PFU_TOTAL_RATE, label: pctLabel(PFU_TOTAL_PCT), detail: 'compte-titres, PFU 2026' },
+  { v: PFU_PS_RATE, label: pctLabel(PFU_PS_PCT), detail: 'PEA après 5 ans, taux 2026' },
+  { v: PS_2025_RATE, label: pctLabel(PS_2025_PCT), detail: 'PEA, taux historique' },
   { v: 0, label: 'Aucune' },
 ];
 

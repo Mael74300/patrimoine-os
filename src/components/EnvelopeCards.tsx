@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { keepNumbersTogether } from '../lib/nbsp';
+import { PFU_IR_PCT, PFU_PS_PCT, PFU_TOTAL_PCT, pctLabel } from '../lib/calc/pfu';
 
 /** Une ligne d'une carte : un libellé et un extrait mot pour mot du texte du guide « choisir son enveloppe ». */
 export type EnvelopeRow = { label: string; text: string };
@@ -28,7 +29,7 @@ export const ENVELOPE_CARDS: EnvelopeCard[] = [
   { name: 'Compte-titres', to: '/encyclopedie/compte-titres', paragraph: 3, use: 'pour placer sans plafond, partout dans le monde, sans avantage fiscal', rows: [
     { label: 'Versements', text: 'aucune limite' },
     { label: 'Retraits', text: 'aucune limite' },
-    { label: 'Impôts', text: 'prélèvement forfaitaire unique (PFU, ou « flat tax ») de 31,4 % en 2026 (12,8 % d’impôt et 18,6 % de prélèvements sociaux)' },
+    { label: 'Impôts', text: `prélèvement forfaitaire unique (PFU, ou « flat tax ») de ${pctLabel(PFU_TOTAL_PCT)} en 2026 (${pctLabel(PFU_IR_PCT)} d’impôt et ${pctLabel(PFU_PS_PCT)} de prélèvements sociaux)` },
   ] },
 ];
 

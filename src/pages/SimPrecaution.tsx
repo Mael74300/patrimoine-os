@@ -4,7 +4,7 @@ import {
   allocateEnvelopes, fmtEur, fmtMonths, fmtNum, fmtPct, monthlySavingNeeded, monthsCovered, precautionPath,
   PROFILE_MONTHS, precautionSegments, type PrecautionInput, type PrecautionSegment, type PrecautionProfile,
 } from '../lib/finance';
-import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
+import { LIVRET_A, LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
 import { interestShareLabel, precautionPlacementTakeaway, precautionTakeaway, precautionTargetSub } from '../lib/takeaways';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, ChoiceField, Fold, Sources, usePersistentState, JumpToResults, CoverageGauge, SimNotice } from '../components/ui';
 
@@ -12,7 +12,7 @@ type State = PrecautionInput & { profile: PrecautionProfile; lep: 'oui' | 'non';
 
 const DEFAULTS: State = {
   profile: 'stable', monthlyExpenses: 2000, months: PROFILE_MONTHS.stable.months, extraReserve: 1000,
-  currentSavings: 2500, monthlySaving: 250, annualRate: 0.017, lep: 'non', deadline: 24,
+  currentSavings: 2500, monthlySaving: 250, annualRate: LIVRET_A.rate, lep: 'non', deadline: 24,
 };
 
 const SEG_CLASS: Record<PrecautionSegment['key'], string> = { start: 'pf-initial', deposits: 'pf-monthly', interest: 'pf-gain' };
@@ -82,7 +82,7 @@ export default function SimPrecaution() {
               <p className="small muted">Déjà remplis avec des valeurs d'exemple. Si vous ne savez pas, laissez-les telles quelles.</p>
               <NumberField label="Nombre de mois à couvrir" unit="mois" value={s.months} onChange={up('months')} min={0} max={24} step={1} />
               <NumberField label="Réserve pour dépenses prévisibles" unit="€" value={s.extraReserve} onChange={up('extraReserve')} min={0} step={500} hint="Franchise d'assurance, réparation, remplacement d'un appareil…" />
-              <NumberField label="Taux de rémunération" unit="%" percent value={s.annualRate} onChange={up('annualRate')} min={0} max={10} step={0.1} hint={`Livret A et LDDS : ${fmtPct(LIVRETS[1].rate)} ${LIVRETS_PERIOD}.`} />
+              <NumberField label="Taux de rémunération" unit="%" percent value={s.annualRate} onChange={up('annualRate')} min={0} max={10} step={0.1} hint={`Livret A et LDDS : ${fmtPct(LIVRET_A.rate)} ${LIVRETS_PERIOD}.`} />
               <ChoiceField
                 label="Éligible au LEP"
                 value={s.lep}

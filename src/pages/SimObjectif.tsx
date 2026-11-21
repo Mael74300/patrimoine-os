@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom';
 import { fmtEur, fmtPct, goalByDuration, goalScale, goalSplit, monthlyByRate, savingsGoal, type GoalDurationRow } from '../lib/finance';
 import { savingsGoalTakeaway } from '../lib/takeaways';
-import { LIVRETS, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
+import { LIVRET_A, LIVRETS_AS_OF, LIVRETS_PERIOD } from '../data/livrets';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice, Fold } from '../components/ui';
 
 type State = { target: number; current: number; years: number; annualRate: number };
 
-const DEFAULTS: State = { target: 20000, current: 2000, years: 5, annualRate: 0.017 };
-const LIVRET_A = LIVRETS.find((l) => l.id === 'livretA')!;
+const DEFAULTS: State = { target: 20000, current: 2000, years: 5, annualRate: LIVRET_A.rate };
 const DURATIONS = [2, 3, 5, 10, 15];
 
 /** Une barre par échéance : épargne de départ, versements et intérêts, à la même échelle pour toutes. */

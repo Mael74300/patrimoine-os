@@ -14,3 +14,6 @@ export const LIVRETS: Livret[] = [
   { id: 'livretA', name: 'Livret A', rate: 0.017, cap: 22950, slug: 'livret-a', source: { label: 'Service-Public.fr — Livret A', url: 'https://www.service-public.fr/particuliers/vosdroits/F2365' } },
   { id: 'ldds', name: 'LDDS', rate: 0.017, cap: 12000, slug: 'livret-a', source: { label: 'Service-Public.fr — Livret de développement durable et solidaire (LDDS)', url: 'https://www.service-public.fr/particuliers/vosdroits/F2368' } },
 ];
+
+/** Livret A : taux repris par les valeurs par défaut des simulateurs (un seul chiffre à changer au 1er février et au 1er août). */
+export const LIVRET_A = LIVRETS.find((l) => l.id === 'livretA')!;

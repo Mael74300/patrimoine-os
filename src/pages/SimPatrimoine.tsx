@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useMemo } from 'react';
+import { PFU_PS_PCT, PFU_PS_RATE, PFU_TOTAL_PCT, PFU_TOTAL_RATE, PS_2025_PCT, PS_2025_RATE, pctLabel } from '../lib/calc/pfu';
 import { wealthGoalTakeaway, wealthTakeaway } from '../lib/takeaways';
 import { afterTax, fmtEur, fmtPct, lateHalfGainsYears, netOfFees, projectGrowth, requiredMonthly, type SavingsChange, type Withdrawal } from '../lib/finance';
 import { Crumbs, Disclaimer, Fold, SimFaq, Takeaway, Kpi, LineChart, NumberField, PageHead, RowsEditor, SavedSims, ChoiceField, Tabs, usePersistentState, JumpToResults, CoverageGauge } from '../components/ui';
@@ -21,7 +22,7 @@ type State = { scenarios: Scenario[]; active: number; target: number };
 
 const SCENARIO: Scenario = {
   name: 'Scénario A', initial: 5000, monthly: 300, contributionGrowth: 0, years: 25, annualReturn: 0.05, annualFees: 0.005,
-  inflation: 0.02, taxRate: 0.314, withdrawals: [], savingsChanges: [],
+  inflation: 0.02, taxRate: PFU_TOTAL_RATE, withdrawals: [], savingsChanges: [],
 };
 const DEFAULTS: State = { scenarios: [SCENARIO], active: 0, target: 300000 };
 const COLORS = ['var(--chart-1)', 'var(--chart-4)', 'var(--chart-3)'];
@@ -33,9 +34,9 @@ const PROFILES = [
 ];
 const TAX_OPTIONS = [
   { v: 0, label: 'Aucune', detail: 'livret réglementé' },
-  { v: 0.172, label: '17,2 %', detail: 'prélèvements sociaux seuls, ex. assurance-vie après abattement' },
-  { v: 0.186, label: '18,6 %', detail: 'prélèvements sociaux, taux relevé 2026' },
-  { v: 0.314, label: '31,4 %', detail: 'PFU 2026, compte-titres' },
+  { v: PS_2025_RATE, label: pctLabel(PS_2025_PCT), detail: 'prélèvements sociaux seuls, ex. assurance-vie après abattement' },
+  { v: PFU_PS_RATE, label: pctLabel(PFU_PS_PCT), detail: 'prélèvements sociaux, taux relevé 2026' },
+  { v: PFU_TOTAL_RATE, label: pctLabel(PFU_TOTAL_PCT), detail: 'PFU 2026, compte-titres' },
 ];
 
 export default function SimPatrimoine() {

@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
+import { PFU_TOTAL_PCT, PFU_TOTAL_RATE, pctLabel } from '../lib/calc/pfu';
 import { fmtEur, fmtMonths, fmtPct, prepayVsInvest, prepayVsInvestByReturn } from '../lib/finance';
 import { prepayTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, MobileFold, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
 type State = { balance: number; annualRate: number; remainingYears: number; lump: number; annualReturn: number; annualFees: number; taxRate: number };
 
-const DEFAULTS: State = { balance: 150000, annualRate: 0.035, remainingYears: 15, lump: 20000, annualReturn: 0.05, annualFees: 0.005, taxRate: 0.314 };
+const DEFAULTS: State = { balance: 150000, annualRate: 0.035, remainingYears: 15, lump: 20000, annualReturn: 0.05, annualFees: 0.005, taxRate: PFU_TOTAL_RATE };
 
 export default function SimRembourser() {
   const [s, setS, up] = usePersistentState<State>('rembourser', DEFAULTS);
@@ -22,7 +23,7 @@ export default function SimRembourser() {
       </PageHead>
       <SimNotice>
         <strong>Le rendement est une hypothèse, pas une promesse.</strong> Un placement peut perdre de la valeur ; rembourser un crédit, lui, fait économiser des intérêts à coup sûr.
-        Le taux d'imposition de 31,4 % est celui du prélèvement forfaitaire unique de 2026 (<Link to="/encyclopedie/compte-titres">fiche Compte-titres</Link>) : changez-le si votre placement est dans une autre enveloppe.
+        Le taux d'imposition de {pctLabel(PFU_TOTAL_PCT)} est celui du prélèvement forfaitaire unique de 2026 (<Link to="/encyclopedie/compte-titres">fiche Compte-titres</Link>) : changez-le si votre placement est dans une autre enveloppe.
       </SimNotice>
       <div className="sim" style={{ marginTop: 24 }}>
         <form className="panel sim-form" onSubmit={(e) => e.preventDefault()}>
