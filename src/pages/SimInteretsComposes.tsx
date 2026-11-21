@@ -364,7 +364,7 @@ function Attendre() {
         labels={{ deposits: 'Vos versements' }}
       />
       <p className="muted small">
-        Les versements ont lieu en fin de mois. Attendre fait perdre les versements des mois d’attente et les intérêts qu’ils auraient produits jusqu’à l’arrivée : plus le délai est long par rapport à l’horizon, plus l’écart est grand.
+        Les versements ont lieu en fin de mois ; le rendement est supposé le même chaque année.
         Si le délai atteint l’horizon, aucun versement n’est possible et le rattrapage n’est pas défini. Les exemples ci-dessus sont fictifs.
       </p>
       <SavedSims simKey="attendre" current={s} onLoad={(d) => setS({ ...ATTENDRE, ...d })} />

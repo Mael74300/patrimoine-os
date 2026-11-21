@@ -350,14 +350,31 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(t).toContain(eur(r.gap));
     expect(simpleVsCompoundTakeaway({ initial: 0, years: 20, simpleFinal: 0, compoundFinal: 0, gap: 0 })).toBe('');
   });
-  it('intérêts composés : coût d’attendre et rattrapage', () => {
+  it('intérêts composés : coût d’attendre expliqué sans recopier les cases (exemple fictif par défaut)', () => {
     const r = delayCost({ monthly: 200, annualReturn: 0.05, years: 25, delayYears: 5 });
-    const t = digits(delayCostTakeaway({ monthly: 200, years: 25, delayYears: 5, ...r }));
-    expect(t).toContain(eur(r.startNow));
-    expect(t).toContain(eur(r.startLater));
-    expect(t).toContain(eur(r.cost));
-    expect(t).toContain(eur(r.catchUpMonthly as number));
+    const brut = delayCostTakeaway({ monthly: 200, years: 25, delayYears: 5, ...r });
+    const t = digits(brut);
+    // Ni les cases (coût, rattrapage) ni les capitaux des barres ne sont recopiés.
+    for (const v of [r.cost, r.catchUpMonthly as number, r.startNow, r.startLater]) expect(t).not.toContain(eur(v) + '€');
+    // Recalcul : 5 ans × 12 × 200 € = 12 000 € non versés ; 35 986 € / 12 000 € ≈ 3 fois ; 35 986 € / 5 ≈ 7 197 € par an ; 289 € / 200 € ≈ +44 %.
+    expect(Math.round(r.cost)).toBe(35986);
+    expect(t).toContain('12000€demoinsversés');
+    expect(brut).toContain('de 3\u00a0fois cette somme');
+    expect(t).toContain(`enmoyenne${eur(r.cost / 5)}€`);
+    expect(eur(r.cost / 5)).toBe('7197');
+    expect(Math.round((r.catchUpMonthly as number / 200 - 1) * 100)).toBe(44);
+    expect(brut).toContain('44\u00a0% de plus chaque mois pendant les 20\u00a0ans restants');
     expect(delayCostTakeaway({ monthly: 200, years: 5, delayYears: 5, startNow: 0, startLater: 0, cost: 0, catchUpMonthly: null })).toBe('');
+  });
+  it('intérêts composés : coût d’attendre avec un rendement nul ou négatif, ou un délai court', () => {
+    const z = delayCost({ monthly: 100, annualReturn: 0, years: 10, delayYears: 2 });
+    const tz = delayCostTakeaway({ monthly: 100, years: 10, delayYears: 2, ...z });
+    expect(tz).toContain('à peu près cette somme seulement');
+    expect(tz).toContain('25\u00a0% de plus');
+    const n = delayCost({ monthly: 100, annualReturn: -0.05, years: 20, delayYears: 5 });
+    expect(delayCostTakeaway({ monthly: 100, years: 20, delayYears: 5, ...n })).toContain('rendement négatif');
+    const c = delayCost({ monthly: 100, annualReturn: 0.05, years: 10, delayYears: 1 });
+    expect(delayCostTakeaway({ monthly: 100, years: 10, delayYears: 1, ...c })).not.toContain('Chaque année');
   });
   it('intérêts composés : épargne qui augmente', () => {
     const r = stepUp({ monthly: 200, annualIncrease: 0.03, annualReturn: 0.05, years: 25 });
