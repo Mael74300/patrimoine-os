@@ -10,7 +10,7 @@ import { simBlurb } from '../lib/simThemes';
 import { interleave, splitNext } from '../lib/nextLinks';
 import { NextList, NextMore, type NextItem } from '../components/NextList';
 import { DONATION_ABATTEMENTS, fmtEuros } from '../data/donationAbattements';
-import { SchemaActions, SchemaForet, SchemaDonation, SchemaDonationBilan, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaObligationBilan, SchemaEtfBilan, SchemaAssuranceVieBilan, SchemaOr, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaScpi, SchemaScpiBilan, SchemaCrowdfundingBilan, SchemaMicroBilan, SchemaUniteDeCompte, SchemaFondsEuros, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaRepriseBilan, SchemaLivretBilan, SchemaActiviteNumerique, SchemaPee, SchemaPeeBilan, SchemaLevierBilan, SchemaPeaBilan, SchemaForetBilan, SchemaFraisBilan } from '../components/schemas/fiches';
+import { SchemaActions, SchemaForet, SchemaDonation, SchemaDonationBilan, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaCrowdfunding, SchemaCrypto, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaObligationBilan, SchemaEtfBilan, SchemaAssuranceVieBilan, SchemaOr, SchemaOrBilan, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaScpi, SchemaScpiBilan, SchemaCrowdfundingBilan, SchemaMicroBilan, SchemaUniteDeCompte, SchemaFondsEuros, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaCreationEntreprise, SchemaRepriseEntreprise, SchemaRepriseBilan, SchemaLivretBilan, SchemaActiviteNumerique, SchemaPee, SchemaPeeBilan, SchemaLevierBilan, SchemaPeaBilan, SchemaForetBilan, SchemaFraisBilan } from '../components/schemas/fiches';
 import { SchemaPea, SchemaQuinzaines } from '../components/schemas/communs';
 import NotFound from './NotFound';
 import { DonationCalculator } from '../components/DonationCalculator';
@@ -124,7 +124,6 @@ export default function InvestmentPage() {
           {inv.slug === 'location-nue' && <SchemaLocationNue />}
           {inv.slug === 'etf-monde' && <SchemaEtf />}
           {inv.slug === 'cryptomonnaies' && <SchemaCrypto />}
-          {inv.slug === 'compte-titres' && <SchemaCto />}
           {inv.slug === 'donation' && <SchemaDonation />}
           {inv.slug === 'or' && <SchemaOr />}
           {inv.slug === 'livret-a' && <SchemaQuinzaines />}
@@ -178,6 +177,8 @@ export default function InvestmentPage() {
             if (inv.slug === 'assurance-vie') return <SchemaAssuranceVieBilan>{ex}</SchemaAssuranceVieBilan>;
             if (inv.slug === 'actions-individuelles') return <SchemaActions>{ex}</SchemaActions>;
             if (inv.slug === 'pea') return <SchemaPeaBilan>{ex}</SchemaPeaBilan>;
+            if (inv.slug === 'compte-titres') return <SchemaCto>{ex}</SchemaCto>;
+            if (inv.slug === 'or') return <SchemaOrBilan>{ex}</SchemaOrBilan>;
             if (inv.slug === 'pee') return <SchemaPeeBilan>{ex}</SchemaPeeBilan>;
             if (inv.slug === 'fonds-euros' || inv.slug === 'unites-de-compte') return <SchemaFraisBilan kind={inv.slug}>{ex}</SchemaFraisBilan>;
             if (inv.slug === 'groupements-forestiers') return <SchemaForetBilan>{ex}</SchemaForetBilan>;
