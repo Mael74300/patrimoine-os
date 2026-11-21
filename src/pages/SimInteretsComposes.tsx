@@ -300,7 +300,7 @@ function Simple() {
         <Kpi label="Écart en faveur des composés" value={fmtEur(r.gap)} sub="intérêts gagnés en plus en les réinvestissant" />
         <Kpi label="Rapport composé / simple" value={`× ${fmtNum(r.ratio)}`} sub="sur le capital final" />
       </div>
-      <Takeaway>{simpleVsCompoundTakeaway({ initial: s.initial, years: s.years, simpleFinal: r.simpleFinal, compoundFinal: r.compoundFinal, gap: r.gap })}</Takeaway>
+      <Takeaway>{simpleVsCompoundTakeaway({ initial: s.initial, years: s.years, annualRate: s.annualRate / 100, rows: r.rows, compoundFinal: r.compoundFinal, gap: r.gap })}</Takeaway>
       {bars && (
         <CapitalBars
           title="Ce que rapportent les intérêts des intérêts"
@@ -319,8 +319,7 @@ function Simple() {
       </table></div>
       </Fold>
       <p className="muted small">
-        Intérêts simples : seul le capital de départ rapporte, le même montant chaque année. Intérêts composés : les intérêts déjà gagnés rapportent à leur tour. Les deux coïncident la première année ; l’écart croît ensuite de plus en plus vite.
-        Les exemples ci-dessus sont fictifs.
+        Les deux méthodes donnent le même résultat la première année. Les exemples ci-dessus sont fictifs.
       </p>
       <SavedSims simKey="simple-compose" current={s} onLoad={(d) => setS({ ...SIMPLE, ...d })} />
     </Layout>
@@ -402,7 +401,7 @@ function Progressif() {
         <Kpi label="Capital en plus" value={fmtEur(r.extraCapital)} sub="par rapport au versement constant" />
         <Kpi label="Dernier versement mensuel" value={fmtEur(r.lastMonthly)} sub={`équivalent à ${fmtEur(r.equivalentFlatMonthly)} constants par mois`} />
       </div>
-      <Takeaway>{stepUpTakeaway({ monthly: s.monthly, years: s.years, flatCapital: r.flatCapital, steppedCapital: r.steppedCapital, extraCapital: r.extraCapital, lastMonthly: r.lastMonthly })}</Takeaway>
+      <Takeaway>{stepUpTakeaway({ monthly: s.monthly, years: s.years, annualIncrease: s.annualIncrease / 100, months: r.months, flatCapital: r.flatCapital, extraCapital: r.extraCapital, flatInvested: r.flatInvested, steppedInvested: r.steppedInvested })}</Takeaway>
       <CapitalBars
         title={`Le capital dans ${fmtAns(s.years)}`}
         lines={[{ name: 'Versement constant', row: bars.flat }, { name: 'Versement qui augmente', row: bars.stepped }]}

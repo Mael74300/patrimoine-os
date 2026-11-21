@@ -342,13 +342,31 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     expect(doublingTakeaway({ multiple: 2, exactYears: flat.exactYears, realYears: flat.realYears, realReturn: flat.realReturn })).toContain('pouvoir d\'achat n\'augmente pas');
     expect(doublingTakeaway({ multiple: 1, exactYears: null, realYears: null, realReturn: 0 })).toBe('');
   });
-  it('intérêts composés : simples ou composés', () => {
+  it('intérêts composés : simples ou composés, expliqué sans recopier les cases (exemple fictif par défaut)', () => {
     const r = simpleVsCompound({ initial: 10000, annualRate: 0.05, years: 20 });
-    const t = digits(simpleVsCompoundTakeaway({ initial: 10000, years: 20, ...r }));
-    expect(t).toContain(eur(r.simpleFinal));
-    expect(t).toContain(eur(r.compoundFinal));
-    expect(t).toContain(eur(r.gap));
-    expect(simpleVsCompoundTakeaway({ initial: 0, years: 20, simpleFinal: 0, compoundFinal: 0, gap: 0 })).toBe('');
+    const brut = simpleVsCompoundTakeaway({ initial: 10000, years: 20, annualRate: 0.05, ...r });
+    const t = digits(brut);
+    // Ni les cases (écart, rapport) ni les capitaux des barres ne sont recopiés.
+    for (const v of [r.gap, r.simpleFinal, r.compoundFinal]) expect(t).not.toContain(eur(v) + '€');
+    expect(brut).not.toContain('1,33');
+    // Recalcul : 5 % de 10 000 € = 500 € par an ; 10 000 × 1,05^19 × 0,05 ≈ 1 263 € la 20e année, soit 2,5 fois plus.
+    expect(t).toContain('rapporte500€chaqueannée');
+    expect(Math.round(10000 * Math.pow(1.05, 19) * 0.05)).toBe(1263);
+    expect(t).toContain('rapporte1263€');
+    expect(brut).toContain('2,5\u00a0fois plus');
+    // Écart à 14 ans : 2 799 € ; à 15 ans : 3 289 € ; final 6 533 € : plus de la moitié se forme pendant les 6 dernières années.
+    expect(Math.round(r.rows[14].gap)).toBe(2799);
+    expect(r.rows[20].gap - r.rows[15].gap).toBeLessThanOrEqual(r.rows[20].gap / 2);
+    expect(brut).toContain('les 6\u00a0dernières années');
+    expect(simpleVsCompoundTakeaway({ initial: 0, years: 20, annualRate: 0.05, rows: r.rows, compoundFinal: 0, gap: 0 })).toBe('');
+    const neg = simpleVsCompound({ initial: 10000, annualRate: -0.03, years: 10 });
+    expect(simpleVsCompoundTakeaway({ initial: 10000, years: 10, annualRate: -0.03, ...neg })).toContain('baisse donc moins vite');
+    const zero = simpleVsCompound({ initial: 10000, annualRate: 0, years: 10 });
+    expect(simpleVsCompoundTakeaway({ initial: 10000, years: 10, annualRate: 0, ...zero })).toContain('même résultat');
+    const court = simpleVsCompound({ initial: 10000, annualRate: 0.02, years: 3 });
+    const c = simpleVsCompoundTakeaway({ initial: 10000, years: 3, annualRate: 0.02, ...court });
+    expect(c).toContain('à peine plus');
+    expect(c).not.toContain('dernières années');
   });
   it('intérêts composés : coût d’attendre expliqué sans recopier les cases (exemple fictif par défaut)', () => {
     const r = delayCost({ monthly: 200, annualReturn: 0.05, years: 25, delayYears: 5 });
@@ -376,14 +394,29 @@ describe('phrase « Concrètement » : immobilier locatif', () => {
     const c = delayCost({ monthly: 100, annualReturn: 0.05, years: 10, delayYears: 1 });
     expect(delayCostTakeaway({ monthly: 100, years: 10, delayYears: 1, ...c })).not.toContain('Chaque année');
   });
-  it('intérêts composés : épargne qui augmente', () => {
+  it('intérêts composés : épargne qui augmente, d’où vient le capital en plus (exemple fictif par défaut)', () => {
     const r = stepUp({ monthly: 200, annualIncrease: 0.03, annualReturn: 0.05, years: 25 });
-    const t = digits(stepUpTakeaway({ monthly: 200, years: 25, ...r }));
-    expect(t).toContain(eur(r.steppedCapital));
-    expect(t).toContain(eur(r.flatCapital));
-    expect(t).toContain(eur(r.extraCapital));
-    expect(t).toContain(eur(r.lastMonthly));
-    expect(stepUpTakeaway({ monthly: 0, years: 25, ...r })).toBe('');
+    const brut = stepUpTakeaway({ monthly: 200, years: 25, annualIncrease: 0.03, ...r });
+    const t = digits(brut);
+    // Ni les cases (capital en plus, dernier versement, équivalent constant) ni les capitaux des barres ne sont recopiés.
+    for (const v of [r.extraCapital, r.lastMonthly, r.equivalentFlatMonthly, r.flatCapital, r.steppedCapital]) expect(t).not.toContain(eur(v) + '€');
+    // Recalcul : 87 502 € − 60 000 € = 27 502 € versés en plus, soit 27 502 / 300 ≈ 92 € par mois ;
+    // 41 486 € − 27 502 € = 13 983 € d'intérêts (arrondis) ; 27 502 / 41 486 ≈ 66 %.
+    expect(Math.round(r.steppedInvested - r.flatInvested)).toBe(27502);
+    expect(t).toContain('verser27502€deplussur25ans');
+    expect(t).toContain('environ92€deplusparmois');
+    expect(t).toContain(`nerapportentque${eur(r.extraCapital - (r.steppedInvested - r.flatInvested))}€d'intérêts`);
+    expect(Math.round((r.steppedInvested - r.flatInvested) / r.extraCapital * 100)).toBe(66);
+    expect(brut).toContain('66\u00a0% du capital en plus vient de votre effort');
+    expect(stepUpTakeaway({ monthly: 0, years: 25, annualIncrease: 0.03, ...r })).toBe('');
+    const plat = stepUp({ monthly: 200, annualIncrease: 0, annualReturn: 0.05, years: 25 });
+    expect(stepUpTakeaway({ monthly: 200, years: 25, annualIncrease: 0, ...plat })).toContain('ne change pas');
+    const baisse = stepUp({ monthly: 200, annualIncrease: -0.05, annualReturn: 0.05, years: 10 });
+    expect(stepUpTakeaway({ monthly: 200, years: 10, annualIncrease: -0.05, ...baisse })).toContain('de moins sur');
+    const nul = stepUp({ monthly: 200, annualIncrease: 0.03, annualReturn: 0, years: 10 });
+    expect(stepUpTakeaway({ monthly: 200, years: 10, annualIncrease: 0.03, ...nul })).toContain('Sans rendement');
+    const neg = stepUp({ monthly: 200, annualIncrease: 0.03, annualReturn: -0.02, years: 10 });
+    expect(stepUpTakeaway({ monthly: 200, years: 10, annualIncrease: 0.03, ...neg })).toContain('rendement négatif');
   });
   it('intérêts composés : conversion de taux', () => {
     const r = rateConversion({ annualRate: 0.05, periods: 12 });
