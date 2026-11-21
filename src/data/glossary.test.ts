@@ -66,3 +66,24 @@ describe('notions fiscales les plus citées', () => {
     for (const q of ['pfu', 'flat tax', 'tmi', 'prélèvements sociaux']) expect(search(q).some((r) => r.kind === 'Glossaire'), q).toBe(true);
   });
 });
+
+describe('liens vers le glossaire depuis les pages', () => {
+  it('chaque ancre /glossaire#… des pages mène à un terme existant', async () => {
+    const { glossaryId } = await import('./glossary');
+    const ids = new Set(glossary.map((t) => glossaryId(t.term)));
+    const pages = import.meta.glob<string>('../pages/*.tsx', { query: '?raw', import: 'default', eager: true });
+    const anchors = Object.values(pages).flatMap((src) => [...src.matchAll(/\/glossaire#([a-z0-9-]+)/g)].map((m) => m[1]));
+    expect(anchors).toContain('dic-document-d-informations-cles');
+    for (const a of anchors) expect(ids, a).toContain(a);
+  });
+});
+
+describe('simulateur Portefeuille : la note de risque est expliquée', () => {
+  it('la question fréquente renvoie au DIC et à l’échelle de 1 à 7', async () => {
+    const { simFaq } = await import('./simFaq');
+    const a = simFaq.portefeuille.find((i) => i.q.includes('niveau de risque'))!.a;
+    expect(a).toMatch(/document d’informations clés \(DIC\)/);
+    expect(a).toMatch(/de 1 à 7/);
+    expect(a).toMatch(/ne veut pas dire sans risque/);
+  });
+});
