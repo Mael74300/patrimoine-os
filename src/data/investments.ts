@@ -417,7 +417,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Revendable chaque jour de Bourse', 'Frais bas en passant par un ETF'],
     cons: ['Prix aussi changeant que celui des actions'],
     timeSkills: 'Faible à modéré.',
-    example: 'Exemple fictif : 5 000 € en actions de foncières. Si leur cours baisse de 10 % sur l’année, vos 5 000 € ne valent plus que 4 500 € ; si elles versent 4 % de dividendes, vous touchez 200 €, avant impôt. Les loyers encaissés par les foncières ne protègent pas des variations de la Bourse.',
+    example: 'Exemple fictif : 5 000 € en actions de foncières, une année où leur cours baisse de 10 % et où elles versent 4 % de dividendes, avant impôt. À retenir : les loyers encaissés par les foncières ne protègent pas des variations de la Bourse ; ici, les dividendes de l’année ne rattrapent pas la baisse du cours.',
     sources: [S.amf, S.amfFrais, S.lfptFraisBourse],
     alternatives: ['scpi', 'etf-monde'],
     tags: ['immobilier', 'bourse'],
