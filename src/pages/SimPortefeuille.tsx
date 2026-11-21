@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { portfolioProjectionNote, portfolioTakeaway, rebalanceTakeaway } from '../lib/takeaways';
 import { fmtEur, fmtPct, projectGrowth, rebalance, summarizePortfolio, type PortfolioLine } from '../lib/finance';
+import { LIVRET_A } from '../data/livrets';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, LineChart, NumberField, NumInput, PageHead, SavedSims, usePersistentState } from '../components/ui';
 
 type Line = PortfolioLine & { target: number };
@@ -12,7 +13,7 @@ const DEFAULTS: State = {
   lines: [
     { id: 'l1', label: 'ETF actions monde', amount: 12000, expectedReturn: 0.06, fees: 0.002, risk: 4, target: 0.5 },
     { id: 'l2', label: 'Fonds en euros', amount: 5000, expectedReturn: 0.025, fees: 0.006, risk: 1, target: 0.3 },
-    { id: 'l3', label: 'Livret A', amount: 3000, expectedReturn: 0.017, fees: 0, risk: 1, target: 0.2 },
+    { id: 'l3', label: 'Livret A', amount: 3000, expectedReturn: LIVRET_A.rate, fees: 0, risk: 1, target: 0.2 },
   ],
 };
 const COLORS = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)', 'var(--chart-4)', '#5a7d8c', '#a0a35a'];

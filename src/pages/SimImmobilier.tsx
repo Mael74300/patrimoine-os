@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { PFU_PS_PCT, PFU_PS_RATE, PS_2025_PCT, PS_2025_RATE, pctLabel } from '../lib/calc/pfu';
 import { Link } from 'react-router-dom';
 import { ADVERSE, adverseScenario, amortize, fmtEur, fmtPct, rentalAnalysis, rentalBalance, rentalProjection, rentalTaxDetail, type RentalBalance, type RentalTaxDetail, type RentalInput, type TaxRegime } from '../lib/finance';
 import { rentalCashflowSub, rentalTakeaway } from '../lib/takeaways';
@@ -9,7 +10,7 @@ export const RENTAL_DEFAULTS: RentalInput = {
   monthlyRent: 750, vacancyMonths: 1, propertyTax: 900, coOwnership: 600, insurancePno: 150,
   managementRate: 0, maintenanceRate: 0.05,
   downPayment: 22000, loanRate: 0.035, loanYears: 20, loanInsuranceRate: 0.003,
-  regime: 'micro-foncier', marginalRate: 0.3, socialRate: 0.172, microAllowance: 0.3, annualDepreciation: 4000,
+  regime: 'micro-foncier', marginalRate: 0.3, socialRate: PS_2025_RATE, microAllowance: 0.3, annualDepreciation: 4000,
   appreciation: 0.01, indexation: 0.015, horizon: 20,
 };
 
@@ -24,8 +25,8 @@ export const REGIMES: { v: TaxRegime; label: string; detail?: string; allowance?
 
 export const TMI_OPTIONS = [0, 0.11, 0.3, 0.41, 0.45].map((v) => ({ v, label: `${Math.round(v * 100)} %` }));
 export const PS_OPTIONS = [
-  { v: 0.172, label: '17,2 %', detail: 'revenus fonciers' },
-  { v: 0.186, label: '18,6 %', detail: 'taux général des revenus du patrimoine ; à confirmer pour le meublé' },
+  { v: PS_2025_RATE, label: pctLabel(PS_2025_PCT), detail: 'revenus fonciers' },
+  { v: PFU_PS_RATE, label: pctLabel(PFU_PS_PCT), detail: 'taux général des revenus du patrimoine ; à confirmer pour le meublé' },
 ];
 
 /** Première année d'un scénario : rendement net de charges et solde mensuel avant et après impôt. */
