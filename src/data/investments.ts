@@ -554,7 +554,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Entreprises absentes de la Bourse', 'Une part de l’épargne placée hors de la Bourse'],
     cons: ['Frais élevés', 'Argent bloqué des années', 'Résultats très variables selon le gérant'],
     timeSkills: 'Faible via des fonds, élevé en direct.',
-    example: 'Exemple fictif : 5 000 € souscrits dans un fonds et bloqués 8 ans, avec des frais de 3 % par an des sommes souscrites. Cela fait 150 € par an, soit 1 200 € sur 8 ans, prélevés quel que soit le résultat : les entreprises du fonds doivent d’abord rapporter ces 1 200 € pour que vous récupériez simplement vos 5 000 €. Rien n’est garanti.',
+    example: 'Exemple fictif : 5 000 € souscrits dans un fonds et bloqués 8 ans, avec des frais de 3 % par an des sommes souscrites, prélevés quel que soit le résultat. À retenir : les frais s’additionnent année après année, même sans gain ; les entreprises du fonds doivent d’abord les regagner pour que vous récupériez simplement votre mise. Rien n’est garanti.',
     sources: [S.amf, S.amfNonCote, S.bofipFcpi],
     alternatives: ['crowdfunding', 'etf-monde'],
     tags: ['non coté', 'risqué'],

@@ -4,7 +4,7 @@ import { pfuSplit, PFU_IR_PCT, PFU_PS_PCT, PFU_TOTAL_PCT } from '../../lib/calc/
 import { perDeductionBalance } from '../../lib/calc/per';
 import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, leverageMonth, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
 import { LIVRETS } from '../../data/livrets';
-import { abattementDetentionMeubles, assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, listedPropertyYear, microFoncierExample, recoveryAfterDrop, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
+import { abattementDetentionMeubles, assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, listedPropertyYear, fundFeesOnSubscribed, microFoncierExample, recoveryAfterDrop, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
 import { fmtEur2 } from '../../lib/calc/format';
 import { W } from './outils';
@@ -224,6 +224,56 @@ export function SchemaFonciereBilan({ children }: { children?: ReactNode }) {
         <rect x={1} y={236} width={338} height={64} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
         <text x={170} y={261} textAnchor="middle" className="ill-step">{`Bilan de l’année : −${fmtEur(mise - fin)}`}</text>
         <text x={170} y={284} textAnchor="middle" className="ill-sub">les loyers ne protègent pas de la Bourse</text>
+      </svg>
+      {children && <figcaption>{children}</figcaption>}
+    </figure>
+  );
+}
+
+/** Exemple fictif de la fiche Capital-investissement, rubrique « Exemple chiffré » : 5 000 € souscrits, bloqués 8 ans, frais de 3 % par an des sommes souscrites. */
+export const PRIVATE_EQUITY_BILAN = { mise: 5000, fraisPct: 3, ans: 8 } as const;
+
+/**
+ * Schéma de l'exemple chiffré de la fiche Capital-investissement (constat du 2026-11-21 : l'exemple restait un paragraphe
+ * de montants). Huit cases, une par année de blocage, chacune avec les frais prélevés même sans gain ; puis une barre à
+ * l'échelle de ce que le fonds doit valoir pour rendre la mise : la mise, plus les frais cumulés. Calcul pur
+ * `fundFeesOnSubscribed` (arithmétique, aucune règle fiscale ni réglementaire).
+ */
+export function SchemaPrivateEquityBilan({ children }: { children?: ReactNode }) {
+  const { mise, fraisPct, ans } = PRIVATE_EQUITY_BILAN;
+  const f = fundFeesOnSubscribed(mise, fraisPct, ans);
+  const cible = mise + f.total;
+  const pct = Math.round((f.total / mise) * 100);
+  const TW = 79;
+  const tx = (i: number) => 2 + (i % 4) * (TW + 7.33);
+  const ty = (i: number) => 30 + Math.floor(i / 4) * 58;
+  const BX = 2;
+  const BL = 336;
+  const wMise = (mise / cible) * BL;
+  const wFrais = (f.total / cible) * BL;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 304" role="img" aria-labelledby="ill-peb-t ill-peb-d" className="ill-svg">
+        <title id="ill-peb-t">{`Capital-investissement : les frais de chaque année doivent être regagnés avant de récupérer sa mise`}</title>
+        <desc id="ill-peb-d">{`Exemple fictif : ${fmtEur(mise)} souscrits dans un fonds de capital-investissement, bloqués ${ans} ans, avec des frais de ${fraisPct} % par an des sommes souscrites. Cela fait ${fmtEur(f.yearly)} chaque année, prélevés quel que soit le résultat, soit ${fmtEur(f.total)} sur ${ans} ans. Pour vous rendre simplement vos ${fmtEur(mise)}, le fonds doit donc valoir ${fmtEur(cible)} avant frais : ses entreprises doivent d’abord rapporter ${fmtEur(f.total)} de gains, soit ${pct} % de la mise. Longueurs proportionnelles aux montants.`}</desc>
+        <text x={170} y={16} textAnchor="middle" className="ill-step">{`Frais : ${fraisPct} % de ${fmtEur(mise)}, chaque année`}</text>
+        {Array.from({ length: ans }, (_, i) => (
+          <g key={i}>
+            <rect x={tx(i)} y={ty(i)} width={TW} height={48} rx={10} fill="var(--warn-soft)" stroke="var(--danger)" strokeWidth={2} />
+            <text x={tx(i) + TW / 2} y={ty(i) + 19} textAnchor="middle" className="ill-sub">{`année ${i + 1}`}</text>
+            <text x={tx(i) + TW / 2} y={ty(i) + 38} textAnchor="middle" className="ill-in" style={{ fill: 'var(--danger)' }}>{`−${fmtEur(f.yearly)}`}</text>
+          </g>
+        ))}
+        <text x={170} y={172} textAnchor="middle" className="ill-in">{`Pour vous rendre ${fmtEur(mise)}, le fonds doit valoir :`}</text>
+        <rect x={BX} y={182} width={wMise} height={34} rx={6} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={BX + wMise / 2} y={204} textAnchor="middle" className="ill-in">{`${fmtEur(mise)} : votre mise`}</text>
+        <rect x={BX + wMise} y={182} width={wFrais} height={34} rx={6} fill="var(--warn-soft)" stroke="var(--danger)" strokeWidth={2} />
+        <text x={BX + wMise + wFrais / 2} y={204} textAnchor="middle" className="ill-in" style={{ fill: 'var(--danger)' }}>{fmtEur(f.total)}</text>
+        <text x={BX + BL} y={234} textAnchor="end" className="ill-sub">{`frais : ${ans} × ${fmtEur(f.yearly)}`}</text>
+        <text x={BX} y={234} textAnchor="start" className="ill-sub">{`total : ${fmtEur(cible)}`}</text>
+        <rect x={1} y={244} width={338} height={56} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={170} y={267} textAnchor="middle" className="ill-step">{`À regagner d’abord : +${fmtEur(f.total)} (+${pct} %)`}</text>
+        <text x={170} y={288} textAnchor="middle" className="ill-sub">juste pour récupérer votre mise</text>
       </svg>
       {children && <figcaption>{children}</figcaption>}
     </figure>
