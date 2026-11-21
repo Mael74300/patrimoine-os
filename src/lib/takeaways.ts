@@ -287,12 +287,28 @@ export function simpleVsCompoundTakeaway(p: { initial: number; years: number; si
 }
 
 /** Coût d'attendre : capital perdu et effort de rattrapage. */
+/**
+ * Coût d'attendre : ce que signifient les deux cases, sans recopier leurs montants (coût de l'attente,
+ * versement pour rattraper) ni les capitaux déjà écrits sur les barres. Les seuls montants cités sont nouveaux :
+ * les versements sautés pendant l'attente, combien de fois cette somme le capital perd, le coût moyen d'une année
+ * d'attente et l'effort supplémentaire, en pourcentage, pour rattraper.
+ */
 export function delayCostTakeaway(p: { monthly: number; years: number; delayYears: number; startNow: number; startLater: number; cost: number; catchUpMonthly: number | null }): string {
   if (!(p.monthly > 0) || !(p.years >= 1) || !(p.delayYears > 0) || p.delayYears >= p.years) return '';
   const attente = fmtAns(p.delayYears);
-  const rattrape = p.catchUpMonthly === null ? '' : ` Pour arriver au même capital en commençant plus tard, il faudrait verser ${fmtEur(p.catchUpMonthly)} par mois au lieu de ${fmtEur(p.monthly)}.`;
-  if (Math.round(p.cost) <= 0) return `Avec ces hypothèses, attendre ${attente} ne change pas le capital final (${fmtEur(p.startNow)}).`;
-  return `Commencer maintenant donne ${fmtEur(p.startNow)} dans ${fmtAns(p.years)}, contre ${fmtEur(p.startLater)} en attendant ${attente} : l'attente coûte ${fmtEur(p.cost)}.${rattrape}`;
+  if (Math.round(p.cost) <= 0) return `Avec ces hypothèses, attendre ${attente} ne change pas le capital final.`;
+  const manques = p.monthly * Math.floor(p.delayYears * 12);
+  const fois = p.cost / manques;
+  const debut = `Attendre ${attente}, c'est ${fmtEur(manques)} de moins versés, mais un capital final réduit`;
+  const phrase1 = fois >= 1.1
+    ? `${debut} de ${fmtNum(Math.round(fois * 10) / 10)}\u00a0fois cette somme, car ces versements auraient rapporté des intérêts jusqu'au bout.`
+    : fois > 0.95
+      ? `${debut} d'à peu près cette somme seulement : avec ce rendement, les intérêts pèsent peu.`
+      : `${debut} de moins que cette somme : avec ce rendement négatif, ces versements auraient perdu de la valeur.`;
+  const parAn = p.delayYears >= 2 ? ` Chaque année d'attente coûte en moyenne ${fmtEur(p.cost / p.delayYears)} à l'arrivée.` : '';
+  const hausse = p.catchUpMonthly === null ? 0 : Math.round((p.catchUpMonthly / p.monthly - 1) * 100);
+  const rattrape = hausse > 0 ? ` Pour rattraper, il faudrait verser ${hausse} % de plus chaque mois pendant les ${fmtAns(p.years - p.delayYears)} restants.` : '';
+  return phrase1 + parAn + rattrape;
 }
 
 /** Épargne qui augmente : capital supplémentaire obtenu en relevant le versement chaque année. */
