@@ -64,8 +64,7 @@ export default function Entrepreneuriat() {
 
       <div className="panel cta-band">
         <p>
-          <strong>Votre projet en chiffres :</strong> ventes, charges, ce que vous pourrez vous verser et l’argent disponible, en scénario pessimiste,
-          central et optimiste.
+          <strong>Votre projet en chiffres :</strong> ce que vous pourrez vous verser et l’argent disponible, en scénario pessimiste, central et optimiste.
         </p>
         <Link className="btn" to="/simulateurs/entreprise">Chiffrer mon projet</Link>
       </div>
@@ -73,18 +72,19 @@ export default function Entrepreneuriat() {
       <h2>Séparer l'entreprise et le patrimoine</h2>
       <SchemaSeparer>
         <p>
-          Un entrepreneur a souvent presque tout son patrimoine dans sa société. Une épargne personnelle à côté (livrets, PEA, assurance-vie) limite la
-          casse si l'activité s'arrête. Le <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link> estime ce que donnerait le placement régulier
-          d'une partie des bénéfices.
+          Un entrepreneur a souvent presque tout son patrimoine dans sa société. Épargner à côté une partie des bénéfices limite la casse si
+          l'activité s'arrête : le <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link> estime ce que cela donnerait.
         </p>
       </SchemaSeparer>
       <h2>Avant de vous lancer</h2>
-      <div className="path-prep">
-        <Link className="panel path-before" to={`/encyclopedie/${competences.slug}`}>
-          <strong>{competences.name} →</strong>
-          <span>{competences.summary}</span>
-        </Link>
-        <div className="panel">
+      <div className="panel path-prep">
+        <div className="path-prep-col">
+          <h3>{competences.name}</h3>
+          <p className="muted">{competences.summary}</p>
+          <ul className="small">{competences.howToInvest.map((s) => <li key={s}>{s.replace('droits CPF', 'droits à la formation (CPF)')}</li>)}</ul>
+          <p className="path-more"><Link to={`/encyclopedie/${competences.slug}`} aria-label={`Lire la fiche ${competences.name}`}>Voir la fiche →</Link></p>
+        </div>
+        <div className="path-prep-col">
           <h3>Ressources publiques gratuites</h3>
           <ul className="small">
             <li><a href="https://bpifrance-creation.fr" target="_blank" rel="noopener noreferrer">Bpifrance Création</a> — choix du statut, financement, guides.</li>

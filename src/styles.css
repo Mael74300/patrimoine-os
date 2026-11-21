@@ -1373,19 +1373,22 @@ h2.gloss-letter::before { content: none; }
 .path-card .meter-rows { gap: 6px; margin: 0 0 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
 .path-card .path-steps { padding-left: 18px; margin: 0; }
 .path-card + .meters-legend, .grid + .meters-legend { margin-top: 12px; }
-.path-before { display: grid; gap: 4px; text-decoration: none; color: var(--ink-2); }
-/* « Avant de vous lancer » (Entrepreneuriat) : la fiche Formation et les ressources publiques côte à côte, l'avertissement dessous (chantier 182). */
-.path-prep { display: grid; gap: 12px; margin-top: 0.6rem; }
-@media (min-width: 701px) { .path-prep { grid-template-columns: 1fr 1fr; } }
-.path-prep .panel { margin: 0; }
-.path-prep .path-before { align-content: start; }
-.path-prep .path-before span { margin: 0; }
+/* « Avant de vous lancer » (Entrepreneuriat) : un seul panneau, la fiche Formation et les ressources publiques
+   en deux colonnes de même poids séparées d'un filet, l'avertissement au pied des ressources (chantiers 182 et 274). */
+.path-prep { display: grid; gap: 14px; margin-top: 0.6rem; }
+@media (min-width: 701px) {
+  .path-prep { grid-template-columns: 1fr 1fr; column-gap: 0; }
+  .path-prep-col + .path-prep-col { padding-left: 24px; margin-left: 24px; border-left: 1px solid var(--line); }
+}
+@media (max-width: 700px) { .path-prep-col + .path-prep-col { padding-top: 14px; border-top: 1px solid var(--line); } }
+.path-prep-col { display: flex; flex-direction: column; min-width: 0; }
 .path-prep h3 { margin: 0 0 6px; font-size: 1rem; }
+.path-prep p.muted { margin: 0 0 10px; }
 .path-prep ul { margin: 0; padding-left: 1.1rem; }
 .path-prep li + li { margin-top: 4px; }
+.path-prep ul + .path-warn { margin-top: 12px; }
+.path-prep .path-more { margin: auto 0 0; padding-top: 10px; font-weight: 600; }
 .path-prep + .notice { margin-top: 12px; }
-.path-before strong { color: var(--primary); }
-.path-before:hover strong, .path-before:focus-visible strong { text-decoration: underline; }
 .prose h3.next-sub { font-size: 1rem; margin: 1.1rem 0 0; color: var(--ink-2, inherit); }
 
 .guide-min-inline { display: none; }
@@ -1686,7 +1689,7 @@ details.fold.next-more > summary { padding: 10px 14px; }
 .cta-band.slim { margin-top: 16px; padding: 12px 16px; gap: 8px 20px; }
 .cta-band.slim p { flex-basis: 260px; font-size: 0.9375rem; line-height: 1.45; }
 @media (max-width: 520px) { .cta-band.slim .btn { width: auto; } }
-.path-prep .path-warn { margin: 10px 0 0; padding-top: 8px; border-top: 1px solid var(--line); color: var(--ink-2); }
+.path-prep .path-warn { margin: auto 0 0; padding-top: 10px; border-top: 1px solid var(--line); color: var(--ink-2); }
 /* Renégociation : frise « mois après mois » (frais remboursés jusqu'au point mort, puis gain). */
 .rt { margin: 14px -16px 0; padding: 12px 16px 10px; border-top: 1px solid var(--line); }
 .rt-title { margin: 0 0 2px; font-size: .95rem; font-weight: 700; color: var(--ink); }
