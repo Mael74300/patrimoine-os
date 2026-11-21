@@ -35,10 +35,10 @@ function LocalDataTools({ onClear }: { onClear: () => void }) {
   return (
     <>
       <p>
-        Pour retrouver vos simulations sur un autre appareil, exportez-les dans un fichier, puis importez ce fichier sur l'autre appareil.
-        Le fichier reste chez vous : rien n'est envoyé. L'import complète ou remplace vos données locales actuelles.
+        Pour les retrouver sur un autre appareil, exportez-les dans un fichier, puis importez-le là-bas : rien n'est envoyé. L'import
+        complète ou remplace vos données locales actuelles. Vous pouvez aussi tout effacer à tout moment.
       </p>
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+      <div className="btn-row">
         <button className="btn secondary" onClick={download}>Exporter mes données</button>
         <label className="btn secondary" style={{ cursor: 'pointer' }}>
           Importer un fichier
@@ -54,8 +54,8 @@ function LocalDataTools({ onClear }: { onClear: () => void }) {
 /** Rubriques de la politique de confidentialité ; « Mesure d'audience » seulement si la mesure est activée. */
 export function confidentialiteRubriques(audience: boolean): string[] {
   return [
-    'Ce que le site ne collecte pas', 'Les calculs restent sur votre appareil', 'Stockage local',
-    ...(audience ? ["Mesure d'audience"] : []), 'Hébergement', 'Liens externes', 'Vos droits',
+    'En bref', 'Stockage local',
+    ...(audience ? ["Mesure d'audience"] : []), 'Hébergement et sites tiers', 'Vos droits',
   ];
 }
 
@@ -65,25 +65,35 @@ export function Confidentialite() {
   const [cleared, setCleared] = useState(false);
   return (
     <ProseWithToc items={tocItems(confidentialiteRubriques(Boolean(config.analytics.goatcounter)))}>
-      <PageHead eyebrow="RGPD" title="Politique de confidentialité">Version du 10 octobre 2026, mise à jour pour la mesure d'audience.</PageHead>
+      <PageHead eyebrow="RGPD" title="Politique de confidentialité">
+        Ni compte, ni cookie : les montants que vous saisissez ne quittent pas votre appareil.
+      </PageHead>
 
-      <TocH2>Ce que le site ne collecte pas</TocH2>
-      <p>
-        {config.siteName} ne demande ni compte, ni adresse électronique, ni coordonnées bancaires, ni mot de passe. Il n'utilise aucun cookie
-        et aucun traceur publicitaire. Aucun formulaire n'envoie de données à un serveur.
-      </p>
-
-      <TocH2>Les calculs restent sur votre appareil</TocH2>
-      <p>
-        Les simulateurs s'exécutent entièrement dans votre navigateur. Les montants que vous saisissez ne sont transmis à personne, y compris à l'éditeur.
-      </p>
+      <TocH2>En bref</TocH2>
+      <div className="proscons">
+        <div className="panel cons">
+          <h3>Jamais demandé ni déposé</h3>
+          <ul>
+            <li>Aucun compte ni adresse électronique</li>
+            <li>Aucune coordonnée bancaire ni mot de passe</li>
+            <li>Aucun cookie ni traceur publicitaire</li>
+          </ul>
+        </div>
+        <div className="panel pros">
+          <h3>Ce qui reste chez vous</h3>
+          <ul>
+            <li>Les calculs : faits entièrement dans votre navigateur</li>
+            <li>Vos montants : transmis à personne, pas même à l’éditeur</li>
+            <li>Vos saisies : aucun formulaire ne les envoie à un serveur</li>
+          </ul>
+        </div>
+      </div>
 
       <TocH2>Stockage local</TocH2>
       <p>
-        Pour vous éviter de tout ressaisir, vos dernières saisies et les simulations que vous choisissez d'enregistrer sont conservées dans le
-        stockage local de votre navigateur (localStorage). Ce stockage sert uniquement une fonctionnalité que vous utilisez ; il ne sert ni à
-        vous suivre ni à mesurer l'audience. Ces données restent sur cet appareil, ne sont pas synchronisées entre vos appareils et ne sont jamais
-        envoyées. Vous pouvez les exporter, les importer ou les effacer à tout moment :
+        Vos dernières saisies et les simulations que vous enregistrez sont gardées dans le stockage local de votre navigateur (localStorage),
+        pour vous éviter de tout ressaisir. Elles restent sur cet appareil : jamais envoyées, ni synchronisées entre vos appareils, ni utilisées
+        pour vous suivre ou mesurer l'audience.
       </p>
       <LocalDataTools onClear={() => { clearAll(); setCleared(true); }} />
       {cleared && <p role="status" className="small" style={{ marginTop: 8 }}>Données locales effacées.</p>}
@@ -106,22 +116,20 @@ export function Confidentialite() {
         </>
       )}
 
-      <TocH2>Hébergement</TocH2>
+      <TocH2>Hébergement et sites tiers</TocH2>
       <p>
         Le site est hébergé par GitHub Pages. Comme tout hébergeur, GitHub peut enregistrer des données techniques de connexion, notamment
         l'adresse IP, à des fins de sécurité et de fonctionnement, et peut les traiter aux États-Unis. Ce traitement relève de GitHub :
         consultez sa <a href={config.legal.hostPrivacyUrl} target="_blank" rel="noopener noreferrer">déclaration de confidentialité</a>.
+        Les liens vers d'autres sites, comme les sources officielles, ouvrent des sites tiers, soumis à leurs propres politiques.
       </p>
-
-      <TocH2>Liens externes</TocH2>
-      <p>Les liens vers des sites officiels ou des partenaires ouvrent des sites tiers, soumis à leurs propres politiques.</p>
 
       <TocH2>Vos droits</TocH2>
       <p>
         L'éditeur ne détenant aucune donnée personnelle vous concernant, il n'en a aucune à vous communiquer ou à effacer. Pour toute question :
         {' '}{config.legal.contact}. Vous pouvez aussi saisir la <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">CNIL</a>.
       </p>
-      <p className="small muted">Si d'autres services tiers (publicité, par exemple) étaient ajoutés, cette page serait mise à jour et un consentement serait demandé lorsque la loi l'exige, avant tout dépôt de traceur.</p>
+      <p className="small muted">Version du 10 octobre 2026, mise à jour pour la mesure d'audience. Si d'autres services tiers (publicité, par exemple) étaient ajoutés, cette page serait mise à jour et un consentement serait demandé lorsque la loi l'exige, avant tout dépôt de traceur.</p>
     </ProseWithToc>
   );
 }
