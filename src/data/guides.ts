@@ -271,13 +271,13 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Construire un patrimoine avec une épargne limitée',
     summary: 'Les leviers qui comptent vraiment quand on ne peut épargner que quelques dizaines d’euros par mois.',
     readingMinutes: 3,
-    updatedOn: '2026-11-11',
+    updatedOn: '2026-11-21',
     sections: [
       {
         heading: 'Commencer petit, mais commencer',
         body: [
-          'Exemple fictif : 50 € par mois pendant 30 ans, avec un rendement supposé de 4 %, représentent environ 34 400 € pour 18 000 € versés.',
-          'Si les versements passent à 100 € au bout de 5 ans puis à 150 € au bout de 10 ans, le total atteint environ 78 200 € pour 45 000 € versés. Augmenter progressivement son effort pèse davantage que chercher le placement miracle.',
+          'Exemple fictif, celui du schéma : 30 ans d’épargne à 4 % par an supposé, avec 50 € par mois fixes, ou 100 € après 5 ans puis 150 € après 10 ans.',
+          'À retenir : même 50 € par mois comptent, car près de la moitié du capital final vient des gains. Augmenter son effort par paliers fait plus que doubler ce capital : bien plus efficace que chercher le placement miracle.',
         ],
       },
       {

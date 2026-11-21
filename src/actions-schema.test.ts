@@ -17,11 +17,16 @@ describe('schéma « Actions en direct » : 15 lignes ou 3', () => {
     expect(a).toEqual({ lines: 15, perLine: 1000, maxLossPct: 6.7 });
     expect(b).toEqual({ lines: 3, perLine: 5000, maxLossPct: 33.3 });
     for (const t of ['15 lignes de 1 000 €', '3 lignes de 5 000 €', '6,7 %', '33,3 %']) {
-      expect(ex).toContain(t);
       expect(texte).toContain(t);
+      expect(ex).not.toContain(t);
     }
     expect(texte).toContain('15 000 € placés en actions');
     expect(texte).toContain('perte 5 fois plus lourde');
+    // Le texte de la fiche donne les hypothèses du schéma et le même rapport, sans recopier ses montants.
+    expect(ex).toContain('15 000 € répartis sur 15 entreprises ou sur 3');
+    expect(b.perLine / a.perLine).toBe(5);
+    expect(ex).not.toContain('5 fois');
+    expect(ex).toContain('À retenir : plus on détient d’entreprises, moins une faillite pèse lourd');
   });
   it('deux rangées de même longueur : une case défaillante sur 15, puis sur 3', () => {
     const cases = [...svg.matchAll(/<rect x="([\d.]+)" y="(90|206)" width="([\d.]+)"[^>]*fill="var\(--(accent|warn)-soft\)"/g)];

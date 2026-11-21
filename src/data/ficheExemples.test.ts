@@ -339,12 +339,12 @@ describe('fiche Actions en direct : peu de lignes, une chute pèse lourd', () =>
     expect((1000 * 0.4) / 100).toBe(4);
   });
   it('le texte de la fiche cite les mêmes montants, reste marqué fictif et reprend le taux de la rubrique Frais', () => {
-    expect(ex).toMatch(/^Exemple fictif/);
-    expect(ex).toContain(`15 lignes de ${eur(1000)}`);
-    expect(ex).toContain(`au plus 6,7 % du total`);
-    expect(ex).toContain(`3 lignes de ${eur(5000)}`);
-    expect(ex).toContain(`mêmes ${eur(15000)} sur 3 lignes`);
-    expect(ex).toContain(`jusqu’à ${eur(5000)}, soit 33,3 %`);
+    expect(ex).toMatch(/^Exemple fictif, celui du schéma/);
+    expect(ex).toContain(`${eur(15000)} répartis sur ${quinze.lines} entreprises ou sur ${trois.lines}, dont l’une perd toute sa valeur`);
+    expect(ex).toContain('À retenir : plus on détient d’entreprises, moins une faillite pèse lourd');
+    // Les pertes en pourcentage restent sur le schéma, pas recopiées dans le texte.
+    for (const v of ['6,7 %', '33,3 %', `lignes de ${eur(5000)}`]) expect(ex).not.toContain(v);
+    expect(ex).toContain(`À l’achat de ${eur(1000)} d’actions`);
     expect(ex).toContain(`comptez ${eur(4)} de taxe`);
     expect(norm(investmentBySlug['actions-individuelles']!.fees.text)).toContain('taxe de 0,4 % du prix');
     expect(ex).toContain('de 0,4 %');
