@@ -590,7 +590,10 @@ describe('fiche Objets d’art : la taxe porte sur le prix, pas sur le gain', ()
   });
   it('le texte cite les mêmes montants, reste fictif et reprend les taux de la rubrique Fiscalité et Frais', () => {
     expect(ex).toMatch(/^Exemple fictif/);
-    for (const v of [5000, r.cost, 8000, 520, 7480, 1480, 6000, 390]) expect(ex).toContain(eur(v));
+    expect(ex).toContain(`adjugé ${eur(5000)}`);
+    expect(ex).toContain('À retenir');
+    // Les montants des reventes sont écrits sur le schéma de l’exemple (SchemaObjetsArtBilan), pas recopiés (constat du 2026-11-21).
+    for (const v of [r.cost, 8000, 520, 7480, 1480, 390, 5610]) expect(ex).not.toContain(eur(v));
     expect(ex).toContain('6,5 %');
     expect(ex).toContain('22 ans');
     expect(norm(fiche.tax.text)).toContain('6,5 %');

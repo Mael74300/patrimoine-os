@@ -17,6 +17,6 @@ describe('schéma de la fiche Objets d’art', () => {
   it('le calcul 6 % + 0,5 % = 6,5 % et l’exemple fictif de 8 000 € sont exacts', () => {
     expect(6 + 0.5).toBe(6.5);
     expect(Math.round(8000 * 0.065)).toBe(520);
-    expect(fiche).toContain('520 €');
+    expect(fiche).toContain('6,5 % du prix de vente');
   });
 });

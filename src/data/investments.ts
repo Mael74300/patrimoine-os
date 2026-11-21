@@ -600,7 +600,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Plaisir de posséder un objet', 'Peu lié aux marchés financiers'],
     cons: ['Aucun revenu régulier', 'Revente lente et incertaine', 'Prix difficile à estimer', 'Frais, assurance et conservation', 'Risque de contrefaçon'],
     timeSkills: 'Élevé : connaissance du marché et de l’objet.',
-    example: 'Exemple fictif : un tableau adjugé 5 000 € coûte environ 6 000 € avec les frais d’acheteur, de l’ordre de 20 %. Revendu 8 000 € : 520 € de taxe forfaitaire (6,5 %), il vous reste 7 480 €, soit environ 1 480 € de gain. Revendu 6 000 €, sans aucun gain : la taxe prend quand même 390 €. Détenu plus de 22 ans, facture conservée : 0 € d’impôt sur option pour le régime des plus-values. Avant assurance, conservation et frais de revente.',
+    example: 'Exemple fictif : un tableau adjugé 5 000 €, frais d’acheteur de l’ordre de 20 %. Par défaut, la taxe forfaitaire prend 6,5 % du prix de vente ; après plus de 22 ans de détention, facture conservée, la revente peut être exonérée sur option. À retenir : la taxe porte sur le prix, pas sur le gain ; revendre au prix payé fait donc perdre de l’argent. Avant assurance, conservation et frais de revente.',
     sources: [S.bofipTfop, S.bofipOptionPv, S.tfopForm, S.lfptArt],
     alternatives: ['or', 'etf-monde'],
     tags: ['tangible', 'peu liquide', 'risqué'],
