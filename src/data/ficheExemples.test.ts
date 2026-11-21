@@ -235,7 +235,10 @@ describe('fiches : exemples chiffrés menés jusqu’au résultat', () => {
     expect(r).toEqual({ afterDrop: 4500, dividends: 200 });
     const t = ex('foncieres-cotees');
     expect(t).toMatch(/^Exemple fictif/);
-    for (const s of [eur(5000), 'baisse de 10 %', `plus que ${eur(r.afterDrop)}`, '4 % de dividendes', `vous touchez ${eur(r.dividends)}`, 'avant impôt']) expect(t).toContain(s);
+    for (const s of [eur(5000), 'baisse de 10 %', '4 % de dividendes', 'avant impôt', 'ne rattrapent pas la baisse']) expect(t).toContain(s);
+    // Les montants calculés sont dessinés dans le schéma (SchemaFonciereBilan), pas recopiés dans la légende.
+    expect(t).not.toContain(eur(r.afterDrop));
+    expect(r.dividends).toBeLessThan(5000 - r.afterDrop);
   });
 });
 

@@ -4,7 +4,7 @@ import { pfuSplit, PFU_IR_PCT, PFU_PS_PCT, PFU_TOTAL_PCT } from '../../lib/calc/
 import { perDeductionBalance } from '../../lib/calc/per';
 import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, leverageMonth, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
 import { LIVRETS } from '../../data/livrets';
-import { abattementDetentionMeubles, assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, microFoncierExample, recoveryAfterDrop, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
+import { abattementDetentionMeubles, assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, listedPropertyYear, microFoncierExample, recoveryAfterDrop, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
 import { fmtEur2 } from '../../lib/calc/format';
 import { W } from './outils';
@@ -171,6 +171,61 @@ export function SchemaFonciereCotee() {
         </g>
         <text x={170} y={342} textAnchor="middle" className="ill-sub">Schéma de principe, sans chiffre</text>
       </svg>
+    </figure>
+  );
+}
+
+/** Exemple fictif de la fiche Foncières cotées, rubrique « Exemple chiffré » : 5 000 € en actions, cours en baisse de 10 % sur l’année, 4 % de dividendes. */
+export const FONCIERE_BILAN = { mise: 5000, baissePct: 10, dividendePct: 4 } as const;
+
+/**
+ * Schéma de l'exemple chiffré de la fiche Foncières cotées (constat du 2026-11-21 : l'exemple restait un paragraphe de
+ * quatre montants). Une année en cascade, hauteurs proportionnelles aux montants depuis zéro : le départ, la baisse du
+ * cours, les dividendes, puis le bilan (actions + dividendes encaissés). La ligne pointillée garde le niveau de départ.
+ * Calcul pur `listedPropertyYear` (arithmétique, aucune règle fiscale ni réglementaire).
+ */
+export function SchemaFonciereBilan({ children }: { children?: ReactNode }) {
+  const { mise, baissePct, dividendePct } = FONCIERE_BILAN;
+  const r = listedPropertyYear(mise, baissePct, dividendePct);
+  const fin = r.afterDrop + r.dividends;
+  const BASE = 188;
+  const H = 150;
+  const y = (v: number) => BASE - (v / mise) * H;
+  const BW = 66;
+  const xs = [8, 94, 180, 266];
+  const lab = (i: number, l1: string, l2: string) => (
+    <g>
+      <text x={xs[i] + BW / 2} y={BASE + 20} textAnchor="middle" className="ill-sub">{l1}</text>
+      {l2 && <text x={xs[i] + BW / 2} y={BASE + 38} textAnchor="middle" className="ill-sub">{l2}</text>}
+    </g>
+  );
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 304" role="img" aria-labelledby="ill-fcb-t ill-fcb-d" className="ill-svg">
+        <title id="ill-fcb-t">{`Foncières cotées : les dividendes de l’année ne compensent pas ici la baisse du cours`}</title>
+        <desc id="ill-fcb-d">{`Exemple fictif : ${fmtEur(mise)} en actions de foncières. Le cours baisse de ${baissePct} % sur l’année : les actions ne valent plus que ${fmtEur(r.afterDrop)}, soit ${fmtEur(mise - r.afterDrop)} de moins. Les foncières versent ${dividendePct} % de dividendes, soit ${fmtEur(r.dividends)} avant impôt. Au bout d’un an, actions et dividendes réunis font ${fmtEur(fin)}, ${fmtEur(mise - fin)} de moins qu’au départ. Hauteurs proportionnelles aux montants.`}</desc>
+        <line x1={xs[0] + BW} x2={xs[3] + BW} y1={y(mise)} y2={y(mise)} stroke="var(--ink-3)" strokeWidth={1.5} strokeDasharray="4 4" />
+        <line x1={xs[1] + BW} x2={xs[2]} y1={y(r.afterDrop)} y2={y(r.afterDrop)} stroke="var(--ink-3)" strokeWidth={1.5} strokeDasharray="4 4" />
+        <line x1={xs[2] + BW} x2={xs[3]} y1={y(fin)} y2={y(fin)} stroke="var(--ink-3)" strokeWidth={1.5} strokeDasharray="4 4" />
+        <rect x={xs[0]} y={y(mise)} width={BW} height={BASE - y(mise)} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={xs[0] + BW / 2} y={y(mise) - 8} textAnchor="middle" className="ill-in">{fmtEur(mise)}</text>
+        <rect x={xs[1]} y={y(mise)} width={BW} height={y(r.afterDrop) - y(mise)} rx={3} fill="var(--warn-soft)" stroke="var(--danger)" strokeWidth={2} />
+        <text x={xs[1] + BW / 2} y={y(mise) - 8} textAnchor="middle" className="ill-in" style={{ fill: 'var(--danger)' }}>{`−${fmtEur(mise - r.afterDrop)}`}</text>
+        <rect x={xs[2]} y={y(fin)} width={BW} height={y(r.afterDrop) - y(fin)} rx={2} fill="var(--accent)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={xs[2] + BW / 2} y={y(r.afterDrop) + 20} textAnchor="middle" className="ill-in" style={{ fill: 'var(--accent)' }}>{`+${fmtEur(r.dividends)}`}</text>
+        <rect x={xs[3]} y={y(r.afterDrop)} width={BW} height={BASE - y(r.afterDrop)} rx={4} fill="var(--surface-2)" stroke="var(--ink-3)" strokeWidth={2} />
+        <rect x={xs[3]} y={y(fin)} width={BW} height={y(r.afterDrop) - y(fin)} rx={2} fill="var(--accent)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={xs[3] + BW / 2} y={y(fin) + 30} textAnchor="middle" className="ill-in">{fmtEur(fin)}</text>
+        {lab(0, 'Au départ', '')}
+        {lab(1, 'Cours', `−${baissePct} %`)}
+        {lab(2, 'Dividendes', `${dividendePct} %`)}
+        {lab(3, 'Après', 'un an')}
+        <line x1={4} x2={336} y1={BASE} y2={BASE} stroke="var(--line)" strokeWidth={1.5} />
+        <rect x={1} y={236} width={338} height={64} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={170} y={261} textAnchor="middle" className="ill-step">{`Bilan de l’année : −${fmtEur(mise - fin)}`}</text>
+        <text x={170} y={284} textAnchor="middle" className="ill-sub">les loyers ne protègent pas de la Bourse</text>
+      </svg>
+      {children && <figcaption>{children}</figcaption>}
     </figure>
   );
 }
