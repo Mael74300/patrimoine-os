@@ -346,8 +346,10 @@ describe('fiche Cryptomonnaies : remonter après une forte baisse', () => {
   });
   it('le texte de la fiche cite les mêmes montants, reste marqué fictif et cohérent avec « Fonctionnement »', () => {
     expect(ex).toMatch(/^Exemple fictif/);
-    for (const v of [1000, r.afterDrop, r.sameRiseValue]) expect(ex).toContain(eur(v));
-    expect(ex).toContain(`il faut ${r.recoveryPct} % de hausse`);
+    // Depuis le schéma de l'exemple (2026-11-21), 510 € et +233 % sont écrits sur le dessin, pas recopiés dans le texte.
+    for (const v of [1000, r.afterDrop]) expect(ex).toContain(eur(v));
+    expect(ex).toContain('la même hausse ne suffit pas');
+    expect(r.recoveryPct).toBeGreaterThan(200);
     expect(ex).toContain('baisse de 70 %');
     expect(norm(investmentBySlug['cryptomonnaies']!.howItWorks)).toContain('supérieures à 70 %');
   });

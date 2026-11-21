@@ -4,7 +4,7 @@ import { pfuSplit, PFU_IR_PCT, PFU_PS_PCT, PFU_TOTAL_PCT } from '../../lib/calc/
 import { perDeductionBalance } from '../../lib/calc/per';
 import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, leverageMonth, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
 import { LIVRETS } from '../../data/livrets';
-import { abattementDetentionMeubles, assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, microFoncierExample, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
+import { abattementDetentionMeubles, assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, microFoncierExample, recoveryAfterDrop, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
 import { fmtEur2 } from '../../lib/calc/format';
 import { W } from './outils';
@@ -431,6 +431,56 @@ export function SchemaCrypto() {
         <text x={170} y={316} textAnchor="middle" className="ill-sub">si la plateforme fait faillite</text>
         <text x={170} y={356} textAnchor="middle" className="ill-sub">Schéma de principe d’après l’AMF</text>
       </svg>
+    </figure>
+  );
+}
+
+/** Exemple fictif de la fiche Cryptomonnaies, rubrique « Exemple chiffré » : 1 000 € investis, baisse de 70 %, puis hausse de 70 %. */
+export const CRYPTO_BILAN = { mise: 1000, baissePct: 70 } as const;
+
+/**
+ * Schéma de l'exemple chiffré de la fiche Cryptomonnaies (constat du 2026-11-21 : l'exemple restait un paragraphe, et
+ * l'asymétrie « une hausse de 70 % ne rattrape pas une baisse de 70 % » est contre-intuitive). Trois colonnes à la hauteur
+ * proportionnelle aux montants (départ, après la baisse, après la même hausse) ; la part qui manque pour revenir au
+ * départ est en pointillés. Calcul pur `recoveryAfterDrop` (arithmétique, aucune règle fiscale ni réglementaire).
+ */
+export function SchemaCryptoBilan({ children }: { children?: ReactNode }) {
+  const { mise, baissePct } = CRYPTO_BILAN;
+  const r = recoveryAfterDrop(mise, baissePct);
+  const BASE = 180;
+  const H = 150;
+  const h = (v: number) => (v / mise) * H;
+  const top = BASE - H;
+  const cols = [
+    { x: 14, v: mise, l1: 'Au départ', l2: '', fill: 'var(--accent-soft)', stroke: 'var(--accent)' },
+    { x: 130, v: r.afterDrop, l1: 'Après une', l2: `baisse de ${baissePct} %`, fill: 'var(--warn-soft)', stroke: 'var(--danger)' },
+    { x: 246, v: r.sameRiseValue, l1: 'Puis une', l2: `hausse de ${baissePct} %`, fill: 'var(--surface-2)', stroke: 'var(--ink-3)' },
+  ];
+  const BW = 80;
+  const third = cols[2];
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 296" role="img" aria-labelledby="ill-crb-t ill-crb-d" className="ill-svg">
+        <title id="ill-crb-t">{`Cryptomonnaies : après une baisse de ${baissePct} %, une hausse de ${baissePct} % ne ramène qu’à ${fmtEur(r.sameRiseValue)}`}</title>
+        <desc id="ill-crb-d">{`Exemple fictif : ${fmtEur(mise)} investis tombent à ${fmtEur(r.afterDrop)} après une baisse de ${baissePct} %. Si le cours remonte ensuite de ${baissePct} %, ils ne valent que ${fmtEur(r.sameRiseValue)}, loin du départ. Pour revenir à ${fmtEur(mise)} depuis ${fmtEur(r.afterDrop)}, il faut une hausse de ${r.recoveryPct} %. Colonnes proportionnelles aux montants.`}</desc>
+        <line x1={14 + BW} x2={third.x + BW} y1={top} y2={top} stroke="var(--ink-3)" strokeWidth={1.5} strokeDasharray="4 4" />
+        <text x={(14 + BW + third.x) / 2 + BW / 2 - 40} y={top - 8} textAnchor="middle" className="ill-sub">niveau de départ</text>
+        <rect x={third.x} y={top} width={BW} height={H - h(third.v)} rx={4} fill="none" stroke="var(--danger)" strokeWidth={1.5} strokeDasharray="4 4" />
+        <text x={third.x + BW / 2} y={top + (H - h(third.v)) / 2 + 4} textAnchor="middle" className="ill-sub" style={{ fill: 'var(--danger)' }}>manque</text>
+        {cols.map((c) => (
+          <g key={c.x}>
+            <rect x={c.x} y={BASE - h(c.v)} width={BW} height={h(c.v)} rx={4} fill={c.fill} stroke={c.stroke} strokeWidth={2} />
+            <text x={c.x + BW / 2} y={c === third ? BASE - h(c.v) + 20 : BASE - h(c.v) - 8} textAnchor="middle" className="ill-in">{fmtEur(c.v)}</text>
+            <text x={c.x + BW / 2} y={BASE + 20} textAnchor="middle" className="ill-sub">{c.l1}</text>
+            {c.l2 && <text x={c.x + BW / 2} y={BASE + 38} textAnchor="middle" className="ill-sub">{c.l2}</text>}
+          </g>
+        ))}
+        <line x1={4} x2={336} y1={BASE} y2={BASE} stroke="var(--line)" strokeWidth={1.5} />
+        <rect x={1} y={228} width={338} height={64} rx={12} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={170} y={253} textAnchor="middle" className="ill-step">{`Pour revenir à ${fmtEur(mise)} : +${r.recoveryPct} %`}</text>
+        <text x={170} y={276} textAnchor="middle" className="ill-sub">{`depuis ${fmtEur(r.afterDrop)}, soit plus que tripler`}</text>
+      </svg>
+      {children && <figcaption>{children}</figcaption>}
     </figure>
   );
 }

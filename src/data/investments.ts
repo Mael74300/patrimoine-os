@@ -641,7 +641,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Accessible avec quelques euros', 'Fortes hausses possibles'],
     cons: ['Prix qui peut chuter ou bondir très fortement, très vite', 'Pas de garantie des dépôts (FGDR) si la plateforme fait faillite', 'Risques de fraude et de piratage', 'Rien ne garantit leur valeur'],
     timeSkills: 'Modéré à élevé.',
-    example: 'Exemple fictif : 1 000 € investis peuvent valoir 300 € ou 2 000 € un an plus tard. Après cette baisse de 70 %, une hausse de 70 % ne ramène qu’à 510 € : il faut 233 % de hausse pour retrouver 1 000 €.',
+    example: 'Exemple fictif : 1 000 € investis peuvent valoir 300 € ou 2 000 € un an plus tard. Une perte se rattrape bien plus lentement qu’elle ne se produit : après une baisse de 70 %, la même hausse ne suffit pas.',
     sources: [S.amf, S.amfCrypto, S.amfListes, S.impots],
     alternatives: ['etf-monde', 'or'],
     tags: ['spéculatif', 'numérique', 'risqué'],
