@@ -315,10 +315,10 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Par où commencer pour construire son patrimoine',
     summary: 'Un ordre de priorité simple, de l’épargne de précaution aux investissements de long terme.',
     readingMinutes: 2,
-    updatedOn: '2026-11-18',
+    updatedOn: '2026-11-21',
     sections: [
       { heading: 'Connaître sa capacité d’épargne', body: ['Listez vos revenus nets et vos dépenses fixes sur trois mois. Passer de 100 € à 300 € d’épargne mensuelle a souvent plus d’effet que gagner un point de rendement.'] },
-      { heading: 'Constituer une épargne de précaution', body: ['Un repère courant est de trois à six mois de dépenses, à adapter à la stabilité de vos revenus. Les livrets réglementés (LEP si vous êtes éligible, puis Livret A et LDDS) sont les supports naturels de cette réserve.'] },
+      { heading: 'Constituer une épargne de précaution', body: ['Aucune règle officielle ne fixe son montant. La finance pour tous parle de 3 à 6 mois de revenus ; le guide sur l’épargne de précaution compte plutôt en mois de dépenses, de 3 à 9 selon la stabilité de vos revenus. Les livrets réglementés (LEP si vous êtes éligible, puis Livret A et LDDS) sont les supports naturels de cette réserve.'] },
       { heading: 'Rembourser les dettes coûteuses', body: ['Un crédit à la consommation à taux élevé coûte souvent plus que ce que rapporterait un placement. Le rembourser est un gain certain.'] },
       { heading: 'Ouvrir les bonnes enveloppes tôt', body: ['PEA et assurance-vie bénéficient d’avantages fiscaux qui dépendent de leur ancienneté (5 et 8 ans). Les ouvrir tôt, même avec un petit versement, fait courir ces délais.', 'Salarié ? Si votre entreprise a un plan d’épargne entreprise (PEE), elle peut y compléter vos versements (l’abondement) ; l’argent y est bloqué 5 ans, sauf cas de déblocage anticipé.'] },
       { heading: 'Investir régulièrement selon son horizon', body: ['L’argent nécessaire dans moins de trois ans n’a pas sa place en actions. Pour un horizon long, une allocation diversifiée et peu coûteuse, alimentée chaque mois, est une approche robuste.'] },
@@ -366,19 +366,19 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Combien mettre en épargne de précaution ?',
     summary: 'Trois, six ou neuf mois de dépenses : comment choisir son repère, où placer cette réserve et dans quel ordre remplir les livrets.',
     readingMinutes: 4,
-    updatedOn: '2026-11-11',
+    updatedOn: '2026-11-21',
     sections: [
       {
         heading: 'Aucune règle officielle, des repères',
         body: [
-          'Aucun texte ne fixe le montant d’une épargne de précaution. Les repères courants se comptent en mois de dépenses : environ 3 mois avec des revenus stables (CDI, fonction publique, retraite), 6 mois avec des revenus variables (CDD, intérim) et jusqu’à 9 mois pour un indépendant ou un dirigeant.',
+          'Aucun texte ne fixe le montant d’une épargne de précaution. Les repères courants se comptent en mois de dépenses : environ 3 mois avec des revenus stables (CDI, fonction publique, retraite), 6 mois avec des revenus variables (CDD, intérim) et jusqu’à 9 mois pour un indépendant ou un dirigeant. La finance pour tous parle, elle, de 3 à 6 mois de revenus ; compter en dépenses donne un montant plus bas si vous épargnez déjà chaque mois.',
           'Exemple fictif : avec 2 000 € de dépenses mensuelles, ces repères donnent respectivement 6 000 €, 12 000 € et 18 000 €. À ce montant, ajoutez les dépenses prévisibles (franchise d’assurance, réparation, appareil à remplacer).',
         ],
       },
       {
         heading: 'Ce qui fait varier le montant',
         body: [
-          'La stabilité de vos revenus, le nombre de personnes à charge, un seul ou deux revenus dans le foyer, l’âge du logement et du véhicule, ainsi que votre couverture santé et prévoyance. Un foyer à deux revenus stables peut viser le bas de la fourchette ; un indépendant avec un crédit en cours, le haut.',
+          'La stabilité des revenus, les personnes à charge, un ou deux revenus dans le foyer, l’âge du logement et de la voiture, la couverture santé et prévoyance. Deux revenus stables : le bas de la fourchette ; un indépendant avec un crédit en cours : le haut.',
         ],
       },
       {
@@ -395,9 +395,9 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       },
     ],
     related: ['livret-a', 'lep'],
-    sources: [SP('Livret A', 'F2365'), SP('Livret d’épargne populaire (LEP)', 'F2367'), SP('Livret de développement durable et solidaire (LDDS)', 'F2368'), BDF],
+    sources: [IFP_SE_PREPARER, SP('Livret A', 'F2365'), SP('Livret d’épargne populaire (LEP)', 'F2367'), SP('Livret de développement durable et solidaire (LDDS)', 'F2368'), BDF],
     faq: [
-      { q: 'Combien de mois de dépenses faut-il garder en épargne de précaution ?', a: 'Aucune règle officielle ne le fixe. Les repères courants sont d’environ 3 mois de dépenses avec des revenus stables, 6 mois avec des revenus variables et jusqu’à 9 mois pour un indépendant. À adapter à votre situation.' },
+      { q: 'Combien de mois de dépenses faut-il garder en épargne de précaution ?', a: 'Aucune règle officielle ne le fixe. Les repères courants sont d’environ 3 mois de dépenses avec des revenus stables, 6 mois avec des revenus variables et jusqu’à 9 mois pour un indépendant. La finance pour tous parle, elle, de 3 à 6 mois de revenus. À adapter à votre situation.' },
       { q: 'Sur quel placement garder son épargne de précaution ?', a: 'Sur des supports disponibles immédiatement et sans risque de perte en capital : les livrets réglementés (LEP si vous y avez droit, Livret A, LDDS), dans la limite de leurs plafonds.' },
       { q: 'Faut-il constituer l’épargne de précaution avant d’investir ?', a: 'C’est l’ordre de priorité le plus courant : une réserve évite de devoir vendre un placement au mauvais moment ou de recourir au découvert. Le montant dépend de vos revenus et de vos charges.' },
     ],
