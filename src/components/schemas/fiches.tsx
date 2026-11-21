@@ -4,7 +4,7 @@ import { pfuSplit, PFU_IR_PCT, PFU_PS_PCT, PFU_TOTAL_PCT } from '../../lib/calc/
 import { perDeductionBalance } from '../../lib/calc/per';
 import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, leverageMonth, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
 import { LIVRETS } from '../../data/livrets';
-import { abattementDetentionMeubles, artResale, assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, listedPropertyYear, fundFeesOnSubscribed, microFoncierExample, recoveryAfterDrop, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
+import { abattementDetentionMeubles, artResale, assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, listedPropertyYear, yearlySavingsValue, fundFeesOnSubscribed, microFoncierExample, recoveryAfterDrop, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
 import { fmtEur2 } from '../../lib/calc/format';
 import { W } from './outils';
@@ -1518,6 +1518,60 @@ export function SchemaCreationEntreprise() {
         <text x={170} y={266} textAnchor="middle" className="ill-in">est réel</text>
         <text x={170} y={308} textAnchor="middle" className="ill-sub">Schéma de principe</text>
       </svg>
+    </figure>
+  );
+}
+
+/** Exemple fictif de la fiche Créer son entreprise, rubrique « Exemple chiffré » (mêmes chiffres que le texte d’avant le schéma). */
+export const CREATION_BILAN = { benefice: 30000, epargne: 10000, taux: 4, annees: 10 } as const;
+
+/**
+ * Schéma de l'exemple chiffré de la fiche Créer son entreprise (constat du 2026-11-21 : l'exemple restait un paragraphe de cinq montants,
+ * une des deux dernières fiches sans exemple dessiné). Trois étapes : une année de bénéfice et la part épargnée ; dix années d'épargne
+ * empilées (dix cases de 10 000 €) ; les mêmes sommes placées à 4 % par an, avec la part due aux intérêts. Les deux dernières barres sont à
+ * la même échelle (le total placé = toute la largeur). Une case en pointillés rappelle que la valeur de revente peut s'ajouter, sans garantie.
+ * Calcul pur `yearlySavingsValue` (versements en fin d'année). Aucun chiffre nouveau par rapport à la fiche.
+ */
+export function SchemaCreationBilan({ children }: { children?: ReactNode }) {
+  const { benefice, epargne, taux, annees } = CREATION_BILAN;
+  const r = yearlySavingsValue(epargne, taux, annees);
+  const interets = r.withGrowth - r.saved;
+  const reste = benefice - epargne;
+  const X0 = 1;
+  const W = 338;
+  const wAn = (v: number) => (v / benefice) * W;
+  const w = (v: number) => (v / r.withGrowth) * W;
+  const gap = 2;
+  const pct = taux.toLocaleString('fr-FR');
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 330" role="img" aria-labelledby="ill-ceb-t ill-ceb-d" className="ill-svg">
+        <title id="ill-ceb-t">{`Créer son entreprise : ce que l’épargne tirée de l’activité devient en ${annees} ans`}</title>
+        <desc id="ill-ceb-d">{`Exemple fictif : une activité de conseil dégage ${fmtEur(benefice)} de bénéfice par an. ${fmtEur(epargne)} en sont épargnés chaque année, après impôts et cotisations ; les ${fmtEur(reste)} restants vont aux impôts, aux cotisations et aux dépenses. En ${annees} ans, cela fait ${annees} fois ${fmtEur(epargne)}, soit ${fmtEur(r.saved)} mis de côté. Placés à ${pct} % par an, ils deviennent environ ${fmtEur(r.withGrowth)}, dont environ ${fmtEur(interets)} d’intérêts. La valeur de revente de l’entreprise peut s’y ajouter, sans garantie. Les deux dernières barres sont à la même échelle.`}</desc>
+
+        <text x={X0} y={16} className="ill-step">{`Une année : ${fmtEur(benefice)} de bénéfice`}</text>
+        <rect x={X0} y={26} width={wAn(epargne) - gap} height={30} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <rect x={X0 + wAn(epargne)} y={26} width={wAn(reste)} height={30} rx={4} fill="var(--surface-2)" stroke="var(--ink-3)" strokeWidth={1.5} />
+        <text x={X0 + wAn(epargne) / 2} y={46} textAnchor="middle" className="ill-in">{fmtEur(epargne)}</text>
+        <text x={X0 + wAn(epargne) + wAn(reste) / 2} y={46} textAnchor="middle" className="ill-in">{`${fmtEur(reste)} : impôts et dépenses`}</text>
+        <text x={X0} y={76} className="ill-sub">épargnés, après impôts et cotisations</text>
+
+        <text x={X0} y={114} className="ill-step">{`En ${annees} ans : ${annees} fois ${fmtEur(epargne)}`}</text>
+        {Array.from({ length: annees }, (_, i) => (
+          <rect key={i} x={X0 + i * w(epargne)} y={124} width={w(epargne) - gap} height={30} rx={3} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />
+        ))}
+        <text x={X0} y={174} className="ill-sub">{`= ${fmtEur(r.saved)} mis de côté, sans les placer`}</text>
+
+        <text x={X0} y={212} className="ill-step">{`Placés à ${pct} % par an`}</text>
+        <rect x={X0} y={222} width={w(r.saved) - gap} height={30} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+        <rect x={X0 + w(r.saved)} y={222} width={w(interets)} height={30} rx={4} fill="var(--accent)" stroke="var(--accent)" strokeWidth={2} />
+        <text x={X0 + w(r.saved) / 2} y={242} textAnchor="middle" className="ill-in">{`${fmtEur(r.saved)} mis de côté`}</text>
+        <text x={X0} y={272} className="ill-sub">{`total ≈ ${fmtEur(r.withGrowth)}, dont ≈ ${fmtEur(interets)} d’intérêts`}</text>
+
+        <rect x={X0} y={286} width={W} height={36} rx={8} fill="none" stroke="var(--ink-2)" strokeWidth={1.5} strokeDasharray="5 4" />
+        <text x={170} y={309} textAnchor="middle" className="ill-in">+ la valeur de revente ? Sans garantie</text>
+      </svg>
+      {children && <figcaption>{children}</figcaption>}
     </figure>
   );
 }

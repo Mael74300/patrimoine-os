@@ -468,7 +468,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Potentiel de création de valeur le plus élevé', 'Revenu lié à ses compétences'],
     cons: ['Risque de perte élevé', 'Temps et énergie considérables'],
     timeSkills: 'Très élevé.',
-    example: 'Exemple fictif : une activité de conseil dégage 30 000 € de bénéfice par an, dont 10 000 € épargnés chaque année, après impôts et cotisations. En 10 ans, cela fait 100 000 € mis de côté ; placés à 4 % par an, environ 120 100 €. La valeur de revente de l’entreprise peut s’y ajouter, sans garantie.',
+    example: 'Exemple fictif : une activité de conseil dégage 30 000 € de bénéfice par an, dont 10 000 € épargnés chaque année, après impôts et cotisations, puis placés à 4 % par an. À retenir : l’essentiel du capital vient de ce que l’activité permet de mettre de côté ; les intérêts n’en ajoutent qu’une part. La valeur de revente de l’entreprise peut s’y ajouter, sans garantie.',
     sources: [S.impotsIndependants, S.impotsResultats, S.bpi, S.urssaf],
     alternatives: ['reprise-entreprise', 'activite-numerique'],
     tags: ['entrepreneuriat', 'actif'],

@@ -234,7 +234,9 @@ describe('fiches : exemples chiffrés menés jusqu’au résultat', () => {
     expect(r).toEqual({ saved: 100000, withGrowth: 120100 });
     const t = ex('creation-entreprise');
     expect(t).toMatch(/^Exemple fictif/);
-    for (const s of [`${eur(30000)} de bénéfice par an`, `${eur(10000)} épargnés chaque année`, `${eur(r.saved)} mis de côté`, '4 % par an', `environ ${eur(r.withGrowth)}`, 'sans garantie']) expect(t).toContain(s);
+    for (const s of [`${eur(30000)} de bénéfice par an`, `${eur(10000)} épargnés chaque année`, '4 % par an', 'sans garantie']) expect(t).toContain(s);
+    // Les montants calculés sont dessinés dans le schéma (SchemaCreationBilan, testé dans creationBilan.test.ts), pas recopiés.
+    for (const v of [r.saved, r.withGrowth]) expect(t).not.toContain(eur(v));
   });
 
   it('Foncières cotées : 5 000 €, baisse de 10 % → 4 500 € ; 4 % de dividendes → 200 €', () => {
