@@ -105,7 +105,8 @@ describe('changement de page au clavier', () => {
 describe('bouton « Haut de page »', () => {
   it('est masqué à l’impression et a une cible tactile d’au moins 44 px', () => {
     expect(css).toMatch(/\.back-top\s*\{[^}]*min-height:\s*44px/);
-    expect(css).toMatch(/@media print\s*\{\s*\.back-top\s*\{\s*display:\s*none/);
+    // Feuille d'impression regroupée (chantier 256) : .back-top figure dans la liste des éléments masqués.
+    expect(css).toMatch(/@media print\s*\{[\s\S]*?\.back-top[^{]*\{\s*display:\s*none/);
   });
 });
 

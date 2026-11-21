@@ -2,6 +2,7 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { config } from './config';
 import { trackPageview } from './lib/analytics';
+import { PRINT_OPEN_SELECTOR, openForPrint, printedAddress, restoreAfterPrint } from './lib/print';
 import { surveillerTextes } from './lib/typo';
 import { ROUTES } from './routes';
 
@@ -194,6 +195,36 @@ function Footer() {
   );
 }
 
+/**
+ * Impression : les réglages avancés d'un simulateur (hypothèses du calcul) et les listes repliées sur mobile
+ * s'impriment ouverts, puis la page retrouve son état (voir lib/print.ts et la feuille d'impression).
+ */
+function PrintPrep() {
+  useEffect(() => {
+    let opened: HTMLDetailsElement[] = [];
+    // Cumul : certains navigateurs envoient « beforeprint » deux fois (aperçu puis impression) ; tout ce qui a été ouvert est refermé.
+    const before = () => { opened = opened.concat(openForPrint(document.querySelectorAll<HTMLDetailsElement>(PRINT_OPEN_SELECTOR))); };
+    const after = () => { restoreAfterPrint(opened); opened = []; };
+    window.addEventListener('beforeprint', before);
+    window.addEventListener('afterprint', after);
+    return () => {
+      window.removeEventListener('beforeprint', before);
+      window.removeEventListener('afterprint', after);
+    };
+  }, []);
+  return null;
+}
+
+/** Ligne imprimée en bas de page (invisible à l'écran) : d'où vient la feuille et ce qu'elle n'est pas. */
+export function PrintSource() {
+  const { pathname } = useLocation();
+  return (
+    <p className="print-only print-source">
+      {config.siteName} · {printedAddress(config.siteUrl, pathname)} · Informations générales et outils pédagogiques, pas un conseil personnalisé.
+    </p>
+  );
+}
+
 /** Coquille de l'application, sans routeur : utilisée par le navigateur (BrowserRouter) et le pré-rendu (StaticRouter). */
 export default function App() {
   return (
@@ -216,6 +247,8 @@ export default function App() {
           </Suspense>
         </div>
       </main>
+      <PrintSource />
+      <PrintPrep />
       <Footer />
       <BackToTop />
     </>
