@@ -53,6 +53,10 @@ describe('intégrité des données éditoriales', () => {
         expect(src.label, `${g.slug} : ${src.label}`).toMatch(/ — /);
       }
   });
+  it('les fiches citent une page précise d’impots.gouv.fr, pas l’accueil « Particuliers » (reste : SCPI)', () => {
+    const accueil = investments.filter((i) => i.sources.some((s) => /^https:\/\/www\.impots\.gouv\.fr\/particulier\/?$/.test(s.url))).map((i) => i.slug);
+    expect(accueil).toEqual(['scpi']);
+  });
   it('les guides pointent vers des fiches existantes', () => {
     for (const g of guides) for (const r of g.related) expect(investmentBySlug[r], r).toBeDefined();
   });
