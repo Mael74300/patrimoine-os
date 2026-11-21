@@ -278,12 +278,28 @@ export function doublingTakeaway(p: { multiple: number; exactYears: number | nul
   return exact + reel;
 }
 
-/** Intérêts simples ou composés : écart au bout de la durée. */
-export function simpleVsCompoundTakeaway(p: { initial: number; years: number; simpleFinal: number; compoundFinal: number; gap: number }): string {
-  if (!(p.initial > 0) || !(p.years >= 1)) return '';
+/**
+ * Intérêts simples ou composés : ce que veut dire l'écart, sans recopier les cases (écart, rapport) ni les capitaux
+ * déjà écrits sur les barres. Les montants cités sont nouveaux : le gain fixe d'une année en intérêts simples, le gain
+ * de la dernière année en intérêts composés, et le nombre de dernières années pendant lesquelles se forme plus de la
+ * moitié de l'écart (l'effet demande du temps).
+ */
+export function simpleVsCompoundTakeaway(p: { initial: number; years: number; annualRate: number; rows: { year: number; compound: number; gap: number }[]; compoundFinal: number; gap: number }): string {
+  if (!(p.initial > 0) || !(p.years >= 1) || p.rows.length < 2) return '';
   if (Math.round(p.gap) === 0) return `Avec ces hypothèses, les deux méthodes donnent le même résultat : ${fmtEur(p.compoundFinal)} après ${fmtAns(p.years)}.`;
-  const sens = p.gap > 0 ? `${fmtEur(p.gap)} de plus avec les intérêts composés` : `${fmtEur(-p.gap)} de moins avec les intérêts composés`;
-  return `Avec ${fmtEur(p.initial)} placés pendant ${fmtAns(p.years)}, vous obtenez ${fmtEur(p.simpleFinal)} si seuls les ${fmtEur(p.initial)} de départ rapportent, et ${fmtEur(p.compoundFinal)} si les intérêts rapportent aussi : ${sens}.`;
+  if (p.annualRate < 0) return 'Avec un taux négatif, chaque perte porte sur un capital déjà réduit : en intérêts composés, le capital baisse donc moins vite qu\'en intérêts simples.';
+  const n = p.rows.length - 1;
+  const simpleGain = p.initial * p.annualRate;
+  const lastGain = p.rows[n].compound - p.rows[n - 1].compound;
+  const fois = Math.round((lastGain / simpleGain) * 10) / 10;
+  const compare = fois >= 1.2 ? `, soit ${fmtNum(fois)}\u00a0fois plus,` : ', à peine plus,';
+  const phrase1 = `En intérêts simples, le placement rapporte ${fmtEur(simpleGain)} chaque année, toujours la même somme. En intérêts composés, la dernière année rapporte ${fmtEur(lastGain)}${compare} car les intérêts déjà gagnés rapportent à leur tour.`;
+  if (n < 4) return phrase1;
+  // Plus petit k tel que les k dernières années forment plus de la moitié de l'écart final.
+  let k = 1;
+  while (k < n && p.rows[n].gap - p.rows[n - k].gap <= p.rows[n].gap / 2) k++;
+  const fin = k === 1 ? 'la dernière année' : `les ${k}\u00a0dernières années`;
+  return `${phrase1} Cet effet demande du temps : plus de la moitié de l'écart se forme pendant ${fin}.`;
 }
 
 /** Coût d'attendre : capital perdu et effort de rattrapage. */
@@ -311,11 +327,23 @@ export function delayCostTakeaway(p: { monthly: number; years: number; delayYear
   return phrase1 + parAn + rattrape;
 }
 
-/** Épargne qui augmente : capital supplémentaire obtenu en relevant le versement chaque année. */
-export function stepUpTakeaway(p: { monthly: number; years: number; flatCapital: number; steppedCapital: number; extraCapital: number; lastMonthly: number }): string {
-  if (!(p.monthly > 0) || !(p.years >= 1)) return '';
+/**
+ * Épargne qui augmente : d'où vient le capital en plus, sans recopier les cases (capital en plus, dernier versement)
+ * ni les capitaux des barres. Les montants cités sont nouveaux : ce que l'on verse en plus sur la durée (et par mois
+ * en moyenne), les intérêts qu'il produit, et la part du capital en plus qui vient de l'effort.
+ */
+export function stepUpTakeaway(p: { monthly: number; years: number; annualIncrease: number; months: number; flatCapital: number; extraCapital: number; flatInvested: number; steppedInvested: number }): string {
+  if (!(p.monthly > 0) || !(p.years >= 1) || !(p.months > 0)) return '';
   if (Math.round(p.extraCapital) === 0) return `Avec ces hypothèses, relever le versement chaque année ne change pas le capital final (${fmtEur(p.flatCapital)}).`;
-  return `En partant de ${fmtEur(p.monthly)} par mois et en relevant le versement chaque année, vous arrivez à ${fmtEur(p.steppedCapital)} après ${fmtAns(p.years)}, contre ${fmtEur(p.flatCapital)} avec un versement constant : ${fmtEur(p.extraCapital)} d'écart. La dernière année, le versement atteint ${fmtEur(p.lastMonthly)} par mois.`;
+  const extraVerse = p.steppedInvested - p.flatInvested;
+  const extraInterets = p.extraCapital - extraVerse;
+  const duree = fmtAns(p.years);
+  if (extraVerse < 0) return `Baisser le versement de ${fmtPct(-p.annualIncrease)} chaque année, c'est verser ${fmtEur(-extraVerse)} de moins sur ${duree}, et perdre aussi ce que ces sommes auraient rapporté.`;
+  const debut = `Relever le versement de ${fmtPct(p.annualIncrease)} chaque année, c'est verser ${fmtEur(extraVerse)} de plus sur ${duree}, soit environ ${fmtEur(extraVerse / p.months)} de plus par mois en moyenne.`;
+  if (Math.round(extraInterets) < 0) return `${debut} Avec ce rendement négatif, ces versements perdent de la valeur : le capital en plus est inférieur à ce que vous versez en plus.`;
+  if (Math.round(extraInterets) === 0) return `${debut} Sans rendement, ces versements ne rapportent rien : tout le capital en plus vient de votre effort.`;
+  const part = Math.round((extraVerse / p.extraCapital) * 100);
+  return `${debut} Arrivés plus tard, ces versements ne rapportent que ${fmtEur(extraInterets)} d'intérêts : ${part}\u00a0% du capital en plus vient de votre effort.`;
 }
 
 /** Conversion de taux : pourquoi ne pas simplement diviser le taux annuel. */
