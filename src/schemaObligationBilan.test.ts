@@ -29,7 +29,9 @@ describe('fiche Obligations : schéma de l’exemple chiffré', () => {
     expect(bondCoupons(amount, ratePct, years)).toEqual({ coupon: 30, totalCoupons: 150, received: 1150 });
     expect(sensitivityChangePct(sensitivity, rateRisePoints)).toBe(-5);
     const t = investmentBySlug.obligations.example.replace(/[  ]/g, ' ');
-    for (const s of ['1 000 €', 'pendant 5 ans', 'coupon de 3 %', '30 € chaque année', '150 € en tout', 'sensibilité est de 5', 'environ 5 %', 'de 1 point']) expect(t).toContain(s);
+    for (const s of ['1 000 €', 'pendant 5 ans', 'coupon de 3 %', 'sensibilité est de 5', 'environ 5 %', 'de 1 point']) expect(t).toContain(s);
+    // Coupons et total sont écrits sur le schéma ; le texte, sa légende, ne les recopie pas.
+    for (const s of ['30 €', '150 €', '1 150 €']) expect(t).not.toContain(s);
   });
 
   it('montants affichés : 5 coupons de 30 €, 1 000 € rendus, 1 150 € au total, environ −5 %', () => {

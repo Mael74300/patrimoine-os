@@ -205,7 +205,9 @@ describe('fiches : exemples chiffrés menés jusqu’au résultat', () => {
     expect(r).toEqual({ coupon: 30, totalCoupons: 150, received: 1150 });
     const t = ex('obligations');
     expect(t).toMatch(/^Exemple fictif/);
-    for (const s of [`prêtez ${eur(1000)}`, 'pendant 5 ans', 'coupon de 3 % par an', `${eur(r.coupon)} chaque année`, `${eur(r.totalCoupons)} en tout`, `vos ${eur(1000)} à l’échéance`, 'avant impôt et frais']) expect(t).toContain(s);
+    for (const s of [`prêtez ${eur(1000)}`, 'pendant 5 ans', 'coupon de 3 % par an', 'avant impôt et frais', 'puis rend la somme prêtée']) expect(t).toContain(s);
+    // 30 € par an et 150 € en tout sont écrits sur le schéma de l’exemple (SchemaObligationBilan), pas recopiés.
+    for (const v of [r.coupon, r.totalCoupons, r.received]) expect(t).not.toContain(eur(v));
   });
 
   it('Capital-investissement : 3 % par an de 5 000 € souscrits pendant 8 ans → 150 € par an, 1 200 € en tout', () => {
@@ -449,12 +451,13 @@ describe('fiches PEL et LEP : une année comparée au Livret A', () => {
     expect(tax).toContain('Taux de 2,00 % pour les PEL ouverts à partir du 1er janvier 2026');
     expect(tax).toContain('prélèvement forfaitaire unique de 30 %');
     const r = pelVsLivretA(10000, 2, 30, livretA.rate * 100);
-    expect(ex).toMatch(/^Exemple fictif/);
-    expect(ex).toContain(`${eur(10000)} sur un PEL ouvert en 2026, à ${pct(2)}, rapportent ${eur(r.gross)}`);
-    expect(ex).toContain(`de 30 % en retient ${eur(r.tax)} : il reste ${eur(r.net)}`);
+    expect(ex).toMatch(/^Exemple fictif, celui du schéma/);
+    expect(ex).toContain(`${eur(10000)} sur un PEL ouvert en 2026, à ${pct(2)}`);
+    expect(ex).toContain('le PEL passe derrière le Livret A une fois le prélèvement forfaitaire unique de 30 % payé');
     expect(ex).toContain(`Livret A à ${pct(livretA.rate * 100)}`);
-    expect(ex).toContain(`rapporterait ${eur(r.livret)}`);
     expect(ex).toContain(`descend sous ${pct(r.breakEvenPct)}`);
+    // Intérêts, impôt et reste sont écrits sur le schéma : le texte n’en recopie aucun.
+    for (const v of [r.gross, r.tax, r.net, r.livret]) expect(ex).not.toContain(eur(v));
     expect(r.net).toBeLessThan(r.livret);
   });
   it('LEP : 250 € contre 170 €, soit 80 € de plus, au plafond de 10 000 €', () => {
@@ -462,11 +465,14 @@ describe('fiches PEL et LEP : une année comparée au Livret A', () => {
     const ex = norm(fiche.example);
     expect(lepVsLivretA(10000, 2.5, 1.7)).toEqual({ lep: 250, livret: 170, gap: 80 });
     const r = lepVsLivretA(lepLivret.cap, lepLivret.rate * 100, livretA.rate * 100);
-    expect(ex).toMatch(/^Exemple fictif/);
-    expect(ex).toContain(`${eur(lepLivret.cap)} à ${pct(lepLivret.rate * 100)} (le plafond du livret)`);
-    expect(ex).toContain(`rapportent ${eur(r.lep)} d’intérêts, sans impôt`);
-    expect(ex).toContain(`Livret A à ${pct(livretA.rate * 100)}, la même somme rapporterait ${eur(r.livret)}`);
-    expect(ex).toContain(`${eur(r.gap)} de plus par an`);
+    expect(ex).toMatch(/^Exemple fictif, celui du schéma/);
+    expect(ex).toContain(`${eur(lepLivret.cap)} (le plafond du livret)`);
+    expect(ex).toContain('le LEP rapporte nettement plus que le Livret A, sans impôt lui non plus');
+    // La condition de revenus est écrite sur le schéma (« le LEP est réservé aux foyers sous un plafond de revenus »).
+    expect(plain(renderToStaticMarkup(createElement(SchemaLivretBilan, { kind: 'lep', children: 'x' })))).toContain('aux foyers sous un plafond de revenus');
+    // 250 €, 170 € et 80 € de plus sont écrits sur le schéma : le texte n’en recopie aucun (ni les taux, repris de LIVRETS).
+    for (const v of [r.lep, r.livret, r.gap]) expect(ex).not.toContain(eur(v));
+    expect(r.lep / r.livret).toBeGreaterThan(1.4); // « nettement plus » : près de moitié plus
     expect(norm(fiche.tax.text)).toContain(`Taux : ${pct(lepLivret.rate * 100)}`);
   });
 });
@@ -488,12 +494,13 @@ describe('fiches Compte à terme, Unités de compte et Forêt : exemples recalcu
     const fiche = investmentBySlug['compte-a-terme']!;
     const ex = norm(fiche.example);
     expect(norm(fiche.tax.text)).toContain('prélèvement forfaitaire unique de 31,4 %');
-    expect(ex).toMatch(/^Exemple fictif/);
-    expect(ex).toContain(`${eur(10000)} à 3 % brut rapportent ${eur(r.gross)}`);
-    expect(ex).toContain(`31,4 % en retient ${cents(r.tax)} : il reste ${cents(r.net)}, soit ${pct(r.netPct)} net`);
+    expect(ex).toMatch(/^Exemple fictif, celui du schéma/);
+    expect(ex).toContain(`${eur(10000)} placés un an à 3 % brut`);
+    expect(ex).toContain(`prélèvement forfaitaire unique de 31,4 % ramène ces 3 % à ${pct(r.netPct)} net`);
     expect(ex).toContain(`Livret A à ${pct(livretA.rate * 100)}`);
-    expect(ex).toContain(`rapporterait ${eur(r.livret)}`);
     expect(ex).toContain(`dépasse ${pct(r.breakEvenPct)}`);
+    // Constat du 2026-11-20 (chantier 253) : 300 €, 94,20 €, 205,80 € et 170 € sont sur le schéma, plus dans le texte.
+    for (const v of [eur(r.gross), cents(r.tax), cents(r.net), eur(r.livret)]) expect(ex).not.toContain(v);
   });
 
   it('Unités de compte : 6 % moins 1,5 % de frais par an, environ 4,4 % ; 23 700 € au lieu de 32 100 € en 20 ans', () => {
@@ -517,12 +524,14 @@ describe('fiches Compte à terme, Unités de compte et Forêt : exemples recalcu
     const tax = norm(fiche.tax.text);
     for (const m of ['Crédit d’impôt de 25 %', 'plafonnées à 6 250 € pour une personne seule et 12 500 € pour un couple']) expect(tax).toContain(m);
     const ex = norm(fiche.example);
-    expect(ex).toMatch(/^Exemple fictif/);
-    expect(ex).toContain(`Seuls ${eur(seul.retained)} sont retenus`);
-    expect(ex).toContain(`soit ${cents(seul.credit)} : ${pct(seul.effectivePct, 1)} de la somme versée`);
-    expect(ex).toContain(`coûtent donc ${cents(seul.netCost)}, hors frais`);
-    expect(ex).toContain(`(plafond de ${eur(12500)})`);
-    expect(ex).toContain(`${eur(couple.credit)} de crédit`);
+    expect(ex).toMatch(/^Exemple fictif, celui du schéma/);
+    expect(ex).toContain(`plafonnée à ${eur(seul.retained)}`);
+    expect(ex).toContain(`un crédit que de ${pct(seul.effectivePct, 1)} de ce qu’elle verse, pas 25 %`);
+    expect(ex).toContain(`(plafond de ${eur(12500)}) l’obtient sur la totalité`);
+    expect(ex).toContain(`${eur(10000)} de parts`);
+    expect(couple.effectivePct).toBe(25);
+    expect(ex).not.toContain(cents(seul.credit));
+    expect(ex).not.toContain(cents(seul.netCost));
   });
 
   it('PEE : 500 € versés + 500 € d’abondement = 1 000 € placés, dans les plafonds de 2026 (Service-Public F2142 et F2140, consultées le 2026-11-18)', () => {
@@ -590,14 +599,16 @@ describe('fiches Compte à terme, PEL et LEP : schéma face au Livret A', () => 
   const kinds = ['compte-a-terme', 'pel', 'lep'] as const;
   const render = (kind: (typeof kinds)[number]) => renderToStaticMarkup(createElement(SchemaLivretBilan, { kind, children: 'légende' }));
 
-  it('chaque montant du schéma figure dans le texte de la fiche', () => {
+  it('le texte de chaque fiche légende le schéma sans recopier ses montants (constat du 2026-11-21)', () => {
     for (const kind of kinds) {
       const ex = norm(investmentBySlug[kind]!.example);
+      expect(ex).toMatch(/^Exemple fictif, celui du schéma : 10 000 €/);
+      expect(ex).toContain('À retenir :');
       const { rows } = livretBilan(kind);
+      expect(rows.every((r) => r.net > 0)).toBe(true);
       for (const r of rows) {
         const show = (n: number) => norm(Number.isInteger(n) ? n.toLocaleString('fr-FR') : n.toLocaleString('fr-FR', { minimumFractionDigits: 2 }));
-        expect(ex).toContain(`${show(r.net)} €`);
-        if (r.tax > 0) { expect(ex).toContain(`${show(r.tax)} €`); expect(ex).toContain(`${show(r.gross)} €`); }
+        for (const n of [r.net, r.tax, r.gross].filter((n) => n > 0)) expect(ex, `${kind} : ${n}`).not.toContain(`${show(n)} €`);
       }
     }
   });
