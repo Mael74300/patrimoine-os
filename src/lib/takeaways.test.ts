@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, fmtEur, rentalAnalysis, rentalBalance, rentalProjection, type RentalInput, fireTarget, drawdown, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
+import { averageYearsInvested, projectGrowth, afterTax, netOfFees, purchasingPower, analyzeBudget, catchUp, delayCost, doubling, presentValue, rateConversion, requiredReturn, simpleVsCompound, stepUp, timeToTarget, amortize, debtRatio, fmtPct, fmtEur, rentalAnalysis, rentalBalance, rentalProjection, type RentalInput, fireTarget, drawdown, performance, precautionPath, prepayVsInvest, rentVsBuy, withdrawal, savingsGoal, yearsToTarget } from './finance';
 import { BUSINESS_SCENARIOS, lowestCash, projectBusiness, summarizePortfolio, fmtMonths, monthlySavingNeeded, lateHalfGainsYears, fmtPart, monthlyByRate } from './finance';
 import { feeImpact } from './calc/fees';
 import { comparePayoff } from './calc/debtPayoff';
@@ -53,12 +53,34 @@ describe('phrases « Concrètement »', () => {
     const t = debtRatioTakeaway({ income: 4000, ratioAfter: r.ratioAfter, remainingAfter: r.remainingAfter, withinRef: true, refLabel: '35 %' });
     expect(t).toContain('sous le repère');
   });
-  it('rendement : gain ou perte, vide si taux non défini', () => {
-    const r = performance({ initial: 5000, monthly: 200, months: 120, finalValue: 34000 });
-    expect(performanceTakeaway({ invested: r.invested, gain: r.gain, annualized: r.annualized })).toContain('gagné');
-    const p = performance({ initial: 5000, monthly: 200, months: 120, finalValue: 20000 });
-    expect(performanceTakeaway({ invested: p.invested, gain: p.gain, annualized: p.annualized })).toContain('perdu');
-    expect(performanceTakeaway({ invested: 0, gain: 0, annualized: null })).toBe('');
+  it('rendement : ce que veut dire le taux annuel, sans recopier les cases (exemple fictif par défaut)', () => {
+    const input = { initial: 5000, monthly: 200, months: 120, finalValue: 34000 };
+    const r = performance(input);
+    const avg = averageYearsInvested(input)!;
+    // (5 000 × 120 + 200 × 120 × 119 / 2) / 29 000 / 12 = 5,83 ans
+    expect(avg).toBeCloseTo((5000 * 120 + 200 * 120 * 119 / 2) / 29000 / 12, 10);
+    const t = performanceTakeaway({ annualized: r.annualized, years: 10, avgYears: avg, monthly: 200 }).replace(/\u00a0/g, ' ');
+    const cent = (100 * (1 + r.annualized!)).toFixed(2).replace('.', ',');
+    expect(t).toContain(`sont devenus ${cent} €`);
+    expect(t).toContain('5,8 ans en moyenne sur 10 ans');
+    const doubleAns = Math.round(Math.log(2) / Math.log(1 + r.annualized!));
+    expect(t).toContain(`double en ${doubleAns} ans environ`);
+    // ne recopie ni le total versé ni le gain des cases
+    expect(digits(t)).not.toContain('29000');
+    expect(digits(t)).not.toContain('5000€');
+  });
+  it('rendement : perte, versement unique, taux nul ou non défini', () => {
+    const loss = performance({ initial: 5000, monthly: 200, months: 120, finalValue: 20000 });
+    const tl = performanceTakeaway({ annualized: loss.annualized, years: 10, avgYears: 5.8, monthly: 200 });
+    expect(tl).toContain('ne valaient plus que');
+    expect(tl).toContain('perd la moitié');
+    const lump = performance({ initial: 10000, monthly: 0, months: 120, finalValue: 16289 });
+    const tu = performanceTakeaway({ annualized: lump.annualized, years: 10, avgYears: 10, monthly: 0 });
+    expect(tu).toContain('premières années ont eux-mêmes rapporté');
+    expect(tu.replace(/\u00a0/g, ' ')).toContain('sont devenus 105 €');
+    expect(performanceTakeaway({ annualized: 0, years: 10, avgYears: 5, monthly: 100 })).toContain('pratiquement rien');
+    expect(performanceTakeaway({ annualized: null, years: 0, avgYears: null, monthly: 0 })).toBe('');
+    expect(averageYearsInvested({ initial: 0, monthly: 0, months: 12, finalValue: 0 })).toBeNull();
   });
 
   const digits = (t: string) => t.replace(/\s/g, '');

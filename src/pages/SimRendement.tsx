@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { performance, performanceSegments, fmtAns, fmtEur, fmtPct } from '../lib/finance';
+import { averageYearsInvested, performance, performanceSegments, fmtAns, fmtEur, fmtPct } from '../lib/finance';
 import { performanceTakeaway } from '../lib/takeaways';
 import { Crumbs, Disclaimer, SimFaq, Takeaway, Kpi, NumberField, PageHead, SavedSims, usePersistentState, JumpToResults, SimNotice } from '../components/ui';
 
@@ -54,7 +54,7 @@ export default function SimRendement() {
             <Kpi label="Total versé" value={fmtEur(r.invested)} sub="initial et mensuels" />
             <Kpi label="Gain ou perte" value={fmtEur(r.gain)} sub={r.cumulative === null ? '' : `soit ${fmtPct(r.cumulative)} du total versé`} />
           </div>
-          <Takeaway>{performanceTakeaway({ invested: r.invested, gain: r.gain, annualized: r.annualized })}</Takeaway>
+          <Takeaway>{performanceTakeaway({ annualized: r.annualized, years: input.months / 12, avgYears: averageYearsInvested(input), monthly: s.monthly })}</Takeaway>
           {segs.length > 0 && (
             <>
               <h2>D’où vient la valeur actuelle</h2>
@@ -71,16 +71,10 @@ export default function SimRendement() {
                   </li>
                 ))}
               </ul>
-              {r.annualized !== null && r.cumulative !== null && (
-                <>
-                <p className="pf-why">
-                  <strong>Pourquoi deux taux ?</strong> {fmtPct(r.cumulative)} compare le gain au total versé, sur toute la durée.
-                  {' '}{fmtPct(r.annualized)} par an ramène ce résultat à une année : les premiers euros versés ont travaillé plus longtemps que les derniers.
-                </p>
+              {r.annualized !== null && (
                 <p className="pf-why">
                   <strong>Et l’inflation ?</strong> Ce taux ne la retire pas : comparez-le à la hausse des prix de la même période pour obtenir votre <Link to="/guides/inflation-pouvoir-d-achat-epargne">rendement réel</Link>.
                 </p>
-                </>
               )}
             </>
           )}

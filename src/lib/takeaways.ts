@@ -1,4 +1,4 @@
-import { fmtAns, fmtDuree, fmtEur, fmtMonths, fmtNum, fmtPart, fmtPct } from './finance';
+import { fmtAns, fmtDuree, fmtEur, fmtEur2, fmtMonths, fmtNum, fmtPart, fmtPct } from './finance';
 
 /**
  * Phrases « Concrètement » affichées sous les résultats des simulateurs.
@@ -37,11 +37,32 @@ export function debtRatioTakeaway(p: { income: number; ratioAfter: number; remai
   return part + reste + repere;
 }
 
-/** Rendement réel : traduit le taux annuel équivalent en gain sur 100 € placés. */
-export function performanceTakeaway(p: { invested: number; gain: number; annualized: number | null }): string {
-  if (!(p.invested > 0) || p.annualized === null) return '';
-  const verbe = p.gain >= 0 ? `gagné ${fmtEur(p.gain)}` : `perdu ${fmtEur(-p.gain)}`;
-  return `Vous avez versé ${fmtEur(p.invested)} et ${verbe}. Ramené à une année, c'est comme si l'argent placé avait rapporté ${fmtPct(p.annualized)} par an en moyenne. Ce taux sert à comparer avec un livret ou un autre placement sur la même durée.`;
+/**
+ * Rendement de mon placement : ce que veut dire le taux annuel, sans recopier les cases (total versé, gain).
+ * Ce que deviennent 100 € en un an à ce taux, pourquoi on ne divise pas le gain par le nombre d'années
+ * (durée moyenne de placement des euros versés), puis le temps pour doubler (ou perdre la moitié) à ce rythme.
+ */
+export function performanceTakeaway(p: { annualized: number | null; years: number; avgYears: number | null; monthly: number }): string {
+  if (p.annualized === null || !(p.years > 0)) return '';
+  const a = p.annualized;
+  if (a <= -0.999) return 'Votre placement a perdu presque toute sa valeur : le taux annuel ne veut plus dire grand-chose.';
+  if (Math.abs(a) < 0.0005) return 'Votre placement n\'a pratiquement rien rapporté ni perdu : il vaut à peu près ce que vous avez versé.';
+  const cent = fmtEur2(100 * (1 + a)).replace(/,00\s€$/, '\u00a0€');
+  const phrase1 = a > 0
+    ? `Ce taux veut dire qu'en moyenne, 100\u00a0€ restés placés un an sont devenus ${cent}.`
+    : `Ce taux veut dire qu'en moyenne, 100\u00a0€ restés placés un an ne valaient plus que ${cent}.`;
+  const avg = p.avgYears;
+  const divise = `C'est pourquoi il ne suffit pas de diviser le pourcentage de ${a > 0 ? 'gain' : 'perte'} par le nombre d'années.`;
+  const phrase2 = p.monthly > 0 && avg !== null && avg < p.years - 0.05
+    ? ` Il tient compte des dates : les euros versés ne sont restés placés que ${fmtAns(Math.round(avg * 10) / 10)} en moyenne sur ${fmtAns(p.years)}. ${divise}`
+    : ` ${a > 0 ? 'Les gains des premières années ont eux-mêmes rapporté' : 'Les pertes se sont cumulées d\'année en année'} : ${divise.charAt(0).toLowerCase() + divise.slice(1)}`;
+  const half = Math.log(2) / Math.abs(Math.log(1 + a));
+  const phrase3 = Math.abs(a) >= 0.005 && half <= 100
+    ? (a > 0
+      ? ` À ce rythme, une somme placée double en ${fmtAns(Math.round(half))} environ.`
+      : ` À ce rythme, une somme placée perd la moitié de sa valeur en ${fmtAns(Math.round(half))} environ.`)
+    : '';
+  return phrase1 + phrase2 + phrase3;
 }
 
 /**

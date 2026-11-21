@@ -58,6 +58,21 @@ export function performance(input: PerformanceInput): PerformanceResult {
   return { invested, gain, cumulative, annualized: Math.pow(1 + m, 12) - 1 };
 }
 
+/**
+ * Durée moyenne pendant laquelle chaque euro versé est resté placé, en années (moyenne pondérée par les montants).
+ * Versement initial placé pendant toute la durée ; versement mensuel du mois k (fin de mois) placé pendant (mois − k) mois.
+ * Sert à expliquer pourquoi le gain total ne se divise pas simplement par le nombre d'années. Null si rien n'est versé.
+ */
+export function averageYearsInvested(input: PerformanceInput): number | null {
+  const initial = Math.max(0, num(input.initial));
+  const monthly = Math.max(0, num(input.monthly));
+  const months = Math.floor(clamp(input.months, 0, 960, 0));
+  const invested = initial + monthly * months;
+  if (invested <= 0 || months === 0) return null;
+  const euroMonths = initial * months + (monthly * months * (months - 1)) / 2;
+  return euroMonths / invested / 12;
+}
+
 export type PerformanceSegment = { key: 'initial' | 'monthly' | 'gain' | 'value' | 'loss'; label: string; amount: number; width: number };
 
 /**
