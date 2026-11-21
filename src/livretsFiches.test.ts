@@ -30,9 +30,11 @@ describe('fiches Livret A et LEP', () => {
       for (const p of parts) expect(sentenceLead(p), p).not.toBeNull();
     }
   });
-  it('exemple fictif du LEP : 10 000 € au taux du LEP ≈ 250 €', () => {
+  it('exemple fictif du LEP : 10 000 € au taux du LEP ≈ 250 €, montant porté par le schéma, pas par le texte', () => {
     expect(Math.round(by.lep.cap * by.lep.rate)).toBe(250);
-    expect(norm(investmentBySlug.lep.example)).toContain(`${eur(by.lep.cap)} à ${pct(by.lep.rate)}`);
-    expect(norm(investmentBySlug.lep.example)).toContain('250 €');
+    expect(norm(investmentBySlug.lep.example)).toContain(`${eur(by.lep.cap)} (le plafond du livret)`);
+    // Taux et intérêts sont sur le schéma (tiré de LIVRETS) : le texte ne les recopie pas, rien à y changer au 1er février.
+    expect(norm(investmentBySlug.lep.example)).not.toContain('250 €');
+    expect(norm(investmentBySlug.lep.example)).not.toContain(pct(by.lep.rate));
   });
 });

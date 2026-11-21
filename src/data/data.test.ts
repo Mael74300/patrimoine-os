@@ -133,7 +133,8 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
   it('Groupement forestier : 10 000 € versés, base plafonnée à 6 250 €, crédit de 25 % → 1 562,50 €', () => {
     expect(Math.min(10000, 6250) * 0.25).toBeCloseTo(1562.5, 6);
     expect(12500 * 0.25).toBeCloseTo(3125, 6);
-    expect(investmentBySlug['groupements-forestiers'].example.replace(/\u00a0/g, ' ')).toContain('1 562,50 €');
+    // Le montant figure sur le schéma de l’exemple ; le texte, sa légende, en donne le taux réel (15,6 %).
+    expect(investmentBySlug['groupements-forestiers'].example.replace(/\u00a0/g, ' ')).toContain('15,6 %');
   });
   it('Compte à terme : 300 € bruts → 205,80 € nets au PFU de 31,4 %', () => {
     expect(300 * (1 - 0.314)).toBeCloseTo(205.8, 6);
@@ -396,7 +397,7 @@ describe('fiche PEL', () => {
     expect(plain(f.review.data.join(' '))).toContain('61 200 €');
     expect(10000 * 0.02).toBe(200);
     expect(f.example).toContain('fictif');
-    expect(plain(f.example)).toContain('200 €');
+    expect(plain(f.example)).toContain('10 000 € sur un PEL ouvert en 2026, à 2,00 %');
     expect(f.sources.some((x) => x.url.includes('F16140'))).toBe(true);
   });
 });

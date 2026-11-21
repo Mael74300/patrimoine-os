@@ -56,10 +56,15 @@ describe('fiche Forêt : schéma du coût des parts après crédit d’impôt', 
     expect(tax).toContain(`Crédit d’impôt de ${ratePct} %`);
     expect(tax).toContain(`plafonnées à ${eur(caps[0]!.cap)} pour une personne seule et ${eur(caps[1]!.cap)} pour un couple`);
   });
-  it('mêmes montants que le texte de la fiche', () => {
+  it('le texte de la fiche légende le schéma : mêmes hypothèses, sans recopier les montants dessinés', () => {
     const ex = norm(fiche.example);
-    expect(ex).toMatch(/^Exemple fictif/);
-    for (const v of [amount, seul!.retained, seul!.credit, seul!.netCost, couple!.credit]) expect(ex).toContain(eur(v));
+    expect(ex).toMatch(/^Exemple fictif, celui du schéma/);
+    for (const v of [amount, seul!.retained, caps[1]!.cap]) expect(ex).toContain(eur(v));
+    expect(ex).toContain(`${ratePct} %`);
+    expect(ex).toContain('15,6 %');
+    // « 2 500 € » ne doit pas se confondre avec la fin de « 12 500 € » : montant isolé seulement.
+    const isole = (v: number) => new RegExp(`(?<![\\d ])${eur(v)}`);
+    for (const v of [seul!.credit, seul!.netCost, couple!.credit, couple!.netCost]) expect(ex).not.toMatch(isole(v));
   });
   it('le schéma montre le coût et le crédit de chaque foyer', () => {
     expect(t).toContain(`coût : ${eur(seul!.netCost)}`);
