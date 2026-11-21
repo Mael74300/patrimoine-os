@@ -102,19 +102,19 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
     const loyers = 600 * 11;
     const abattement = loyers * 0.5;
     const ex = investmentBySlug['lmnp'].example.replace(/\u00a0/g, ' ');
-    expect(ex).toContain('6 600 €');
     expect(ex).toContain('abattement de 50 %');
+    expect(ex).toContain('600 € par mois');
     expect(loyers).toBe(6600);
     expect(abattement).toBe(3300);
-    expect(ex).toContain('retire 3 300 €');
-    expect(ex).toContain('seuls 3 300 €');
+    // Montants dessinés sur le schéma (ficheExemples.test.ts), plus recopiés dans le texte (chantier 260).
+    for (const v of ['6 600 €', '3 300 €', '990 €']) expect(ex).not.toContain(v);
+    // Micro-BIC : abattement forfaitaire, les charges ne se déduisent pas (Service-Public F32744, consulté le 2026-11-21).
+    expect(ex).toContain('remplace vos charges réelles');
     // Suite de l’exemple : tranche à 30 % (barème Service-Public F1419, consulté le 2026-11-13).
     const impot = abattement * 0.3;
     expect(impot).toBeCloseTo(990, 6);
     expect(Math.round((impot / loyers) * 100)).toBe(15);
     expect(ex).toContain('tranche à 30 %');
-    expect(ex).toContain('990 € d’impôt sur le revenu');
-    expect(ex).toContain('15 % des loyers');
   });
 
   it('lmnp : jargon expliqué (BIC, amortissement), début d’activité sourcé, rubrique « Comment se lancer »', () => {
@@ -341,7 +341,10 @@ describe('fiche donation : cohérence des montants', () => {
     expect(ex).toContain('200 000 €');
     expect(ex).toContain('100 000 €');
     expect(droitsDonationLigneDirecte(200_000 - abattementEnfant)).toBe(18_194);
-    expect(ex).toContain('18 194 €');
+    // Les droits sont dessinés sur le schéma (schemaDonationCtoMobile.test.ts) ; le texte dit la règle des 15 ans.
+    expect(ex).not.toContain('18 194 €');
+    expect(ex).toContain('redevient disponible 15 ans après le don');
+    expect(f.howItWorks).toContain('15 ans après le don');
     expect(detailDroitsLigneDirecte(DONATION_EXAMPLE.value - abattementEnfant).map((t) => t.droits)).toEqual([403.6, 403.7, 573.45, 16_813.6]);
     expect(DONATION_EXAMPLE.value).toBe(200_000);
     expect(BAREME_LIGNE_DIRECTE[0].jusqua).toBe(8_072);

@@ -26,8 +26,14 @@ describe('fiche PEA : schéma du bilan, compte-titres face au PEA', () => {
 
   it('mêmes montants que le texte de la fiche : 6 280 €, 3 720 €, 2 560 € d’écart', () => {
     expect([cto.total, peaTax, cto.total - peaTax]).toEqual([6280, 3720, 2560]);
-    expect(ex).toMatch(/^Exemple fictif/);
-    for (const v of [gain, cto.total, peaTax, cto.total - peaTax]) expect(ex).toContain(eur(v));
+    expect(ex).toMatch(/^Exemple fictif, celui du schéma/);
+    expect(ex).toContain(eur(gain));
+    // Le texte légende le schéma sans recopier ses montants (chantier 260, constat du 2026-11-21).
+    for (const v of [cto.total, peaTax, cto.total - peaTax, gain - cto.total, gain - peaTax]) expect(ex).not.toContain(eur(v));
+    expect(ex).toContain('À retenir :');
+    // « 128 € pour chaque tranche de 1 000 € de gains » : l'impôt sur le revenu évité, rapporté à 1 000 €.
+    expect((cto.ir / gain) * 1000).toBe(128);
+    expect(ex).toContain(`de ${eur((cto.ir / gain) * 1000)} pour chaque tranche de ${eur(1000)} de gains`);
   });
   it('le schéma montre ce qui reste et l’écart, égal à l’impôt sur le revenu évité', () => {
     expect(t).toContain(`${eur(gain - cto.total)} pour vous`);

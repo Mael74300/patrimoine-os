@@ -1,4 +1,7 @@
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import { SchemaPerBilan } from '../components/schemas/fiches';
 import { investmentBySlug } from './investments';
 import { perDeductionBalance } from '../lib/calc/per';
 import { PER_EXAMPLE } from '../lib/illustrationData';
@@ -23,10 +26,23 @@ describe('fiche PER : exemple de l’entrée à la sortie', () => {
   });
   it('la légende du schéma cite le versement, l’impôt évité et les tranches, et reste marqué fictif', () => {
     expect(ex).toMatch(/^Exemple fictif/);
-    for (const v of [amount, low.saved]) expect(ex).toContain(`${fmt(v)} €`);
+    expect(ex).toContain(`${fmt(amount)} €`);
+    // Les montants du bilan sont dessinés ; le texte ne les recopie pas (chantier 260, constat du 2026-11-21).
+    for (const v of [low.saved, low.paidLater, low.net]) expect(ex).not.toContain(`${fmt(v)} €`);
+    expect(ex).toContain('À retenir :');
     expect(ex).toContain(`tranche à ${entryRatePct} %`);
-    for (const r of exitRatesPct) expect(ex).toContain(`${r} %`);
+    // Les tranches de sortie (11 % et 30 %) sont écrites sur le schéma.
     expect(ex).toContain(`${String(pfuPct).replace('.', ',')} %`);
+  });
+  it('le schéma porte les montants que le texte ne recopie plus (chantier 260)', () => {
+    const svg = renderToStaticMarkup(createElement(SchemaPerBilan, null, 'légende'));
+    const t = norm(svg.replace(/<[^>]+>/g, ' ').replace(/&#x27;|&#39;/g, '’')).replace(/\s+/g, ' ');
+    expect(t).toContain(`${fmt(low.saved)} € évités à l’entrée`);
+    expect(t).toContain(`${fmt(low.paidLater)} € payés à la sortie`);
+    expect(t).toContain(`Bilan : ${fmt(low.net)} € gagnés`);
+    expect(t).toContain(`${fmt(same.paidLater)} € payés à la sortie`);
+    expect(t).toContain('Bilan : 0 €');
+    expect(svg).toContain('role="img"');
   });
   it('même taux de PFU que la rubrique Fiscalité, barème cité en source', () => {
     expect(pfuPct).toBe(PFU_TOTAL_PCT);
