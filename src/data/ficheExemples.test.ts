@@ -146,9 +146,12 @@ describe('fiche Location meublée : ce que le micro-BIC impose', () => {
   });
   it('le texte de la fiche et le schéma citent les mêmes montants', () => {
     expect(ex).toMatch(/^Exemple fictif/);
-    for (const v of [price, monthlyRent, r.rents, r.taxable, r.incomeTax]) expect(ex).toContain(eur(v));
+    for (const v of [price, monthlyRent]) expect(ex).toContain(eur(v));
     expect(ex).toContain('un mois de vacance par an');
-    expect(ex).toContain(`${pctFr(r.incomeTaxPctOfRents)} des loyers`);
+    // Le texte donne les hypothèses ; les montants calculés sont sur le schéma seulement (chantier 260).
+    for (const v of [r.rents, r.allowance, r.incomeTax]) expect(ex).not.toContain(eur(v));
+    expect(ex).not.toContain(`${pctFr(r.incomeTaxPctOfRents)} des loyers`);
+    expect(ex).toContain('À retenir :');
     const svg = renderToStaticMarkup(createElement(SchemaMicroBilan, { kind: 'lmnp' }, 'légende'));
     const t = plain(svg);
     for (const v of [r.rents, monthlyRent, r.allowance, r.taxable, r.incomeTax]) expect(t).toContain(eur(v));
@@ -172,12 +175,14 @@ describe('fiche Racheter une entreprise : ce que le prêt prend sur le résultat
     expect(r).toEqual({ monthly: 5468, yearly: 65610, sharePct: 66, left: 34390, leftAfterDrop: 4390, droppedProfit: 70000 });
     expect(Math.round(amortize({ principal: loan, annualRate: ratePct / 100, years }).monthlyPayment)).toBe(r.monthly);
   });
-  it('le texte de la fiche cite les mêmes montants, le taux est dit fictif', () => {
-    expect(ex).toMatch(/^Exemple fictif/);
-    for (const v of [profit, price, loan, r.monthly, r.yearly, r.left, r.leftAfterDrop]) expect(ex).toContain(eur(v));
+  it('le texte de la fiche donne les hypothèses sans recopier les montants du schéma, le taux est dit fictif', () => {
+    expect(ex).toMatch(/^Exemple fictif, celui du schéma/);
+    for (const v of [price, loan]) expect(ex).toContain(eur(v));
+    for (const v of [r.monthly, r.yearly, r.left, r.leftAfterDrop]) expect(ex).not.toContain(eur(v));
     expect(ex).toContain(`taux fictif de ${ratePct} %`);
-    expect(ex).toContain(`${r.sharePct} % du résultat`);
-    expect(ex).toContain(`baisse de ${dropPct} %`);
+    expect(ex).toContain('À retenir :');
+    // « une mauvaise année peut presque tout effacer » : il reste moins de 15 % de la marge après la baisse.
+    expect(r.leftAfterDrop / r.left).toBeLessThan(0.15);
     expect(ex).toContain(`${years} ans`);
     expect(ex).toContain('sans impôt sur les bénéfices ni assurance du prêt');
   });

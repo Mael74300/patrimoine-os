@@ -29,7 +29,9 @@ describe('Calcul des droits de la fiche Donation', () => {
     expect(DONATION_CALC_DEFAULT.montant).toBe(200_000);
     const ex = plain(investmentBySlug['donation']!.example);
     const r = estimerDonation(DONATION_CALC_DEFAULT.montant, enfant, 0);
-    expect(ex).toContain(`${r.droits.toLocaleString('fr-FR').replace(/[  ]/g, ' ')} €`);
+    // Les droits sont sur le schéma et le calculateur ; le texte garde le montant donné (chantier 260).
+    expect(ex).toContain('200 000 €');
+    expect(r.droits).toBe(18_194);
   });
   it('« Concrètement » dit les droits ou l’abattement restant', () => {
     expect(plain(donationTakeaway(200_000, 'enfant', false))).toContain('18 194 € de droits, soit environ 9,1 % de la somme donnée');

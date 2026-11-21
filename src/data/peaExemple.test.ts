@@ -21,12 +21,13 @@ describe('fiche PEA : exemple chiffré complet', () => {
     expect(pea).toBe(3720);
     expect(cto - pea).toBe(2560);
   });
-  it('le texte affiche ces montants et reste marqué fictif', () => {
+  it('le texte légende le schéma et reste marqué fictif', () => {
     const ex = norm(f.example);
     expect(ex).toMatch(/^Exemple fictif/);
-    for (const v of [gain, cto, pea, cto - pea]) expect(ex).toContain(`${fmt(v)} €`);
-    expect(ex).toContain('31,4 %');
-    expect(ex).toContain('18,6 %');
+    expect(ex).toContain(`${fmt(gain)} €`);
+    // Les montants sont sur le schéma (schemaPeaForetBilan.test.ts) ; la règle des 5 ans est dans la rubrique Fiscalité.
+    expect(ex).toContain('À retenir :');
+    expect(norm(f.tax.text)).toContain('Retrait avant 5 ans : clôture du plan (sauf exceptions) et imposition des gains au PFU');
   });
   it('même taux que la rubrique Fiscalité, source citée', () => {
     expect(norm(f.tax.text)).toContain('18,6 %');
