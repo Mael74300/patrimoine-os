@@ -4,7 +4,7 @@ import { pfuSplit, PFU_IR_PCT, PFU_PS_PCT, PFU_TOTAL_PCT } from '../../lib/calc/
 import { perDeductionBalance } from '../../lib/calc/per';
 import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, leverageMonth, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
 import { LIVRETS } from '../../data/livrets';
-import { abattementDetentionMeubles, assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, listedPropertyYear, fundFeesOnSubscribed, microFoncierExample, recoveryAfterDrop, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
+import { abattementDetentionMeubles, artResale, assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, listedPropertyYear, fundFeesOnSubscribed, microFoncierExample, recoveryAfterDrop, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
 import { fmtEur2 } from '../../lib/calc/format';
 import { W } from './outils';
@@ -1390,6 +1390,67 @@ export function SchemaObjetsArt() {
         <text x={170} y={333} textAnchor="middle" className="ill-in">objet par objet.</text>
         <text x={170} y={360} textAnchor="middle" className="ill-sub">Schéma de principe</text>
       </svg>
+    </figure>
+  );
+}
+
+/** Exemple fictif de la fiche Objets d’art, rubrique « Exemple chiffré » : tableau adjugé 5 000 €, frais d’acheteur de l’ordre de 20 %,
+ * taxe forfaitaire de 6,5 % du prix de vente au-delà de 5 000 € (mêmes chiffres que les rubriques Frais et Fiscalité), deux reventes. */
+export const ART_BILAN = { adjuge: 5000, fraisPct: 20, taxePct: 6.5, seuil: 5000, haut: 8000, plat: 6000 } as const;
+
+/**
+ * Schéma de l'exemple chiffré de la fiche Objets d’art (constat du 2026-11-21 : l'exemple restait un paragraphe de huit montants,
+ * dernier exemple non dessiné d'une fiche à risque très élevé). Haut : ce que coûte le tableau, frais d'acheteur compris. Puis trois
+ * reventes, barres à la même échelle (8 000 € = toute la largeur) : la part qui vous reste et la taxe ; un trait pointillé marque le
+ * prix payé (sur chaque barre seulement, pour ne pas barrer les textes), pour voir d'un coup d'œil si la revente gagne ou perd. Calcul pur `artResale` ; après plus de 22 ans de détention, sur
+ * option, le gain est exonéré (`abattementDetentionMeubles(23)` = 100 %). Aucun chiffre nouveau par rapport à la fiche.
+ */
+export function SchemaObjetsArtBilan({ children }: { children?: ReactNode }) {
+  const { adjuge, fraisPct, taxePct, seuil, haut, plat } = ART_BILAN;
+  const r = artResale(adjuge, fraisPct, taxePct, seuil, [haut, plat]);
+  const [venteHaute, ventePlate] = r.sales as [typeof r.sales[number], typeof r.sales[number]];
+  const impotOption = Math.round((haut - r.cost) * (1 - abattementDetentionMeubles(23)));
+  const gainOption = haut - impotOption - r.cost;
+  const X0 = 1;
+  const W = 338;
+  const w = (v: number) => (v / haut) * W;
+  const xCout = X0 + w(r.cost);
+  const signe = (v: number) => (v >= 0 ? `+${fmtEur(v)}` : `−${fmtEur(-v)}`);
+  const rows = [
+    { y: 108, titre: `Revendu ${fmtEur(haut)} (taxe par défaut)`, net: venteHaute.net, taxe: venteHaute.tax, note: `${fmtEur(venteHaute.tax)} de taxe : ${taxePct.toLocaleString('fr-FR')} % du prix`, bilan: venteHaute.vsCost },
+    { y: 194, titre: `Revendu ${fmtEur(plat)}, le prix payé`, net: ventePlate.net, taxe: ventePlate.tax, note: `${fmtEur(ventePlate.tax)} de taxe quand même`, bilan: ventePlate.vsCost },
+    { y: 280, titre: `Revendu ${fmtEur(haut)} après plus de 22 ans`, net: haut - impotOption, taxe: impotOption, note: `sur option : ${fmtEur(impotOption)} d’impôt`, bilan: gainOption },
+  ];
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 376" role="img" aria-labelledby="ill-artb-t ill-artb-d" className="ill-svg">
+        <title id="ill-artb-t">{`Objets d’art : la taxe forfaitaire porte sur le prix de vente, même sans gain`}</title>
+        <desc id="ill-artb-d">{`Exemple fictif : un tableau adjugé ${fmtEur(adjuge)} coûte ${fmtEur(r.cost)} avec ${fmtEur(r.buyerFees)} de frais d’acheteur, de l’ordre de ${fraisPct} %. Revendu ${fmtEur(haut)}, la taxe forfaitaire de ${taxePct.toLocaleString('fr-FR')} % du prix prend ${fmtEur(venteHaute.tax)} : il reste ${fmtEur(venteHaute.net)}, soit ${signe(venteHaute.vsCost)} par rapport au prix payé. Revendu ${fmtEur(plat)}, sans gain, la taxe prend quand même ${fmtEur(ventePlate.tax)} : il reste ${fmtEur(ventePlate.net)}, soit ${signe(ventePlate.vsCost)}. Revendu ${fmtEur(haut)} après plus de 22 ans de détention, facture conservée, sur option pour le régime des plus-values : ${fmtEur(impotOption)} d’impôt, soit ${signe(gainOption)}. Barres proportionnelles aux montants ; le trait pointillé marque les ${fmtEur(r.cost)} payés.`}</desc>
+
+        <text x={X0} y={16} className="ill-step">{`Achat : ${fmtEur(adjuge)} adjugé, plus les frais`}</text>
+        <rect x={X0} y={26} width={w(adjuge)} height={30} rx={4} fill="var(--surface-2)" stroke="var(--ink-3)" strokeWidth={1.5} />
+        <rect x={X0 + w(adjuge)} y={26} width={w(r.buyerFees)} height={30} rx={4} fill="var(--warn-soft)" stroke="var(--warn)" strokeWidth={2} />
+        <text x={X0 + w(adjuge) / 2} y={46} textAnchor="middle" className="ill-in">{`${fmtEur(adjuge)} adjugé`}</text>
+        <text x={xCout + 6} y={46} className="ill-in">{`= ${fmtEur(r.cost)}`}</text>
+        <text x={X0} y={76} className="ill-sub">{`dont ${fmtEur(r.buyerFees)} de frais d’acheteur (≈ ${fraisPct} %)`}</text>
+
+        {rows.map((row) => (
+          <g key={row.y}>
+            <text x={X0} y={row.y} className="ill-step">{row.titre}</text>
+            <rect x={X0} y={row.y + 10} width={w(row.net)} height={30} rx={4} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={2} />
+            {row.taxe > 0 && <rect x={X0 + w(row.net)} y={row.y + 10} width={w(row.taxe)} height={30} rx={4} fill="var(--warn-soft)" stroke="var(--danger)" strokeWidth={2} />}
+            <text x={X0 + Math.min(w(row.net), xCout - X0) / 2} y={row.y + 30} textAnchor="middle" className="ill-in">{`${fmtEur(row.net)} pour vous`}</text>
+            <text x={X0} y={row.y + 60} className="ill-sub">{row.note}</text>
+            <text x={X0 + W} y={row.y + 60} textAnchor="end" className="ill-in" style={{ fill: row.bilan >= 0 ? 'var(--accent)' : 'var(--danger)' }}>{`${row.bilan >= 0 ? 'gain' : 'perte'} : ${signe(row.bilan)}`}</text>
+          </g>
+        ))}
+
+        {[26, ...rows.map((row) => row.y + 10)].map((y) => (
+          <line key={y} x1={xCout} x2={xCout} y1={y - 5} y2={y + 35} stroke="var(--ink-2)" strokeWidth={1.5} strokeDasharray="4 3" />
+        ))}
+        <text x={170} y={366} textAnchor="middle" className="ill-sub">{`pointillés : les ${fmtEur(r.cost)} payés à l’achat`}</text>
+      </svg>
+      {children && <figcaption>{children}</figcaption>}
     </figure>
   );
 }

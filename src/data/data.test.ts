@@ -132,7 +132,8 @@ describe('les exemples chiffrés des fiches sont exacts', () => {
 
   it('Objets d’art : 8 000 € revendus, taxe forfaitaire 6 % + 0,5 % de CRDS → 520 €', () => {
     expect(8000 * (0.06 + 0.005)).toBeCloseTo(520, 6);
-    expect(investmentBySlug['objets-d-art-collection'].example.replace(/\u00a0/g, ' ')).toContain('520 €');
+    // Le montant figure sur le schéma de l’exemple (SchemaObjetsArtBilan, testé dans objetsArtBilan.test.ts) ; le texte donne le taux.
+    expect(investmentBySlug['objets-d-art-collection'].example.replace(/\u00a0/g, ' ')).toContain('6,5 % du prix de vente');
   });
   it('Groupement forestier : 10 000 € versés, base plafonnée à 6 250 €, crédit de 25 % → 1 562,50 €', () => {
     expect(Math.min(10000, 6250) * 0.25).toBeCloseTo(1562.5, 6);
