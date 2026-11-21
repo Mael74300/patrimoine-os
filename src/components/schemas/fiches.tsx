@@ -4,7 +4,7 @@ import { pfuSplit, PFU_IR_PCT, PFU_PS_PCT, PFU_TOTAL_PCT } from '../../lib/calc/
 import { perDeductionBalance } from '../../lib/calc/per';
 import { ASSURANCE_VIE_EXAMPLE, CROWDFUNDING_EXAMPLE, DONATION_EXAMPLE, ETF_EXAMPLE, leverageMonth, LMNP_EXAMPLE, LOCATION_NUE_EXAMPLE, OBLIGATION_EXAMPLE, PEL_EXAMPLE, PER_EXAMPLE, REPRISE_EXAMPLE, SCPI_EXAMPLE, TERM_DEPOSIT_EXAMPLE } from '../../lib/illustrationData';
 import { LIVRETS } from '../../data/livrets';
-import { abattementDetentionMeubles, artResale, assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, listedPropertyYear, yearlySavingsValue, fundFeesOnSubscribed, microFoncierExample, recoveryAfterDrop, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
+import { abattementDetentionMeubles, artResale, assuranceVieRetrait, bondCoupons, concentrationLoss, forestCredit, fondsEurosGrowth, fondsEurosYearlyInterest, ucFeesDrag, crowdfundingScenario, etfMilestones, lepVsLivretA, pelVsLivretA, termDepositVsLivretA, listedPropertyYear, subscriptionMonths, yearlySavingsValue, fundFeesOnSubscribed, microFoncierExample, recoveryAfterDrop, repriseDebtShare, scpiFeesPayback, sensitivityChangePct } from '../../lib/calc/ficheExemples';
 import { detailDroitsLigneDirecte } from '../../lib/calc/donation';
 import { fmtEur2 } from '../../lib/calc/format';
 import { W } from './outils';
@@ -1665,6 +1665,68 @@ export function SchemaActiviteNumerique() {
         <text x={170} y={256} textAnchor="middle" className="ill-in">dépendance à une plateforme</text>
         <text x={170} y={308} textAnchor="middle" className="ill-sub">Schéma de principe</text>
       </svg>
+    </figure>
+  );
+}
+
+/** Exemple fictif de la fiche Activité numérique, rubrique « Exemple chiffré » (mêmes chiffres que le texte d’avant le schéma). */
+export const NUMERIQUE_BILAN = { abonnes: 200, prix: 15, departsPct: 5, mois: 12 } as const;
+
+/**
+ * Schéma de l'exemple chiffré de la fiche Activité numérique (constat du 2026-11-21 : dernière fiche dont l'exemple restait un
+ * paragraphe). Deux rangées de 13 barres mensuelles, à la même échelle (3 000 € = toute la hauteur) : sans nouveaux clients, le
+ * revenu fond mois après mois sous le niveau de départ (trait pointillé) ; avec autant d'arrivées que de départs, il reste au même
+ * niveau. Calcul pur `subscriptionMonths`. Aucun chiffre nouveau par rapport à la fiche.
+ */
+export function SchemaNumeriqueBilan({ children }: { children?: ReactNode }) {
+  const { abonnes, prix, departsPct, mois } = NUMERIQUE_BILAN;
+  const recrues = Math.round((abonnes * departsPct) / 100);
+  const seul = subscriptionMonths(abonnes, prix, departsPct, mois);
+  const garde = subscriptionMonths(abonnes, prix, departsPct, mois, recrues);
+  const depart = seul[0]!.revenue;
+  const fin = seul[mois]!;
+  const finGarde = garde[mois]!;
+  const H = 80;
+  const pas = 338 / (mois + 1);
+  const larg = pas - 4;
+  const rangee = (serie: typeof seul, y0: number) => {
+    const base = y0 + H;
+    return (
+      <g>
+        <line x1={1} x2={339} y1={y0} y2={y0} stroke="var(--ink-3)" strokeWidth={1.5} strokeDasharray="4 4" />
+        {serie.map((m) => {
+          const h = (m.revenue / depart) * H;
+          return <rect key={m.month} x={1 + m.month * pas} y={base - h} width={larg} height={h} rx={3} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth={1.5} />;
+        })}
+        <line x1={1} x2={339} y1={base} y2={base} stroke="var(--ink-2)" strokeWidth={1.5} />
+        <text x={1} y={base + 16} className="ill-sub">aujourd’hui</text>
+        <text x={1 + 6 * pas + larg / 2} y={base + 16} textAnchor="middle" className="ill-sub">6 mois</text>
+        <text x={339} y={base + 16} textAnchor="end" className="ill-sub">12 mois</text>
+      </g>
+    );
+  };
+  const hFin = (fin.revenue / depart) * H;
+  return (
+    <figure className="illustration">
+      <svg viewBox="0 0 340 366" role="img" aria-labelledby="ill-nb-t ill-nb-d" className="ill-svg">
+        <title id="ill-nb-t">Activité numérique : un revenu par abonnement qui s’use s’il n’est pas renouvelé</title>
+        <desc id="ill-nb-d">{`Exemple fictif : ${abonnes} abonnés à ${fmtEur(prix)} par mois rapportent ${fmtEur(depart)} par mois. ${departsPct} % résilient chaque mois. Sans nouveaux clients, le revenu baisse chaque mois : il reste environ ${fin.clients} abonnés au bout de ${mois} mois, soit environ ${fmtEur(fin.revenue)} par mois. Avec ${recrues} nouveaux clients chaque mois, autant que de départs, il reste ${finGarde.clients} abonnés et ${fmtEur(finGarde.revenue)} par mois. Barres mensuelles à la même échelle.`}</desc>
+
+        <text x={1} y={16} className="ill-step">Sans nouveaux clients</text>
+        <text x={339} y={16} textAnchor="end" className="ill-sub">{`${departsPct} % partent chaque mois`}</text>
+        <text x={1} y={38} className="ill-in">{`${fmtEur(depart)} par mois au départ`}</text>
+        {rangee(seul, 46)}
+        <text x={339} y={46 + H - hFin - 8} textAnchor="end" className="ill-in ill-halo-bg">{`≈ ${fmtEur(fin.revenue)}`}</text>
+        <text x={1} y={166} className="ill-sub">{`≈ ${fin.clients} abonnés au bout d’un an`}</text>
+
+        <line x1={0} x2={340} y1={184} y2={184} stroke="var(--line)" strokeWidth={1} />
+
+        <text x={1} y={210} className="ill-step">{`Avec ${recrues} nouveaux clients par mois`}</text>
+        <text x={1} y={232} className="ill-in">{`autant que de départs : ${fmtEur(finGarde.revenue)} par mois`}</text>
+        {rangee(garde, 240)}
+        <text x={1} y={360} className="ill-sub">{`${finGarde.clients} abonnés gardés`}</text>
+      </svg>
+      {children && <figcaption>{children}</figcaption>}
     </figure>
   );
 }
