@@ -510,7 +510,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Capital de départ réduit', 'Potentiel de revenu récurrent'],
     cons: ['Taux d’échec élevé', 'Dépendance aux plateformes'],
     timeSkills: 'Très élevé : produit, technique, marketing.',
-    example: 'Exemple fictif : 200 abonnés à 15 € par mois rapportent 3 000 € par mois, avant vos propres frais (hébergement, outils, publicité). Si 5 % résilient chaque mois sans nouveaux venus, il en reste environ 108 au bout d’un an : 1 620 € par mois. Rester à 3 000 € demande donc 10 nouveaux clients chaque mois.',
+    example: 'Exemple fictif : 200 abonnés à 15 € par mois rapportent 3 000 € par mois, avant vos propres frais (hébergement, outils, publicité), et 5 % d’entre eux résilient chaque mois. À retenir : un revenu par abonnement n’est jamais acquis ; sans nouveaux clients, il perd près de la moitié de sa valeur en un an, et le garder demande de trouver chaque mois autant de clients qu’il en part.',
     sources: [S.impotsIndependants, S.impotsResultats, S.bpi, S.urssaf],
     alternatives: ['creation-entreprise'],
     tags: ['entrepreneuriat', 'numérique'],

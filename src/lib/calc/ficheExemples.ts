@@ -178,6 +178,24 @@ export function subscriptionChurn(clients: number, price: number, churnPct: numb
   return { revenue: clients * price, lostFirstMonth: Math.round((clients * churnPct) / 100), clientsLeft, revenueLeft: clientsLeft * price };
 }
 
+export interface SubscriptionMonth { month: number; clients: number; revenue: number }
+
+/**
+ * Activité numérique par abonnement, mois par mois (mois 0 à `months`) : chaque mois, `churnPct` % des abonnés résilient,
+ * puis `newPerMonth` nouveaux clients arrivent. Abonnés arrondis à l'unité pour l'affichage, revenu = abonnés arrondis × prix
+ * (mêmes arrondis que `subscriptionChurn`).
+ */
+export function subscriptionMonths(clients: number, price: number, churnPct: number, months: number, newPerMonth = 0): SubscriptionMonth[] {
+  const out: SubscriptionMonth[] = [];
+  let c = clients;
+  for (let m = 0; m <= months; m++) {
+    if (m > 0) c = c * (1 - churnPct / 100) + newPerMonth;
+    const r = Math.round(c);
+    out.push({ month: m, clients: r, revenue: r * price });
+  }
+  return out;
+}
+
 export interface FondsEurosGrowth { final: number; firstYearInterest: number; lastYearInterest: number; finalWithMoreFees: number; gap: number }
 
 /**

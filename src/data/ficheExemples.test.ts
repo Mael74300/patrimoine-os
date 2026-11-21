@@ -396,12 +396,20 @@ describe('fiche SaaS, e-commerce et produits numériques : un revenu récurrent 
   it('montants recalculés : 3 000 € par mois, 10 départs le premier mois, 108 clients et 1 620 € après un an', () => {
     expect(r).toEqual({ revenue: 3000, lostFirstMonth: 10, clientsLeft: 108, revenueLeft: 1620 });
   });
-  it('le texte de la fiche cite les mêmes montants et reste marqué fictif', () => {
+  it('le texte de la fiche donne les hypothèses, reste marqué fictif et ne recopie pas les montants dessinés', () => {
     expect(ex).toMatch(/^Exemple fictif/);
     expect(ex).toContain(`200 abonnés à ${eur(15)} par mois rapportent ${eur(r.revenue)} par mois`);
-    expect(ex).toContain('Si 5 % résilient chaque mois sans nouveaux venus');
-    expect(ex).toContain(`environ ${r.clientsLeft} au bout d’un an : ${eur(r.revenueLeft)} par mois`);
-    expect(ex).toContain(`demande donc ${r.lostFirstMonth} nouveaux clients chaque mois`);
+    expect(ex).toContain('5 % d’entre eux résilient chaque mois');
+    // Les montants calculés sont dessinés dans le schéma (SchemaNumeriqueBilan, testé dans numeriqueBilan.test.ts), pas recopiés.
+    expect(ex).not.toContain(eur(r.revenueLeft));
+    expect(ex).not.toContain(String(r.clientsLeft));
+  });
+  it('« près de la moitié de sa valeur en un an » : la perte est entre 40 % et 50 %', () => {
+    const perte = 1 - r.revenueLeft / r.revenue;
+    expect(perte).toBeGreaterThan(0.4);
+    expect(perte).toBeLessThan(0.5);
+    expect(ex).toContain('il perd près de la moitié de sa valeur en un an');
+    expect(ex).toContain('autant de clients qu’il en part');
   });
 });
 
