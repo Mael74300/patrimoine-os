@@ -66,6 +66,25 @@ for (const viewport of VIEWPORTS) {
         .map((e) => `${e.tagName.toLowerCase()}${e.className && typeof e.className === 'string' ? '.' + e.className.split(' ').join('.') : ''} (droite à ${Math.round(e.getBoundingClientRect().right)} px)`));
       errors.push(`débordement horizontal de ${overflow} px${fautifs.length ? ' ; éléments : ' + fautifs.join(', ') : ''}`);
     }
+    // Schéma ou graphique placé dans un bloc repliable : une fois le bloc ouvert, il reste entre ses bords
+    // (règle CSS « details.fold > .illustration » ; avant, sur téléphone, le schéma sortait du bloc jusqu'aux bords de l'écran).
+    const horsBloc = await page.evaluate(() => {
+      const out = [];
+      for (const d of document.querySelectorAll('details')) {
+        const etaitOuvert = d.open;
+        d.open = true;
+        const db = d.getBoundingClientRect();
+        for (const f of d.querySelectorAll('.illustration, .fig-pair, .line-chart')) {
+          const fb = f.getBoundingClientRect();
+          if (fb.width && (fb.left < db.left - 0.5 || fb.right > db.right + 0.5)) {
+            out.push(`« ${d.querySelector('summary')?.textContent?.trim() ?? 'bloc'} » : ${f.className} de ${Math.round(fb.left)} à ${Math.round(fb.right)} px, bloc de ${Math.round(db.left)} à ${Math.round(db.right)} px`);
+          }
+        }
+        d.open = etaitOuvert;
+      }
+      return out;
+    });
+    errors.push(...horsBloc.map((e) => `schéma hors de son bloc repliable : ${e}`));
     // Texte d'un dessin SVG : la plus petite case (rect) qui contient le centre du texte doit le contenir
     // entièrement, avec une marge horizontale ; sans case, le texte reste dans le dessin.
     // Mesure faite avec Liberation Sans (mêmes largeurs qu'Arial, installée avec les dépendances de Playwright),

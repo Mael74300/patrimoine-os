@@ -514,6 +514,14 @@ td.neg { color: var(--danger); }
   .ill-svg[viewBox^="0 0 420 "] .ill-in { font-size: 13.2px; }
   .ill-svg[viewBox^="0 0 420 "] .ill-sub { font-size: 13.6px; }
 }
+/* Schéma placé dans un bloc repliable : le bloc sert déjà de cadre. Le schéma n'ajoute ni second cadre ni ombre
+   et reste dans les marges du bloc (avant : cadre dans le cadre sur grand écran ; sur téléphone, schéma étiré
+   jusqu'aux bords de l'écran, hors du bloc). Contrôlé par le test de fumée (scripts/smoke.mjs). */
+details.fold > .illustration { margin: 0 14px 14px; padding: 2px 0 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+@media (max-width: 480px) {
+  details.fold > .illustration { margin: 0 10px 12px; }
+  details.fold > .illustration figcaption { padding: 0 4px; }
+}
 
 /* Blocs repliables : un seul repère sur tout le site, « + » fermé, « − » ouvert, après le titre
    (à droite dans les blocs encadrés). Les marqueurs natifs ▶ / ▼ sont masqués partout. */
