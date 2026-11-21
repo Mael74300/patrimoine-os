@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { portfolioProjectionNote, portfolioTakeaway, rebalanceTakeaway } from '../lib/takeaways';
 import { fmtEur, fmtPct, projectGrowth, rebalance, summarizePortfolio, type PortfolioLine } from '../lib/finance';
 import { LIVRET_A } from '../data/livrets';
@@ -42,7 +43,7 @@ export default function SimPortefeuille() {
 
       <h2>Ce que vous détenez</h2>
       <p className="small muted" style={{ marginTop: 0 }}>
-        <strong>Rendement</strong> et <strong>frais</strong> : en % par an. <strong>Risque</strong> : de 1 (très prudent) à 7 (très risqué). <strong>Part visée</strong> : la part du total voulue pour chaque placement (100 % en tout).
+        <strong>Rendement</strong> et <strong>frais</strong> : en % par an. <strong>Risque</strong> : de 1 (faible) à 7 (fort), noté dans le <Link to="/glossaire#dic-document-d-informations-cles">DIC</Link> d’un fonds, sinon à estimer. <strong>Part visée</strong> : la part voulue du total (100 % en tout).
       </p>
       <div className="table-wrap line-wrap" tabIndex={0}>
         <table className="line-table">
