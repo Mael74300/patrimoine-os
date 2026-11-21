@@ -215,7 +215,9 @@ describe('fiches : exemples chiffrés menés jusqu’au résultat', () => {
     expect(r).toEqual({ yearly: 150, total: 1200 });
     const t = ex('private-equity');
     expect(t).toMatch(/^Exemple fictif/);
-    for (const s of [`${eur(5000)} souscrits`, 'bloqués 8 ans', 'frais de 3 % par an des sommes souscrites', `${eur(r.yearly)} par an`, `${eur(r.total)} sur 8 ans`, 'Rien n’est garanti']) expect(t).toContain(s);
+    for (const s of [`${eur(5000)} souscrits`, 'bloqués 8 ans', 'frais de 3 % par an des sommes souscrites', 'quel que soit le résultat', 'À retenir', 'Rien n’est garanti']) expect(t).toContain(s);
+    // 150 € par an et 1 200 € en tout sont écrits sur le schéma de l’exemple (SchemaPrivateEquityBilan), pas recopiés.
+    for (const v of [r.yearly, r.total]) expect(t).not.toContain(eur(v));
     // 3 % se situe entre les médianes sourcées de la rubrique Frais (FCPR 2,4 % à 2,5 %, FIP 3,5 %).
     const fees = norm(investmentBySlug['private-equity']!.fees.text);
     expect(fees).toContain('plus de 3,5 % par an des sommes souscrites');
