@@ -205,7 +205,7 @@ const raw: Omit<Investment, 'review'>[] = [
     pros: ['Vous choisissez vous-même chaque entreprise', 'Pas de frais de gestion annuels'],
     cons: ['Peu de titres : une seule chute pèse lourd', 'Demande du temps et de la méthode', 'Décisions prises sous l’émotion'],
     timeSkills: 'Plusieurs heures par mois et des compétences en analyse financière.',
-    example: 'Exemple fictif : avec 15 lignes de 1 000 €, comme sur le schéma, une défaillance coûte au plus 6,7 % du total. Avec les mêmes 15 000 € sur 3 lignes de 5 000 €, elle coûte jusqu’à 5 000 €, soit 33,3 %. À l’achat d’une ligne de 1 000 € soumise à la taxe de 0,4 %, comptez 4 € de taxe, en plus du courtage.',
+    example: 'Exemple fictif, celui du schéma : 15 000 € répartis sur 15 entreprises ou sur 3, dont l’une perd toute sa valeur. À retenir : plus on détient d’entreprises, moins une faillite pèse lourd. À l’achat de 1 000 € d’actions soumises à la taxe de 0,4 %, comptez 4 € de taxe, en plus du courtage.',
     sources: [S.amf, S.lfptFraisBourse, S.bofipTtf],
     alternatives: ['etf-monde'],
     tags: ['bourse', 'actif'],

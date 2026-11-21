@@ -12,8 +12,21 @@ describe('schéma « petits versements »', () => {
   it('recalcule les montants cités dans le guide', () => {
     const r = petitsVersementsRows();
     expect(r.map((x) => [x.paid, x.total, x.gains])).toEqual([[18000, 34400, 16400], [45000, 78200, 33200]]);
-    expect(texte).toContain('environ 34 400 € pour 18 000 € versés');
-    expect(texte).toContain('environ 78 200 € pour 45 000 € versés');
+    // Le texte au-dessus du schéma donne les hypothèses et ce qu'il faut retenir, sans recopier les montants dessinés.
+    const sec = guide.sections.find((s) => s.heading === 'Commencer petit, mais commencer')!.body.join(' ').replace(/\u00a0/g, ' ');
+    for (const v of ['34 400 €', '18 000 €', '78 200 €', '45 000 €']) expect(sec).not.toContain(v);
+    expect(sec).toContain('Exemple fictif, celui du schéma : 30 ans d’épargne à 4 % par an supposé, avec 50 € par mois fixes');
+    expect(sec).toContain('100 € après 5 ans puis 150 € après 10 ans');
+    expect(sec).toContain('À retenir :');
+    // « près de la moitié du capital final vient des gains » et « fait plus que doubler ce capital » : recalculés.
+    expect(sec).toContain('près de la moitié du capital final vient des gains');
+    expect(r[0].gains / r[0].total).toBeGreaterThan(0.45);
+    expect(r[0].gains / r[0].total).toBeLessThan(0.5);
+    expect(sec).toContain('fait plus que doubler ce capital');
+    expect(r[1].total / r[0].total).toBeGreaterThan(2);
+    expect(r[1].total / r[0].total).toBeLessThan(2.5);
+    // La FAQ, lue seule (et reprise dans les données structurées), garde le montant chiffré.
+    expect(guide.faq![0].a.replace(/\u00a0/g, ' ')).toContain('environ 34 400 € pour 18 000 € versés');
   });
   it('ses paliers couvrent les 30 ans et redonnent les sommes versées', () => {
     for (const r of petitsVersementsRows()) {
