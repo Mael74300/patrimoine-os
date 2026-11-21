@@ -10,7 +10,7 @@ import { simBlurb } from '../lib/simThemes';
 import { interleave, splitNext } from '../lib/nextLinks';
 import { NextList, NextMore, type NextItem } from '../components/NextList';
 import { DONATION_ABATTEMENTS, fmtEuros } from '../data/donationAbattements';
-import { SchemaActions, SchemaForet, SchemaDonation, SchemaDonationBilan, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaPrivateEquityBilan, SchemaCrowdfunding, SchemaCrypto, SchemaCryptoBilan, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaFonciereBilan, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaObligationBilan, SchemaEtfBilan, SchemaAssuranceVieBilan, SchemaOr, SchemaOrBilan, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaScpi, SchemaScpiBilan, SchemaCrowdfundingBilan, SchemaMicroBilan, SchemaUniteDeCompte, SchemaFondsEuros, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaObjetsArtBilan, SchemaCreationEntreprise, SchemaCreationBilan, SchemaRepriseEntreprise, SchemaRepriseBilan, SchemaLivretBilan, SchemaActiviteNumerique, SchemaNumeriqueBilan, SchemaPee, SchemaPeeBilan, SchemaLevierBilan, SchemaPeaBilan, SchemaForetBilan, SchemaFraisBilan } from '../components/schemas/fiches';
+import { SchemaActions, SchemaForet, SchemaDonation, SchemaDonationBilan, SchemaAssuranceVie, SchemaCapitalInvestissement, SchemaPrivateEquityBilan, SchemaCrowdfunding, SchemaCrypto, SchemaCryptoBilan, SchemaCto, SchemaEtf, SchemaFonciereCotee, SchemaFonciereBilan, SchemaLmnp, SchemaLocationNue, SchemaObligation, SchemaObligationBilan, SchemaEtfBilan, SchemaAssuranceVieBilan, SchemaOr, SchemaOrBilan, SchemaLep, SchemaPel, SchemaPer, SchemaPerBilan, SchemaScpi, SchemaScpiBilan, SchemaCrowdfundingBilan, SchemaMicroBilan, SchemaUniteDeCompte, SchemaFondsEuros, SchemaCompteATerme, SchemaAssuranceVieDeces, SchemaCpf, SchemaObjetsArt, SchemaObjetsArtBilan, SchemaCreationEntreprise, SchemaCreationBilan, SchemaFormationBilan, SchemaRepriseEntreprise, SchemaRepriseBilan, SchemaLivretBilan, SchemaActiviteNumerique, SchemaNumeriqueBilan, SchemaPee, SchemaPeeBilan, SchemaLevierBilan, SchemaPeaBilan, SchemaForetBilan, SchemaFraisBilan } from '../components/schemas/fiches';
 import { SchemaPea, SchemaQuinzaines } from '../components/schemas/communs';
 import NotFound from './NotFound';
 import { DonationCalculator } from '../components/DonationCalculator';
@@ -184,6 +184,7 @@ export default function InvestmentPage() {
             if (inv.slug === 'private-equity') return <SchemaPrivateEquityBilan>{ex}</SchemaPrivateEquityBilan>;
             if (inv.slug === 'objets-d-art-collection') return <SchemaObjetsArtBilan>{ex}</SchemaObjetsArtBilan>;
             if (inv.slug === 'creation-entreprise') return <SchemaCreationBilan>{ex}</SchemaCreationBilan>;
+            if (inv.slug === 'capital-humain') return <SchemaFormationBilan>{ex}</SchemaFormationBilan>;
             if (inv.slug === 'activite-numerique') return <SchemaNumeriqueBilan>{ex}</SchemaNumeriqueBilan>;
             if (inv.slug === 'pee') return <SchemaPeeBilan>{ex}</SchemaPeeBilan>;
             if (inv.slug === 'fonds-euros' || inv.slug === 'unites-de-compte') return <SchemaFraisBilan kind={inv.slug}>{ex}</SchemaFraisBilan>;

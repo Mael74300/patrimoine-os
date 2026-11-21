@@ -376,16 +376,22 @@ describe('fiche Formation et compétences : ce qu’une hausse de salaire rappor
   it('montants recalculés avec le moteur du simulateur : 5 mois, 31 000 € en 10 ans, 81 500 € en 20 ans', () => {
     expect(r).toEqual({ paybackMonths: 5, saved: [{ years: 10, contributed: 24000, value: 31000 }, { years: 20, contributed: 48000, value: 81500 }] });
   });
-  it('le texte de la fiche cite les mêmes montants, reste marqué fictif et reprend l’hypothèse du suivi', () => {
+  it('le texte de la fiche donne les hypothèses, reste marqué fictif et ne recopie pas les montants dessinés', () => {
     expect(ex).toMatch(/^Exemple fictif/);
     expect(ex).toContain(`formation à ${eur(1000)}`);
     expect(ex).toContain(`hausse de salaire de ${eur(200)} nets par mois`);
-    expect(ex).toContain(`remboursée en ${r.paybackMonths} mois`);
-    for (const s of r.saved) {
-      expect(ex).toContain(`${eur(s.value)} en ${s.years} ans (${eur(s.contributed)} versés)`);
-    }
     expect(ex).toContain('5 % par an');
     expect(norm(investmentBySlug['capital-humain']!.review.assumptions!.join(' '))).toContain('5 % par an');
+    // Les montants calculés sont dessinés dans le schéma (SchemaFormationBilan, testé dans formationBilan.test.ts), pas recopiés.
+    for (const s of r.saved) {
+      expect(ex).not.toContain(eur(s.value));
+      expect(ex).not.toContain(eur(s.contributed));
+    }
+  });
+  it('« elle finit par peser bien plus que la formation » : dès 10 ans, plus de dix fois la dépense', () => {
+    expect(r.saved[0]!.value).toBeGreaterThan(10 * 1000);
+    expect(ex).toContain('elle finit par peser bien plus que la formation');
+    expect(ex).toContain('Sans hausse, seuls les 1 000 € et votre temps sont perdus');
   });
 });
 
