@@ -17,7 +17,7 @@ export const SIM_THEME_ART: Record<string, HeaderArtName> = {
 export function HeaderArt({ name }: { name: HeaderArtName }) {
   const line = { fill: 'none', stroke: 'var(--primary)', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   const soft = { fill: 'var(--accent-soft)', stroke: 'var(--accent)', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
-  const white = { fill: '#fff', stroke: 'var(--primary)', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
+  const white = { fill: 'var(--surface)', stroke: 'var(--primary)', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   const gold = { fill: 'var(--gold)', stroke: 'var(--primary)', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
   let scene: JSX.Element;
   switch (name) {

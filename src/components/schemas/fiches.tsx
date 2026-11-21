@@ -1541,7 +1541,7 @@ export function SchemaMicroBilan({ kind, children }: { kind: keyof typeof MICRO_
 
         <text x={0} y={104} className="ill-year" textAnchor="start">{`Impôt dans la tranche à ${pct(marginalRatePct)}`}</text>
         <rect x={xa} y={114} width={r.incomeTax * k} height={26} rx={4} fill="var(--danger)" />
-        <text x={xa + (r.incomeTax * k) / 2} y={132} className="ill-in" textAnchor="middle" style={{ fill: '#fff' }}>{fmtEur(r.incomeTax)}</text>
+        <text x={xa + (r.incomeTax * k) / 2} y={132} className="ill-in" textAnchor="middle" style={{ fill: 'var(--primary-ink)' }}>{fmtEur(r.incomeTax)}</text>
         <text x={xa + r.incomeTax * k + 8} y={132} className="ill-sub" textAnchor="start">{`sur ces ${fmtEur(r.taxable)}`}</text>
 
         <text x={0} y={166} className="ill-total" textAnchor="start" style={{ fill: 'var(--danger)' }}>{`Impôt : ${fmtEur(r.incomeTax)}, soit ${pct(r.incomeTaxPctOfRents)} des loyers`}</text>

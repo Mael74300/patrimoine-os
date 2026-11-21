@@ -1,6 +1,6 @@
 # Patrimoine OS
 
-Plateforme française et gratuite consacrée à la construction du patrimoine : encyclopédie des investissements, comparateurs, vingt et un simulateurs et guides pédagogiques. Site statique pré-rendu, sans backend, sans compte, sans cookie ni traceur. Coût d'exploitation : 0 €.
+Plateforme française et gratuite consacrée à la construction du patrimoine : encyclopédie des investissements, comparateurs, vingt et un simulateurs et guides pédagogiques. Site statique pré-rendu, sans backend, sans compte, sans cookie ni traceur. S'affiche en clair ou en sombre selon le réglage de l'appareil (l'impression reste claire). Coût d'exploitation : 0 €.
 
 ## Contenu
 
