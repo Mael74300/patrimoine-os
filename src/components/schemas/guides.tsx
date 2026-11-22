@@ -633,34 +633,60 @@ export function SchemaPatrimoineNet() {
   );
 }
 
-/** Schéma « Rembourser ou investir » : patrimoine net final des deux options sur l’exemple fictif du guide. */
+/** Schéma « Rembourser ou investir » : les 20 ans du crédit en frise, à l'échelle, pour chaque option de l'exemple fictif du guide
+ * (crédit raccourci puis mensualité placée, ou crédit jusqu'au bout et somme placée dès le départ), avec le patrimoine net final (chantier 280). */
 export function SchemaRembourser() {
   const p = rembourserParts();
-  const pctFr = (v: number) => `${(Math.round(v * 1000) / 10).toLocaleString('fr-FR')} %`;
+  const pctFr = (v: number) => `${(Math.round(v * 1000) / 10).toLocaleString('fr-FR')} %`;
+  const months = p.remainingYears * 12;
   const X0 = 14;
-  const BW = 250;
-  const w = (v: number) => (v / Math.max(p.wealthPrepay, p.wealthInvest)) * BW;
-  const bars = [
-    { y: 52, v: p.wealthPrepay, fill: 'var(--accent)', title: 'Option 1 : rembourser', sub: `crédit éteint ${p.monthsSaved} mois plus tôt, mensualité inchangée` },
-    { y: 136, v: p.wealthInvest, fill: 'var(--primary)', title: 'Option 2 : investir', sub: `placement à ${pctFr(p.annualReturn)} par an, crédit inchangé` },
+  const X1 = 326;
+  /** Abscisse d'un mois : la durée est dessinée à l'échelle (20 ans sur 312 unités). */
+  const xm = (m: number) => X0 + (m / months) * (X1 - X0);
+  const xStop = xm(p.monthsIfPrepaid);
+  const pay = `≈ ${fmtEur(p.monthlyPayment)} par mois`;
+  /** Épargne placée en coin qui s'épaissit : illustration de la croissance, pas une échelle de montants. */
+  const wedge = (x: number, base: number, h0: number, h1: number) => `M ${x} ${base} H ${X1} V ${base - h1} L ${x} ${base - h0} Z`;
+  const BAR = 24;
+  const rows = [
+    { y: 0, title: '1. Rembourser tout de suite', value: p.wealthPrepay },
+    { y: 104, title: `2. Investir les ${fmtEur(p.lump)}`, value: p.wealthInvest },
   ];
+  const axisY = 210;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 340 192" role="img" aria-labelledby="ill-rb-t ill-rb-d" className="ill-svg">
-        <title id="ill-rb-t">Rembourser ou investir : le patrimoine net obtenu dans chaque cas</title>
-        <desc id="ill-rb-d">{`Exemple fictif : ${fmtEur(p.lump)} disponibles, crédit de ${fmtEur(p.balance)} à ${pctFr(p.annualRate)} sur ${p.remainingYears} ans restants. Au bout de ${p.remainingYears} ans, patrimoine net d’environ ${fmtEur(p.wealthPrepay)} en remboursant, contre environ ${fmtEur(p.wealthInvest)} en investissant : écart d’environ ${fmtEur(p.gap)}. Au-delà d’environ ${p.breakEvenReturn === null ? '—' : pctFr(p.breakEvenReturn)} brut par an de rendement, investir gagnerait.`}</desc>
-        <text x={X0} y="16" className="ill-step">{`Patrimoine net après ${p.remainingYears} ans (environ)`}</text>
-        {bars.map((b) => (
-          <g key={b.title}>
-            <text x={X0} y={b.y - 10} className="ill-step">{b.title}</text>
-            <rect x={X0} y={b.y} width={w(b.v)} height="28" rx="7" fill={b.fill} />
-            <text x={X0 + w(b.v) + 8} y={b.y + 19} className="ill-total">{fmtEur(b.v)}</text>
-            <text x={X0} y={b.y + 46} className="ill-sub">{b.sub}</text>
+      <svg viewBox="0 0 340 240" role="img" aria-labelledby="ill-rb-t ill-rb-d" className="ill-svg">
+        <title id="ill-rb-t">{`Rembourser ou investir : ce qui se passe pendant les ${p.remainingYears} ans du crédit`}</title>
+        <desc id="ill-rb-d">{`Exemple fictif : ${fmtEur(p.lump)} disponibles, crédit de ${fmtEur(p.balance)} à ${pctFr(p.annualRate)} sur ${p.remainingYears} ans restants, mensualité d’environ ${fmtEur(p.monthlyPayment)}. Option 1 : la somme rembourse le crédit, qui s’arrête ${p.monthsSaved} mois plus tôt ; pendant ces ${p.monthsSaved} derniers mois, la mensualité est placée ; patrimoine net d’environ ${fmtEur(p.wealthPrepay)} au bout de ${p.remainingYears} ans. Option 2 : le crédit va jusqu’au bout et la somme reste placée ${p.remainingYears} ans à ${pctFr(p.annualReturn)} par an ; patrimoine net d’environ ${fmtEur(p.wealthInvest)}. Au-delà d’environ ${p.breakEvenReturn === null ? '—' : pctFr(p.breakEvenReturn)} brut par an de rendement, investir gagnerait.`}</desc>
+        {rows.map((r) => (
+          <g key={r.title}>
+            <text x={X0} y={r.y + 18} className="ill-step">{r.title}</text>
+            <text x={X1} y={r.y + 18} textAnchor="end" className="ill-total">{`≈ ${fmtEur(r.value)}`}</text>
+          </g>
+        ))}
+        {/* Option 1 : crédit raccourci, puis la mensualité placée jusqu'à la fin prévue. */}
+        <rect x={X0} y={28} width={xStop - X0} height={BAR} rx={6} fill="var(--primary)" />
+        <text x={X0 + 10} y={45} className="ill-in ill-on-dark">{`crédit, ${pay}`}</text>
+        <path d={`M ${xStop} 28 V ${28 + BAR + 26}`} stroke="var(--ink-2)" strokeWidth={1.5} strokeDasharray="3 3" />
+        <path d={wedge(xStop + 3, 28 + BAR + 26, 3, 18)} fill="var(--accent)" />
+        <text x={xStop - 6} y={28 + BAR + 18} textAnchor="end" className="ill-sub">{`crédit fini ${p.monthsSaved} mois plus tôt,`}</text>
+        <text x={xStop - 6} y={28 + BAR + 36} textAnchor="end" className="ill-placed">puis la mensualité est placée →</text>
+        {/* Option 2 : crédit jusqu'au bout, la somme placée dès le départ. */}
+        <rect x={X0} y={132} width={X1 - X0} height={BAR} rx={6} fill="var(--primary)" />
+        <text x={X0 + 10} y={149} className="ill-in ill-on-dark">{`crédit jusqu’au bout, ${pay}`}</text>
+        <path d={wedge(X0, 178, 6, 18)} fill="var(--accent)" />
+        <text x={X0} y={196} className="ill-placed">{`${fmtEur(p.lump)} placés ${p.remainingYears} ans à ${pctFr(p.annualReturn)} par an`}</text>
+        {/* Axe du temps, à l'échelle. */}
+        <path d={`M ${X0} ${axisY} H ${X1}`} stroke="var(--ink-2)" strokeWidth={1.5} />
+        {[0, 5, 10, 15, 20].filter((y) => y <= p.remainingYears).map((y) => (
+          <g key={y}>
+            <path d={`M ${xm(y * 12)} ${axisY} v 5`} stroke="var(--ink-2)" strokeWidth={1.5} />
+            <text x={xm(y * 12)} y={axisY + 20} textAnchor={y === 0 ? 'start' : y === p.remainingYears ? 'end' : 'middle'} className="ill-sub">{y === 0 ? 'an 0' : `an ${y}`}</text>
           </g>
         ))}
       </svg>
       <figcaption className="fig-short">
-        <strong>Illustration, exemple fictif</strong> : barres proportionnelles aux montants.
+        <strong>Illustration, exemple fictif</strong> : durées à l’échelle, montants nets de frais et d’impôt.
       </figcaption>
     </figure>
   );

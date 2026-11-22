@@ -37,6 +37,14 @@ describe('schéma « rembourser ou investir »', () => {
     expect(html).toContain('exemple fictif');
     expect(html).toContain('43 850');
     expect(html).toContain('5,4 %');
+    expect(html).toContain('41 250');
+    // La frise montre le mécanisme : crédit raccourci de 45 mois, puis la mensualité placée (≈ 909 €).
+    const p = rembourserParts();
+    expect(p.monthsIfPrepaid + p.monthsSaved).toBe(p.remainingYears * 12);
+    expect(p.monthlyPayment).toBe(909);
+    expect(html).toContain('crédit fini 45 mois plus tôt');
+    expect(html).toContain('≈ 909 € par mois');
+    expect(html).toContain('durées à l’échelle');
     expect(html.length).toBeLessThan(15000);
   });
 });

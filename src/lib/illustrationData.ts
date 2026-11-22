@@ -230,6 +230,10 @@ export function rembourserParts() {
     wealthInvest: round50(r.wealthInvest),
     gap: round50(r.wealthPrepay - r.wealthInvest),
     monthsSaved: r.monthsSaved,
+    /** Mois de crédit restants si l'on rembourse (le crédit s'éteint alors, la mensualité est placée jusqu'à la fin prévue). */
+    monthsIfPrepaid: r.monthsIfPrepaid,
+    /** Mensualité du crédit, arrondie à l'euro (affichée « environ »). */
+    monthlyPayment: Math.round(r.monthlyPayment),
     interestSaved: round50(r.interestSaved),
     breakEvenReturn: r.breakEvenReturn,
   };
