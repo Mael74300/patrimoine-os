@@ -188,10 +188,10 @@ export default function SimEntreprise() {
           </p>
           </Fold>
           <SavedSims simKey="entreprise" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <Disclaimer kind="entreprise" />
-          <SimFaq slug="entreprise" />
         </section>
       </div>
+      <Disclaimer kind="entreprise" />
+      <SimFaq slug="entreprise" />
     </>
   );
 }

@@ -202,10 +202,10 @@ export default function SimLouerAcheter() {
             </figcaption>
           </figure>
           <SavedSims simKey="louer-acheter" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <Disclaimer />
-          <SimFaq slug="louer-ou-acheter" />
         </section>
       </div>
+      <Disclaimer />
+      <SimFaq slug="louer-ou-acheter" />
     </>
   );
 }

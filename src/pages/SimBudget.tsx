@@ -117,10 +117,10 @@ export default function SimBudget() {
             l'inflation, les frais ou des versements qui changent, utilisez le <Link to="/simulateurs/patrimoine">simulateur de patrimoine</Link>.
           </p>
           <SavedSims simKey="budget" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <Disclaimer />
-          <SimFaq slug="budget" />
         </section>
       </div>
+      <Disclaimer />
+      <SimFaq slug="budget" />
     </>
   );
 }
