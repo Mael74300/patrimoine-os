@@ -4,9 +4,13 @@ import { investmentBySlug, investments } from '../data/investments';
 import { fmtEur, projectGrowth } from '../lib/finance';
 import { durationExceeded, impossibleFromYear, monthCapExceeded, projectionSplit, totalContributed } from '../lib/calc/compareSummary';
 import { fmtMonths } from '../lib/calc/format';
+import { compareCell } from '../lib/compareCell';
+import { sentenceLead } from '../lib/sentenceLead';
+import { fmtDate } from '../lib/dates';
+import type { Checked } from '../data/types';
 import { readingFromRefs, nextForComparator } from '../lib/relatedSims';
 import { DURATION_LIMITS, REGULATED_RATES, VERSEMENT_CAPS } from '../data/versementCaps';
-import { CapitalFact, CheckedText, Disclaimer, LineChart, MeterRows, MetersLegend, NumberField, PageHead, SimNext } from '../components/ui';
+import { CapitalFact, Disclaimer, Linked, LineChart, MeterRows, MetersLegend, NumberField, PageHead, SimNext } from '../components/ui';
 
 /** Critères longs et chiffrés : repliés par ligne sur mobile (le tableau y est empilé), toujours ouverts sans JavaScript et en écran large.
  *  Restent ouverts sur mobile les repères, l'horizon et les avantages et inconvénients : de quoi comparer d'un coup d'œil. */
@@ -27,6 +31,36 @@ export function useIsMobile(): boolean {
 function splitText(value: number, amount: number, monthly: number, years: number): ReactNode {
   const { gains } = projectionSplit(value, totalContributed(amount, monthly, years));
   return <><strong className="num">{fmtEur(Math.abs(gains))}</strong> {gains >= 0 ? 'de gains' : 'de moins que vos versements'}</>;
+}
+
+/** Une ligne de case : l'amorce en gras (« Après 8 ans : »), comme sur les fiches. */
+function CmpLine({ text, path }: { text: string; path: string }) {
+  const l = sentenceLead(text);
+  return <li>{l ? <><strong>{l.lead}</strong><Linked text={l.rest} path={path} /></> : <Linked text={text} path={path} />}</li>;
+}
+
+/**
+ * Case Capital nécessaire, Frais ou Fiscalité : trois lignes visibles au plus, la suite repliée
+ * (« 3 autres points »), pour que la case la plus longue ne dicte plus la hauteur de toute la ligne.
+ * Le repli est un <details> : tout le texte reste dans le HTML pré-rendu.
+ */
+function CmpFact({ c, slug, field }: { c: Checked; slug: string; field: 'minCapital' | 'fees' | 'tax' }) {
+  const { shown, more } = compareCell(c, slug, field);
+  const path = `/encyclopedie/${slug}`;
+  const badge = c.verified ? <span className="badge-verified">✓ vérifié{c.asOf ? ` au ${fmtDate(c.asOf)}` : ''}</span> : c.advice ? null : <span className="badge-unverified">à vérifier</span>;
+  if (shown.length === 1 && more.length === 0) return <p><Linked text={shown[0]} path={path} /> {badge}</p>;
+  return (
+    <>
+      <ul className="sentence-list">{shown.map((t) => <CmpLine key={t} text={t} path={path} />)}</ul>
+      {more.length > 0 && (
+        <details className="cmp-more">
+          <summary>{more.length} autres points</summary>
+          <ul className="sentence-list">{more.map((t) => <CmpLine key={t} text={t} path={path} />)}</ul>
+        </details>
+      )}
+      {badge && <p className="cmp-badge">{badge}</p>}
+    </>
+  );
 }
 
 const COLORS = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)'];
@@ -87,9 +121,9 @@ export default function Compare() {
         <ul className="cmp-list cmp-cons">{i.cons.map((x) => <li key={x}>{x}</li>)}</ul>
       </>
     )],
-    ['Capital nécessaire', (i) => (i.minCapital.advice ? <p><CapitalFact c={i.minCapital} /></p> : <CheckedText c={i.minCapital} split />)],
-    ['Frais', (i) => <CheckedText c={i.fees} split />],
-    ['Fiscalité', (i) => <CheckedText c={i.tax} split />],
+    ['Capital nécessaire', (i) => (i.minCapital.advice ? <p><CapitalFact c={i.minCapital} /></p> : <CmpFact c={i.minCapital} slug={i.slug} field="minCapital" />)],
+    ['Frais', (i) => <CmpFact c={i.fees} slug={i.slug} field="fees" />],
+    ['Fiscalité', (i) => <CmpFact c={i.tax} slug={i.slug} field="tax" />],
   ];
 
   return (

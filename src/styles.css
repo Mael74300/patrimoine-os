@@ -611,6 +611,12 @@ details.fold > .fold-form { padding: 4px 14px 6px; }
 .cmp-table td > p { margin: 0; }
 .cmp-table .sentence-list { font-size: inherit; padding-left: 16px; }
 .cmp-table .sentence-list li { margin-bottom: 2px; }
+/* Suite repliée d'une case Frais ou Fiscalité : un lien discret sous les trois premières lignes. */
+.cmp-more { margin: 4px 0 0; }
+.cmp-more > summary { min-height: 36px; gap: 6px; font-size: 0.9rem; font-weight: 600; color: var(--primary); }
+.cmp-more > summary::after { font-size: 1.1rem; }
+.cmp-more > .sentence-list { margin-top: 2px; }
+.cmp-table .cmp-badge { margin: 4px 0 0; }
 /* Comparateur : sous 700 px, chaque critère devient un bloc et chaque placement une ligne étiquetée */
 @media (max-width: 700px) {
   .cmp-wrap { overflow-x: visible; }
