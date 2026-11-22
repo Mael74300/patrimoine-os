@@ -455,6 +455,11 @@ type ChartProps = {
   band?: ChartBand;
   /** Point lu par défaut dans la légende (sinon le dernier), par exemple la valeur saisie. */
   defaultIndex?: number;
+  /**
+   * Ce que mesurent les montants lus dans la légende (« capital restant dû », « en euros d’aujourd’hui »…), affiché après
+   * la période lue. Utile quand les courbes portent le nom d’un scénario (« Propriétaire », « Frais 1 % ») et non d’un montant.
+   */
+  measure?: string;
 };
 
 const CHAR_W = 6.6; // largeur moyenne d'un caractère de la police des graduations (px)
@@ -552,7 +557,7 @@ export function placeXLabels(
 }
 
 /** Graphique en lignes SVG, sans dépendance, utilisable à la souris, au doigt et au clavier. */
-export function LineChart({ series, xLabels, format, title, showTitle, height = 300, axisLabels, band, defaultIndex }: ChartProps) {
+export function LineChart({ series, xLabels, format, title, showTitle, height = 300, axisLabels, band, defaultIndex, measure }: ChartProps) {
   // Largeur du dessin = largeur affichée : les textes gardent leur taille réelle (lisibles sur mobile).
   const [W, setW] = useState(720);
   const narrow = W < 480;
@@ -698,7 +703,10 @@ export function LineChart({ series, xLabels, format, title, showTitle, height = 
         </table>
       </div>
       <figcaption className="chart-legend" aria-live="polite">
-        <strong className="chart-legend-x">{xLabels[active]}</strong>
+        <span className="chart-legend-x">
+          <strong>{xLabels[active]}</strong>
+          {measure && <span className="chart-legend-measure"> · {measure}</span>}
+        </span>
         {series.map((s, idx) => (
           <span key={idx} className={s.dashed ? 'dashed' : undefined} style={{ ['--c' as string]: s.color }}>
             {s.name}

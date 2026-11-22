@@ -54,6 +54,7 @@ export default function SimInflation() {
           <h2>Valeur de la somme dans le temps (euros d’aujourd’hui)</h2>
           <LineChart
             title="Pouvoir d'achat de la somme, inchangée ou placée"
+            measure="en euros d’aujourd’hui"
             xLabels={r.idleSeries.map((_, i) => `An ${i}`)}
             format={fmtEur}
             series={[

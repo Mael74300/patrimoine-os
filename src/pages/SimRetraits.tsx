@@ -18,10 +18,10 @@ export default function SimRetraits() {
   const series = withdrawalSeries({ capital: s.capital, monthly: s.monthly, annualReturn: s.ret, indexation: s.idx, years: s.years });
   // Seconde courbe : le même capital avec le retrait tenable, quand il diffère du retrait saisi (exemple fictif).
   const chartNote = withdrawalChartNote({ monthly: s.monthly, years: s.years, sustainable: r.sustainable });
-  const chartSeries: Series[] = [{ name: chartNote ? `Votre retrait (${fmtEur(s.monthly)} par mois)` : 'Capital restant', color: 'var(--chart-1)', values: series }];
+  const chartSeries: Series[] = [{ name: chartNote ? `Avec votre retrait (${fmtEur(s.monthly)} par mois)` : 'Capital restant', color: 'var(--chart-1)', values: series }];
   if (chartNote) {
     const alt = withdrawalSeries({ capital: s.capital, monthly: r.sustainable, annualReturn: s.ret, indexation: s.idx, years: s.years });
-    chartSeries.push({ name: `Retrait tenable (${fmtEur(r.sustainable)} par mois)`, color: 'var(--chart-2)', values: alt, dashed: true });
+    chartSeries.push({ name: `Avec le retrait tenable (${fmtEur(r.sustainable)} par mois)`, color: 'var(--chart-2)', values: alt, dashed: true });
   }
   // Capital épuisé avant l'horizon : zone grisée à partir de l'épuisement, et lecture par défaut sur la dernière année
   // où il reste quelque chose (sinon la légende afficherait « 0 € » pour les deux courbes).
@@ -74,6 +74,7 @@ export default function SimRetraits() {
           <h2>Capital restant année après année</h2>
           <LineChart
             title="Capital restant à la fin de chaque année de retraits"
+            measure="capital restant en fin d’année"
             xLabels={series.map((_, i) => `An ${i}`)}
             format={fmtEur}
             series={chartSeries}

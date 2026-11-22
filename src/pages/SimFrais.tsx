@@ -103,6 +103,7 @@ export default function SimFrais() {
           <Fold title="Voir l'évolution année par année">
             <LineChart
               title="Capital selon le niveau de frais annuels"
+              measure="capital"
               xLabels={base.series.map((_, i) => `An ${i}`)}
               format={fmtEur}
               series={res.map((r, i) => ({ name: `Frais ${fmtPct(r.fees)}`, color: COLORS[i], values: r.series }))}

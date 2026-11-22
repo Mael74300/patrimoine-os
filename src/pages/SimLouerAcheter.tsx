@@ -171,6 +171,7 @@ export default function SimLouerAcheter() {
             <Fold title="Qui est le plus riche, année après année ?">
               <LineChart
                 title="Patrimoine du propriétaire et du locataire à la fin de chaque année"
+                measure="patrimoine en fin d’année"
                 xLabels={r.series.map((p) => `An ${p.year}`)}
                 format={fmtEur}
                 series={[

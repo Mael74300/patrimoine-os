@@ -112,6 +112,7 @@ export default function SimCredit() {
           <div className="panel">
             <LineChart
               title="Capital restant dû à la banque, année après année"
+              measure="capital restant dû"
               showTitle
               xLabels={Array.from({ length: yearsAxis + 1 }, (_, y) => `An ${y}`)}
               format={fmtEur}

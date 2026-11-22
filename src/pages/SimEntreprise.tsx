@@ -140,6 +140,7 @@ export default function SimEntreprise() {
           <div className="panel">
             <LineChart
               title="Trésorerie selon les scénarios"
+              measure="trésorerie en fin d’année"
             showTitle
               xLabels={Array.from({ length: s.years + 1 }, (_, y) => `An ${y}`)}
               format={fmtEur}

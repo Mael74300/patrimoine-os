@@ -146,7 +146,7 @@ export default function SimPatrimoine() {
           </div>
           <Takeaway>{wealthTakeaway({ years: s.years, contributed: last.contributed, value: last.value, gains: last.gains, netValue: net, netRealValue: netReal, inflation: s.inflation, lateHalfYears: lateHalfGainsYears(points) })}</Takeaway>
           <div className="panel">
-            <LineChart title="Évolution du capital" showTitle xLabels={Array.from({ length: (st.scenarios.length === 1 ? points.length - 1 : maxYears) + 1 }, (_, y) => `An ${y}`)} format={fmtEur} series={series} />
+            <LineChart title="Évolution du capital" showTitle measure={st.scenarios.length > 1 ? 'capital simulé' : undefined} xLabels={Array.from({ length: (st.scenarios.length === 1 ? points.length - 1 : maxYears) + 1 }, (_, y) => `An ${y}`)} format={fmtEur} series={series} />
           </div>
 
           {st.scenarios.length > 1 && (
