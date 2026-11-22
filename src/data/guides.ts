@@ -572,8 +572,8 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
         points: true,
         body: [
           'Le point de départ : crédit de 150 000 € à 4 % sur 20 ans restants, 20 000 € disponibles, placement à 5 % par an, frais de 0,2 % par an, gains imposés à 31,4 % (prélèvement forfaitaire unique de 2026).',
-          'Si vous remboursez : le crédit s’arrête 45 mois plus tôt, avec environ 21 250 € d’intérêts économisés. La mensualité libérée est placée pendant ces 45 mois : au bout des 20 ans, vous avez environ 43 850 €.',
-          'Si vous investissez : les 20 000 € restent placés 20 ans ; après frais et impôt, vous avez environ 41 250 €. Rembourser l’emporte d’environ 2 600 €.',
+          'Si vous remboursez : le crédit s’arrête 45 mois plus tôt (environ 21 250 € d’intérêts économisés), puis la mensualité est placée : environ 43 850 € au bout des 20 ans.',
+          'Si vous investissez : les 20 000 € restent placés 20 ans, soit environ 41 250 € après frais et impôt. Rembourser l’emporte d’environ 2 600 €.',
           'Le rendement d’équilibre : environ 5,4 % brut par an. Au-dessus, investir gagne ; en dessous, rembourser gagne. Ce rendement n’est pas garanti, l’économie d’intérêts l’est.',
         ],
       },

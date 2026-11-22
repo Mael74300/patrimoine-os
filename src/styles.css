@@ -475,6 +475,7 @@ td.neg { color: var(--danger); }
 .ill-in { font-size: 12px; font-weight: 600; }
 .ill-sub { font-size: 13px; fill: var(--ink-2) !important; }
 .ill-svg text.ill-on-dark { fill: var(--primary-ink); }
+.ill-svg text.ill-placed { fill: var(--accent); font-size: 13px; font-weight: 600; }
 .ill-svg text.ill-loss { fill: var(--danger); font-size: 13px; font-weight: 700; }
 .ill-svg text.ill-halo-warn, .ill-svg text.ill-halo-accent, .ill-svg text.ill-halo-bg { paint-order: stroke; stroke-width: 5px; stroke-linejoin: round; }
 .ill-svg text.ill-halo-warn { stroke: var(--warn-soft); }
