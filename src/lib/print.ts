@@ -2,11 +2,11 @@
  * Impression d'une page (chantier 256). Sur papier, un bloc replié n'est qu'un titre suivi de « + » : la feuille
  * d'impression masque donc les blocs fermés. Certains doivent pourtant s'imprimer ouverts, car ils portent des
  * hypothèses du calcul (réglages avancés d'un simulateur : rendement, revalorisation…) ou une liste repliée
- * seulement sur téléphone (avertissement d'un simulateur compris) : un résultat imprimé sans ses hypothèses ne veut rien dire.
+ * seulement sur téléphone (avertissement d'un simulateur compris), ou la suite des cases Frais et Fiscalité du comparateur : un résultat imprimé sans ses hypothèses ne veut rien dire.
  */
 
 /** Blocs à ouvrir le temps de l'impression : repliables d'un formulaire de simulateur et listes repliées sur mobile. */
-export const PRINT_OPEN_SELECTOR = '.sim-form details, details.mob-fold, details.sim-notice';
+export const PRINT_OPEN_SELECTOR = '.sim-form details, details.mob-fold, details.sim-notice, details.cmp-more';
 
 type Openable = { open: boolean };
 

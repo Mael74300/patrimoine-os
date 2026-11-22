@@ -291,7 +291,7 @@ export function MetersLegend() {
 export { splitSentences };
 
 /** Texte d'une rubrique où les pages citées par leur nom (« fiche PEA ») deviennent des liens. */
-const Linked = ({ text, path }: { text: string; path?: string }) => <JargonText segs={linkOnly(text, path)} />;
+export const Linked = ({ text, path }: { text: string; path?: string }) => <JargonText segs={linkOnly(text, path)} />;
 
 /** Petite ampoule du « Conseil » : même trait arrondi que les icônes du site, couleur du texte qui l'entoure. */
 function TipIcon() {
