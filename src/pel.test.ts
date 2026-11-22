@@ -21,7 +21,7 @@ describe('schéma de la fiche PEL', () => {
   });
   it('lisible à 375 px : viewBox 340, chaque étape de la légende sur deux lignes', () => {
     const svg = renderToStaticMarkup(createElement(SchemaPel)).replace(/[\u00a0\u202f]/g, ' ');
-    expect(svg).toContain('viewBox="0 0 340 312"');
+    expect(svg).toContain('viewBox="0 0 340 318"');
     for (const p of PEL_PHASES) {
       expect(svg).toContain(`>${p.label}</text>`);
       expect(svg).toContain(`>${p.detail.replace(/[\u00a0\u202f]/g, ' ')}</text>`);
