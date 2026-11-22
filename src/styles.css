@@ -818,6 +818,9 @@ th { background: var(--surface-2); color: var(--primary-deep); }
 .home-example { margin-top: 40px; display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px; align-items: center; border-top: 4px solid var(--gold); box-shadow: var(--shadow); padding: 28px; }
 .home-example h2.plain { margin: 0 0 10px; font-size: 1.4rem; }
 .home-example h2.plain::before { display: none; }
+.home-example-hyp { margin: 0; font-size: .92rem; line-height: 1.5; color: var(--ink-2); }
+.home-example-hyp strong { color: var(--ink); }
+.home-takeaway { margin: 14px 0 18px; }
 .eyebrow-warn { background: var(--warn-soft) !important; color: var(--warn) !important; }
 @media (max-width: 860px) { .home-example { grid-template-columns: 1fr; gap: 16px; padding: 20px; margin-top: 28px; } }
 

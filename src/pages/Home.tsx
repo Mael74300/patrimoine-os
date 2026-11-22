@@ -48,8 +48,7 @@ export default function Home() {
     () => projectGrowth({ initial: 5000, monthly: 200, annualReturn: 0.05, annualFees: 0.005, years: 25, inflation: 0.02 }),
     [],
   );
-  const last = example[example.length - 1];
-  const counts = [`${FICHES_COUNT} fiches`, `${simulators.length} simulateurs`, '3 placements à comparer', `${GUIDES_COUNT} guides`, '3 façons d’entreprendre', `${GLOSSARY_COUNT} termes`];
+  const counts = [`${FICHES_COUNT} fiches`, `${simulators.length} simulateurs`, '3 placements', `${GUIDES_COUNT} guides`, '3 parcours', `${GLOSSARY_COUNT} termes`];
 
   return (
     <>
@@ -103,9 +102,12 @@ export default function Home() {
         <div>
           <div className="eyebrow eyebrow-warn">Exemple fictif</div>
           <h2 className="plain">Ce que peut donner l'épargne régulière</h2>
-          <p>
-            5 000 € de départ, puis 200 € par mois pendant 25 ans, avec une <strong>hypothèse</strong> de 5 % par an, 0,5 % de frais et 2 % d'inflation :
-            {' '}{fmtEur(last.value)} pour {fmtEur(last.contributed)} versés. Ce n'est ni une prévision ni une promesse.
+          <p className="home-example-hyp">
+            <strong>Hypothèses</strong> : 5 000 € au départ, puis 200 € par mois pendant 25 ans ; 5 % par an, moins 0,5 % de frais ; 2 % d'inflation par an. Ce n'est ni une prévision ni une promesse.
+          </p>
+          <p className="takeaway home-takeaway">
+            <span className="takeaway-line"><strong>À retenir.</strong> Près de la moitié de la somme finale vient des gains, dont les deux tiers pendant les 10 dernières années : les gains s’accélèrent avec le temps.</span>
+            <span className="takeaway-line">En pointillés, la même somme en euros d’aujourd’hui : à cause de la hausse des prix, elle achète environ 40 % de moins.</span>
           </p>
           <Link className="btn" to="/simulateurs/patrimoine">Faire ma simulation</Link>
         </div>
