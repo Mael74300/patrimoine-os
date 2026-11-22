@@ -159,8 +159,7 @@ export function SchemaInflation() {
         </g>
       </svg>
       <figcaption>
-        <strong>Illustration, exemple fictif</strong> : {fmtEur(initial)} sur {years} ans, avec une inflation constante de {inflation * 100} % par an et un placement à {rate * 100} % par an, avant frais et impôts.
-        Le montant affiché peut grossir sans que la somme permette d’acheter plus : ce qui compte, c’est l’écart avec l’inflation. Ces taux ne sont ni observés ni prévus.
+        <strong>Illustration, exemple fictif</strong>, avant frais et impôts : le montant affiché peut grossir sans que la somme permette d’acheter plus. Ce qui compte, c’est l’écart avec l’inflation.
       </figcaption>
     </figure>
   );

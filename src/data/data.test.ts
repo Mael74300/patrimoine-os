@@ -263,7 +263,10 @@ describe('guide inflation', () => {
     expect(Math.round(10000 * 1.03 ** 10 / 1.02 ** 10) - 10000).toBe(1025);
     expect(Math.round(10000 * 1.03 ** 10) - 10000).toBe(3439);
     expect(Math.round((0.03 - 0.02) * 100)).toBe(1);
-    for (const v of ['8 203', '13 439', '11 025', '1 025', '3 439', 'environ 1 % par an', '0,98 %', 'fictif']) expect(t).toContain(v);
+    for (const v of ['8 203', '1 025', '3 439', 'environ 1 % par an', '0,98 %', 'fictif']) expect(t).toContain(v);
+    // Les quatre montants sont lus sur le schéma (testé à part) : le texte ne les recopie plus tous (chantier 284).
+    expect(t).not.toContain('13 439');
+    expect(t).not.toContain('11 025');
     // Plus de formule brute dans le guide : des mots à la place des puissances et des parenthèses.
     expect(t).not.toMatch(/\^|\(1 \+/);
   });

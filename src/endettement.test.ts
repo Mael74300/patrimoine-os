@@ -47,9 +47,15 @@ describe('schéma « taux d’endettement »', () => {
     const section = guide.sections.find((s) => s.heading.startsWith('Que faire si'))!;
     expect(section.points).toBe(true);
     const t = section.body.join(' ').replace(/[\u00a0\u202f]/g, ' ');
-    for (const m of ['850 €', 'taux fictif de 3,6 %', 'assurance de 0,3 %', 'environ 139 000 € sur 20 ans', 'environ 172 000 €', 'sur 25 ans au lieu de 20, environ 160 000 €', '1 500 € de revenus en plus', '1 575 € par mois, dont 1 375 €', 'environ 225 000 €']) {
+    for (const m of ['850 €', 'taux fictif de 3,6 %', 'assurance de 0,3 %', 'sur 20 ans', '200 €', '1 050 €', '1 500 € de revenus en plus', '1 575 € par mois, dont 1 375 €']) {
       expect(t).toContain(m);
     }
+    // Les sommes empruntables sont lues sur le schéma : le texte n'en recopie aucune (chantier 284).
+    for (const m of ['139 000', '160 000', '172 000', '225 000']) expect(t).not.toContain(m);
+    // Même ordre dans la liste et dans le schéma : durée allongée, petit crédit soldé, à deux.
+    const ordre = ['Allonger la durée', 'Solder un petit crédit', 'Emprunter à deux'].map((h) => section.body.findIndex((b) => b.startsWith(h)));
+    expect(ordre.every((v, i) => v > 0 && (i === 0 || v > ordre[i - 1]))).toBe(true);
+    expect(l.base < l.longer && l.longer < l.noOldLoan && l.noOldLoan < l.couple).toBe(true);
     const html = renderToStaticMarkup(createElement(SchemaLeviers)).replace(/[\u00a0\u202f]/g, ' ');
     for (const m of ['139 000 €', '160 000 €', '172 000 €', '225 000 €', 'exemple fictif', '3,6 %', '0,3 %', 'role="img"']) expect(html).toContain(m);
     expect(html.length).toBeLessThan(15000);
