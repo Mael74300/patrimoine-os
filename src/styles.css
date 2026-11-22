@@ -148,6 +148,9 @@ main { padding: 32px 0 64px; min-height: 70vh; }
   .footer-grid ul { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; }
   .footer-grid li { margin: 0; }
   .footer-grid li a { display: flex; align-items: center; min-height: 44px; }
+  /* Place réservée sous le dernier rang de liens : le bouton « Haut de page » (fixe, 44 px, à 12 px du bas)
+     recouvrait « Banque de France » en bas de chaque page sur téléphone. */
+  .site-footer { padding-bottom: 88px; }
 }
 
 /* ---------- Elements */

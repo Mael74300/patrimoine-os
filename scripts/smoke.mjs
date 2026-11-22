@@ -112,6 +112,31 @@ for (const viewport of VIEWPORTS) {
       return out;
     }, MARGE_TEXTE);
     errors.push(...serres.map((e) => `texte de schéma : ${e}`));
+    // Bas de page : le bouton fixe « Haut de page » ne recouvre aucun lien ni bouton (avant, sur téléphone,
+    // il cachait le dernier lien du pied de page, impossible à toucher).
+    const recouverts = await page.evaluate(async () => {
+      // Défiler jusqu'en bas tant que la page s'allonge encore (contenu chargé après coup).
+      let h = -1;
+      for (let i = 0; i < 10 && h !== document.documentElement.scrollHeight; i++) {
+        h = document.documentElement.scrollHeight;
+        window.scrollTo(0, h);
+        await new Promise((ok) => setTimeout(ok, 150));
+      }
+      const btn = document.querySelector('.back-top');
+      if (!btn) return [];
+      const b = btn.getBoundingClientRect();
+      return [...document.querySelectorAll('a, button, input, select, summary')]
+        .filter((e) => e !== btn && !btn.contains(e))
+        .filter((e) => {
+          // Un élément d'un bloc replié garde une position calculée : seuls les éléments réellement affichés comptent.
+          if (!e.checkVisibility()) return false;
+          const r = e.getBoundingClientRect();
+          return r.width > 0 && r.height > 0 && r.right > b.left && r.left < b.right && r.bottom > b.top && r.top < b.bottom;
+        })
+        .slice(0, 4)
+        .map((e) => `« ${e.textContent?.trim().slice(0, 40) || e.tagName.toLowerCase()} »`);
+    });
+    if (recouverts.length) errors.push(`bouton « Haut de page » posé sur ${recouverts.join(', ')} en bas de page`);
     for (const e of errors) problems.push(`${path} (${viewport.width} px) : ${e}`);
   }
   await ctx.close();
