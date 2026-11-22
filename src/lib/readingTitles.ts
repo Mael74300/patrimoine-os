@@ -46,7 +46,7 @@ export const investmentNames: Record<string, string> = {
   "credit-immobilier": "Investir à crédit dans l’immobilier",
   "creation-entreprise": "Créer son entreprise",
   "reprise-entreprise": "Racheter une entreprise",
-  "activite-numerique": "SaaS, e-commerce et produits numériques",
+  "activite-numerique": "Activités en ligne",
   "per": "Plan d'épargne retraite (PER)",
   "pee": "Plan d'épargne entreprise (PEE)",
   "capital-humain": "Formation et compétences",

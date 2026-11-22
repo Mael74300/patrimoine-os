@@ -496,10 +496,10 @@ const raw: Omit<Investment, 'review'>[] = [
   },
   {
     slug: 'activite-numerique',
-    name: 'SaaS, e-commerce et produits numériques',
+    name: 'Activités en ligne',
     category: 'numerique',
     summary: 'Logiciels, boutiques en ligne, contenus : des activités sur internet qui peuvent rapporter un revenu régulier.',
-    definition: 'Une activité qui vend en ligne : abonnements à un logiciel, formations, sites de contenu, boutiques. Une fois le produit créé, servir un client de plus coûte peu.',
+    definition: 'Une activité qui vend en ligne : abonnements à un logiciel (SaaS), formations, sites de contenu, boutiques. Une fois le produit créé, servir un client de plus coûte peu.',
     howItWorks: "Une telle activité vaut surtout par son revenu récurrent, l'argent qui rentre chaque mois (abonnements, ventes), et par sa progression. Ces activités peuvent se revendre, mais leur revenu peut aussi s'effondrer (concurrence, dépendance à une plateforme).",
     howToInvest: ['Créer de zéro à faible coût.', 'Acheter un petit site ou logiciel existant sur une place de marché spécialisée (vérifier les chiffres de façon indépendante).'],
     minCapital: { text: 'Fixez un budget ; pour racheter un site, faites d’abord vérifier ses revenus.', verified: false, advice: true },
@@ -513,7 +513,7 @@ const raw: Omit<Investment, 'review'>[] = [
     example: 'Exemple fictif : 200 abonnés à 15 € par mois rapportent 3 000 € par mois, avant vos propres frais (hébergement, outils, publicité), et 5 % d’entre eux résilient chaque mois. À retenir : un revenu par abonnement n’est jamais acquis ; sans nouveaux clients, il perd près de la moitié de sa valeur en un an, et le garder demande de trouver chaque mois autant de clients qu’il en part.',
     sources: [S.impotsIndependants, S.impotsResultats, S.bpi, S.urssaf],
     alternatives: ['creation-entreprise'],
-    tags: ['entrepreneuriat', 'numérique'],
+    tags: ['entrepreneuriat', 'numérique', 'SaaS', 'e-commerce', 'internet'],
   },
 
   // ------------------------------------------------------------------ Non coté
