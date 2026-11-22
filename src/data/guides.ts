@@ -434,10 +434,10 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
         heading: 'Que faire si le taux dépasse 35 %',
         points: true,
         body: [
-          'Point de départ : le foyer de l’exemple fictif peut mettre 850 € par mois dans le nouveau prêt, soit environ 139 000 € sur 20 ans (avec un taux fictif de 3,6 % et une assurance de 0,3 %).',
-          'Solder un petit crédit : sans les 200 € du crédit en cours, les 1 050 € vont tous au nouveau prêt, soit environ 172 000 €.',
-          'Allonger la durée : sur 25 ans au lieu de 20, environ 160 000 €, mais plus d’intérêts à payer. La durée reste plafonnée (voir plus haut).',
-          'Emprunter à deux : avec 1 500 € de revenus en plus, la limite passe à 1 575 € par mois, dont 1 375 € pour le nouveau prêt, soit environ 225 000 €.',
+          'Point de départ : le foyer fictif peut mettre 850 € par mois dans le nouveau prêt, sur 20 ans (taux fictif de 3,6 %, assurance de 0,3 %).',
+          'Allonger la durée : la même mensualité rembourse plus, mais coûte plus d’intérêts. La durée reste plafonnée (voir plus haut).',
+          'Solder un petit crédit : les 200 € libérés vont au nouveau prêt, qui reçoit toute la limite de 1 050 €.',
+          'Emprunter à deux : 1 500 € de revenus en plus portent la limite à 1 575 € par mois, dont 1 375 € pour le nouveau prêt.',
           'Plus d’apport ou un bien moins cher : vous pouvez emprunter autant, mais vous avez besoin de moins.',
         ],
       },
@@ -672,9 +672,8 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       {
         heading: 'Un exemple fictif chiffré',
         body: [
-          'Si les prix montent de 2 % par an pendant 10 ans, 10 000 € gardés tels quels n’achètent plus que ce que 8 203 € achètent aujourd’hui.',
-          'Placés à 3 % par an, intérêts réinvestis, ils deviennent environ 13 439 €, qui n’achètent que ce que 11 025 € achètent aujourd’hui.',
-          'Concrètement, le pouvoir d’achat gagne environ 1 025 € en 10 ans, pas les 3 439 € affichés : un rendement réel d’environ 0,98 % par an (1,03 divisé par 1,02, moins 1). Exemple fictif : ces taux ne sont ni observés ni prévus.',
+          'Prenons 10 000 € pendant 10 ans, avec des prix qui montent de 2 % par an. Le schéma compare deux cas : la somme laissée telle quelle, et la même somme placée à 3 % par an, intérêts réinvestis.',
+          'Concrètement, laissés tels quels, les 10 000 € n’achètent plus que ce que 8 203 € achètent aujourd’hui. Placés, ils affichent 3 439 € de plus, mais le pouvoir d’achat ne gagne qu’environ 1 025 € : un rendement réel d’environ 0,98 % par an (1,03 divisé par 1,02, moins 1). Exemple fictif : ces taux ne sont ni observés ni prévus.',
         ],
       },
       {

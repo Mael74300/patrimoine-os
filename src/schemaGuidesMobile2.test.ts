@@ -35,6 +35,7 @@ describe('schémas des guides en viewBox 340 (suite)', () => {
     for (const [x, w] of rects(s)) expect(x + w).toBeLessThanOrEqual(340);
     const [idle, placed] = inflationBars();
     expect([idle.shown, idle.real, placed.shown, placed.real].map(Math.round)).toEqual([10000, 8203, 13439, 11025]);
+    for (const v of ['10 000', '8 203', '13 439', '11 025']) expect(s.replace(/[\u00a0\u202f]/g, ' ')).toContain(v);
     // étiquettes de bas de barre centrées sur 86 et 254
     expect(largeur('Laissée telle quelle', 14) / 2).toBeLessThan(86);
     expect(254 + largeur('Placée à 3 % par an', 14) / 2).toBeLessThan(340);
