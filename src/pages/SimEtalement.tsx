@@ -114,6 +114,7 @@ export default function SimEtalement() {
               <LineChart
                 showTitle
                 title="Valeur des deux méthodes, mois après mois"
+                measure="valeur totale, part pas encore investie comprise"
                 xLabels={r.series.map((p) => (p.month === 0 ? 'Au départ' : `Après ${fmtMonths(p.month)}`))}
                 axisLabels={r.series.map((p) => axisLabel(p.month, r.months))}
                 band={r.spreadMonths > 1 ? { from: 0, to: r.spreadMonths, label: 'Étalement' } : undefined}

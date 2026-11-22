@@ -59,7 +59,9 @@ export default function SimRembourser() {
               <h2>Et si le placement rapportait plus ou moins ?</h2>
               <LineChart
                 title="Patrimoine net à la fin du crédit selon le rendement brut du placement"
-                xLabels={byReturn.map((p) => `${Math.round(p.annualReturn * 100)}\u00a0%`)}
+                xLabels={byReturn.map((p) => `Placement à ${Math.round(p.annualReturn * 100)}\u00a0% par an`)}
+                axisLabels={byReturn.map((p) => (Math.round(p.annualReturn * 100) % 2 === 0 ? `${Math.round(p.annualReturn * 100)}\u00a0%` : ''))}
+                measure="patrimoine net à la fin du crédit"
                 format={fmtEur}
                 series={[
                   { name: 'Rembourser', color: 'var(--chart-1)', values: byReturn.map((p) => p.wealthPrepay) },

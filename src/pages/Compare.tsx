@@ -165,6 +165,7 @@ export default function Compare() {
           <div className="panel" style={{ marginBottom: 16 }}>
             <LineChart
               title="Comparaison des projections"
+              measure="valeur projetée"
               showTitle
               xLabels={proj[0].map((p) => `An ${p.year}`)}
               format={fmtEur}
