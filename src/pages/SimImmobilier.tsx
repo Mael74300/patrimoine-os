@@ -281,10 +281,10 @@ export default function SimImmobilier() {
           </div>
           </Fold>
           <SavedSims simKey="immobilier" current={s} onLoad={(d) => setS({ ...RENTAL_DEFAULTS, ...d })} />
-          <SimFaq slug="immobilier" />
-          <Disclaimer />
         </section>
       </div>
+      <Disclaimer />
+      <SimFaq slug="immobilier" />
     </>
   );
 }

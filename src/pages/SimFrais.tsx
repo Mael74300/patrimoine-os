@@ -113,10 +113,10 @@ export default function SimFrais() {
             ni de la fiscalité ni des écarts de performance entre produits.
           </p>
           <SavedSims simKey="frais" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <Disclaimer />
-          <SimFaq slug="frais" />
         </section>
       </div>
+      <Disclaimer />
+      <SimFaq slug="frais" />
     </>
   );
 }

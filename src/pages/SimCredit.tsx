@@ -146,10 +146,10 @@ export default function SimCredit() {
           </div>
           </Fold>
           <SavedSims simKey="credit" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <Disclaimer kind="credit" />
-          <SimFaq slug="credit" />
         </section>
       </div>
+      <Disclaimer kind="credit" />
+      <SimFaq slug="credit" />
     </>
   );
 }

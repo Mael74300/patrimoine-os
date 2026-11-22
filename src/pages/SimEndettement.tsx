@@ -77,10 +77,10 @@ export default function SimEndettement() {
             <a href={HCSF.source.url} target="_blank" rel="noopener noreferrer">{HCSF.source.label}</a>.
           </p>
           <SavedSims simKey="endettement" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <SimFaq slug="endettement" />
-          <Disclaimer kind="credit" />
         </section>
       </div>
+      <Disclaimer kind="credit" />
+      <SimFaq slug="endettement" />
     </>
   );
 }

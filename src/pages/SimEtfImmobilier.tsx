@@ -247,10 +247,10 @@ export default function SimEtfImmobilier() {
 
           </Fold>
           <SavedSims simKey="etf-immobilier" current={st} onLoad={(d) => setSt({ ...DEFAULTS, ...d })} />
-          <Disclaimer />
-          <SimFaq slug="etf-immobilier" />
         </section>
       </div>
+      <Disclaimer />
+      <SimFaq slug="etf-immobilier" />
     </>
   );
 }

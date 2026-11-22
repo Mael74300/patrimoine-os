@@ -85,10 +85,10 @@ export default function SimRetraits() {
             Rendement appliqué chaque mois, retrait prélevé en fin de mois et revalorisé chaque année. Exemple fictif.
           </p>
           <SavedSims simKey="retraits" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <Disclaimer />
-          <SimFaq slug="retraits-reguliers-duree-du-capital" />
         </section>
       </div>
+      <Disclaimer />
+      <SimFaq slug="retraits-reguliers-duree-du-capital" />
     </>
   );
 }

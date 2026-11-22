@@ -138,10 +138,10 @@ export default function SimIndependance() {
             <p className="muted small">Vos revenus récurrents couvrent déjà vos dépenses : aucun retrait n’est nécessaire.</p>
           )}
           <SavedSims simKey="independance" current={s} onLoad={(d) => setS({ ...DEFAULTS, ...d })} />
-          <Disclaimer />
-          <SimFaq slug="independance-financiere" />
         </section>
       </div>
+      <Disclaimer />
+      <SimFaq slug="independance-financiere" />
     </>
   );
 }
