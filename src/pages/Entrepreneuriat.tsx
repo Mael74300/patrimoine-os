@@ -17,7 +17,7 @@ const PATHS = [
   {
     title: 'Construire un produit',
     body: "Logiciel, boutique en ligne, formation en vidéo. Le produit peut se vendre sans vous, mais beaucoup de projets échouent et les ventes tardent souvent.",
-    fiche: { slug: 'activite-numerique', label: 'la fiche SaaS, e-commerce et produits numériques' },
+    fiche: { slug: 'activite-numerique', label: 'la fiche Activités en ligne' },
     steps: [
       'Partir d’un problème précis, vécu par un public précis.',
       'Suivre les abonnements et la part des clients qui s’en vont.',

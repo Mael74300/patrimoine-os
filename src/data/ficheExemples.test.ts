@@ -395,7 +395,7 @@ describe('fiche Formation et compétences : ce qu’une hausse de salaire rappor
   });
 });
 
-describe('fiche SaaS, e-commerce et produits numériques : un revenu récurrent qui s’use', () => {
+describe('fiche Activités en ligne : un revenu récurrent qui s’use', () => {
   const ex = norm(investmentBySlug['activite-numerique']!.example);
   const r = subscriptionChurn(200, 15, 5, 12);
 
