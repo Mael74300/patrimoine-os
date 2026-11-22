@@ -456,7 +456,7 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
     title: 'Le prêt à taux zéro (PTZ) : pour qui, pour quel logement ?',
     summary: 'Un prêt aidé par l’État pour acheter ou construire sa première résidence principale : à quoi il sert, qui peut l’obtenir, comment il se rembourse et où le demander.',
     readingMinutes: 4,
-    updatedOn: '2026-11-13',
+    updatedOn: '2026-11-22',
     sections: [
       {
         heading: 'Ce que c’est, en deux phrases',
@@ -498,11 +498,12 @@ export const guides: Guide[] = deepKeepNumbers<Guide[]>([
       },
     ],
     related: [],
-    sources: [{ label: 'Service-Public.fr — Prêt à taux zéro (PTZ ou PTZ+), page vérifiée le 15 septembre 2026, consultée le 13 novembre 2026', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F10871', official: true }, ANIL],
+    sources: [{ label: 'Service-Public.fr — Prêt à taux zéro (PTZ ou PTZ+), page vérifiée le 15 septembre 2026, consultée le 13 novembre 2026', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F10871', official: true }, { label: 'Service-Public.fr — Don familial d’une somme d’argent, page vérifiée le 1er janvier 2026, consultée le 22 novembre 2026', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F36656', official: true }, ANIL],
     faq: [
       { q: 'Le prêt à taux zéro est-il vraiment sans aucun frais ?', a: 'Le PTZ lui-même ne porte ni intérêts, ni frais de dossier ni frais d’expertise. Mais il s’ajoute à un autre prêt, qui, lui, a un coût : intérêts, assurance, garantie.' },
       { q: 'Peut-on financer tout son achat avec un PTZ ?', a: 'Non. Le PTZ finance une partie de l’opération et doit être demandé en complément d’au moins un autre prêt immobilier.' },
       { q: 'Peut-on obtenir un PTZ si l’on a déjà été propriétaire ?', a: 'En principe, il ne faut pas avoir été propriétaire de sa résidence principale pendant les 2 années qui précèdent le prêt, avec quelques exceptions (usufruit, nue-propriété, handicap, catastrophe naturelle).' },
+      { q: 'Un parent peut-il m’aider à acheter sans droits à payer ?', a: 'Oui, dans des limites. Jusqu’au 31 décembre 2026, un don d’argent d’un parent ou d’un grand-parent pour acheter un logement neuf ou sur plan est exonéré jusqu’à 100 000 € par donateur et 300 000 € par bénéficiaire. Il faut utiliser l’argent avant la fin du 6e mois et garder le logement comme résidence principale (la vôtre ou celle d’un locataire) pendant 5 ans. En dehors de ce cas, les abattements habituels s’appliquent : la fiche Donation et transmission les détaille.' },
     ],
     cta: { to: '/simulateurs/endettement', label: 'Calculer mon taux d’endettement' },
   },
