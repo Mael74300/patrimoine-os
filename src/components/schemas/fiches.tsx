@@ -1060,7 +1060,7 @@ export function SchemaPel() {
   const legendY = (i: number) => 146 + i * 43;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 340 312" role="img" aria-labelledby="ill-pel-t ill-pel-d" className="ill-svg">
+      <svg viewBox="0 0 340 318" role="img" aria-labelledby="ill-pel-t ill-pel-d" className="ill-svg">
         <title id="ill-pel-t">Vie d’un PEL : taux figé à l’ouverture, 4 ans minimum, 10 ans maximum de versements, livret ordinaire à 15 ans</title>
         <desc id="ill-pel-d">Le taux est fixé à l’ouverture du plan et ne change pas. De 0 à 4 ans : durée minimale, avec au moins 540 € versés par an. De 4 à 10 ans : le plan peut être prolongé d’année en année. De 10 à 15 ans : plus de versements, mais les intérêts continuent au taux du contrat. À 15 ans, le PEL devient un livret ordinaire au taux fixé par la banque.</desc>
         <text x={X0} y={18} className="ill-step">Taux fixé à l’ouverture (2,00 % en 2026),</text>
@@ -1921,7 +1921,7 @@ export function SchemaMicroBilan({ kind, children }: { kind: keyof typeof MICRO_
   const vacancy = months === 12 ? '' : `, loué ${months} mois sur 12`;
   return (
     <figure className="illustration">
-      <svg viewBox="0 0 340 186" role="img" aria-labelledby={`ill-${c.id}-t ill-${c.id}-d`} className="ill-svg">
+      <svg viewBox="0 0 340 192" role="img" aria-labelledby={`ill-${c.id}-t ill-${c.id}-d`} className="ill-svg">
         <title id={`ill-${c.id}-t`}>{c.title}</title>
         <desc id={`ill-${c.id}-d`}>{`Exemple fictif : ${fmtEur(monthlyRent)} de loyer par mois${vacancy}, soit ${fmtEur(r.rents)} par an. ${c.regime} retire d’office ${allowancePct} %, soit ${fmtEur(r.allowance)} : ${fmtEur(r.taxable)} s’ajoutent aux autres revenus. Dans la tranche à ${marginalRatePct} %, cela fait ${fmtEur(r.incomeTax)} d’impôt sur le revenu, ${pct(r.incomeTaxPctOfRents)} des loyers, ${c.social}.`}</desc>
         <text x={0} y={16} className="ill-year" textAnchor="start">{`Loyers : ${fmtEur(r.rents)} par an (${monthsTxt})`}</text>

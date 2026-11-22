@@ -107,6 +107,10 @@ for (const viewport of VIEWPORTS) {
             .sort((a, b) => a.width * a.height - b.width * b.height)[0];
           const m = c ? Math.min(tb.left - c.left, c.right - tb.right) : Math.min(tb.left - sb.left, sb.right - tb.right) + marge;
           if (m < marge) out.push(`« ${t.textContent} » ${c ? 'touche le bord de sa case' : 'dépasse du dessin'} (marge ${m.toFixed(1)} px)`);
+          // En hauteur aussi : une dernière ligne trop basse perd le pied de ses lettres (p, g, j), rogné par le cadre
+          // du dessin (constat du 2026-11-22 sur les fiches Location nue, LMNP et PEL).
+          const v = Math.min(tb.top - sb.top, sb.bottom - tb.bottom);
+          if (v < 0) out.push(`« ${t.textContent} » rogné ${tb.top < sb.top ? 'en haut' : 'en bas'} du dessin (${(-v).toFixed(1)} px)`);
         }
       }
       return out;
